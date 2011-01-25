@@ -1,0 +1,158 @@
+{% extends "mapbody.html" %}
+{# Original code from Tim's SABIO project and copyright is retained by the original author #}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% block extrajs %}
+  {{ block.super }}
+  <!-- bring in the OpenStreetMap OpenLayers layers.
+       Using this hosted file will make sure we are kept up
+       to date with any necessary changes -->
+  <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    {# // create global for each search result layer so we can manipulate them later #}
+    var pageLoaded = false; var loadMoreData = null;
+    function init() {
+      if (OpenLayers.Util.getBrowserName() == "msie" && !window.ieLoaded) {
+        window.ieLoaded = true;
+        setTimeout(init, 2000);
+        return;
+      }  
+      {% if user.is_staff %}//setupSqlDialog();{% endif %}
+      setupMetadataDialog();
+      {# vars initialised inside a function using var will have local scope #}
+      {# vars initialised inside a function without using var will have global scope #}
+      {# jquery button function requires jquery-ui 1.8 #}
+      $(".button-link").button();
+      {# tooltips setup - see http://flowplayer.org/tools/demos/tooltip/index.html #}
+      $("#results img[title]").tooltip('#recordtooltip'); 
+      {# manage table resizing #}
+      resizeTable(); {# for initial page load #}
+      $(window).resize(function () {# for page resize #}
+      {
+        resizeTable();
+      });
+      $("#accordion").accordion({ autoHeight: false });
+      {% if myCartFlag %}
+      $("#cart").load("/showcartcontents/");
+      {% endif %}
+      setupBaseMap();
+      {% if myShowSearchFeatureInfoFlag %}
+        setupSearchFeatureInfo();
+      {% endif %}
+      {# manage map height but only if there is no results table on the same page #}
+      {% if not myRecords %}
+      //resizeMap();
+      {% endif %}
+      {% if myLayerDefinitions %}
+      //layerdefs
+        {% for myValue in myLayerDefinitions %}
+          {{ myValue|safe }}
+        {% endfor %}
+      {% endif %}
+      {# //layers to show on the map #}
+      {% if myLayersList %}
+        //layers list
+        var myLayersList = {{myLayersList|safe}}
+        // Here we use a predefined layer that will be kept up to date with URL changes
+        layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Open Street Map");
+        //myLayersList.unshift(layerMapnik); // add to start of array
+        myLayersList.push(layerMapnik); // add to end of array
+        mMap.addLayers(myLayersList);
+      {% endif %}
+      {% if myShowCartFlag %}
+      showMiniCart( false );
+      {% endif %}
+      {% if myLegendFlag %}
+      createLegend();
+      {% endif %}
+      setupMiniIconClickCallback();
+      {% if myExtent %}
+      var myBounds = new OpenLayers.Bounds{{myExtent}}; //calculated from search page results
+      mMap.zoomToExtent( transformBounds( myBounds )); 
+      {% else %}
+      mMap.zoomToExtent( transformBounds(new OpenLayers.Bounds(14.0,-35.0,34.0,-21.0)));  //sa
+      {% endif %}
+      pageLoaded = true;
+      if (loadMoreData) {
+        loadMoreData();
+        loadMoreData = null;
+      }  
+    }
+    {# // make OL compute scale according to WMS spec #}
+    OpenLayers.DOTS_PER_INCH = 25.4 / 0.28;
+  /* ]]> */
+  </script>
+{% endblock %}
+{% block body_load %}onload="init()";{% endblock %}
+
+{% block table %}
+<div id="working"></div> {# used to display ajax status updates #}
+<div id="recordtooltip">&nbsp;</div> {# used to display tooltips #}
+    {% include "page.html" %}
+{% endblock %}
+
+{% block cart %}
+  {% if myShowCartFlag %}
+    <h3 id="cart-accordion-h3"><a href="#"><img src="/media/images/buy_16.png" alt="" />&nbsp;Your Basket</a></h3>
+    <div id="cart-accordion-div">
+      <div>Click the basket icon to add an image to your collection.</div>
+      <div id="cart"></div>
+      <div style="text-align: center;">
+        <a href="/addorder/" onclick='addOrderClicked(); return false;'>{# return false to prevent invoking link #}
+          <img src="/media/images/letter_16.png" alt="" /> Order Now!
+        </a>
+        <div style="display: none;" id="cart-empty-dialog" title="SAC Catalogue"><b>Your cart is empty.</b> Please add some items to your cart first!</div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block preview %}
+  {% if myShowPreviewFlag %}
+    <h3 id="preview-accordion-h3"><a href="#"><img src="/media/images/picture_16.png" alt="" />&nbsp;Preview</a></h3>
+    <div id="preview-accordion-div">Click the thumbnail images to see a larger preview here.</div>
+  {% endif %}
+{% endblock %}
+
+{% block search %}
+  {% if mySearchFlag %}
+    <h3 id="search-summary-accordion-h3"><a href="#"><img src="/media/images/search_16.png" alt="" />&nbsp;Search Summary</a></h3>
+    <div id="search-summary-accordion-div">
+        {% if myMessages %}
+          {% for myValue in myMessages %}
+            {{ myValue|safe }}<br/>
+          {% endfor %}
+          <div><b>Note:</b>The SPOT Imagery provided in this backdrop has been degraded to 10m</div>
+        {% endif %}
+        {% if myRecords %}
+        <a href="/searchresultshapefile/{{mySearchGuid}}/"><img src="/media/images/down_16.png" alt=""/> Download search as a shapefile.</a>
+        {% endif %}
+        {# <a href="/modifysearch/{{mySearchGuid}}/" class="button-link">Modify this search</a> #}
+        {#% if user.is_staff %}<div id="sql" style="display: none;">{{ mySqlString }}</div><input type=button id="sql-button" value="Show SQL" />{% endif %#}
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block legend %}
+  {% if myLegendFlag %}
+    <h3 id="legend-accordion-h3"><a href="#"><img src="/media/images/search_16.png" alt="" />&nbsp;Legend</a></h3>
+    <div id="legend-accordion-div">
+      <ul id="base-layer-legend"><li style="display:none;"></li></ul>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block messages %}
+  {% if myMessagesFlag %}
+    {{ myMessagesHeading|safe }}
+    <div>
+        {% if myMessages %}
+          {% for myValue in myMessages %}
+            {{ myValue|safe }}<br/>
+          {% endfor %}
+        {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}
+

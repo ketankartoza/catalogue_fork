@@ -1,0 +1,70 @@
+{# Original code from Tim's SABIO project and copyright is retained by the original author #}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% box_start "" "" ""%}
+  {% if myRecords %}
+      <table id="gradient-style" summary="Available Sensors">
+        <thead> 
+        </thead>
+        <tfoot>
+        </tfoot>
+        <tbody>
+          <tr>
+            <th>User</th>
+            <th>IP Address</th>
+            <th>Country</th>
+            <th>City</th>
+            <th>Date</th>
+          </tr>
+          <tr>
+            <td colspan="5">
+              <div class="pagination">
+                <span class="step-links">
+                  {% if myRecords.has_previous %}
+                  <a href="#" onclick='$("#content").load("/visitorlist/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a>
+                  {% endif %}
+
+                  <span class="current">
+                    Page {{ myRecords.number }} of {{ myRecords.paginator.num_pages }}.
+                  </span>
+
+                  {% if myRecords.has_next %}
+                  <a href="#" onclick='$("#content").load("/visitorlist/?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</a>
+                  {% endif %}
+                </span>
+              </div>
+            </td>
+          </tr>
+          {% for myRecord in myRecords.object_list %}
+          <tr>
+            <td>{{ myRecord.user}}</td>
+            <td>{{ myRecord.ip_address }}</td>
+            <td>{{ myRecord.country}}</td>
+            <td>{{ myRecord.city }}</td>
+            <td>{{ myRecord.visit_date }}</td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="5">
+              <div class="pagination">
+                <span class="step-links">
+                  {% if myRecords.has_previous %}
+                  <a href="#" onclick='$("#content").load("/visitorlist/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a>
+                  {% endif %}
+
+                  <span class="current">
+                    Page {{ myRecords.number }} of {{ myRecords.paginator.num_pages }}.
+                  </span>
+
+                  {% if myRecords.has_next %}
+                  <a href="#" onclick='$("#content").load("/visitorlist/?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</a>
+                  {% endif %}
+                </span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  {% else %}
+  <p>No visitors are available.</p>
+  {% endif %}
+{% box_end %}

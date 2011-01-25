@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% block content%}
+  {% box_start "" "" "welcome" %}
+<h2>About Us</h2>
+
+<img src="/media/images/sac.png" align="left" style="padding-right: 10px;">
+<p>The SANSA Earth Observation &amp; Space Operations Centre is a key component of
+SANSA's efforts to maximise the benefit of information, communications and
+space technology for industry and society. The centre at Hartebeesthoek is
+located some 70 km west of Pretoria in the Magaliesberg mountain range and is
+ideally positioned to provide tracking, telemetry and command (TT&amp;C) services
+for geo-synchronous and polar orbiting spacecraft to the manufacturers,
+operators and users of satellites and launch vehicles. It is also ideally
+situated for satellite data acquisition and as such, delivers world-class earth
+observation data relayed from satellites to a range of stakeholders. It
+provides key remote sensing technologies, infrastructure, services and spatial
+information to address inter alia the mitigation of natural disasters; public
+safety and security; health-related issues; infrastructure and utilities;
+environmental conservation and effective land cover and land use
+classifications.</p>
+
+<p>You can find more information about SAC at our <a href="http://www.csir.co.za/SAC/">home page</a></p>
+
+
+<h3>Credits</h3>
+This website was built using open source toolkits and components:
+
+<ul>
+  <li>
+    <a href="http://django.org">Django</a>
+  </li>
+  <li>
+  <a href="http://www.pixel-mixer.com">Pixel Mixer Icons</a>
+  </li>
+</ul> 
+
+  {% box_end %}
+
+
+{% endblock %}
+

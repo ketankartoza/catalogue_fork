@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% block extrajs %}
+    {{ block.super }}
+{% endblock%}
+{% block body_load%}{{ block.super }}{% endblock%}
+{% block content%}
+  {# layout done with blueprint.css we inherit 22 cols of space from base.html #}
+  <div class="span-15 append-1"> {# recommended to use blueprint divs only for layout ... #}
+    <div class="span-15 ui-widget-content ui-state-highlight ui-corner-all"> {# thus nested jquery widget container #}
+      <div id="map" class="span-15 last"></div>
+      <div id="map-panel">
+        <div id="map-navigation-panel"></div>
+        <div id="map-location" class="small"></div>{# small class from blueprint css #}
+        <div class="olControlScalebar" id="map-scale"></div>
+      </div>
+      <div id="mapquery" class="span-15 last"></div>
+      <div id="table" class="span-15 last">
+      {% block table %}{% endblock %}
+      </div>
+    </div>
+  </div>
+  <div id="sidebar" class="span-6 last">
+    <div id="accordion" class="">
+      {% block messages %}{% endblock %}
+      {% block search %}{% endblock %}
+      {% block preview %}{% endblock %}
+      {% block cart %}{% endblock %}
+      {% block legend %}{% endblock %}
+    </div> 
+  </div>
+{% endblock%}

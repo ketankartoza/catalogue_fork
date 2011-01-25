@@ -1,0 +1,163 @@
+= Batch import of informix data to sac_catalogue =
+
+== Introduction ==
+
+The idea here is to create a local replica of the spot catalogue 
+currently running on informix. This process will take several 
+hours due to the data volumes involved.
+
+== Clearing existing tables from the local copy ==
+
+If you are doing a complete sync (rather than an incremental 
+update), you need to run the drop tables script that 
+will delete all the model tables from the postgres backed:
+
+```
+psql sac < deletetables.sql
+```
+
+Next you need to recreate the tables from the models using 
+django sync:
+
+```
+python manage.py syncdb
+```
+
+== Informix environment preparation ==
+
+Run this from the django python shell (python manage.py shell) 
+to batch import all data from the spot informix catalogue. 
+To run it paste the content below into the shell.
+Before you run this script, do: 
+
+```
+export INFORMIXSERVER=catalog2
+```
+   
+from the shell to make sure you have the informix env set up
+   
+Also, log in to the informix server and run this sql to 
+change the geometry type to wkt.
+
+**Note:** This is no longer neededas my script does it for you!
+
+```
+   ssh informix@196.35.94.210
+   echo "update GeoParam set value = 0 where id =3;" | dbaccess catalogue
+```
+
+== Configuring more temporary swap space ==
+
+**Note:** This should not be required anymore!
+
+Before you run the import, be aware that it consumes a very large amount 
+of memory, and the default amount of swap space allocated will 
+probably be inadequate. For this reason, you should make some more 
+swap space available. 
+
+```
+dd if=/dev/zero of=swapfile bs=1024 count=4322070
+chmod go-rwx swapfile 
+sudo /sbin/mkswap swapfile
+sudo /sbin/swapon swapfile
+```
+This will add just over 4gigs of swap space to the system.
+Using a file based swap like this is probably not very performant,
+but in this context performance if a lesser consideration to 
+stability of the import procedure.
+
+== Running the data load ==
+
+Now you need to start a django shell:
+
+```
+python manage.py shell
+```
+
+Next run the following to start the data load:
+
+```
+import informixdb
+from catalogue.informix import *
+myInformix = Informix()
+myInformix.runImport()
+```
+
+While the script is running, you can watch its progress:
+
+```
+tail -f /tmp/informix.log
+```
+
+== Post migration ==
+
+**Note:** This is no longer needed as my script does it for you!
+
+After running the script, you should revert the informix 
+geometry type to native informix:
+
+```
+ssh informix@196.35.94.210
+echo "update GeoParam set value = 0 where id =3;" | dbaccess catalogue
+exit
+```
+
+Back on the local machine, you can check the import ran ok from the
+log output in:
+
+```
+/tmp/informix.log
+```
+
+That should look something like this:
+
+```
+Superclasses - OK 3 Records
+DataMode - OK 3 Records
+EllipsoidType - OK 2 Records
+ErsCompMode - OK 2 Records
+FileType - OK 18 Records
+HeaderType - OK 7 Records
+Satellte - OK 9 Records
+Satellite - OK 15 Records
+SpotAcquisitionMode - OK 3 Records
+Station - OK 110 Records
+Medium - OK: 157277 Records, Failed:0 Records.
+Localization - OK: 1179257 Records, Failed:0 Records.
+SegmentCommon - OK: 157277 Records, Failed:0 Records.
+```
+
+**Note:** Also probably no longer needed!
+
+Lastly you can remove the temp swap space we created:
+
+```
+sudo swapoff /home/timlinux/swapfile
+rm swapfile
+```
+
+Make sure to give the full path to the swapfile.
+
+
+== Regular updates ==
+
+Simply run this script (e.g. daily from cron) to get your system synced to the informix db:
+
+```
+./updateInformix.sh
+```
+
+
+= Backup and Restore =
+
+To backup the postgres database do:
+
+```
+pg_dump -f sac`date +%a%d%b%Y`.sql.tar.gz -x -O -F tar sac
+```
+
+To restore the postgres database do:
+
+```
+pg_restore -F t sacThu21May2009.sql.tar.gz |psql sac
+```

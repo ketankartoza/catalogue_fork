@@ -1,0 +1,11 @@
+*.pyc
+.DS_Store
+Thumb.db
+desktop.ini
+apache/apache-site-wsgi
+apache/django.wsgi
+scenes_out_projected/
+settings.py
+thumbs_out/
+*.*~
+media/avatars/

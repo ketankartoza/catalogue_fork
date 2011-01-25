@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% block extrajs %}
+      {{ block.super }}
+      <script type="text/javascript">
+      
+        // Load the Visualization API and the piechart package.
+        google.load('visualization', '1', {'packages':['corechart']});
+        
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.setOnLoadCallback(drawChart);
+        
+        // Callback that creates and populates a data table, 
+        // instantiates the pie chart, passes in the data and
+        // draws it.
+        function drawChart() {
+
+        // Create our data table.
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'Country');
+          data.addColumn('number', 'Visits');
+          data.addRows([
+            {% for myCountry in myScores %}
+            {% ifnotequal myCountry.country 'south africa' %}
+            ['{{myCountry.country}}', {{ myCountry.count }}],
+            {% endifnotequal %}
+            {% endfor %}
+          ]);
+
+          // Instantiate and draw our chart, passing in some options.
+          var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+          chart.draw(data, {width: 400, height: 240, is3D: true, title: 'Visitors by country'});
+        }
+      </script>
+{% endblock %}
+{% block content %}
+{% box_start "" "" "" %}
+    {% if myTopCountries and myScores %}
+      <!--Load the AJAX API-->
+      <h2 class="chartTitle">Visits by country excluding SA</h2>
+      <!--Div that will hold the pie chart-->
+      <div id="chart_div"></div>
+
+      <div id="allCountries">
+        <h2 class="chartTitle">All Countries</h2>
+         <table id="gradient-style" summary="SAC Catalogue Visitors" style="width:100%; margin:0px;">
+            <thead> 
+              <th>Country</th>
+              <th>Visitors</th>
+            </thead>
+            <tfoot></tfoot>
+            <tbody>
+              {% for myCountry in myScores %}
+                <tr><td>{% filter force_escape|capfirst %}{{myCountry.country}}{% endfilter %}</td><td>{{ myCountry.count }}</td></tr>
+              {% endfor %}
+            </tbody>
+         </table>
+       </div>
+    {% else %}
+      <p>No reports to generate.</p>
+    {% endif %}
+{% box_end %}
+{% endblock %}

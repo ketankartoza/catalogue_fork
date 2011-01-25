@@ -1,0 +1,149 @@
+/*
+ * Map size
+ */
+
+#map {
+  /* width defined by blueprint.css */
+  height: 250px;
+}
+
+/*
+ * Css required for map controls that are not rendered in the map widget
+ */
+
+.destroyFeatureItemInactive {
+  height: 24px;
+  width: 24px;
+  background:url(/media/images/delete_16.png) no-repeat;
+}    
+
+.olControlDrawFeaturePolygonItemActive
+{
+  background:url(/media/images/draw_polygon_on.png) no-repeat;
+  height:24px;
+  width:24px;
+}
+.olControlDrawFeaturePolygonItemInactive
+{
+  background:url(/media/images/draw_polygon_off.png) no-repeat;
+  height:24px;
+  width:24px;
+}
+.olControlModifyFeatureItemActive
+{
+  background:url(/media/images/draw_line_on.png) no-repeat;
+  height:24px;
+  width:24px;
+}
+.olControlModifyFeatureItemInactive
+{
+  background:url(/media/images/draw_line_off.png) no-repeat;
+  height:24px;
+  width:24px;
+}
+.olControlNavigationItemActive
+{
+  background:url(/media/images/pan_on.png) no-repeat;
+  height:24px;
+  width:24px;
+}
+.olControlNavigationItemInactive
+{
+  background:url(/media/images/pan_off.png) no-repeat;
+  height:24px;
+  width:24px;
+}
+.olControlZoomBoxInItemActive 
+{
+  background:url(/media/images/zoom_in_24.png) no-repeat;
+  height:24px;
+  width:24px;
+}
+.olControlZoomBoxOutItemActive 
+{
+  background:url(/media/images/zoom_out_24.png) no-repeat;
+  height:24px;
+  width:24px;
+}
+.olControlZoomBoxInItemInactive 
+{
+  background:url(/media/images/zoom_in_off_24.png) no-repeat;
+  height:24px;
+  width:24px;
+}
+.olControlZoomBoxOutItemInactive 
+{
+  background:url(/media/images/zoom_out_off_24.png) no-repeat;
+  height:24px;
+  width:24px;
+}
+
+/*
+ * Scalebar
+ */
+
+.olImageLoadError { background-color: transparent !important; }
+
+.olControlScaleBar {
+    bottom: 10px;
+    left: 15px;
+    font-family: sans-serif;
+}
+
+.olControlScaleBarBar {
+    height: 5px!important;
+    top: 12px;
+    background-color: #FFFFFF;
+    background-position: 0 0;
+    background-repeat: repeat-x;
+}
+.olControlScaleBarBarAlt {
+    height: 5px!important;
+    top: 12px;
+    background-color: #000000;
+    background-position: 0 0;
+    background-repeat: repeat-x;
+}
+
+.olControlScaleBarMarkerMajor {
+    height: 12px!important;
+    width: 13px;
+    top: 12px;
+    color: #000000;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    z-index: 5000;
+}
+
+.olControlScaleBarMarkerMinor {
+    height: 12px!important;
+    width: 13px;
+    top: 12px;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    z-index: 5000;
+}
+
+.olControlScaleBarNumbersBox {
+    height: 17px!important;
+    width: 40px;
+    top: 18px;
+    font-size: 9px;
+}
+
+.olControlScaleBarLabelBox {
+    height: 17px!important;
+    top: -6px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+}
+
+.olControlScaleBarLabelBoxSingleLine {
+    height: 13px!important;
+    width: 35px;
+    top: 0px;
+    left: 10px;
+    font-size: 13px;
+}
+

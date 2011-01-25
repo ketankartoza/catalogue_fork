@@ -1,0 +1,32 @@
+<table>
+  <thead>
+    <tr>
+      <th>
+        Old Status
+      </th>
+      <th>
+        New Status
+      </th>
+      <th>
+        Date of Change
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for myRecord in myHistory %}
+    <tr>
+      <td>{{ myRecord.old_order_status }}</td>
+      <td>{{ myRecord.new_order_status }}</td>
+      <td>{{ myRecord.order_change_date }}</td>
+    </tr>
+    <tr>
+      <th>
+        {{ myRecord.user }} notes:
+      </th>
+      <td colspan="2">
+        {{ myRecord.notes }}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>

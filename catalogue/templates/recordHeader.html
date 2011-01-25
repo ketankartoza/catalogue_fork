@@ -1,0 +1,54 @@
+  <thead>
+  </thead>
+    <tr>
+      {% if myShowDetailFlag %}
+      <th></th>
+      {% endif %}
+      {% if myShowSensorFlag %} 
+      <th>Sensor</th>
+      {% endif %}
+      {% if myShowIdFlag %}
+      <th>Id</th>
+      {% endif %}
+      {% if myShowSceneIdFlag %}
+      <th>Scene Id <a href="#" id="scene-id-help">(About)</a></th>
+      {% endif %}
+      {% if myShowDateFlag %}
+      <th>Date</th>
+      {% endif %}
+      {% if myShowRowFlag %}
+      <th>
+        Row  
+      </th>
+      {% endif %}
+      {% if myShowPathFlag %}
+      <th>
+        Path
+      </th>
+      {% endif %}
+      {% if myShowCloudCoverFlag %}
+      <th>{# Note: title attributes below needed for jquery tooltip plugin #}
+        <img src="/media/images/sun2_16.png" alt="Cloud Cover" title="Mean Cloud Cover. % by which the image is covered in cloud. UNK = Unknown" />
+      </th>
+      {% endif %}
+      {% if myShowMetadataFlag %}
+      <th>
+        <img src="/media/images/info_16.png" alt="View Metadata" title="View Metadata. Click this icon to view metadata for this image."/>
+      </th>
+      {% endif %}
+      {% if myShowCartFlag %}
+      <th>
+        <img src='/media/images/buy_16.png' alt="Add to Cart" title="Add to cart. Add this item to your cart for later ordering."/>
+      </th>
+      {% endif %}
+      {% if myShowRemoveIconFlag %}
+      <th>
+        <img src="/media/images/delete_16.png" alt="Remove" title="Remove. Remove this item from the list."/>
+      </th>
+      {% endif %}
+      {% if myShowPreviewFlag %}
+      <th>
+        <img src="/media/images/search_16.png" alt="Show Preview" title="Show Preview. Show a preview thumbnail of this image." />
+      </th>
+      {% endif %}
+    </tr>

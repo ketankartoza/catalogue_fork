@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% block content%}
+  {% box_start "" "" "welcome" %}
+    <center><img src="/media/images/overview.jpg" alt="overview" /></center>
+    <h2>Welcome to the SANSA Earth Observation Online Catalogue</h2>
+    <p>The development of this catalogue was funded by the <a
+        href="http://www.dst.gov.za/">Department of Science and
+        Technology.</a></p>
+    <p>This site will become the main SANSA (South African National Space
+      Agency) earth observation data catalogue for Landsat 4,5 MSS; Landsat 5
+      TM; Landsat 7 ETM; SPOT 1,2,4; ERS 1,2 and NOAA sensors. The CSIR has
+      been acquiring satellite earth observation data since the early 1980's
+      when reception of Landsat-2 MSS data commenced.</p>
+    <pPlease note that is version 1 of our new catalogue. As such there are
+      many features that are planned but not yet implemented.</p>
+    <p><b>Browser compatibility:</b> This web site works with Mozilla
+      Firefox, Google Chrome, Opera, Safari and Internet Explorer 8.
+        future.</b>Users of older versions of Internet Explorer should
+      upgrade to version 8 to get the best experience.</p>
+    <p><b>Legacy Catalogue:</b> The old catalogue (that this catalogue aims to replace) is still 
+      <a href="http://196.35.94.9:8089">online here</a>.</p>
+  {% box_end %}
+
+{% endblock %}
+

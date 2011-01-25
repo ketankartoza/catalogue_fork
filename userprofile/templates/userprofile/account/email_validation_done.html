@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% load i18n %}
+
+{% block title %}{% if successful %}{% trans 'E-mail validation successful' %}{% else %}{% trans 'E-mail change unsuccessful' %}{% endif %}{% endblock %}
+
+
+{% block content %}
+<div id="content">
+{% box_start "" "" "" %}
+  <div class="{% if successful %}success{% else %}error{% endif %}">
+  {% if successful %}
+  <p>{% trans "E-mail address validated successfully" %}.</p>
+  {% else %}
+  <p>{% trans "The key you received via e-mail is no longer valid. Please try the e-mail validation process again" %}.</p>
+  {% endif %}
+  </div>
+{% box_end %}
+{% box_start "" "" "" %}
+    <h3>{% trans "E-mail validation process" %}</h3>
+    <p>{% trans "You can manage the e-mail validation process from the" %} <a href="{% url profile_overview %}">{% trans "overview page" %}.</p>
+{% box_end %}
+</div>
+{% include "userprofile/menu.html" %}
+{% endblock %}

@@ -1,0 +1,76 @@
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+  <script type="text/javascript">
+    // <![CDATA[
+    $.ui.dialog.prototype.options.bgiframe = true;
+    function check_search_dates() { /* do nothing */ };
+    function init() {
+      if (OpenLayers.Util.getBrowserName() == "msie" && !window.ieLoaded) {
+        window.ieLoaded = true;
+        setTimeout(init, 2000);
+        return;
+      }  
+      {% if myLayerDefinitions %}
+        {% for myValue in myLayerDefinitions %}
+        {{ myValue|safe }}
+        {% endfor %}
+      {% endif %}
+      {% if myLayersList %}
+        setupBaseMap();
+        mMap.addLayers( {{ myLayersList|safe }} );
+      {% endif %}
+      {% if myTaskingRequestFlag %}
+        setupTaskingMap({{ myLayersList|safe }} );
+      {% endif %}
+      {% for myField in myForm %}
+        $("#{{myField.html_name}}Help").dialog({
+        autoOpen: false, 
+        bgiframe: true,
+        modal: true,
+        buttons: {
+          Ok: function() {
+            $(this).dialog('close');
+          }
+        }
+      });
+      $('#{{myField.html_name}}Button').click(function() 
+      { 
+        $('#{{myField.html_name}}Help').dialog('open'); 
+        return false;
+      }); 
+      {% endfor %}
+  };
+  //]]>
+  </script>
+  {% box_start "" "" "" %}
+    <h2>{{ myTitle }}</h2>
+    {{  myMessage|safe }}
+
+    <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="horizontal" id="add_form">
+        <table>
+          {{myForm}}
+        </table>  
+        {% if mySubmitLabel %}
+        <button type="submit" id="submitButton">{{ mySubmitLabel }}</button>
+        {% else %}
+        <button type="submit" id="submitButton">Save</button>
+        {% endif %}
+    </form>
+  {% box_end %}
+  <br />
+  {% if myShowCartContentsFlag %}
+    <div id="cart">
+    {% include "cartContents.html" %}
+    </div>
+  {% endif %}
+  <!--
+  {% for myField in myForm %}
+    {# popup help for this field #}
+    <div id="{{myField.html_name}}Help" title="{{ myField.label }}">
+      <p>
+        <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+        {{ myField.help_text }}
+      </p>
+    </div>
+    {# popup ends #}
+  {% endfor %}
+  -->

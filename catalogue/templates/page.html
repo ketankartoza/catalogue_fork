@@ -1,0 +1,79 @@
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% if myRecords %}
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    function loadMoreData() {
+      {# vars initialised inside a function using var will have local scope #}
+      {# vars initialised inside a function withoug using var will have global scope #}
+      clearSearchResults();
+      {# see http://trac.openlayers.org/wiki/Styles for more info on styling #}
+      var myScenesLayer = new OpenLayers.Layer.Vector("scenes",{
+        styleMap: mSceneStyleMap, 
+        rendererOptions: {zIndexing: true},
+        projection: new OpenLayers.Projection("EPSG:900913"),
+        });
+      var myGJFormat = new OpenLayers.Format.GeoJSON(
+        
+        );
+      {% for myResult in myRecords %} 
+      var myFeature{{forloop.counter}} = myGJFormat.read({{myResult.product.spatial_coverage.geojson|safe}})[0];
+      myFeature{{forloop.counter}}.geometry = transformGeometry(myFeature{{forloop.counter}}.geometry);
+      myFeature{{forloop.counter}}.id = '{{myResult.product.id}}';
+      myFeature{{forloop.counter}}.product_id = '{{myResult.product.product_id}}';
+      myFeature{{forloop.counter}}.selected = 'no';
+      myScenesLayer.addFeatures(myFeature{{forloop.counter}});
+      {% endfor %}
+      mMap.addLayer(myScenesLayer);
+      {% if myExtent %}
+      var myBounds = transformBounds( new OpenLayers.Bounds{{myExtent}}); //calculated from search page results
+      mMap.zoomToExtent( myBounds ); 
+      {% else %}
+      mMap.zoomToExtent( transformBounds(new OpenLayers.Bounds(14.0,-35.0,34.0,-21.0)));  //sa
+      {% endif %}
+      setupSceneSelector( myScenesLayer );
+
+    }
+    if (pageLoaded) {
+        loadMoreData();
+        loadMoreData = null;
+    }    
+
+  /* ]]> */
+  </script>
+{% box_start "" "comment-edit-48x48.png" "results-table" %}
+  <div class="pagination">
+    <span class="step-links">
+      {% if myPage.has_previous %}
+      <a href="#" onclick='loadPage({{ myPage.previous_page_number }},"{{mySearchGuid}}"); return false;'>Previous</a>
+      {% endif %}
+      {% if myPage %}
+      <span class="current">
+        Page {{ myPage.number }} of {{ myPage.paginator.num_pages }}.
+      </span>
+      {% endif %}
+      {% if myPage.has_next %}
+        <a href="#" onclick='loadPage({{ myPage.next_page_number }},"{{mySearchGuid}}"); return false;'>Next</a>
+      {% endif %}
+    </span>
+  </div>
+
+  <table id="results" cellpadding="0" cellspacing="0" width="100%">
+    {% include "recordHeader.html" %}
+    <tbody>
+      {% for myRecord in myRecords %}
+      {% include "record.html" %} 
+      {% endfor %}
+    </tbody>
+  </table>
+{% box_end %}
+{% endif %}
+{% if myMessagesFlag %}
+  {{ myMessagesHeading|safe }}
+  <div>
+      {% if myMessages %}
+        {% for myValue in myMessages %}
+          {{ myValue|safe }}<br/>
+        {% endfor %}
+      {% endif %}
+  </div>
+{% endif %}

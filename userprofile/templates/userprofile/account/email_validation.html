@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% load i18n %}
+
+{% block title %}{% if user.email %}{% trans "E-mail change" %}{% else %}{% trans "Add e-mail" %}{% endif %}{% endblock %}
+
+{% block extrajs %}
+{{ block.super }}
+<script type="text/javascript">
+  $(function() {
+    $("input#id_email").focus();
+    $("input[type='text'], input[type='text']").addClass("text");
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+<div id="content">
+{% box_start "" "" "" %}
+  <form action="" method="post" accept-charset="utf-8">
+  <fieldset>
+    <legend>{% if user.email %}{% trans "E-mail change" %}{% else %}{% trans "Add e-mail" %}{% endif %}</legend>
+    <label for="id_email">{% trans 'New e-mail address' %}</label>
+    <p>{{ form.email }}
+    {% if form.email.errors %}
+      <span class="quiet red"><br />* {{ form.email.errors|join:"; " }}</span>
+    {% endif %}
+    </p>
+    {% if form.non_field_errors %}
+      <ul class="quiet red">{{ form.non_field_errors.as_ul }}</ul>
+    {% endif %}
+  </fieldset>
+  <p><input type="submit" value="{% trans 'Send confirmation' %}" /></p>
+  </form>
+    <h3>{% trans "Add e-mail" %}</h3>
+    <p>{% trans "Insert the new e-mail address. An e-mail will be send to it for testing and confirmation" %}.</p>
+{% box_end %}
+</div>
+{% include "userprofile/menu.html" %}
+{% endblock %}

@@ -1,0 +1,10 @@
+django>=1.2
+django-registration
+sorl-thumbnail
+django-db-log
+django-debug-toolbar
+django-extensions
+psycopg2
+pil
+gdata
+GDAL

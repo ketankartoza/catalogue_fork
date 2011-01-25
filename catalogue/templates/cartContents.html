@@ -1,0 +1,20 @@
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% box_start "" "" "cart-contents" %}
+  {% if myCartTitle %}
+  <h2>{{ myCartTitle }}</h2>
+  {% endif %}
+  <table id="cart-contents-table" width="100%" style="border-bottom: solid 1px; border-top: solid 1px; margin-top: 3px;">
+    {% include "recordHeader.html" %}
+    {% for myRecord in myRecords %}
+      {% include "record.html" %}
+    {% endfor %}
+  </table>
+  <div style="text-align: center;">
+    <b id="cart-item-count">{{ myRecords.count }}</b> item(s).
+  </div>
+  {% if myRecords %}
+  <div id="cart-download-div" style="text-align: center;">
+    <a href="/cartasshapefile/"><img src="/media/images/down_16.png" alt=""/> Download cart as shapefile.</a>
+  </div>
+  {% endif %}
+{% box_end %}

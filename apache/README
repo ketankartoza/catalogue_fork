@@ -1,0 +1,7 @@
+create copies of these files (without the .templ extension)
+Modify as needed
+Link the apache site file into /etc/apache/sites-available
+Enable the site with 
+
+sudo a2ensite <your config name>
+sudo /etc/apache/reload

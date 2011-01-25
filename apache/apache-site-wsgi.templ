@@ -1,0 +1,63 @@
+<VirtualHost *>
+  ServerAdmin tim@linfiniti.com 
+  ServerName catalogue.sac.co.za
+  ServerAlias www.catalogue.sac.co.za
+  LogLevel warn
+
+  CustomLog /var/log/apache2/catalogue.access.log combined
+  # Possible values include: debug, info, notice, warn, error, crit,
+  # alert, emerg.
+  ErrorLog /var/log/apache2/catalogue.error.log
+
+  ServerSignature Off
+
+
+
+  ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+  <Directory "/usr/lib/cgi-bin">
+    AllowOverride None
+    Options ExecCGI -MultiViews +SymLinksIfOwnerMatch
+    Order allow,deny
+    Allow from all
+  </Directory>
+  # This will match basically all addresses except
+  # those with cgi-bin in them since we want 
+  # python proxy to work for cross site xhttprequests
+  # see http://www.codinghorror.com/blog/archives/000425.html
+  # for an explanation of the 'negative lookbehind' regex used here
+  #<LocationMatch "^/(?!cgi-bin).*$">
+  #  SetHandler python-program
+  #  # see informix notes for why this is needed
+  #  SetEnv INFORMIXSERVER catalog2
+  #</LocationMatch>
+
+  WSGIScriptAlias / /opt/sac_catalogue/sac_live/apache/django.wsgi
+  WSGIDaemonProcess sac-live user=www-data group=www-data processes=3 threads=25 python-path=/opt/sac_catalogue/python/lib/python2.6/site-packages
+  WSGIProcessGroup sac-live
+  <Directory /opt/sac_catalogue/sac_live/apache>
+    Order deny,allow
+    Allow from all
+  </Directory>
+
+  Alias /admin_media /opt/sac_catalogue/python/lib/python2.6/site-packages/django/contrib/admin/media/
+  <Location /admin_media>
+    Order deny,allow
+    Allow from all
+    SetHandler None
+  </Location>
+
+  Alias /media /opt/sac_catalogue/sac_live/media
+  <Location /media>
+    Order deny,allow
+    Allow from all
+    SetHandler None
+  </Location>
+
+  Alias /imagery /opt/sac_catalogue/sac_test/imagery_mastercopies
+  <Location /media>
+    Order deny,allow
+    Allow from all
+    SetHandler None
+  </Location>
+</VirtualHost>
+

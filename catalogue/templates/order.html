@@ -1,0 +1,177 @@
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+<script type="text/javascript">
+    // <![CDATA[
+    $(function() 
+    {
+      $("#statusFormLink").button({});
+      {# submit button not used when we are using ajax #}
+      $("#submitButton").hide();
+      $("#statusForm").dialog(
+      {
+        bgiframe: true,
+        autoOpen: false,
+        height: 'auto',
+        width: 450,
+        modal: true,
+        buttons: 
+        {
+          'Update': function() 
+          {
+            submitHistory();
+            $(this).dialog('close');
+          },
+          Cancel: function() 
+          {
+            $(this).dialog('close');
+          },
+        }
+      });
+    });
+    function submitHistory() 
+    {
+      $("#formHeading").html('Updating status...<img src="/media/images/ajax-loader.gif">'); 
+      $("#orderHistory").hide();
+      // validate and process form here
+      var myDataString = 'order={{myOrder.id}}';
+      {% for myField in myForm %}
+      myDataString += "&"; 
+      myDataString+="{{myField.html_name}}=" + $("#id_{{myField.html_name}}").val();
+      {% endfor %}
+      //alert(myDataString);
+      $.post(
+        "/updateorderhistory/", 
+        myDataString,
+        function(theResponseData)
+        {
+           {# alert(theResponseData); #}
+           $("#orderHistory").html('');
+           $("#orderHistory").slideDown('slow');
+           $("#orderHistory").html(theResponseData);
+           $("#formHeading").html('Status updated!'); 
+        }, 
+        "html");
+      return false;
+    };
+  //]]>
+</script>
+{% box_start "" "" "" %}
+<h2>Order Details</h2>
+<h2>Order No: {{myOrder.id}}, Order Status: {{myOrder.order_status}}</h2>
+<table>
+  <thead>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Date</th>
+      <th>Owner</th>
+      <th>Level</th>
+      <th>Resampling</th>
+    </tr>
+    <tr>
+      <td>{{myOrder.order_date}}</td>
+      <td>{{myOrder.user}}</td>
+      <td>{{myOrder.processing_level}}</td>
+      <td>{{myOrder.resampling_method}}</td>
+    </tr>
+    <tr>
+      <th>Projection</th>
+      <th>Datum</th>
+      <th>Output Format</th>
+      <th>File Format</th>
+    </tr>
+    <tr>
+      <td>{{myOrder.projection}}</td>
+      <td>{{myOrder.datum}}</td>
+      <td>{{myOrder.outputformat}}</td>
+      <td>{{myOrder.file_format}}</td>
+    </tr>
+    <tr>
+      <th colspan="2">Full Name</th>
+      <th colspan="2">Email</th>
+    </tr>
+    <tr>
+      <td colspan="2">{{myOrder.user.get_profile.firstname}} {{myOrder.user.get_profile.surname}}</td>
+      <td colspan="2"><a href="mailto:{{myOrder.user.email}}">{{myOrder.user.email}}</a></td>
+    </tr>
+    <tr>
+      <th colspan="1">Photo</th>
+      <th colspan="3">Address</th>
+    </tr>
+    <tr>
+      <td colspan="1">
+        {% load avatars %}
+        <img id="avatarimg" src="{% avatar 96 %}" />
+      </td>
+      <td colspan="3">
+      {% if myOrder.user.get_profile.organisation%}
+      {{ myOrder.user.get_profile.organisation}}<br />
+      {% else %}
+      Organisation Not set<br />
+      {% endif %}
+      {% if myOrder.user.get_profile.address1 %}
+        {{ myOrder.user.get_profile.address1 }}<br />
+      {% else %}
+        Address1 Not set<br />
+      {% endif %}
+      {% if myOrder.user.get_profile.address2 %}
+        {{ myOrder.user.get_profile.address2 }}<br />
+      {% else %}
+      Address2 Not set<br />
+      {% endif %}
+      {% if myOrder.user.get_profile.address3 %}
+        {{ myOrder.user.get_profile.address3 }}<br />
+      {% endif %}
+      {% if myOrder.user.get_profile.address4 %}
+        {{ myOrder.user.get_profile.address4 }}<br />
+      {% endif %}
+      {% if myOrder.user.get_profile.post_code%}
+        {{ myOrder.user.get_profile.post_code }}<br />
+      {% else %}
+      Post Code Not set<br />
+      {% endif %}
+      {% if myOrder.user.get_profile.contact_no%}
+      {{ myOrder.user.get_profile.contact_no}}<br />
+      {% else %}
+      Contact Number Not set<br />
+      {% endif %}
+
+      </td>
+    </tr>
+    <tr>
+      <th colspan="4">Notes</th>
+    </tr>
+    <tr>
+      <td colspan="4">{{myOrder.notes}}</td>
+    </tr>
+  </tbody>
+</table>
+{% box_end %}
+<br />
+<div id="items">
+  {% include "cartContents.html" %}
+</div>
+<br />
+{% box_start "" "" "" %}
+<h2>
+Order History
+</h2>
+{% if myForm %}
+  <a id="statusFormLink" onclick="$('#statusForm').dialog('open'); return false;">Update status</a>
+{% endif %}
+<div id="orderHistory">
+  {% if myHistory %}
+    {% include "orderStatusHistory.html" %}
+  {% endif %}
+</div>
+{% box_end %}
+<br />
+{% if myForm %}
+  <div id="statusForm">
+      <h3 id="formHeading">Update Status</h3>
+      <form enctype="multipart/form-data" action="/updateorderhistory/" method="post" id="order_form">
+        <center>{{ myForm.as_p }}</center>
+        <input id="id_order" name="order" type="hidden" value="{{myOrder.id}}" />
+        <button type="submit" id="submitButton">Update</button>
+      </form>
+  </div>
+{% endif %}

@@ -1,0 +1,63 @@
+{# Original code from Tim's SABIO project and copyright is retained by the original author #}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% box_start "" "" ""%}
+  <h2>Recent Search History</h2>
+  <table width="100%" style="border-bottom: solid 1px; border-top: solid 1px; margin-top: 3px;">
+    <tr>
+      <th>
+        <b>Searched by</b>
+      </th>
+      <th>
+        <b>Searched on</b>
+      </th>
+      <th>
+        <b>Sensor</b>
+      </th>
+      <th>
+        <b>Start Date</b>
+      </th>
+      <th>
+        <b>End Date</b>
+      </th>
+      <th>
+        <b>View</b>
+      </th>
+      <th>
+      </th>
+    </tr>
+    {% for mySearch in mySearches %}
+    <tr>
+      <td>
+        {{ mySearch.user }} 
+      </td>
+      <td>
+        {{ mySearch.search_date|date:"D, d M Y, H:m" }} 
+      </td>
+      <td>
+        {{ mySearch.sensorsAsString }} 
+      </td>
+      <td>
+        {{ mySearch.start_date }} 
+      </td>
+      <td>
+        {{ mySearch.end_date }} 
+      </td>
+      <td>
+        <a href="/searchresult/{{ mySearch.guid }}/"
+          >View
+          </a>
+      </td>
+      <td>
+        <a href="/deletesearch/{{ mySearch.id }}/"
+          onclick='
+          $.get("/deletesearch/{{ mySearch.id }}/?xhr");
+          $(this).parent().parent().remove();
+          return false;'
+          >
+          <img src="/media/images/delete_16.png">
+          </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+{% box_end %}

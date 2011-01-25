@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content%}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% box_start "" "" "Cart Help" %}
+  <h2>Empty Cart</h2>
+  <p>Your cart is still empty. You need to add some items to the cart before you can place your order. To do this, use the <a href="/search">search</a> form to search for some data. Then from the search results, choose which items interest you and add them to your cart using the green cart icon.<img class="icon" src="/media/images/buy_16.png"></p>
+{% box_end %}
+{% endblock %}

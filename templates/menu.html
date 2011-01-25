@@ -1,0 +1,87 @@
+<ul id="menu" class="dropdown dropdown-linear">
+
+  <li><a href="/"><img src="/media/images/home_16.png" alt=""/>&nbsp;Home</a></li>
+{% if user.is_authenticated %}     
+  <li><a href="/search/"><img src="/media/images/search_16.png" alt=""/>&nbsp;Search</a></li>
+  <li>
+    <a href="/showcartcontents" onclick='$("#content").load("/showcartcontents/"); return false;'>
+      <img src="/media/images/buy_16.png" alt=""/>&nbsp;My Cart</a>
+  </li>
+  <li>
+    <a href="/addorder"><img src="/media/images/letter_16.png" alt=""/>&nbsp;Order Now!</a>
+  </li>
+  {# popular links #}
+  <li>
+    <span class="dir"><img src="/media/images/bookmark_16.png" alt="" />&nbsp;Popular Links</span>
+    <ul>
+      <li>
+        <a href="/mapHelp/" onclick='$("#content").load("/mapHelp/","",zebraTables); return false;'>
+          <img src="/media/images/help_16.png" alt=""/>&nbsp;Using the map</a>
+      </li>
+      <li>
+        <a href="/mysearches" onclick='$("#content").load("/mysearches/","",zebraTables); return false;'>
+          <img src="/media/images/search_16.png" alt=""/>&nbsp;My Search History</a>
+      </li>
+      <li>
+        <a href="/myorders" onclick='$("#content").load("/myorders/","",zebraTables); return false;'>
+          <img src="/media/images/briefcase_16.png" alt=""/>&nbsp;My Orders</a>
+      </li>
+      <li>
+        <a href="/addtaskingrequest">
+          <img src="/media/images/tasking_16.png" alt=""/>&nbsp;New Tasking Request</a>
+      </li>
+      <li>
+        <a href="/mytaskingrequests" onclick='$("#content").load("/mytaskingrequests/","",zebraTables); return false;'>
+          <img src="/media/images/tasking_16.png" alt=""/>&nbsp;My Tasking Requests</a>
+      </li>
+      <li><a href="/whereami"><img src="/media/images/wherami_16.png">&nbsp;Where am I?</a></li>
+    </ul>
+  </li>
+  {# Partners menu #}
+  {% if myPartnerFlag %}
+  <li>
+    <span class="dir"><img src="/media/images/globe_16.png" alt="" />&nbsp;Partners</span>
+    <ul>
+      <li><a href="/clip"><img src="/media/images/globe_16.png">&nbsp;Clip Mosaic</a></li>
+    </ul>
+  </li>
+  {% endif %}
+  {# staff menu #}
+  {% if user.is_staff %}     
+  <li>
+    <span class="dir"><img src="/media/images/users_16.png" alt="" />&nbsp;Staff</span>
+    <ul>
+      <li><a href="/visitormap/"><img src="/media/images/users_16.png">&nbsp;Vistor Map</a></li>
+      <li><a href="/kml/"><img src="/media/images/darkearth_16.png">&nbsp;Visitor KML</a></li>
+      <li>
+        <a href="/visitorlist/" onclick='$("#content").load("/visitorlist/","",zebraTables); return false;'>
+          <img src="/media/images/notebook_16.png" alt=""/>&nbsp;Visitor List</a>
+      </li>
+      <li><a href="/visitorreport/"><img src="/media/images/statistics_16.png">&nbsp;Visitor Stats</a></li>
+      <li><a href="/searchesmap/"><img src="/media/images/search_16.png">&nbsp;Searches Map</a></li>
+      <li>
+        <a href="/recentsearches/" onclick='$("#content").load("/recentsearches/","",zebraTables); return false;'>
+          <img src="/media/images/notebook_16.png" alt=""/>&nbsp;Searches Table</a>
+      </li>
+      <li>
+        <a href="/listorders/" onclick='$("#content").load("/listorders/","",zebraTables); return false;'>
+          <img src="/media/images/briefcase_16.png" alt=""/>&nbsp;Orders List</a>
+      </li>
+      <li>
+        <a href="/dataSummaryTable/" onclick='$("#content").load("/dataSummaryTable/","",zebraTables); return false;'>
+          <img src="/media/images/diagram_16.png" alt=""/>&nbsp;Data Summary</a>
+      </li>
+      <li><a href="/admin/"><img src="/media/images/shield_16.png" alt=""/>&nbsp;Admin</a></li>
+    </ul>
+  </li>
+  {% endif %}
+  {% include "userprofile/menu_content.html" %}
+  {# login menu #}
+  {% else %} {# User is not authenticated #}
+  <li><a href="/accounts/login/"><img src="/media/images/user_16.png">&nbsp;Login</a></li>
+  <li><a href="/accounts/register/"><img src="/media/images/key_16.png">&nbsp;Register</a></li>
+  <li><a href="/accounts/password/reset/"><img src="/media/images/user_16.png">&nbsp;Reset Password</a></li>
+  {% endif %}
+  <li><a href="/about/"><img src="/media/images/flag_16.png" alt=""/>&nbsp;About</a></li>
+  <li><a href="/contact/"><img src="/media/images/pencil_16.png" alt=""/>&nbsp;Contact </a></li>
+</ul>

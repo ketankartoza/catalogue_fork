@@ -1,0 +1,80 @@
+---------------------------
+Tasking Request Details
+---------------------------
+
+Tasking Order No       {{myOrder.id}}, Order Status: {{myOrder.order_status}}
+Date                   {{myOrder.order_date}}
+Owner                  {{myOrder.user}}
+Level                  {{myOrder.processing_level}}
+Resampling             {{myOrder.resampling_method}}
+    
+Projection             {{myOrder.projection}}
+Datum                  {{myOrder.datum}}
+Output Format          {{myOrder.outputformat}}
+File Format            {{myOrder.file_format}}
+
+Mission Sensor         {{myOrder.mission_sensor }}
+    
+Full Name              {{myOrder.user.get_profile.firstname}} {{myOrder.user.get_profile.surname}}
+Email                  {{myOrder.user.email}}
+    
+    
+Address   
+      {% if myOrder.user.get_profile.organisation%}
+      {{ myOrder.user.get_profile.organisation}}
+      {% else %}
+      Organisation Not set
+      {% endif %}
+      {% if myOrder.user.get_profile.address1 %}
+        {{ myOrder.user.get_profile.address1 }}
+      {% else %}
+        Address1 Not set
+      {% endif %}
+      {% if myOrder.user.get_profile.address2 %}
+        {{ myOrder.user.get_profile.address2 }}
+      {% else %}
+      Address2 Not set
+      {% endif %}
+      {% if myOrder.user.get_profile.address3 %}
+        {{ myOrder.user.get_profile.address3 }}
+      {% endif %}
+      {% if myOrder.user.get_profile.address4 %}
+        {{ myOrder.user.get_profile.address4 }}
+      {% endif %}
+      {% if myOrder.user.get_profile.post_code%}
+        {{ myOrder.user.get_profile.post_code }}
+      {% else %}
+      Post Code Not set
+      {% endif %}
+      {% if myOrder.user.get_profile.contact_no%}
+      {{ myOrder.user.get_profile.contact_no}}
+      {% else %}
+      Contact Number Not set
+      {% endif %}
+
+---------------------------
+Tasking Request Notes: 
+---------------------------
+{{myOrder.notes}}
+
+---------------------------
+Tasking Request Products: 
+---------------------------
+{% for myRecord in myRecords %}
+{{ myRecord.product.product_id }}
+{% endfor %}
+
+---------------------------
+Tasking Request History
+---------------------------
+
+{% for myRecord in myHistory %}
+Old Status       {{ myRecord.old_order_status }}
+New Status       {{ myRecord.new_order_status }}
+Date of Change   {{ myRecord.order_change_date }}
+{{ myRecord.user }} notes:
+{{ myRecord.notes }}
+---------------------------
+
+{% endfor %}
+

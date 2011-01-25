@@ -1,0 +1,9 @@
+{% load i18n %}
+{% if user.is_authenticated %}
+  <div id="sidebar" class="clearfix">
+    <div id="accordion">
+        {% include "userprofile/menu_content.html" %}
+      </div>
+    </div>
+  </div>
+{% endif %}

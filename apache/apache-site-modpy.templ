@@ -1,0 +1,79 @@
+<VirtualHost *>
+  ServerAdmin tim@linfiniti.com 
+  ServerName it.sac.co.za
+  ServerAlias www.it.sac.co.za
+  LogLevel warn
+
+  CustomLog /var/log/apache2/it.access.log combined
+  # Possible values include: debug, info, notice, warn, error, crit,
+  # alert, emerg.
+  ErrorLog /var/log/apache2/it.error.log
+
+  ServerSignature Off
+
+
+
+  ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+  <Directory "/usr/lib/cgi-bin">
+    AllowOverride None
+    Options ExecCGI -MultiViews +SymLinksIfOwnerMatch
+    Order allow,deny
+    Allow from all
+  </Directory>
+ 
+  # -----------------------------------------------------
+  #
+  # Use this if not using a virtual env
+  #
+  # This will match basically all addresses except
+  # those with cgi-bin in them since we want 
+  # python proxy to work for cross site xhttprequests
+  # see http://www.codinghorror.com/blog/archives/000425.html
+  # for an explanation of the 'negative lookbehind' regex used here
+  #<LocationMatch "^/(?!cgi-bin).*$">
+  #  SetHandler python-program
+  #  PythonHandler django.core.handlers.modpython
+  #  SetEnv DJANGO_SETTINGS_MODULE settings
+  #  # see informix notes for why this is needed
+  #  SetEnv INFORMIXSERVER catalog2
+  #  PythonPath "['/opt/sac_catalogue/sac_test/'] + sys.path"
+  #  PythonOption django.root /sac_test
+  #  PythonDebug Off  
+  #</LocationMatch>
+  # -----------------------------------------------------
+
+
+
+  # -----------------------------------------------------
+  #
+  # Use this if using a virtual env - see
+  # http://mydjangoblog.com/2009/03/30/django-mod_python-and-virtualenv/
+  #
+  # This will match basically all addresses except
+  # those with cgi-bin in them since we want 
+  # python proxy to work for cross site xhttprequests
+  # see http://www.codinghorror.com/blog/archives/000425.html
+  # for an explanation of the 'negative lookbehind' regex used here
+  <LocationMatch "^/(?!cgi-bin).*$">
+    SetHandler python-program
+    PythonHandler sacvirtualenv
+    SetEnv DJANGO_SETTINGS_MODULE settings
+    # see informix notes for why this is needed
+    SetEnv INFORMIXSERVER catalog2
+    PythonPath "['/opt/sac_catalogue/python/bin','/opt/sac_catalogue/sac_test/'] + sys.path"
+    PythonOption django.root /sac_test
+    PythonDebug Off  
+    SetEnv PYTHON_EGG_CACHE /var/tmp/egg
+    #PythonInterpreter polyprog_ru
+  </LocationMatch>
+
+  # -----------------------------------------------------
+  <Location "/admin_media">
+      SetHandler None
+  </Location>
+  <Location "/media">
+      SetHandler None
+  </Location>
+  Alias /admin_media /usr/lib/python2.5/site-packages/django/contrib/admin/media
+  Alias /media /opt/sac_catalogue/sac_test/media
+</VirtualHost>

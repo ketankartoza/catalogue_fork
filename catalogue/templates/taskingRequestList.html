@@ -1,0 +1,90 @@
+{# Original code from Tim's SABIO project and copyright is retained by the original author #}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% block content %}
+  {% box_start "" "" "tasking-request-list" %}
+  <script type="text/javascript">
+      function showTask(theId) {
+        theUrl = '/viewtaskingrequest/' + theId + '/';
+        $('#content').load(theUrl,'', zebraTables );
+      };
+  </script>
+  <h2>Tasking Requests List</h2>
+  <table>
+    <thead>
+      <tr>
+        <td colspan="5">
+        <form name="frmShowTask" method="get" action="">
+          <label>Go to Tasking Request:</label>
+          <input name="task_id_text" type="text" size="6" maxlength="5" />
+          <input type="button" value="Go!" 
+                onclick="showTask(forms['frmShowTask'].task_id_text.value); return false;"
+        </form>
+        </td>              
+      </tr>                
+    </thead>
+    <tbody>
+      <tr>
+        <th>Id</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Placed by</th>
+        <th>View</th>
+      </tr>
+      <tr>
+        <td colspan="5" style="text-align: center;">
+          <div class="pagination">
+            <span class="step-links">
+              {% if myRecords.has_previous %}
+              <a href="#" onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a>
+              {% endif %}
+
+              <span class="current">
+                Page {{ myRecords.number }} of {{ myRecords.paginator.num_pages }}.
+              </span>
+
+              {% if myRecords.has_next %}
+              <a href="#" onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</a>
+              {% endif %}
+            </span>
+          </div>
+        </td>
+      </tr>
+    {% for myOrder in myRecords.object_list %}
+      <tr>
+        <td>{{myOrder.id }}</td>
+        <td>{{myOrder.order_date|date:"D, d M Y, H:m" }}</td>
+        <td>{{myOrder.order_status}}</td>
+        <td>{{myOrder.user}}</td>
+        <td>
+          <img src="/media/images/search_16.png" 
+               style="cursor: pointer;"
+               onclick='
+               $("#content").load("/viewtaskingrequest/{{myOrder.id}}/","", zebraTables );
+               return false;' 
+           / >
+        </td>
+      </tr>
+    {% endfor %}
+      <tr>
+        <td colspan="5" style="text-align: center;">
+          <div class="pagination">
+            <span class="step-links">
+              {% if myRecords.has_previous %}
+              <a href="#" onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a>
+              {% endif %}
+
+              <span class="current">
+                Page {{ myRecords.number }} of {{ myRecords.paginator.num_pages }}.
+              </span>
+
+              {% if myRecords.has_next %}
+              <a href="#" onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</a>
+              {% endif %}
+            </span>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  {% box_end %}
+{% endblock %}
