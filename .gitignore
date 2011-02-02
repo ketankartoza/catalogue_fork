@@ -11,4 +11,8 @@ thumbs_out/
 *~
 media/avatars/
 
+
+# ABP
 settings_local.py
+ipy.py
+
