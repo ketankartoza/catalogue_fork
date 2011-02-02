@@ -38,9 +38,12 @@
         return false;
       }); 
       {% endfor %}
+{# // add tooltip #}
+    $("#map-navigation-panel div[title]").tooltip('#maptooltip'); 
   };
   //]]>
   </script>
+  <div id="maptooltip">&nbsp;</div> 
   {% box_start "" "" "" %}
     <h2>{{ myTitle }}</h2>
     {{  myMessage|safe }}
