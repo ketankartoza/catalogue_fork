@@ -189,10 +189,7 @@ class GenericProduct( models.Model ):
     """Returns the path (relative to whatever parent dir it is in) for the
       thumb for this file following the scheme <Sensor>/<YYYY>/<MM>/<DD>/
       The thumb itself will exist under this dir as <product_id>.jpg"""
-    return os.path.join( self.mission.abbreviation,
-                    str( self.product_acquisition_start.year ),
-                    str( self.product_acquisition_start.month ),
-                    str( self.product_acquisition_start.day ) )
+    raise NotImplementedError()
 
   def thumbnail(self, theSize):
       """Return a thumbnail for this product of size "small" - 16x16, "medium" - 200x200 or "large" - 400x400
@@ -334,11 +331,7 @@ class GenericProduct( models.Model ):
     """Returns the path (relative to whatever parent dir it is in) for the
       image itself following the scheme <Sensor>/<processinglevel>/<YYYY>/<MM>/<DD>/
       The image itself will exist under this dir as <product_id>.tif.bz2"""
-    return os.path.join( self.mission.abbreviation,
-                    str( self.processing_level.abbreviation),
-                    str( self.product_acquisition_start.year ),
-                    str( self.product_acquisition_start.month ),
-                    str( self.product_acquisition_start.day ) )
+    raise NotImplementedError()
 
   def imageUrl( self ):
     """Returns a path to the actual imagery data as a url. You need to have
@@ -460,6 +453,25 @@ class GenericSensorProduct( GenericProduct ):
     """
     abstract = False
 
+  def imagePath( self ):
+    """Returns the path (relative to whatever parent dir it is in) for the
+      image itself following the scheme <Sensor>/<processinglevel>/<YYYY>/<MM>/<DD>/
+      The image itself will exist under this dir as <product_id>.tif.bz2"""
+    return os.path.join( self.mission.abbreviation,
+                    str( self.processing_level.abbreviation),
+                    str( self.product_acquisition_start.year ),
+                    str( self.product_acquisition_start.month ),
+                    str( self.product_acquisition_start.day ) )
+
+
+  def thumbnailPath( self ):
+    """Returns the path (relative to whatever parent dir it is in) for the
+      thumb for this file following the scheme <Sensor>/<YYYY>/<MM>/<DD>/
+      The thumb itself will exist under this dir as <product_id>.jpg"""
+    return os.path.join( self.mission.abbreviation,
+                    str( self.product_acquisition_start.year ),
+                    str( self.product_acquisition_start.month ),
+                    str( self.product_acquisition_start.day ) )
 
   def setSacProductId( self ):
     """A sac product id adheres to the following format:
@@ -1185,9 +1197,9 @@ def set_generic_product_date(sender, instance, **kw):
   """
   if instance.product_acquisition_end:
     instance.product_date = datetime.fromordinal(instance.product_acquisition_start.toordinal() \
-        + (instance.product_acquisition_end -  instance.product_acquisition_end).days)
+        + (instance.product_acquisition_end - instance.product_acquisition_end).days)
   else:
     instance.product_date = instance.product_acquisition_start
 
 
-models.signals.pre_save.connect(set_generic_product_date, sender=GenericSensorProduct)
+models.signals.pre_save.connect(set_generic_product_date, sender = GenericSensorProduct)
