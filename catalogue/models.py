@@ -12,6 +12,9 @@ import datetime
 # for generating globally unique id's - I think python 2.5 is required
 import uuid
 
+# for product_date soft trigger
+import datetime
+
 # Helper classes
 from catalogue.geoiputils import *
 from catalogue.nosubclassmanager import NoSubclassManager
@@ -155,39 +158,17 @@ class GenericProduct( models.Model ):
   """A generic model (following R-5.1-160 of DIMS system architecture document).
   @NOTE: this is not an abstract base class since we are using django multi-table
   inheritance. See http://docs.djangoproject.com/en/dev/topics/db/models/#id7"""
-  mission = models.ForeignKey( 'catalogue.Mission' ) # e.g. S5
-  mission_sensor = models.ForeignKey( MissionSensor ) # e.g. HRV
-  sensor_type = models.ForeignKey( SensorType ) #e.g. CAM1
-  acquisition_mode = models.ForeignKey( AcquisitionMode ) #e.g. M X T J etc
+  product_date = models.DateTimeField(null=False,blank=False,db_index=True)
   processing_level = models.ForeignKey( ProcessingLevel )
   owner = models.ForeignKey( Institution )
   license = models.ForeignKey( License )
-  product_acquisition_start = models.DateTimeField(null=False,blank=False)
-  product_acquisition_end = models.DateTimeField(null=True,blank=True)
   spatial_coverage = models.PolygonField( srid=4326, help_text="Image footprint", null=False,blank=False )
   projection = models.ForeignKey( Projection )
   quality = models.ForeignKey( Quality )
-  geometric_accuracy_mean = models.FloatField ( null=True,blank=True )
-  geometric_accuracy_1sigma = models.FloatField ( null=True,blank=True )
-  geometric_accuracy_2sigma = models.FloatField ( null=True,blank=True )
-  spectral_accuracy = models.FloatField( help_text="Wavelength Deviation",null=True,blank=True )
-  radiometric_signal_to_noise_ratio = models.FloatField( null=True,blank=True )
-  radiometric_percentage_error = models.FloatField( null=True,blank=True )
-  geometric_resolution_x = models.FloatField( help_text="Geometric resolution in mm (x direction)", null=False,blank=False )
-  geometric_resolution_y = models.FloatField( help_text="Geometric resolution in mm (y direction)", null=False,blank=False )
-  spectral_resolution = models.IntegerField( help_text="Number of spectral bands in product" , null=False,blank=False)
-  radiometric_resolution = models.IntegerField( help_text="Bit depth of image e.g. 16bit", null=False,blank=False  )
   creating_software = models.ForeignKey( CreatingSoftware, null=False,blank=False )
   original_product_id = models.CharField( max_length="255", null=True,blank=True )
   product_id = models.CharField( help_text="SAC Formatted product ID", max_length="255", null=False,blank=True, db_index=True,unique=True )
-  orbit_number = models.IntegerField(null=True,blank=True)
   product_revision = models.CharField( max_length="255",null=True,blank=True )
-  path = models.IntegerField(null=True,blank=True) #K Path Orbit
-  path_offset = models.IntegerField(null=True,blank=True)
-  row = models.IntegerField(null=True,blank=True) #J Frame Row
-  row_offset = models.IntegerField(null=True,blank=True)
-  offline_storage_medium_id = models.CharField( max_length=12, help_text="Identifier for the offline tape or other medium on which this scene is stored", null=True,blank=True )
-  online_storage_medium_id = models.CharField( max_length=36, help_text="DIMS Product Id as defined by Werum e.g. S5_G2_J_MX_200902160841252_FG_001822",null=True,blank=True )
   local_storage_path = models.CharField( max_length=255, help_text="Location on local storage if this product is offered for immediate download.", null=True,blank=True)
   metadata = models.TextField(help_text=_("An xml document describing all known metadata for this sensor."))
   remote_thumbnail_url =  models.TextField( max_length=255, help_text="Location on a remote server where this product's thumbnail resides. The value in this field will be nulled when a local copy is made of the thumbnail.")
@@ -201,6 +182,7 @@ class GenericProduct( models.Model ):
     see http://docs.djangoproject.com/en/dev/topics/db/models/#id7
     """
     abstract = False
+
 
   def thumbnailPath( self ):
     """Returns the path (relative to whatever parent dir it is in) for the
@@ -519,9 +501,49 @@ class GenericProduct( models.Model ):
     myString = "0"*(theLength-myLength) + theString
     return myString
 
+
+
+
 ###############################################################################
 
-class OpticalProduct( GenericProduct ):
+class GenericSensorProduct( GenericProduct ):
+  """
+  Multitable inheritance class to hold common fields for satellite imagery
+  """
+  mission = models.ForeignKey( 'catalogue.Mission' ) # e.g. S5
+  mission_sensor = models.ForeignKey( MissionSensor ) # e.g. HRV
+  sensor_type = models.ForeignKey( SensorType ) #e.g. CAM1
+  acquisition_mode = models.ForeignKey( AcquisitionMode ) #e.g. M X T J etc
+  product_acquisition_start = models.DateTimeField(null=False,blank=False,db_index=True)
+  product_acquisition_end = models.DateTimeField(null=True,blank=True,db_index=True)
+  geometric_accuracy_mean = models.FloatField ( null=True,blank=True )
+  geometric_accuracy_1sigma = models.FloatField ( null=True,blank=True )
+  geometric_accuracy_2sigma = models.FloatField ( null=True,blank=True )
+  radiometric_signal_to_noise_ratio = models.FloatField( null=True,blank=True )
+  radiometric_percentage_error = models.FloatField( null=True,blank=True )
+  radiometric_resolution = models.IntegerField( help_text="Bit depth of image e.g. 16bit", null=False,blank=False  )
+  geometric_resolution_x = models.FloatField( help_text="Geometric resolution in mm (x direction)", null=False,blank=False )
+  geometric_resolution_y = models.FloatField( help_text="Geometric resolution in mm (y direction)", null=False,blank=False )
+  spectral_resolution = models.IntegerField( help_text="Number of spectral bands in product" , null=False,blank=False)
+  spectral_accuracy = models.FloatField( help_text="Wavelength Deviation",null=True,blank=True )
+  orbit_number = models.IntegerField(null=True,blank=True)
+  path = models.IntegerField(null=True,blank=True) #K Path Orbit
+  path_offset = models.IntegerField(null=True,blank=True)
+  row = models.IntegerField(null=True,blank=True) #J Frame Row
+  row_offset = models.IntegerField(null=True,blank=True)
+  offline_storage_medium_id = models.CharField( max_length=12, help_text="Identifier for the offline tape or other medium on which this scene is stored", null=True,blank=True )
+  online_storage_medium_id = models.CharField( max_length=36, help_text="DIMS Product Id as defined by Werum e.g. S5_G2_J_MX_200902160841252_FG_001822",null=True,blank=True )
+
+  class Meta:
+    """This is not an abstract base class although you should avoid dealing directly with it
+    see http://docs.djangoproject.com/en/dev/topics/db/models/#id7
+    """
+    abstract = False
+
+
+###############################################################################
+
+class OpticalProduct( GenericSensorProduct ):
   """We are using multitable inheritance so you can do this to get this
   class instance from an GenericProduct :
   myOpticalProduct = GenericProduct.objects.get(id=1).opticalproduct
@@ -551,7 +573,7 @@ RECEIVE_CONFIGURATION_CHOICES = ( ( 'V','Vertical' ), ( 'H','Horizontal' ) )
 POLARISING_MODE_CHOICES = ( ('S','Single Pole' ), ( 'D','Dual Pole' ), ( 'Q', 'Quad Pole' ) )
 ORBIT_DIRECTION_CHOICES = ( ('A', 'Ascending' ), ('D', 'Descending' ) )
 
-class RadarProduct( GenericProduct ):
+class RadarProduct( GenericSensorProduct ):
   """We are using multitable inheritance so you can do this to get this
   class instance from an GenericProduct :
   myRadarProduct = GenericProduct.objects.get(id=1).radarproduct
@@ -1111,3 +1133,17 @@ class Cbers(models.Model):
       db_table = '"import"."cbers"'
       #requires django 1.1
       managed = False
+
+
+def set_generic_product_date(sender, instance, **kw):
+  """
+  Sets the product_date based on acquisition date
+  """
+  if instance.product_acquisition_end:
+    instance.product_date = datetime.fromordinal(instance.product_acquisition_start.toordinal() \
+        + (instance.product_acquisition_end -  instance.product_acquisition_end).days)
+  else:
+    instance.product_date = instance.product_acquisition_start
+
+
+models.signals.pre_save.connect(set_generic_product_date, sender=GenericSensorProduct)
