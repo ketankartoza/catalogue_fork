@@ -377,17 +377,19 @@ class GenericProduct( models.Model ):
         object was found.
         """
     try:
-      if self.genericsensorproduct.opticalproduct:
-        myObject = self.genericsensorproduct.opticalproduct
-        return myObject, "Optical"
-      elif self.genericsensorproduct.radarproduct:
-        myObject = self.genericsensorproduct.radarproduct
-        return myObject, "Radar"
-      elif self.geospatialproduct:
-        myObject = self.geospatialproduct
-        return myObject, "Geospatial"
+      return self.genericsensorproduct.opticalproduct, "Optical"
     except:
-      return None, "Error - product not found"
+      pass
+    try:
+      return self.genericsensorproduct.radarproduct, "Radar"
+    except:
+      pass
+    try:
+      return self.geospatialproduct, "Geospatial"
+    except:
+      pass
+
+    return None, "Error - product not found"
 
 
   def getConcreteInstance( self ):
