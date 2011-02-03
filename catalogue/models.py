@@ -440,7 +440,9 @@ class GenericProduct( models.Model ):
 
 class GenericSensorProduct( GenericProduct ):
   """
-  Multitable inheritance class to hold common fields for satellite imagery
+  Multitable inheritance class to hold common fields for satellite / sensor
+  based imagery as opposed to other spatial products such as derived rasters
+  and vectors.
   """
   mission = models.ForeignKey( 'catalogue.Mission' ) # e.g. S5
   mission_sensor = models.ForeignKey( MissionSensor ) # e.g. HRV

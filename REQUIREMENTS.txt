@@ -1,4 +1,5 @@
-django>=1.2
+#Note 1.2.4 has broken routers / multidb support
+django==1.2.1
 django-registration
 sorl-thumbnail
 django-db-log
