@@ -189,7 +189,10 @@ class GenericProduct( models.Model ):
     """Returns the path (relative to whatever parent dir it is in) for the
       thumb for this file following the scheme <Sensor>/<YYYY>/<MM>/<DD>/
       The thumb itself will exist under this dir as <product_id>.jpg"""
-    raise NotImplementedError()
+    try:
+        return self.getConcreteInstance().thumbnailPath()
+    except:
+        raise NotImplementedError()
 
   def thumbnail(self, theSize):
       """Return a thumbnail for this product of size "small" - 16x16, "medium" - 200x200 or "large" - 400x400
@@ -331,7 +334,10 @@ class GenericProduct( models.Model ):
     """Returns the path (relative to whatever parent dir it is in) for the
       image itself following the scheme <Sensor>/<processinglevel>/<YYYY>/<MM>/<DD>/
       The image itself will exist under this dir as <product_id>.tif.bz2"""
-    raise NotImplementedError()
+    try:
+        return self.getConcreteInstance().imagePath()
+    except:
+        raise NotImplementedError()
 
   def imageUrl( self ):
     """Returns a path to the actual imagery data as a url. You need to have
@@ -371,17 +377,25 @@ class GenericProduct( models.Model ):
         object was found.
         """
     try:
-      if self.opticalproduct:
-        myObject = self.opticalproduct
+      if self.genericsensorproduct.opticalproduct:
+        myObject = self.genericsensorproduct.opticalproduct
         return myObject, "Optical"
-      elif self.radarproduct:
-        myObject = self.radarproduct
+      elif self.genericsensorproduct.radarproduct:
+        myObject = self.genericsensorproduct.radarproduct
         return myObject, "Radar"
       elif self.geospatialproduct:
-        myObject = self.radarproduct
+        myObject = self.geospatialproduct
         return myObject, "Geospatial"
     except:
       return None, "Error - product not found"
+
+
+  def getConcreteInstance( self ):
+    """
+    Returns the concrete product instance
+    """
+    return self.getConcreteProduct()[0]
+
 
   def setSacProductId( self ):
     """A sac product id adheres to the following format:
@@ -389,7 +403,10 @@ class GenericProduct( models.Model ):
     SAT_SEN_TYP_MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL
 
     """
-    raise NotImplementedError()
+    try:
+        return self.getConcreteInstance().setSacProductId()
+    except:
+        raise NotImplementedError()
 
   def tidySacId( self ):
     """Return a tidy version of the SAC ID for use on web pages etc.
@@ -857,7 +874,7 @@ class Search(models.Model):
   Stores search results
   """
 
-  # ABP: added to store which product to search
+  #ABP: added to store which product to search
   # Values for the search_type parameter
   PRODUCT_SEARCH_GENERIC       = 0  # default in case of blank/null/0
   PRODUCT_SEARCH_OPTICAL       = 1

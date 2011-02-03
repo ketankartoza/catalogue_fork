@@ -135,7 +135,7 @@ class Searcher:
     self.mLayersList = "[zaSpot10mMosaic2008,zaRoadsBoundaries,myCartLayer]"
     self.mSearchRecords = []
 
-    # ABP: Create the query set based on the type of class we're going to search in
+    #ABP: Create the query set based on the type of class we're going to search in
     assert self.mSearch.search_type in dict(Search.PRODUCT_SEARCH_TYPES).keys()
 
     if self.mSearch.search_type == Search.PRODUCT_SEARCH_GENERIC:
@@ -153,7 +153,7 @@ class Searcher:
 
 
     self.mSearchPage = None
-    # ABP: new date search is on product_date
+    #ABP: new date search is on product_date
     self.mDateQuery = Q(product_date__range=(self.mSearch.start_date,self.mSearch.end_date))
     self.mGeometryQuery = Q(spatial_coverage__intersects=self.mSearch.geometry)
     self.mThumbnails = []
@@ -184,16 +184,16 @@ class Searcher:
     logging.info('filtering by search criteria ...')
     #
 
-    # ABP:  new logic is to get directly from the request which kind of product to search on
+    #ABP:  new logic is to get directly from the request which kind of product to search on
 
-    # ABP: common "simple search" parameters
+    #ABP: common "simple search" parameters
     if self.mSearch.start_date and self.mSearch.end_date:
         self.mQuerySet = self.mQuerySet.filter( self.mDateQuery )
 
     if self.mSearch.geometry:
       self.mQuerySet = self.mQuerySet.filter( self.mGeometryQuery )
 
-    # ABP: sensor only (advanced  query for Radar and Optical)
+    #ABP: sensor only (advanced  query for Radar and Optical)
     # I really don't like this kind of checks... bad OOP ...
     # this should be sooner or later heavily refactored
     if self.mSearch.search_type in (Search.PRODUCT_SEARCH_OPTICAL, Search.PRODUCT_SEARCH_RADAR):

@@ -730,7 +730,11 @@ def showThumbPage(theRequest, theId):
   logging.info("showThumbPage : id " + theId)
   myDetails=[]
   myProduct = get_object_or_404( GenericProduct, id=theId )
-  myDetails.append("<tr><th>Sensor: " + myProduct.mission_sensor.name + "</th></tr>")
+  #ABP: ugly hack
+  try:
+    myDetails.append("<tr><th>Sensor: " + myProduct.mission_sensor.name + "</th></tr>")
+  except AttributeError:
+    pass
   myImageFile = os.path.join( myProduct.thumbnailPath(), myProduct.product_id + ".jpg" )
   myDetails.append("<tr><td><center><img src=\"/thumbnails/" + myImageFile + "\"></center></td></tr>")
   #render_to_response is done by the renderWithContext decorator
@@ -765,7 +769,7 @@ def metadata(theRequest, theId):
   to iterate through the product class properties using class introspection
   and generate a simple html document containing key/value pairs"""
   myGenericProduct = get_object_or_404( GenericProduct, id=theId )
-  myObject, myType = myGenericProduct.getConcreteProduct()
+  myObject, myType = myGenericProduct.getConcreteInstance()
   myDetails=[]
   myDetails.append( "<tr><th>Key</th><th>Value</th></tr>")
   if myObject:
@@ -1737,7 +1741,8 @@ def dataSummaryTable(theRequest):
     return
 
   #myResultSet = GenericProduct.objects.values("mission_sensor").annotate(Count("id")).order_by().aggregate(Min('product_acquisition_start'),Max('product_acquisition_end'))
-  myResultSet = GenericProduct.objects.values("mission_sensor").annotate(Count("id")).order_by()
+  #ABP: changed to GenericSensorProduct
+  myResultSet = GenericSensorProduct.objects.values("mission_sensor").annotate(Count("id")).order_by()
     #[{'mission_sensor': 6, 'id__count': 288307}, {'mission_sensor': 9, 'id__count': 289028}, {'mission_sensor': 3, 'id__count': 120943}, {'mission_sensor': 7, 'id__count': 222429}, {'mission_sensor': 5, 'id__count': 16624}, {'mission_sensor': 1, 'id__count': 3162}, {'mission_sensor': 2, 'id__count': 20896}, {'mission_sensor': 4, 'id__count': 17143}, {'mission_sensor': 8, 'id__count': 186269}]
   myResults = "<table><thead>"
   myResults += "</thead>"
