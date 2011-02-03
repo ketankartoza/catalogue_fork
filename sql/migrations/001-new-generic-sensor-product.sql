@@ -1,5 +1,13 @@
-begin;
+-- ######################################################################
+--
+-- Migration script for GenericSensorProduct introduction
+-- and other modifications for the advanced search and the new
+-- GeospatialProduct
+--
+-- ######################################################################
 
+
+begin;
 
 -- transfer data to the new table
 select
@@ -38,25 +46,6 @@ alter table catalogue_genericproduct rename product_acquisition_start to product
 
 -- the view depends on fields that are going to be deleted
 DROP VIEW vw_usercart;
-
--- CREATE OR REPLACE VIEW vw_usercart AS
---  SELECT catalogue_searchrecord.id, catalogue_searchrecord.order_id, auth_user.username, catalogue_missionsensor.name, catalogue_genericproduct.product_id, catalogue_genericproduct.spatial_coverage
---    FROM
---
---    -- rewrite with left join
---    -- catalogue_missionsensor,
---
---    catalogue_searchrecord,
---    catalogue_genericproduct,
---    auth_user
---    -- here it goes
---    LEFT JOIN catalogue_missionsensor ON catalogue_genericproduct.mission_sensor_id = catalogue_missionsensor.id
---   WHERE catalogue_searchrecord.user_id = auth_user.id AND catalogue_searchrecord.product_id = catalogue_genericproduct.id
---   -- left joined
---   -- AND catalogue_genericproduct.mission_sensor_id = catalogue_missionsensor.id
---   AND catalogue_searchrecord.order_id IS NULL;
-
-
 
 
 -- drop old fields
@@ -114,7 +103,6 @@ alter table catalogue_genericsensorproduct alter radiometric_resolution set not 
 
 
 -- now change reference to parent for imagery
-
 ALTER TABLE catalogue_opticalproduct DROP CONSTRAINT catalogue_opticalproduct_genericproduct_ptr_id_fkey;
 ALTER TABLE catalogue_opticalproduct RENAME genericproduct_ptr_id TO genericsensorproduct_ptr_id;
 
@@ -142,9 +130,34 @@ CREATE INDEX "catalogue_genericsensorproduct_product_acquisition_start" ON "cata
 CREATE INDEX "catalogue_genericsensorproduct_product_acquisition_end" ON "catalogue_genericsensorproduct" ("product_acquisition_end");
 
 
+DROP VIEW vw_usercart;
+
+CREATE OR REPLACE VIEW vw_usercart AS
+ SELECT catalogue_searchrecord.id, catalogue_searchrecord.order_id, auth_user.username, catalogue_genericproduct.product_id, catalogue_genericproduct.spatial_coverage
+   FROM
 
 
--- create the table : output from Django sqlall:
+   catalogue_searchrecord,
+   catalogue_genericproduct,
+   auth_user
+  WHERE catalogue_searchrecord.user_id = auth_user.id AND catalogue_searchrecord.product_id = catalogue_genericproduct.id
+  AND catalogue_searchrecord.order_id IS NULL;
+
+
+-- add search type
+ALTER TABLE "catalogue_search" ADD "search_type" INTEGER;
+
+UPDATE catalogue_search SET search_type = 1 WHERE use_cloud_cover or k_orbit_path_min is not null or j_frame_row_min is not null or k_orbit_path_max is not null or j_frame_row_max is not null or id in (select distinct search_id from catalogue_search_sensors);
+UPDATE catalogue_search SET search_type = 0 where search_type is null;
+
+
+
+alter table catalogue_search alter search_type set not null;
+CREATE INDEX "catalogue_search_search_type" ON "catalogue_search" ("search_type");
+
+
+
+-- output from Django sqlall, just a reference ... :
 
 -- CREATE TABLE "catalogue_genericsensorproduct" (
 -- "genericproduct_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "catalogue_genericproduct" ("id") DEFERRABLE INITIALLY DEFERRED,
@@ -221,7 +234,14 @@ CREATE INDEX "catalogue_genericsensorproduct_product_acquisition_end" ON "catalo
 --     "orbit_direction" varchar(1),
 --     "calibration" varchar(255),
 --     "incidence_angle" double precision
--- )
+-- );
+
+
+CREATE TABLE "catalogue_geospatialproduct" (
+    "genericproduct_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "catalogue_genericproduct" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "name" varchar(255) NOT NULL
+);
+
 
 
 commit;

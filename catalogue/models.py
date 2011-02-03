@@ -182,6 +182,7 @@ class GenericProduct( models.Model ):
     see http://docs.djangoproject.com/en/dev/topics/db/models/#id7
     """
     abstract = False
+    ordering = ('product_date',)
 
 
   def thumbnailPath( self ):
@@ -383,8 +384,82 @@ class GenericProduct( models.Model ):
       elif self.radarproduct:
         myObject = self.radarproduct
         return myObject, "Radar"
+      elif self.geospatialproduct:
+        myObject = self.radarproduct
+        return myObject, "Geospatial"
     except:
       return None, "Error - product not found"
+
+  def setSacProductId( self ):
+    """A sac product id adheres to the following format:
+
+    SAT_SEN_TYP_MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL
+
+    """
+    raise NotImplementedError()
+
+  def tidySacId( self ):
+    """Return a tidy version of the SAC ID for use on web pages etc.
+
+       Normal: S5-_HRG_J--_CAM2_0118-_00_0418-_00_090403_085811_L1A-_ORBIT-
+
+       Tidy:   S5 HRG J CAM2 0118 00 0418  00 090403 085811
+
+       This is so that we can wrap the id nicely in small spaces etc."""
+    myTokens = self.product_id.split("_")
+    myUsedTokens = myTokens[0:9]
+    myNewString = " ".join(myUsedTokens).replace("-","")
+    return myNewString
+
+  def pad( self, theString, theLength):
+    myLength = len (theString)
+    myString = theString + "-"*(theLength-myLength)
+    return myString
+
+  def zeroPad( self, theString, theLength):
+    myLength = len (theString)
+    myString = "0"*(theLength-myLength) + theString
+    return myString
+
+
+
+
+###############################################################################
+
+class GenericSensorProduct( GenericProduct ):
+  """
+  Multitable inheritance class to hold common fields for satellite imagery
+  """
+  mission = models.ForeignKey( 'catalogue.Mission' ) # e.g. S5
+  mission_sensor = models.ForeignKey( MissionSensor ) # e.g. HRV
+  sensor_type = models.ForeignKey( SensorType ) #e.g. CAM1
+  acquisition_mode = models.ForeignKey( AcquisitionMode ) #e.g. M X T J etc
+  product_acquisition_start = models.DateTimeField(null=False,blank=False,db_index=True)
+  product_acquisition_end = models.DateTimeField(null=True,blank=True,db_index=True)
+  geometric_accuracy_mean = models.FloatField ( null=True,blank=True )
+  geometric_accuracy_1sigma = models.FloatField ( null=True,blank=True )
+  geometric_accuracy_2sigma = models.FloatField ( null=True,blank=True )
+  radiometric_signal_to_noise_ratio = models.FloatField( null=True,blank=True )
+  radiometric_percentage_error = models.FloatField( null=True,blank=True )
+  radiometric_resolution = models.IntegerField( help_text="Bit depth of image e.g. 16bit", null=False,blank=False  )
+  geometric_resolution_x = models.FloatField( help_text="Geometric resolution in mm (x direction)", null=False,blank=False )
+  geometric_resolution_y = models.FloatField( help_text="Geometric resolution in mm (y direction)", null=False,blank=False )
+  spectral_resolution = models.IntegerField( help_text="Number of spectral bands in product" , null=False,blank=False)
+  spectral_accuracy = models.FloatField( help_text="Wavelength Deviation",null=True,blank=True )
+  orbit_number = models.IntegerField(null=True,blank=True)
+  path = models.IntegerField(null=True,blank=True) #K Path Orbit
+  path_offset = models.IntegerField(null=True,blank=True)
+  row = models.IntegerField(null=True,blank=True) #J Frame Row
+  row_offset = models.IntegerField(null=True,blank=True)
+  offline_storage_medium_id = models.CharField( max_length=12, help_text="Identifier for the offline tape or other medium on which this scene is stored", null=True,blank=True )
+  online_storage_medium_id = models.CharField( max_length=36, help_text="DIMS Product Id as defined by Werum e.g. S5_G2_J_MX_200902160841252_FG_001822",null=True,blank=True )
+
+  class Meta:
+    """This is not an abstract base class although you should avoid dealing directly with it
+    see http://docs.djangoproject.com/en/dev/topics/db/models/#id7
+    """
+    abstract = False
+
 
   def setSacProductId( self ):
     """A sac product id adheres to the following format:
@@ -478,68 +553,6 @@ class GenericProduct( models.Model ):
       logging.debug("Failed to move the thumbnail" )
     return
 
-  def tidySacId( self ):
-    """Return a tidy version of the SAC ID for use on web pages etc.
-
-       Normal: S5-_HRG_J--_CAM2_0118-_00_0418-_00_090403_085811_L1A-_ORBIT-
-
-       Tidy:   S5 HRG J CAM2 0118 00 0418  00 090403 085811
-
-       This is so that we can wrap the id nicely in small spaces etc."""
-    myTokens = self.product_id.split("_")
-    myUsedTokens = myTokens[0:9]
-    myNewString = " ".join(myUsedTokens).replace("-","")
-    return myNewString
-
-  def pad( self, theString, theLength):
-    myLength = len (theString)
-    myString = theString + "-"*(theLength-myLength)
-    return myString
-
-  def zeroPad( self, theString, theLength):
-    myLength = len (theString)
-    myString = "0"*(theLength-myLength) + theString
-    return myString
-
-
-
-
-###############################################################################
-
-class GenericSensorProduct( GenericProduct ):
-  """
-  Multitable inheritance class to hold common fields for satellite imagery
-  """
-  mission = models.ForeignKey( 'catalogue.Mission' ) # e.g. S5
-  mission_sensor = models.ForeignKey( MissionSensor ) # e.g. HRV
-  sensor_type = models.ForeignKey( SensorType ) #e.g. CAM1
-  acquisition_mode = models.ForeignKey( AcquisitionMode ) #e.g. M X T J etc
-  product_acquisition_start = models.DateTimeField(null=False,blank=False,db_index=True)
-  product_acquisition_end = models.DateTimeField(null=True,blank=True,db_index=True)
-  geometric_accuracy_mean = models.FloatField ( null=True,blank=True )
-  geometric_accuracy_1sigma = models.FloatField ( null=True,blank=True )
-  geometric_accuracy_2sigma = models.FloatField ( null=True,blank=True )
-  radiometric_signal_to_noise_ratio = models.FloatField( null=True,blank=True )
-  radiometric_percentage_error = models.FloatField( null=True,blank=True )
-  radiometric_resolution = models.IntegerField( help_text="Bit depth of image e.g. 16bit", null=False,blank=False  )
-  geometric_resolution_x = models.FloatField( help_text="Geometric resolution in mm (x direction)", null=False,blank=False )
-  geometric_resolution_y = models.FloatField( help_text="Geometric resolution in mm (y direction)", null=False,blank=False )
-  spectral_resolution = models.IntegerField( help_text="Number of spectral bands in product" , null=False,blank=False)
-  spectral_accuracy = models.FloatField( help_text="Wavelength Deviation",null=True,blank=True )
-  orbit_number = models.IntegerField(null=True,blank=True)
-  path = models.IntegerField(null=True,blank=True) #K Path Orbit
-  path_offset = models.IntegerField(null=True,blank=True)
-  row = models.IntegerField(null=True,blank=True) #J Frame Row
-  row_offset = models.IntegerField(null=True,blank=True)
-  offline_storage_medium_id = models.CharField( max_length=12, help_text="Identifier for the offline tape or other medium on which this scene is stored", null=True,blank=True )
-  online_storage_medium_id = models.CharField( max_length=36, help_text="DIMS Product Id as defined by Werum e.g. S5_G2_J_MX_200902160841252_FG_001822",null=True,blank=True )
-
-  class Meta:
-    """This is not an abstract base class although you should avoid dealing directly with it
-    see http://docs.djangoproject.com/en/dev/topics/db/models/#id7
-    """
-    abstract = False
-
 
 ###############################################################################
 
@@ -565,6 +578,18 @@ class OpticalProduct( GenericSensorProduct ):
      return self.product_id
 
 ###############################################################################
+
+
+###############################################################################
+
+class GeospatialProduct( GenericProduct ):
+    """
+    Geospatial product, does not have sensors information
+    """
+    name = models.CharField(max_length = 255);
+
+
+
 
 
 #TODO use lookup tables rather?
@@ -816,6 +841,25 @@ class OrderStatusHistory(models.Model):
 ###############################################################################
 
 class Search(models.Model):
+  """
+  Stores search results
+  """
+
+  # ABP: added to store which product to search
+  # Values for the search_type parameter
+  PRODUCT_SEARCH_GENERIC       = 0  # default in case of blank/null/0
+  PRODUCT_SEARCH_OPTICAL       = 1
+  PRODUCT_SEARCH_RADAR         = 2
+  PRODUCT_SEARCH_GEOSPATIAL    = 3
+
+  PRODUCT_SEARCH_TYPES = (
+    (PRODUCT_SEARCH_GENERIC,    'Generic product search'),
+    (PRODUCT_SEARCH_OPTICAL,    'Optical product search'),
+    (PRODUCT_SEARCH_RADAR,      'Radar product search'),
+    (PRODUCT_SEARCH_GEOSPATIAL, 'Geospatial product search'),
+  )
+
+  search_type = models.IntegerField('Search type', default = 0, choices = PRODUCT_SEARCH_TYPES, db_index = True)
   user = models.ForeignKey(User)
   keywords = models.CharField('Keywords', max_length=255,blank=True)
   # foreign keys require the first arg to the be the relation name

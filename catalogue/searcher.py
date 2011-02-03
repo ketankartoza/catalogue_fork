@@ -128,15 +128,33 @@ class Searcher:
     return
 
   def search(self, thePaginateFlag=True):
-    """Show a map of a single search for scenes"""
+    """Performs a search and shows a map of a single search for scenes"""
     logging.info('search called...')
     logging.info('Searching by scene')
     self.mExtraLayers = [ WEB_LAYERS['ZaSpot10mMosaic2008'],WEB_LAYERS['ZaRoadsBoundaries'],self.mCartLayer ]
     self.mLayersList = "[zaSpot10mMosaic2008,zaRoadsBoundaries,myCartLayer]"
     self.mSearchRecords = []
-    self.mQuerySet = None
+
+    # ABP: Create the query set based on the type of class we're going to search in
+    assert self.mSearch.search_type in dict(Search.PRODUCT_SEARCH_TYPES).keys()
+
+    if self.mSearch.search_type == Search.PRODUCT_SEARCH_GENERIC:
+        logging.info('Search type is PRODUCT_SEARCH_GENERIC')
+        self.mQuerySet = GenericProduct.objects.all()
+    elif self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL:
+        logging.info('Search type is PRODUCT_SEARCH_OPTICAL')
+        self.mQuerySet = OpticalProduct.objects.all()
+    elif self.mSearch.search_type == Search.PRODUCT_SEARCH_RADAR:
+        logging.info('Search type is PRODUCT_SEARCH_RADAR')
+        self.mQuerySet = RadarProduct.objects.all()
+    elif self.mSearch.search_type == Search.PRODUCT_SEARCH_GEOSPATIAL:
+        logging.info('Search type is PRODUCT_SEARCH_GEOSPATIAL')
+        self.mQuerySet = GeospatialProduct.objects.all()
+
+
     self.mSearchPage = None
-    self.mDateQuery = Q(product_acquisition_start__range=(self.mSearch.start_date,self.mSearch.end_date))
+    # ABP: new date search is on product_date
+    self.mDateQuery = Q(product_date__range=(self.mSearch.start_date,self.mSearch.end_date))
     self.mGeometryQuery = Q(spatial_coverage__intersects=self.mSearch.geometry)
     self.mThumbnails = []
     self.mMessages = []
@@ -164,37 +182,37 @@ class Searcher:
 
     # -----------------------------------------------------
     logging.info('filtering by search criteria ...')
-    if self.mSearch.cloud_mean and self.mSearch.use_cloud_cover:
-      self.mQuerySet = OpticalProduct.objects.all().order_by('product_acquisition_start')
-      self.mQuerySet = self.mQuerySet.filter( self.mCloudQuery )
-    else:
-      self.mQuerySet = GenericProduct.objects.all().order_by('product_acquisition_start')
+    #
 
-    mySensorList = self.mSearch.sensors.values_list('id', flat=True)
-    self.mSensorQuery = Q( mission_sensor__in=mySensorList )
-    self.mQuerySet = self.mQuerySet.filter( self.mSensorQuery )
+    # ABP:  new logic is to get directly from the request which kind of product to search on
+
+    # ABP: common "simple search" parameters
+    if self.mSearch.start_date and self.mSearch.end_date:
+        self.mQuerySet = self.mQuerySet.filter( self.mDateQuery )
 
     if self.mSearch.geometry:
+      self.mQuerySet = self.mQuerySet.filter( self.mGeometryQuery )
 
-      if self.mSearch.start_date and self.mSearch.end_date:
-        self.mQuerySet = self.mQuerySet.filter( self.mDateQuery )
-        self.mQuerySet = self.mQuerySet.filter( self.mGeometryQuery )
+    # ABP: sensor only (advanced  query for Radar and Optical)
+    # I really don't like this kind of checks... bad OOP ...
+    # this should be sooner or later heavily refactored
+    if self.mSearch.search_type in (Search.PRODUCT_SEARCH_OPTICAL, Search.PRODUCT_SEARCH_RADAR):
+      logging.info('GenericSensorProduct advanced search activated')
+      mySensorList = self.mSearch.sensors.values_list('id', flat=True)
+      self.mSensorQuery = Q( mission_sensor__in=mySensorList )
+      self.mQuerySet = self.mQuerySet.filter( self.mSensorQuery )
 
-    else: # search with no geometry
-      if self.mSearch.start_date and self.mSearch.end_date:
-        self.mQuerySet = self.mQuerySet.filter( self.mDateQuery )
-
-    logging.info('checking if we should use landsat path / row filtering...')
-    logging.info('Sensor in use is:' + str( self.mSearch.sensors.values_list( 'name',flat=True ) ) )
-    if self.mSearch.k_orbit_path_min > 0 \
-      and self.mSearch.k_orbit_path_max > 0 \
-      and self.mSearch.j_frame_row_min > 0 \
-      and self.mSearch.j_frame_row_max > 0:
-      logging.info('path row filtering is enabled')
-      self.mQuerySet = self.mQuerySet.filter( self.mKOrbitPathQuery )
-      self.mQuerySet = self.mQuerySet.filter( self.mJFrameRowQuery )
-    else:
-      logging.info( 'path row filtering is DISABLED' )
+      logging.info('checking if we should use landsat path / row filtering...')
+      logging.info('Sensor in use is:' + str( self.mSearch.sensors.values_list( 'name',flat=True ) ) )
+      if self.mSearch.k_orbit_path_min > 0 \
+          and self.mSearch.k_orbit_path_max > 0 \
+          and self.mSearch.j_frame_row_min > 0 \
+          and self.mSearch.j_frame_row_max > 0:
+        logging.info('path row filtering is enabled')
+        self.mQuerySet = self.mQuerySet.filter( self.mKOrbitPathQuery )
+        self.mQuerySet = self.mQuerySet.filter( self.mJFrameRowQuery )
+      else:
+        logging.info( 'path row filtering is DISABLED' )
 
 
     logging.info('search by Scene paginating...')

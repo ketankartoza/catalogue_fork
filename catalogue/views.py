@@ -458,6 +458,7 @@ def search(theRequest):
   # if the advanced form should be show. Post request because the for
   myAdvancedFlag = theRequest.GET.has_key('advanced') or theRequest.POST.has_key('advanced')
   mySearchTemplate = None
+  #ABP: advanced ?
   if theRequest.is_ajax():
     mySearchTemplate = "searchPanel.html"
   else:
@@ -1678,7 +1679,7 @@ def notifySalesStaff(theUser, theOrderId):
       logging.info("Sending notice to : %s" % myAddress)
   #also send an email to the originator of the order
   #We do this separately to avoid them seeing the staff cc list
-  myClientAddress = theUser.email 
+  myClientAddress = theUser.email
   myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, [myClientAddress]))
   # mass mail expects a tuple (read-only list) so convert the list to tuple on send
   logging.info("Sending messages: \n%s" % tuple(myMessagesList) )

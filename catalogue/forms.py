@@ -46,7 +46,7 @@ class SearchForm(forms.ModelForm):
 
   class Meta:
     model = Search
-    exclude = ('ip_position','guid','keywords','geometry_file','user', 'k_orbit_path_min', 'j_frame_row_min', 'k_orbit_path_max', 'j_frame_row_max', 'deleted' )
+    exclude = ('ip_position','guid','keywords','geometry_file','user', 'k_orbit_path_min', 'j_frame_row_min', 'k_orbit_path_max', 'j_frame_row_max', 'deleted', 'search_type' )
 
   # Simple way to assign css class to every field
   def __init__(self, *args, **kwargs):
@@ -110,7 +110,9 @@ class AdvancedSearchForm( SearchForm ):
 
   class Meta:
     model = Search
-    exclude = ('ip_position','guid','keywords','user', 'deleted' )
+    #TODO: remove search_type from exclude, there will be a
+    #      radio/tab or another system to set it in the form
+    exclude = ('ip_position','guid','keywords','user', 'deleted', 'search_type' )
 
 class AbbreviationModelChoiceField( forms.ModelChoiceField ):
   """Custom model choice field that shows abbreviated name rather than the default unicode representation
@@ -135,7 +137,7 @@ class ProductIdSearchForm( forms.Form ):
   hour = forms.ChoiceField( zip( range(0,24), range(0,24) ) )
   minute = forms.ChoiceField( zip( range(0,60),range(0,60) ) )
   second = forms.ChoiceField( zip( range(0,60), range(0,60) ) )
-  
+
   def __init__(self,*args,**kwargs):
     super ( ProductIdSearchForm, self ).__init__(*args,**kwargs)
     self.fields['mission'].queryset = Mission.objects.all()
@@ -146,7 +148,7 @@ class ProductIdSearchForm( forms.Form ):
   class Meta:
     #model = Search
     pass
-  
+
 
 class OrderStatusForm(forms.ModelForm):
   class Meta:
