@@ -1,0 +1,169 @@
+from django.contrib.gis.db import models
+from dictionaries import *
+##for translation
+from django.utils.translation import ugettext_lazy as _
+#for user id foreign keys
+from django.contrib.auth.models import User
+# Helper classes
+# ABP: unused ? from catalogue.geoiputils import *
+from catalogue.nosubclassmanager import NoSubclassManager
+from userprofile.models import BaseProfile
+
+
+###############################################################################
+#
+# Next bunch of models all relate to order management
+#
+###############################################################################
+
+class Datum(models.Model):
+
+  name = models.CharField('Name', max_length=128, db_index=True,unique=True)
+
+  class Meta:
+    app_label= 'catalogue'
+    verbose_name = _('Datums')
+    verbose_name_plural = _('Datums')
+
+  def __unicode__(self):
+    return self.name
+
+  class Admin:
+    pass
+
+###############################################################################
+
+
+class ResamplingMethod(models.Model):
+
+  name = models.CharField('Name', max_length=128, db_index=True,unique=True)
+
+
+  class Meta:
+    app_label= 'catalogue'
+    verbose_name = _('Resampling Method')
+    verbose_name_plural = _('Resampling Methods')
+
+  def __unicode__(self):
+    return self.name
+
+  class Admin:
+    pass
+
+###############################################################################
+
+
+class FileFormat(models.Model):
+
+  name = models.CharField('Name', max_length=128, db_index=True,unique=True)
+
+
+  class Meta:
+    app_label= 'catalogue'
+    verbose_name = _('File Format')
+    verbose_name_plural = _('File Formats')
+
+  def __unicode__(self):
+    return self.name
+
+  class Admin:
+    pass
+
+###############################################################################
+
+
+class OrderStatus(models.Model):
+
+  name = models.CharField('Name', max_length=128, db_index=True,unique=True)
+
+
+  class Meta:
+    app_label= 'catalogue'
+    verbose_name = _('Order Status')
+    verbose_name_plural = _('Order Status List')
+
+  def __unicode__(self):
+    return self.name
+
+  class Admin:
+    pass
+
+###############################################################################
+
+class DeliveryMethod(models.Model):
+
+  name = models.CharField('Name', max_length=128, db_index=True,unique=True)
+
+
+  class Meta:
+    app_label= 'catalogue'
+    verbose_name = _('Delivery Method')
+    verbose_name_plural = _('Delivery Methods')
+
+  def __unicode__(self):
+    return self.name
+
+  class Admin:
+    pass
+
+
+###############################################################################
+
+class Order(models.Model):
+  user = models.ForeignKey(User)
+  notes = models.TextField(help_text=_("Make a note of any special requirements or processing instructions you may need. Please note that in the case of free products and priority products, they will only be supplied with default options."),null=True,blank=True)
+  processing_level = models.ForeignKey(ProcessingLevel,verbose_name="Processing Level",default=3)
+  projection = models.ForeignKey(Projection,verbose_name="Projection",default=3)
+  datum = models.ForeignKey(Datum, verbose_name="Datum",default=1)
+  resampling_method = models.ForeignKey(ResamplingMethod, verbose_name="Resampling Method",default=2) #cubic conv#cubic conv
+  file_format = models.ForeignKey(FileFormat, verbose_name="File Format",default=1)
+  order_status = models.ForeignKey(OrderStatus,verbose_name="Order Status",default=1)
+  delivery_method = models.ForeignKey(DeliveryMethod, verbose_name="Delivery Method", default=1)
+  order_date = models.DateTimeField(verbose_name="Order Date", auto_now=True, auto_now_add=True,
+      help_text = "When the order was placed - not shown to users")
+  #default manager
+  objects = models.Manager()
+  # A model can have more than one manager. Above will be used as default
+  # see: http://docs.djangoproject.com/en/dev/topics/db/managers/
+  # Also use a custom manager so that we can get
+  # orders that have no subclass instances (since
+  # we want to be able to list product orders while excluding
+  # their TaskingRequest subclasses
+  base_objects = NoSubclassManager() #see catalogue/nosubclassmanager.py
+
+  class Meta:
+    app_label= 'catalogue'
+    verbose_name = _('Order')
+    verbose_name_plural = _('Orders')
+
+  def __unicode__(self):
+    return str(self.id)
+
+  class Admin:
+    pass
+
+###############################################################################
+
+class TaskingRequest( Order ):
+  """A tasking request inherits from the order model and adds
+  three fields: geometry, target date  and sensor. The tasking
+  request is used by end users to queue up acquisition requests
+  for a given sensor."""
+  geometry = models.PolygonField( srid=4326, help_text="Requested coverage area", null=False,blank=False )
+  target_date = models.DateTimeField(verbose_name="Target Date", auto_now=True, auto_now_add=True,
+      help_text = "When the image should be acquired (as close as possible to this date).")
+  mission_sensor = models.ForeignKey( MissionSensor ) # e.g. Spot5
+  objects = models.GeoManager()
+
+
+  class Meta:
+    app_label= 'catalogue'
+    verbose_name = _('Tasking Request')
+    verbose_name_plural = _('Tasking Requests')
+
+  def __unicode__(self):
+    return str(self.id)
+
+  class Admin:
+    pass
+
