@@ -9,6 +9,7 @@ settings.py
 thumbs_out/
 *.*~
 *~
+catalogue.log
 media/avatars/
 
 
