@@ -75,7 +75,14 @@ alter table catalogue_genericproduct drop spectral_accuracy ;
 alter table catalogue_genericproduct drop spectral_resolution ;
 
 -- add constraints
+
+
 alter table catalogue_genericsensorproduct add CONSTRAINT catalogue_genericsensorproduct_pkey PRIMARY KEY (genericproduct_ptr_id);
+
+ALTER TABLE catalogue_genericsensorproduct
+  ADD CONSTRAINT catalogue_genericsensorproduct_genericproduct_ptr_id_fkey FOREIGN KEY (genericproduct_ptr_id)
+      REFERENCES catalogue_genericproduct (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED;
 alter table catalogue_genericsensorproduct add  CONSTRAINT catalogue_genericsensorproduct_acquisition_mode_id_fkey FOREIGN KEY (acquisition_mode_id)
   REFERENCES catalogue_acquisitionmode (id) MATCH SIMPLE
   ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED;

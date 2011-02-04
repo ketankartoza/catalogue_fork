@@ -175,7 +175,12 @@ class GenericProduct( models.Model ):
   objects = models.GeoManager()
 
   def __unicode__( self ):
-     return self.product_id
+     if self.product_id:
+        return self.product_id
+     return "Internal ID: %d" % self.pk
+
+  def __str__( self ):
+     return self.__unicode__()
 
   class Meta:
     """This is not an abstract base class although you should avoid dealing directly with it
@@ -606,16 +611,13 @@ class OpticalProduct( GenericSensorProduct ):
   earth_sun_distance = models.FloatField(null=True,blank=True)
   objects = models.GeoManager()
 
-  def __unicode__(self):
-     return self.product_id
-
 ###############################################################################
 
 GEOSPATIAL_GEOMETRY_TYPE_CHOICES = ( ( 'R','Raster' ), ( 'VP', 'Vector - Points' ), ( 'VL', 'Vector - Lines' ) , ( 'VA', 'Vector - Areas / Polygons' ) )
 class GeospatialProduct( GenericProduct ):
   """
-    Geospatial product, does not have sensors information. Geospatial products may be rasters 
-    (that were derived from one or more satellite or other rasters) or vectors.
+  Geospatial product, does not have sensors information. Geospatial products may be rasters
+  (that were derived from one or more satellite or other rasters) or vectors.
   """
   name = models.CharField(max_length = 255, null=False, blank=False, help_text="A descriptive name for this dataset");
   data_type = models.CharField( max_length=1, choices=GEOSPATIAL_GEOMETRY_TYPE_CHOICES,null=True,blank=True, help_text="Is this a vector or raster dataset?" )
@@ -623,9 +625,6 @@ class GeospatialProduct( GenericProduct ):
   processing_notes = models.TextField( null=True, blank=True, help_text="Description of how the product was created." )
 
   objects = models.GeoManager()
-
-  def __unicode__(self):
-     return self.product_id
 
 ###############################################################################
 
@@ -882,7 +881,7 @@ class Search(models.Model):
   Stores search results
   """
 
-  #ABP: added to store which product to search
+  # ABP: added to store which product to search
   # Values for the search_type parameter
   PRODUCT_SEARCH_GENERIC       = 0  # default in case of blank/null/0
   PRODUCT_SEARCH_OPTICAL       = 1
@@ -1222,11 +1221,15 @@ def set_generic_product_date(sender, instance, **kw):
   if both start_date and end_date are set, then calculate the avg,
   uses the start_date if end_date is not set
   """
+  import ipy; ipy.shell()
   if instance.product_acquisition_end:
-    instance.product_date = datetime.fromordinal(instance.product_acquisition_start.toordinal() \
-        + (instance.product_acquisition_end - instance.product_acquisition_end).days)
+    instance.product_date = datetime.datetime.fromordinal(instance.product_acquisition_start.toordinal() \
+        + (instance.product_acquisition_end - instance.product_acquisition_start).days)
   else:
     instance.product_date = instance.product_acquisition_start
+  logging.info('Pre-save signal activated for %s' % instance)
 
 
-models.signals.pre_save.connect(set_generic_product_date, sender = GenericSensorProduct)
+# ABP: doesn't work for GenericSensorProduct: need the child models :(
+models.signals.pre_save.connect(set_generic_product_date, sender = OpticalProduct)
+models.signals.pre_save.connect(set_generic_product_date, sender = RadarProduct)

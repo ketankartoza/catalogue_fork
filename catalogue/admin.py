@@ -60,6 +60,8 @@ class CreatingSoftwareAdmin( admin.GeoModelAdmin ):
   pass
 class GenericProductAdmin( admin.GeoModelAdmin ):
   pass
+class GeospatialProductAdmin( admin.GeoModelAdmin ):
+  pass
 class OpticalProductAdmin( admin.GeoModelAdmin ):
   list_filter = ('mission', 'mission_sensor', 'sensor_type', 'processing_level', 'product_acquisition_start' )
 class ResamplingMethodAdmin( admin.GeoModelAdmin ):
@@ -94,6 +96,7 @@ admin.site.register(Quality, QualityAdmin)
 admin.site.register(CreatingSoftware, CreatingSoftwareAdmin)
 admin.site.register(GenericProduct, GenericProductAdmin)
 admin.site.register(OpticalProduct, OpticalProductAdmin)
+admin.site.register(GeospatialProduct, GeospatialProductAdmin)
 admin.site.register(OrderNotificationRecipients, OrderNotificationRecipientsAdmin)
 
 #################################################
