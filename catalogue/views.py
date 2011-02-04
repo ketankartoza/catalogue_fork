@@ -1652,7 +1652,10 @@ def notifySalesStaff(theUser, theOrderId):
      >>> from catalogue.views import *
      >>> myUser = User.objects.get(id=1)
      >>> myUser
-     >>> notifySalesStaff( myUser, 16 )"""
+     >>> notifySalesStaff( myUser, 16 )
+
+    #TODO: ABP: GenericProduct does not have sensor informations anymore, notifications must be unbound from the sensors
+  """
 
   if not settings.EMAIL_NOTIFICATIONS_ENABLED:
     return
