@@ -5,15 +5,15 @@ from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _
 #for user id foreign keys
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 import os
-
 import logging
+# for product_date soft trigger
 import datetime
 # for generating globally unique id's - I think python 2.5 is required
 import uuid
 
-# for product_date soft trigger
-import datetime
+
 
 # Helper classes
 from catalogue.geoiputils import *
@@ -389,7 +389,8 @@ class GenericProduct( models.Model ):
     except:
       pass
 
-    return None, "Error - product not found"
+    # ABP: raise exception instead of returning None, "Error - product not found"
+    raise ObjectDoesNotExist()
 
 
   def getConcreteInstance( self ):
@@ -440,9 +441,7 @@ class GenericProduct( models.Model ):
 
 class GenericSensorProduct( GenericProduct ):
   """
-  Multitable inheritance class to hold common fields for satellite / sensor
-  based imagery as opposed to other spatial products such as derived rasters
-  and vectors.
+  Multitable inheritance class to hold common fields for satellite imagery
   """
   mission = models.ForeignKey( 'catalogue.Mission' ) # e.g. S5
   mission_sensor = models.ForeignKey( MissionSensor ) # e.g. HRV
@@ -1214,7 +1213,9 @@ class Cbers(models.Model):
 
 def set_generic_product_date(sender, instance, **kw):
   """
-  Sets the product_date based on acquisition date
+  Sets the product_date based on acquisition date,
+  if both start_date and end_date are set, then calculate the avg,
+  uses the start_date if end_date is not set
   """
   if instance.product_acquisition_end:
     instance.product_date = datetime.fromordinal(instance.product_acquisition_start.toordinal() \
