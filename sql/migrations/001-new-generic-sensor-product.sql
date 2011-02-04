@@ -136,6 +136,7 @@ CREATE INDEX "catalogue_genericsensorproduct_acquisition_mode_id" ON "catalogue_
 CREATE INDEX "catalogue_genericsensorproduct_product_acquisition_start" ON "catalogue_genericsensorproduct" ("product_acquisition_start");
 CREATE INDEX "catalogue_genericsensorproduct_product_acquisition_end" ON "catalogue_genericsensorproduct" ("product_acquisition_end");
 
+CREATE INDEX "catalogue_genericproduct_product_date" ON "catalogue_genericproduct" ("product_date");
 
 DROP VIEW vw_usercart;
 
