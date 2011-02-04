@@ -612,18 +612,23 @@ class OpticalProduct( GenericSensorProduct ):
 
 ###############################################################################
 
+GEOSPATIAL_GEOMETRY_TYPE_CHOICES = ( ( 'R','Raster' ), ( 'VP', 'Vector - Points' ), ( 'VL', 'Vector - Lines' ) , ( 'VA', 'Vector - Areas / Polygons' ) )
+class GeospatialProduct( GenericProduct ):
+  """
+    Geospatial product, does not have sensors information. Geospatial products may be rasters 
+    (that were derived from one or more satellite or other rasters) or vectors.
+  """
+  name = models.CharField(max_length = 255, null=False, blank=False, help_text="A descriptive name for this dataset");
+  data_type = models.CharField( max_length=1, choices=GEOSPATIAL_GEOMETRY_TYPE_CHOICES,null=True,blank=True, help_text="Is this a vector or raster dataset?" )
+  scale = models.IntegerField( help_text="The fractional part at the ideal maximum scale for this dataset. For example enter '50000' if it should not be used at scales larger that 1:50 000", null=True, blank=True, default=50000 )
+  processing_notes = models.TextField( null=True, blank=True, help_text="Description of how the product was created." )
+
+  objects = models.GeoManager()
+
+  def __unicode__(self):
+     return self.product_id
 
 ###############################################################################
-
-class GeospatialProduct( GenericProduct ):
-    """
-    Geospatial product, does not have sensors information
-    """
-    name = models.CharField(max_length = 255);
-
-
-
-
 
 #TODO use lookup tables rather?
 LOOK_DIRECTION_CHOICES = ( ( 'L','Left' ), ( 'R', 'Right' ) )
