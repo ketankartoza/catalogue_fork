@@ -78,7 +78,8 @@
         loadMoreData();
         loadMoreData = null;
       }
-    $("#map-navigation-panel div[title]").tooltip('#maptooltip'); 
+    $("#map-navigation-panel div[title]").tooltip('#maptooltip');
+    $("#map-container").mapResizer({'map':mMap});{# //activate mapresizer widget #}
     } {# //end init #}
     {# // make OL compute scale according to WMS spec #}
     OpenLayers.DOTS_PER_INCH = 25.4 / 0.28;

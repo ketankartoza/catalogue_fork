@@ -234,31 +234,7 @@ div.formSpacer {
   margin-top: 2px;
   margin-bottom: 2px;
   border: solid 0px;
-  height: 35px;
-}
-/*toolbar for navigation actions */
-#map-navigation-panel 
-{
-  width: 256px;
-}
-/*essentially the buttons in our toolbar */
-#map-navigation-panel div
-{
-  float: left;
-  border: solid 0px;
-  height: 24px;
-  width: 24px;
-}
-
-#map-scale 
-{
-  text-align: right;
-}
-
-#map-location
-{
-  text-align: center;
-  height: 30px;
+ /* height: 35px;*/
 }
 
 /* form formattting */
