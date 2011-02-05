@@ -36,12 +36,11 @@
 	    }
 	    
 	    //calculate minimal right edge for the map
-	    var elem_parent= this.element.parent();
-	    this.right_edge_limit = elem_parent.offset().left + elem_parent.width();
+	    this.right_edge_limit = this.element.offset().left + this.element.width();
 
 	    //set min_width to parent width and height
-	    this.min_width=elem_parent.width();
-	    this.min_height=elem_parent.height();
+	    this.min_width=this.element.width();
+	    this.min_height=this.element.height();
 
 	    //set map_panel_height +2 (for borders)
 	    this.map_panel_height=this.element.find("#"+this.options.map_panel_id).height()+2;
