@@ -29,7 +29,12 @@ class GeometryWidget(forms.TextInput):
     else:
       attrs['style'] = ""
       # Now we write our widget into a string
-    myResult = '<input %s value="%s"><div id="map"></div>' % (forms.util.flatatt(attrs), value)
+    myResult = '''<input %s value="%s"><div id="map" class="span-19 last"></div>
+    <div id="map-panel" class="span-19 last">
+        <div id="map-navigation-panel" class="span-5 append-1"></div>
+        <div id="map-location"  class="span-4 append-1 small"></div>
+        <div class="olControlScalebar span-6" id="map-scale"></div>
+      </div>''' % (forms.util.flatatt(attrs), value)
     # Mark the widget html as safe - e.g. by escaping any special chars etc
     # and then return it
     return mark_safe(myResult)

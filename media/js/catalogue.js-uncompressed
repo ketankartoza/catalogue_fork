@@ -153,7 +153,10 @@ function modifyWKT(event)
 // Add Select control
 function addSelectControl()
 {   
-  var select = new OpenLayers.Control.SelectFeature(mVectorLayer, {'toggle' : true, 'clickout' : true});
+  var select = new OpenLayers.Control.SelectFeature(mVectorLayer, {
+      'toggle' : true, 
+      'clickout' : true
+  });
   mMap.addControl(select);
   select.activate();
   mVectorLayer.selectFeatureControl = select;
@@ -174,15 +177,18 @@ function enableEditing()
 function setupEditingPanel(theLayer)
 {
   var myDrawingControl = new OpenLayers.Control.DrawFeature(theLayer, 
-      OpenLayers.Handler.Polygon, 
-      {'displayClass': 'olControlDrawFeaturePolygon'}
-    );
-  var myModifyFeatureControl = new OpenLayers.Control.ModifyFeature(theLayer, 
-      {'displayClass': 'olControlModifyFeature'}
-    );
+      OpenLayers.Handler.Polygon, {
+	  'displayClass': 'olControlDrawFeaturePolygon',
+	  'title': 'Draw polygon'
+      });
+  var myModifyFeatureControl = new OpenLayers.Control.ModifyFeature(theLayer, {
+      'displayClass': 'olControlModifyFeature',
+      'title': 'Modify polygon'
+  });
   var myDestroyFeaturesControl = new DestroyFeatures({
-       'displayClass': 'destroyFeature',
-       'layer': theLayer
+      'displayClass': 'destroyFeature',
+      'title':'Remove polygon',
+      'layer': theLayer
       }
     );
   mMapControls = [myDrawingControl, myModifyFeatureControl, myDestroyFeaturesControl];
@@ -492,14 +498,24 @@ function setupBaseMap()
       });
   mMap.addControl(myZoomInControl);
   var myZoomOutControl = new OpenLayers.Control.ZoomBox({
-        title: "Zoom in box",
+        title: "Zoom out box",
         displayClass:'olControlZoomBoxOut', //so we can set its css
         out: true
       });
   mMap.addControl(myZoomOutControl);
-  var myNavigationControl = new OpenLayers.Control.Navigation();
+    var myNavigationControl = new OpenLayers.Control.Navigation({
+	title : "Pan map"
+    }
+  );
   mMap.addControl(myNavigationControl);
-  var myHistoryControl = new OpenLayers.Control.NavigationHistory();
+    var myHistoryControl = new OpenLayers.Control.NavigationHistory({
+	previousOptions: {
+	    title : "Previous view"
+	},
+	nextOptions: {
+	    title : "Next view"
+	}
+    });
   mMap.addControl(myHistoryControl);
   // now add these controls all to our toolbar / panel
   mNavigationPanel.addControls([myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.next, myHistoryControl.previous]);

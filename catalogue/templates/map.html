@@ -17,7 +17,7 @@
         window.ieLoaded = true;
         setTimeout(init, 2000);
         return;
-      }  
+      }
       {% if user.is_staff %}//setupSqlDialog();{% endif %}
       setupMetadataDialog();
       {# vars initialised inside a function using var will have local scope #}
@@ -77,8 +77,9 @@
       if (loadMoreData) {
         loadMoreData();
         loadMoreData = null;
-      }  
-    }
+      }
+    $("#map-navigation-panel div[title]").tooltip('#maptooltip'); 
+    } {# //end init #}
     {# // make OL compute scale according to WMS spec #}
     OpenLayers.DOTS_PER_INCH = 25.4 / 0.28;
   /* ]]> */
@@ -88,7 +89,8 @@
 
 {% block table %}
 <div id="working"></div> {# used to display ajax status updates #}
-<div id="recordtooltip">&nbsp;</div> {# used to display tooltips #}
+<div id="recordtooltip">&nbsp;</div> {# used to display record tooltips #}
+<div id="maptooltip">&nbsp;</div> {# used to display map tooltips #}
     {% include "page.html" %}
 {% endblock %}
 
