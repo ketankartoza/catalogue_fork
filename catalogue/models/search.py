@@ -6,7 +6,7 @@ import datetime
 from django.contrib.auth.models import User
 from orders import Order, OrderStatus
 from products import GenericProduct
-from dictionaries import MissionSensor
+from dictionaries import MissionSensor, AcquisitionMode, License, SensorType, Mission
 #for translation
 from django.utils.translation import ugettext_lazy as _
 
@@ -89,7 +89,7 @@ class Search(models.Model):
 
   # ABP: added to store which product to search
   # Values for the search_type parameter
-  PRODUCT_SEARCH_GENERIC       = 0  # default in case of blank/null/0
+  PRODUCT_SEARCH_GENERIC       = 0  # default in case of blank/null/0 = simple search
   PRODUCT_SEARCH_OPTICAL       = 1
   PRODUCT_SEARCH_RADAR         = 2
   PRODUCT_SEARCH_GEOSPATIAL    = 3
@@ -137,10 +137,11 @@ class Search(models.Model):
       help_text = "When the search was made - not shown to users")
   start_date = models.DateField('Start Date', auto_now=False, auto_now_add=False, null=False, blank=False,
       default = datetime.datetime.now(),
-      help_text='Start date is required. YYYY-MM-DD.')
-  end_date = models.DateField('End Date', auto_now=False, auto_now_add=False, null=False, blank=True,
+      help_text='Product date is required. YYYY-MM-DD.')
+  end_date = models.DateField('End Date', auto_now=False, auto_now_add=False, null=False, blank=False,
       default = datetime.datetime.now(),
       help_text='End date is required. YYYY-MM-DD.')
+
   # e.g. 16fd2706-8baf-433b-82eb-8c7fada847da
   guid = models.CharField(max_length=40)
   deleted = models.NullBooleanField('Deleted?',
@@ -155,6 +156,46 @@ class Search(models.Model):
       help_text='If you want to limit searches to optical products with a certain cloud cover, enable this.')
   cloud_mean = models.IntegerField(null=True, blank=True, default=5, verbose_name="Max Clouds", help_text="Select the maximum permissible cloud cover.", max_length=1)
 
+  # ABP: new additions
+  acquisition_mode = models.ForeignKey(AcquisitionMode, blank=True, null=True) #e.g. M X T J etc
+  license  = models.ForeignKey(License, blank=True, null=True)
+
+  # ABP: added to store geometric_accuracy_mean ranges
+  # Values for geometric_accuracy_mean
+  ACCURACY_MEAN_0               = 0
+  ACCURACY_MEAN_1               = 1
+  ACCURACY_MEAN_2               = 2
+  ACCURACY_MEAN_3               = 3
+  ACCURACY_MEAN_4               = 4
+  ACCURACY_MEAN_5               = 5
+
+  ACCURACY_MEAN_OPTIONS = (
+    (ACCURACY_MEAN_0,   '<= 1m'),
+    (ACCURACY_MEAN_1,   '1m - 2m'),
+    (ACCURACY_MEAN_2,   '2m - 6m'),
+    (ACCURACY_MEAN_3,   '6m - 20m'),
+    (ACCURACY_MEAN_4,   '20m - 35m'),
+    (ACCURACY_MEAN_5,   '35m - 60m'),
+  )
+
+  ACCURACY_MEAN_RANGE = {
+    ACCURACY_MEAN_0:   (0.0, 1.0),
+    ACCURACY_MEAN_1:   (1.0, 2.0),
+    ACCURACY_MEAN_2:   (2.0, 6.0),
+    ACCURACY_MEAN_3:   (6.0, 20.0),
+    ACCURACY_MEAN_4:   (20.0, 35.0),
+    ACCURACY_MEAN_5:   (35.0, 60.0),
+  }
+
+  geometric_accuracy_mean = models.IntegerField(null=True, blank=True, choices = ACCURACY_MEAN_OPTIONS)
+  spectral_resolution = models.IntegerField(help_text="Number of spectral bands in product", null=True, blank=True)
+  sensor_inclination_angle = models.FloatField(null=True, blank=True)
+
+  # ABP: 2 new FKs
+  mission = models.ForeignKey( Mission, null=True, blank=True ) # e.g. S5
+  sensor_type = models.ForeignKey( SensorType, null=True, blank=True, related_name = 'search_sensor_type'  ) #e.g. CAM1
+
+
   # Use the geo manager to handle geometry
   objects = models.GeoManager()
 
@@ -165,8 +206,29 @@ class Search(models.Model):
     super(Search, self).save()
 
   def __unicode__(self):
-    return "Start Date: " + str(self.start_date) + " End Date: "  \
-           + str(self.end_date) + " Guid: " + self.guid + " User: " + str(self.user)
+    return "Start Date: " + str(self.start_date) + "End Date: " + str(self.end_date) + " Guid: " + self.guid + " User: " + str(self.user)
+
+
+  @property
+  def isAdvanced(self):
+    """
+    Checks wether the Search is and advanced Search
+    """
+    return  self.search_type \
+            or self.sensors.count() \
+            or self.keywords \
+            or self.k_orbit_path_min \
+            or self.j_frame_row_min \
+            or self.k_orbit_path_max \
+            or self.j_frame_row_max \
+            or self.use_cloud_cover \
+            or self.acquisition_mode_id \
+            or self.license_id \
+            or self.geometric_accuracy_mean \
+            or self.spectral_resolution \
+            or self.sensor_inclination_angle \
+            or self.mission_id \
+            or self.sensor_type_id \
 
   def sensorsAsString( self ):
     myList = self.sensors.values_list( 'name',flat=True )

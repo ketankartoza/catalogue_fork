@@ -447,6 +447,8 @@ def standardLayers(theRequest):
     myActiveBaseMap =  "zaSpot10mMosaic2009"
   return myLayersList, myLayerDefinitions, myActiveBaseMap
 
+
+
 @login_required
 #theRequest context decorator not used here since we have different return paths
 def search(theRequest):
@@ -454,22 +456,9 @@ def search(theRequest):
   myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
   # check if the post ended with /?advanced for advanced searches
   logging.debug(("Post vars:" + str(theRequest.POST)))
-  # get request because initial form is requested via ajax with a /?advanced url
-  # if the advanced form should be show. Post request because the for
-  myAdvancedFlag = theRequest.GET.has_key('advanced') or theRequest.POST.has_key('advanced')
-  mySearchTemplate = None
-  #ABP: advanced ?
-  if theRequest.is_ajax():
-    mySearchTemplate = "searchPanel.html"
-  else:
-    mySearchTemplate = "search.html"
-  myForm = None
   logging.info( 'search called')
   if theRequest.method == 'POST':
-    if myAdvancedFlag:
-      myForm = AdvancedSearchForm(theRequest.POST, theRequest.FILES)
-    else:
-      myForm = SearchForm(theRequest.POST)
+    myForm = AdvancedSearchForm(theRequest.POST, theRequest.FILES)
     if myForm.is_valid():
       mySearch = myForm.save(commit=False)
       myLatLong = {'longitude':0,'latitude':0}
@@ -519,8 +508,9 @@ def search(theRequest):
     else:
       logging.info('form is INVALID after editing')
       #render_to_response is done by the renderWithContext decorator
-      return render_to_response ( mySearchTemplate ,{
-        'myAdvancedFlag' : myAdvancedFlag,
+      return render_to_response ( 'search.html' ,{
+        'myAdvancedFlag' : theRequest.POST['advanced'] == 'true',
+        'mySearchType' :  theRequest.POST['search_type'],
         'myForm': myForm,
         'myHost' : settings.HOST,
         'myLegendFlag' : True, #used to show the legend in the accordion
@@ -530,13 +520,11 @@ def search(theRequest):
         }, context_instance=RequestContext(theRequest))
   else:
     logging.info('initial search form being rendered')
-    if myAdvancedFlag:
-      myForm = AdvancedSearchForm()
-    else:
-      myForm = SearchForm()
+    myForm = AdvancedSearchForm()
     #render_to_response is done by the renderWithContext decorator
-    return render_to_response ( mySearchTemplate ,{
-      'myAdvancedFlag' : myAdvancedFlag,
+    return render_to_response ( 'search.html' ,{
+      'myAdvancedFlag' : False,
+      'mySearchType' :  None,
       'myLegendFlag' : True, #used to show the legend in the accordion
       'myForm': myForm,
       'myHost' : settings.HOST,
@@ -553,17 +541,13 @@ def modifySearch(theRequest, theGuid):
   A new search will be created from the modified one.
   """
   myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
-  mySearchTemplate = None
-  if theRequest.is_ajax():
-    mySearchTemplate = "searchPanel.html"
-  else:
-    mySearchTemplate = "search.html"
   logging.info('initial search form being rendered')
   mySearch = get_object_or_404( Search, guid=theGuid )
   myForm = AdvancedSearchForm( instance = mySearch )
   #render_to_response is done by the renderWithContext decorator
-  return render_to_response ( mySearchTemplate ,{
-    'myAdvancedFlag' : True,
+  return render_to_response ( 'search.html' ,{
+    'myAdvancedFlag' :  mySearch.isAdvanced,
+    'mySearchType' :  mySearch.search_type,
     'myForm': myForm,
     'myHost' : settings.HOST,
     'myLayerDefinitions' : myLayerDefinitions,

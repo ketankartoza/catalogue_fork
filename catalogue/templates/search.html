@@ -6,12 +6,12 @@
   <script type="text/javascript">
   /* <![CDATA[ */
   {# use init rather than jquery document.ready() for ie support! #}
-  function init() { 
+  function init() {
     if (OpenLayers.Util.getBrowserName() == "msie" && !window.ieLoaded) {
       window.ieLoaded = true;
       setTimeout(init, 2000);
       return;
-    }  
+    }
     // Extra layer definitions passed in by view
     {% if myLayerDefinitions %}
       {% for myValue in myLayerDefinitions %}
@@ -23,14 +23,14 @@
     layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Open Street Map");
     //myLayersList.unshift(layerMapnik); // add to start of array
     myLayersList.push(layerMapnik); // add to end of array
-                                                    
+
     {% if myLayersList %}
       setupSearchMap( myLayersList );
     {% endif %}
     mMap.setBaseLayer( {{ myActiveBaseMap }} );
     setupMapHelpDialog();
     {# //add tooltip div #}
-    $("#map-navigation-panel div[title]").tooltip('#maptooltip'); 
+    $("#map-navigation-panel div[title]").tooltip('#maptooltip');
   }
 /* ]]> */
 
@@ -42,12 +42,24 @@
         };
     };
 
+    {% if myAdvancedFlag %}{# activate advanced search tab #}
+    $(function(){
+        advSearchActivate({{ mySearchType }});
+    });
+    {% endif %}
+
+    $(function(){
+        $('#advSearchCombo select').change(function(e){
+            advSearchActivate(e.currentTarget.value);
+        });
+    });
+
   </script>
 
 {% endblock %}
 {% block body_load %}onload="init()";{% endblock %}
 {% block content%}
-<div id="maptooltip">&nbsp;</div> 
+<div id="maptooltip">&nbsp;</div>
   {# layout done with blueprint.css we inherit 22 cols of space from base.html #}
   <div class="span-22 append-bottom last"> {# recommended to use blueprint divs only for layout ... #}
     <div class="span-22 ui-widget-content ui-state-highlight ui-corner-all last"> {# thus nested jquery widget container #}

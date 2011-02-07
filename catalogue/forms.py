@@ -20,13 +20,16 @@ DATE_FORMATS = (
         '%d %B %Y', '%d %B, %Y',            # '25 October 2006', '25 October, 2006'
         )
 
-class SearchForm(forms.ModelForm):
+class AdvancedSearchForm(forms.ModelForm):
   """ Let the user perform searches on sensors, by date and/or geometry digitised on map. """
   #keywords = forms.CharField(widget=forms.TextInput(attrs={'cols':'32'}),required=False)
   # Note1: the help_text strings are duplicated from the model help text
   #        since I didnt find a simple way to reuse it if adding custom fields
   # Note2: Only custom fields are added here. Fields that need no tweaking are
   #        pulled by the form generator directly from the model
+
+
+  # ABP: the common part: will be searched on GenericProducts class only
   start_date = forms.DateField(widget=DateTimeWidget,required=True,input_formats=DATE_FORMATS,
       error_messages={'required': '''Entering a start date for your search is required.'''},
       help_text='Start date is required. DD-MM-YYYY.')
@@ -34,24 +37,31 @@ class SearchForm(forms.ModelForm):
       error_messages={'required': '''Entering an end date for your search is required.'''},
       help_text='End date is required. DD-MM-YYYY.'
       )
+  geometry = forms.CharField(widget=forms.HiddenInput(), required=False,
+      help_text='Digitising an area of interest is not required but is recommended. You can use the help tab in the map area for more information on how to use the map. Draw an area of interest on the map to refine the set of search results to a specific area.')
+
+  geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
+                                  required = False,
+                                  help_text = 'Upload a zipped shapefile of less than 1MB. If the shapefile contains\
+                                              more than one polygon, only the first will be used. \
+                                              Complex polygons will increase search time.')
+
   cloud_mean = forms.CharField(widget=SliderWidget(),
                                   required = False,
                                   label="Maximum cloud cover",
                                   help_text = 'Select the maximum cloud cover when searching for images. \
                                                Note that not all sensors support cloud cover filtering.\
                                               ')
-  geometry = forms.CharField(widget=forms.HiddenInput(), required=False,
-      help_text='Digitising an area of interest is not required but is recommended. You can use the help tab in the map area for more information on how to use the map. Draw an area of interest on the map to refine the set of search results to a specific area.')
 
 
   class Meta:
     model = Search
-    exclude = ('ip_position','guid','keywords','geometry_file','user', 'k_orbit_path_min', 'j_frame_row_min', 'k_orbit_path_max', 'j_frame_row_max', 'deleted', 'search_type' )
+    exclude = ('ip_position','guid','keywords','geometry_file','user', 'deleted' )
 
   # Simple way to assign css class to every field
   def __init__(self, *args, **kwargs):
 
-    super(SearchForm, self).__init__(*args, **kwargs)
+    super(AdvancedSearchForm, self).__init__(*args, **kwargs)
     for myField in self.fields:
       self.fields[myField].widget.attrs['class'] = 'ui-corner-all'
 
@@ -100,19 +110,7 @@ class SearchForm(forms.ModelForm):
     except:
       raise forms.ValidationError("Error: Start date can not be after the end date! Both dates must be entered.")
 
-class AdvancedSearchForm( SearchForm ):
-  """ Adds to SearchForm the field to load polygon from a zipped shapefile. """
-  geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
-                                  required = False,
-                                  help_text = 'Upload a zipped shapefile of less than 1MB. If the shapefile contains\
-                                              more than one polygon, only the first will be used. \
-                                              Complex polygons will increase search time.')
 
-  class Meta:
-    model = Search
-    #TODO: remove search_type from exclude, there will be a
-    #      radio/tab or another system to set it in the form
-    exclude = ('ip_position','guid','keywords','user', 'deleted', 'search_type' )
 
 class AbbreviationModelChoiceField( forms.ModelChoiceField ):
   """Custom model choice field that shows abbreviated name rather than the default unicode representation

@@ -11,7 +11,7 @@ class SearchAdmin(admin.GeoModelAdmin):
   field = (None, {'fields': ('ip_position')})
   field = (None, {'fields': ('start_date')})
   field = (None, {'fields': ('end_date')})
-  list_display = ('search_date', 'user', 'guid','start_date','end_date' )
+  list_display = ('search_date', 'user', 'guid','start_date','end_date')
   list_filter = ('search_date', 'user', )
 
 class VisitAdmin(admin.GeoModelAdmin):

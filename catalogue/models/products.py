@@ -475,6 +475,10 @@ class OpticalProduct( GenericSensorProduct ):
 
 ###############################################################################
 
+#ABP: this part will be completed with GeospatialProduct as an "abstract" class and Ordinal/Continuous
+#TODO:
+
+
 GEOSPATIAL_GEOMETRY_TYPE_CHOICES = ( ( 'R','Raster' ), ( 'VP', 'Vector - Points' ), ( 'VL', 'Vector - Lines' ) , ( 'VA', 'Vector - Areas / Polygons' ) )
 class GeospatialProduct( GenericProduct ):
   """
