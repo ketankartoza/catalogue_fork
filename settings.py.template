@@ -186,7 +186,6 @@ INSTALLED_APPS = (
     'shapes',
     'django_extensions',
     'userprofile',
-    'olwidget',
     'debug_toolbar'
 )
 

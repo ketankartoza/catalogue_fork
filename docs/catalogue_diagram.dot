@@ -1510,10 +1510,10 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">notes</FONT
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">notes</FONT
         ></TD>
         <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">TextField</FONT
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">TextField</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -1599,10 +1599,10 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">notes</FONT
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">notes</FONT
         ></TD>
         <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">TextField</FONT
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">TextField</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -1969,7 +1969,7 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">polygon</FONT
+        ><FONT FACE="Helvetica Bold">geometry</FONT
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT FACE="Helvetica Bold">PolygonField</FONT
@@ -2240,6 +2240,39 @@ digraph name {
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+    
+    </TABLE>
+    >]
+  
+    catalogue_models_OrderNotificationRecipients [label=<
+    <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4"
+     ><FONT FACE="Helvetica Bold" COLOR="white"
+     >OrderNotificationRecipients</FONT></TD></TR>
+
+    
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">id</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">AutoField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">user</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">sensors</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">ManyToManyField</FONT
         ></TD></TR>
         
     
@@ -3120,6 +3153,20 @@ digraph name {
         >]
     
     catalogue_models_SacUserProfile -> django_contrib_auth_models_User
+    [label="user"] ;
+    
+  
+    
+    
+    django_contrib_auth_models_User [label=<
+        <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4"
+        ><FONT FACE="Helvetica Bold" COLOR="white"
+        >User</FONT></TD></TR>
+        </TABLE>
+        >]
+    
+    catalogue_models_OrderNotificationRecipients -> django_contrib_auth_models_User
     [label="user"] ;
     
   

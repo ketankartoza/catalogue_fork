@@ -38,9 +38,13 @@
         return false;
       }); 
       {% endfor %}
+{# // add tooltip #}
+    $("#map-navigation-panel div[title]").tooltip('#maptooltip');
+    $('#OpenLayers_Control_MaximizeDiv_innerImage').css({'height':'100px'}); {# //dirty hack, OL sets 'style' element which cannot be overriden by CSS #}
   };
   //]]>
   </script>
+  <div id="maptooltip">&nbsp;</div> 
   {% box_start "" "" "" %}
     <h2>{{ myTitle }}</h2>
     {{  myMessage|safe }}
