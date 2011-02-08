@@ -106,8 +106,9 @@ class Searcher:
       # used for scene searches only (landsat only)
       self.mJFrameRowQuery = Q(row__range=[self.mSearch.j_frame_row_min,self.mSearch.j_frame_row_max])
       # ABP: new search fields
-      self.mLicenseQuery = Q(license = self.mSearch.license)
-      self.mGeometryAccuracyMeanQuery = Q(geometric_accuracy_mean = self.mSearch.geometric_accuracy_mean)
+      self.mLicenseQuery = Q(license__in = self.mSearch.license.all())
+      # ABP: this needs special handling to map from classes to floats
+      self.mGeometryAccuracyMeanQuery = Q(geometric_accuracy_mean__range = Search.ACCURACY_MEAN_RANGE.get(self.mSearch.geometric_accuracy_mean))
       self.mSpectralResolutionQuery = Q(spectral_resolution = self.mSearch.spectral_resolution)
       # ABP: TODO: to be removed after testing
       assert (self.mSearch.sensor_inclination_angle_start < self.mSearch.sensor_inclination_angle_end) or not (self.mSearch.sensor_inclination_angle_start or self.mSearch.sensor_inclination_angle_end), "Search sensor_inclination_angle_start is not < sensor_inclination_angle_end"

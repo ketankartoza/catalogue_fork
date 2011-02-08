@@ -166,7 +166,7 @@ class Search(models.Model):
 
   # ABP: new additions
   acquisition_mode                  = models.ForeignKey(AcquisitionMode, blank=True, null=True) #e.g. M X T J etc
-  license                           = models.ForeignKey(License, blank=True, null=True)
+  license                           = models.ManyToManyField(License, blank=True, null=True)
 
   # ABP: added to store geometric_accuracy_mean ranges
   # Values for geometric_accuracy_mean
@@ -197,14 +197,12 @@ class Search(models.Model):
 
   geometric_accuracy_mean           = models.IntegerField(null=True, blank=True, choices = ACCURACY_MEAN_OPTIONS)
   spectral_resolution               = models.IntegerField(help_text="Number of spectral bands in product", null=True, blank=True)
-  # Range
+  # sensor_inclination_angle: range
   sensor_inclination_angle_start    = models.FloatField(null=True, blank=True)
   sensor_inclination_angle_end      = models.FloatField(null=True, blank=True)
-
   # ABP: 2 new FKs
   mission                           = models.ForeignKey( Mission, null=True, blank=True ) # e.g. S5
   sensor_type                       = models.ForeignKey( SensorType, null=True, blank=True, related_name = 'search_sensor_type'  ) #e.g. CAM1
-
 
   # Use the geo manager to handle geometry
   objects = models.GeoManager()
@@ -239,7 +237,7 @@ class Search(models.Model):
             or self.sensor_inclination_angle_start \
             or self.sensor_inclination_angle_end \
             or self.mission_id \
-            or self.sensor_type_id \
+            or self.sensor_type_id
 
   def sensorsAsString( self ):
     myList = self.sensors.values_list( 'name',flat=True )
