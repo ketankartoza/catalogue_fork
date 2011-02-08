@@ -32,7 +32,6 @@ class Searcher:
     self.mSqlString = ""
     self.mExtraLayers = ""
     self.mLayersList = ""
-    return
 
   def templateData(self):
     """Return data from the searcher suitable for passing along
@@ -72,6 +71,7 @@ class Searcher:
          'myShowPreviewFlag' : True,
          'myLegendFlag' : True, #used to show the legend in the accordion
          'mySearchFlag' : True,
+         'myPaginator' : self.mPaginator,
         })
 
   def __del__(self):
@@ -99,13 +99,15 @@ class Searcher:
     self.mSearch = get_object_or_404(Search, guid=theGuid)
     self.mAdvancedFlag = self.mSearch.isAdvanced
     if self.mAdvancedFlag:
-      self.mSensorQuery = Q( mission_sensor__in=self.mSearch.sensors.values_list( 'name',flat=True ) ) #__in = match to one or more sensors
+      # ABP: TODO: remove when tested, sensors is mandatory for sensors-based products
+      assert self.mSearch.sensors.count() > 0, "Search contains no sensors informations"
+      self.mSensorQuery = Q( mission_sensor__in=self.mSearch.sensors.all()) #__in = match to one or more sensors
       self.mCloudQuery = Q( cloud_cover__lte=self.mSearch.cloud_mean ) | Q( cloud_cover__isnull=True )
       # used for scene searches only (landsat only)
       self.mKOrbitPathQuery = Q(path__range=[self.mSearch.k_orbit_path_min, self.mSearch.k_orbit_path_max])
       # used for scene searches only (landsat only)
       self.mJFrameRowQuery = Q(row__range=[self.mSearch.j_frame_row_min,self.mSearch.j_frame_row_max])
-      # ABP: new search fields
+      # ABP: m2m
       self.mLicenseQuery = Q(license__in = self.mSearch.license.all())
       # ABP: this needs special handling to map from classes to floats
       self.mGeometryAccuracyMeanQuery = Q(geometric_accuracy_mean__range = Search.ACCURACY_MEAN_RANGE.get(self.mSearch.geometric_accuracy_mean))
@@ -206,7 +208,8 @@ class Searcher:
 
     # ABP: common "simple search" parameters
     if self.mSearch.start_date and self.mSearch.end_date:
-        self.mQuerySet = self.mQuerySet.filter( self.mDateQuery )
+      self.mMessages.append('dates between <b>%s and %s</b>' % (self.mSearch.start_date, self.mSearch.end_date))
+      self.mQuerySet = self.mQuerySet.filter( self.mDateQuery )
 
     if self.mSearch.geometry:
       self.mQuerySet = self.mQuerySet.filter( self.mGeometryQuery )
@@ -215,7 +218,8 @@ class Searcher:
     if self.mAdvancedFlag:
       logging.info('Search is advanced')
       # ABP: advanced search parameters, not sensor-specific
-      if self.mSearch.license:
+      if self.mSearch.license.count():
+        self.mMessages.append('licenses %s' % ' ,'.join(["<b>%s</b>" % l for l in self.mSearch.license.all()]))
         self.mQuerySet = self.mQuerySet.filter( self.mLicenseQuery )
 
 
@@ -224,19 +228,20 @@ class Searcher:
       # this should be sooner or later heavily refactored
       if self.mSearch.search_type in (Search.PRODUCT_SEARCH_OPTICAL, Search.PRODUCT_SEARCH_RADAR):
         logging.info('GenericSensorProduct advanced search activated')
-        mySensorList = self.mSearch.sensors.values_list('id', flat=True)
-        self.mSensorQuery = Q( mission_sensor__in=mySensorList )
-        # ABP: TODO: remove when tested, sensors is mandatory for sensors-based products
-        assert self.mSearch.sensors.count() > 0, "Search contains no sensors informations"
+        # ABP: sensors is mandatory, so don't check
         self.mQuerySet = self.mQuerySet.filter( self.mSensorQuery )
-
+        self.mMessages.append("sensors <b>%s</b>" % self.mSearch.sensorsAsString())
         if self.mSearch.acquisition_mode:
+          self.mMessages.append('acquisition mode <b>%s</b>' % self.mSearch.acquisition_mode)
           self.mQuerySet = self.mQuerySet.filter( self.mAcquisitionModeQuery )
         if self.mSearch.mission:
+          self.mMessages.append('mission <b>%s</b>' % self.mSearch.mission)
           self.mQuerySet = self.mQuerySet.filter( self.mMissionQuery )
         if self.mSearch.sensor_type:
+          self.mMessages.append('sensor type <b>%s</b>' % self.mSearch.sensor_type)
           self.mQuerySet = self.mQuerySet.filter( self.mSensorTypeQuery )
         if self.mSearch.geometric_accuracy_mean:
+          self.mMessages.append('geometric accuracy mean between <b>%sm and %sm</b>' % Search.ACCURACY_MEAN_RANGE.get(self.mSearch.geometric_accuracy_mean))
           self.mQuerySet = self.mQuerySet.filter( self.mGeometryAccuracyMeanQuery )
 
         logging.info('checking if we should use landsat path / row filtering...')
@@ -248,6 +253,7 @@ class Searcher:
           logging.info('path row filtering is enabled')
           self.mQuerySet = self.mQuerySet.filter( self.mKOrbitPathQuery )
           self.mQuerySet = self.mQuerySet.filter( self.mJFrameRowQuery )
+          self.mMessages.append(self.rowPathAsString())
         else:
           logging.info( 'path row filtering is DISABLED' )
 
@@ -255,17 +261,19 @@ class Searcher:
       if self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL:
         logging.info('OpticalProduct advanced search activated')
         if self.mSearch.use_cloud_cover:
-            self.mQuerySet = self.mQuerySet.filter( self.mCloudQuery )
+          self.mQuerySet = self.mQuerySet.filter( self.mCloudQuery )
+          self.mMessages.append(self.meanCloudString())
         if self.mSearch.sensor_inclination_angle_start and self.mSearch.sensor_inclination_angle_end:
-            self.mQuerySet = self.mQuerySet.filter( self.mSensorInclinationAngleQuery )
+          self.mQuerySet = self.mQuerySet.filter( self.mSensorInclinationAngleQuery )
+          self.mMessages.append('sensor inclination angle between <b>%s and %s</b>' % (self.mSearch.sensor_inclination_angle_start, self.mSearch.sensor_inclination_angle_end))
 
       # ABP: radar only
       if self.mSearch.search_type == Search.PRODUCT_SEARCH_RADAR:
-          logging.info('RadarProduct advanced search activated')
+        logging.info('RadarProduct advanced search activated')
 
       # ABP: geospatial only
       if self.mSearch.search_type == Search.PRODUCT_SEARCH_GEOSPATIAL:
-          logging.info('GeospatialProduct advanced search activated')
+        logging.info('GeospatialProduct advanced search activated')
     else:
       logging.info('Search is simple (advanced flag is not set)')
 
@@ -320,24 +328,6 @@ class Searcher:
     # -----------------------------------------------------
     logging.info( "search : wrapping up search result presentation " )
     logging.info('extent of search results page...' + str(self.mExtent))
-    # get_FOO_display is a syntactical shortcut to display the lookup value of a choice field
-    # ABP: TODO: add other conditions to this message string ?
-    self.mMessages.append(
-        "<b>"
-        + str(self.mPaginator.count)
-        + "</b>"
-        + " records found for sensor "
-        + "<b>"
-        + str(self.mSearch.sensorsAsString())
-        + "</b>"
-        + " between "
-        + str(self.mSearch.start_date)
-        + " and "
-        + str(self.mSearch.end_date)
-        + ". "
-        + self.rowPathAsString()
-        + self.meanCloudString()
-        )
     self.logResults()
     return ()
 
@@ -358,6 +348,6 @@ class Searcher:
     else:
       myCloudAsPercent = 0
     # %% is to escape the percent symbol so we get a % literal
-    myString =  "With a maximum cloud cover of %s%%." % myCloudAsPercent
+    myString =  "with a maximum cloud cover of %s%%" % myCloudAsPercent
     return myString
 

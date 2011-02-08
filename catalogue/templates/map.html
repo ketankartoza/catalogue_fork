@@ -122,8 +122,9 @@
     <h3 id="search-summary-accordion-h3"><a href="#"><img src="/media/images/search_16.png" alt="" />&nbsp;Search Summary</a></h3>
     <div id="search-summary-accordion-div">
         {% if myMessages %}
+          <b>{{ myPaginator.count }}</b> record found for
           {% for myValue in myMessages %}
-            {{ myValue|safe }}<br/>
+            {{ myValue|safe }}{% if not forloop.last %},{% else %}.{% endif %}<br/>
           {% endfor %}
           <div><b>Note:</b>The SPOT Imagery provided in this backdrop has been degraded to 10m</div>
         {% endif %}
