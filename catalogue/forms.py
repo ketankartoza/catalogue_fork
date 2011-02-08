@@ -52,11 +52,12 @@ class AdvancedSearchForm(forms.ModelForm):
                                   help_text = 'Select the maximum cloud cover when searching for images. \
                                                Note that not all sensors support cloud cover filtering.\
                                               ')
+  advanced = forms.CharField(widget=forms.HiddenInput())
 
 
   class Meta:
     model = Search
-    exclude = ('ip_position','guid','keywords','geometry_file','user', 'deleted' )
+    exclude = ('ip_position' ,'guid' ,'keywords' ,'geometry_file' ,'user' ,'deleted' )
 
   # Simple way to assign css class to every field
   def __init__(self, *args, **kwargs):
@@ -106,9 +107,20 @@ class AdvancedSearchForm(forms.ModelForm):
       myEndDate = myCleanedData.get("end_date")
       if myEndDate and (myEndDate < myStartDate):
         raise forms.ValidationError("Error: Start date can not be after the end date!")
-      return self.cleaned_data
     except:
       raise forms.ValidationError("Error: Start date can not be after the end date! Both dates must be entered.")
+
+    # ABP: checks for advanced search only (not in cleaned_data because it does not belong to Search model)
+    if self.data.get('advanced') == 'true':
+      myStartSensorAngle = myCleanedData.get('sensor_inclination_angle_start')
+      myEndSensorAngle = myCleanedData.get('sensor_inclination_angle_end')
+      if (myStartSensorAngle and myEndSensorAngle) and (myEndSensorAngle < myStartSensorAngle):
+        raise forms.ValidationError("Error: Start sensor angle can not be greater than the end sensor angle!")
+
+      if int(myCleanedData.get('search_type')) in (Search.PRODUCT_SEARCH_OPTICAL,Search.PRODUCT_SEARCH_RADAR) and not myCleanedData.get('sensors'):
+        raise forms.ValidationError("Error: Sensors are mandatory for sensors-based products search!")
+
+    return self.cleaned_data
 
 
 

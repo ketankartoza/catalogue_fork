@@ -94,15 +94,32 @@ class Searcher:
 
     self.mRequest = theRequest
     logging.info('Searcher initialised')
+
+    # ABP: is advanced ?
     self.mSearch = get_object_or_404(Search, guid=theGuid)
-    self.mSensorQuery = Q( mission_sensor__in=self.mSearch.sensors.values_list( 'name',flat=True ) ) #__in = match to one or more sensors
-    self.mCloudQuery = Q( cloud_cover__lte=self.mSearch.cloud_mean ) | Q( cloud_cover__isnull=True )
-    # used for scene searches only (landsat only)
-    self.mKOrbitPathQuery = Q(path__range=[self.mSearch.k_orbit_path_min, self.mSearch.k_orbit_path_max])
-    # used for scene searches only (landsat only)
-    self.mJFrameRowQuery = Q(row__range=[self.mSearch.j_frame_row_min,self.mSearch.j_frame_row_max])
+    self.mAdvancedFlag = self.mSearch.isAdvanced
+    if self.mAdvancedFlag:
+      self.mSensorQuery = Q( mission_sensor__in=self.mSearch.sensors.values_list( 'name',flat=True ) ) #__in = match to one or more sensors
+      self.mCloudQuery = Q( cloud_cover__lte=self.mSearch.cloud_mean ) | Q( cloud_cover__isnull=True )
+      # used for scene searches only (landsat only)
+      self.mKOrbitPathQuery = Q(path__range=[self.mSearch.k_orbit_path_min, self.mSearch.k_orbit_path_max])
+      # used for scene searches only (landsat only)
+      self.mJFrameRowQuery = Q(row__range=[self.mSearch.j_frame_row_min,self.mSearch.j_frame_row_max])
+      # ABP: new search fields
+      self.mLicenseQuery = Q(license = self.mSearch.license)
+      self.mGeometryAccuracyMeanQuery = Q(geometric_accuracy_mean = self.mSearch.geometric_accuracy_mean)
+      self.mSpectralResolutionQuery = Q(spectral_resolution = self.mSearch.spectral_resolution)
+      # ABP: TODO: to be removed after testing
+      assert (self.mSearch.sensor_inclination_angle_start < self.mSearch.sensor_inclination_angle_end) or not (self.mSearch.sensor_inclination_angle_start or self.mSearch.sensor_inclination_angle_end), "Search sensor_inclination_angle_start is not < sensor_inclination_angle_end"
+      self.mSensorInclinationAngleQuery = Q(sensor_inclination_angle__range = (self.mSearch.sensor_inclination_angle_start, self.mSearch.sensor_inclination_angle_end))
+      self.mAcquisitionModeQuery = Q(acquisition_mode = self.mSearch.acquisition_mode)
+      # ABP: 2 new FKs
+      self.mMissionQuery = Q(mission = self.mSearch.mission)
+      self.mSensorTypeQuery = Q(sensor_type = self.mSearch.sensor_type)
+
     self.mDateQuery = Q(product_acquisition_start__range=(self.mSearch.start_date,self.mSearch.end_date))
     self.mGeometryQuery = Q(spatial_coverage__intersects=self.mSearch.geometry)
+
     # Map of all search footprints that have been added to the users cart
     # Transparent: true will make a wms layer into an overlay
     self.mCartLayer = '''myCartLayer = new OpenLayers.Layer.WMS("Cart", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=CART&user=''' + str(theRequest.user.username) + '''",
@@ -135,7 +152,7 @@ class Searcher:
     self.mLayersList = "[zaSpot10mMosaic2008,zaRoadsBoundaries,myCartLayer]"
     self.mSearchRecords = []
 
-    #ABP: Create the query set based on the type of class we're going to search in
+    # ABP: Create the query set based on the type of class we're going to search in
     assert self.mSearch.search_type in dict(Search.PRODUCT_SEARCH_TYPES).keys()
 
     if self.mSearch.search_type == Search.PRODUCT_SEARCH_GENERIC:
@@ -153,7 +170,7 @@ class Searcher:
 
 
     self.mSearchPage = None
-    #ABP: new date search is on product_date
+    # ABP: new date search is on product_date
     self.mDateQuery = Q(product_date__range=(self.mSearch.start_date,self.mSearch.end_date))
     self.mGeometryQuery = Q(spatial_coverage__intersects=self.mSearch.geometry)
     self.mThumbnails = []
@@ -184,35 +201,72 @@ class Searcher:
     logging.info('filtering by search criteria ...')
     #
 
-    #ABP:  new logic is to get directly from the request which kind of product to search on
+    # ABP: new logic is to get directly from the request which kind of product to search on
 
-    #ABP: common "simple search" parameters
+    # ABP: common "simple search" parameters
     if self.mSearch.start_date and self.mSearch.end_date:
         self.mQuerySet = self.mQuerySet.filter( self.mDateQuery )
 
     if self.mSearch.geometry:
       self.mQuerySet = self.mQuerySet.filter( self.mGeometryQuery )
 
-    #ABP: sensor only (advanced  query for Radar and Optical)
-    # I really don't like this kind of checks... bad OOP ...
-    # this should be sooner or later heavily refactored
-    if self.mSearch.search_type in (Search.PRODUCT_SEARCH_OPTICAL, Search.PRODUCT_SEARCH_RADAR):
-      logging.info('GenericSensorProduct advanced search activated')
-      mySensorList = self.mSearch.sensors.values_list('id', flat=True)
-      self.mSensorQuery = Q( mission_sensor__in=mySensorList )
-      self.mQuerySet = self.mQuerySet.filter( self.mSensorQuery )
+    # ABP: paramters for "advanced search" only
+    if self.mAdvancedFlag:
+      logging.info('Search is advanced')
+      # ABP: advanced search parameters, not sensor-specific
+      if self.mSearch.license:
+        self.mQuerySet = self.mQuerySet.filter( self.mLicenseQuery )
 
-      logging.info('checking if we should use landsat path / row filtering...')
-      logging.info('Sensor in use is:' + str( self.mSearch.sensors.values_list( 'name',flat=True ) ) )
-      if self.mSearch.k_orbit_path_min > 0 \
-          and self.mSearch.k_orbit_path_max > 0 \
-          and self.mSearch.j_frame_row_min > 0 \
-          and self.mSearch.j_frame_row_max > 0:
-        logging.info('path row filtering is enabled')
-        self.mQuerySet = self.mQuerySet.filter( self.mKOrbitPathQuery )
-        self.mQuerySet = self.mQuerySet.filter( self.mJFrameRowQuery )
-      else:
-        logging.info( 'path row filtering is DISABLED' )
+
+      # ABP: sensor only (advanced  query for Radar and Optical)
+      # I don't really like this kind of checks... bad OOP ...
+      # this should be sooner or later heavily refactored
+      if self.mSearch.search_type in (Search.PRODUCT_SEARCH_OPTICAL, Search.PRODUCT_SEARCH_RADAR):
+        logging.info('GenericSensorProduct advanced search activated')
+        mySensorList = self.mSearch.sensors.values_list('id', flat=True)
+        self.mSensorQuery = Q( mission_sensor__in=mySensorList )
+        # ABP: TODO: remove when tested, sensors is mandatory for sensors-based products
+        assert self.mSearch.sensors.count() > 0, "Search contains no sensors informations"
+        self.mQuerySet = self.mQuerySet.filter( self.mSensorQuery )
+
+        if self.mSearch.acquisition_mode:
+          self.mQuerySet = self.mQuerySet.filter( self.mAcquisitionModeQuery )
+        if self.mSearch.mission:
+          self.mQuerySet = self.mQuerySet.filter( self.mMissionQuery )
+        if self.mSearch.sensor_type:
+          self.mQuerySet = self.mQuerySet.filter( self.mSensorTypeQuery )
+        if self.mSearch.geometric_accuracy_mean:
+          self.mQuerySet = self.mQuerySet.filter( self.mGeometryAccuracyMeanQuery )
+
+        logging.info('checking if we should use landsat path / row filtering...')
+        logging.info('Sensor in use is:' + str( self.mSearch.sensors.values_list( 'name',flat=True ) ) )
+        if self.mSearch.k_orbit_path_min > 0 \
+            and self.mSearch.k_orbit_path_max > 0 \
+            and self.mSearch.j_frame_row_min > 0 \
+            and self.mSearch.j_frame_row_max > 0:
+          logging.info('path row filtering is enabled')
+          self.mQuerySet = self.mQuerySet.filter( self.mKOrbitPathQuery )
+          self.mQuerySet = self.mQuerySet.filter( self.mJFrameRowQuery )
+        else:
+          logging.info( 'path row filtering is DISABLED' )
+
+      # ABP: optical only
+      if self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL:
+        logging.info('OpticalProduct advanced search activated')
+        if self.mSearch.use_cloud_cover:
+            self.mQuerySet = self.mQuerySet.filter( self.mCloudQuery )
+        if self.mSearch.sensor_inclination_angle_start and self.mSearch.sensor_inclination_angle_end:
+            self.mQuerySet = self.mQuerySet.filter( self.mSensorInclinationAngleQuery )
+
+      # ABP: radar only
+      if self.mSearch.search_type == Search.PRODUCT_SEARCH_RADAR:
+          logging.info('RadarProduct advanced search activated')
+
+      # ABP: geospatial only
+      if self.mSearch.search_type == Search.PRODUCT_SEARCH_GEOSPATIAL:
+          logging.info('GeospatialProduct advanced search activated')
+    else:
+      logging.info('Search is simple (advanced flag is not set)')
 
 
     logging.info('search by Scene paginating...')
@@ -266,6 +320,7 @@ class Searcher:
     logging.info( "search : wrapping up search result presentation " )
     logging.info('extent of search results page...' + str(self.mExtent))
     # get_FOO_display is a syntactical shortcut to display the lookup value of a choice field
+    # ABP: TODO: add other conditions to this message string ?
     self.mMessages.append(
         "<b>"
         + str(self.mPaginator.count)

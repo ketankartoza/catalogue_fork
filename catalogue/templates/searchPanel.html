@@ -33,9 +33,9 @@
 
   {% if myForm %}
     <form enctype="multipart/form-data" action="/search/" method="post" id="search_form" class="inline">
-
+      {{ myForm.non_field_errors }}
       <div id="simpleSearchDiv">
-        <div class="span-6 prepend-2 append-bottom">{#column 1, first row----------------------- #}
+        <div class="span-6 prepend-2 append-bottom">
             <div class="span-6 last">
             <img id="{{myForm.start_date.html_name}}Button"
                 src="/media/images/info_16.png"
@@ -54,7 +54,7 @@
             </div>
             {% endif %}
         </div> {# end of column 1 #}
-        <div class="span-6 append-bottom">{#column 2 ------------------------------------------ #}
+        <div class="span-6 append-bottom">
             <div class="span-6 last">
             <img id="{{myForm.end_date.html_name}}Button"
                 src="/media/images/info_16.png"
@@ -72,11 +72,9 @@
             <strong>Alert:</strong> {{ myForm.end_date.errors }} </p>
             </div>
             {% endif %}
-        </div> {# end of column 2 #}
+        </div>
 
-
-
-        <div class="span-6 append-bottom last">{# bottom row col 3---------------------------------- #}
+        <div class="span-6 append-bottom last">
             <div class="span-6 last adv_search_ui">
                 <img id="{{myForm.geometry_file.html_name}}Button"
                     src="/media/images/info_16.png"
@@ -97,13 +95,12 @@
             </div>
             {% endif %}
 
-            <!--input type="button" value="Toggle Simple Search" id="simpleSearch"/-->
-            <input type="hidden" id="advancedSearchActive" name="advanced" value="false"/>
+            {{ myForm.advanced }}
             <input type="button" value="Toggle Advanced Search" id="advancedSearch"/>
             <input type="submit" value="Search" class="default" name="_search" />
             <input type="button" value="Map Help" id="map-help-button"/>
             {{ myForm.geometry }}
-        </div> {# end of column 3 bottom row #}
+        </div>
 
 
         <div class="clr"></div>
@@ -114,7 +111,7 @@
       <div id="advSearchCombo">{{ myForm.search_type.label }}: {{ myForm.search_type }}</div>
 
 
-      <div class="span-6 append-bottom adv_search_1 adv_search_2 adv_fld">{# bottom row col 2---------------------------------- #}
+      <div class="span-6 append-bottom adv_search_1 adv_search_2 adv_fld">
         <div class="span-6 last">
           <img id="{{myForm.k_orbit_path_min.html_name}}Button"
                src="/media/images/info_16.png"
@@ -181,7 +178,7 @@
         </div>
         {% endif %}
 
-      </div> {# end of column 2 #}
+      </div>
 
       <div class="span-6 append-bottom last adv_search_1 adv_search_2 adv_fld">
             <div class="span-6 last">
@@ -206,20 +203,39 @@
         <!-- optical only -->
         <div class="span-6 append-bottom last adv_search_1 adv_fld">
             <div class="span-6 last">
-            <img id="{{myForm.sensor_inclination_angle.html_name}}Button"
+            <img id="{{myForm.sensor_inclination_angle_start.html_name}}Button"
                 src="/media/images/info_16.png"
                 style="cursor: pointer;"
                 alt="Click for help"
                 />
-            {{ myForm.sensor_inclination_angle.label }}
+            {{ myForm.sensor_inclination_angle_start.label }}
             </div>
             <div class="span-6 last">
-            {{ myForm.sensor_inclination_angle }}
+            {{ myForm.sensor_inclination_angle_start }}
             </div>
-            {% if myForm.sensor_inclination_angle.errors %}
+            {% if myForm.sensor_inclination_angle_start.errors %}
             <div class="span-6 last">
                 <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-                <strong>Alert:</strong> {{ myForm.sensor_inclination_angle.errors }} </p>
+                <strong>Alert:</strong> {{ myForm.sensor_inclination_angle_start.errors }} </p>
+            </div>
+            {% endif %}
+        </div>
+        <div class="span-6 append-bottom last adv_search_1 adv_fld">
+            <div class="span-6 last">
+            <img id="{{myForm.sensor_inclination_angle_end.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.sensor_inclination_angle_end.label }}
+            </div>
+            <div class="span-6 last">
+            {{ myForm.sensor_inclination_angle_end }}
+            </div>
+            {% if myForm.sensor_inclination_angle_end.errors %}
+            <div class="span-6 last">
+                <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+                <strong>Alert:</strong> {{ myForm.sensor_inclination_angle_end.errors }} </p>
             </div>
             {% endif %}
         </div>
@@ -262,47 +278,68 @@
 
         <!-- new generic sensor fields -->
 
-      <div class="span-6 append-bottom last adv_search_1 adv_search_2 adv_fld">
-        <div class="span-6 last">
-        <img id="{{myForm.mission.html_name}}Button"
-            src="/media/images/info_16.png"
-            style="cursor: pointer;"
-            alt="Click for help"
-            />
-        {{ myForm.mission.label }}
+        <div class="span-6 append-bottom last adv_search_1 adv_search_2 adv_fld">
+          <div class="span-6 last">
+          <img id="{{myForm.mission.html_name}}Button"
+              src="/media/images/info_16.png"
+              style="cursor: pointer;"
+              alt="Click for help"
+              />
+          {{ myForm.mission.label }}
+          </div>
+          <div class="span-6 last">
+          {{ myForm.mission }}
+          </div>
+          {% if myForm.mission.errors %}
+          <div class="span-6 last">
+          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+          <strong>Alert:</strong> {{ myForm.mission.errors }} </p>
+          </div>
+          {% endif %}
         </div>
-        <div class="span-6 last">
-        {{ myForm.mission }}
+
+        <div class="span-6 append-bottom last adv_search_1 adv_search_2 adv_fld">
+          <div class="span-6 last">
+          <img id="{{myForm.sensor_type.html_name}}Button"
+              src="/media/images/info_16.png"
+              style="cursor: pointer;"
+              alt="Click for help"
+              />
+          {{ myForm.sensor_type.label }}
+          </div>
+          <div class="span-6 last">
+          {{ myForm.sensor_type }}
+          </div>
+          {% if myForm.sensor_type.errors %}
+          <div class="span-6 last">
+          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+          <strong>Alert:</strong> {{ myForm.sensor_type.errors }} </p>
+          </div>
+          {% endif %}
         </div>
-        {% if myForm.mission.errors %}
-        <div class="span-6 last">
-        <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-        <strong>Alert:</strong> {{ myForm.mission.errors }} </p>
-        </div>
-        {% endif %}
-      </div>
-      <div class="span-6 append-bottom last adv_search_1 adv_search_2 adv_fld">
-        <div class="span-6 last">
-        <img id="{{myForm.sensor_type.html_name}}Button"
-            src="/media/images/info_16.png"
-            style="cursor: pointer;"
-            alt="Click for help"
-            />
-        {{ myForm.sensor_type.label }}
-        </div>
-        <div class="span-6 last">
-        {{ myForm.sensor_type }}
-        </div>
-        {% if myForm.sensor_type.errors %}
-        <div class="span-6 last">
-        <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-        <strong>Alert:</strong> {{ myForm.sensor_type.errors }} </p>
-        </div>
-        {% endif %}
+
+        <div class="span-6 append-bottom last adv_search_1 adv_search_2 adv_fld">
+          <div class="span-6 last">
+          <img id="{{myForm.geometric_accuracy_mean.html_name}}Button"
+              src="/media/images/info_16.png"
+              style="cursor: pointer;"
+              alt="Click for help"
+              />
+          {{ myForm.geometric_accuracy_mean.label }}
+          </div>
+          <div class="span-6 last">
+          {{ myForm.geometric_accuracy_mean }}
+          </div>
+          {% if myForm.geometric_accuracy_mean.errors %}
+          <div class="span-6 last">
+          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+          <strong>Alert:</strong> {{ myForm.geometric_accuracy_mean.errors }} </p>
+          </div>
+          {% endif %}
         </div>
         <!-- end: new generic sensor fields -->
 
-        <div class="clr"></div>
+      <div class="clr"></div>
       </div><!-- end of advancedSearchDiv  -->
     </form>
 

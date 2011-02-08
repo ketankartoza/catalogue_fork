@@ -29,7 +29,8 @@ ALTER TABLE "catalogue_search" ADD  CONSTRAINT catalogue_search_sensortype_id_fk
 
 ALTER TABLE "catalogue_search" ADD COLUMN  "geometric_accuracy_mean" integer;
 ALTER TABLE "catalogue_search" ADD COLUMN  "spectral_resolution" integer;
-ALTER TABLE "catalogue_search" ADD COLUMN  "sensor_inclination_angle" FLOAT;
+ALTER TABLE "catalogue_search" ADD COLUMN  "sensor_inclination_angle_start" FLOAT;
+ALTER TABLE "catalogue_search" ADD COLUMN  "sensor_inclination_angle_end" FLOAT;
 
 CREATE INDEX "catalogue_search_acquisition_mode_id" ON "catalogue_search" ("acquisition_mode_id");
 CREATE INDEX "catalogue_search_license_id" ON "catalogue_search" ("license_id");

@@ -130,7 +130,7 @@
         {% if myRecords %}
         <a href="/searchresultshapefile/{{mySearchGuid}}/"><img src="/media/images/down_16.png" alt=""/> Download search as a shapefile.</a>
         {% endif %}
-        <a href="/modifysearch/{{mySearchGuid}}/" class="button-link">Modify this search</a>
+        <br /><a href="/modifysearch/{{mySearchGuid}}/" class="button-link">Modify this search</a>
         {#% if user.is_staff %}<div id="sql" style="display: none;">{{ mySqlString }}</div><input type=button id="sql-button" value="Show SQL" />{% endif %#}
     </div>
   {% endif %}
