@@ -32,13 +32,20 @@
     {# //add tooltip div #}
     $("#map-navigation-panel div[title]").tooltip('#maptooltip');
   }
-/* ]]> */
 
     function check_search_dates() {
         var sd = $("#id_start_date-widget").datepicker("getDate");
         var ed = $("#id_end_date-widget").datepicker("getDate");
         if (sd > ed) {
             alert ("The Start Date is later than the End Date.");
+        };
+    };
+
+    function check_sensor_inclination_angles() {
+        var sv = parseInt($("#id_sensor_inclination_angle_start").val());
+        var ev = parseInt($("#id_sensor_inclination_angle_end").val());
+        if (sv && ev && (sv > ev)) {
+            alert ("The sensor inclination angle start value is greater than the end.");
         };
     };
 
@@ -49,11 +56,17 @@
     {% endif %}
 
     $(function(){
+        {% if myAdvancedFlag %}{# activate advanced search tab #}
+        advSearchActivate({{ mySearchType }});
+        {% endif %}
         $('#advSearchCombo select').change(function(e){
             advSearchActivate(e.currentTarget.value);
         });
+        $("#id_sensor_inclination_angle_start").change(check_sensor_inclination_angles);
+        $("#id_sensor_inclination_angle_end").change(check_sensor_inclination_angles);
     });
 
+  /* ]]> */
   </script>
 
 {% endblock %}

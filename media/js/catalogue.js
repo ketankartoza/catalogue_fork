@@ -545,7 +545,7 @@ function advSearchActivate(search_type){
         $('.adv_search_' + search_type).show();
         $('.adv_search_ui').show('slow');
     }
-    $('#id_advanced')[0].value = true;
+    $('#id_advanced').val(true);
 };
 
 /*
@@ -563,7 +563,7 @@ function setupSearchMap( theLayers )
   {
     //block();
     $('.adv_search_ui').toggle('slow', function(){
-        $('#id_advanced')[0].value = $('#advancedSearchDiv').is(':visible');
+        $('#id_advanced').val($('#advancedSearchDiv').is(':visible'));
     });
   });
   //check if the slider exists first
