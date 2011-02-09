@@ -244,6 +244,23 @@ class Search(models.Model):
     myString = ", ".join(myList)
     return myString
 
+  def productIdAsHash(self):
+    """
+    Returns field values suitable for initial ProductIdSearchForm population
+    """
+    return {
+        'mission':            self.mission_id,
+        'sensors':            [m.pk for m in self.sensors.all()],
+        'acquisition_mode':   self.acquisition_mode_id,
+        'sensor_type':        self.sensor_type_id,
+        'start_year':         self.start_date.year,
+        'start_month':        self.start_date.month,
+        'start_day':          self.start_date.day,
+        'end_year':           self.end_date.year,
+        'end_month':          self.end_date.month,
+        'end_day':            self.end_date.day,
+      }
+
   class Meta:
     app_label= 'catalogue'
     verbose_name = _('Search')

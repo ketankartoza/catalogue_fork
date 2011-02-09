@@ -2,14 +2,53 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% block extrajs %}
   {{ block.super }}
+  {% if theGuid %}
+  <script type="text/javascript">
+    $(function(){
+
+      // TODO: remove the button and the following code
+      $('#product-search-button').click(function(){
+        $('#productIdForm').submit();
+      });
+
+      // Initial load
+      $('#search-results').load('/searchpage/{{ theGuid }}/');
+
+      $('#productIdForm').submit(function(){
+        $.ajax({
+          type: "POST",
+          url: "/productIdSearch/{{ theGuid }}/",
+          data: $('#productIdForm').serialize(),
+          success: function(data) {
+            $('#messages').hide(); // Just in case...
+            $('#search-results').load('/searchpage/{{ theGuid }}/');
+          },
+          failure: function(data) {
+            $('#messages').html(data).show('slow');
+          }
+        });
+        return false;
+      });
+
+      $('#productIdForm select').change(function() {
+        $('#productIdForm').submit();
+      });
+    });
+  </script>
+  {% endif %}
 {% endblock %}
 
 {% block content %}
 {% box_start "" "" "" %}
+<div id="messages" style="display:none;background:white"></div>
 <pre>SAT SEN TYP MOD YYMMDD HHMMSS</pre>
 <ul id="product-id-search-list">
+  <form id="productIdForm" action="/productIdSearch/{{ theGuid }}/">
+  {% csrf_token %}
   {{myForm.as_ul}}
+  </form>
 </ul>
 <input type="button" value="Search!" id="product-search-button" />
-{% box_end %}  
+<div id="search-results"></div>
+{% box_end %}
 {% endblock %}

@@ -359,7 +359,8 @@ class GenericSensorProduct( GenericProduct ):
                     str( self.product_acquisition_start.day ) )
 
   def setSacProductId( self ):
-    """A sac product id adheres to the following format:
+    """
+      A sac product id adheres to the following format:
 
       SAT_SEN_TYP_MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL
 

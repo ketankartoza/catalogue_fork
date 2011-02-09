@@ -559,58 +559,53 @@ def modifySearch(theRequest, theGuid):
     }, context_instance=RequestContext(theRequest))
 
 
+
 @login_required
 #theRequest context decorator not used here since we have different return paths
-def productIdSearch(theRequest, theGuid = None):
-  """Perform an attribute and spatial search for imagery using the product id builder"""
+def productIdSearch(theRequest, theGuid):
+  """
+  Display the product id builder, based on initial existing Search values,
+  the following interaction is ajax based
+  """
   myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
-  mySearchTemplate = "productIdSearch.html"
+  mySearch = get_object_or_404( Search, guid=theGuid )
+  myInitialValues = mySearch.productIdAsHash()
+  logging.info('productIdSearch initializing values from existing search %s' % theGuid)
+  logging.info('productIdSearch initial values: %s' % myInitialValues)
+
+
   if theRequest.method == 'POST':
     myForm = ProductIdSearchForm(theRequest.POST, theRequest.FILES)
     if myForm.is_valid():
-      mySearch = myForm.save(commit=False)
-      myLatLong = {'longitude':0,'latitude':0}
-      if settings.USE_GEOIP:
-        try:
-          myGeoIpUtils = GeoIpUtils()
-          myIp = myGeoIpUtils.getMyIp(theRequest)
-          myLatLong = myGeoIpUtils.getMyLatLong(theRequest)
-        except:
-          #raise forms.ValidationError( "Could not get geoip for this request" + traceback.format_exc() )
-          # do nothing - better in a production environment
-          pass
-      if myLatLong:
-        mySearch.ip_position = "SRID=4326;POINT(" + str(myLatLong['longitude']) + " " + str(myLatLong['latitude']) + ")"
-      mySearch.user = theRequest.user
-      mySearch.deleted = False
-      try:
-        myGeometry = getGeometryFromShapefile( theRequest, myForm, 'geometry_file' )
-        if myGeometry:
-          mySearch.geometry = myGeometry
-        else:
-          logging.info("Failed to set search area from uploaded shapefile")
-      except:
-        logging.info("An error occurred trying to set search area from uploaded shapefile")
-      # else use the on-the-fly digitised geometry
-      mySearch.save()
-      logging.debug("Search: " + str( mySearch ))
-      logging.info('form is VALID after editing')
-      #test of registered user messaging system
-      theRequest.user.message_set.create(message="Your search was carried out successfully.")
-      return HttpResponseRedirect('/searchresult/' + mySearch.guid)
+      logging.info('productIdSearch form is VALID after editing')
+      logging.info('productIdSearch cleaned_data: %s' % myForm.cleaned_data)
+      # Bind data
+      for f in [f.name for f in mySearch._meta.fields]:
+        if myForm.cleaned_data.has_key(f):
+          setattr(mySearch, f, myForm.cleaned_data.get(f))
+        mySearch.save()
+      # Save m2m, should be required, but check anyway
+      if myForm.cleaned_data.get('sensors'):
+        mySearch.sensors.clear()
+        for s in myForm.cleaned_data.get('sensors'):
+          mySearch.sensors.add(s)
+      if theRequest.is_ajax():
+        return HttpResponse('ok')
     else:
       logging.info('form is INVALID after editing')
-      #render_to_response is done by the renderWithContext decorator
-      return render_to_response ( mySearchTemplate ,{
+      if theRequest.is_ajax():
+        return HttpResponse(myForm.errors)
+      return render_to_response ( 'productIdSearch.html' ,{
         'myForm': myForm,
-        }, context_instance=RequestContext(theRequest))
-  else:
-    logging.info('initial search form being rendered')
-    myForm = ProductIdSearchForm()
-    #render_to_response is done by the renderWithContext decorator
-    return render_to_response ( mySearchTemplate ,{
-      'myForm': myForm,
+        'theGuid' : theGuid,
       }, context_instance=RequestContext(theRequest))
+
+  myForm = ProductIdSearchForm(initial = myInitialValues)
+  logging.info('initial search form being rendered')
+  return render_to_response ( 'productIdSearch.html' ,{
+      'myForm': myForm,
+      'theGuid' : theGuid,
+    }, context_instance=RequestContext(theRequest))
 
 
 @login_required

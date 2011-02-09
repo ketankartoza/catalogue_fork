@@ -131,33 +131,62 @@ class AbbreviationModelChoiceField( forms.ModelChoiceField ):
     return obj.abbreviation
 
 
+class AbbreviationModelMultipleChoiceField( forms.ModelMultipleChoiceField ):
+  """Custom model choice field that shows abbreviated name rather than the default unicode representation
+  so that we can show compact combo boxes. The associated model must have a field called abbreviation."""
+  def label_from_instance(self, obj):
+    return obj.abbreviation
+
+
+
 class ProductIdSearchForm( forms.Form ):
-  """ A special class of search form that allows to construct the search by
+  """
+  A special class of search form that allows to construct the search by
   building up a Product ID. This is intended to be used as an unbound form
-  so the init function initialises the choices lists and so on."""
-  mission = AbbreviationModelChoiceField( None, empty_label="---" )
-  mission_sensor = AbbreviationModelChoiceField( None, empty_label="---" )
-  acquisition_mode = AbbreviationModelChoiceField( None, empty_label="---" )
-  sensor_type = AbbreviationModelChoiceField( None, empty_label="---" )
-  myRange = range(1970, datetime.date.today().year)
+  so the init function initialises the choices lists and so on.
+  #TODO: validation, not that much really, just date ranges probably
+  """
+  mission = AbbreviationModelChoiceField( None, empty_label="*" , required = False)
+  sensors = AbbreviationModelMultipleChoiceField(None)
+  acquisition_mode = AbbreviationModelChoiceField(None, empty_label="*", required = False)
+  sensor_type = AbbreviationModelChoiceField(None, empty_label="*", required = False)
+  myRange = range(1970, datetime.date.today().year + 1)
   #zip creates a 2-tuple out of an array e.g. ((1970,1970),(1971,1971),etc....)
-  year = forms.ChoiceField( zip(myRange,myRange) )
-  month = forms.ChoiceField( zip( range(1,13), range(1,13) ) )
-  day = forms.ChoiceField( zip( range(1,32), range(1,32) ) )
-  hour = forms.ChoiceField( zip( range(0,24), range(0,24) ) )
-  minute = forms.ChoiceField( zip( range(0,60),range(0,60) ) )
-  second = forms.ChoiceField( zip( range(0,60), range(0,60) ) )
+  start_year = forms.ChoiceField([(None, '*')] + zip(myRange,myRange))
+  start_month = forms.ChoiceField( zip( range(1,13), range(1,13) ) )
+  start_day = forms.ChoiceField( zip( range(1,32), range(1,32) ) )
+  start_hour = forms.ChoiceField( zip( range(0,24), range(0,24) ), required = False)
+  start_minute = forms.ChoiceField( zip( range(0,60),range(0,60) ), required = False)
+  start_second = forms.ChoiceField( zip( range(0,60), range(0,60) ), required = False)
+  end_year = forms.ChoiceField( zip(myRange,myRange) )
+  end_month = forms.ChoiceField( zip( range(1,13), range(1,13) ) )
+  end_day = forms.ChoiceField( zip( range(1,32), range(1,32) ) )
+  end_hour = forms.ChoiceField( zip( range(0,24), range(0,24) ), required = False)
+  end_minute = forms.ChoiceField( zip( range(0,60),range(0,60) ), required = False)
+  end_second = forms.ChoiceField( zip( range(0,60), range(0,60) ), required = False)
 
   def __init__(self,*args,**kwargs):
+    """
+    Querysets will be filtered by existing search instance if passed in init
+    """
     super ( ProductIdSearchForm, self ).__init__(*args,**kwargs)
     self.fields['mission'].queryset = Mission.objects.all()
-    self.fields['mission_sensor'].queryset = MissionSensor.objects.all()
+    self.fields['sensors'].queryset = MissionSensor.objects.all()
     self.fields['acquisition_mode'].queryset = AcquisitionMode.objects.all()
     self.fields['sensor_type'].queryset = SensorType.objects.all()
 
-  class Meta:
-    #model = Search
-    pass
+  def clean(self):
+    cleaned_data = self.cleaned_data
+    if cleaned_data.get('start_year') or cleaned_data.get('start_month') or cleaned_data.get('start_day'):
+      try:
+        self.cleaned_data['start_date'] = datetime.datetime(int(cleaned_data.get('start_year')), int(cleaned_data.get('start_month')), int(cleaned_data.get('start_day')), int(cleaned_data.get('start_hour')), int(cleaned_data.get('start_minute')), int(cleaned_data.get('start_second')))
+      except ValueError, e:
+        raise forms.ValidationError ('Error: start date is not valid. %s' % e)
+      try:
+        self.cleaned_data['end_date'] = datetime.datetime(int(cleaned_data.get('end_year')), int(cleaned_data.get('end_month')), int(cleaned_data.get('end_day')), int(cleaned_data.get('end_hour')), int(cleaned_data.get('end_minute')), int(cleaned_data.get('end_second')))
+      except ValueError, e:
+        raise forms.ValidationError ('Error: end date is not valid. %s' % e)
+    return self.cleaned_data
 
 
 class OrderStatusForm(forms.ModelForm):
