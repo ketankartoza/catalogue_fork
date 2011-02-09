@@ -52,7 +52,7 @@ class AdvancedSearchForm(forms.ModelForm):
                                   help_text = 'Select the maximum cloud cover when searching for images. \
                                                Note that not all sensors support cloud cover filtering.\
                                               ')
-  advanced = forms.CharField(widget=forms.HiddenInput())
+  isAdvanced = forms.CharField(widget=forms.HiddenInput(), required = False)
 
 
   class Meta:

@@ -223,6 +223,7 @@ class Search(models.Model):
     Checks wether the Search is an advanced Search
     """
     return  self.search_type \
+            or self.license.count() \
             or self.sensors.count() \
             or self.keywords \
             or self.k_orbit_path_min \
@@ -230,14 +231,13 @@ class Search(models.Model):
             or self.k_orbit_path_max \
             or self.j_frame_row_max \
             or self.use_cloud_cover \
-            or self.acquisition_mode_id \
-            or self.license_id \
+            or self.acquisition_mode \
             or self.geometric_accuracy_mean \
             or self.spectral_resolution \
             or self.sensor_inclination_angle_start \
             or self.sensor_inclination_angle_end \
-            or self.mission_id \
-            or self.sensor_type_id
+            or self.mission \
+            or self.sensor_type
 
   def sensorsAsString( self ):
     myList = self.sensors.values_list( 'name',flat=True )

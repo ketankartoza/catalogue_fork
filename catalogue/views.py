@@ -313,7 +313,6 @@ def clip(theRequest):
       return HttpResponseRedirect(myRedirectPath + str(myObject.id))
     else:
       logging.info('form is INVALID after editing')
-
       #render_to_response is done by the renderWithContext decorator
       return ({
         'myTitle': myTitle,
@@ -452,9 +451,10 @@ def standardLayers(theRequest):
 @login_required
 #theRequest context decorator not used here since we have different return paths
 def search(theRequest):
-  """Perform an attribute and spatial search for imagery"""
+  """
+  Perform an attribute and spatial search for imagery
+  """
   myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
-  # check if the post ended with /?advanced for advanced searches
   logging.debug(("Post vars:" + str(theRequest.POST)))
   logging.info( 'search called')
   if theRequest.method == 'POST':
@@ -506,10 +506,11 @@ def search(theRequest):
       theRequest.user.message_set.create(message="Your search was carried out successfully.")
       return HttpResponseRedirect('/searchresult/' + mySearch.guid)
     else:
+
       logging.info('form is INVALID after editing')
       #render_to_response is done by the renderWithContext decorator
       return render_to_response ( 'search.html' ,{
-        'myAdvancedFlag' : theRequest.POST['advanced'] == 'true',
+        'myAdvancedFlag' : theRequest.POST['isAdvanced'] == 'true',
         'mySearchType' :  theRequest.POST['search_type'],
         'myForm': myForm,
         'myHost' : settings.HOST,
@@ -536,7 +537,8 @@ def search(theRequest):
 
 @login_required
 def modifySearch(theRequest, theGuid):
-  """Given a search guid, give the user a form prepopulated with
+  """
+  Given a search guid, give the user a form prepopulated with
   that search's criteria so they can modify their search easily.
   A new search will be created from the modified one.
   """
@@ -549,6 +551,7 @@ def modifySearch(theRequest, theGuid):
     'myAdvancedFlag' :  mySearch.isAdvanced,
     'mySearchType' :  mySearch.search_type,
     'myForm': myForm,
+    'myGuid' : theGuid,
     'myHost' : settings.HOST,
     'myLayerDefinitions' : myLayerDefinitions,
     'myLayersList' : myLayersList,
@@ -558,7 +561,7 @@ def modifySearch(theRequest, theGuid):
 
 @login_required
 #theRequest context decorator not used here since we have different return paths
-def productIdSearch(theRequest):
+def productIdSearch(theRequest, theGuid = None):
   """Perform an attribute and spatial search for imagery using the product id builder"""
   myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
   mySearchTemplate = "productIdSearch.html"

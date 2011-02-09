@@ -545,7 +545,7 @@ function advSearchActivate(search_type){
         $('.adv_search_' + search_type).show();
         $('.adv_search_ui').show('slow');
     }
-    $('#id_advanced').val(true);
+    $('#id_isAdvanced').val(true);
 };
 
 /*
@@ -555,15 +555,11 @@ function setupSearchMap( theLayers )
 {
 
   // for toggling advanced search on / off
-  // Bind the click event of the simple / advanced search buttons
-  // to a custom event. We do this because if the button was loaded
-  // into the page via ajax, it wont be able to directly call a fn on
-  // the parent page. Binding (via live fn below) requires jquery.
   $('#advancedSearch').click(function(event)
   {
     //block();
     $('.adv_search_ui').toggle('slow', function(){
-        $('#id_advanced').val($('#advancedSearchDiv').is(':visible'));
+        $('#id_isAdvanced').val($('#advancedSearchDiv').is(':visible'));
     });
   });
   //check if the slider exists first

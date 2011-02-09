@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% block extrajs %}
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+{% box_start "" "" "" %}
+<pre>SAT SEN TYP MOD YYMMDD HHMMSS</pre>
+<ul id="product-id-search-list">
+  {{myForm.as_ul}}
+</ul>
+<input type="button" value="Search!" id="product-search-button" />
+{% box_end %}  
+{% endblock %}
