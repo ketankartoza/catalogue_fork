@@ -6,12 +6,13 @@
   <script type="text/javascript">
   /* <![CDATA[ */
   {# use init rather than jquery document.ready() for ie support! #}
-  function init() { 
+  function init() {
     if (OpenLayers.Util.getBrowserName() == "msie" && !window.ieLoaded) {
       window.ieLoaded = true;
       setTimeout(init, 2000);
       return;
     }  
+
     // Extra layer definitions passed in by view
     {% if myLayerDefinitions %}
       {% for myValue in myLayerDefinitions %}
@@ -29,10 +30,11 @@
     {% endif %}
     mMap.setBaseLayer( {{ myActiveBaseMap }} );
     setupMapHelpDialog();
-    {# //add tooltip div #}
-    $("#map-navigation-panel div[title]").tooltip('#maptooltip');
-    $('#OpenLayers_Control_MaximizeDiv_innerImage').css({'height':'100px'}); {# //dirty hack, OL sets 'style' element which cannot be overriden by CSS #}
 
+    $('#OpenLayers_Control_MaximizeDiv_innerImage').css({'height':'100px'}); {# //dirty hack, OL sets 'style' element which cannot be overriden by CSS #}
+    $("#map-container").mapResizer({'map':mMap});{# //activate mapresizer widget #}
+    {# //add tooltip div #}
+    $("#map-navigation-panel div[title],#resizer_toolbox img[title]").tooltip('#maptooltip');
   }
 /* ]]> */
 
@@ -52,11 +54,11 @@
 <div id="maptooltip">&nbsp;</div> 
   {# layout done with blueprint.css we inherit 22 cols of space from base.html #}
   <div class="span-22 append-bottom last"> {# recommended to use blueprint divs only for layout ... #}
-    <div class="span-22 ui-widget-content ui-state-highlight ui-corner-all last"> {# thus nested jquery widget container #}
+    <div id="map-container" class="span-22 ui-widget-content ui-state-highlight ui-corner-all last"> {# thus nested jquery widget container #}
       <div id="map" class="span-22 last"></div>
       <div id="map-panel" class="span-22 last">
-        <div id="map-navigation-panel" class="span-6 append-1"></div>
-        <div id="map-location"  class="span-6 append-1 small"></div>{# small class from blueprint css #}
+        <div id="map-navigation-panel" class="span-7 append-1"></div>
+        <div id="map-location"  class="prepend-1 span-4 append-1 small"></div>{# small class from blueprint css #}
         <div class="olControlScalebar span-6 append-1" id="map-scale"></div>
       </div>
     </div>

@@ -14,6 +14,7 @@
  * zIndexing so that we can raise the selected on above the others
  * see http://openlayers.org/dev/examples/ordering.html */
 
+
 var DestroyFeatures = OpenLayers.Class(OpenLayers.Control, {
     type: OpenLayers.Control.TYPE_BUTTON,
     trigger: function() {
