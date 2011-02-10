@@ -919,10 +919,15 @@ class Visit(models.Model):
   user = models.ForeignKey(User,null=True, blank=True)
   objects = models.GeoManager()
 
-  def customSQL( self, sql_string, qkeys ):
+  def customSQL( self, sql_string, qkeys, args=None ):
     from django.db import connection
     cursor = connection.cursor()
-    cursor.execute(sql_string)
+    #args MUST be parsed in case of SQL injection attempt
+    #execute() does this automatically for us
+    if args:
+      cursor.execute(sql_string,args)
+    else:
+      cursor.execute(sql_string)
     rows = cursor.fetchall()
     fdicts = []
     for row in rows:
