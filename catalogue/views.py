@@ -35,7 +35,7 @@ from shapes.views import ShpResponder
 import os
 from PIL import Image, ImageFilter, ImageOps
 
-# For shopping cart
+# For shopping cart and ajax product id search
 from django.utils import simplejson
 
 # for sending email
@@ -601,7 +601,6 @@ def productIdSearch(theRequest, theGuid):
         # is not in the Search class :(
         mySearcher = Searcher(theRequest,theGuid)
         return HttpResponse(simplejson.dumps(mySearcher.describeQuery()), mimetype='application/json')
-
     else:
       logging.info('form is INVALID after editing')
       if theRequest.is_ajax():

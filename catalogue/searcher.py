@@ -121,12 +121,9 @@ class Searcher:
         logging.info('Search type is PRODUCT_SEARCH_GEOSPATIAL')
         self.mQuerySet = GeospatialProduct.objects.all()
 
-
     # -----------------------------------------------------
     logging.info('filtering by search criteria ...')
     #
-
-
     # ABP: new logic is to get directly from the request which kind of product to search on
 
     # ABP: common "simple search" parameters
@@ -337,7 +334,7 @@ class Searcher:
     self.logResults()
     return ()
 
-  def rowPathAsString( self ):
+  def rowPathAsString(self):
     if self.mSearch.k_orbit_path_min > 0 \
       and self.mSearch.k_orbit_path_max > 0 \
       and self.mSearch.j_frame_row_min > 0 \
@@ -347,7 +344,7 @@ class Searcher:
     else:
       return ""
 
-  def meanCloudString( self ):
+  def meanCloudString(self):
     myCloudAsPercent = None
     if self.mSearch.cloud_mean:
       myCloudAsPercent = int( self.mSearch.cloud_mean )  * 10
@@ -357,9 +354,20 @@ class Searcher:
     myString =  "with a maximum cloud cover of %s%%" % myCloudAsPercent
     return myString
 
-  def describeQuery( self ):
+  def describeQuery(self):
     """
     Returns a struct with messages and SQL of mSearch query
     """
-    return { 'messages' : self.mMessages, 'query' : "%s" % self.mSqlString, 'count' : self.mRecordCount }
+    # Get option for all related fields
+    values = {}
+    for field_name in [f.name for f in self.mSearch._meta.fields if f.rel]:
+      if field_name != 'user' and not getattr(self.mSearch, field_name , None):
+        values[field_name] = self.getOption(field_name)
+    return { 'messages' : self.mMessages, 'query' : "%s" % self.mSqlString, 'count' : self.mRecordCount, 'values' : values }
+
+  def getOption(self, field_name):
+    """
+    Returns a list of possible values that selected search parameters can assume for a given field
+    """
+    return list(self.mQuerySet.distinct().values_list(field_name, flat = True).order_by())
 
