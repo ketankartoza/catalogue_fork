@@ -49,6 +49,8 @@ import sys
 # for error logging
 import traceback
 
+# for date handling
+import datetime
 
 #### VIEW FUNCTIONS ####
 
@@ -418,9 +420,46 @@ def visitorReport( theRequest ):
 
   #render_to_response is done by the renderWithContext decorator
   return ( {
-        'myTopCountries': myTopCountries,
-        'myScores': myScores}
-        )
+    'myTopCountries': myTopCountries,
+    'myScores': myScores,
+    'myCurrentMonth': datetime.date.today()
+    })
+
+@login_required
+#renderWithContext is explained in renderWith.py
+@renderWithContext('visitorMonthlyReport.html')
+def visitorMonthlyReport( theRequest, theyear, themonth):
+  #construct date object
+  if not(theyear and themonth):
+    myDate=datetime.date.today()
+  else:
+    try:
+      myDate=datetime.date(int(theyear),int(themonth),1)
+    except:
+      logging.error("Date arguments cannot be parsed")
+      logging.info(traceback.format_exc())
+
+  myQuerySet = Visit()
+  myCountryStats = myQuerySet.customSQL("""
+  SELECT LOWER(country),count(*) as count, DATE_TRUNC('month',
+  visit_date) as month
+  FROM catalogue_visit
+  WHERE visit_date BETWEEN to_date(%(date)s,'MM-YYYY') AND to_date(%(date)s,'MM-YYYY')+ interval '1 month'
+  GROUP BY LOWER(country),DATE_TRUNC('month',visit_date)
+  ORDER BY month DESC""",['country','count','month'],{'date':myDate.strftime('%m-%Y')})
+  myMaximum = 1
+  myScores = []
+  for myRec in myCountryStats:
+    myScores.append({'country' : myRec['country'],'count' : myRec['count']})
+  myTopCountries = myScores[0:10]
+
+  return ({
+    'myTopCountries': myTopCountries,
+    'myScores': myScores,
+    'myCurrentDate': myDate,
+    'myPrevDate':myDate - datetime.timedelta(days=1),
+    'myNextDate':myDate + datetime.timedelta(days=31),
+    })
 
 
 def standardLayers(theRequest):
