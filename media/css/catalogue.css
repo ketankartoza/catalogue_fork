@@ -334,3 +334,8 @@ ul.dropdown ul {
 #product-id-search-list #id_sensors {
   height: 3em;
 }
+
+#advancedSearchDiv #id_sensor_type {
+  width: 220px;
+}
+
