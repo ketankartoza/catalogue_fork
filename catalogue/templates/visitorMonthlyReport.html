@@ -35,10 +35,11 @@
 {% endblock %}
 {% block content %}
 {% box_start "" "" "" %}
-      <a href="/visitormonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{  myCurrentMonth|date:'m' }}/">Monthly reports</a>
+      <a href="/visitormonthlyreport/{{ myPrevDate|date:'Y' }}/{{  myPrevDate|date:'m' }}/">Prevoius month</a>
+      <a href="/visitormonthlyreport/{{ myNextDate|date:'Y' }}/{{  myNextDate|date:'m' }}/">Next month</a>
     {% if myTopCountries and myScores %}
       <!--Load the AJAX API-->
-      <h2 class="chartTitle">Visits by country excluding SA</h2>
+      <h2 class="chartTitle">Visits by country excluding SA for {{ myCurrentDate|date:'M, Y' }}</h2>
       <!--Div that will hold the pie chart-->
       <div id="chart_div"></div>
 
