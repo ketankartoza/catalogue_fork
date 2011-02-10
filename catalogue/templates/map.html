@@ -3,6 +3,7 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% block extrajs %}
   {{ block.super }}
+  {% block ol_map %}
   <!-- bring in the OpenStreetMap OpenLayers layers.
        Using this hosted file will make sure we are kept up
        to date with any necessary changes -->
@@ -84,6 +85,7 @@
     OpenLayers.DOTS_PER_INCH = 25.4 / 0.28;
   /* ]]> */
   </script>
+  {% endblock %}
 {% endblock %}
 {% block body_load %}onload="init()";{% endblock %}
 
@@ -121,18 +123,18 @@
   {% if mySearchFlag %}
     <h3 id="search-summary-accordion-h3"><a href="#"><img src="/media/images/search_16.png" alt="" />&nbsp;Search Summary</a></h3>
     <div id="search-summary-accordion-div">
-        {% if myMessages %}
+        {% if myMessages %}<div id="search-messages">
           <b>{{ myPaginator.count }}</b> record found for
           {% for myValue in myMessages %}
             {{ myValue|safe }}{% if not forloop.last %},{% else %}.{% endif %}<br/>
           {% endfor %}
           <div><b>Note:</b>The SPOT Imagery provided in this backdrop has been degraded to 10m</div>
-        {% endif %}
+        </div>{% endif %}
         {% if myRecords %}
         <a href="/searchresultshapefile/{{mySearchGuid}}/"><img src="/media/images/down_16.png" alt=""/> Download search as a shapefile.</a>
         {% endif %}
         <br /><a href="/modifysearch/{{mySearchGuid}}/" class="button-link">Modify this search</a>
-        <br /><a href="/productIdSearch/{{mySearchGuid}}/" class="button-link">Product ID search</a>
+        {% if myProductIdSearch %}<br /><a href="/productIdSearch/{{mySearchGuid}}/" class="button-link">Product ID search</a>{% endif %}
         {#% if user.is_staff %}<div id="sql" style="display: none;">{{ mySqlString }}</div><input type=button id="sql-button" value="Show SQL" />{% endif %#}
     </div>
   {% endif %}

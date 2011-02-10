@@ -111,13 +111,13 @@ class AdvancedSearchForm(forms.ModelForm):
       raise forms.ValidationError("Error: Start date can not be after the end date! Both dates must be entered.")
 
     # ABP: checks for advanced search only (not in cleaned_data because it does not belong to Search model)
-    if self.data.get('advanced') == 'true':
+    if self.data.get('isAdvanced') == 'true':
       myStartSensorAngle = myCleanedData.get('sensor_inclination_angle_start')
       myEndSensorAngle = myCleanedData.get('sensor_inclination_angle_end')
       if (myStartSensorAngle and myEndSensorAngle) and (myEndSensorAngle < myStartSensorAngle):
         raise forms.ValidationError("Error: Start sensor angle can not be greater than the end sensor angle!")
 
-      if int(myCleanedData.get('search_type')) in (Search.PRODUCT_SEARCH_OPTICAL,Search.PRODUCT_SEARCH_RADAR) and not myCleanedData.get('sensors'):
+      if int(myCleanedData.get('search_type')) in (Search.PRODUCT_SEARCH_OPTICAL, Search.PRODUCT_SEARCH_RADAR) and not myCleanedData.get('sensors'):
         raise forms.ValidationError("Error: Sensors are mandatory for sensors-based products search!")
 
     return self.cleaned_data
@@ -144,7 +144,6 @@ class ProductIdSearchForm( forms.Form ):
   A special class of search form that allows to construct the search by
   building up a Product ID. This is intended to be used as an unbound form
   so the init function initialises the choices lists and so on.
-  #TODO: validation, not that much really, just date ranges probably
   """
   mission = AbbreviationModelChoiceField( None, empty_label="*" , required = False)
   sensors = AbbreviationModelMultipleChoiceField(None)
@@ -177,15 +176,18 @@ class ProductIdSearchForm( forms.Form ):
 
   def clean(self):
     cleaned_data = self.cleaned_data
-    if cleaned_data.get('start_year') or cleaned_data.get('start_month') or cleaned_data.get('start_day'):
-      try:
-        self.cleaned_data['start_date'] = datetime.datetime(int(cleaned_data.get('start_year')), int(cleaned_data.get('start_month')), int(cleaned_data.get('start_day')), int(cleaned_data.get('start_hour')), int(cleaned_data.get('start_minute')), int(cleaned_data.get('start_second')))
-      except ValueError, e:
-        raise forms.ValidationError ('Error: start date is not valid. %s' % e)
-      try:
-        self.cleaned_data['end_date'] = datetime.datetime(int(cleaned_data.get('end_year')), int(cleaned_data.get('end_month')), int(cleaned_data.get('end_day')), int(cleaned_data.get('end_hour')), int(cleaned_data.get('end_minute')), int(cleaned_data.get('end_second')))
-      except ValueError, e:
-        raise forms.ValidationError ('Error: end date is not valid. %s' % e)
+    try:
+      self.cleaned_data['start_date'] = datetime.datetime(int(cleaned_data.get('start_year')), int(cleaned_data.get('start_month')), int(cleaned_data.get('start_day')), int(cleaned_data.get('start_hour')), int(cleaned_data.get('start_minute')), int(cleaned_data.get('start_second')))
+    except ValueError, e:
+      raise forms.ValidationError ('Error: start date is not valid. %s' % e)
+    try:
+      self.cleaned_data['end_date'] = datetime.datetime(int(cleaned_data.get('end_year')), int(cleaned_data.get('end_month')), int(cleaned_data.get('end_day')), int(cleaned_data.get('end_hour')), int(cleaned_data.get('end_minute')), int(cleaned_data.get('end_second')))
+    except ValueError, e:
+      raise forms.ValidationError ('Error: end date is not valid. %s' % e)
+
+    if not self.cleaned_data['start_date'] <=  self.cleaned_data['end_date']:
+      raise forms.ValidationError ('Error: date range is not valid.')
+
     return self.cleaned_data
 
 

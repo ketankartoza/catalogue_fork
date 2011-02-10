@@ -34,6 +34,7 @@ class Searcher:
     self.mSqlString = ""
     self.mExtraLayers = ""
     self.mLayersList = ""
+    self.mRecordCount = 0
 
   def templateData(self):
     """Return data from the searcher suitable for passing along
@@ -74,83 +75,17 @@ class Searcher:
          'myLegendFlag' : True, #used to show the legend in the accordion
          'mySearchFlag' : True,
          'myPaginator' : self.mPaginator,
+         'myProductIdSearch' :  self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL,
         })
 
   def __del__(self):
     logging.info('Searcher destroyed')
     return
 
-  def __init__(self, theRequest, theGuid):
-    # Queries
-    self.mPageNo = 1
-
-    # items that are passed back with templateData
-    self.mMessages = []
-    self.mThumbnails = []
-    self.mSearchRecords = []
-    self.mExtent = '(-180.0,-90.0, 180.0, 90.0)'
-    self.mRequest = theRequest
-
-    logging.info('Searcher initialised')
-
-    # ABP: is advanced ?
-    self.mSearch = get_object_or_404(Search, guid=theGuid)
-    self.mAdvancedFlag = self.mSearch.isAdvanced
-
-    # Map of all search footprints that have been added to the users cart
-    # Transparent: true will make a wms layer into an overlay
-    self.mCartLayer = '''myCartLayer = new OpenLayers.Layer.WMS("Cart", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=CART&user=''' + str(theRequest.user.username) + '''",
-          {
-             version: '1.1.1',
-             width: '800',
-             layers: 'Cart',
-             srs: 'EPSG:4326',
-             height: '525',
-             format: 'image/png',
-             transparent: 'true'
-           },
-           {isBaseLayer: false});
-           '''
-    #self.mSqlString = ""
-    #self.mExtraLayers = ""
-    #self.mLayersList = ""
-
-  def logResults (self):
-    logging.info('New results: ')
-    for myResult in self.mSearchRecords:
-      logging.info('Result product: ' + str(myResult.product.product_id) )
-    return
-
-  def search(self, thePaginateFlag=True):
-    """Performs a search and shows a map of a single search for scenes"""
-    logging.info('search called...')
-    logging.info('Searching by scene')
-    self.mExtraLayers = [ WEB_LAYERS['ZaSpot10mMosaic2008'],WEB_LAYERS['ZaRoadsBoundaries'],self.mCartLayer ]
-    self.mLayersList = "[zaSpot10mMosaic2008,zaRoadsBoundaries,myCartLayer]"
-    self.mSearchRecords = []
-
-    # ABP: Create the query set based on the type of class we're going to search in
-    assert self.mSearch.search_type in dict(Search.PRODUCT_SEARCH_TYPES).keys()
-
-    if self.mSearch.search_type == Search.PRODUCT_SEARCH_GENERIC:
-        logging.info('Search type is PRODUCT_SEARCH_GENERIC')
-        self.mQuerySet = GenericProduct.objects.all()
-    elif self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL:
-        logging.info('Search type is PRODUCT_SEARCH_OPTICAL')
-        self.mQuerySet = OpticalProduct.objects.all()
-    elif self.mSearch.search_type == Search.PRODUCT_SEARCH_RADAR:
-        logging.info('Search type is PRODUCT_SEARCH_RADAR')
-        self.mQuerySet = RadarProduct.objects.all()
-    elif self.mSearch.search_type == Search.PRODUCT_SEARCH_GEOSPATIAL:
-        logging.info('Search type is PRODUCT_SEARCH_GEOSPATIAL')
-        self.mQuerySet = GeospatialProduct.objects.all()
-
-
-    self.mSearchPage = None
-    self.mThumbnails = []
-    self.mMessages = []
-    self.mPaginator = None
-
+  def initQuery(self):
+    """
+    Setup the querySet configuring the filters
+    """
     # -----------------------------------------------------
     # First fallback extent, will be overwritten by search geom extents if
     # there is a search geom
@@ -169,6 +104,22 @@ class Searcher:
       # but its a good fallback in case there were no records
       self.mExtent =  str( self.mSearch.geometry.envelope.extent )
     self.mLayersList = "[zaSpot10mMosaic2008,zaRoadsBoundaries,myCartLayer]"
+
+    # ABP: Create the query set based on the type of class we're going to search in
+    assert self.mSearch.search_type in dict(Search.PRODUCT_SEARCH_TYPES).keys()
+
+    if self.mSearch.search_type == Search.PRODUCT_SEARCH_GENERIC:
+        logging.info('Search type is PRODUCT_SEARCH_GENERIC')
+        self.mQuerySet = GenericProduct.objects.all()
+    elif self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL:
+        logging.info('Search type is PRODUCT_SEARCH_OPTICAL')
+        self.mQuerySet = OpticalProduct.objects.all()
+    elif self.mSearch.search_type == Search.PRODUCT_SEARCH_RADAR:
+        logging.info('Search type is PRODUCT_SEARCH_RADAR')
+        self.mQuerySet = RadarProduct.objects.all()
+    elif self.mSearch.search_type == Search.PRODUCT_SEARCH_GEOSPATIAL:
+        logging.info('Search type is PRODUCT_SEARCH_GEOSPATIAL')
+        self.mQuerySet = GeospatialProduct.objects.all()
 
 
     # -----------------------------------------------------
@@ -191,6 +142,8 @@ class Searcher:
     # ABP: paramters for "advanced search" only
     if self.mAdvancedFlag:
       logging.info('Search is advanced')
+      # ABP: adds informations about search_type
+      self.mMessages.append('search type <b>%s</b>' % dict(self.mSearch.PRODUCT_SEARCH_TYPES)[self.mSearch.search_type])
       # ABP: advanced search parameters, not sensor-specific
       if self.mSearch.license.count():
         self.mMessages.append('licenses %s' % ' ,'.join(["<b>%s</b>" % l for l in self.mSearch.license.all()]))
@@ -271,9 +224,68 @@ class Searcher:
     else:
       logging.info('Search is simple (advanced flag is not set)')
 
+    self.mSqlString = self.mQuerySet.query
+    self.mRecordCount =  self.mQuerySet.count()
+
+
+  def __init__(self, theRequest, theGuid):
+    # Queries
+    self.mPageNo = 1
+
+    # items that are passed back with templateData
+    self.mMessages = []
+    self.mThumbnails = []
+    self.mSearchRecords = []
+    self.mExtent = '(-180.0,-90.0, 180.0, 90.0)'
+    self.mRequest = theRequest
+    self.mRecordCount = 0
+
+    logging.info('Searcher initialised')
+
+    # ABP: is advanced ?
+    self.mSearch = get_object_or_404(Search, guid=theGuid)
+    self.mAdvancedFlag = self.mSearch.isAdvanced
+
+    # Map of all search footprints that have been added to the users cart
+    # Transparent: true will make a wms layer into an overlay
+    self.mCartLayer = '''myCartLayer = new OpenLayers.Layer.WMS("Cart", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=CART&user=''' + str(theRequest.user.username) + '''",
+          {
+             version: '1.1.1',
+             width: '800',
+             layers: 'Cart',
+             srs: 'EPSG:4326',
+             height: '525',
+             format: 'image/png',
+             transparent: 'true'
+           },
+           {isBaseLayer: false});
+           '''
+    self.mSqlString = ""
+    self.mExtraLayers = ""
+    self.mLayersList = ""
+    self.initQuery()
+
+
+  def logResults (self):
+    logging.info('New results: ')
+    for myResult in self.mSearchRecords:
+      logging.info('Result product: ' + str(myResult.product.product_id) )
+    return
+
+  def search(self, thePaginateFlag=True):
+    """Performs a search and shows a map of a single search for scenes"""
+    logging.info('search called...')
+    logging.info('Searching by scene')
+    self.mExtraLayers = [ WEB_LAYERS['ZaSpot10mMosaic2008'],WEB_LAYERS['ZaRoadsBoundaries'],self.mCartLayer ]
+    self.mLayersList = "[zaSpot10mMosaic2008,zaRoadsBoundaries,myCartLayer]"
+    self.mSearchRecords = []
+    self.mSearchPage = None
+    self.mThumbnails = []
+    self.mPaginator = None
+
+
 
     logging.info('search by Scene paginating...')
-    self.mSqlString = self.mQuerySet.query
     # Can also write the query like this:
     # mQuerySet = Localization.objects.filter(sensor=mSearch.sensor).filter(timeStamp__range=(mSearch.start_date,mSearch.end_date)).filter(geometry__intersects=mSearch.geometry)
     #
@@ -344,4 +356,10 @@ class Searcher:
     # %% is to escape the percent symbol so we get a % literal
     myString =  "with a maximum cloud cover of %s%%" % myCloudAsPercent
     return myString
+
+  def describeQuery( self ):
+    """
+    Returns a struct with messages and SQL of mSearch query
+    """
+    return { 'messages' : self.mMessages, 'query' : "%s" % self.mSqlString, 'count' : self.mRecordCount }
 

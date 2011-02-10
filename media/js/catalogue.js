@@ -554,14 +554,6 @@ function advSearchActivate(search_type){
 function setupSearchMap( theLayers )
 {
 
-  // for toggling advanced search on / off
-  $('#advancedSearch').click(function(event)
-  {
-    //block();
-    $('.adv_search_ui').toggle('slow', function(){
-        $('#id_isAdvanced').val($('#advancedSearchDiv').is(':visible'));
-    });
-  });
   //check if the slider exists first
   if ($("#id_cloud_mean").length > 0 )
   {

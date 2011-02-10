@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "map.html" %}
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% block extrajs %}
   {{ block.super }}
@@ -11,20 +11,40 @@
         $('#productIdForm').submit();
       });
 
-      // Initial load
-      $('#search-results').load('/searchpage/{{ theGuid }}/');
-
       $('#productIdForm').submit(function(){
+        $("#working").html('<p>Searching, please wait...<img src="/media/images/ajax-loader.gif"></p>');
+        $("#working").slideDown('slow');
         $.ajax({
           type: "POST",
           url: "/productIdSearch/{{ theGuid }}/",
           data: $('#productIdForm').serialize(),
           success: function(data) {
-            $('#messages').hide(); // Just in case...
-            $('#search-results').load('/searchpage/{{ theGuid }}/');
+            // Just in case...
+            $('#productIdForm select').css({border: 'none'});
+            $('#messages').hide();
+            $('#search-messages').html('<b>' + data.count + '</b> record found for ' + data.messages.join(', ') + '.');
+            $('#results-table').parent().load('/searchpage/{{ theGuid }}/',revealTable);
+            $("#working").slideUp('slow');
           },
-          failure: function(data) {
-            $('#messages').html(data).show('slow');
+          error: function(data) {
+            var errors = $.parseJSON (data.responseText);
+            var messages = '';
+            for (e in errors) {
+              try {
+                $('#id_' + e).css({border: 'solid 1px red'});
+                messages += '<p>Errors in field <b>' + e + '</b>:<ul><li>';
+                messages += errors[e].join('</li><li>');
+                messages += '</ul></p>';
+              } catch(e) {};
+            }
+            if (errors['__all__']) {
+                messages += '<p>Errors in form :<ul><li>';
+                messages += errors['__all__'].join('</li><li>');
+                messages += '</ul></p>';
+            }
+            $('#id_sensors').css({border: 'solid 1px red'});
+            $('#messages').html(messages).show('slow');
+            $("#working").slideUp('slow');
           }
         });
         return false;
@@ -49,6 +69,6 @@
   </form>
 </ul>
 <input type="button" value="Search!" id="product-search-button" />
-<div id="search-results"></div>
 {% box_end %}
+{{ block.super }}
 {% endblock %}

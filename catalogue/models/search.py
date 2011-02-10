@@ -162,11 +162,11 @@ class Search(models.Model):
       null=False,
       default = False,
       help_text='If you want to limit searches to optical products with a certain cloud cover, enable this.')
-  cloud_mean = models.IntegerField(null=True, blank=True, default=5, verbose_name="Max Clouds", help_text="Select the maximum permissible cloud cover.", max_length=1)
+  cloud_mean = models.IntegerField(null=True, blank=True, default=5, verbose_name="Max Clouds", help_text = "Select the maximum permissible cloud cover.", max_length=1)
 
   # ABP: new additions
-  acquisition_mode                  = models.ForeignKey(AcquisitionMode, blank=True, null=True) #e.g. M X T J etc
-  license                           = models.ManyToManyField(License, blank=True, null=True)
+  acquisition_mode                  = models.ForeignKey(AcquisitionMode, blank=True, null=True, help_text = 'Choose the acquisition mode.') #e.g. M X T J etc
+  license                           = models.ManyToManyField(License, blank=True, null=True, help_text = 'Choose one or more licenses.')
 
   # ABP: added to store geometric_accuracy_mean ranges
   # Values for geometric_accuracy_mean
@@ -195,14 +195,14 @@ class Search(models.Model):
     ACCURACY_MEAN_5:   (35.0, 60.0),
   }
 
-  geometric_accuracy_mean           = models.IntegerField(null=True, blank=True, choices = ACCURACY_MEAN_OPTIONS)
-  spectral_resolution               = models.IntegerField(help_text="Number of spectral bands in product", null=True, blank=True)
+  geometric_accuracy_mean           = models.IntegerField(null=True, blank=True, choices = ACCURACY_MEAN_OPTIONS, help_text = 'Select mean resolution class.')
+  spectral_resolution               = models.IntegerField(help_text="Number of spectral bands in product", null=True, blank =True)
   # sensor_inclination_angle: range
-  sensor_inclination_angle_start    = models.FloatField(null=True, blank=True)
-  sensor_inclination_angle_end      = models.FloatField(null=True, blank=True)
+  sensor_inclination_angle_start    = models.FloatField(null=True, blank=True, help_text = 'Select sensor inclination angle start.')
+  sensor_inclination_angle_end      = models.FloatField(null=True, blank=True, help_text = 'Select sensor inclination angle end.')
   # ABP: 2 new FKs
-  mission                           = models.ForeignKey( Mission, null=True, blank=True ) # e.g. S5
-  sensor_type                       = models.ForeignKey( SensorType, null=True, blank=True, related_name = 'search_sensor_type'  ) #e.g. CAM1
+  mission                           = models.ForeignKey( Mission, null=True, blank=True, help_text = 'Select satellite mission.') # e.g. S5
+  sensor_type                       = models.ForeignKey( SensorType, null=True, blank=True, related_name = 'search_sensor_type') #e.g. CAM1
 
   # Use the geo manager to handle geometry
   objects = models.GeoManager()
@@ -220,7 +220,9 @@ class Search(models.Model):
   @property
   def isAdvanced(self):
     """
-    Checks wether the Search is an advanced Search
+    Checks wether the Search is an advanced Search.
+    Condition for being an advanced search is that at least one of the
+    advanced parameter is set
     """
     return  self.search_type \
             or self.license.count() \

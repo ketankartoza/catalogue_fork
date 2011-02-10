@@ -75,33 +75,44 @@
         </div>
 
         <div class="span-6 append-bottom last">
-            <div class="span-6 last adv_search_ui">
-                <img id="{{myForm.geometry_file.html_name}}Button"
-                    src="/media/images/info_16.png"
-                    style="cursor: pointer;"
-                    alt="Click for help"
-                    />
-                {{ myForm.geometry_file.label }}
-                {{ myForm.geometry_file }}
-            </div>
-            <div class="span-6 last adv_search_ui">
-                {{ myForm.license.label }}
-                {{ myForm.license }}
-            </div>
-            {% if myForm.geometry_file.errors %}
-            <div class="span-6 last adv_search_ui">
-                <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-                <strong>Alert:</strong> {{ myForm.geometry_file.errors }} </p>
-            </div>
-            {% endif %}
-
+          <div class="span-6 last adv_search_ui">
+              <img id="{{myForm.geometry_file.html_name}}Button"
+                  src="/media/images/info_16.png"
+                  style="cursor: pointer;"
+                  alt="Click for help"
+                  />
+              {{ myForm.geometry_file.label }}
+              {{ myForm.geometry_file }}
+          </div>
+          {% if myForm.geometry_file.errors %}
+          <div class="span-6 last adv_search_ui">
+              <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+              <strong>Alert:</strong> {{ myForm.geometry_file.errors }} </p>
+          </div>
+          {% endif %}
+        </div>
+        <div class="span-6 last adv_search_ui">
+          <img id="{{myForm.license.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+          {{ myForm.license.label }}
+          {{ myForm.license }}
+          {% if myForm.license.errors %}
+          <div class="span-6 last">
+            <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+            <strong>Alert:</strong> {{ myForm.license.errors }} </p>
+          </div>
+          {% endif %}
+        </div>
+        <div class="">
             {{ myForm.isAdvanced }}
-            <input type="button" value="Toggle Advanced Search" id="advancedSearch"/>
-            <input type="submit" value="Search" class="default" name="_search" />
-            <input type="button" value="Map Help" id="map-help-button"/>
+            <input type="button" value="{% if myAdvancedFlag %}Toggle Simple Search{% else %}Toggle Advanced Search{% endif %}" id="advancedSearch"/><br />
+            <input type="submit" value="Search" class="default" name="_search" /><br />
+            <input type="button" value="Map Help" id="map-help-button"/><br />
             {{ myForm.geometry }}
         </div>
-
 
         <div class="clr"></div>
     </div><!-- end of simpleSearchDiv -->

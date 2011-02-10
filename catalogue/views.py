@@ -1,7 +1,7 @@
 # Django helpers for forming html pages
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseServerError
 from django.contrib.gis.shortcuts import render_to_kml, render_to_kmz
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -19,7 +19,6 @@ import logging
 # Models and forms for our app
 from catalogue.models import *
 from catalogue.forms import *
-from catalogue.shortcuts import render_to_geojson
 from catalogue.renderDecorator import renderWithContext
 from catalogue.profileRequiredDecorator import requireProfile
 from catalogue.getFeaturesFromZipFile import *
@@ -565,14 +564,21 @@ def modifySearch(theRequest, theGuid):
 def productIdSearch(theRequest, theGuid):
   """
   Display the product id builder, based on initial existing Search values,
-  the following interaction is ajax based
+  the following interaction is ajax based.
+  This kind of search is only available when search_type is PRODUCT_SEARCH_OPTICAL
   """
   myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
-  mySearch = get_object_or_404( Search, guid=theGuid )
+  mySearch = get_object_or_404( Search, guid=theGuid)
+
+  if mySearch.search_type != Search.PRODUCT_SEARCH_OPTICAL:
+    raise Http500('productIdSearch is only available for products of type PRODUCT_SEARCH_OPTICAL')
+
   myInitialValues = mySearch.productIdAsHash()
   logging.info('productIdSearch initializing values from existing search %s' % theGuid)
   logging.info('productIdSearch initial values: %s' % myInitialValues)
-
+  mySearcher = Searcher(theRequest, theGuid)
+  mySearcher.search()
+  myTemplateData = mySearcher.templateData()
 
   if theRequest.method == 'POST':
     myForm = ProductIdSearchForm(theRequest.POST, theRequest.FILES)
@@ -590,11 +596,17 @@ def productIdSearch(theRequest, theGuid):
         for s in myForm.cleaned_data.get('sensors'):
           mySearch.sensors.add(s)
       if theRequest.is_ajax():
-        return HttpResponse('ok')
+        # ABP: Returns a json object with query description.
+        # We need to instanciate the Searcher since search logic
+        # is not in the Search class :(
+        mySearcher = Searcher(theRequest,theGuid)
+        return HttpResponse(simplejson.dumps(mySearcher.describeQuery()), mimetype='application/json')
+
     else:
       logging.info('form is INVALID after editing')
       if theRequest.is_ajax():
-        return HttpResponse(myForm.errors)
+        # Sends a 500
+        return HttpResponseServerError(simplejson.dumps(myForm.errors), mimetype='application/json')
       return render_to_response ( 'productIdSearch.html' ,{
         'myForm': myForm,
         'theGuid' : theGuid,
@@ -602,10 +614,9 @@ def productIdSearch(theRequest, theGuid):
 
   myForm = ProductIdSearchForm(initial = myInitialValues)
   logging.info('initial search form being rendered')
-  return render_to_response ( 'productIdSearch.html' ,{
-      'myForm': myForm,
-      'theGuid' : theGuid,
-    }, context_instance=RequestContext(theRequest))
+  myTemplateData['myForm'] = myForm
+  myTemplateData['theGuid'] = theGuid
+  return render_to_response ( 'productIdSearch.html' , myTemplateData, context_instance=RequestContext(theRequest))
 
 
 @login_required
@@ -679,6 +690,7 @@ def showProduct(theRequest, theProductId):
         'myLegendFlag' : True, #used to show the legend in the accordion
         'mySearchFlag' : True,
         })
+
 
 
 @login_required
