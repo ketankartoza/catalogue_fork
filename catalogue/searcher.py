@@ -154,11 +154,13 @@ class Searcher:
       # this should be sooner or later heavily refactored
       if self.mSearch.search_type in (Search.PRODUCT_SEARCH_OPTICAL, Search.PRODUCT_SEARCH_RADAR):
         logging.info('GenericSensorProduct advanced search activated')
-        # ABP: sensors is mandatory
-        assert self.mSearch.sensors.count() > 0, "Search contains no sensors informations"
-        self.mSensorQuery = Q( mission_sensor__in=self.mSearch.sensors.all()) #__in = match to one or more sensors
-        self.mQuerySet = self.mQuerySet.filter( self.mSensorQuery )
-        self.mMessages.append("sensors <b>%s</b>" % self.mSearch.sensorsAsString())
+        # ABP: sensors is mandatory ? Better if not: too bad in product_id search!
+        #assert self.mSearch.sensors.count() > 0, "Search contains no sensors informations"
+        if self.mSearch.sensors.count() > 0:
+          self.mSensorQuery = Q( mission_sensor__in=self.mSearch.sensors.all()) #__in = match to one or more sensors
+          self.mQuerySet = self.mQuerySet.filter( self.mSensorQuery )
+          self.mMessages.append("sensors <b>%s</b>" % self.mSearch.sensorsAsString())
+          logging.info('Sensor in use is:' + str( self.mSearch.sensors.values_list( 'name',flat=True ) ) )
         if self.mSearch.acquisition_mode:
           self.mMessages.append('acquisition mode <b>%s</b>' % self.mSearch.acquisition_mode)
           self.mAcquisitionModeQuery = Q(acquisition_mode = self.mSearch.acquisition_mode)
@@ -182,7 +184,6 @@ class Searcher:
           self.mQuerySet = self.mQuerySet.filter( self.mSpectralResolutionQuery)
 
         logging.info('checking if we should use landsat path / row filtering...')
-        logging.info('Sensor in use is:' + str( self.mSearch.sensors.values_list( 'name',flat=True ) ) )
         if self.mSearch.k_orbit_path_min > 0 \
             and self.mSearch.k_orbit_path_max > 0 \
             and self.mSearch.j_frame_row_min > 0 \
@@ -358,11 +359,17 @@ class Searcher:
     """
     Returns a struct with messages and SQL of mSearch query
     """
-    # Get option for all related fields
+    # Get option for all related fields, exclude users
     values = {}
     for field_name in [f.name for f in self.mSearch._meta.fields if f.rel]:
       if field_name != 'user' and not getattr(self.mSearch, field_name , None):
         values[field_name] = self.getOption(field_name)
+    # m2m
+    if not getattr(self.mSearch, 'sensors').count():
+        values['sensors'] = self.getOption('mission_sensor')
+    if not getattr(self.mSearch, 'license').count():
+        values['license'] = self.getOption('license')
+
     return { 'messages' : self.mMessages, 'query' : "%s" % self.mSqlString, 'count' : self.mRecordCount, 'values' : values }
 
   def getOption(self, field_name):
@@ -370,4 +377,5 @@ class Searcher:
     Returns a list of possible values that selected search parameters can assume for a given field
     """
     return list(self.mQuerySet.distinct().values_list(field_name, flat = True).order_by())
+
 

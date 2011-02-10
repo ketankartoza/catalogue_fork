@@ -590,9 +590,11 @@ def productIdSearch(theRequest, theGuid):
         if myForm.cleaned_data.has_key(f):
           setattr(mySearch, f, myForm.cleaned_data.get(f))
         mySearch.save()
-      # Save m2m, should be required, but check anyway
+      # Save m2m,
+      # ABP: sensors is not required anymore for pivot oo work
+      # ... should be required, but check anyway
+      mySearch.sensors.clear()
       if myForm.cleaned_data.get('sensors'):
-        mySearch.sensors.clear()
         for s in myForm.cleaned_data.get('sensors'):
           mySearch.sensors.add(s)
       if theRequest.is_ajax():
@@ -615,6 +617,7 @@ def productIdSearch(theRequest, theGuid):
   logging.info('initial search form being rendered')
   myTemplateData['myForm'] = myForm
   myTemplateData['theGuid'] = theGuid
+  myTemplateData['filterValues'] = simplejson.dumps(mySearcher.describeQuery()['values'])
   return render_to_response ( 'productIdSearch.html' , myTemplateData, context_instance=RequestContext(theRequest))
 
 

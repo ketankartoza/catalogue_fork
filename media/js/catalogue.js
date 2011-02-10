@@ -199,8 +199,8 @@ function setupEditingPanel(theLayer)
 //A bit of a hack, this function is used as a call back when ajax pages load
 function zebraTables()
 {
-  $("table tr:even").addClass("odd");
-  $("table tr:odd").addClass("even");
+  $("table tr:even").addClass("even");
+  $("table tr:odd").addClass("odd");
 }
 
  /*

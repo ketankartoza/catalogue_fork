@@ -146,7 +146,7 @@ class ProductIdSearchForm( forms.Form ):
   so the init function initialises the choices lists and so on.
   """
   mission = AbbreviationModelChoiceField( None, empty_label="*" , required = False)
-  sensors = AbbreviationModelMultipleChoiceField(None)
+  sensors = AbbreviationModelMultipleChoiceField(None, required = False)
   acquisition_mode = AbbreviationModelChoiceField(None, empty_label="*", required = False)
   sensor_type = AbbreviationModelChoiceField(None, empty_label="*", required = False)
   myRange = range(1970, datetime.date.today().year + 1)

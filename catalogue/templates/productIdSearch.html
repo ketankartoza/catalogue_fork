@@ -4,8 +4,28 @@
   {{ block.super }}
   {% if theGuid %}
   <script type="text/javascript">
-    $(function(){
 
+    // Set select options
+    function set_form_options(options){
+      $('#productIdForm select option').show();
+      for (id in options) {
+        try {
+          //console.log('Checking ' + id);
+          //console.log(options[id]);
+          $('#id_' + id + ' :not(:selected)').each(function(e,e){
+            if ($.inArray(parseInt(e.value), options[id]) == -1) {
+              $(e).hide();
+              //console.log('hiding ' + id + ' val:' + e.value);
+            } else {
+              //console.log('no match ' + id + ' val:' + e.value);
+            }
+          });
+        } catch(e) {
+        };
+      };
+    };
+
+    $(function(){
       // TODO: remove the button and the following code
       $('#product-search-button').click(function(){
         $('#productIdForm').submit();
@@ -24,6 +44,7 @@
             $('#productIdForm select').css({border: 'none'});
             $('#messages').hide();
             $('#search-messages').html('<b>' + data.count + '</b> record found for ' + data.messages.join(', ') + '.');
+            set_form_options(data.values);
             $('#results-table').parent().load('/searchpage/{{ theGuid }}/',revealTable);
             $("#working").slideUp('slow');
           },
@@ -54,6 +75,9 @@
       $('#productIdForm select').change(function() {
         $('#productIdForm').submit();
       });
+      {% if filterValues %}// Filter initial options
+      set_form_options({{ filterValues|safe }});
+      {% endif %}
     });
   </script>
   {% endif %}
