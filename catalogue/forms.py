@@ -9,6 +9,7 @@ from catalogue.geometrywidget import *
 from catalogue.sliderwidget import *
 # Used for reading shapefiles etc
 #from django.contrib.gis.gdal import DataSource
+from catalogue.aoigeometry import AOIGeometryField
 
 import datetime
 
@@ -42,6 +43,7 @@ class SearchForm(forms.ModelForm):
                                               ')
   geometry = forms.CharField(widget=forms.HiddenInput(), required=False,
       help_text='Digitising an area of interest is not required but is recommended. You can use the help tab in the map area for more information on how to use the map. Draw an area of interest on the map to refine the set of search results to a specific area.')
+  aoi_geometry = AOIGeometryField(required = False)
 
 
   class Meta:

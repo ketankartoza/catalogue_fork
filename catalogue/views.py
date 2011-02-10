@@ -493,6 +493,11 @@ def search(theRequest):
           logging.info("Failed to set search area from uploaded shapefile")
       except:
         logging.info("An error occurred trying to set search area from uploaded shapefile")
+      #check if aoi_geometry exists
+      myAOIGeometry = myForm.cleaned_data.get('aoi_geometry')
+      if myAOIGeometry:
+        logging.info("Using AOI geometry, specified by user")
+        mySearch.geometry = myAOIGeometry
       # else use the on-the-fly digitised geometry
       mySearch.save()
       """Another side effect of using commit=False is seen when your model has

@@ -91,6 +91,23 @@
       </div> {# end of column 3 #}
       <div class="span-6 prepend-2 append-bottom">{# bottom row col 1---------------------------------- #}
         <div class="span-6 last">
+          <img id="{{myForm.aoi_geometry.html_name}}Button"
+               src="/media/images/info_16.png"
+               style="cursor: pointer;"
+               alt="Click for help"
+               />
+          {{ myForm.aoi_geometry.label }}
+          {{ myForm.aoi_geometry }}
+        </div>
+        {% if myForm.aoi_geometry.errors %}
+        <div class="span-6 last">
+          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+          <strong>Alert:</strong> {{ myForm.aoi_geometry.errors }} </p>
+        </div>
+        {% endif %}
+
+
+        <div class="span-6 last">
           <img id="{{myForm.use_cloud_cover.html_name}}Button" 
                src="/media/images/info_16.png"
                style="cursor: pointer;"
