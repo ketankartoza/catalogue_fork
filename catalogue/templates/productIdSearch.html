@@ -65,7 +65,31 @@
 <ul id="product-id-search-list">
   <form id="productIdForm" action="/productIdSearch/{{ theGuid }}/">
   {% csrf_token %}
-  {{myForm.as_ul}}
+  <table>
+    <tr>
+      <td>{{ myForm.mission }}</td>
+      <td rowspan="2">{{ myForm.sensors }}</td>
+      <td>{{ myForm.acquisition_mode }}</td>
+      <td>{{ myForm.sensor_type }}</td>
+      <td>{{ myForm.start_year }}</td>
+      <td>{{ myForm.start_month }}</td>
+      <td>{{ myForm.start_day }}</td>
+      <td>{{ myForm.start_hour }}</td>
+      <td>{{ myForm.start_minute }}</td>
+      <td>{{ myForm.start_second }}</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td colspan="2" style="text-align:right;">End date:</td>
+      <td>{{ myForm.end_year }}</td>
+      <td>{{ myForm.end_month }}</td>
+      <td>{{ myForm.end_day }}</td>
+      <td>{{ myForm.end_hour }}</td>
+      <td>{{ myForm.end_minute }}</td>
+      <td>{{ myForm.end_second }}</td>
+    </tr>
+  </table>
+
   </form>
 </ul>
 <input type="button" value="Search!" id="product-search-button" />

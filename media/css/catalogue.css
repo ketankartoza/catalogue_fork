@@ -330,3 +330,7 @@ ul.dropdown ul {
 #advancedSearchDiv {
     margin-left: 80px;
 }
+
+#product-id-search-list #id_sensors {
+  height: 3em;
+}
