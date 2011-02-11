@@ -25,7 +25,6 @@ ALTER TABLE "catalogue_search" ADD COLUMN  "sensor_inclination_angle_start" FLOA
 ALTER TABLE "catalogue_search" ADD COLUMN  "sensor_inclination_angle_end" FLOAT;
 
 CREATE INDEX "catalogue_search_acquisition_mode_id" ON "catalogue_search" ("acquisition_mode_id");
-CREATE INDEX "catalogue_search_license_id" ON "catalogue_search" ("license_id");
 CREATE INDEX "catalogue_search_mission_id" ON "catalogue_search" ("mission_id");
 CREATE INDEX "catalogue_search_sensortype_id" ON "catalogue_search" ("sensor_type_id");
 

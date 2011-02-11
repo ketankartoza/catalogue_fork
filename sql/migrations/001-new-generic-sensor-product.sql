@@ -138,7 +138,6 @@ CREATE INDEX "catalogue_genericsensorproduct_product_acquisition_end" ON "catalo
 
 CREATE INDEX "catalogue_genericproduct_product_date" ON "catalogue_genericproduct" ("product_date");
 
-DROP VIEW vw_usercart;
 
 CREATE OR REPLACE VIEW vw_usercart AS
  SELECT catalogue_searchrecord.id, catalogue_searchrecord.order_id, auth_user.username, catalogue_genericproduct.product_id, catalogue_genericproduct.spatial_coverage

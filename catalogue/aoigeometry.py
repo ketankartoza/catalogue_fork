@@ -5,7 +5,7 @@ from django.contrib.gis.geos import Point,Polygon
 
 class AOIGeometryField(forms.CharField):
   widget = forms.TextInput
-  
+
   def __init__(self, *args,**kwargs):
     super(AOIGeometryField,self).__init__(*args, **kwargs)
     self.label = "Area of interest"
@@ -15,7 +15,7 @@ class AOIGeometryField(forms.CharField):
     """ AOI geometry validator """
     if not value:
       #do nothing
-      pass
+      return ''
     else:
       try:
         myFields = value.split(',')
@@ -26,7 +26,7 @@ class AOIGeometryField(forms.CharField):
         except:
           logging.info("AOI geometry: invalid input values, can't be converted tu numbers: %s" % (value))
           raise
-            
+
         #point and radius validation
         if len(myFields)==3:
           logging.info("AOI geometry: point and radius validation")
@@ -76,7 +76,7 @@ class AOIGeometryField(forms.CharField):
       except Exception,e:
         logging.info(str(e))
         raise forms.ValidationError( "Area of interest geometry is not valid." )
-    
+
     return self.to_python(myFields)
 
   def to_python(self,value):

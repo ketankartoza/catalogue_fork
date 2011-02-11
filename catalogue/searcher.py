@@ -227,6 +227,9 @@ class Searcher:
 
 
   def __init__(self, theRequest, theGuid):
+
+    self.mSearch = get_object_or_404(Search, guid=theGuid)
+
     # Queries
     self.mPageNo = 1
 
@@ -238,10 +241,7 @@ class Searcher:
     self.mRequest = theRequest
     self.mRecordCount = 0
 
-    logging.info('Searcher initialised')
-
     # ABP: is advanced ?
-    self.mSearch = get_object_or_404(Search, guid=theGuid)
     self.mAdvancedFlag = self.mSearch.isAdvanced
 
     # Map of all search footprints that have been added to the users cart
@@ -259,9 +259,12 @@ class Searcher:
            {isBaseLayer: false});
            '''
     self.mSqlString = ""
-    self.mExtraLayers = ""
-    self.mLayersList = ""
+    self.mExtraLayers = [ WEB_LAYERS['ZaSpot10mMosaic2008'],WEB_LAYERS['ZaRoadsBoundaries'],self.mCartLayer ]
+    self.mLayersList = "[zaSpot10mMosaic2008,zaRoadsBoundaries,myCartLayer]"
+    self.mSearchPage = None
+    self.mPaginator = None
     self.initQuery()
+    logging.info('Searcher initialised')
 
 
   def logResults (self):
@@ -272,17 +275,6 @@ class Searcher:
 
   def search(self, thePaginateFlag=True):
     """Performs a search and shows a map of a single search for scenes"""
-    logging.info('search called...')
-    logging.info('Searching by scene')
-    self.mExtraLayers = [ WEB_LAYERS['ZaSpot10mMosaic2008'],WEB_LAYERS['ZaRoadsBoundaries'],self.mCartLayer ]
-    self.mLayersList = "[zaSpot10mMosaic2008,zaRoadsBoundaries,myCartLayer]"
-    self.mSearchRecords = []
-    self.mSearchPage = None
-    self.mThumbnails = []
-    self.mPaginator = None
-
-
-
     logging.info('search by Scene paginating...')
     # Can also write the query like this:
     # mQuerySet = Localization.objects.filter(sensor=mSearch.sensor).filter(timeStamp__range=(mSearch.start_date,mSearch.end_date)).filter(geometry__intersects=mSearch.geometry)
