@@ -7,13 +7,15 @@
 {% block content%}
   {# layout done with blueprint.css we inherit 22 cols of space from base.html #}
   <div class="span-15 append-1"> {# recommended to use blueprint divs only for layout ... #}
-    <div class="span-15 ui-widget-content ui-state-highlight ui-corner-all"> {# thus nested jquery widget container #}
+    <div id="map-container" class="span-15 ui-widget-content ui-state-highlight ui-corner-all"> {# thus nested jquery widget container #}
       <div id="map" class="span-15 last"></div>
-      <div id="map-panel">
-        <div id="map-navigation-panel"></div>
-        <div id="map-location" class="small"></div>{# small class from blueprint css #}
-        <div class="olControlScalebar" id="map-scale"></div>
+      <div id="map-panel" class="span-15 last">
+        <div id="map-navigation-panel" class="span-4 append-1"></div>
+        <div id="map-location" class="span-3 small"></div>{# small class from blueprint css #}
+        <div class="span-4 olControlScalebar" id="map-scale"></div>
       </div>
+    </div>
+    <div class="span-15 ui-widget-content ui-state-highlight ui-corner-all"> {# thus nested jquery widget container #}
       <div id="mapquery" class="span-15 last"></div>
       <div id="table" class="span-15 last">
       {% block table %}{% endblock %}

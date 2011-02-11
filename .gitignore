@@ -8,8 +8,11 @@ scenes_out_projected/
 settings.py
 thumbs_out/
 *.*~
+<<<<<<< HEAD
 *~
 catalogue.log
+=======
+>>>>>>> dodobas
 media/avatars/
 
 

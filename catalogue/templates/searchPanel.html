@@ -75,6 +75,23 @@
         </div>
 
         <div class="span-6 append-bottom last">
+
+          <div class="span-6 last adv_search_ui">
+            <img id="{{myForm.aoi_geometry.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.aoi_geometry.label }}
+            {{ myForm.aoi_geometry }}
+          </div>
+          {% if myForm.aoi_geometry.errors %}
+          <div class="span-6 last">
+            <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+            <strong>Alert:</strong> {{ myForm.aoi_geometry.errors }} </p>
+          </div>
+          {% endif %}
+
           <div class="span-6 last adv_search_ui">
               <img id="{{myForm.geometry_file.html_name}}Button"
                   src="/media/images/info_16.png"

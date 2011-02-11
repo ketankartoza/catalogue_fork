@@ -149,7 +149,7 @@ url.
 Check out this folder using 
 
 ```
-git clone orasac1:/opt/git/sac_catalogue
+svn co https://196.35.94.196/svn/trunk/sac_catalogue
 cd sac_catalogue
 ```
 

@@ -57,6 +57,7 @@ urlpatterns = patterns('',
     (r'^searchesmap/$', searchesMap),
     (r'^visitorlist/$', visitorList),
     (r'^visitorreport/$', visitorReport),
+    (r'^visitormonthlyreport/(?P<theyear>\d{4})/(?P<themonth>\d{1,2})/$', visitorMonthlyReport),
     # Profile application
     (r'^accounts/', include('userprofile.urls')),
     (r'^searchkml/(?P<theGuid>[a-h0-9\-]{36})/$', searchKml), #single search poly as kml
