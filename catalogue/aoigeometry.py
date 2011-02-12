@@ -14,8 +14,8 @@ class AOIGeometryField(forms.CharField):
   def clean(self,value):
     """ AOI geometry validator """
     if not value:
-      #do nothing
-      pass
+      #do nothing, return empty string ''
+      return ''
     else:
       try:
         myFields = value.split(',')
