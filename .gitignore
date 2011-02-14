@@ -8,10 +8,8 @@ scenes_out_projected/
 settings.py
 thumbs_out/
 *.*~
-*~
 media/avatars/
-*.swp
-catalogue.log
+
 
 # ABP
 settings_local.py
