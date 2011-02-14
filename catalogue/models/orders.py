@@ -142,6 +142,30 @@ class Order(models.Model):
   class Admin:
     pass
 
+
+class OrderStatusHistory(models.Model):
+  '''Used to maintain provenance of all status changes that happen to an order'''
+  user = models.ForeignKey(User)
+  order = models.ForeignKey(Order)
+  order_change_date = models.DateTimeField(verbose_name="Date", auto_now=True, auto_now_add=True,
+      help_text = "When the order status was changed")
+  notes = models.TextField()
+  old_order_status = models.ForeignKey(OrderStatus,verbose_name="Old Order Status",related_name="old_order_status")
+  new_order_status = models.ForeignKey(OrderStatus,verbose_name="New Order Status",related_name="new_order_status")
+
+  def __unicode__(self):
+     return self.notes[:25]
+
+  class Meta:
+    verbose_name = _('Order Status History')
+    verbose_name_plural = _('Order Status History')
+    ordering = ('-order_change_date',)
+    app_label= 'catalogue'
+
+  class Admin:
+    pass
+
+
 ###############################################################################
 
 class TaskingRequest( Order ):
