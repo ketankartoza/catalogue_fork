@@ -1,40 +1,8 @@
-Procedures for importing data from various sources into the catalogue:
 
-Tim Sutton 2010
 
-%!target       : html
-%!style(html)  : style.css
-%!Options      : --toc --toc-level 3 --enum-title --css-sugar --css-inside
-%!preproc      : TUT_URL   https://qgis.org
-%!PostProc(html): '(?i)(<pre>)' '<div class="code">\1'
-%!PostProc(html): '(?i)(</pre>)' '\1</div>'
-%!encoding: iso-8859-1
-% These are comments and will not be generated in any output
-% -------------------
+% Leave the blank space above here
 
-%This document is in text2tags format. You can generate html, plain text and
-%moinmoin formatted documentation by running txt2tags on this document. See the
-%txt2tags home page for more details.  Please insert manual line breaks in this
-%document as it makes diffing for changes much easier. To do this in vim 
-%automatically, select a section then issue (gq) command. Please dont
-%apply vim formatting to the whol document as it screws up some formatting
-%rather apply it selectively to paragraphs where needed.
-
-% To generate the text version of this document:
-% txt2tags -t txt -o DATAIMPORT docs/DATAIMPORT.t2t
-% To generate the moinmoin version of this document
-% txt2tags -t moin -o DATAIMPORT.moin  docs/DATAIMPORT.t2t
-% To generate the html version of this document
-% txt2tags -t html -o DATAIMPORT.html docs/DATAIMPORT.t2t
-% To generate the pdf version of this document
-% txt2tags -t latex -o DATAIMPORT.tex docs/DATAIMPORT.t2t
-% then pdflatex docs/DATAIMPORT.tex
-% do a second time to generate the contents table:  pdflatex DATAIMPORT.tex
-
-% End of comments
-% -------------------
-
-= Introduction =
+= Procedures for importing data from various sources into the catalogue =
 
 ""Note:"" This document should be considered compulsory reading before you
 attempt to import any data into the catalogue.
@@ -66,17 +34,18 @@ For sumbandilasat the procedure for import at the moment boils down to this:
 - The scripts/sort_sumb_imagery.py script is then run. This converts the sumb
   pix images to tif and then files them under imagery master copies in the L1Ab
   folder as shown below.
+-
 
 ```
 imagery_mastercopies
-├── C2B      <-- CBERS
-│   ├── 1Aa
-│   └── 1Ab
-├── S-C      <-- SACC
-│   └── 1Ab
-└── ZA2      <-- sumbandilasat
-    ├── 1Aa
-    └── 1Ab
++-- C2B      <-- CBERS
+|   +-- 1Aa
+|   +-- 1Ab
++-- S-C      <-- SACC
+|   +-- 1Ab
++-- ZA2      <-- sumbandilasat
+    +-- 1Aa
+    +-- 1Ab
 ```
  - The scripts/sort_sumb_raw_imagery.py script is then run. This archives the
    raw folder and files it into the L1Aa folder as shown above. 
@@ -101,11 +70,11 @@ The copied over project file should have a structure something like this:
 
 ```
 20100801_20100830
-├── imp
-│   └── ThNl
-└── raw
-    ├── I0049
-    ├── I0085
++-- imp
+|   +-- ThNl
++-- raw
+    +-- I0049
+    +-- I0085
     ...etc
 ```
 

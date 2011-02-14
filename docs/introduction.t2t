@@ -1,3 +1,7 @@
+
+
+% Leave the blank space above here
+
 = Introduction =
 
 == The CSIR ==
@@ -115,6 +119,7 @@ capable heirachical storage system that in short works as follows:
  - data is written to local hard drives
  - after a certain period of inactivity moved down to slower sata drives (nearline storage)
  - and after that its migrated down onto a tape library
+ -
  
 The tape library (offline storage) is treated as part of the file system. It
 has a robot arm that loads tapes automatically. When you browse the file
@@ -157,7 +162,9 @@ version uses the concept of a 'generic product' for the data model.
 XXXXXXXXX Insert image here XXXXXXXXXXXXXXX
 
 On the left / center part of the diagram you will see an entity name 'Generic product'.
-This is a generic representation of any product (e.g. optical, radar, atmospheric, derived (like landcover map) and in the future we want to tune this to cater for vector data too. 
+This is a generic representation of any product (e.g. optical, radar,
+atmospheric, derived (like landcover map) and in the future we want to tune
+this to cater for vector data too. 
 
 
 There are five inherited models: 
@@ -172,8 +179,9 @@ terms described in the models including:
  - temporary tables used during product imports
  -
 
-The Online catalogue has the capability to deliver some products directly if they are held on local storage
-and also some basic capabilities for visitors to submit tasking requests.
+The Online catalogue has the capability to deliver some products directly if
+they are held on local storage and also some basic capabilities for visitors to
+submit tasking requests.
 
-Every time a search is made, its remembered, and the records the user is shown may be added to a cart
-and then assigned to an order
+Every time a search is made, its remembered, and the records the user is shown
+may be added to a cart and then assigned to an order

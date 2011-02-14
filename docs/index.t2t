@@ -26,9 +26,13 @@ Tim Sutton, 2008
 % txt2tags -t moin -o index.moin  index.t2t
 % To generate the html version of this document
 % txt2tags -t html -o index.html index.t2t
+% To generate a LaTeX / pdf
+% txt2tags -t tex -o index.tex index.t2t; pdflatex index.tex
 
 % End of comments
 % -------------------
 
 
 %!include: introduction.t2t  
+%!include: informix_import_data.t2t
+%!include: importing_products.t2t
