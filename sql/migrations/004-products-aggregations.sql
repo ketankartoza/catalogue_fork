@@ -1,0 +1,12 @@
+-- ######################################################################
+--
+-- Migration script for the products aggregation
+--
+--
+-- WARNING
+--
+-- this file is just a placemark, for this migration there is no need
+-- for extra SQL:
+-- python manage.py syncdb will suffice.
+--
+-- ######################################################################

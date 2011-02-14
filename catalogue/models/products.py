@@ -10,9 +10,11 @@ from django.core.exceptions import ObjectDoesNotExist
 # PIL and os needed for making small thumbs
 from PIL import Image, ImageFilter, ImageOps
 
+from django_dag.models import node_factory, edge_factory
 
 
-class GenericProduct( models.Model ):
+
+class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.Model ) ):
   """A generic model (following R-5.1-160 of DIMS system architecture document).
   @NOTE: this is not an abstract base class since we are using django multi-table
   inheritance. See http://docs.djangoproject.com/en/dev/topics/db/models/#id7"""
@@ -299,6 +301,15 @@ class GenericProduct( models.Model ):
     return myString
 
 
+class ProductLink (edge_factory(GenericProduct, concrete = False, base_model = models.Model)):
+  """
+  Links between products
+  """
+  class Meta:
+    """This is not an abstract base class although you should avoid dealing directly with it
+    see http://docs.djangoproject.com/en/dev/topics/db/models/#id7
+    """
+    app_label= 'catalogue'
 
 
 ###############################################################################
