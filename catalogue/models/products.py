@@ -301,7 +301,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     return myString
 
 
-class ProductLink (edge_factory(GenericProduct, concrete = False, base_model = models.Model)):
+class ProductLink (edge_factory('catalogue.GenericProduct', concrete = False, base_model = models.Model)):
   """
   Links between products
   """
