@@ -12,13 +12,28 @@ This section is broken up into the following parts:
 
 == Overview of the data migration process ==
 
+The process of data migration seeks to largely clone the informix ACS catalogue
+into a postgresql database, and then use that as the basis of running various
+import steps in order to migrate key parts of the ACS database into the SAC
+Catalogue.
+
+There are two things to consider here:
+
+ + migration of metadata
+ + migration of product thumbnails
+ +
+
+Metadata records are defined in a complex of different tables which need to be
+queried in order to be able to obtain all the data related to a specific
+product.  The informix acs catalogue stores all thumbnails as whole segments
+within blobs inside the database and these need to be extracted, georeferenced
+and clipped into individual scenes.
 
 == Technical notes for informix access via python ==
 
-
-
-
-=== Connecting to the database using python ===
+This section covers the installation and setup process for the informix python
+client so that you can connect to the server from a separate linux box using
+python. 
 
 
 Download the InformixDB driver for python from:
