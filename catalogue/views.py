@@ -289,14 +289,14 @@ def clip(theRequest):
       myObject.owner = theRequest.user
       myGeometry = None
       try:
-        myGeometry = getGeometryFromShapefile( theRequest, myForm, 'geometry_file' )
+        myGeometry = getGeometryFromUploadedFile( theRequest, myForm, 'geometry_file' )
         if myGeometry:
           myObject.geometry = myGeometry
         else:
-          logging.info("Failed to set clip area from uploaded shapefile")
-          logging.info("Or no shapefile uploaded")
+          logging.info("Failed to set clip area from uploaded geometry file")
+          logging.info("Or no geometry file uploaded")
       except:
-        logging.info("An error occurred try to set clip area from uploaded shapefile")
+        logging.info("An error occurred try to set clip area from uploaded geometry file")
         logging.info(traceback.format_exc() )
       if not myObject.geometry:
         myErrors = myForm._errors.setdefault("geometry", ErrorList())
@@ -489,14 +489,13 @@ def search(theRequest):
       mySearch.user = theRequest.user
       mySearch.deleted = False
       try:
-        #myGeometry = getGeometryFromShapefile( theRequest, myForm, 'geometry_file' )
-        myGeometry = getGeometryFromKML( theRequest, myForm, 'geometry_file' )
+        myGeometry = getGeometryFromUploadedFile( theRequest, myForm, 'geometry_file' )
         if myGeometry:
           mySearch.geometry = myGeometry
         else:
-          logging.info("Failed to set search area from uploaded shapefile")
+          logging.info("Failed to set search area from uploaded geometry file")
       except:
-        logging.info("An error occurred trying to set search area from uploaded shapefile")
+        logging.info("An error occurred trying to set search area from uploaded geometry file")
       # else use the on-the-fly digitised geometry
       mySearch.save()
       """Another side effect of using commit=False is seen when your model has
@@ -600,13 +599,13 @@ def productIdSearch(theRequest):
       mySearch.user = theRequest.user
       mySearch.deleted = False
       try:
-        myGeometry = getGeometryFromShapefile( theRequest, myForm, 'geometry_file' )
+        myGeometry = getGeometryFromUploadedFile( theRequest, myForm, 'geometry_file' )
         if myGeometry:
           mySearch.geometry = myGeometry
         else:
-          logging.info("Failed to set search area from uploaded shapefile")
+          logging.info("Failed to set search area from uploaded geometry file")
       except:
-        logging.info("An error occurred trying to set search area from uploaded shapefile")
+        logging.info("An error occurred trying to set search area from uploaded geometry file")
       # else use the on-the-fly digitised geometry
       mySearch.save()
       logging.debug("Search: " + str( mySearch ))
@@ -1503,14 +1502,14 @@ def    addTaskingRequest( theRequest ):
       myObject.user = theRequest.user
       myGeometry = None
       try:
-        myGeometry = getGeometryFromShapefile( theRequest, myForm, 'geometry_file' )
+        myGeometry = getGeometryFromUploadedFile( theRequest, myForm, 'geometry_file' )
         if myGeometry:
           myObject.geometry = myGeometry
         else:
-          logging.info("Failed to set tasking request from uploaded shapefile")
-          logging.info("Or no shapefile uploaded")
+          logging.info("Failed to set tasking request from uploaded geometry file")
+          logging.info("Or no geometry file uploaded")
       except:
-        logging.info("An error occurred try to set tasking area from uploaded shapefile")
+        logging.info("An error occurred try to set tasking area from uploaded geometry file")
         logging.info(traceback.format_exc() )
       if not myObject.geometry:
         myErrors = myForm._errors.setdefault("geometry", ErrorList())
