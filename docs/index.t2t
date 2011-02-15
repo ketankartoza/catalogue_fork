@@ -10,6 +10,7 @@ Tim Sutton, 2008
 %! PostProc(html): '(?i)(</pre>)' '\1</div>'
 % scartcl is from the koma script document class (apt-get install texlive-latex-recommended ttf-komatuna)
 %! PostProc(tex): '\\documentclass{article}' '\\documentclass{scrartcl}'
+%! PostProc(tex): '\\includegraphics' '\\includegraphics[width=100mm]'
 %! encoding: iso-8859-1
 % These are comments and will not be generated in any output
 % -------------------
@@ -38,4 +39,4 @@ Tim Sutton, 2008
 %!include: introduction.t2t  
 %!include: informix_import_data.t2t
 %!include: importing_products.t2t
-%!include: developer_guide.t2t
+%%!include: developer_guide.t2t

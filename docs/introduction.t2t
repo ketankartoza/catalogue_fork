@@ -150,9 +150,13 @@ intervention.
 
 == The Online Catalogue ==
 
-Along side of these other packages, Linfiniti has been building a new we
+Along side of these other packages, Linfiniti has been building a new web
 catalogue for SAC-EO.  The catalogue is django + postgresql + all the other
-nice FOSS tools we can use to make a rich, interactive site. Work on this
+great FOSS tools we can use together to make a rich, interactive site.
+
+[img/system-overview.png]
+
+Work on this
 started before any dims software was installed on site and the first major task
 was to migrate data and thumbnailss from a legacy, proprietary informix
 catalogue and get it into postgresql.
