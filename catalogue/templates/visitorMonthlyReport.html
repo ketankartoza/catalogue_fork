@@ -35,7 +35,7 @@
 {% endblock %}
 {% block content %}
 {% box_start "" "" "" %}
-      <a href="/visitormonthlyreport/{{ myPrevDate|date:'Y' }}/{{  myPrevDate|date:'m' }}/">Prevoius month</a>
+      <a href="/visitormonthlyreport/{{ myPrevDate|date:'Y' }}/{{  myPrevDate|date:'m' }}/">Previous month</a>
       <a href="/visitormonthlyreport/{{ myNextDate|date:'Y' }}/{{  myNextDate|date:'m' }}/">Next month</a>
     {% if myTopCountries and myScores %}
       <!--Load the AJAX API-->
