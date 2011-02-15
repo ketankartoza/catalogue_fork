@@ -9,7 +9,7 @@ admin.autodiscover()
 
 # These dictionaries are used for our generic views
 # see http://docs.djangoproject.com/en/dev/intro/tutorial04/
-#myOrdersDict = { 'queryset': Order.objects.all(), 
+#myOrdersDict = { 'queryset': Order.objects.all(),
    #  "template_object_name" : "myOrders",
 #    }
 
@@ -19,7 +19,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     (r'^admin/(.*)', admin.site.root),
-    # Usually you would do this using apache but since 
+    # Usually you would do this using apache but since
     # I have deployed the app to the root of the server
     # we need to do it here
     (r'^admin_media/(.*)$','django.views.static.serve',
@@ -47,14 +47,14 @@ urlpatterns = patterns('',
     (r'^mysearches/$', searchHistory),
     (r'^recentsearches/$', recentSearches),
     (r'^search/$', search),
-    (r'^productIdSearch/$', productIdSearch),
+    (r'^productIdSearch/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearch),
     (r'^visit/$', logVisit),
     (r'^visitormap/$', visitorMap),
     (r'^whereami/$', whereAmI),
     (r'^worldmap/$', worldMap),
 
     #show all searches that were made
-    (r'^searchesmap/$', searchesMap), 
+    (r'^searchesmap/$', searchesMap),
     (r'^visitorlist/$', visitorList),
     (r'^visitorreport/$', visitorReport),
     (r'^visitormonthlyreport/(?P<theyear>\d{4})/(?P<themonth>\d{1,2})/$', visitorMonthlyReport),
@@ -64,18 +64,18 @@ urlpatterns = patterns('',
      #show a single search map
     (r'^searchresult/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultMap),
     #show a single search page to insert into search result map
-    (r'^searchpage/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultPage), 
+    (r'^searchpage/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultPage),
     # return the results of a search as a shapefile
-    (r'^searchresultshapefile/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultShapeFile), 
+    (r'^searchresultshapefile/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultShapeFile),
     # show segment thumb for a segment by #
     (r'^thumbnailpage/(?P<theId>[0-9]+)/$', showThumbPage),
     # returns image mime type - show segment thumb info for a segment
-    (r'^thumbnail/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showThumb), 
+    (r'^thumbnail/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showThumb),
     # returns html mime type
-    (r'^showpreview/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showPreview), 
+    (r'^showpreview/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showPreview),
     #show info for a scene or segment by #
-    (r'^metadata/(?P<theId>[0-9]+)/$', metadata), 
-    (r'^metadatatext/(?P<theId>[0-9]+)/$', metadataText), 
+    (r'^metadata/(?P<theId>[0-9]+)/$', metadata),
+    (r'^metadatatext/(?P<theId>[0-9]+)/$', metadataText),
     (r'^addtocart/(?P<theId>[0-9]+)/$', addToCart),
     (r'^removefromcart/(?P<theId>[0-9]+)/$', removeFromCart),
     # cart contents for embedding into other pages
@@ -95,11 +95,11 @@ urlpatterns = patterns('',
     (r'^addtaskingrequest/', addTaskingRequest),
     (r'^mytaskingrequests/$', myTaskingRequests),
     (r'^viewtaskingrequest/(?P<theId>[0-9]+)/$', viewTaskingRequest),
-    (r'^taskingrequestasshapefile/(?P<theTaskingRequestId>[0-9]+)/$', taskingRequestAsShapefile), 
+    (r'^taskingrequestasshapefile/(?P<theTaskingRequestId>[0-9]+)/$', taskingRequestAsShapefile),
 
     # upload polygon from zipped shapefile for search/clip
     #( r'^uploadFeature/$', uploadFeature),
-    
+
     (r'^getFeatureInfo/(?P<theLon>[-]*\d+.\d+)/(?P<theLat>[-]*\d+.\d+)/(?P<theBoundingBox>[0-9\-,.]*)/(?P<thePixelX>\d+)/(?P<thePixelY>\d+)/(?P<theMapWidth>\d+)/(?P<theMapHeight>\d+)/$', getFeatureInfo),
 
     ( r'^dataSummaryTable/$', dataSummaryTable),

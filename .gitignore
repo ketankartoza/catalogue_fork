@@ -8,7 +8,15 @@ scenes_out_projected/
 settings.py
 thumbs_out/
 *.*~
+<<<<<<< HEAD
 *~
+=======
+<<<<<<< HEAD
+*~
+catalogue.log
+=======
+>>>>>>> dodobas
+>>>>>>> ale
 media/avatars/
 *.swp
 catalogue.log
@@ -20,7 +28,7 @@ index.toc
 doc-src
 
 
-# ABP
+# ABP:
 settings_local.py
 ipy.py
 

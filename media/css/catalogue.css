@@ -19,7 +19,7 @@ body {
   float: left;
   position: absolute;
   left: 0em;
-  top: 0px; 
+  top: 0px;
   background: url(/media/images/ribbon.png) no-repeat left top;
 }
 
@@ -52,7 +52,7 @@ ul.errorlist {
    padding: 4px 5px;
 }
 
-.required 
+.required
 {
   /* add as required for required fields on forms */
 }
@@ -70,35 +70,35 @@ ul.errorlist {
   overflow-y:scroll;
 }
 
-th a:link, th a:hover, th a:active { 
-  color: white; 
-  background:transparent url(/media/images/help_16.png) no-repeat; 
+th a:link, th a:hover, th a:active {
+  color: white;
+  background:transparent url(/media/images/help_16.png) no-repeat;
   padding-left: 18px;
   text-decoration: none;
 }
 
 /* tool tips definition: record, map */
 #recordtooltip
-{ 
-  display:none; 
-  background:transparent url(/media/images/tooltips/black_arrow.png); 
-  font-size:12px; 
-  height:70px; 
-  width:160px; 
-  padding:25px; 
-  color:#fff;     
+{
+  display:none;
+  background:transparent url(/media/images/tooltips/black_arrow.png);
+  font-size:12px;
+  height:70px;
+  width:160px;
+  padding:25px;
+  color:#fff;
   z-index: 999;
 }
 
 #maptooltip
-{ 
-  display:none; 
-  background:transparent url(/media/images/tooltips/black_arrow.png); 
-  font-size:12px; 
-  height:70px; 
-  width:160px; 
-  padding:25px; 
-  color:#fff;     
+{
+  display:none;
+  background:transparent url(/media/images/tooltips/black_arrow.png);
+  font-size:12px;
+  height:70px;
+  width:160px;
+  padding:25px;
+  color:#fff;
   z-index: 999;
 }
 
@@ -142,7 +142,7 @@ div.formSpacer {
   text-align: center;
   display: block;
   padding: 10px 0 3px 0;
-} 
+}
 
 /* Jquery slider formatting */
 
@@ -157,58 +157,58 @@ div.formSpacer {
 }
 
 .slider-reduce-label
-{ 
-  background:url(/media/images/sun_16.png) no-repeat; 
+{
+  background:url(/media/images/sun_16.png) no-repeat;
   background-position: 50%;
-  height:16px; 
-  width:16px; 
+  height:16px;
+  width:16px;
   overflow:hidden;
-  float:left; 
+  float:left;
 }
 
 .slider-increase-label
-{ 
-  background:url(/media/images/sun2_16.png) no-repeat; 
+{
+  background:url(/media/images/sun2_16.png) no-repeat;
   background-position: 50%;
   padding-top: 40px;
-  height:16px; 
-  width:16px; 
+  height:16px;
+  width:16px;
   overflow:hidden;
-  float:left; 
+  float:left;
 }
 
-.ui-slider-horizontal .ui-state-default 
+.ui-slider-horizontal .ui-state-default
 {
-  background: url(/media/images/slider-handle.png) no-repeat scroll; 
+  background: url(/media/images/slider-handle.png) no-repeat scroll;
   background-position: 50%;
-  height: 50px; 
-  top: -20px; 
+  height: 50px;
+  top: -20px;
   border: none;
 }
 
 .ui-slider-horizontal
-{ 
-  background:url(/media/images/slider-bar.png) no-repeat; 
+{
+  background:url(/media/images/slider-bar.png) no-repeat;
   top: 16px;
-  height:4px; 
-  width:160px; 
-  position:relative; 
+  height:4px;
+  width:160px;
+  position:relative;
   float:left;
   z-index: 100;
 }
 
 .slider-bubble
-{ 
-  background:url(/media/images/callout.gif) no-repeat; 
-  height:46px; 
-  width:38px; 
-  overflow:hidden; 
-  position:absolute; 
+{
+  background:url(/media/images/callout.gif) no-repeat;
+  height:46px;
+  width:38px;
+  overflow:hidden;
+  position:absolute;
   top:-14px;
   padding:8px 0 0 0;
   text-align:center;
   font-weight:bold;
-  color:#202020; 
+  color:#202020;
   display: none;
 }
 
@@ -291,3 +291,27 @@ ul.dropdown ul {
 /* Product ID Search form */
 #product-id-search-list li { list-style-type: none; margin: 0; display: inline;}
 #product-id-search-list li label { display: none;}
+
+/* ABP: generic clear both class */
+.clr {
+    clear: both;
+}
+
+/* ABP: hidden adv search elements */
+.adv_search_ui,
+.adv_fld  {
+    display: none;
+}
+
+#advancedSearchDiv {
+    margin-left: 80px;
+}
+
+#product-id-search-list #id_sensors {
+  height: 3em;
+}
+
+#advancedSearchDiv #id_sensor_type {
+  width: 220px;
+}
+

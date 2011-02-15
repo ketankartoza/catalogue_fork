@@ -1,15 +1,123 @@
-{% extends "base.html" %}
+{% extends "map.html" %}
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% block extrajs %}
   {{ block.super }}
+  {% if theGuid %}
+  <script type="text/javascript">
+
+    // Set select options
+    function set_form_options(options){
+      $('#productIdForm select option').show();
+      for (id in options) {
+        try {
+          //console.log('Checking ' + id);
+          //console.log(options[id]);
+          $('#id_' + id + ' :not(:selected)').each(function(e,e){
+            if ($.inArray(parseInt(e.value), options[id]) == -1) {
+              $(e).hide();
+              //console.log('hiding ' + id + ' val:' + e.value);
+            } else {
+              //console.log('no match ' + id + ' val:' + e.value);
+            }
+          });
+        } catch(e) {
+        };
+      };
+    };
+
+    $(function(){
+      // TODO: remove the button and the following code
+      $('#product-search-button').click(function(){
+        $('#productIdForm').submit();
+      });
+
+      // Form ajax handling
+      $('#productIdForm').submit(function(){
+        $("#working").html('<p>Searching, please wait...<img src="/media/images/ajax-loader.gif"></p>');
+        $("#working").slideDown('slow');
+        $.ajax({
+          type: "POST",
+          url: "/productIdSearch/{{ theGuid }}/",
+          data: $('#productIdForm').serialize(),
+          success: function(data) {
+            // Just in case...
+            $('#productIdForm select').css({border: 'none'});
+            $('#messages').hide();
+            $('#search-messages').html('<b>' + data.count + '</b> record found for ' + data.messages.join(', ') + '.');
+            set_form_options(data.values);
+            $('#results-table').parent().load('/searchpage/{{ theGuid }}/',revealTable);
+            $("#working").slideUp('slow');
+          },
+          error: function(data) {
+            var errors = $.parseJSON (data.responseText);
+            var messages = '';
+            for (e in errors) {
+              try {
+                $('#id_' + e).css({border: 'solid 1px red'});
+                messages += '<p>Errors in field <b>' + e + '</b>:<ul><li>';
+                messages += errors[e].join('</li><li>');
+                messages += '</ul></p>';
+              } catch(e) {};
+            }
+            if (errors['__all__']) {
+                messages += '<p>Errors in form :<ul><li>';
+                messages += errors['__all__'].join('</li><li>');
+                messages += '</ul></p>';
+            }
+            $('#id_sensors').css({border: 'solid 1px red'});
+            $('#messages').html(messages).show('slow');
+            $("#working").slideUp('slow');
+          }
+        });
+        return false;
+      });
+
+      $('#productIdForm select').change(function() {
+        $('#productIdForm').submit();
+      });
+      {% if filterValues %}// Filter initial options
+      set_form_options({{ filterValues|safe }});
+      {% endif %}
+    });
+  </script>
+  {% endif %}
 {% endblock %}
 
 {% block content %}
 {% box_start "" "" "" %}
+<div id="messages" style="display:none;background:white"></div>
 <pre>SAT SEN TYP MOD YYMMDD HHMMSS</pre>
 <ul id="product-id-search-list">
-  {{myForm.as_ul}}
+  <form id="productIdForm" action="/productIdSearch/{{ theGuid }}/">
+  {% csrf_token %}
+  <table>
+    <tr>
+      <td>{{ myForm.mission }}</td>
+      <td rowspan="2">{{ myForm.sensors }}</td>
+      <td>{{ myForm.acquisition_mode }}</td>
+      <td>{{ myForm.sensor_type }}</td>
+      <td>{{ myForm.start_year }}</td>
+      <td>{{ myForm.start_month }}</td>
+      <td>{{ myForm.start_day }}</td>
+      <td>{{ myForm.start_hour }}</td>
+      <td>{{ myForm.start_minute }}</td>
+      <td>{{ myForm.start_second }}</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td colspan="2" style="text-align:right;">End date:</td>
+      <td>{{ myForm.end_year }}</td>
+      <td>{{ myForm.end_month }}</td>
+      <td>{{ myForm.end_day }}</td>
+      <td>{{ myForm.end_hour }}</td>
+      <td>{{ myForm.end_minute }}</td>
+      <td>{{ myForm.end_second }}</td>
+    </tr>
+  </table>
+
+  </form>
 </ul>
 <input type="button" value="Search!" id="product-search-button" />
-{% box_end %}  
+{% box_end %}
+{{ block.super }}
 {% endblock %}

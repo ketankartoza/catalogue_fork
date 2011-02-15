@@ -377,7 +377,8 @@ class ShpResponder(object):
             feat = ogr.Feature( feature_def )
 
             for field in attributes:
-                value = getattr(item.product,field)
+                #ABP: added getConcreteProduct and None
+                value = getattr(item.product.getConcreteInstance(),field,None)
                 logging.info("Shape writer: Setting %s to %s" % (field,value))
                 try:
                     string_value = str(value)

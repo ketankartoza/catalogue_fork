@@ -35,17 +35,17 @@
         {% endif %}
         {% if myShowMetadataFlag %}
         <td>
-          <img src="/media/images/info_16.png" 
-               alt="View Metadata" 
+          <img src="/media/images/info_16.png"
+               alt="View Metadata"
                style="cursor: pointer;"
                class="metadata-icon"
-               longdesc="{{ myRecord.product.id }}" 
+               longdesc="{{ myRecord.product.id }}"
           />
         </td>
         {% endif %}
         {% if myShowCartFlag %}
         <td>
-          <img src='/media/images/buy_16.png' 
+          <img src='/media/images/buy_16.png'
                alt="Add to Cart"
                style='cursor: pointer;'
                onclick='addToCart("{{ myRecord.product.id }}");' />
@@ -71,7 +71,7 @@
                  alt="Thumbnail"
                  id="miniPreview{{ myRecord.product.id }}"
                  style="cursor: pointer;"
-                 longdesc="{{ myRecord.product.id }}" 
+                 longdesc="{{ myRecord.product.id }}"
                  />
         </td>
         {% endif %}

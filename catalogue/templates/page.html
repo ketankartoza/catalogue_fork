@@ -8,14 +8,14 @@
       clearSearchResults();
       {# see http://trac.openlayers.org/wiki/Styles for more info on styling #}
       var myScenesLayer = new OpenLayers.Layer.Vector("scenes",{
-        styleMap: mSceneStyleMap, 
+        styleMap: mSceneStyleMap,
         rendererOptions: {zIndexing: true},
         projection: new OpenLayers.Projection("EPSG:900913"),
         });
       var myGJFormat = new OpenLayers.Format.GeoJSON(
-        
+
         );
-      {% for myResult in myRecords %} 
+      {% for myResult in myRecords %}
       var myFeature{{forloop.counter}} = myGJFormat.read({{myResult.product.spatial_coverage.geojson|safe}})[0];
       myFeature{{forloop.counter}}.geometry = transformGeometry(myFeature{{forloop.counter}}.geometry);
       myFeature{{forloop.counter}}.id = '{{myResult.product.id}}';
@@ -26,7 +26,7 @@
       mMap.addLayer(myScenesLayer);
       {% if myExtent %}
       var myBounds = transformBounds( new OpenLayers.Bounds{{myExtent}}); //calculated from search page results
-      mMap.zoomToExtent( myBounds ); 
+      mMap.zoomToExtent( myBounds );
       {% else %}
       mMap.zoomToExtent( transformBounds(new OpenLayers.Bounds(14.0,-35.0,34.0,-21.0)));  //sa
       {% endif %}
@@ -36,7 +36,7 @@
     if (pageLoaded) {
         loadMoreData();
         loadMoreData = null;
-    }    
+    }
 
   /* ]]> */
   </script>
@@ -61,12 +61,21 @@
     {% include "recordHeader.html" %}
     <tbody>
       {% for myRecord in myRecords %}
-      {% include "record.html" %} 
+      {% include "record.html" %}
+      {% empty %}
+      <h2>No records found.</h2>
       {% endfor %}
     </tbody>
   </table>
 {% box_end %}
+{% else %}
+{% box_start "" "comment-edit-48x48.png" "results-table" %}
+<table id="results-table" cellpadding="0" cellspacing="0" width="100%">
+  <tr><td>No records found</td></tr>
+</table>
+{% box_end %}
 {% endif %}
+
 {% if myMessagesFlag %}
   {{ myMessagesHeading|safe }}
   <div>

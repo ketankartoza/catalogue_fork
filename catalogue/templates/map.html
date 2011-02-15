@@ -3,6 +3,7 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% block extrajs %}
   {{ block.super }}
+  {% block ol_map %}
   <!-- bring in the OpenStreetMap OpenLayers layers.
        Using this hosted file will make sure we are kept up
        to date with any necessary changes -->
@@ -25,7 +26,7 @@
       {# jquery button function requires jquery-ui 1.8 #}
       $(".button-link").button();
       {# tooltips setup - see http://flowplayer.org/tools/demos/tooltip/index.html #}
-      $("#results img[title]").tooltip('#recordtooltip'); 
+      $("#results img[title]").tooltip('#recordtooltip');
       {# manage table resizing #}
       resizeTable(); {# for initial page load #}
       $(window).resize(function () {# for page resize #}
@@ -69,7 +70,7 @@
       setupMiniIconClickCallback();
       {% if myExtent %}
       var myBounds = new OpenLayers.Bounds{{myExtent}}; //calculated from search page results
-      mMap.zoomToExtent( transformBounds( myBounds )); 
+      mMap.zoomToExtent( transformBounds( myBounds ));
       {% else %}
       mMap.zoomToExtent( transformBounds(new OpenLayers.Bounds(14.0,-35.0,34.0,-21.0)));  //sa
       {% endif %}
@@ -78,14 +79,14 @@
         loadMoreData();
         loadMoreData = null;
       }
-
-    $("#map-container").mapResizer({'map':mMap});{# //activate mapresizer widget #}
-    $("#map-navigation-panel div[title],#resizer_toolbox img[title]").tooltip('#maptooltip');
+      $("#map-container").mapResizer({'map':mMap});{# //activate mapresizer widget #}
+      $("#map-navigation-panel div[title],#resizer_toolbox img[title]").tooltip('#maptooltip');
     } {# //end init #}
     {# // make OL compute scale according to WMS spec #}
     OpenLayers.DOTS_PER_INCH = 25.4 / 0.28;
   /* ]]> */
   </script>
+  {% endblock %}
 {% endblock %}
 {% block body_load %}onload="init()";{% endblock %}
 
@@ -123,16 +124,18 @@
   {% if mySearchFlag %}
     <h3 id="search-summary-accordion-h3"><a href="#"><img src="/media/images/search_16.png" alt="" />&nbsp;Search Summary</a></h3>
     <div id="search-summary-accordion-div">
-        {% if myMessages %}
+        {% if myMessages %}<div id="search-messages">
+          <b>{{ myPaginator.count }}</b> record found for
           {% for myValue in myMessages %}
-            {{ myValue|safe }}<br/>
+            {{ myValue|safe }}{% if not forloop.last %},{% else %}.{% endif %}<br/>
           {% endfor %}
           <div><b>Note:</b>The SPOT Imagery provided in this backdrop has been degraded to 10m</div>
-        {% endif %}
+        </div>{% endif %}
         {% if myRecords %}
         <a href="/searchresultshapefile/{{mySearchGuid}}/"><img src="/media/images/down_16.png" alt=""/> Download search as a shapefile.</a>
         {% endif %}
-        {# <a href="/modifysearch/{{mySearchGuid}}/" class="button-link">Modify this search</a> #}
+        <br /><a href="/modifysearch/{{mySearchGuid}}/" class="button-link">Modify this search</a>
+        {% if myProductIdSearch %}<br /><a href="/productIdSearch/{{mySearchGuid}}/" class="button-link">Product ID search</a>{% endif %}
         {#% if user.is_staff %}<div id="sql" style="display: none;">{{ mySqlString }}</div><input type=button id="sql-button" value="Show SQL" />{% endif %#}
     </div>
   {% endif %}
