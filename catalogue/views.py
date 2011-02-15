@@ -23,6 +23,7 @@ from catalogue.shortcuts import render_to_geojson
 from catalogue.renderDecorator import renderWithContext
 from catalogue.profileRequiredDecorator import requireProfile
 from catalogue.getFeaturesFromZipFile import *
+from catalogue.getFeaturesFromKMLFile import *
 
 # Helper classes
 from catalogue.geoiputils import *
@@ -486,7 +487,8 @@ def search(theRequest):
       mySearch.user = theRequest.user
       mySearch.deleted = False
       try:
-        myGeometry = getGeometryFromShapefile( theRequest, myForm, 'geometry_file' )
+        #myGeometry = getGeometryFromShapefile( theRequest, myForm, 'geometry_file' )
+        myGeometry = getGeometryFromKML( theRequest, myForm, 'geometry_file' )
         if myGeometry:
           mySearch.geometry = myGeometry
         else:
@@ -1784,3 +1786,31 @@ def getGeometryFromShapefile( theRequest, theForm, theFileField ):
     extractedGeometries = getFeaturesFromZipFile(myOutFile, "Polygon", 1)
     myGeometry = extractedGeometries[0]
     return myGeometry
+
+
+def getGeometryFromKML( theRequest, theForm, theFileField ):
+  """Retrieve an uploaded geometry from a shp file. Note in order for this to
+     work, you must have set your form to use multipart encoding type e.g.
+     <form enctype="multipart/form-data" action="/search/" method="post" id="search_form">"""
+  logging.info('Form cleaned data: ' + str(theForm.cleaned_data))
+  if theRequest.FILES[theFileField]:
+    logging.debug("Using geometry from KML.")
+    #if not theForm.cleaned_data.contains( "theFileField" ):
+    #  logging.error("Error: %s field not submitted with form" % theFileField)
+    #  return False
+    myExtension = theForm.cleaned_data[theFileField].name.split(".")[1]
+    if not(myExtension.lower() == "kml" or myExtension.lower() == "kmz"):
+      logging.info('Wrong format for uploaded geometry. Please select a KML/KMZ file.')
+      #render_to_response is done by the renderWithContext decorator
+      #@TODO return a clearer error spotmap just like Alert for the missing dates
+      return False
+    myFile = theForm.cleaned_data[theFileField]
+    myOutFile = '/tmp/%s' % myFile.name
+    destination = open(myOutFile, 'wb+')
+    for chunk in myFile.chunks():
+      destination.write(chunk)
+    destination.close()
+    extractedGeometries = getFeaturesFromKML(myOutFile, "Polygon", 1)
+    myGeometry = extractedGeometries[0]
+    return myGeometry
+
