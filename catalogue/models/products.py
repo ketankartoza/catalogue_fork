@@ -5,7 +5,6 @@ import os
 import urllib2
 from django.conf import settings
 #for translation
-from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 # PIL and os needed for making small thumbs
 from PIL import Image, ImageFilter, ImageOps
@@ -30,7 +29,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
   product_id = models.CharField( help_text="SAC Formatted product ID", max_length="255", db_index=True,unique=True )
   product_revision = models.CharField( max_length="255",null=True,blank=True )
   local_storage_path = models.CharField( max_length=255, help_text="Location on local storage if this product is offered for immediate download.", null=True,blank=True)
-  metadata = models.TextField(help_text=_("An xml document describing all known metadata for this sensor."))
+  metadata = models.TextField(help_text="An xml document describing all known metadata for this sensor.")
   remote_thumbnail_url =  models.TextField( max_length=255, help_text="Location on a remote server where this product's thumbnail resides. The value in this field will be nulled when a local copy is made of the thumbnail.")
   objects = models.GeoManager()
 

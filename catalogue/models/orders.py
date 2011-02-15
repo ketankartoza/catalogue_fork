@@ -1,7 +1,5 @@
 from django.contrib.gis.db import models
 from dictionaries import *
-##for translation
-from django.utils.translation import ugettext_lazy as _
 #for user id foreign keys
 from django.contrib.auth.models import User
 # Helper classes
@@ -22,8 +20,8 @@ class Datum(models.Model):
 
   class Meta:
     app_label= 'catalogue'
-    verbose_name = _('Datums')
-    verbose_name_plural = _('Datums')
+    verbose_name = 'Datums'
+    verbose_name_plural = 'Datums'
 
   def __unicode__(self):
     return self.name
@@ -41,8 +39,8 @@ class ResamplingMethod(models.Model):
 
   class Meta:
     app_label= 'catalogue'
-    verbose_name = _('Resampling Method')
-    verbose_name_plural = _('Resampling Methods')
+    verbose_name = 'Resampling Method'
+    verbose_name_plural = 'Resampling Methods'
 
   def __unicode__(self):
     return self.name
@@ -60,8 +58,8 @@ class FileFormat(models.Model):
 
   class Meta:
     app_label= 'catalogue'
-    verbose_name = _('File Format')
-    verbose_name_plural = _('File Formats')
+    verbose_name = 'File Format'
+    verbose_name_plural = 'File Formats'
 
   def __unicode__(self):
     return self.name
@@ -79,8 +77,8 @@ class OrderStatus(models.Model):
 
   class Meta:
     app_label= 'catalogue'
-    verbose_name = _('Order Status')
-    verbose_name_plural = _('Order Status List')
+    verbose_name = 'Order Status'
+    verbose_name_plural = 'Order Status List'
 
   def __unicode__(self):
     return self.name
@@ -97,8 +95,8 @@ class DeliveryMethod(models.Model):
 
   class Meta:
     app_label= 'catalogue'
-    verbose_name = _('Delivery Method')
-    verbose_name_plural = _('Delivery Methods')
+    verbose_name = 'Delivery Method'
+    verbose_name_plural = 'Delivery Methods'
 
   def __unicode__(self):
     return self.name
@@ -111,7 +109,7 @@ class DeliveryMethod(models.Model):
 
 class Order(models.Model):
   user = models.ForeignKey(User)
-  notes = models.TextField(help_text=_("Make a note of any special requirements or processing instructions you may need. Please note that in the case of free products and priority products, they will only be supplied with default options."),null=True,blank=True)
+  notes = models.TextField(help_text="Make a note of any special requirements or processing instructions you may need. Please note that in the case of free products and priority products, they will only be supplied with default options.",null=True,blank=True)
   processing_level = models.ForeignKey(ProcessingLevel,verbose_name="Processing Level",default=3)
   projection = models.ForeignKey(Projection,verbose_name="Projection",default=3)
   datum = models.ForeignKey(Datum, verbose_name="Datum",default=1)
@@ -133,8 +131,8 @@ class Order(models.Model):
 
   class Meta:
     app_label= 'catalogue'
-    verbose_name = _('Order')
-    verbose_name_plural = _('Orders')
+    verbose_name = 'Order'
+    verbose_name_plural = 'Orders'
 
   def __unicode__(self):
     return str(self.id)
@@ -157,8 +155,8 @@ class OrderStatusHistory(models.Model):
      return self.notes[:25]
 
   class Meta:
-    verbose_name = _('Order Status History')
-    verbose_name_plural = _('Order Status History')
+    verbose_name = 'Order Status History'
+    verbose_name_plural = 'Order Status History'
     ordering = ('-order_change_date',)
     app_label= 'catalogue'
 
@@ -182,8 +180,8 @@ class TaskingRequest( Order ):
 
   class Meta:
     app_label= 'catalogue'
-    verbose_name = _('Tasking Request')
-    verbose_name_plural = _('Tasking Requests')
+    verbose_name = 'Tasking Request'
+    verbose_name_plural = 'Tasking Requests'
 
   def __unicode__(self):
     return str(self.id)

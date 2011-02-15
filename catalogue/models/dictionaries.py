@@ -1,6 +1,4 @@
 from django.contrib.gis.db import models
-#for translation
-from django.utils.translation import ugettext_lazy as _
 
 ###############################################################################
 # Product related model ancilliary tables
@@ -72,8 +70,8 @@ class ProcessingLevel( models.Model ):
 
   class Meta:
     app_label= 'catalogue'
-    verbose_name = _('Processing Level')
-    verbose_name_plural = _('Processing Levels')
+    verbose_name = 'Processing Level'
+    verbose_name_plural = 'Processing Levels'
 
   class Admin:
     pass
@@ -90,8 +88,8 @@ class Projection( models.Model ):
 
   class Meta:
     app_label= 'catalogue'
-    verbose_name = _('Projection')
-    verbose_name_plural = _('Projections')
+    verbose_name = 'Projection'
+    verbose_name_plural = 'Projections'
     ordering = ('epsg_code', 'name')
 
 
@@ -133,8 +131,8 @@ class Quality( models.Model ):
      return self.name
   class Meta:
     app_label= 'catalogue'
-    verbose_name = _('Quality')
-    verbose_name_plural = _('Qualities')
+    verbose_name = 'Quality'
+    verbose_name_plural = 'Qualities'
 
 ###############################################################################
 
