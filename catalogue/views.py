@@ -396,7 +396,7 @@ def visitorMap(theRequest):
     })
 
 
-@login_required
+@staff_member_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('visitorReport.html')
 def visitorReport( theRequest ):
@@ -428,7 +428,7 @@ def visitorReport( theRequest ):
     'myCurrentMonth': datetime.date.today()
     })
 
-@login_required
+@staff_member_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('visitorMonthlyReport.html')
 def visitorMonthlyReport( theRequest, theyear, themonth):
