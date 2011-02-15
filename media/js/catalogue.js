@@ -562,7 +562,7 @@ function setupSearchMap( theLayers )
   }
   mWKTFormat = new OpenLayers.Format.WKT();
   setupBaseMap();
-  mVectorLayer = new OpenLayers.Layer.Vector("geometry");
+  mVectorLayer = new OpenLayers.Layer.Vector("search_geometry");
   mMap.addLayer(mVectorLayer);
   // Add geometry specific panel of toolbar controls
   setupEditingPanel(mVectorLayer);
@@ -607,7 +607,7 @@ function setupSearchMap( theLayers )
 function setupTaskingMap( theLayers )
 {
   mWKTFormat = new OpenLayers.Format.WKT();
-  mVectorLayer = new OpenLayers.Layer.Vector("geometry");
+  mVectorLayer = new OpenLayers.Layer.Vector("task_geometry");
   mMap.addLayer(mVectorLayer);
   // Add geometry specific panel of toolbar controls
   setupEditingPanel(mVectorLayer);
@@ -990,4 +990,3 @@ function reverseTransformPoint(thePoint)
   myPoint = myPoint.transform(mySourceCRS, myCRS);
   return myPoint;
 }
-
