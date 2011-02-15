@@ -11,7 +11,7 @@ Industrial Research' - it is the main national science foundation of the
 country. They are a big organisation with many divisions of which SAC
 (Satellite Applications Center) is one.
 
-== SAC SAC ==
+== SAC ==
 SAC is a satellite ground station. This means they have a big campus with many
 antennas and collect information from satellites as they pass over our sky
 window they also do satellite tasking (telling satellites where to go and what
@@ -41,16 +41,16 @@ this project (of which we form a small part), the processing of imagery was
 done manually and ad-hoc which is not very efficient and prone to difficulty if
 an expert leaves.
 
-Thus they have started to build an integrated system called SAEOS (pronounced 'sigh-os').
-The purpose of SAEOS is to create an automated processing environment through
-all the steps of the EO product workflow i.e.:
+Thus they have started to build an integrated system called SAEOS (pronounced
+'sigh-os').  The purpose of SAEOS is to create an automated processing
+environment through all the steps of the EO product workflow i.e.:
 
- - satellite tasking (please programme spot5 to take an image at footprint foo on date X)
+ - satellite tasking ('please programme spot5 to take an image at footprint foo on date X')
  - image processing (level 1a through 3a/b)
  - image analysis (level 4)
- - image ordering (can I please get a copy of that SPOT image you took on dec 4 2008 of this area)
- - product packaging (bundle up the stuff that was ordered using a DVD robot,
-   placing on an ftp site, writing to an external HD etc)
+ - image ordering ('can I please get a copy of that SPOT image you took on dec 4 2008 of this area')
+ - product packaging ('bundle up the stuff that was ordered using a DVD robot,
+   placing on an ftp site, writing to an external HD etc')
  - 
 
 To achieve this goal they have a number of software components.
@@ -84,6 +84,7 @@ PCI/Geomatica instead of EASI script. SARMES has all the logic to do things like
    with a pan-chromatic / grey scale band)
  - chop up images in various tile schemes (e.g. degree squares, quarter degree
    sqauares etc)
+ -
 
 These jobs are run by manual process - creating config files, placing input
 files in a specific dir heirachy etc.
@@ -110,6 +111,7 @@ OS4EO standard is pretty simple and familiar. In essence it allows you to:
  - get quote
  - place order
  -
+
 In DIMS it is implemented using SOAP rather than a RESTful service.
 
 Along the process of creating the SAEOS project, SAC-EO have also been
