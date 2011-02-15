@@ -12,6 +12,13 @@ thumbs_out/
 media/avatars/
 *.swp
 catalogue.log
+index.aux
+index.log
+index.out
+index.tex
+index.toc
+doc-src
+
 
 # ABP
 settings_local.py
