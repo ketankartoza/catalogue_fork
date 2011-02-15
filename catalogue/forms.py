@@ -106,9 +106,9 @@ class AdvancedSearchForm( SearchForm ):
   """ Adds to SearchForm the field to load polygon from a zipped shapefile. """
   geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
                                   required = False,
-                                  help_text = 'Upload a zipped shapefile of less than 1MB. If the shapefile contains\
-                                              more than one polygon, only the first will be used. \
-                                              Complex polygons will increase search time.')
+                                  help_text = """Upload a zipped shapefile or KML/KMZ of less than 1MB. If the
+                                  shapefile contains more than one polygon, only the first will be
+                                  used. Complex polygons will increase search time.""")
 
   class Meta:
     model = Search
