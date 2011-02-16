@@ -14,6 +14,8 @@ Generic sensor product is an Abstract Base Class that all other sensor based pro
 
 Several domain lists are implemented for sensor based products. These can be visualised in the following diagram:
 
+[img/sensor-product-dictionaries.png]
+
 ==== Mission ====
 
 A mission is the name for the particular space vechicle on board of which one
