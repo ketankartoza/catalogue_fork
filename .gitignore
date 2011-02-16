@@ -18,6 +18,6 @@ settings_local.py
 ipy.py
 *.sqlite
 settings_test.py
-catalogue/test/dims_packages/*.*
+catalogue/tests/dims_packages
 init_*.sql
 
