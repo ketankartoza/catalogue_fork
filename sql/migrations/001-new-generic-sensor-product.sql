@@ -104,7 +104,6 @@ alter table catalogue_genericsensorproduct alter sensor_type_id set not null;
 alter table catalogue_genericsensorproduct alter acquisition_mode_id set not null;
 
 alter table catalogue_genericsensorproduct alter product_acquisition_start set not null;
-alter table catalogue_genericsensorproduct alter geometric_resolution_x set not null;
 alter table catalogue_genericsensorproduct alter geometric_resolution_y set not null;
 alter table catalogue_genericsensorproduct alter radiometric_resolution set not null;
 
