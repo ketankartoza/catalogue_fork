@@ -1,0 +1,65 @@
+
+
+% Leave the two blank lines above
+
+= Catalogue Reporting tools =
+
+The catalogue provides numerous interactions for users and is continually being
+updated with new metadata records. It is useful to produce reports that allow
+SANSA staff to obtain the pulse of the system. These reports cover 4 main
+areas:
+
++ Data holdings
++ Search activities
++ Visitor statistics
++ Order and tasking activities
++
+
+The reports can be obtained in one of two ways:
+
++ Visiting the 'staff' area of the web site and selecting from the reports
+  presented there
++ By direct email. Here staff can nominate which reports they wish to receive,
+  and with which frequency they receive them
++
+
+**Note:** Only 'staff' members are elegible to receive reports.
+
+Reports sent by email will be in either rich html format, or as pdf attachments.
+
+== Order summaries ==
+
+=== Order summary table ===
+
+The order summary table is accessible from the **Staff -> Orders list** and for
+individual users from **Popular Links -> My orders**. For individual users,
+only their own orders will be listed. In all other respects, both tables are
+the same. The table contains the following headers:
+
+|| Id | Date | Status | Placed by | View |
+
+When clicked, the headers will set the sort order for the table.
+
+Above the table is a chart which displays total orders by status. For
+individual users, this chart shows only their own orders.
+
+The summary report link on the summary table will return the user an on-the-fly
+created order summary report in pdf format as described below.
+
+=== Order summary report ===
+
+The order summary report will be sent to nominated users at chose interval of
+daily, weekly or monthly. It can also be generated on-the-fly from the staff 
+admin interface.
+
+The orders summary report contains the following information:
+
+- How many orders have been created in the reporting month
+- How many orders have been closed in the reporting month
+- A break down of all open orders by status (accepted etc.)
+- A break down of all open orders by age
+- A break down of all orders by customer
+-
+
+Format : pdf
+
