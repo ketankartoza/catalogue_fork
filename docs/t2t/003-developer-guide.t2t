@@ -110,20 +110,7 @@ git push origin :new-branch
 
 The repositories are arranged like this:
 
-```
-                   Orasac1 (SANSA Server) - Canonical master repository
-                          |                                    ^
-                          |                                    |
-                          v                                    V
-                     Lion (SANSA Prod Server)        Linfiniti2 (Linfiniti Dev Repo Clone)
-                        |                |             ^              ^                  ^   
-                        |                |             |              |                  |
-                        V                V             |              |                  |
-                  live instance   test instance        |              |                  |
-                                                       V              V                  V
-                                                      Tim          Drazen            Alessandro
-
-```
+[img/git-topology.png]
 
 The orasac master repo must pull from the linfiniti2 server at regular (e.g.
 weekly) intervals using a command like this:
