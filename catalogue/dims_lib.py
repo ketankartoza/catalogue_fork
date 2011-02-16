@@ -21,14 +21,14 @@ class dims(object):
   statuses    = ('OPEN', 'CLOSE')
 
   NS = dict(
-    xmlns_gco   = "{http://www.isotc211.org/2005/gco}",
-    xmlns_gts   = "{http://www.isotc211.org/2005/gts}",
-    xmlns_gss   = "{http://www.isotc211.org/2005/gss}",
-    xmlns_gsr   = "{http://www.isotc211.org/2005/gsr}",
-    xmlns_xsi   = "{http://www.w3.org/2001/XMLSchema-instance}",
-    xmlns_xlink = "{http://www.w3.org/1999/xlink}",
-    xmlns_gml   = "{http://www.opengis.net/gml}",
-    xmlns       = "{http://www.isotc211.org/2005/gmd}",
+      xmlns_gco   = "{http://www.isotc211.org/2005/gco}",
+      xmlns_gts   = "{http://www.isotc211.org/2005/gts}",
+      xmlns_gss   = "{http://www.isotc211.org/2005/gss}",
+      xmlns_gsr   = "{http://www.isotc211.org/2005/gsr}",
+      xmlns_xsi   = "{http://www.w3.org/2001/XMLSchema-instance}",
+      xmlns_xlink = "{http://www.w3.org/1999/xlink}",
+      xmlns_gml   = "{http://www.opengis.net/gml}",
+      xmlns       = "{http://www.isotc211.org/2005/gmd}",
     )
 
 
@@ -56,8 +56,12 @@ class dims(object):
     # Scan for DIMS products
     for product_path in filter(lambda x: re.search(self._tar_index[0] + '/' + 'Metadata/ISOMetadata/[^/]+/[^\.]+\.xml$', x), self._tar_index):
       m = re.search('ISOMetadata/([^/]+)/([^/]+)$', product_path)
-      pl, pr = m.groups()
-      self._products[pr] = {'path': product_path, 'metadata': self._read_metadata(product_path)}
+      processing_level_code, product = m.groups()
+      self._products[product] = {
+          'path':       product_path,
+          'metadata':   self._read_metadata(product_path),
+          'thumbnail':  self._read_file(product_path.replace('ISOMetadata', 'Thumbnails').replace('.xml', '.jpg')),
+        }
 
 
   def _read_metadata(self, product_path):
@@ -70,10 +74,20 @@ class dims(object):
     tree = etree.parse(file_handle)
     #TODO: missing from ISO 'spatial_coverage':     PolygonField
     metadata = {
-          'product_date':             datetime.strptime(tree.find('//{xmlns}dateStamp/{xmlns_gco}Date'.format(**self.NS)).text, '%Y-%m-%dT%H:%M:%S.%f'),
+          #'product_date':             datetime.strptime(tree.find('//{xmlns}dateStamp/{xmlns_gco}Date'.format(**self.NS)).text, '%Y-%m-%dT%H:%M:%S.%f'),
+          'product_date':             tree.find('//{xmlns}dateStamp/{xmlns_gco}Date'.format(**self.NS)).text,
           'projection' :              tree.find('//{xmlns_gml}VerticalCS/{xmlns_gml}name'.format(**self.NS)).text,
+          'processing_level_code':    tree.find('//{xmlns}processingLevelCode//{xmlns}code/{xmlns_gco}CharacterString'.format(**self.NS)).text,
+          'cloud_cover_percentage':   tree.find('//{xmlns}cloudCoverPercentage/{xmlns_gco}Real'.format(**self.NS)).text,
         }
     return metadata
+
+  def _read_file(self, file_path):
+    """
+    Read a file from tar
+    """
+    file_info = self._tar.getmember(file_path)
+    return self._tar.extractfile(file_info)
 
 
   def get_metadata(self):

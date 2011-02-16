@@ -52,10 +52,8 @@ mission_sensor                  y               y [2]
 sensor_type                     y               n
 acquisition_mode                y [3]           n
 product_acquisition_start       y               y
-radiometric_resolution          n               n
 geometric_resolution_x          n               n
 geometric_resolution_y          n               n
-spectral_resolution             n               n
 ------------------------------  --------------  ---------------
 
 
@@ -90,7 +88,7 @@ row                                 y               n
 row_offset                          y               n
 offline_storage_medium_id           n               n
 online_storage_medium_id            n               n
-cloud_cover                         n               n
+cloud_cover                         n               y
 sensor_inclination_angle            n               y [5]
 sensor_viewing_angle                n               y [5]
 gain_name                           n               n
@@ -100,6 +98,8 @@ bias_per_channel                    n               n
 solar_zenith_angle                  n               n
 solar_azimuth_angle                 n               n
 earth_sun_distance                  n               n
+radiometric_resolution              n               n
+spectral_resolution                 n               n
 ----------------------------------  --------------  -------------
 
 [4] there is something that resembles a revision, appended to the
