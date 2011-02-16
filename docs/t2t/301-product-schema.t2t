@@ -1,0 +1,110 @@
+
+
+% Do not remove the above blank lines
+
+= Catalogue Schema : Products =
+
+[img/product-heirarchy2.png]
+
+== Sensor based products ==
+
+Generic sensor product is an Abstract Base Class that all other sensor based products inherit from.
+
+=== Dictionaries ===
+
+Several domain lists are implemented for sensor based products. These can be visualised in the following diagram:
+
+==== Mission ====
+
+A mission is the name for the particular space vechicle on board of which one
+or more sensors are deployed. The catalogue hosts metadata entry for a number
+of different sensors - at time of writing this list looked like the table
+below.
+
+ || id   | abbreviation |     name      |
+ |  1  | N14          | Noaa 14         |
+ |  2  | N16          | Noaa 16         |
+ |  3  | N11          | Noaa 11         |
+ |  4  | N9           | Noaa 9          |
+ |  5  | N17          | Noaa 17         |
+ |  6  | N12          | Noaa 12         |
+ |  7  | N15          | Noaa 15         |
+ |  8  | E2           | E-Ers 2         |
+ |  9  | E1           | E-Ers 1         |
+ |  10 | L5           | Landsat 5       |
+ |  11 | L7           | Landsat 7       |
+ |  12 | L2           | Landsat 2       |
+ |  13 | L3           | Landsat 3       |
+ |  14 | L4           | Landsat 4       |
+ |  15 | S2           | Spot 2          |
+ |  16 | S4           | Spot 4          |
+ |  17 | S1           | Spot 1          |
+ |  18 | S5           | Spot 5          |
+ |  19 | ZA2          | Sumbandilasat   |
+ |  20 | C2B          | CBERS           |
+ |  21 | S-C          | SAC-C           |
+
+==== Mission Sensors ====
+
+ || id | abbreviation |         name          | description | has_data |
+ | 1 | AVH          | NOAA AVHRR            |             | t |
+ | 2 | AMI          | ERS AMI SAR           |             | t |
+ | 3 | TM           | Landsat 4,5 TM        |             | t |
+ | 4 | MSS          | Landsat 1,2,3,4,5 MSS |             | t |
+ | 5 | ETM          | Landsat 7 ETM+        |             | t |
+ | 6 | Xs           | Spot 1,2,3 HRV Xs     |             | t |
+ | 7 | Xi           | Spot 4 G,R,NIR,SWIR   |             | t |
+ | 8 | M            | Spot 4 Pan            |             | t |
+ | 9 | Pan          | Spot 1,2,3 HRV Pan    |             | t |
+ | 10 | HRG          | Spot 5 HRG            | Spot 5 HRG  | t |
+ | 14 | CCD          | CBERS CCD             |             | t |
+ | 15 | MRS          | SACC MRS              |             | t |
+ | 13 | SMS          | Sumbandilasat MSS     |             | t |
+
+==== Sensor Types ====
+
+ || id | abbreviation |                   name                   |
+ |  1 | AVHR         | Advanced Very High Resolution Radiometer  |
+ |  2 | AMI          | AMI                                       |
+ |  3 | MST          | Multispectral + Thermal                   |
+ |  4 | CAM2         | Spot Camera 2                             |
+ |  5 | CAM1         | Spot Camera 1                             |
+ |  6 | R3B          | R3B                                       |
+ |  7 | MSS          | Multispectral                             |
+ |  8 | RT           | RT                                        |
+
+
+==== Acquisition Modes ====
+
+ || id   | abbreviation |               name               | geometric_resolution | band_count |
+ |  1  | MS           | Multispectral                    |                    0 |          0   |
+ |  2  | VV           | Vertical / Vertical Polarisation |                    0 |          0   |
+ |  3  | HRT          | Multispectral and Thermal        |                    0 |          0   |
+ |  4  | X            | X                                |                    0 |          0   |
+ |  5  | I            | I                                |                    0 |          0   |
+ |  6  | M            | M                                |                    0 |          0   |
+ |  7  | P            | P                                |                    0 |          0   |
+ |  8  | J            | Multispectral                    |                    0 |          0   |
+ |  9  | B            | Panchromatic                     |                    0 |          0   |
+ |  10 | A            | Panchromatic                     |                    0 |          0   |
+ |  11 | FMC4         | FMC4                             |                    0 |          0   |
+ |  12 | 3BG          | 3BG                              |                    0 |          0   |
+ |  13 | 5BF          | 5BF                              |                    0 |          0   |
+ |  14 | 3BP          | 3BP                              |                    0 |          0   |
+ |  15 | HR           | HR                               |                    0 |          0   |
+
+**Note:** we intend to deprecate the final two columns in this table - Wolfgang to comment?
+
+**Note2:** The abbreviated sensor names that are single letter may run into uniqueness issues WL comment?
+
+
+
+=== Optical products ===
+
+=== Radar Products ===
+
+== Geospatial Products ==
+
+=== Ordinal Products ===
+
+=== Continuous Products ===
