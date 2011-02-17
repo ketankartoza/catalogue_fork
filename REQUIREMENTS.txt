@@ -10,4 +10,7 @@ pil
 gdata
 GDAL
 django-dag
+html5lib==0.90
+reportlab==2.5
+pisa==3.0.33
 
