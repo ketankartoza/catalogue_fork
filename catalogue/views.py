@@ -425,7 +425,8 @@ def visitorReport( theRequest ):
   return ( {
     'myTopCountries': myTopCountries,
     'myScores': myScores,
-    'myCurrentMonth': datetime.date.today()
+    'myCurrentMonth': datetime.date.today(),
+    'myGraphLabel': ({'Country':'country'})
     })
 
 @staff_member_required
