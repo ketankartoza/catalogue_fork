@@ -14,6 +14,60 @@ common properties applicable to **any** product regardless of type. A number of
 data dictionaries (as described in the next section) are used to ensure data
 consistency for properties relating to a product.
 
+All generic products can be identified by a 'nearly unique' product id. The product id seeks to normalise the naming conventions used by different satellite operators such that a common naming scheme can be universally applied.
+
+**Note:** As per discussion with Wolfgang on 17 Feb 2011, the SAC Product Id will apply only to sensor based products and a different, as yet undefined, identifcation scheme will be used for GeoSpatial products.
+
+**Note:** See CDSM naming scheme for vector products.
+
+The following scheme is used for assigning product id's:
+
+--------------------
+
+Single scene file names:
+
+``SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LLLL_PPPPPP``
+
+e.g. L7-_ETM_HRF_SAM-_168-_00_077-_010530_------_L3Ab_UTM36S
+
+--------------------
+
+
+Composite files -mosaics:
+
+``QQQQQQ_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
+
+Use central scene for date and time
+
+--------------------
+
+Composite files - time series:
+
+``MT_yymmdd_yymmdd_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
+
+Use central time scene for date and time
+
+--------------------
+
+The following key can be used to decode the above:
+
+|| Code            | Description                                          |
+| SSS              | satellite (mission) name e.g. L5-; S5-               |
+| sss              | sensor (mission sensor) e.g. TM-; ETM                |
+| ttt              | type (sensor type) eg. HRF; HPN; HPM                 |
+| mmmm             | bumper (acquisition) mode eg. SAM- BUF-              |
+| pppp             | path                                                 |
+| ps               | path shift                                           |
+| rrrr             | row                                                  |
+| rs               | row span                                             |
+| yymmdd           | date                                                 |
+| hhmmss           | time                                                 |
+| LLLL             | processing Level code eg. L2A; L4Ab                  |
+| PPPPPP           | Projection eg. UTM35S; LATLON; ORBIT-                |
+| QQQQQQ           | 1:50000 topographic map name eg 3425CD               |
+| MT_yymmdd_yymmdd | multi-temporal time span: start date to end date     |
+
+
 === Dictionaries ===
 
 Generic product properties that are used repeatedly are decribed using foreign
@@ -76,6 +130,22 @@ Some commonly used codes include:
 | L4B*   | Pixel-based classification                   |
 | L4C*   | Vector/object classification                 |
 
+Some common values for class type include:
+
+|| Code | Description |
+| a | Ancillary data eg. Relief shadow, hydrology |
+| b | Bare or built-up indices |
+| m | Maths transformation |
+| s | Statistical calculations |
+| t | Texture |
+| v | Vegetation indices |
+| w | Water/moisture indices |
+| x | Time-series or metrics |
+| f | Spectral Rule based Features including indices |
+| r | L1 Spectral Rule based layers |
+| c | L2 Spectral Rule based layers classification spectral categories |
+
+
 The following processing levels are listed in the database.
 
  || ID | Abbreviation |   Name    |
@@ -93,7 +163,6 @@ The following processing levels are listed in the database.
 
 **Note:** These should be updated to include a proper description with each in
 a new description col. TS
-
 
 ==== Projection  ====
 
@@ -214,6 +283,11 @@ below.
  |  20 | C2B          | CBERS           |
  |  21 | S-C          | SAC-C           |
 
+**Note:** Wolfgang we are using ZA2 instead of SS here.
+
+**Note:** RE - RapidEye needs to be added to this list
+
+
 ==== Mission Sensors ====
 
  || ID | Abbreviation |         Name          | Description | Has Data |
@@ -230,6 +304,14 @@ below.
  | 14 | CCD          | CBERS CCD             |             | t |
  | 15 | MRS          | SACC MRS              |             | t |
  | 13 | SMS          | Sumbandilasat MSS     |             | t |
+
+
+Sensors
+TM - Thematic Mapper 
+ETM - Enhanced thematic mapper
+MSS Multi-spectral
+
+
 
 ==== Sensor Types ====
 
@@ -263,13 +345,53 @@ below.
  |  14 | 3BP          | 3BP                              |                    0 |          0   |
  |  15 | HR           | HR                               |                    0 |          0   |
 
+
+**Todo:** Check this list from Wolfgang is represented:
+
+|| Mode | Description              |
+| HRF  | Multi-spectral bands         |
+| HPN  | Panchromatic bands           |
+| HTM  | Thermal bands                |
+| HPM  | Pan-sharpened multi-spectral |
+
 **Note:** we intend to deprecate the final two columns in this table - Wolfgang to comment?
 
 **Note2:** The abbreviated sensor names that are single letter may run into uniqueness issues WL comment?
 
+The schema described above has some issues - there is no enforced relationship
+between mission, mission sensor, sensor type and acquisition mode. To address
+this, it is proposed to alter the schema to look like this:
 
+
+[img/proposed-sensor-product-dictionaries.png]
+
+The proposed schema change will bring about the following advantages:
+
+ - less attributes stored on generic sensor (simplification is always good)
+ - easier to understand the relationship between these entities
+ - remove the risk of ambigious entries (e.g. MSS applying to multiple
+   different sensors)
+ - we can now effectively store resolution on acquisition table as its
+    unambiguous as to which sensor & mission it applies
+ - product id 'drill down searches will be more efficient
+ -
+
+**Note:** We need to get the mappings from Wolfgang for which mission sensors
+are associated with each mission etc.
 
 === Optical products ===
+
+Optical products are a specialisation of Generic Sensor Products. An Optical
+Product is a concrete class (i.e. one that should not be treated as abstract).
+The Optical Product model is used to represent any sensor originated product
+that has been taken using an optical sensor. It may cover non-visible parts of
+the spectrum and consist of one or more bands, each covering a different part
+of the spectrum. Generally the bands (in multiple band images) are co-aligned -
+meaning the cover the same geographical footprint. In some cases however, the
+bands are offset from each other, creating an opportunity to super-sample the
+image and improve its native resolution. 
+
+[img/optical-image-example-medium.png]
 
 === Radar Products ===
 
