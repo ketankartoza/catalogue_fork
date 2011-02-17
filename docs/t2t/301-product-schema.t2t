@@ -23,7 +23,7 @@ or more sensors are deployed. The catalogue hosts metadata entry for a number
 of different sensors - at time of writing this list looked like the table
 below.
 
- || id   | abbreviation |     name      |
+ || ID   | Abbreviation |     Name      |
  |  1  | N14          | Noaa 14         |
  |  2  | N16          | Noaa 16         |
  |  3  | N11          | Noaa 11         |
@@ -48,7 +48,7 @@ below.
 
 ==== Mission Sensors ====
 
- || id | abbreviation |         name          | description | has_data |
+ || ID | Abbreviation |         Name          | Description | Has Data |
  | 1 | AVH          | NOAA AVHRR            |             | t |
  | 2 | AMI          | ERS AMI SAR           |             | t |
  | 3 | TM           | Landsat 4,5 TM        |             | t |
@@ -65,7 +65,7 @@ below.
 
 ==== Sensor Types ====
 
- || id | abbreviation |                   name                   |
+ || ID | Abbreviation |                   Name                   |
  |  1 | AVHR         | Advanced Very High Resolution Radiometer  |
  |  2 | AMI          | AMI                                       |
  |  3 | MST          | Multispectral + Thermal                   |
@@ -78,7 +78,7 @@ below.
 
 ==== Acquisition Modes ====
 
- || id   | abbreviation |               name               | geometric_resolution | band_count |
+ || ID   | Abbreviation |               Name               | Geometric Resolution | Band Count |
  |  1  | MS           | Multispectral                    |                    0 |          0   |
  |  2  | VV           | Vertical / Vertical Polarisation |                    0 |          0   |
  |  3  | HRT          | Multispectral and Thermal        |                    0 |          0   |
