@@ -8,3 +8,6 @@ psycopg2
 pil
 gdata
 GDAL
+html5lib==0.90
+reportlab==2.5
+pisa==3.0.33
