@@ -6,9 +6,177 @@
 
 [img/product-heirarchy2.png]
 
+== Generic Products ==
+
+The generic product is the base class of all products (sensor based or derived
+/ surveyed geospatial data). The purpose of the generic product is to define
+common properties applicable to **any** product regardless of type. A number of
+data dictionaries (as described in the next section) are used to ensure data
+consistency for properties relating to a product.
+
+=== Dictionaries ===
+
+Generic product properties that are used repeatedly are decribed using foreign
+key joins to various dictionary tables. These can be visualised in the
+following diagram:
+
+[img/generic-product-dictionaries.png]
+
+==== Institution ====
+
+The institution (linked to the **GenericProduct** table on the owner field) indicates the organisation from which the product can be obtained.
+
+**Note:** Wolfgang verify that we won't be storing the original data owner (e.g. Spot Image) here.
+
+As at the time of writing this document, only one record exists in this table, and all new products are assigned to this institution:
+
+|| ID |             Name              |   Address1    | Address2 |   Address3   | Post Code |
+|  1 | Satellite Applications Centre | Hartebeeshoek | Gauteng  | South Africa | 0000       |
+
+
+
+==== Processing Level ====
+
+Products may have been processed by software to improve the product. For
+example, a level 1a product is a 'raw' image with no georeferencing, format
+conversion etc. In order for a product to be usable by mainstream users, it
+generally needs to be converted into a popular image format (e.g. geotiff),
+georeferenced (so that it appears in the correct place on a map),
+orthorectified (to adjust the image based on distortions introduced by terrain
+variance) and so on.
+
+Processing levels are expressed as a four letter code e.g.:
+
+```
+L1Aa
+```
+
+This code can be deconstructed as:
+
+ - **L** Abbreviation for 'level'
+ - **[1-4]** A numeral representing the major level wher
+  - **1** Raw imagery
+  - **2** Unreferenced imagery in a common format e.g. tiff
+  - **3** Rectified and imagery cleaned for atmospheric disturbance, lens irregularities etc.
+  - **4** Derived products
+  -
+ - **[A-C]** A single upper case character representing product class (derivative,raster, vector)
+ - **[a-z]** A single lower case character representing class-type (see below)
+ -
+
+Some commonly used codes include:
+
+|| Code   | Description                                 |
+| L2A/B  | (L1G)                                        |
+| L3Aa   | (L1T) Orthorectified DN values               |
+| L3Ab   | At sensor/TOA reflectance                    |
+| L3Ac   | Atmospherically corrected/TOC reflectance    |
+| L3At   | Topographic correction                       |
+| L4A*   | Derivatives/products                         |
+| L4B*   | Pixel-based classification                   |
+| L4C*   | Vector/object classification                 |
+
+The following processing levels are listed in the database.
+
+ || ID | Abbreviation |   Name    |
+ |  1  | 2A           | Level 2A  |
+ |  2  | 1A           | Level 1A  |
+ |  3  | 1Ab          | Level 1Ab |
+ |  4  | 1Aa          | Level 1Aa |
+ |  12 | L3Aa         | Level 3Aa |
+ |  13 | L3Ab         | Level 3Ab |
+ |  14 | L3Ac         | Level 3Ac |
+ |  15 | L3Ad         | Level 3Ad |
+ |  16 | L3Ba         | Level 3Ba |
+ |  17 | L3Bb         | Level 3Bb |
+ |  18 | L4           | Level 4   |
+
+**Note:** These should be updated to include a proper description with each in
+a new description col. TS
+
+
+==== Projection  ====
+
+The projection (or more accurately the coordinate reference system (CRS)) model
+contains a dictionary of CRS identifiers and human readable names. The
+identifiers are expressed in the numbering system of the European Petroleum
+Survey Group (EPSG). The list included is not comprehensive - at the time of
+writing it contains only 84 or the //circa// 3000+ entries available in the
+official EPSG CRS list.
+
+The EPSG name is a mode user friendly and easily recognisable representation of
+the EPSG code. For reference, an extract of the entries is provided in the table below:
+
+ || ID | Epsg Code |  Name | 
+ |  1 |     32737 | UTM37S |
+ |  2 |     32733 | UTM33S |
+ |  3 |     32738 | UTM38S |
+ |  4 |     32734 | UTM34S |
+ |  5 |     32732 | UTM32S |
+ |  6 |     32735 | UTM35S |
+ |  7 |     32629 | UTM29N |
+ |  8 |     32731 | UTM31S |
+
+
+==== Quality ====
+
+The quality is intended to provide a well defined dictionary of terms for
+qualitative assessment of products. Different product vendors use different
+schemes for describing product quality. 
+
+For example Spot Image describes quality in terms of an imaginary grid overlaid
+(and bisecting the image into equal sized units). Each grid cell is then given
+a ranking e.g. ''AABBAAAABB''.
+
+Currently only one entry exists:
+
+ || ID |  Name  | 
+ |  1 | Unknown |
+
+This presence of a quality indicator is mandatory for GenericProduct, but the
+fact that all records are currently assigned a ranking of 'Unknown' makes this
+attribute largely meaningless.
+
+**Note:** Wolfgang - we need do define a standard of quality description and a
+strategy for populating existing and new records with an appropriate quality
+indicator.
+
+==== Creating Software ====
+
+It is useful in understanding a dataset to know which software package was used
+to create it. At time of writing this document, only two software packages are
+available:
+
+ || ID |  Name   | Version |
+ | 1 | Unknown | None      |
+ | 2 | SARMES1 | Sarmes1   |
+
+Sarmes2 will be added to this list in the future, and other additional packages
+as needed.
+
+**Note:** Wolfgang - do we need to include other software here, and if so which
+products should have this applied?
+
+==== License ====
+
+Each product should have a license associated with it. The license will detail
+any restrictions on redistribution or useage that applies for the product.
+
+Currently, only one license is defined, and all products have been assigned
+this license. 
+
+ || ID |    Name     |   Details   |
+ |  1 | SAC License | SAC License   |
+
+**Note:** Wolfgang - we need to define more completely the SAC License, or
+several variants of it, and add any other licenses that may apply. We would
+also need rules descibing how to select products which should have which
+license applied.
+
 == Sensor based products ==
 
-Generic sensor product is an Abstract Base Class that all other sensor based products inherit from.
+Generic sensor product is an Abstract Base Class that all other sensor based
+products inherit from.
 
 === Dictionaries ===
 
