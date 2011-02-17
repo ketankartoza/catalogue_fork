@@ -11,7 +11,13 @@ Tim Sutton, 2008
 % scartcl is from the koma script document class (apt-get install texlive-latex-recommended ttf-komatuna)
 %! PostProc(tex): '\\documentclass{article}' '\\documentclass{scrartcl}'
 %! PostProc(tex): '\\includegraphics' '\\includegraphics[width=100mm]'
-%! PostProc(tex): '\\usepackage{style.css}  % user defined' ''
+% use the color table and table packages so we can pimp the tables a little
+%! PostProc(tex): '\\usepackage{style.css}  % user defined' '\\usepackage{colortbl} \n\\usepackage [table]{xcolor}\n\\definecolor{tableShade}{HTML}{cecece} '
+% Make the header row of tables have a dark background. light text
+%! PostProc(tex): '\\hline \\textbf' '\\hline \\rowcolor[rgb]{0,0,0} \\color{white} \\textbf'
+%! PostProc(tex): '& \\textbf' '& \\color{white} \\textbf'
+% Give alternating table rows different colours
+%! PostProc(tex): '\\begin{tabular}' '\\rowcolors{2}{tableShade}{white} \n \\begin{tabular}'
 %! encoding: iso-8859-1
 % These are comments and will not be generated in any output
 % -------------------
