@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<style type="text/css">
+@page {
+
+-pdf-page-orientation: portrait;
+-pdf-page-size: a4;
+
+margin-top: 2cm;
+margin-left: 2cm;
+margin-right: 2cm;
+margin-bottom: 3cm;
+
+@frame footer {
+-pdf-frame-content: footer;
+bottom: 2cm;
+left: 4cm;
+right: 2cm;
+height: 1cm;
+}
+
+}
+
+#footer {
+text-align: right;
+}
+
+table {
+  border:1px solid blue;
+  padding:3px;
+}
+</style>
+</head>
+<body>
+{% block content %}
+
+TEST PAGE!
+
+{% endblock %}
+<div id="footer" class="pdf">
+
+Page <pdf:pagenumber>
+
+</div>
+</body>
+</html>

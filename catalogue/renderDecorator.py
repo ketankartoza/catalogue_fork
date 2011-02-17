@@ -16,6 +16,7 @@
    """
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from pdfReport import render_to_pdf
 
 class renderWithContext(object):
   def __init__(self, template_name):
@@ -24,6 +25,11 @@ class renderWithContext(object):
   def __call__(self, func):
     def rendered_func(request, *args, **kwargs):
       items = func(request, *args, **kwargs)
+      #check for PDF arg
+      if request.GET.has_key('pdf'):
+        tmp_template_name = '/'.join(['pdf',self.template_name])
+        return render_to_pdf(tmp_template_name,items)
+
       return render_to_response(self.template_name, items, context_instance=RequestContext(request))
 
     return rendered_func
