@@ -1,0 +1,37 @@
+{% extends "pdfpage.html" %}
+
+{% load graphtag %}
+
+{% block content %}
+<div id="monthSelector" class="span-22 last">
+  <div class="span-4 prepend-3 append-3">{{ myCurrentDate|date:'F Y' }}</div>
+</div>
+
+<img src="{% gPieChart myScores myGraphLabel %}" />
+
+    {% if myTopCountries and myScores %}
+      <!--Load the AJAX API-->
+      <h2 class="chartTitle">Visits by country excluding SA for {{ myCurrentDate|date:'M, Y' }}</h2>
+      <!--Div that will hold the pie chart-->
+      <div id="chart_div"></div>
+
+      <div id="allCountries">
+        <h2 class="chartTitle">All Countries</h2>
+         <table id="gradient-style" summary="SAC Catalogue Visitors" style="width:100%; margin:0px;">
+            <thead> 
+              <th>Country</th>
+              <th>Visitors</th>
+            </thead>
+            <tfoot></tfoot>
+            <tbody>
+              {% for myCountry in myScores %}
+                <tr><td>{% filter force_escape|capfirst %}{{myCountry.country}}{% endfilter %}</td><td>{{ myCountry.count }}</td></tr>
+              {% endfor %}
+            </tbody>
+         </table>
+       </div>
+    {% else %}
+      <p>No reports to generate.</p>
+    {% endif %}
+
+{% endblock %}

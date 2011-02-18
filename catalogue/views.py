@@ -448,7 +448,7 @@ def visitorMonthlyReport( theRequest, theyear, themonth):
   FROM catalogue_visit
   WHERE visit_date BETWEEN to_date(%(date)s,'MM-YYYY') AND to_date(%(date)s,'MM-YYYY')+ interval '1 month'
   GROUP BY LOWER(country),DATE_TRUNC('month',visit_date)
-  ORDER BY month DESC""",['country','count','month'],{'date':myDate.strftime('%m-%Y')})
+  ORDER BY count DESC""",['country','count','month'],{'date':myDate.strftime('%m-%Y')})
   myMaximum = 1
   myScores = []
   for myRec in myCountryStats:
@@ -461,6 +461,7 @@ def visitorMonthlyReport( theRequest, theyear, themonth):
     'myCurrentDate': myDate,
     'myPrevDate':myDate - datetime.timedelta(days=1),
     'myNextDate':myDate + datetime.timedelta(days=31),
+    'myGraphLabel': ({'Country':'country'})
     })
 
 
