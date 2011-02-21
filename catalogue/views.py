@@ -1214,7 +1214,37 @@ def listOrders(theRequest):
   #render_to_response is done by the renderWithContext decorator
   return ({
         'myRecords': myRecords,
-        'myUrl' : myUrl})
+        'myUrl' : myUrl,
+        'myCurrentMonth': datetime.date.today()
+    })
+
+@login_required
+@renderWithContext('orderMonthlyReport.html')
+def orderMonthlyReport( theRequest, theyear, themonth):
+  #construct date object
+  if not(theyear and themonth):
+    myDate=datetime.date.today()
+  else:
+    try:
+      myDate=datetime.date(int(theyear),int(themonth),1)
+    except:
+      logging.error("Date arguments cannot be parsed")
+      logging.info(traceback.format_exc())
+
+  if not theRequest.user.is_staff:
+    '''Non staff users can only see their own orders listed'''
+    myRecords = Order.base_objects.filter(user=theRequest.user).filter(order_date__month=myDate.month).filter(order_date__year=myDate.year).order_by('order_date')
+  else:
+    '''This view is strictly for staff only'''
+    myRecords = Order.base_objects.filter(order_date__month=myDate.month).filter(order_date__year=myDate.year).order_by('order_date')
+
+  return ({
+    'myRecords': myRecords,
+    'myCurrentDate': myDate,
+    'myPrevDate':myDate - datetime.timedelta(days=1),
+    'myNextDate':myDate + datetime.timedelta(days=31)
+    })
+
 
 @login_required
 def viewOrder (theRequest, theId):
