@@ -27,8 +27,13 @@ For sumbandilasat the procedure for import at the moment boils down to this:
 - Wolfgang / other SAC staffer performs initial L1Ab processing of imagery
 - Products are placed on the SAC storage array and an email is sent to Tim 
   detailing the names of the new product directories.
+  (Typically they will be under ``/cxfs/SARMES/S/INT/RI/SS1/``
 - The products are copied over to LION into
-  ```/mnt/cataloguestorage/imagery_processing/sumbandilasat```
+  ``/mnt/cataloguestorage/imagery_processing/sumbandilasat``
+  e.g. ``rsync -ave ssh cheetah:/cxfs/SARMES/S/INT/RI/SS1/2* .``
+- Before rsyncing, it would be worth noting which products are already processed e.g.
+  ``20100409-20100712  20100801_20100830  20100901_20100910  20100901_20100922  
+   20100927_20101014  20101018_20101108  20101109_20101112  20101116_20101119``
 - The .shp project file is then imported into the sac database in the import
   schema to the 'sumb' table
 - The scripts/sort_sumb_imagery.py script is then run. This converts the sumb
