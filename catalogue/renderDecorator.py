@@ -26,7 +26,11 @@ class renderWithContext(object):
   def __call__(self, func):
     def rendered_func(request, *args, **kwargs):
       if request.is_ajax():
-        render_template = self.ajax_template_name
+        if self.ajax_template_name:
+          render_template = self.ajax_template_name
+        else:
+          #if request is really ajax and uses single template, use template_name
+          render_template = self.template_name
       else:
         render_template = self.template_name
 
