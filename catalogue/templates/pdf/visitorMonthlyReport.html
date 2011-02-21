@@ -2,36 +2,38 @@
 
 {% load graphtag %}
 
+
 {% block content %}
-<div id="monthSelector" class="span-22 last">
-  <div class="span-4 prepend-3 append-3">{{ myCurrentDate|date:'F Y' }}</div>
-</div>
 
+{% if myTopCountries and myScores %}
+
+<div class="h2">Visits by country excluding SA for {{ myCurrentDate|date:'F Y' }}</div>
+
+<center>
 <img src="{% gPieChart myScores myGraphLabel %}" />
+</center>
 
-    {% if myTopCountries and myScores %}
-      <!--Load the AJAX API-->
-      <h2 class="chartTitle">Visits by country excluding SA for {{ myCurrentDate|date:'M, Y' }}</h2>
-      <!--Div that will hold the pie chart-->
-      <div id="chart_div"></div>
+<pdf:spacer height='1cm'/>
 
-      <div id="allCountries">
-        <h2 class="chartTitle">All Countries</h2>
-         <table id="gradient-style" summary="SAC Catalogue Visitors" style="width:100%; margin:0px;">
-            <thead> 
-              <th>Country</th>
-              <th>Visitors</th>
-            </thead>
-            <tfoot></tfoot>
-            <tbody>
-              {% for myCountry in myScores %}
-                <tr><td>{% filter force_escape|capfirst %}{{myCountry.country}}{% endfilter %}</td><td>{{ myCountry.count }}</td></tr>
-              {% endfor %}
-            </tbody>
-         </table>
-       </div>
-    {% else %}
-      <p>No reports to generate.</p>
-    {% endif %}
+<div class="h2">Visits by country for {{ myCurrentDate|date:'F Y' }}</div>
+<table>
+  <thead>
+    <th width="150px">Country</th>
+    <th width="100px">Visitors</th>
+  </thead>
+  <tbody>
+    {% for myCountry in myScores %}
+    <tr>
+      <td align="left">{% filter force_escape|capfirst %}{{myCountry.country}}{% endfilter %}</td>
+      <td align="right">{{ myCountry.count }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+<p>No reports to generate.</p>
+{% endif %}
 
 {% endblock %}
+
