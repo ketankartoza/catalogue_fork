@@ -1189,11 +1189,8 @@ def myOrders(theRequest):
 
 
 @login_required
+@renderWithContext("orderListPage.html","orderList.html")
 def listOrders(theRequest):
-  myPath = "orderListPage.html"
-  if theRequest.is_ajax():
-    # No page container needed, just a snippet
-    myPath = "orderList.html"
   myRecords = None
   if not theRequest.user.is_staff:
     '''Non staff users can only see their own orders listed'''
@@ -1215,12 +1212,9 @@ def listOrders(theRequest):
     myRecords = myPaginator.page(myPaginator.num_pages)
   myUrl = "listorders"
   #render_to_response is done by the renderWithContext decorator
-  return render_to_response(myPath,
-      {
+  return ({
         'myRecords': myRecords,
-        'myUrl' : myUrl
-      },
-      context_instance=RequestContext(theRequest))
+        'myUrl' : myUrl})
 
 @login_required
 def viewOrder (theRequest, theId):
