@@ -1470,6 +1470,17 @@ def viewOrderItems(theRequest,theOrderId):
          'myBaseTemplate' : 'emptytemplate.html',
          })
 
+@login_required
+#renderWithContext is explained in renderWith.py
+@renderWithContext('ordersSummary.html')
+def ordersSummary(theRequest):
+  #count orders by status
+  myOrderStatus = OrderStatus.objects.annotate(num_orders=Count('order__id'))
+  #count orders by product type (misson sensor)
+  myOrderProductType = MissionSensor.objects.annotate(num_orders=Count('taskingrequest__order_ptr__id'))
+
+  return dict(myOrderStatus=myOrderStatus, myOrderProductType=myOrderProductType)
+
 ###########################################################
 #
 # Tasking related views
