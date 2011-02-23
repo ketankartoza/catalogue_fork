@@ -76,6 +76,7 @@ True
 False
 
 
+
 Test XML metadata export
 
 >>> from lxml import etree
@@ -84,6 +85,36 @@ Test XML metadata export
 '2011-01-24T14:29:43.278'
 >>> xml.find('//{http://www.isotc211.org/2005/gmd}MD_DataIdentification//{http://www.isotc211.org/2005/gmd}CI_Citation/{http://www.isotc211.org/2005/gmd}title/{http://www.isotc211.org/2005/gco}CharacterString').text
 'SPOT5.HRG.L1A'
+
+
+
+Test save to a given path
+
+>>> import tempfile
+>>> dir = tempfile.mkdtemp()
+>>> tar_path = os.path.join(dir, 'test0001.tar.gz')
+>>> tar_path2 = d.write(tar_path)
+>>> tar_path == tar_path2
+True
+>>> os.path.split(tar_path2)[1]
+'test0001.tar.gz'
+
+Now tests that the test image and thumbnail are really in the tarball
+
+>>> import tarfile
+>>> t = tarfile.open(tar_path2, 'r:gz')
+>>> '0000000001/Products/SacPackage/ORBIT/DN_L1A_DIMAP/PRODUCT_00001.tif' in t.getnames()
+True
+>>> '0000000001/Products/SacPackage/ORBIT/DN_L1A_DIMAP/PRODUCT_00001.tif' in t.getnames()
+True
+>>> '0000000001/Metadata/ISOMetadata/DN_L1A/PRODUCT_00001.xml' in t.getnames()
+True
+>>> '0000000001/Metadata/Thumbnails/DN_L1A/PRODUCT_00001.jpg' in t.getnames()
+True
+>>> '0000000001/Metadata/ISOMetadata/ISOMetadata_template.xml' in  t.getnames()
+False
+
+
 
 
 

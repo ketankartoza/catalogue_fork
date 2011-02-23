@@ -182,7 +182,8 @@ class dimsWriter(dimsBase):
 
   def _get_metadata(self, product_data, key, silently_fail=False):
     """
-    Returns a metadata value for a given product_code
+    Returns a metadata value for a given product_code.
+    If silently_fail is not set and metadata is not found then an exception is raised
     """
     try:
       product_data['metadata']
@@ -200,7 +201,9 @@ class dimsWriter(dimsBase):
     Set metadata in the template
     """
     # Metadata
-    _xml = os.path.join(self._path, 'Metadata', 'ISOMetadata', self._get_metadata(product_data, 'processing_level_code'), product_code + '.xml')
+    _xml = os.path.join(self._path, 'Metadata', 'ISOMetadata',
+                        self._get_metadata(product_data, 'processing_level_code'),
+                        product_code + '.xml')
     tree = etree.parse(self._xml_template)
     metadata = {}
     for md_name, md_xpath in self.METADATA.items():
@@ -255,9 +258,12 @@ class dimsWriter(dimsBase):
     product_info must contain all the informations
     needed to create the product informations,
     files informations are passed as paths to the files
+
+    See: tests for example usage.
     """
     for product_code, product_data in products_info.items():
       self._add_product(product_code, product_data)
+
 
   def _get_tarball_name(self):
     """
@@ -265,26 +271,25 @@ class dimsWriter(dimsBase):
     """
     return self._package_name + '.tar.gz'
 
-  def _write(self):
+
+  def _write(self, tar_path):
     """
     Creates the package
     """
-
-    #TODO: dump the XML
-
     os.chdir(os.path.split(self._path)[0])
-    tar_path = os.path.join(os.getcwd(), self._get_tarball_name())
-    tar = tarfile.open(self._get_tarball_name(), "w:gz")
+    tar_path = tar_path or os.path.join(os.getcwd(), self._get_tarball_name())
+    tar = tarfile.open(tar_path, "w:gz")
     tar.add(self._package_name, exclude = lambda x: -1 != x.find('ISOMetadata_template'))
     tar.close()
     logging.info("writing tarball %s" % tar_path)
     return tar_path
 
-  def write(self):
+
+  def write(self, tar_path=None):
     """
     Public api
     """
-    return self._write()
+    return self._write(tar_path)
 
 
   def __str__(self):
