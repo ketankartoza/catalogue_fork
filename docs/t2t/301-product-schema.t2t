@@ -14,63 +14,28 @@ common properties applicable to **any** product regardless of type. A number of
 data dictionaries (as described in the next section) are used to ensure data
 consistency for properties relating to a product.
 
-All generic products can be identified by a 'nearly unique' product id. The product id seeks to normalise the naming conventions used by different satellite operators such that a common naming scheme can be universally applied.
+All generic products can be identified by a 'nearly unique' product id. The
+product id seeks to normalise the naming conventions used by different
+satellite operators such that a common naming scheme can be universally
+applied.
 
-**Note:** As per discussion with Wolfgang on 17 Feb 2011, the SAC Product Id will apply only to sensor based products and a different, as yet undefined, identifcation scheme will be used for GeoSpatial products.
+The naming scheme used for products depends on where the product falls in the
+model heirarchy. Each product type (Generic, Imagery, Sensor, Geospatial etc.)
+can overload the getSacProductId method in order to apply model specific logic
+as to how these product Ids should be assigned.
+
+These will be discussed more fully in the sections that follow.
+
+**Note:** As per discussion with Wolfgang on 17 Feb 2011, the SAC Product Id
+will apply only to sensor based products and a different, as yet undefined,
+identifcation scheme will be used for GeoSpatial products.
 
 **Note:** See CDSM naming scheme for vector products.
-
-The following scheme is used for assigning product id's:
-
---------------------
-
-Single scene file names:
-
-``SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LLLL_PPPPPP``
-
-e.g. L7-_ETM_HRF_SAM-_168-_00_077-_010530_------_L3Ab_UTM36S
-
---------------------
-
-
-Composite files -mosaics:
-
-``QQQQQQ_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
-
-Use central scene for date and time
-
---------------------
-
-Composite files - time series:
-
-``MT_yymmdd_yymmdd_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
-
-Use central time scene for date and time
-
---------------------
-
-The following key can be used to decode the above:
-
-|| Code            | Description                                          |
-| SSS              | satellite (mission) name e.g. L5-; S5-               |
-| sss              | sensor (mission sensor) e.g. TM-; ETM                |
-| ttt              | type (sensor type) eg. HRF; HPN; HPM                 |
-| mmmm             | bumper (acquisition) mode eg. SAM- BUF-              |
-| pppp             | path                                                 |
-| ps               | path shift                                           |
-| rrrr             | row                                                  |
-| rs               | row span                                             |
-| yymmdd           | date                                                 |
-| hhmmss           | time                                                 |
-| LLLL             | processing Level code eg. L2A; L4Ab                  |
-| PPPPPP           | Projection eg. UTM35S; LATLON; ORBIT-                |
-| QQQQQQ           | 1:50000 topographic map name eg 3425CD               |
-| MT_yymmdd_yymmdd | multi-temporal time span: start date to end date     |
 
 
 === Dictionaries ===
 
-Generic product properties that are used repeatedly are decribed using foreign
+Generic product properties that are used repeatedly are described using foreign
 key joins to various dictionary tables. These can be visualised in the
 following diagram:
 
@@ -242,12 +207,97 @@ several variants of it, and add any other licenses that may apply. We would
 also need rules descibing how to select products which should have which
 license applied.
 
-== Sensor based products ==
+== ImageryProducts ==
+
+Generic imagery product is the model that all sensor based products inherit
+from. In addition, concrete instances of **ImageryProduct** are used to lodge sensor
+based aggregate data. For example when an image is created that is a
+combination of a 'J' and a 'T' image, we can no longer canonically state which
+acquisition mode etc was used for that image. In this case the DAG (Directed
+Acyclical Graph) implementation will be used to provide backpointers to the
+original images used to create this record (and those backpointers will be to
+Sensor based product records).
+
+=== Imagery Product Aggregation Rules ===
+
+In the DAG (Directed Acyclical Graph) that maps relationships between products
+and their downstream constituent products, ImageryProducts can be made of:
+
+- Generic Products
+- Generic Imagery Products
+- Generic Sensor Products
+- Optical Products
+- Radar Products
+- Geospatial Products and subclasses of Geospatial products
+- 
+
+**Note:** Self referencing is not allowed. That is, a Imagery product may not include itself in any leaf node.
+
+
+== Generic Sensor based products ==
 
 Generic sensor product is an Abstract Base Class that all other sensor based
-products inherit from.
+products inherit from. It inherits from Generic Imagery product.
 
-=== Dictionaries ===
+The following scheme is used for assigning product id's for sensor based products:
+
+--------------------
+
+Single scene file names:
+
+``SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LLLL_PPPPPP``
+
+e.g. L7-_ETM_HRF_SAM-_168-_00_077-_010530_------_L3Ab_UTM36S
+
+--------------------
+
+
+Composite files -mosaics:
+
+``QQQQQQ_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
+
+Use central scene for date and time
+
+--------------------
+
+Composite files - time series:
+
+``MT_yymmdd_yymmdd_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
+
+Use central time scene for date and time
+
+--------------------
+
+The following key can be used to decode the above:
+
+|| Code            | Description                                          |
+| SSS              | satellite (mission) name e.g. L5-; S5-               |
+| sss              | sensor (mission sensor) e.g. TM-; ETM                |
+| ttt              | type (sensor type) eg. HRF; HPN; HPM                 |
+| mmmm             | bumper (acquisition) mode eg. SAM- BUF-              |
+| pppp             | path                                                 |
+| ps               | path shift                                           |
+| rrrr             | row                                                  |
+| rs               | row span                                             |
+| yymmdd           | date                                                 |
+| hhmmss           | time                                                 |
+| LLLL             | processing Level code eg. L2A; L4Ab                  |
+| PPPPPP           | Projection eg. UTM35S; LATLON; ORBIT-                |
+| QQQQQQ           | 1:50000 topographic map name eg 3425CD               |
+| MT_yymmdd_yymmdd | multi-temporal time span: start date to end date     |
+
+=== Generic Sensor Product Aggregation Rules ===
+
+In the DAG (Directed Acyclical Graph) that maps relationships between products
+and their downstream constituent products, **GenericSensorProducts** may
+**not** be aggregates. This is because each sensor product has an explicit
+acquisition mode, sensor type etc. and such relationships are not mappable for
+aggregate products. In the case that you have have two
+**GenericSensorProducts** (or its subclasses) forming a new image, the new
+image should be modelled as a **GenericImageryProduct**.
+
+
+=== Sensor Product Dictionaries ===
 
 Several domain lists are implemented for sensor based products. These can be
 visualised in the following diagram:
@@ -525,7 +575,7 @@ image) will not be modelled under generic sensor products but rather belong to
 a sub class GenericImageryProduct.
 
 
-=== Optical products ===
+== Optical products ==
 
 Optical products are a specialisation of Generic Sensor Products. An Optical
 Product is a concrete class (i.e. one that should not be treated as abstract).
@@ -539,7 +589,25 @@ image and improve its native resolution.
 
 [img/optical-image-example-medium.png]
 
-=== Radar Products ===
+=== Optical Product Aggregation Rules ===
+
+In the DAG (Directed Acyclical Graph) that maps relationships between products
+and their downstream constituent products, **OpticalProducts** may **not** be
+aggregates. This is because each sensor product has an explicit acquisition
+mode, sensor type etc. and such relationships are not mappable for aggregate
+products. In the case that you have have two **OpticalProducts** forming a new
+image, the new image should be modelled as a **GenericImageryProduct**.
+
+== Radar Products ==
+
+=== Radar Product Aggregation Rules ===
+
+In the DAG (Directed Acyclical Graph) that maps relationships between products
+and their downstream constituent products, **RadarlProducts** may **not** be
+aggregates. This is because each sensor product has an explicit acquisition
+mode, sensor type etc. and such relationships are not mappable for aggregate
+products. In the case that you have have two **RadarlProducts** forming a new
+image, the new image should be modelled as a **GenericImageryProduct**.
 
 == Geospatial Products ==
 
