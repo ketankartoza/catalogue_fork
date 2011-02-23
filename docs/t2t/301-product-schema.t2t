@@ -249,9 +249,19 @@ products inherit from.
 
 === Dictionaries ===
 
-Several domain lists are implemented for sensor based products. These can be visualised in the following diagram:
+Several domain lists are implemented for sensor based products. These can be
+visualised in the following diagram:
 
 [img/sensor-product-dictionaries.png]
+
+The schema described above has some issues - there is no enforced relationship
+between mission, mission sensor, sensor type and acquisition mode. To address
+this, it is proposed to alter the schema to look like this:
+
+
+[img/proposed-sensor-product-dictionaries.png]
+
+These proposed changes are described in more detail in the text below.
 
 ==== Mission ====
 
@@ -311,9 +321,80 @@ TM - Thematic Mapper
 ETM - Enhanced thematic mapper
 MSS Multi-spectral
 
+**Note:** This list needs to be refactored such that aggregated entries are separated. e.g. Landsat 1,2,3,4,5 MSS would become:
+
+ || ID | Abbreviation |         Name          | Description | Has Data |
+ | 4 | MSS1          | Landsat 1 MSS |             | t |
+ | 5 | MSS2          | Landsat 2 MSS |             | t |
+ | 6 | MSS3          | Landsat 3 MSS |             | t |
+ | 7 | MSS4          | Landsat 4 MSS |             | t |
+ | 8 | MSS5          | Landsat 5 MSS |             | t |
+
+
+**Note:** In the schema changes for this Work Package, a one-to-many
+relationship will be created between mission sensor entities and their related
+mission - as illustrated here:
+
+```
++----------------+                +---------+
+| Mission Sensor |>---------------| Mission |
++----------------+                +---------+
+```
+
+
+**Relationship in plain english:** Each mission can have one or more mission
+sensors associated with it. Each mission sensor shall be associated to only one
+mission.``
+
+The Abbreviation will **not** be unique per sensor. Note that the 4 letter name
+space does not allow for many permutations and readers of the abbreviation
+should do it in context of a specific mission, sensor type etc.  (for example
+by always presenting the mission abbreviation at the same time). 
+
+In some cases, no specific mission sensors will exist for a mission. In these
+cases, the mission sensor should be named directly after the mission e.g.
+
+ || ID | Abbreviation |         Name          | Description | Has Data | Mission |
+ | 1 | ERS          | ERS            |             | t | ERS
+
+In the updated schema, the MissionSensor table will look like this:
+
+ || ID | Abbreviation |         Name          | Description | Has Data | Mission |
+ | 1 | AVH          | NOAA AVHRR            |             | t | 
+ | 2 | AMI          | ERS AMI SAR           |             | t |
+ | 3 | TM          | Landsat 4 TM        |             | t |
+ | 4 | TM          | Landsat 5 TM        |             | t |
+ | 5 | MSS          | Landsat 1 MSS |             | t |
+ | 6 | MSS          | Landsat 2 MSS |             | t |
+ | 7 | MSS          | Landsat 3 MSS |             | t |
+ | 8 | MSS          | Landsat 4 MSS |             | t |
+ | 9 | MSS          | Landsat 5 MSS |             | t |
+ | 10 | ETM          | Landsat 7 ETM+        |             | t |
+ | 11 | Xs1           | Spot 1 HRV Xs     |             | t |
+ | 12 | Xs2           | Spot 2 HRV Xs     |             | t |
+ | 13 | Xs3           | Spot 3 HRV Xs     |             | t |
+ | 14 | Xi           | Spot 4 G,R,NIR,SWIR   |             | t |
+ | 15 | M            | Spot 4 Pan            |             | t |
+ | 16 | Pan          | Spot 1 HRV Pan    |             | t |
+ | 17 | Pan          | Spot 2 HRV Pan    |             | t |
+ | 18 | Pan          | Spot 3 HRV Pan    |             | t |
+ | 19 | HRG          | Spot 5 HRG            | Spot 5 HRG  | t |
+ | 20 | CCD          | CBERS CCD             |             | t |
+ | 21 | MRS          | SACC MRS              |             | t |
+ | 22 | SMS          | Sumbandilasat MSS     |             | t |
 
 
 ==== Sensor Types ====
+
+The sensor type describes a mission sensor. 'High end' satellites may use a
+custom sensor type with its own specific properties. 'Cheaper' satellites may
+use simple CCD (charge coupled device) style sensors. Each mission sensor
+should have at least one sensor  type associated with it. When a mission sensor
+exists with no associated sensor type, a default sensor type matching the
+mission sensor abbreviation should be created.
+
+**Note:** Wolfgang to supply a complete list if sensor types.
+
 
  || ID | Abbreviation |                   Name                   |
  |  1 | AVHR         | Advanced Very High Resolution Radiometer  |
@@ -325,8 +406,30 @@ MSS Multi-spectral
  |  7 | MSS          | Multispectral                             |
  |  8 | RT           | RT                                        |
 
+**Note:** In the schema changes for this Work Package, a one-to-many
+relationship will be created between mission sensor entities and their related
+mission - as illustrated here:
+
+```
++-------------+                +----------------+
+| Sensor Type |>---------------| Mission Sensor |
++-------------+                +----------------+
+```
+
+**Relationship in plain english:** Each mission sensor can have one or more sensor 
+types associated with it. Each sensor type shall be associated to only one sensor.``
+
+The Abbreviation will **not** be unique per sensor type. Note that the 4 letter name
+space does not allow for many permutations and readers of the abbreviation
+should do it in context of a specific mission-sensor, acquisition mode etc.  (for example
+by always presenting the mission abbreviation at the same time). 
 
 ==== Acquisition Modes ====
+
+Each sensor can operate in one or more modes. Thus there the list of
+acquisition modes should include at least one entry per sensor type. Where such
+an entry does not exist, a default one (named after the sensor type) shall be
+created.
 
  || ID   | Abbreviation |               Name               | Geometric Resolution | Band Count |
  |  1  | MS           | Multispectral                    |                    0 |          0   |
@@ -354,16 +457,51 @@ MSS Multi-spectral
 | HTM  | Thermal bands                |
 | HPM  | Pan-sharpened multi-spectral |
 
-**Note:** we intend to deprecate the final two columns in this table - Wolfgang to comment?
+**Note:** In the schema changes for this Work Package, a one-to-many
+relationship will be created between mission sensor entities and their related
+mission - as illustrated here:
 
-**Note2:** The abbreviated sensor names that are single letter may run into uniqueness issues WL comment?
+```
++------------------+                +----------------+
+| Acquisition Mode |>---------------|   Sensor Type  |
++------------------+                +----------------+
+```
 
-The schema described above has some issues - there is no enforced relationship
-between mission, mission sensor, sensor type and acquisition mode. To address
-this, it is proposed to alter the schema to look like this:
+**Relationship in plain english:** Each sensor type can have one or more
+acquisition mode associated with it. Each acquisition mode shall be associated
+to only one sensor type.``
+
+The Abbreviation will **not** be unique per acquisition mode. Note that the 4
+letter name space does not allow for many permutations and readers of the
+abbreviation should do it in context of a specific sensor type.  (for example
+by always presenting the sensor type, mission type and mission abbreviations at
+the same time). 
+
+**Note:** The geometric resolution and band count columns in this table need to
+be populated by Wolfgang.
+
+**Note2:** The abbreviated sensor names that are single letter may run into
+uniqueness issues WL comment?
+
+==== Mission Group ====
+
+The mission group model will be an addition to the schema that will allow
+virtual groupings of mission sensors. In simple search and other places
+designated by the client, mission groups will be used to select a family of
+missions (satellites) to search on e.g. all Landsat missions.
+
+```
++------------------+                +----------------+
+| Mission          |>---------------| Mission Group  |
++------------------+                +----------------+
+```
+
+**Relationship in plain english:** Each mission group  can have one or more
+missions associated with it. Each mission shall be associated to only one
+mission group.``
 
 
-[img/proposed-sensor-product-dictionaries.png]
+==== Notes on the proposed schema changes ====
 
 The proposed schema change will bring about the following advantages:
 
@@ -378,6 +516,14 @@ The proposed schema change will bring about the following advantages:
 
 **Note:** We need to get the mappings from Wolfgang for which mission sensors
 are associated with each mission etc.
+
+Because the schema changes introduce a strict heirarchy and also introduce a
+requirement that acquisition mode through to mission be defined for a sensor
+based product, assigning these entities to derived products will not be
+meaningful. Because of this composite products (e.g. a pan sharpened SPOT
+image) will not be modelled under generic sensor products but rather belong to
+a sub class GenericImageryProduct.
+
 
 === Optical products ===
 
