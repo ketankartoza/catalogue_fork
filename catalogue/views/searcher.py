@@ -11,7 +11,7 @@ from catalogue.weblayers import *
 from django.db.models import Q
 from django.conf import settings
 import logging
-
+from helpers import *
 
 class Searcher:
   """
