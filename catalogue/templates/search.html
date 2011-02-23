@@ -11,7 +11,7 @@
       window.ieLoaded = true;
       setTimeout(init, 2000);
       return;
-    }  
+    }
 
     // Extra layer definitions passed in by view
     {% if myLayerDefinitions %}
@@ -24,7 +24,7 @@
     layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Open Street Map");
     //myLayersList.unshift(layerMapnik); // add to start of array
     myLayersList.push(layerMapnik); // add to end of array
-                                                    
+
     {% if myLayersList %}
       setupSearchMap( myLayersList );
     {% endif %}
@@ -36,7 +36,6 @@
     {# //add tooltip div #}
     $("#map-navigation-panel div[title],#resizer_toolbox img[title]").tooltip('#maptooltip');
   }
-/* ]]> */
 
     function check_search_dates() {
         var sd = $("#id_start_date-widget").datepicker("getDate");
@@ -46,12 +45,50 @@
         };
     };
 
+    function check_sensor_inclination_angles() {
+        var sv = parseInt($("#id_sensor_inclination_angle_start").val());
+        var ev = parseInt($("#id_sensor_inclination_angle_end").val());
+        if (sv && ev && (sv > ev)) {
+            alert ("The sensor inclination angle start value is greater than the end.");
+        };
+    };
+
+    {% if myAdvancedFlag %}{# activate advanced search tab #}
+    $(function(){
+        advSearchActivate({{ mySearchType }});
+    });
+    {% endif %}
+
+    $(function(){
+        // for toggling advanced search on / off
+        $('#advancedSearch').click(function(event)
+        {
+          $('.adv_search_ui').toggle('slow', function(){
+              $('#id_isAdvanced').val($('#advancedSearchDiv').is(':visible'));
+              if ($('#advancedSearchDiv').is(':visible')) {
+                $('#advancedSearch').val('Toggle Simple Search');
+              } else {
+                $('#advancedSearch').val('Toggle Advanced Search');
+              }
+          });
+        });
+        {% if myAdvancedFlag %}{# activate advanced search tab #}
+        advSearchActivate({{ mySearchType }});
+        {% endif %}
+        $('#id_search_type').change(function(e){
+            advSearchActivate(e.currentTarget.value);
+        });
+        $('#id_sensor_inclination_angle_start').change(check_sensor_inclination_angles);
+        $('#id_sensor_inclination_angle_end').change(check_sensor_inclination_angles);
+    });
+
+  /* ]]> */
   </script>
 
 {% endblock %}
-{% block body_load %}onload="init()";{% endblock %}
+{% block body_load %}onload="init()"{% endblock %}
 {% block content%}
-<div id="maptooltip">&nbsp;</div> 
+<div id="maptooltip">&nbsp;</div>
   {# layout done with blueprint.css we inherit 22 cols of space from base.html #}
   <div class="span-22 append-bottom last"> {# recommended to use blueprint divs only for layout ... #}
     <div id="map-container" class="span-22 ui-widget-content ui-state-highlight ui-corner-all last"> {# thus nested jquery widget container #}

@@ -1,7 +1,7 @@
 # Django helpers for forming html pages
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseServerError
 from django.contrib.gis.shortcuts import render_to_kml, render_to_kmz
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -19,7 +19,6 @@ import logging
 # Models and forms for our app
 from catalogue.models import *
 from catalogue.forms import *
-from catalogue.shortcuts import render_to_geojson
 from catalogue.renderDecorator import renderWithContext
 from catalogue.profileRequiredDecorator import requireProfile
 from catalogue.getFeaturesFromZipFile import *
@@ -36,7 +35,7 @@ from shapes.views import ShpResponder
 import os
 from PIL import Image, ImageFilter, ImageOps
 
-# For shopping cart
+# For shopping cart and ajax product id search
 from django.utils import simplejson
 
 # for sending email
@@ -315,7 +314,6 @@ def clip(theRequest):
       return HttpResponseRedirect(myRedirectPath + str(myObject.id))
     else:
       logging.info('form is INVALID after editing')
-
       #render_to_response is done by the renderWithContext decorator
       return ({
         'myTitle': myTitle,
@@ -486,28 +484,19 @@ def standardLayers(theRequest):
     myActiveBaseMap =  "zaSpot10mMosaic2009"
   return myLayersList, myLayerDefinitions, myActiveBaseMap
 
+
+
 @login_required
 #theRequest context decorator not used here since we have different return paths
 def search(theRequest):
-  """Perform an attribute and spatial search for imagery"""
+  """
+  Perform an attribute and spatial search for imagery
+  """
   myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
-  # check if the post ended with /?advanced for advanced searches
   logging.debug(("Post vars:" + str(theRequest.POST)))
-  # get request because initial form is requested via ajax with a /?advanced url
-  # if the advanced form should be show. Post request because the for
-  myAdvancedFlag = theRequest.GET.has_key('advanced') or theRequest.POST.has_key('advanced')
-  mySearchTemplate = None
-  if theRequest.is_ajax():
-    mySearchTemplate = "searchPanel.html"
-  else:
-    mySearchTemplate = "search.html"
-  myForm = None
   logging.info( 'search called')
   if theRequest.method == 'POST':
-    if myAdvancedFlag:
-      myForm = AdvancedSearchForm(theRequest.POST, theRequest.FILES)
-    else:
-      myForm = SearchForm(theRequest.POST)
+    myForm = AdvancedSearchForm(theRequest.POST, theRequest.FILES)
     if myForm.is_valid():
       mySearch = myForm.save(commit=False)
       myLatLong = {'longitude':0,'latitude':0}
@@ -560,10 +549,12 @@ def search(theRequest):
       theRequest.user.message_set.create(message="Your search was carried out successfully.")
       return HttpResponseRedirect('/searchresult/' + mySearch.guid)
     else:
+
       logging.info('form is INVALID after editing')
       #render_to_response is done by the renderWithContext decorator
-      return render_to_response ( mySearchTemplate ,{
-        'myAdvancedFlag' : myAdvancedFlag,
+      return render_to_response ( 'search.html' ,{
+        'myAdvancedFlag' : theRequest.POST['isAdvanced'] == 'true',
+        'mySearchType' :  theRequest.POST['search_type'],
         'myForm': myForm,
         'myHost' : settings.HOST,
         'myLegendFlag' : True, #used to show the legend in the accordion
@@ -573,13 +564,11 @@ def search(theRequest):
         }, context_instance=RequestContext(theRequest))
   else:
     logging.info('initial search form being rendered')
-    if myAdvancedFlag:
-      myForm = AdvancedSearchForm()
-    else:
-      myForm = SearchForm()
+    myForm = AdvancedSearchForm()
     #render_to_response is done by the renderWithContext decorator
-    return render_to_response ( mySearchTemplate ,{
-      'myAdvancedFlag' : myAdvancedFlag,
+    return render_to_response ( 'search.html' ,{
+      'myAdvancedFlag' : False,
+      'mySearchType' :  None,
       'myLegendFlag' : True, #used to show the legend in the accordion
       'myForm': myForm,
       'myHost' : settings.HOST,
@@ -591,23 +580,21 @@ def search(theRequest):
 
 @login_required
 def modifySearch(theRequest, theGuid):
-  """Given a search guid, give the user a form prepopulated with
+  """
+  Given a search guid, give the user a form prepopulated with
   that search's criteria so they can modify their search easily.
   A new search will be created from the modified one.
   """
   myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
-  mySearchTemplate = None
-  if theRequest.is_ajax():
-    mySearchTemplate = "searchPanel.html"
-  else:
-    mySearchTemplate = "search.html"
   logging.info('initial search form being rendered')
   mySearch = get_object_or_404( Search, guid=theGuid )
   myForm = AdvancedSearchForm( instance = mySearch )
   #render_to_response is done by the renderWithContext decorator
-  return render_to_response ( mySearchTemplate ,{
-    'myAdvancedFlag' : True,
+  return render_to_response ( 'search.html' ,{
+    'myAdvancedFlag' :  mySearch.isAdvanced,
+    'mySearchType' :  mySearch.search_type,
     'myForm': myForm,
+    'myGuid' : theGuid,
     'myHost' : settings.HOST,
     'myLayerDefinitions' : myLayerDefinitions,
     'myLayersList' : myLayersList,
@@ -615,58 +602,67 @@ def modifySearch(theRequest, theGuid):
     }, context_instance=RequestContext(theRequest))
 
 
+
 @login_required
 #theRequest context decorator not used here since we have different return paths
-def productIdSearch(theRequest):
-  """Perform an attribute and spatial search for imagery using the product id builder"""
+def productIdSearch(theRequest, theGuid):
+  """
+  Display the product id builder, based on initial existing Search values,
+  the following interaction is ajax based.
+  This kind of search is only available when search_type is PRODUCT_SEARCH_OPTICAL
+  """
   myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
-  mySearchTemplate = "productIdSearch.html"
+  mySearch = get_object_or_404( Search, guid=theGuid)
+
+  if mySearch.search_type != Search.PRODUCT_SEARCH_OPTICAL:
+    raise Http500('productIdSearch is only available for products of type PRODUCT_SEARCH_OPTICAL')
+
+  myInitialValues = mySearch.productIdAsHash()
+  logging.info('productIdSearch initializing values from existing search %s' % theGuid)
+  logging.info('productIdSearch initial values: %s' % myInitialValues)
+  mySearcher = Searcher(theRequest, theGuid)
+  mySearcher.search()
+  myTemplateData = mySearcher.templateData()
+
   if theRequest.method == 'POST':
     myForm = ProductIdSearchForm(theRequest.POST, theRequest.FILES)
     if myForm.is_valid():
-      mySearch = myForm.save(commit=False)
-      myLatLong = {'longitude':0,'latitude':0}
-      if settings.USE_GEOIP:
-        try:
-          myGeoIpUtils = GeoIpUtils()
-          myIp = myGeoIpUtils.getMyIp(theRequest)
-          myLatLong = myGeoIpUtils.getMyLatLong(theRequest)
-        except:
-          #raise forms.ValidationError( "Could not get geoip for this request" + traceback.format_exc() )
-          # do nothing - better in a production environment
-          pass
-      if myLatLong:
-        mySearch.ip_position = "SRID=4326;POINT(" + str(myLatLong['longitude']) + " " + str(myLatLong['latitude']) + ")"
-      mySearch.user = theRequest.user
-      mySearch.deleted = False
-      try:
-        myGeometry = getGeometryFromShapefile( theRequest, myForm, 'geometry_file' )
-        if myGeometry:
-          mySearch.geometry = myGeometry
-        else:
-          logging.info("Failed to set search area from uploaded shapefile")
-      except:
-        logging.info("An error occurred trying to set search area from uploaded shapefile")
-      # else use the on-the-fly digitised geometry
-      mySearch.save()
-      logging.debug("Search: " + str( mySearch ))
-      logging.info('form is VALID after editing')
-      #test of registered user messaging system
-      theRequest.user.message_set.create(message="Your search was carried out successfully.")
-      return HttpResponseRedirect('/searchresult/' + mySearch.guid)
+      logging.info('productIdSearch form is VALID after editing')
+      logging.info('productIdSearch cleaned_data: %s' % myForm.cleaned_data)
+      # Bind data
+      for f in [f.name for f in mySearch._meta.fields]:
+        if myForm.cleaned_data.has_key(f):
+          setattr(mySearch, f, myForm.cleaned_data.get(f))
+        mySearch.save()
+      # Save m2m,
+      # ABP: sensors is not required anymore for pivot oo work
+      # ... should be required, but check anyway
+      mySearch.sensors.clear()
+      if myForm.cleaned_data.get('sensors'):
+        for s in myForm.cleaned_data.get('sensors'):
+          mySearch.sensors.add(s)
+      if theRequest.is_ajax():
+        # ABP: Returns a json object with query description.
+        # We need to instanciate the Searcher since search logic
+        # is not in the Search class :(
+        mySearcher = Searcher(theRequest,theGuid)
+        return HttpResponse(simplejson.dumps(mySearcher.describeQuery()), mimetype='application/json')
     else:
       logging.info('form is INVALID after editing')
-      #render_to_response is done by the renderWithContext decorator
-      return render_to_response ( mySearchTemplate ,{
+      if theRequest.is_ajax():
+        # Sends a 500
+        return HttpResponseServerError(simplejson.dumps(myForm.errors), mimetype='application/json')
+      return render_to_response ( 'productIdSearch.html' ,{
         'myForm': myForm,
-        }, context_instance=RequestContext(theRequest))
-  else:
-    logging.info('initial search form being rendered')
-    myForm = ProductIdSearchForm()
-    #render_to_response is done by the renderWithContext decorator
-    return render_to_response ( mySearchTemplate ,{
-      'myForm': myForm,
+        'theGuid' : theGuid,
       }, context_instance=RequestContext(theRequest))
+
+  myForm = ProductIdSearchForm(initial = myInitialValues)
+  logging.info('initial search form being rendered')
+  myTemplateData['myForm'] = myForm
+  myTemplateData['theGuid'] = theGuid
+  myTemplateData['filterValues'] = simplejson.dumps(mySearcher.describeQuery()['values'])
+  return render_to_response ( 'productIdSearch.html' , myTemplateData, context_instance=RequestContext(theRequest))
 
 
 @login_required
@@ -742,6 +738,7 @@ def showProduct(theRequest, theProductId):
         })
 
 
+
 @login_required
 def showPreview(theRequest, theId, theSize):
   """Show a segment or scene thumbnail details,
@@ -773,7 +770,11 @@ def showThumbPage(theRequest, theId):
   logging.info("showThumbPage : id " + theId)
   myDetails=[]
   myProduct = get_object_or_404( GenericProduct, id=theId )
-  myDetails.append("<tr><th>Sensor: " + myProduct.mission_sensor.name + "</th></tr>")
+  #ABP: ugly hack
+  try:
+    myDetails.append("<tr><th>Sensor: " + myProduct.mission_sensor.name + "</th></tr>")
+  except AttributeError:
+    pass
   myImageFile = os.path.join( myProduct.thumbnailPath(), myProduct.product_id + ".jpg" )
   myDetails.append("<tr><td><center><img src=\"/thumbnails/" + myImageFile + "\"></center></td></tr>")
   #render_to_response is done by the renderWithContext decorator
@@ -808,7 +809,7 @@ def metadata(theRequest, theId):
   to iterate through the product class properties using class introspection
   and generate a simple html document containing key/value pairs"""
   myGenericProduct = get_object_or_404( GenericProduct, id=theId )
-  myObject, myType = myGenericProduct.getConcreteProduct()
+  myObject, myType = myGenericProduct.getConcreteInstance()
   myDetails=[]
   myDetails.append( "<tr><th>Key</th><th>Value</th></tr>")
   if myObject:
@@ -1691,7 +1692,10 @@ def notifySalesStaff(theUser, theOrderId):
      >>> from catalogue.views import *
      >>> myUser = User.objects.get(id=1)
      >>> myUser
-     >>> notifySalesStaff( myUser, 16 )"""
+     >>> notifySalesStaff( myUser, 16 )
+
+    #TODO: ABP: GenericProduct does not have sensor informations anymore, notifications must be unbound from the sensors
+  """
 
   if not settings.EMAIL_NOTIFICATIONS_ENABLED:
     return
@@ -1722,7 +1726,7 @@ def notifySalesStaff(theUser, theOrderId):
       logging.info("Sending notice to : %s" % myAddress)
   #also send an email to the originator of the order
   #We do this separately to avoid them seeing the staff cc list
-  myClientAddress = theUser.email 
+  myClientAddress = theUser.email
   myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, [myClientAddress]))
   # mass mail expects a tuple (read-only list) so convert the list to tuple on send
   logging.info("Sending messages: \n%s" % tuple(myMessagesList) )
@@ -1780,7 +1784,8 @@ def dataSummaryTable(theRequest):
     return
 
   #myResultSet = GenericProduct.objects.values("mission_sensor").annotate(Count("id")).order_by().aggregate(Min('product_acquisition_start'),Max('product_acquisition_end'))
-  myResultSet = GenericProduct.objects.values("mission_sensor").annotate(Count("id")).order_by()
+  #ABP: changed to GenericSensorProduct
+  myResultSet = GenericSensorProduct.objects.values("mission_sensor").annotate(Count("id")).order_by()
     #[{'mission_sensor': 6, 'id__count': 288307}, {'mission_sensor': 9, 'id__count': 289028}, {'mission_sensor': 3, 'id__count': 120943}, {'mission_sensor': 7, 'id__count': 222429}, {'mission_sensor': 5, 'id__count': 16624}, {'mission_sensor': 1, 'id__count': 3162}, {'mission_sensor': 2, 'id__count': 20896}, {'mission_sensor': 4, 'id__count': 17143}, {'mission_sensor': 8, 'id__count': 186269}]
   myResults = "<table><thead>"
   myResults += "</thead>"

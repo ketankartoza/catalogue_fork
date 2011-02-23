@@ -9,11 +9,16 @@ settings.py
 thumbs_out/
 *.*~
 *~
+catalogue.log
 media/avatars/
 *.swp
 catalogue.log
 
-# ABP
+# ABP:
 settings_local.py
 ipy.py
+*.sqlite
+settings_test.py
+catalogue/tests/dims_packages
+init_*.sql
 

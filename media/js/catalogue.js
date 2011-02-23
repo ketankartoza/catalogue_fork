@@ -3,14 +3,14 @@
 // @output_file_name catalogue.js
 // ==/ClosureCompiler==
 
-/* Compress this file to catalogue.js using google's closure compiler at 
+/* Compress this file to catalogue.js using google's closure compiler at
   http://closure-compiler.appspot.com/home */
 
 /* ------------------------------------------------------
  *  Global variables
  *  ------------------------------------------------------ */
 
-/* Setup the style for our scene footprints layer and enable 
+/* Setup the style for our scene footprints layer and enable
  * zIndexing so that we can raise the selected on above the others
  * see http://openlayers.org/dev/examples/ordering.html */
 
@@ -20,18 +20,18 @@ var DestroyFeatures = OpenLayers.Class(OpenLayers.Control, {
     trigger: function() {
         this.layer.destroyFeatures();
     }
-});    
+});
 OpenLayers.Renderer.VML.prototype.supported = function() {
     return (OpenLayers.Util.getBrowserName() == "msie");
-}    
+}
 OpenLayers.Renderer.VML.prototype.initialize = function(containerID) {
     OpenLayers.Renderer.Elements.prototype.initialize.apply(this, arguments);
-}    
+}
 var mSceneStyleMap = new OpenLayers.StyleMap(
   OpenLayers.Util.applyDefaults(
   {
-    fillColor: "#000000", 
-    fillOpacity: 0.0, 
+    fillColor: "#000000",
+    fillOpacity: 0.0,
     strokeColor: "yellow",
     graphicZIndex: "${zIndex}"
   },
@@ -41,14 +41,14 @@ var mDrawingStyleLookup = {
  'yes' : {strokeColor: "red"},
  'no' : {strokeColor: "yellow"}
 };
-var mContext = function(feature) 
+var mContext = function(feature)
 {
   return feature;
 };
 
 mSceneStyleMap.addUniqueValueRules("default", "selected", mDrawingStyleLookup, mContext);
-var mNavigationPanel = null; 
-var mMapControls = null; 
+var mNavigationPanel = null;
+var mMapControls = null;
 var mWKTFormat = null;
 var mVectorLayer = null;
 var mMap = null;
@@ -56,7 +56,7 @@ var mMap = null;
 /*--------------------------------------------------------
  * Things to run on any page first load that uses this lib
  -------------------------------------------------------- */
-$(document).ready(function() 
+$(document).ready(function()
 {
   //setup help dialog
   setupSceneIdHelpDialog();
@@ -78,14 +78,14 @@ function unblock()
 function block()
 {
   $.blockUI({ message: '<h2><img src="/media/images/ajax-loader.gif" /> Loading...</h2>',
-      css: { 
-        border: '1px solid #000', 
-        padding: '15px', 
-        backgroundColor: '#fff', 
-        '-webkit-border-radius': '10px', 
-        '-moz-border-radius': '10px', 
-        opacity: .9, 
-        color: '#000' 
+      css: {
+        border: '1px solid #000',
+        padding: '15px',
+        backgroundColor: '#fff',
+        '-webkit-border-radius': '10px',
+        '-moz-border-radius': '10px',
+        opacity: .9,
+        color: '#000'
         }
       });
 }
@@ -113,7 +113,7 @@ function readWKT(wkt)
 {
   // OpenLayers cannot handle EWKT -- we make sure to strip it out.
   // EWKT is only exposed to OL if there's a validation error in the admin.
-  var myRegularExpression = new RegExp("^SRID=\\d+;(.+)", "i"); 
+  var myRegularExpression = new RegExp("^SRID=\\d+;(.+)", "i");
   var myMatch = myRegularExpression.exec(wkt);
   if (myMatch)
   {
@@ -128,7 +128,7 @@ function writeWKT(geometry)
 {
   myGeometry = geometry.clone();
   myUnprojectedGeometry = reverseTransformGeometry(myGeometry);
-  document.getElementById('id_geometry').value = 
+  document.getElementById('id_geometry').value =
    'SRID=4326;' + mWKTFormat.write(new OpenLayers.Feature.Vector(myUnprojectedGeometry));
 }
 function addWKT(event)
@@ -153,9 +153,9 @@ function modifyWKT(event)
  * -------------------------------------------------------- */
 // Add Select control
 function addSelectControl()
-{   
+{
   var select = new OpenLayers.Control.SelectFeature(mVectorLayer, {
-      'toggle' : true, 
+      'toggle' : true,
       'clickout' : true
   });
   mMap.addControl(select);
@@ -163,21 +163,21 @@ function addSelectControl()
   mVectorLayer.selectFeatureControl = select;
 }
 function enableDrawing ()
-{ 
+{
   mMap.getControlsByClass('OpenLayers.Control.DrawFeature')[0].activate();
 }
-function enableEditing() 
-{ 
+function enableEditing()
+{
   mMap.getControlsByClass('OpenLayers.Control.ModifyFeature')[0].activate();
 }
-/* 
+/*
  * Populates mMapControls with appropriate editing controls for layer type
  * @note Since we are putting the controls into a panel outside the map,
  * we need to explicitly define the styles for the icons etc.
  */
 function setupEditingPanel(theLayer)
 {
-  var myDrawingControl = new OpenLayers.Control.DrawFeature(theLayer, 
+  var myDrawingControl = new OpenLayers.Control.DrawFeature(theLayer,
       OpenLayers.Handler.Polygon, {
 	  'displayClass': 'olControlDrawFeaturePolygon',
 	  'title': '<b>Capture polygon</b> left click to add points, double click to finish capturing'
@@ -196,19 +196,19 @@ function setupEditingPanel(theLayer)
   mNavigationPanel.addControls(mMapControls);
 }
 
-//A little jquery to colour alternate table rows 
+//A little jquery to colour alternate table rows
 //A bit of a hack, this function is used as a call back when ajax pages load
 function zebraTables()
 {
-  $("table tr:even").addClass("odd");
-  $("table tr:odd").addClass("even");
+  $("table tr:even").addClass("even");
+  $("table tr:odd").addClass("odd");
 }
 
  /*
  * Things to do on initial page load...
- * 
+ *
  */
-$(function() 
+$(function()
 {
   $("#accordion").accordion({ autoHeight: false });
   zebraTables();
@@ -216,7 +216,7 @@ $(function()
 
 function clearSearchResults()
 {
-  // Remove the temporary scenes layer 
+  // Remove the temporary scenes layer
   myLayer = getLayerByName("scenes");
   if (myLayer !== false)
   {
@@ -229,7 +229,7 @@ function clearSearchResults()
   }
 }
 function prepareFancy()
-{ 
+{
   $("#accordion").accordion("activate", 1);
   $("a#large_preview").fancybox(
    {
@@ -250,39 +250,39 @@ function showMiniCart( )
   {
     myShowAccordionFlag = arguments[0];
   }
-  // Refresh the cart layer 
+  // Refresh the cart layer
   myLayer = mMap.getLayersByName("Cart")[0];
   if ( !myLayer )
   {
     return;
   }
-  //Trick to trigger a refresh in an openlayers layer 
+  //Trick to trigger a refresh in an openlayers layer
   //See: http://openlayers.org/pipermail/users/2006-October/000064.html
   myLayer.mergeNewParams({'seed':Math.random()});
   myLayer.redraw();
-  // refresh the cart table 
+  // refresh the cart table
   $("#cart").load("/showminicartcontents/","", zebraTables);
-  if ( myShowAccordionFlag ) 
+  if ( myShowAccordionFlag )
   {
     $("#accordion").accordion("activate", 2);
   }
   $("#working").slideUp('slow');
-} 
+}
 function addToCart( theId )
 {
-  // Show a wait image before we hit our ajax call 
-  $("#working").html('<p>Adding, please wait...<img src="/media/images/ajax-loader.gif"></p>'); 
+  // Show a wait image before we hit our ajax call
+  $("#working").html('<p>Adding, please wait...<img src="/media/images/ajax-loader.gif"></p>');
   $("#working").slideDown('slow');
   $.get("/addtocart/" + theId + "/?xhr","", showMiniCart);
-  // prevent page jumping around on empty hyperlink clicks 
+  // prevent page jumping around on empty hyperlink clicks
   return false;
 }
 function layerRemoved()
 {
-  // Callback for when a layer was removed from the cart 
+  // Callback for when a layer was removed from the cart
   // - to trigger redraw of the cart layer
   myLayer = mMap.getLayersByName("Cart")[0];
-  //Trick to trigger a refresh in an openlayers layer 
+  //Trick to trigger a refresh in an openlayers layer
   //See: http://openlayers.org/pipermail/users/2006-October/000064.html
   myLayer.mergeNewParams({'version':Math.random()});
   myLayer.redraw();
@@ -296,17 +296,17 @@ function removeFromCart(theId, theObject)
   //-1 for the header row
   var myRowCount = $("#cart-contents-table tr").length - 1;
   $("#cart-item-count").html( myRowCount );
-  if ((myRowCount < 1) && ($("#id_processing_level").length != 0)) 
+  if ((myRowCount < 1) && ($("#id_processing_level").length != 0))
   {
     //second clause above to prevent this action when minicart is being interacted with
-    window.location.replace("/emptyCartHelp/"); 
+    window.location.replace("/emptyCartHelp/");
   }
   return false;
 }
 function removeFromMiniCart(theId, theObject)
 {
   //theObject is the remove icon - we use it to find its parent row and remove that
-  $("#working").html('<p>Removing, please wait...<img src="/media/images/ajax-loader.gif"></p>'); 
+  $("#working").html('<p>Removing, please wait...<img src="/media/images/ajax-loader.gif"></p>');
   $("#working").slideDown('slow');
   removeFromCart( theId, theObject );
 }
@@ -314,23 +314,23 @@ function showCart()
 {
   $("#cart").load("/showcartcontents/","", zebraTables);
   $("#working").slideUp('slow');
-} 
+}
 
 function getElement( id )
 {
-  if (document.getElementById) 
+  if (document.getElementById)
   {
     return document.getElementById(id);
   }
-  else if (document.all) 
+  else if (document.all)
   {
     return document.all[id];
   }
-  else if (document.layers) 
+  else if (document.layers)
   {
     return document.layers[id];
   }
-  else 
+  else
   {
     return 0;
   }
@@ -344,9 +344,9 @@ function getFeatureByProductId( theProductId )
   if (myLayer !== false)
   {
     var myFeatures = myLayer.features;
-    for(var i=0; i < myFeatures.length; ++i) 
+    for(var i=0; i < myFeatures.length; ++i)
     {
-      if(myFeatures[i].product_id == theProductId) 
+      if(myFeatures[i].product_id == theProductId)
       {
         return i;
       }
@@ -356,13 +356,13 @@ function getFeatureByProductId( theProductId )
 }
 
 /*
- * Load a paginated search result page into the table 
+ * Load a paginated search result page into the table
  */
 function revealTable()
 {
   zebraTables();
   $("#working").slideUp('slow');
-  $("#working").html(''); 
+  $("#working").html('');
   $("#table").slideDown('slow');
 }
 
@@ -370,7 +370,7 @@ function loadPage( theNumber, theSearchGuid )
 {
   $("#table").slideUp('slow');
   // Show a wait image before we hit our ajax call
-  $("#working").html('<p>Loading, please wait...<img src="/media/images/ajax-loader.gif"></p>'); 
+  $("#working").html('<p>Loading, please wait...<img src="/media/images/ajax-loader.gif"></p>');
   $("#working").slideDown('slow');
   $("#results-table").parent().load("/searchpage/" + theSearchGuid + "/?page=" + theNumber,"",revealTable);
 }
@@ -381,9 +381,9 @@ function resizeTable()
   myHeaderHeight = $( '#header' ).height();
   myMapHeight = $( '#map' ).height();
   myFooterHeight = $( '#footer' ).height();
-  myPadding = 140; //cater for white space on page 
+  myPadding = 140; //cater for white space on page
   myTableHeight = myWindowHeight - ( myHeaderHeight + myFooterHeight + myMapHeight + myPadding );
-  if ( myTableHeight < 200 ) 
+  if ( myTableHeight < 200 )
   {
     myTableHeight = 200;
   }
@@ -392,9 +392,9 @@ function resizeTable()
 
 // Get feature info implementation for openlayer
 // see http://trac.openlayers.org/wiki/GetFeatureInfo
-function showFeatureInfo(event) 
+function showFeatureInfo(event)
 {
-  $("#working").html('<p>Adding, please wait...<img src="/media/images/ajax-loader.gif"></p>'); 
+  $("#working").html('<p>Adding, please wait...<img src="/media/images/ajax-loader.gif"></p>');
   $("#working").slideDown('slow');
   myMousePos = mMap.getLonLatFromPixel(event.xy);
   myBoundingBox = mMap.getExtent().toBBOX();
@@ -413,29 +413,29 @@ function showFeatureInfo(event)
   $("#working").slideUp('slow');
 }
 
-function setHTML(response) 
+function setHTML(response)
 {
   $("#mapquery").html("<p><input type=button id='hidemapquery' value='Hide'></p>" + response.responseText);
   $("#mapquery").slideDown('slow');
-  $('#hidemapquery').click(function() 
-  {  
+  $('#hidemapquery').click(function()
+  {
     $("#mapquery").slideUp('slow');
-  });  
+  });
 }
 
 function createLegend()
 {
   //create the legend
   myLayers = mMap.layers;
-  for (var i = 0; i < myLayers.length; i++) 
+  for (var i = 0; i < myLayers.length; i++)
   {
     myLayer = myLayers[i];
     myLayerName = myLayer.name;
     myVisibility = myLayer.visibility;
     myCheckedString = "";
-    if ( myVisibility ) 
-    { 
-      myCheckedString = "checked"; 
+    if ( myVisibility )
+    {
+      myCheckedString = "checked";
     }
     if ( myLayer.isBaseLayer )
     {
@@ -478,7 +478,7 @@ function setupCloudSlider() {
 function setupBaseMap()
 {
   // The options hash, w/ zoom, resolution, and projection settings.
-  var options = { 
+  var options = {
     projection : new OpenLayers.Projection("EPSG:900913"),
     displayProjection : new OpenLayers.Projection("EPSG:4326"),
     units : 'm',
@@ -530,27 +530,31 @@ function setupBaseMap()
   mMap.addControl(new OpenLayers.Control.MousePosition({'div': document.getElementById("map-location")}));
   mMap.addControl(mNavigationPanel);
 }
+
 /*
- * @param theLayers and array of layers that should be added to the map 
+ * @param num : search_type enum value
+*/
+function advSearchActivate(search_type){
+    if(typeof search_type == 'undefined') {
+        search_type = 0;
+    }
+    $('.adv_search_ui .adv_fld').not('.adv_search_' + search_type).hide();
+    // Check if #advancedSearch is visible
+    if($('#advancedSearchDiv').is(':visible')){
+        $('.adv_search_' + search_type).show('slow');
+    } else {
+        $('.adv_search_' + search_type).show();
+        $('.adv_search_ui').show('slow');
+    }
+    $('#id_isAdvanced').val(true);
+};
+
+/*
+ * @param theLayers and array of layers that should be added to the map
  */
 function setupSearchMap( theLayers )
 {
-  
-  // for toggling advanced search on / off 
-  // Bind the click event of the simple / advanced search buttons  
-  // to a custom event. We do this because if the button was loaded 
-  // into the page via ajax, it wont be able to directly call a fn on 
-  // the parent page. Binding (via live fn below) requires jquery.
-  $('#advancedSearch').live('click',function(event) 
-  {
-    block();
-    $("#search-panel").load("/search/?advanced", setupCloudSlider, null);
-  });  
-  $('#simpleSearch').live('click',function(event) 
-  {
-    block();
-    $("#search-panel").load("/search/", setupCloudSlider, null);
-  });  
+
   //check if the slider exists first
   if ($("#id_cloud_mean").length > 0 )
   {
@@ -561,7 +565,7 @@ function setupSearchMap( theLayers )
   mVectorLayer = new OpenLayers.Layer.Vector("geometry");
   mMap.addLayer(mVectorLayer);
   // Add geometry specific panel of toolbar controls
-  setupEditingPanel(mVectorLayer); 
+  setupEditingPanel(mVectorLayer);
   mMap.addLayers( theLayers );
   addSelectControl();
   mMap.addControl(new OpenLayers.Control.LayerSwitcher());
@@ -569,7 +573,7 @@ function setupSearchMap( theLayers )
   var myWKT = document.getElementById('id_geometry').value;
   if (myWKT)
   {
-    // After reading into geometry, immediately write back to 
+    // After reading into geometry, immediately write back to
     // WKT <textarea> as EWKT (so that SRID is included).
     var mySearchGeometry = readWKT(myWKT);
     var myProjectedSearchGeometry = transformGeometry(mySearchGeometry);
@@ -584,7 +588,7 @@ function setupSearchMap( theLayers )
   }
   // This allows editing of the geographic fields -- the modified WKT is
   // written back to the content field (as EWKT, so that the ORM will know
-  // to transform back to original SRID). 
+  // to transform back to original SRID).
   mVectorLayer.events.on({"featuremodified" : modifyWKT});
   mVectorLayer.events.on({"featureadded" : addWKT});
   // Then add optional behavior controls
@@ -598,7 +602,7 @@ function setupSearchMap( theLayers )
 }
 
 /*
- * @param theLayers an array of layers that should be added to the map 
+ * @param theLayers an array of layers that should be added to the map
  */
 function setupTaskingMap( theLayers )
 {
@@ -606,7 +610,7 @@ function setupTaskingMap( theLayers )
   mVectorLayer = new OpenLayers.Layer.Vector("geometry");
   mMap.addLayer(mVectorLayer);
   // Add geometry specific panel of toolbar controls
-  setupEditingPanel(mVectorLayer); 
+  setupEditingPanel(mVectorLayer);
   // Here we use a predefined layer that will be kept up to date with URL changes
   layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Open Street Map");
   //theLayers.unshift(layerMapnik); // add to start of array
@@ -618,7 +622,7 @@ function setupTaskingMap( theLayers )
   var myWKT = document.getElementById('id_geometry').value;
   if (myWKT)
   {
-    // After reading into geometry, immediately write back to 
+    // After reading into geometry, immediately write back to
     // WKT <textarea> as EWKT (so that SRID is included).
     var mySearchGeometry = readWKT(myWKT);
     var myProjectedSearchGeometry = transformGeometry(mySearchGeometry);
@@ -633,7 +637,7 @@ function setupTaskingMap( theLayers )
   }
   // This allows editing of the geographic fields -- the modified WKT is
   // written back to the content field (as EWKT, so that the ORM will know
-  // to transform back to original SRID). 
+  // to transform back to original SRID).
   mVectorLayer.events.on({"featuremodified" : modifyWKT});
   mVectorLayer.events.on({"featureadded" : addWKT});
   // Then add optional behavior controls
@@ -647,13 +651,13 @@ function setupTaskingMap( theLayers )
 }
 
 /*--------------------------
- * Functions relating to clicking on scenes in the map to 
+ * Functions relating to clicking on scenes in the map to
  * highlight them.
  * -------------------------- */
 
-function featureSelected( theEvent ) 
+function featureSelected( theEvent )
 {
-  $("#working").html(theEvent.feature.product_id); 
+  $("#working").html(theEvent.feature.product_id);
   $("#working").slideDown('slow');
   hightlightRecord(theEvent.feature.id, false);
 }
@@ -702,16 +706,16 @@ function setupSearchFeatureInfo()
     url: 'http://196.35.94.243/cgi-bin/mapserv?map=SEARCHES',
     title: 'Identify features by clicking',
     queryVisible: true,
-    vendorParams: 
+    vendorParams:
     {
       FEATURE_COUNT : "1000",
       INFO_FORMAT : 'text/html'
     },
-    eventListeners: 
+    eventListeners:
     {
-      getfeatureinfo: function(event) 
+      getfeatureinfo: function(event)
       {
-        if((event.text).length > 1) 
+        if((event.text).length > 1)
         {
           mMap.addPopup(new OpenLayers.Popup.FramedCloud(
             "chicken",
@@ -745,15 +749,15 @@ function setupSqlDialog()
   //JQuery popup dialog for admins to see underlying search query
   $('#sql-button').live('click', function (event) {
     $('#sql').dialog({
-      modal: true, 
-      show: 'slide', 
+      modal: true,
+      show: 'slide',
       width: 600,
       hide: 'slide',
       autoOpen: true,
       zIndex: 9999,
       title: 'Underlying Query:',
       buttons: { "Close" : function() { $(this).dialog('close'); } }
-    }); 
+    });
   });
 }
 
@@ -762,8 +766,8 @@ function setupSceneIdHelpDialog()
   var mySceneIdHelpDialog = $('<div></div>').load("/sceneidhelp/").dialog({
     autoOpen: false,
     title: 'Scene Id Help',
-    modal: true, 
-    show: 'slide', 
+    modal: true,
+    show: 'slide',
     hide: 'slide',
     zIndex: 9999,
     height: $(window).height() / 2,
@@ -782,8 +786,8 @@ function setupMapHelpDialog()
   var myMapHelpDialog = $('<div></div>').load("/mapHelp/").dialog({
     autoOpen: false,
     title: 'Map Help',
-    modal: true, 
-    show: 'slide', 
+    modal: true,
+    show: 'slide',
     hide: 'slide',
     zIndex: 9999,
     height: $(window).height() / 2,
@@ -797,7 +801,7 @@ function setupMapHelpDialog()
   }));
 }
 
-/* Show a pop up dialog with metadata. 
+/* Show a pop up dialog with metadata.
  * @see setupMetadataDialog
  * @note also used from withing image preview panel */
 function showMetadata( theRecordId )
@@ -805,8 +809,8 @@ function showMetadata( theRecordId )
     var myMetadataDialog = $('<div></div>').load("/metadata/" + theRecordId + "/").dialog({
       autoOpen: true,
       title: 'Metadata',
-      modal: true, 
-      show: 'slide', 
+      modal: true,
+      show: 'slide',
       hide: 'slide',
       zIndex: 9999,
       height: $(window).height() / 2,
@@ -825,7 +829,7 @@ function setupMetadataDialog( )
 }
 
 
-/* Mark all scenes as selected no and 
+/* Mark all scenes as selected no and
  * give them all an equal zIndex.
  * see http://openlayers.org/dev/examples/ordering.html */
 function resetSceneZIndices( )
@@ -834,7 +838,7 @@ function resetSceneZIndices( )
   if (myLayer !== false)
   {
     var myFeatures = myLayer.features;
-    for(var i=0; i < myFeatures.length; ++i) 
+    for(var i=0; i < myFeatures.length; ++i)
     {
       myFeatures[i].attributes.zIndex=0;
       myFeatures[i].selected = "no";
@@ -849,9 +853,9 @@ function getFeatureIndexByRecordId( theRecordId )
   if (myLayer !== false)
   {
     var myFeatures = myLayer.features;
-    for(var i=0; i < myFeatures.length; ++i) 
+    for(var i=0; i < myFeatures.length; ++i)
     {
-      if(myFeatures[i].id == theRecordId) 
+      if(myFeatures[i].id == theRecordId)
       {
         return i;
       }
@@ -860,14 +864,14 @@ function getFeatureIndexByRecordId( theRecordId )
   return -1; //not found
 }
 
-/* Highlight a record on the map and load its preview in 
+/* Highlight a record on the map and load its preview in
  * the preview panel
  * @param theRecordId - id of the record to hightlight (not the product_id)
  * @param theZoomFlag - whether to zoom to the record on the map
  * */
 function hightlightRecord( theRecordId, theZoomFlag )
 {
-  // use ajax to load the thumb preview and then call the prepareFancy callback 
+  // use ajax to load the thumb preview and then call the prepareFancy callback
   $("#preview-accordion-div").load("/showpreview/" + theRecordId + "/medium/","",prepareFancy);
   resetSceneZIndices();
   var myLayer = getLayerByName("scenes");
@@ -881,7 +885,7 @@ function hightlightRecord( theRecordId, theZoomFlag )
   myLayer.redraw();
 }
 
-/* Setup a callback so that when a mini preview icon is 
+/* Setup a callback so that when a mini preview icon is
  * clicked, the corresponding scene is highlighted on teh map
  * and loaded in the preview accordion panel. */
 function setupMiniIconClickCallback()
@@ -897,15 +901,15 @@ function setupMiniIconClickCallback()
 function addOrderClicked()
 {
   var myRowCount = $("#cart-contents-table tr").length;
-  if ( myRowCount < 2 ) // The header row will always be there... 
+  if ( myRowCount < 2 ) // The header row will always be there...
   {
-    var myOptions = 
-    { 
+    var myOptions =
+    {
       modal: true,
       show: "blind",
       hide: "explode",
       zIndex: 99999,
-      buttons: 
+      buttons:
       {
         Ok: function() {
           $(this).dialog("close");
@@ -916,7 +920,7 @@ function addOrderClicked()
   }
   else
   {
-    window.location.replace("/addorder/"); 
+    window.location.replace("/addorder/");
   }
   return false;
 }

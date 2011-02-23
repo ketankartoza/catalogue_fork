@@ -406,31 +406,10 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">mission</FONT
+        ><FONT FACE="Helvetica Bold">product_date</FONT
         ></TD>
         <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">mission_sensor</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">sensor_type</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">acquisition_mode</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ><FONT FACE="Helvetica Bold">DateTimeField</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -455,20 +434,6 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">product_acquisition_start</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">DateTimeField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">product_acquisition_end</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">DateTimeField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
         ><FONT FACE="Helvetica Bold">spatial_coverage</FONT
         ></TD>
         <TD ALIGN="LEFT"
@@ -487,76 +452,6 @@ digraph name {
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT FACE="Helvetica Bold">ForeignKey</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">geometric_accuracy_mean</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">geometric_accuracy_1sigma</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">geometric_accuracy_2sigma</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">spectral_accuracy</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">radiometric_signal_to_noise_ratio</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">radiometric_percentage_error</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">geometric_resolution_x</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">FloatField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">geometric_resolution_y</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">FloatField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">spectral_resolution</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">IntegerField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">radiometric_resolution</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">IntegerField</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -581,56 +476,7 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">orbit_number</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">IntegerField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
         ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">product_revision</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">path</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">IntegerField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">path_offset</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">IntegerField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">row</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">IntegerField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">row_offset</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">IntegerField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">offline_storage_medium_id</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">online_storage_medium_id</FONT
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
@@ -661,11 +507,11 @@ digraph name {
     </TABLE>
     >]
   
-    catalogue_models_OpticalProduct [label=<
+    catalogue_models_GenericSensorProduct [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
      <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4"
      ><FONT FACE="Helvetica Bold" COLOR="white"
-     >OpticalProduct</FONT></TD></TR>
+     >GenericSensorProduct</FONT></TD></TR>
 
     
         
@@ -674,6 +520,111 @@ digraph name {
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">AutoField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">product_date</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">DateTimeField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">processing_level</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">owner</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">license</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">spatial_coverage</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">PolygonField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">projection</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">quality</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">creating_software</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">original_product_id</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">product_id</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">product_revision</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">local_storage_path</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">metadata</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">TextField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">remote_thumbnail_url</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">TextField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">genericproduct_ptr</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">OneToOneField</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -705,27 +656,6 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">processing_level</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">owner</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">license</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
         ><FONT FACE="Helvetica Bold">product_acquisition_start</FONT
         ></TD>
         <TD ALIGN="LEFT"
@@ -737,27 +667,6 @@ digraph name {
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">DateTimeField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">spatial_coverage</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">PolygonField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">projection</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">quality</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -782,13 +691,6 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">spectral_accuracy</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
         ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">radiometric_signal_to_noise_ratio</FONT
         ></TD>
         <TD ALIGN="LEFT"
@@ -800,6 +702,13 @@ digraph name {
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">radiometric_resolution</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">IntegerField</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -824,10 +733,127 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">radiometric_resolution</FONT
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">spectral_accuracy</FONT
         ></TD>
         <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">IntegerField</FONT
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">orbit_number</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">IntegerField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">path</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">IntegerField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">path_offset</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">IntegerField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">row</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">IntegerField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">row_offset</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">IntegerField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">offline_storage_medium_id</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">online_storage_medium_id</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+    
+    </TABLE>
+    >]
+  
+    catalogue_models_OpticalProduct [label=<
+    <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4"
+     ><FONT FACE="Helvetica Bold" COLOR="white"
+     >OpticalProduct</FONT></TD></TR>
+
+    
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">id</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">AutoField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">product_date</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">DateTimeField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">processing_level</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">owner</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">license</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">spatial_coverage</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">PolygonField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">projection</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">quality</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -852,17 +878,157 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">orbit_number</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">IntegerField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
         ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">product_revision</FONT
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">local_storage_path</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">metadata</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">TextField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">remote_thumbnail_url</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">TextField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">genericproduct_ptr</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">OneToOneField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">mission</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">mission_sensor</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">sensor_type</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">acquisition_mode</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">product_acquisition_start</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">DateTimeField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">product_acquisition_end</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">DateTimeField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">geometric_accuracy_mean</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">geometric_accuracy_1sigma</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">geometric_accuracy_2sigma</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">radiometric_signal_to_noise_ratio</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">radiometric_percentage_error</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">radiometric_resolution</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">IntegerField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">geometric_resolution_x</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">FloatField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">geometric_resolution_y</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">FloatField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">spectral_resolution</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">IntegerField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">spectral_accuracy</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">orbit_number</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">IntegerField</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -908,28 +1074,7 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">local_storage_path</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">metadata</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">TextField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">remote_thumbnail_url</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">TextField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">genericproduct_ptr</FONT
+        ><FONT FACE="Helvetica Bold">genericsensorproduct_ptr</FONT
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT FACE="Helvetica Bold">OneToOneField</FONT
@@ -1009,6 +1154,158 @@ digraph name {
     </TABLE>
     >]
   
+    catalogue_models_GeospatialProduct [label=<
+    <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+     <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4"
+     ><FONT FACE="Helvetica Bold" COLOR="white"
+     >GeospatialProduct</FONT></TD></TR>
+
+    
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">id</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">AutoField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">product_date</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">DateTimeField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">processing_level</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">owner</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">license</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">spatial_coverage</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">PolygonField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">projection</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">quality</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">creating_software</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">original_product_id</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">product_id</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">product_revision</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">local_storage_path</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">metadata</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">TextField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">remote_thumbnail_url</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">TextField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">genericproduct_ptr</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">OneToOneField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">name</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">data_type</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">scale</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">IntegerField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">processing_notes</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">TextField</FONT
+        ></TD></TR>
+        
+    
+    </TABLE>
+    >]
+  
     catalogue_models_RadarProduct [label=<
     <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
      <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4"
@@ -1022,6 +1319,111 @@ digraph name {
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">AutoField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">product_date</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">DateTimeField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">processing_level</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">owner</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">license</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">spatial_coverage</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">PolygonField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">projection</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">quality</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">creating_software</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">original_product_id</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">product_id</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">product_revision</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">local_storage_path</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">metadata</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">TextField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">remote_thumbnail_url</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">TextField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">genericproduct_ptr</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">OneToOneField</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -1053,27 +1455,6 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">processing_level</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">owner</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">license</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
         ><FONT FACE="Helvetica Bold">product_acquisition_start</FONT
         ></TD>
         <TD ALIGN="LEFT"
@@ -1085,27 +1466,6 @@ digraph name {
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">DateTimeField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">spatial_coverage</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">PolygonField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">projection</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">quality</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -1130,13 +1490,6 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">spectral_accuracy</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
         ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">radiometric_signal_to_noise_ratio</FONT
         ></TD>
         <TD ALIGN="LEFT"
@@ -1148,6 +1501,13 @@ digraph name {
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">radiometric_resolution</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">IntegerField</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -1172,31 +1532,10 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">radiometric_resolution</FONT
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">spectral_accuracy</FONT
         ></TD>
         <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">IntegerField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">creating_software</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">ForeignKey</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">original_product_id</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">product_id</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
+        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">FloatField</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -1204,13 +1543,6 @@ digraph name {
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">IntegerField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">product_revision</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -1256,28 +1588,7 @@ digraph name {
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">local_storage_path</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">CharField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">metadata</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">TextField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">remote_thumbnail_url</FONT
-        ></TD>
-        <TD ALIGN="LEFT"
-        ><FONT FACE="Helvetica Bold">TextField</FONT
-        ></TD></TR>
-        
-        <TR><TD ALIGN="LEFT" BORDER="0"
-        ><FONT FACE="Helvetica Bold">genericproduct_ptr</FONT
+        ><FONT FACE="Helvetica Bold">genericsensorproduct_ptr</FONT
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT FACE="Helvetica Bold">OneToOneField</FONT
@@ -1807,6 +2118,13 @@ digraph name {
         ></TD>
         <TD ALIGN="LEFT"
         ><FONT COLOR="#7B7B7B" FACE="Helvetica Bold">AutoField</FONT
+        ></TD></TR>
+        
+        <TR><TD ALIGN="LEFT" BORDER="0"
+        ><FONT FACE="Helvetica Bold">search_type</FONT
+        ></TD>
+        <TD ALIGN="LEFT"
+        ><FONT FACE="Helvetica Bold">IntegerField</FONT
         ></TD></TR>
         
         <TR><TD ALIGN="LEFT" BORDER="0"
@@ -2816,22 +3134,6 @@ digraph name {
   
     
     
-    catalogue_models_GenericProduct -> catalogue_models_Mission
-    [label="mission"] ;
-    
-    
-    catalogue_models_GenericProduct -> catalogue_models_MissionSensor
-    [label="mission_sensor"] ;
-    
-    
-    catalogue_models_GenericProduct -> catalogue_models_SensorType
-    [label="sensor_type"] ;
-    
-    
-    catalogue_models_GenericProduct -> catalogue_models_AcquisitionMode
-    [label="acquisition_mode"] ;
-    
-    
     catalogue_models_GenericProduct -> catalogue_models_ProcessingLevel
     [label="processing_level"] ;
     
@@ -2858,20 +3160,50 @@ digraph name {
   
     
     
-    catalogue_models_OpticalProduct -> catalogue_models_Mission
+    catalogue_models_GenericSensorProduct -> catalogue_models_ProcessingLevel
+    [label="processing_level"] ;
+    
+    
+    catalogue_models_GenericSensorProduct -> catalogue_models_Institution
+    [label="owner"] ;
+    
+    
+    catalogue_models_GenericSensorProduct -> catalogue_models_License
+    [label="license"] ;
+    
+    
+    catalogue_models_GenericSensorProduct -> catalogue_models_Projection
+    [label="projection"] ;
+    
+    
+    catalogue_models_GenericSensorProduct -> catalogue_models_Quality
+    [label="quality"] ;
+    
+    
+    catalogue_models_GenericSensorProduct -> catalogue_models_CreatingSoftware
+    [label="creating_software"] ;
+    
+    
+    catalogue_models_GenericSensorProduct -> catalogue_models_GenericProduct
+    [label="genericproduct_ptr"] ;
+    
+    
+    catalogue_models_GenericSensorProduct -> catalogue_models_Mission
     [label="mission"] ;
     
     
-    catalogue_models_OpticalProduct -> catalogue_models_MissionSensor
+    catalogue_models_GenericSensorProduct -> catalogue_models_MissionSensor
     [label="mission_sensor"] ;
     
     
-    catalogue_models_OpticalProduct -> catalogue_models_SensorType
+    catalogue_models_GenericSensorProduct -> catalogue_models_SensorType
     [label="sensor_type"] ;
     
     
-    catalogue_models_OpticalProduct -> catalogue_models_AcquisitionMode
+    catalogue_models_GenericSensorProduct -> catalogue_models_AcquisitionMode
     [label="acquisition_mode"] ;
+    
+  
     
     
     catalogue_models_OpticalProduct -> catalogue_models_ProcessingLevel
@@ -2901,23 +3233,57 @@ digraph name {
     catalogue_models_OpticalProduct -> catalogue_models_GenericProduct
     [label="genericproduct_ptr"] ;
     
-  
     
-    
-    catalogue_models_RadarProduct -> catalogue_models_Mission
+    catalogue_models_OpticalProduct -> catalogue_models_Mission
     [label="mission"] ;
     
     
-    catalogue_models_RadarProduct -> catalogue_models_MissionSensor
+    catalogue_models_OpticalProduct -> catalogue_models_MissionSensor
     [label="mission_sensor"] ;
     
     
-    catalogue_models_RadarProduct -> catalogue_models_SensorType
+    catalogue_models_OpticalProduct -> catalogue_models_SensorType
     [label="sensor_type"] ;
     
     
-    catalogue_models_RadarProduct -> catalogue_models_AcquisitionMode
+    catalogue_models_OpticalProduct -> catalogue_models_AcquisitionMode
     [label="acquisition_mode"] ;
+    
+    
+    catalogue_models_OpticalProduct -> catalogue_models_GenericSensorProduct
+    [label="genericsensorproduct_ptr"] ;
+    
+  
+    
+    
+    catalogue_models_GeospatialProduct -> catalogue_models_ProcessingLevel
+    [label="processing_level"] ;
+    
+    
+    catalogue_models_GeospatialProduct -> catalogue_models_Institution
+    [label="owner"] ;
+    
+    
+    catalogue_models_GeospatialProduct -> catalogue_models_License
+    [label="license"] ;
+    
+    
+    catalogue_models_GeospatialProduct -> catalogue_models_Projection
+    [label="projection"] ;
+    
+    
+    catalogue_models_GeospatialProduct -> catalogue_models_Quality
+    [label="quality"] ;
+    
+    
+    catalogue_models_GeospatialProduct -> catalogue_models_CreatingSoftware
+    [label="creating_software"] ;
+    
+    
+    catalogue_models_GeospatialProduct -> catalogue_models_GenericProduct
+    [label="genericproduct_ptr"] ;
+    
+  
     
     
     catalogue_models_RadarProduct -> catalogue_models_ProcessingLevel
@@ -2946,6 +3312,26 @@ digraph name {
     
     catalogue_models_RadarProduct -> catalogue_models_GenericProduct
     [label="genericproduct_ptr"] ;
+    
+    
+    catalogue_models_RadarProduct -> catalogue_models_Mission
+    [label="mission"] ;
+    
+    
+    catalogue_models_RadarProduct -> catalogue_models_MissionSensor
+    [label="mission_sensor"] ;
+    
+    
+    catalogue_models_RadarProduct -> catalogue_models_SensorType
+    [label="sensor_type"] ;
+    
+    
+    catalogue_models_RadarProduct -> catalogue_models_AcquisitionMode
+    [label="acquisition_mode"] ;
+    
+    
+    catalogue_models_RadarProduct -> catalogue_models_GenericSensorProduct
+    [label="genericsensorproduct_ptr"] ;
     
   
     
