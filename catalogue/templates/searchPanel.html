@@ -127,8 +127,7 @@
           <div class="">
               {{ myForm.isAdvanced }}
               <input type="button" value="{% if myAdvancedFlag %}Toggle Simple Search{% else %}Toggle Advanced Search{% endif %}" id="advancedSearch"/><br />
-              <input type="submit" value="Search" class="default" name="_search" /><br />
-              <input type="button" value="Map Help" id="map-help-button"/><br />
+              <input type="submit" value="Search" class="default" name="_search" />&nbsp;&nbsp;<input type="button" value="Map Help" id="map-help-button"/><br />
               {{ myForm.geometry }}
           </div>
 
@@ -136,7 +135,7 @@
         </div>
     </div><!-- end of simpleSearchDiv -->
 
-    <div id="advancedSearchDiv" class="adv_search_ui">
+    <div id="advancedSearchDiv" class="adv_search_ui clr">
 
       <div id="advSearchCombo">{{ myForm.search_type.label }}: {{ myForm.search_type }}</div>
 
