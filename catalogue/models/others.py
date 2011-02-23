@@ -118,3 +118,22 @@ class OrderNotificationRecipients(models.Model):
     app_label= 'catalogue'
     verbose_name = 'Order Notification Recipient'
     verbose_name_plural = 'Order Notification Recipients'
+
+
+class WorldBorders(models.Model):
+  iso2 = models.CharField(max_length=2)
+  iso3 = models.CharField(max_length=3)
+  name = models.CharField(max_length=100)
+  geometry = models.MultiPolygonField(srid=4326)
+
+  objects = models.GeoManager()
+
+  class Meta:
+    app_label= 'catalogue'
+
+world_borders_mapping ={
+  'iso2':'ISO2',
+  'iso3':'ISO3',
+  'name':'NAME',
+  'geometry':'POLYGON'
+  }
