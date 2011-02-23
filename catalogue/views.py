@@ -21,7 +21,10 @@ from catalogue.models import *
 from catalogue.forms import *
 from catalogue.renderDecorator import renderWithContext
 from catalogue.profileRequiredDecorator import requireProfile
-from catalogue.getFeaturesFromZipFile import *
+
+# SHP and KML readers
+from catalogue.featureReaders import *
+
 
 # Helper classes
 from catalogue.geoiputils import *
@@ -287,14 +290,14 @@ def clip(theRequest):
       myObject.owner = theRequest.user
       myGeometry = None
       try:
-        myGeometry = getGeometryFromShapefile( theRequest, myForm, 'geometry_file' )
+        myGeometry = getGeometryFromUploadedFile( theRequest, myForm, 'geometry_file' )
         if myGeometry:
           myObject.geometry = myGeometry
         else:
-          logging.info("Failed to set clip area from uploaded shapefile")
-          logging.info("Or no shapefile uploaded")
+          logging.info("Failed to set clip area from uploaded geometry file")
+          logging.info("Or no geometry file uploaded")
       except:
-        logging.info("An error occurred try to set clip area from uploaded shapefile")
+        logging.info("An error occurred try to set clip area from uploaded geometry file")
         logging.info(traceback.format_exc() )
       if not myObject.geometry:
         myErrors = myForm._errors.setdefault("geometry", ErrorList())
@@ -391,7 +394,7 @@ def visitorMap(theRequest):
     })
 
 
-@login_required
+@staff_member_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('visitorReport.html')
 def visitorReport( theRequest ):
@@ -423,7 +426,7 @@ def visitorReport( theRequest ):
     'myCurrentMonth': datetime.date.today()
     })
 
-@login_required
+@staff_member_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('visitorMonthlyReport.html')
 def visitorMonthlyReport( theRequest, theyear, themonth):
@@ -514,11 +517,11 @@ def search(theRequest):
       mySearch.user = theRequest.user
       mySearch.deleted = False
       try:
-        myGeometry = getGeometryFromShapefile( theRequest, myForm, 'geometry_file' )
+        myGeometry = getGeometryFromUploadedFile( theRequest, myForm, 'geometry_file' )
         if myGeometry:
           mySearch.geometry = myGeometry
         else:
-          logging.info("Failed to set search area from uploaded shapefile")
+          logging.info("Failed to set search area from uploaded geometry file")
       except:
         logging.info("An error occurred trying to set search area from uploaded shapefile")
       #check if aoi_geometry exists
@@ -1544,14 +1547,14 @@ def    addTaskingRequest( theRequest ):
       myObject.user = theRequest.user
       myGeometry = None
       try:
-        myGeometry = getGeometryFromShapefile( theRequest, myForm, 'geometry_file' )
+        myGeometry = getGeometryFromUploadedFile( theRequest, myForm, 'geometry_file' )
         if myGeometry:
           myObject.geometry = myGeometry
         else:
-          logging.info("Failed to set tasking request from uploaded shapefile")
-          logging.info("Or no shapefile uploaded")
+          logging.info("Failed to set tasking request from uploaded geometry file")
+          logging.info("Or no geometry file uploaded")
       except:
-        logging.info("An error occurred try to set tasking area from uploaded shapefile")
+        logging.info("An error occurred try to set tasking area from uploaded geometry file")
         logging.info(traceback.format_exc() )
       if not myObject.geometry:
         myErrors = myForm._errors.setdefault("geometry", ErrorList())
@@ -1799,37 +1802,3 @@ def dataSummaryTable(theRequest):
   myResults += "<tr><th>All</th><th>%s</th></tr>" % ( myCount )
   myResults += "</table>"
   return HttpResponse(myResults)
-
-
-
-
-###########################################################
-#
-# Try to extract a geometry if a shp was uploaded
-#
-###########################################################
-def getGeometryFromShapefile( theRequest, theForm, theFileField ):
-  """Retrieve an uploaded geometry from a shp file. Note in order for this to
-     work, you must have set your form to use multipart encoding type e.g.
-     <form enctype="multipart/form-data" action="/search/" method="post" id="search_form">"""
-  logging.info('Form cleaned data: ' + str(theForm.cleaned_data))
-  if theRequest.FILES[theFileField]:
-    logging.debug("Using geometry from shapefile.")
-    #if not theForm.cleaned_data.contains( "theFileField" ):
-    #  logging.error("Error: %s field not submitted with form" % theFileField)
-    #  return False
-    myExtension = theForm.cleaned_data[theFileField].name.split(".")[1]
-    if myExtension != "zip":
-      logging.info('Wrong format for uploaded geometry. Please select a ZIP archive.')
-      #render_to_response is done by the renderWithContext decorator
-      #@TODO return a clearer error spotmap just like Alert for the missing dates
-      return False
-    myFile = theForm.cleaned_data[theFileField]
-    myOutFile = '/tmp/%s' % myFile.name
-    destination = open(myOutFile, 'wb+')
-    for chunk in myFile.chunks():
-      destination.write(chunk)
-    destination.close()
-    extractedGeometries = getFeaturesFromZipFile(myOutFile, "Polygon", 1)
-    myGeometry = extractedGeometries[0]
-    return myGeometry
