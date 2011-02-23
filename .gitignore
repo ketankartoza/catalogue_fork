@@ -8,15 +8,9 @@ scenes_out_projected/
 settings.py
 thumbs_out/
 *.*~
-<<<<<<< HEAD
-*~
-=======
-<<<<<<< HEAD
 *~
 catalogue.log
-=======
->>>>>>> dodobas
->>>>>>> ale
+catalogue.log
 media/avatars/
 *.swp
 catalogue.log
@@ -31,4 +25,8 @@ doc-src
 # ABP:
 settings_local.py
 ipy.py
+*.sqlite
+settings_test.py
+catalogue/tests/dims_packages
+init_*.sql
 

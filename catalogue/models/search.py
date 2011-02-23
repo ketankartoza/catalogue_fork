@@ -8,7 +8,6 @@ from orders import Order
 from products import GenericProduct
 from dictionaries import MissionSensor, AcquisitionMode, License, SensorType, Mission
 #for translation
-from django.utils.translation import ugettext_lazy as _
 
 ###############################################################################
 
@@ -34,8 +33,8 @@ class SearchRecord(models.Model):
   objects = models.GeoManager()
 
   class Meta:
-    verbose_name = _('Record')
-    verbose_name_plural = _('Records')
+    verbose_name = 'Record'
+    verbose_name_plural = 'Records'
     app_label= 'catalogue'
 
   def __unicode__(self):
@@ -245,8 +244,8 @@ class Search(models.Model):
 
   class Meta:
     app_label= 'catalogue'
-    verbose_name = _('Search')
-    verbose_name_plural = _('Searches')
+    verbose_name = 'Search'
+    verbose_name_plural = 'Searches'
     ordering = ('search_date',)
 
 ###############################################################################
@@ -282,5 +281,5 @@ class Clip( models.Model ):
 
   class Meta:
     app_label= 'catalogue'
-    verbose_name=_("Clip")
-    verbose_name_plural=_("Clips")
+    verbose_name="Clip"
+    verbose_name_plural="Clips"

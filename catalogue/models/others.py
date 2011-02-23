@@ -2,7 +2,6 @@ from django.contrib.gis.db import models
 #for user id foreign keys
 from django.contrib.auth.models import User
 #for translation
-from django.utils.translation import ugettext_lazy as _
 from userprofile.models import BaseProfile
 from dictionaries import MissionSensor
 
@@ -42,8 +41,8 @@ class Visit(models.Model):
 
   class Meta:
     app_label= 'catalogue'
-    verbose_name = _('Visit')
-    verbose_name_plural = _('Visits')
+    verbose_name = 'Visit'
+    verbose_name_plural = 'Visits'
     ordering = ('visit_date',)
 
 
@@ -100,8 +99,8 @@ class SacUserProfile(BaseProfile):
 
   class Meta:
     app_label= 'catalogue'
-    verbose_name = _('User Profile')
-    verbose_name_plural = _('User Profiles')
+    verbose_name = 'User Profile'
+    verbose_name_plural = 'User Profiles'
 
 class OrderNotificationRecipients(models.Model):
   """This class is used to map which staff members receive
@@ -117,5 +116,5 @@ class OrderNotificationRecipients(models.Model):
 
   class Meta:
     app_label= 'catalogue'
-    verbose_name = _('Order Notification Recipient')
-    verbose_name_plural = _('Order Notification Recipients')
+    verbose_name = 'Order Notification Recipient'
+    verbose_name_plural = 'Order Notification Recipients'
