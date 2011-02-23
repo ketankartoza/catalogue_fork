@@ -1116,3 +1116,17 @@ class Cbers(models.Model):
       db_table = '"import"."cbers"'
       #requires django 1.1
       managed = False
+
+class WorldBorders(models.Model):
+  iso2 = models.CharField(max_length=2)
+  iso3 = models.CharField(max_length=3)
+  name = models.CharField(max_length=100)
+  geometry = models.MultiPolygonField(srid=4326)
+
+#layer mapping
+world_borders_mapping = {
+  'iso2':'ISO2',
+  'iso3':'ISO3',
+  'name':'NAME',
+  'geometry':'POLYGON'
+  }
