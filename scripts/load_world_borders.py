@@ -1,5 +1,5 @@
 from django.contrib.gis.utils import LayerMapping
-from catalogue.models import WorldBorders,world_borders_mapping
+from catalogue.models.others import WorldBorders,world_borders_mapping
 
 SHAPE_FILE='../TM_WORLD_BORDERS-0.3.shp'
 
