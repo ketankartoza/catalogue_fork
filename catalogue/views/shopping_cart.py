@@ -7,6 +7,9 @@ from shapes.views import ShpResponder
 # Models and forms for our app
 from catalogue.models import *
 
+# For shopping cart and ajax product id search
+from django.utils import simplejson
+
 ###########################################################
 #
 # Shopping cart stuff

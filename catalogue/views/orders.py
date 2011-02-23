@@ -1,9 +1,7 @@
 # Django helpers for forming html pages
-#from django.shortcuts import render_to_response, get_object_or_404
-#from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseServerError
-#from django.conf import settings
+from django.shortcuts import render_to_response, get_object_or_404
+from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseServerError
 from django.contrib.auth.decorators import login_required
-#from django.contrib.admin.views.decorators import staff_member_required
 from django.template import RequestContext
 # python logging support to django logging middleware
 import logging
