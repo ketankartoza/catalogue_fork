@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from catalogue.renderDecorator import renderWithContext
+from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseServerError
 #Dane Springmeyer's django-shapes app for exporting results as a shpfile
 from shapes.views import ShpResponder
 
