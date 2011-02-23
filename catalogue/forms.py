@@ -43,7 +43,7 @@ class AdvancedSearchForm(forms.ModelForm):
 
   geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
                                   required = False,
-                                  help_text = 'Upload a zipped shapefile of less than 1MB. If the shapefile contains\
+                                  help_text = 'Upload a zipped shapefile or KML/KMZ file of less than 1MB. If the shapefile contains\
                                               more than one polygon, only the first will be used. \
                                               Complex polygons will increase search time.')
 
