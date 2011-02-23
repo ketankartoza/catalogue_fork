@@ -8,8 +8,6 @@ scenes_out_projected/
 settings.py
 thumbs_out/
 *.*~
-*~
-catalogue.log
 catalogue.log
 media/avatars/
 *.swp

@@ -2,6 +2,7 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% box_start "" "" ""%}
   {% if myRecords %}
+<a href="/visitorlist/?page={{ myRecords.number}}&pdf">PDF</a>
       <table id="gradient-style" summary="Available Sensors">
         <thead> 
         </thead>

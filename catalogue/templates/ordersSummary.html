@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% block content %}
+  {% box_start "" "" "orders-summary" %}
+<a href="/orderssummary/?pdf">PDF</a>
+<h2>Order status summary report</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for record in myOrderStatus %}
+    <tr>
+      <td>{{ record.name }}</td>
+      <td>{{ record.num_orders }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2>Order product type summary report</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Product type</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for record in myOrderProductType %}
+    <tr>
+      <td>{{ record.name }}</td>
+      <td>{{ record.num_orders }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+  {% box_end %}
+{% endblock %}
+

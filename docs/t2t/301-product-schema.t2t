@@ -14,63 +14,28 @@ common properties applicable to **any** product regardless of type. A number of
 data dictionaries (as described in the next section) are used to ensure data
 consistency for properties relating to a product.
 
-All generic products can be identified by a 'nearly unique' product id. The product id seeks to normalise the naming conventions used by different satellite operators such that a common naming scheme can be universally applied.
+All generic products can be identified by a 'nearly unique' product id. The
+product id seeks to normalise the naming conventions used by different
+satellite operators such that a common naming scheme can be universally
+applied.
 
-**Note:** As per discussion with Wolfgang on 17 Feb 2011, the SAC Product Id will apply only to sensor based products and a different, as yet undefined, identifcation scheme will be used for GeoSpatial products.
+The naming scheme used for products depends on where the product falls in the
+model heirarchy. Each product type (Generic, Imagery, Sensor, Geospatial etc.)
+can overload the getSacProductId method in order to apply model specific logic
+as to how these product Ids should be assigned.
+
+These will be discussed more fully in the sections that follow.
+
+**Note:** As per discussion with Wolfgang on 17 Feb 2011, the SAC Product Id
+will apply only to sensor based products and a different, as yet undefined,
+identifcation scheme will be used for GeoSpatial products.
 
 **Note:** See CDSM naming scheme for vector products.
-
-The following scheme is used for assigning product id's:
-
---------------------
-
-Single scene file names:
-
-``SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LLLL_PPPPPP``
-
-e.g. L7-_ETM_HRF_SAM-_168-_00_077-_010530_------_L3Ab_UTM36S
-
---------------------
-
-
-Composite files -mosaics:
-
-``QQQQQQ_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
-
-Use central scene for date and time
-
---------------------
-
-Composite files - time series:
-
-``MT_yymmdd_yymmdd_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
-
-Use central time scene for date and time
-
---------------------
-
-The following key can be used to decode the above:
-
-|| Code            | Description                                          |
-| SSS              | satellite (mission) name e.g. L5-; S5-               |
-| sss              | sensor (mission sensor) e.g. TM-; ETM                |
-| ttt              | type (sensor type) eg. HRF; HPN; HPM                 |
-| mmmm             | bumper (acquisition) mode eg. SAM- BUF-              |
-| pppp             | path                                                 |
-| ps               | path shift                                           |
-| rrrr             | row                                                  |
-| rs               | row span                                             |
-| yymmdd           | date                                                 |
-| hhmmss           | time                                                 |
-| LLLL             | processing Level code eg. L2A; L4Ab                  |
-| PPPPPP           | Projection eg. UTM35S; LATLON; ORBIT-                |
-| QQQQQQ           | 1:50000 topographic map name eg 3425CD               |
-| MT_yymmdd_yymmdd | multi-temporal time span: start date to end date     |
 
 
 === Dictionaries ===
 
-Generic product properties that are used repeatedly are decribed using foreign
+Generic product properties that are used repeatedly are described using foreign
 key joins to various dictionary tables. These can be visualised in the
 following diagram:
 
@@ -242,16 +207,111 @@ several variants of it, and add any other licenses that may apply. We would
 also need rules descibing how to select products which should have which
 license applied.
 
-== Sensor based products ==
+== ImageryProducts ==
+
+Generic imagery product is the model that all sensor based products inherit
+from. In addition, concrete instances of **ImageryProduct** are used to lodge sensor
+based aggregate data. For example when an image is created that is a
+combination of a 'J' and a 'T' image, we can no longer canonically state which
+acquisition mode etc was used for that image. In this case the DAG (Directed
+Acyclical Graph) implementation will be used to provide backpointers to the
+original images used to create this record (and those backpointers will be to
+Sensor based product records).
+
+=== Imagery Product Aggregation Rules ===
+
+In the DAG (Directed Acyclical Graph) that maps relationships between products
+and their downstream constituent products, ImageryProducts can be made of:
+
+- Generic Products
+- Generic Imagery Products
+- Generic Sensor Products
+- Optical Products
+- Radar Products
+- Geospatial Products and subclasses of Geospatial products
+- 
+
+**Note:** Self referencing is not allowed. That is, a Imagery product may not include itself in any leaf node.
+
+
+== Generic Sensor based products ==
 
 Generic sensor product is an Abstract Base Class that all other sensor based
-products inherit from.
+products inherit from. It inherits from Generic Imagery product.
 
-=== Dictionaries ===
+The following scheme is used for assigning product id's for sensor based products:
 
-Several domain lists are implemented for sensor based products. These can be visualised in the following diagram:
+--------------------
+
+Single scene file names:
+
+``SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LLLL_PPPPPP``
+
+e.g. L7-_ETM_HRF_SAM-_168-_00_077-_010530_------_L3Ab_UTM36S
+
+--------------------
+
+
+Composite files -mosaics:
+
+``QQQQQQ_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
+
+Use central scene for date and time
+
+--------------------
+
+Composite files - time series:
+
+``MT_yymmdd_yymmdd_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
+
+Use central time scene for date and time
+
+--------------------
+
+The following key can be used to decode the above:
+
+|| Code            | Description                                          |
+| SSS              | satellite (mission) name e.g. L5-; S5-               |
+| sss              | sensor (mission sensor) e.g. TM-; ETM                |
+| ttt              | type (sensor type) eg. HRF; HPN; HPM                 |
+| mmmm             | bumper (acquisition) mode eg. SAM- BUF-              |
+| pppp             | path                                                 |
+| ps               | path shift                                           |
+| rrrr             | row                                                  |
+| rs               | row span                                             |
+| yymmdd           | date                                                 |
+| hhmmss           | time                                                 |
+| LLLL             | processing Level code eg. L2A; L4Ab                  |
+| PPPPPP           | Projection eg. UTM35S; LATLON; ORBIT-                |
+| QQQQQQ           | 1:50000 topographic map name eg 3425CD               |
+| MT_yymmdd_yymmdd | multi-temporal time span: start date to end date     |
+
+=== Generic Sensor Product Aggregation Rules ===
+
+In the DAG (Directed Acyclical Graph) that maps relationships between products
+and their downstream constituent products, **GenericSensorProducts** may
+**not** be aggregates. This is because each sensor product has an explicit
+acquisition mode, sensor type etc. and such relationships are not mappable for
+aggregate products. In the case that you have have two
+**GenericSensorProducts** (or its subclasses) forming a new image, the new
+image should be modelled as a **GenericImageryProduct**.
+
+
+=== Sensor Product Dictionaries ===
+
+Several domain lists are implemented for sensor based products. These can be
+visualised in the following diagram:
 
 [img/sensor-product-dictionaries.png]
+
+The schema described above has some issues - there is no enforced relationship
+between mission, mission sensor, sensor type and acquisition mode. To address
+this, it is proposed to alter the schema to look like this:
+
+
+[img/proposed-sensor-product-dictionaries.png]
+
+These proposed changes are described in more detail in the text below.
 
 ==== Mission ====
 
@@ -311,9 +371,80 @@ TM - Thematic Mapper
 ETM - Enhanced thematic mapper
 MSS Multi-spectral
 
+**Note:** This list needs to be refactored such that aggregated entries are separated. e.g. Landsat 1,2,3,4,5 MSS would become:
+
+ || ID | Abbreviation |         Name          | Description | Has Data |
+ | 4 | MSS1          | Landsat 1 MSS |             | t |
+ | 5 | MSS2          | Landsat 2 MSS |             | t |
+ | 6 | MSS3          | Landsat 3 MSS |             | t |
+ | 7 | MSS4          | Landsat 4 MSS |             | t |
+ | 8 | MSS5          | Landsat 5 MSS |             | t |
+
+
+**Note:** In the schema changes for this Work Package, a one-to-many
+relationship will be created between mission sensor entities and their related
+mission - as illustrated here:
+
+```
++----------------+                +---------+
+| Mission Sensor |>---------------| Mission |
++----------------+                +---------+
+```
+
+
+**Relationship in plain english:** Each mission can have one or more mission
+sensors associated with it. Each mission sensor shall be associated to only one
+mission.``
+
+The Abbreviation will **not** be unique per sensor. Note that the 4 letter name
+space does not allow for many permutations and readers of the abbreviation
+should do it in context of a specific mission, sensor type etc.  (for example
+by always presenting the mission abbreviation at the same time). 
+
+In some cases, no specific mission sensors will exist for a mission. In these
+cases, the mission sensor should be named directly after the mission e.g.
+
+ || ID | Abbreviation |         Name          | Description | Has Data | Mission |
+ | 1 | ERS          | ERS            |             | t | ERS
+
+In the updated schema, the MissionSensor table will look like this:
+
+ || ID | Abbreviation |         Name          | Description | Has Data | Mission |
+ | 1 | AVH          | NOAA AVHRR            |             | t | 
+ | 2 | AMI          | ERS AMI SAR           |             | t |
+ | 3 | TM          | Landsat 4 TM        |             | t |
+ | 4 | TM          | Landsat 5 TM        |             | t |
+ | 5 | MSS          | Landsat 1 MSS |             | t |
+ | 6 | MSS          | Landsat 2 MSS |             | t |
+ | 7 | MSS          | Landsat 3 MSS |             | t |
+ | 8 | MSS          | Landsat 4 MSS |             | t |
+ | 9 | MSS          | Landsat 5 MSS |             | t |
+ | 10 | ETM          | Landsat 7 ETM+        |             | t |
+ | 11 | Xs1           | Spot 1 HRV Xs     |             | t |
+ | 12 | Xs2           | Spot 2 HRV Xs     |             | t |
+ | 13 | Xs3           | Spot 3 HRV Xs     |             | t |
+ | 14 | Xi           | Spot 4 G,R,NIR,SWIR   |             | t |
+ | 15 | M            | Spot 4 Pan            |             | t |
+ | 16 | Pan          | Spot 1 HRV Pan    |             | t |
+ | 17 | Pan          | Spot 2 HRV Pan    |             | t |
+ | 18 | Pan          | Spot 3 HRV Pan    |             | t |
+ | 19 | HRG          | Spot 5 HRG            | Spot 5 HRG  | t |
+ | 20 | CCD          | CBERS CCD             |             | t |
+ | 21 | MRS          | SACC MRS              |             | t |
+ | 22 | SMS          | Sumbandilasat MSS     |             | t |
 
 
 ==== Sensor Types ====
+
+The sensor type describes a mission sensor. 'High end' satellites may use a
+custom sensor type with its own specific properties. 'Cheaper' satellites may
+use simple CCD (charge coupled device) style sensors. Each mission sensor
+should have at least one sensor  type associated with it. When a mission sensor
+exists with no associated sensor type, a default sensor type matching the
+mission sensor abbreviation should be created.
+
+**Note:** Wolfgang to supply a complete list if sensor types.
+
 
  || ID | Abbreviation |                   Name                   |
  |  1 | AVHR         | Advanced Very High Resolution Radiometer  |
@@ -325,8 +456,30 @@ MSS Multi-spectral
  |  7 | MSS          | Multispectral                             |
  |  8 | RT           | RT                                        |
 
+**Note:** In the schema changes for this Work Package, a one-to-many
+relationship will be created between mission sensor entities and their related
+mission - as illustrated here:
+
+```
++-------------+                +----------------+
+| Sensor Type |>---------------| Mission Sensor |
++-------------+                +----------------+
+```
+
+**Relationship in plain english:** Each mission sensor can have one or more sensor 
+types associated with it. Each sensor type shall be associated to only one sensor.``
+
+The Abbreviation will **not** be unique per sensor type. Note that the 4 letter name
+space does not allow for many permutations and readers of the abbreviation
+should do it in context of a specific mission-sensor, acquisition mode etc.  (for example
+by always presenting the mission abbreviation at the same time). 
 
 ==== Acquisition Modes ====
+
+Each sensor can operate in one or more modes. Thus there the list of
+acquisition modes should include at least one entry per sensor type. Where such
+an entry does not exist, a default one (named after the sensor type) shall be
+created.
 
  || ID   | Abbreviation |               Name               | Geometric Resolution | Band Count |
  |  1  | MS           | Multispectral                    |                    0 |          0   |
@@ -354,16 +507,51 @@ MSS Multi-spectral
 | HTM  | Thermal bands                |
 | HPM  | Pan-sharpened multi-spectral |
 
-**Note:** we intend to deprecate the final two columns in this table - Wolfgang to comment?
+**Note:** In the schema changes for this Work Package, a one-to-many
+relationship will be created between mission sensor entities and their related
+mission - as illustrated here:
 
-**Note2:** The abbreviated sensor names that are single letter may run into uniqueness issues WL comment?
+```
++------------------+                +----------------+
+| Acquisition Mode |>---------------|   Sensor Type  |
++------------------+                +----------------+
+```
 
-The schema described above has some issues - there is no enforced relationship
-between mission, mission sensor, sensor type and acquisition mode. To address
-this, it is proposed to alter the schema to look like this:
+**Relationship in plain english:** Each sensor type can have one or more
+acquisition mode associated with it. Each acquisition mode shall be associated
+to only one sensor type.``
+
+The Abbreviation will **not** be unique per acquisition mode. Note that the 4
+letter name space does not allow for many permutations and readers of the
+abbreviation should do it in context of a specific sensor type.  (for example
+by always presenting the sensor type, mission type and mission abbreviations at
+the same time). 
+
+**Note:** The geometric resolution and band count columns in this table need to
+be populated by Wolfgang.
+
+**Note2:** The abbreviated sensor names that are single letter may run into
+uniqueness issues WL comment?
+
+==== Mission Group ====
+
+The mission group model will be an addition to the schema that will allow
+virtual groupings of mission sensors. In simple search and other places
+designated by the client, mission groups will be used to select a family of
+missions (satellites) to search on e.g. all Landsat missions.
+
+```
++------------------+                +----------------+
+| Mission          |>---------------| Mission Group  |
++------------------+                +----------------+
+```
+
+**Relationship in plain english:** Each mission group  can have one or more
+missions associated with it. Each mission shall be associated to only one
+mission group.``
 
 
-[img/proposed-sensor-product-dictionaries.png]
+==== Notes on the proposed schema changes ====
 
 The proposed schema change will bring about the following advantages:
 
@@ -379,7 +567,15 @@ The proposed schema change will bring about the following advantages:
 **Note:** We need to get the mappings from Wolfgang for which mission sensors
 are associated with each mission etc.
 
-=== Optical products ===
+Because the schema changes introduce a strict heirarchy and also introduce a
+requirement that acquisition mode through to mission be defined for a sensor
+based product, assigning these entities to derived products will not be
+meaningful. Because of this composite products (e.g. a pan sharpened SPOT
+image) will not be modelled under generic sensor products but rather belong to
+a sub class GenericImageryProduct.
+
+
+== Optical products ==
 
 Optical products are a specialisation of Generic Sensor Products. An Optical
 Product is a concrete class (i.e. one that should not be treated as abstract).
@@ -393,7 +589,25 @@ image and improve its native resolution.
 
 [img/optical-image-example-medium.png]
 
-=== Radar Products ===
+=== Optical Product Aggregation Rules ===
+
+In the DAG (Directed Acyclical Graph) that maps relationships between products
+and their downstream constituent products, **OpticalProducts** may **not** be
+aggregates. This is because each sensor product has an explicit acquisition
+mode, sensor type etc. and such relationships are not mappable for aggregate
+products. In the case that you have have two **OpticalProducts** forming a new
+image, the new image should be modelled as a **GenericImageryProduct**.
+
+== Radar Products ==
+
+=== Radar Product Aggregation Rules ===
+
+In the DAG (Directed Acyclical Graph) that maps relationships between products
+and their downstream constituent products, **RadarlProducts** may **not** be
+aggregates. This is because each sensor product has an explicit acquisition
+mode, sensor type etc. and such relationships are not mappable for aggregate
+products. In the case that you have have two **RadarlProducts** forming a new
+image, the new image should be modelled as a **GenericImageryProduct**.
 
 == Geospatial Products ==
 

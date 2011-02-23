@@ -170,7 +170,13 @@ function enableEditing()
 {
   mMap.getControlsByClass('OpenLayers.Control.ModifyFeature')[0].activate();
 }
-/*
+//helper: enable map Navigation
+function enableNavigation()
+{
+  mMap.getControlsByClass('OpenLayers.Control.Navigation')[0].activate();
+}
+
+/* 
  * Populates mMapControls with appropriate editing controls for layer type
  * @note Since we are putting the controls into a panel outside the map,
  * we need to explicitly define the styles for the icons etc.
@@ -508,6 +514,7 @@ function setupBaseMap()
 	title : "<b>Pan map</b> click and drag map to move the map in the direction of the mouse."
     }
   );
+
   mMap.addControl(myNavigationControl);
     var myHistoryControl = new OpenLayers.Control.NavigationHistory({
 	previousOptions: {
@@ -593,11 +600,17 @@ function setupSearchMap( theLayers )
   mVectorLayer.events.on({"featureadded" : addWKT});
   // Then add optional behavior controls
 
+  /*
+  // disable editing or drawing by default on searchMap
   if (myWKT){
     enableEditing();
   } else {
     enableDrawing();
-  }
+  }*/
+
+  //activate Navigation/DragPan by default for searchMap
+  enableNavigation()
+
   createLegend();
 }
 
