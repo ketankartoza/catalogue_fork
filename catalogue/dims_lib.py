@@ -71,7 +71,7 @@ class dimsReader(dimsBase):
 
   def __init__(self, path):
     """
-    Set the file path and reads the package
+    Set the tarball file path and reads the package
     """
     logging.info("%s initialized" % self.__class__)
     self._path      = path
@@ -85,7 +85,7 @@ class dimsReader(dimsBase):
     """
     Read the tar
     """
-    self._tar       = tarfile.open(self._path, 'r:gz')
+    self._tar       = tarfile.open(self._path)
     self._tar_index = self._tar.getnames()
 
     # Scan for DIMS products
@@ -104,7 +104,8 @@ class dimsReader(dimsBase):
     """
     Extract metadata from an XML metadata file object and
     returns informations as a dictionary, parsing and validation
-    is left to the calling program
+    is left to the calling program. The only check is done here is
+    for mandatory metadata presence.
     """
     file_info = self._tar.getmember(product_path)
     file_handle = self._tar.extractfile(file_info)
@@ -230,7 +231,7 @@ class dimsWriter(dimsBase):
     shutil.copy(product_data['thumbnail'], os.path.join(self._path, 'Metadata', 'Thumbnails', self._get_metadata(product_data, 'processing_level_code'), product_code + '.jpg'))
     # The product imagery itself is not mandatory
     try:
-      if product_data['product_image']:
+      if product_data['image']:
         # make sure the folders exists
         _p = os.path.join(self._path, 'Products', 'SacPackage', self._get_metadata(product_data, 'verticalcs_name'),  self._get_metadata(product_data, 'processing_level_code') + '_DIMAP')
         try:
@@ -238,8 +239,8 @@ class dimsWriter(dimsBase):
         except OSError:
           logging.warning('cannot create %s' % _p)
         # Copy the image, rename the file to match product_code and keeps extension
-        _image_path = os.path.join(_p, product_code + os.path.splitext(product_data['product_image'])[1])
-        shutil.copy(product_data['product_image'], _image_path)
+        _image_path = os.path.join(_p, product_code + os.path.splitext(product_data['image'])[1])
+        shutil.copy(product_data['image'], _image_path)
         logging.info("image saved in %s" % _image_path)
     except KeyError:
         logging.warning('no image data for %s' % product_code)

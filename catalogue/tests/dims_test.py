@@ -49,7 +49,7 @@ Tests writer
 >>> products = {}
 >>> products['PRODUCT_00001'] = {}
 >>> products['PRODUCT_00001']['thumbnail']= 'catalogue/tests/sample_files/sample_thumbnail.jpg'
->>> products['PRODUCT_00001']['product_image'] = 'catalogue/tests/sample_files/sample_image.tif'
+>>> products['PRODUCT_00001']['image'] = 'catalogue/tests/sample_files/sample_image.tif'
 >>> products['PRODUCT_00001']['metadata'] = {}
 >>> products['PRODUCT_00001']['metadata']['product_date'] = '2011-01-24T14:29:43.278'
 >>> products['PRODUCT_00001']['metadata']['md_data_identification'] = 'SPOT5.HRG.L1A'
