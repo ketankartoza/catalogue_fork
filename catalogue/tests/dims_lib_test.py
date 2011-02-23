@@ -1,10 +1,7 @@
 """
+
+
 Unit tests for DIMS
-"""
-
-
-__test__ = {"doctest": """
-
 
 Tests reader
 
@@ -115,7 +112,4 @@ True
 False
 
 
-
-
-
-"""}
+"""

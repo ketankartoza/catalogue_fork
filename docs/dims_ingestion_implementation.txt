@@ -1,6 +1,7 @@
 Summary for DIMS package ingestion
 ==================================
 
+SAC products that have to be ingested are SPOT products (OpticalProducts) only.
 
 Write a python module to read XML metadata and extract the thumbnail
 and optionally the imagery product file from a zipped SAC package file.

@@ -11,6 +11,7 @@ import tarfile
 import logging
 from datetime import datetime
 
+# Use faster lxml if available, fallback on pure python implementation
 try:
   from lxml import etree
 except ImportError:
