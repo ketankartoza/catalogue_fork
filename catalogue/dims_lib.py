@@ -62,6 +62,7 @@ class dimsBase(object):
       bbox_east               = '//{xmlns}EX_GeographicBoundingBox/{xmlns}eastBoundLongitude/{xmlns_gco}Decimal',
       bbox_north              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}northBoundLatitude/{xmlns_gco}Decimal',
       bbox_south              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}southBoundLatitude/{xmlns_gco}Decimal',
+      image_quality_code      = '//{xmlns}imageQualityCode//{xmlns}code/{xmlns_gco}CharacterString',
     )
 
 

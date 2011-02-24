@@ -38,6 +38,8 @@ True
 True
 >>> md.get('md_data_identification') == 'SPOT5.HRG.L1A'
 True
+>>> md.get('image_quality_code') == 'aaaabaaaaaaaaa'
+True
 
 Tests writer
 
