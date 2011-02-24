@@ -223,7 +223,6 @@ Sensor based product records).
 In the DAG (Directed Acyclical Graph) that maps relationships between products
 and their downstream constituent products, ImageryProducts can be made of:
 
-- Generic Products
 - Generic Imagery Products
 - Generic Sensor Products
 - Optical Products
