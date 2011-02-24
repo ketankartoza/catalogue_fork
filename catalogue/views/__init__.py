@@ -1,4 +1,3 @@
-from views import *
 from others import *
 from search import *
 from orders import *

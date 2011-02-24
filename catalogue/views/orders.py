@@ -60,11 +60,8 @@ def myOrders(theRequest):
 
 
 @login_required
+@renderWithContext("orderListPage.html","orderList.html")
 def listOrders(theRequest):
-  myPath = "orderListPage.html"
-  if theRequest.is_ajax():
-    # No page container needed, just a snippet
-    myPath = "orderList.html"
   myRecords = None
   if not theRequest.user.is_staff:
     '''Non staff users can only see their own orders listed'''
@@ -86,12 +83,39 @@ def listOrders(theRequest):
     myRecords = myPaginator.page(myPaginator.num_pages)
   myUrl = "listorders"
   #render_to_response is done by the renderWithContext decorator
-  return render_to_response(myPath,
-      {
+  return ({
         'myRecords': myRecords,
-        'myUrl' : myUrl
-      },
-      context_instance=RequestContext(theRequest))
+        'myUrl' : myUrl,
+        'myCurrentMonth': datetime.date.today()
+    })
+
+@login_required
+@renderWithContext('orderMonthlyReport.html')
+def orderMonthlyReport( theRequest, theyear, themonth):
+  #construct date object
+  if not(theyear and themonth):
+    myDate=datetime.date.today()
+  else:
+    try:
+      myDate=datetime.date(int(theyear),int(themonth),1)
+    except:
+      logging.error("Date arguments cannot be parsed")
+      logging.info(traceback.format_exc())
+
+  if not theRequest.user.is_staff:
+    '''Non staff users can only see their own orders listed'''
+    myRecords = Order.base_objects.filter(user=theRequest.user).filter(order_date__month=myDate.month).filter(order_date__year=myDate.year).order_by('order_date')
+  else:
+    '''This view is strictly for staff only'''
+    myRecords = Order.base_objects.filter(order_date__month=myDate.month).filter(order_date__year=myDate.year).order_by('order_date')
+
+  return ({
+    'myRecords': myRecords,
+    'myCurrentDate': myDate,
+    'myPrevDate':myDate - datetime.timedelta(days=1),
+    'myNextDate':myDate + datetime.timedelta(days=31)
+    })
+
 
 @login_required
 def viewOrder (theRequest, theId):
@@ -317,3 +341,14 @@ def viewOrderItems(theRequest,theOrderId):
          'myShowPreviewFlag' : False,
          'myBaseTemplate' : 'emptytemplate.html',
          })
+
+@login_required
+#renderWithContext is explained in renderWith.py
+@renderWithContext('ordersSummary.html')
+def ordersSummary(theRequest):
+  #count orders by status
+  myOrderStatus = OrderStatus.objects.annotate(num_orders=Count('order__id'))
+  #count orders by product type (misson sensor)
+  myOrderProductType = MissionSensor.objects.annotate(num_orders=Count('taskingrequest__order_ptr__id'))
+
+  return dict(myOrderStatus=myOrderStatus, myOrderProductType=myOrderProductType)
