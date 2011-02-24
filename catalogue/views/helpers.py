@@ -8,6 +8,8 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.shortcuts import render_to_response, get_object_or_404
+from django.http import HttpResponseRedirect
+
 from catalogue.models import *
 from django.template import RequestContext
 # for rendering template to email
@@ -102,18 +104,19 @@ def notifySalesStaffOfTaskRequest(theUser, theId):
   myEmailMessage += render_to_string( myTemplate, { 'myOrder': myTaskingRequest,
                                                     'myHistory' : myHistory
                                                   })
+  myMessagesList = [] # we will use mass_mail to prevent users seeing who other recipients are
   myRecipients = OrderNotificationRecipients.objects.filter(sensors__id__exact = myTaskingRequest.mission_sensor.id)
-  myAddresses = []
   for myRecipient in myRecipients:
-    myAddresses.append(myRecipient.user.email)
-  logging.info("Sending notices to : %s" % myAddresses)
-  send_mail(myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN,
-          myAddresses, fail_silently=False)
+    myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN,
+          [myRecipient.user.email]))
+    logging.info("Sending notices to : %s" % myRecipient.user.email)
+
+
   #also send an email to the originator of the order
   #We do this separately to avoid them seeing the staff cc list
-  myAddresses = [ theUser.email ]
-  send_mail(myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN,
-          myAddresses, fail_silently=False)
+  myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN,
+          [ theUser.email ]))
+  send_mass_mail(tuple(myMessagesList), fail_silently=False)
   return
 
 

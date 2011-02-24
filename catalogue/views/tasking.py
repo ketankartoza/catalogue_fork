@@ -2,12 +2,18 @@ from catalogue.renderDecorator import renderWithContext
 from catalogue.profileRequiredDecorator import requireProfile
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.forms.util import ErrorList
 
 #Dane Springmeyer's django-shapes app for exporting results as a shpfile
 from shapes.views import ShpResponder
 
 # Models and forms for our app
 from catalogue.models import *
+from helpers import *
+from catalogue.forms import *
+
+# for error logging
+import traceback
 
 ###########################################################
 #

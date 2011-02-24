@@ -19,6 +19,9 @@ from django.utils import simplejson
 from helpers import *
 from searcher import *
 
+# for error logging
+import traceback
+
 ###########################################################
 #
 # Ordering related views
