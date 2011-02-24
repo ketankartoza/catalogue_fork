@@ -1,4 +1,136 @@
+###########################################################
+#
+# Initialization, generic and helper methods
+#
+###########################################################
+
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.shortcuts import render_to_response, get_object_or_404
+
+
+###########################################################
+#
+# Email notification of orders to sac sales staff
+#
+###########################################################
+def notifySalesStaff(theUser, theOrderId):
+  """ A helper method to notify sales staff who are subscribed to a sensor
+     Example usage from the console / doctest:
+     >>> from catalogue.models import *
+     >>> from catalogue.views import *
+     >>> myUser = User.objects.get(id=1)
+     >>> myUser
+     >>> notifySalesStaff( myUser, 16 )
+
+    #TODO: ABP: GenericProduct does not have sensor informations anymore, notifications must be unbound from the sensors
+  """
+
+  if not settings.EMAIL_NOTIFICATIONS_ENABLED:
+    return
+  myOrder = get_object_or_404(Order,id=theOrderId)
+  myRecords = SearchRecord.objects.all().filter(user=theUser).filter(order=myOrder)
+  myHistory = OrderStatusHistory.objects.all().filter(order=myOrder)
+  myEmailSubject = 'SAC Order ' + str(myOrder.id) + ' status update (' + myOrder.order_status.name + ')'
+  myEmailMessage = 'The status for order #' +  str(myOrder.id) + ' has changed. Please visit the order page:\n'
+  myEmailMessage = myEmailMessage + 'http://' + settings.DOMAIN + '/vieworder/' + str(myOrder.id) + '/\n\n\n'
+  myTemplate = "orderEmail.txt"
+  myEmailMessage += render_to_string( myTemplate, { 'myOrder': myOrder,
+                                                    'myRecords' : myRecords,
+                                                    'myHistory' : myHistory
+                                                  })
+  # Get a list of all the mission sensors involved in this order:
+  myMissionSensors = []
+  for myRecord in myRecords:
+    mySensor = myRecord.product.mission_sensor
+    if not mySensor in myMissionSensors:
+      myMissionSensors.append(mySensor)
+  # Get a list of staff user's email addresses
+  myMessagesList = [] # we will use mass_mail to prevent users seeing who other recipients are
+  for myMissionSensor in myMissionSensors:
+    myRecipients = OrderNotificationRecipients.objects.filter(sensors__id__exact=myMissionSensor.id)
+    for myRecipient in myRecipients:
+      myAddress = myRecipient.user.email
+      myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, [myAddress]))
+      logging.info("Sending notice to : %s" % myAddress)
+  #also send an email to the originator of the order
+  #We do this separately to avoid them seeing the staff cc list
+  myClientAddress = theUser.email
+  myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, [myClientAddress]))
+  # mass mail expects a tuple (read-only list) so convert the list to tuple on send
+  logging.info("Sending messages: \n%s" % tuple(myMessagesList) )
+  send_mass_mail( tuple(myMessagesList),fail_silently=False )
+  return
+
+###########################################################
+#
+# Email notification of tasking requests to sac sales staff
+#
+###########################################################
+def notifySalesStaffOfTaskRequest(theUser, theId):
+  """ A helper method to notify tasking staff who are subscribed to a sensor
+     Example usage from the console / doctest:
+     >>> from catalogue.models import *
+     >>> from catalogue.views import *
+     >>> myUser = User.objects.get(id=1)
+     >>> myUser
+     >>> notifySalesStaffOfTaskRequest( myUser, 11 )"""
+  if not settings.EMAIL_NOTIFICATIONS_ENABLED:
+    return
+  myTaskingRequest = get_object_or_404(TaskingRequest,id=theId)
+  myHistory = OrderStatusHistory.objects.all().filter(order=myTaskingRequest)
+  myEmailSubject = 'SAC Tasking Request ' + str(myTaskingRequest.id) + ' status update (' + myTaskingRequest.order_status.name + ')'
+  myEmailMessage = 'The status for tasking order #' +  str(myTaskingRequest.id) + ' has changed. Please visit the tasking request page:\n'
+  myEmailMessage = myEmailMessage + 'http://' + settings.DOMAIN + '/viewtaskingrequest/' + str(myTaskingRequest.id) + '/\n\n\n'
+  myTemplate = "taskingEmail.txt"
+  myEmailMessage += render_to_string( myTemplate, { 'myOrder': myTaskingRequest,
+                                                    'myHistory' : myHistory
+                                                  })
+  myRecipients = OrderNotificationRecipients.objects.filter(sensors__id__exact = myTaskingRequest.mission_sensor.id)
+  myAddresses = []
+  for myRecipient in myRecipients:
+    myAddresses.append(myRecipient.user.email)
+  logging.info("Sending notices to : %s" % myAddresses)
+  send_mail(myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN,
+          myAddresses, fail_silently=False)
+  #also send an email to the originator of the order
+  #We do this separately to avoid them seeing the staff cc list
+  myAddresses = [ theUser.email ]
+  send_mail(myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN,
+          myAddresses, fail_silently=False)
+  return
+
+
+###########################################################
+#
+# Try to extract a geometry if a shp was uploaded
+#
+###########################################################
+def getGeometryFromShapefile( theRequest, theForm, theFileField ):
+  """Retrieve an uploaded geometry from a shp file. Note in order for this to
+     work, you must have set your form to use multipart encoding type e.g.
+     <form enctype="multipart/form-data" action="/search/" method="post" id="search_form">"""
+  logging.info('Form cleaned data: ' + str(theForm.cleaned_data))
+  if theRequest.FILES[theFileField]:
+    logging.debug("Using geometry from shapefile.")
+    #if not theForm.cleaned_data.contains( "theFileField" ):
+    #  logging.error("Error: %s field not submitted with form" % theFileField)
+    #  return False
+    myExtension = theForm.cleaned_data[theFileField].name.split(".")[1]
+    if myExtension != "zip":
+      logging.info('Wrong format for uploaded geometry. Please select a ZIP archive.')
+      #render_to_response is done by the renderWithContext decorator
+      #@TODO return a clearer error spotmap just like Alert for the missing dates
+      return False
+    myFile = theForm.cleaned_data[theFileField]
+    myOutFile = '/tmp/%s' % myFile.name
+    destination = open(myOutFile, 'wb+')
+    for chunk in myFile.chunks():
+      destination.write(chunk)
+    destination.close()
+    extractedGeometries = getFeaturesFromZipFile(myOutFile, "Polygon", 1)
+    myGeometry = extractedGeometries[0]
+    return myGeometry
 
 """Layer definitions for use in conjunction with open layers"""
 WEB_LAYERS = {
@@ -308,3 +440,102 @@ mLayerJs = {'VirtualEarth' : '''<script src='http://dev.virtualearth.net/mapcont
           '''}
 
 
+
+# Note this code is from Tims personal codebase and copyright is retained
+@login_required
+def genericAdd(theRequest,
+    theFormClass,
+    theTitle,
+    theRedirectPath,
+    theOptions
+    ):
+  myObject = getObject(theFormClass)
+  logging.info('Generic add called')
+  if theRequest.method == 'POST':
+    # create a form instance using reflection
+    # see http://stackoverflow.com/questions/452969/does-python-have-an-equivalent-to-java-class-forname/452981
+    myForm = myObject(theRequest.POST,theRequest.FILES)
+    myOptions =  {
+            'myForm': myForm,
+            'myTitle': theTitle
+          }
+    myOptions.update(theOptions), #shortcut to join two dicts
+    if myForm.is_valid():
+      myObject = myForm.save(commit=False)
+      myObject.user = theRequest.user
+      myObject.save()
+      logging.info('Add : data is valid')
+      return HttpResponseRedirect(theRedirectPath + str(myObject.id))
+    else:
+      logging.info('Add : form is NOT valid')
+      return render_to_response('add.html',
+          myOptions,
+          context_instance=RequestContext(theRequest))
+  else:
+    myForm = myObject()
+    myOptions =  {
+          'myForm': myForm,
+          'myTitle': theTitle
+        }
+    myOptions.update(theOptions), #shortcut to join two dicts
+    logging.info('Add : new object requested')
+    return render_to_response('add.html',
+        myOptions,
+        context_instance=RequestContext(theRequest))
+
+def genericDelete(theRequest,theObject):
+  if theObject.user != theRequest.user:
+    return ({"myMessage" : "You can only delete an entry that you own!"})
+  else:
+    theObject.delete()
+    return ({'myMessage' : "Entry was deleted successfully"})
+
+def getObject( theClass ):
+  #Create an object instance using reflection
+  #from http://stackoverflow.com/questions/452969/does-python-have-an-equivalent-to-java-class-forname/452981
+  myParts = theClass.split('.')
+  myModule = ".".join(myParts[:-1])
+  myObject = __import__( myModule )
+  for myPath in myParts[1:]:
+    myObject = getattr(myObject, myPath)
+  return myObject
+
+
+@login_required
+def isStrategicPartner(theRequest):
+  """Returns true if the current user is a CSIR strategic partner
+  otherwise false"""
+  myProfile = None
+  try:
+    myProfile = theRequest.user.get_profile()
+  except:
+    logging.debug('Profile does not exist')
+  myPartnerFlag = False
+  if myProfile and myProfile.strategic_partner:
+    myPartnerFlag = True
+  return myPartnerFlag
+
+
+def standardLayers(theRequest):
+  """Helper methods used to return standard layer defs for the openlayers control
+     Note intended to be published as a view in urls.py
+    e.g. usage:
+    myLayersList, myLayerDefinitions, myActiveLayer = standardLayers( theRequest )"""
+
+  myProfile = None
+  myLayersList = None
+  myLayerDefinitions = None
+  myActiveBaseMap = None
+  try:
+    myProfile = theRequest.user.get_profile()
+  except:
+    logging.debug('Profile does not exist')
+  if myProfile and myProfile.strategic_partner:
+    myLayerDefinitions = [ WEB_LAYERS['ZaSpot2mMosaic2009TC'], WEB_LAYERS['ZaSpot2mMosaic2008TC'], WEB_LAYERS['ZaSpot2mMosaic2007TC'], WEB_LAYERS['ZaRoadsBoundaries'] ]
+    myLayersList = "[ zaSpot2mMosaic2009TC,zaSpot2mMosaic2008TC,zaSpot2mMosaic2007TC,zaRoadsBoundaries ]"
+    myActiveBaseMap =  "zaSpot2mMosaic2009TC"
+  else:
+    myLayerDefinitions = [ WEB_LAYERS['ZaSpot10mMosaic2009'],WEB_LAYERS['ZaSpot10mMosaic2008'],WEB_LAYERS['ZaSpot10mMosaic2007'],WEB_LAYERS['ZaRoadsBoundaries'] ]
+    myLayersList = "[zaSpot10mMosaic2009,zaSpot10mMosaic2008,zaSpot10mMosaic2007,zaRoadsBoundaries]"
+    myActiveBaseMap =  "zaSpot10mMosaic2009"
+  return myLayersList, myLayerDefinitions, myActiveBaseMap

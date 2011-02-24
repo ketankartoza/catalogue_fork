@@ -27,6 +27,10 @@ import os
 # python logging support to django logging middleware
 import logging
 
+from django.core.exceptions import ImproperlyConfigured
+from django.db import models
+import os
+
 if not settings.AUTH_PROFILE_MODULE:
     raise SiteProfileNotAvailable
 try:
@@ -61,6 +65,16 @@ if AVATAR_WEBSEARCH:
 def get_profiles():
     return Profile.objects.order_by("-date")
 
+def public(request, username):
+    try:
+        profile = User.objects.get(username=username).get_profile()
+    except:
+        raise Http404
+
+    template = "userprofile/profile/public.html"
+    data = { 'profile': profile, 'GOOGLE_MAPS_API_KEY': GOOGLE_MAPS_API_KEY, }
+    return render_to_response(template, data, context_instance=RequestContext(request))
+
 def fetch_geodata(request, lat, lng):
     if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
         url = "http://ws.geonames.org/countrySubdivision?lat=%s&lng=%s" % (lat, lng)
@@ -76,15 +90,6 @@ def fetch_geodata(request, lat, lng):
     else:
         raise Http404()
 
-def public(request, username):
-    try:
-        profile = User.objects.get(username=username).get_profile()
-    except:
-        raise Http404
-
-    template = "userprofile/profile/public.html"
-    data = { 'profile': profile, 'GOOGLE_MAPS_API_KEY': GOOGLE_MAPS_API_KEY, }
-    return render_to_response(template, data, context_instance=RequestContext(request))
 
 @login_required
 def searchimages(request):
@@ -350,5 +355,5 @@ def email_validation_reset(request):
     except EmailValidation.DoesNotExist:
         response = "failed"
 
-    return HttpResponseRedirect(reverse("email_validation_reset_response", 
+    return HttpResponseRedirect(reverse("email_validation_reset_response",
             args=[response]))

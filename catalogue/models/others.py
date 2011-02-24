@@ -7,6 +7,7 @@ from dictionaries import MissionSensor
 
 ###############################################################################
 
+
 class Visit(models.Model):
   """Each time a visitor to the site arrives to the front page we will log their IP address and Lat/Long"""
 

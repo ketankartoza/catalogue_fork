@@ -62,6 +62,7 @@ class dimsBase(object):
       bbox_east               = '//{xmlns}EX_GeographicBoundingBox/{xmlns}eastBoundLongitude/{xmlns_gco}Decimal',
       bbox_north              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}northBoundLatitude/{xmlns_gco}Decimal',
       bbox_south              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}southBoundLatitude/{xmlns_gco}Decimal',
+      image_quality_code      = '//{xmlns}imageQualityCode//{xmlns}code/{xmlns_gco}CharacterString',
     )
 
 
@@ -280,7 +281,7 @@ class dimsWriter(dimsBase):
     os.chdir(os.path.split(self._path)[0])
     tar_path = tar_path or os.path.join(os.getcwd(), self._get_tarball_name())
     tar = tarfile.open(tar_path, "w:gz")
-    tar.add(self._package_name, exclude = lambda x: -1 != x.find('ISOMetadata_template'))
+    tar.add(self._package_name, exclude=lambda x: -1 != x.find('ISOMetadata_template'))
     tar.close()
     logging.info("writing tarball %s" % tar_path)
     return tar_path

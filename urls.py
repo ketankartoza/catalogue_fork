@@ -46,7 +46,7 @@ urlpatterns = patterns('',
     (r'^myclips/$', clipHistory),
     (r'^mysearches/$', searchHistory),
     (r'^recentsearches/$', recentSearches),
-    (r'^search/$', search),
+    (r'^search/$', 'catalogue.views.search.search'), # clashes with module name catalogue.views.search
     (r'^productIdSearch/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearch),
     (r'^visit/$', logVisit),
     (r'^visitormap/$', visitorMap),
@@ -106,3 +106,4 @@ urlpatterns = patterns('',
 
     ( r'^dataSummaryTable/$', dataSummaryTable),
 )
+
