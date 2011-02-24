@@ -4,15 +4,50 @@
 
 = Catalogue Schema : Products =
 
+The working unit of the catalogue is a product. A product can be any of a range
+of different type of geodata:
+- satellite imagery
+- processed imagery
+- other satellite products e.g. radar data
+- derived products e.g. pan sharpened imagery
+- composite products (and composite derived products) e.g. mosaics
+- vector and raster data of an ordinal nature (where the data is arranged in
+  discrete classes) e.g. landcover maps
+- vector and raster data of a continuous nature (where the data are arranged
+  within a numeric scale) e.g. rainfall monitoring points
+- 
+
+The catalogue implements a model (see figure below) that caters for these
+different types of product and tries to deal with them in a consistent way, and
+groups them in a manner that cross cutting properties and behaviours can be
+assigned to any given  product based on the family of products to which it
+belongs. 
+
 [img/product-heirarchy2.png]
 
+This is the revised schema for version 2 of the online catelogue's product model.
+
+In this chapter we delve into the various subtypes of product and explain the
+operational rules governing each type.
+
+%----------------------------------------------------------
+%----------------------------------------------------------
+%------------------ Imagery Product  ---------------------
+%----------------------------------------------------------
+%----------------------------------------------------------
 == Generic Products ==
+
+**Synopsis:** Abstract Base Class for all products.
+
+**Concrete or Abstract:** Abstract (A product must be a subclass of Generic Product)
 
 The generic product is the base class of all products (sensor based or derived
 / surveyed geospatial data). The purpose of the generic product is to define
 common properties applicable to **any** product regardless of type. A number of
 data dictionaries (as described in the next section) are used to ensure data
 consistency for properties relating to a product.
+
+=== Product ID Naming Scheme ===
 
 All generic products can be identified by a 'nearly unique' product id. The
 product id seeks to normalise the naming conventions used by different
@@ -26,6 +61,9 @@ as to how these product Ids should be assigned.
 
 These will be discussed more fully in the sections that follow.
 
+Since this is an abstract class, it has no direct naming scheme of its own.
+
+------------------
 **Note:** As per discussion with Wolfgang on 17 Feb 2011, the SAC Product Id
 will apply only to sensor based products and a different, as yet undefined,
 identifcation scheme will be used for GeoSpatial products.
@@ -41,17 +79,23 @@ following diagram:
 
 [img/generic-product-dictionaries.png]
 
+These dictionaries are described in details in the sub-sections that follow.
+
 ==== Institution ====
 
-The institution (linked to the **GenericProduct** table on the owner field) indicates the organisation from which the product can be obtained.
+The institution (linked to the **GenericProduct** table on the owner field)
+indicates the organisation from which the product can be obtained.
 
-**Note:** Wolfgang verify that we won't be storing the original data owner (e.g. Spot Image) here.
-
-As at the time of writing this document, only one record exists in this table, and all new products are assigned to this institution:
+As at the time of writing this document, only one record exists in this table,
+and all new products are assigned to this institution:
 
 || ID |             Name              |   Address1    | Address2 |   Address3   | Post Code |
 |  1 | Satellite Applications Centre | Hartebeeshoek | Gauteng  | South Africa | 0000       |
 
+
+----------------------
+**Note:** Wolfgang verify that we won't be storing the original data owner
+(e.g. Spot Image) here.
 
 
 ==== Processing Level ====
@@ -83,17 +127,19 @@ This code can be deconstructed as:
  - **[a-z]** A single lower case character representing class-type (see below)
  -
 
+**Note:** The 'L' prefix is not stored in the database tables.
+
 Some commonly used codes include:
 
 || Code   | Description                                 |
-| L2A/B  | (L1G)                                        |
-| L3Aa   | (L1T) Orthorectified DN values               |
-| L3Ab   | At sensor/TOA reflectance                    |
-| L3Ac   | Atmospherically corrected/TOC reflectance    |
-| L3At   | Topographic correction                       |
-| L4A*   | Derivatives/products                         |
-| L4B*   | Pixel-based classification                   |
-| L4C*   | Vector/object classification                 |
+| 2A/B  | (L1G)                                        |
+| 3Aa   | (L1T) Orthorectified DN values               |
+| 3Ab   | At sensor/TOA reflectance                    |
+| 3Ac   | Atmospherically corrected/TOC reflectance    |
+| 3At   | Topographic correction                       |
+| 4A*   | Derivatives/products                         |
+| 4B*   | Pixel-based classification                   |
+| 4C*   | Vector/object classification                 |
 
 Some common values for class type include:
 
@@ -118,14 +164,16 @@ The following processing levels are listed in the database.
  |  2  | 1A           | Level 1A  |
  |  3  | 1Ab          | Level 1Ab |
  |  4  | 1Aa          | Level 1Aa |
- |  12 | L3Aa         | Level 3Aa |
- |  13 | L3Ab         | Level 3Ab |
- |  14 | L3Ac         | Level 3Ac |
- |  15 | L3Ad         | Level 3Ad |
- |  16 | L3Ba         | Level 3Ba |
- |  17 | L3Bb         | Level 3Bb |
- |  18 | L4           | Level 4   |
+ |  12 | 3Aa         | Level 3Aa |
+ |  13 | 3Ab         | Level 3Ab |
+ |  14 | 3Ac         | Level 3Ac |
+ |  15 | 3Ad         | Level 3Ad |
+ |  16 | 3Ba         | Level 3Ba |
+ |  17 | 3Bb         | Level 3Bb |
+ |  18 | 4           | Level 4   |
 
+
+---------------------------
 **Note:** These should be updated to include a proper description with each in
 a new description col. TS
 
@@ -138,7 +186,7 @@ Survey Group (EPSG). The list included is not comprehensive - at the time of
 writing it contains only 84 or the //circa// 3000+ entries available in the
 official EPSG CRS list.
 
-The EPSG name is a mode user friendly and easily recognisable representation of
+The EPSG name is a more user friendly and easily recognisable representation of
 the EPSG code. For reference, an extract of the entries is provided in the table below:
 
  || ID | Epsg Code |  Name | 
@@ -171,7 +219,8 @@ This presence of a quality indicator is mandatory for GenericProduct, but the
 fact that all records are currently assigned a ranking of 'Unknown' makes this
 attribute largely meaningless.
 
-**Note:** Wolfgang - we need do define a standard of quality description and a
+-------------------------
+**Note:** Wolfgang - we need to define a standard of quality description and a
 strategy for populating existing and new records with an appropriate quality
 indicator.
 
@@ -188,6 +237,7 @@ available:
 Sarmes2 will be added to this list in the future, and other additional packages
 as needed.
 
+-------------------------
 **Note:** Wolfgang - do we need to include other software here, and if so which
 products should have this applied?
 
@@ -202,15 +252,26 @@ this license.
  || ID |    Name     |   Details   |
  |  1 | SAC License | SAC License   |
 
+
+---------------------
 **Note:** Wolfgang - we need to define more completely the SAC License, or
 several variants of it, and add any other licenses that may apply. We would
 also need rules descibing how to select products which should have which
 license applied.
 
-== ImageryProducts ==
+%----------------------------------------------------------
+%----------------------------------------------------------
+%------------------ Generic Imagery Product  ---------------------
+%----------------------------------------------------------
+%----------------------------------------------------------
+== Generic Imagery Products ==
 
-Generic imagery product is the model that all sensor based products inherit
-from. In addition, concrete instances of **ImageryProduct** are used to lodge sensor
+**Synopsis:** Base Class for //imagery// products.
+
+**Concrete or Abstract:** Concrete (instances of this class can be created and stored).
+
+**GenericImageryProduct** is the model that all sensor based products inherit
+from. In addition, concrete instances of **GenericImageryProduct** are used to lodge sensor
 based aggregate data. For example when an image is created that is a
 combination of a 'J' and a 'T' image, we can no longer canonically state which
 acquisition mode etc was used for that image. In this case the DAG (Directed
@@ -218,12 +279,24 @@ Acyclical Graph) implementation will be used to provide backpointers to the
 original images used to create this record (and those backpointers will be to
 Sensor based product records).
 
+=== Product ID Naming Scheme ===
+
+------------------------
+**Note:** Wolfgang to define or we must devise something
+
+=== Imagery product Properties ===
+
+A GenericImageryProduct extends the generic product model with these properties:
+- geometric_resolution
+- geometric_resolution_x
+- geometric_resolution_y
+-
+
 === Imagery Product Aggregation Rules ===
 
 In the DAG (Directed Acyclical Graph) that maps relationships between products
 and their downstream constituent products, ImageryProducts can be made of:
 
-- Generic Products
 - Generic Imagery Products
 - Generic Sensor Products
 - Optical Products
@@ -231,13 +304,27 @@ and their downstream constituent products, ImageryProducts can be made of:
 - Geospatial Products and subclasses of Geospatial products
 - 
 
-**Note:** Self referencing is not allowed. That is, a Imagery product may not include itself in any leaf node.
+**Note:** Self referencing is not allowed. That is, a Imagery product may not
+include itself in any leaf node.
 
+**Note:** Generic Imagery Products will always be composite (derived from one
+or more other products).
+
+=== Dictionaries ===
+
+No additional dictionaries are introduced with this class.
 
 == Generic Sensor based products ==
 
+**Synopsis:** Base Class for //Sensor// products.
+
+**Concrete or Abstract:** Abstract (instances cannot be directly created and stored).
+
+
 Generic sensor product is an Abstract Base Class that all other sensor based
 products inherit from. It inherits from Generic Imagery product.
+
+=== Product ID Naming Scheme ===
 
 The following scheme is used for assigning product id's for sensor based products:
 
@@ -288,13 +375,7 @@ The following key can be used to decode the above:
 
 === Generic Sensor Product Aggregation Rules ===
 
-In the DAG (Directed Acyclical Graph) that maps relationships between products
-and their downstream constituent products, **GenericSensorProducts** may
-**not** be aggregates. This is because each sensor product has an explicit
-acquisition mode, sensor type etc. and such relationships are not mappable for
-aggregate products. In the case that you have have two
-**GenericSensorProducts** (or its subclasses) forming a new image, the new
-image should be modelled as a **GenericImageryProduct**.
+Since this is an abstract class it may not be a node in a product aggregation tree.
 
 
 === Sensor Product Dictionaries ===
@@ -302,16 +383,10 @@ image should be modelled as a **GenericImageryProduct**.
 Several domain lists are implemented for sensor based products. These can be
 visualised in the following diagram:
 
-[img/sensor-product-dictionaries.png]
-
-The schema described above has some issues - there is no enforced relationship
-between mission, mission sensor, sensor type and acquisition mode. To address
-this, it is proposed to alter the schema to look like this:
-
-
 [img/proposed-sensor-product-dictionaries.png]
 
-These proposed changes are described in more detail in the text below.
+These dictionaries and their interrelationships are described in more detail in
+the text below.
 
 ==== Mission ====
 
@@ -374,11 +449,16 @@ MSS Multi-spectral
 **Note:** This list needs to be refactored such that aggregated entries are separated. e.g. Landsat 1,2,3,4,5 MSS would become:
 
  || ID | Abbreviation |         Name          | Description | Has Data |
- | 4 | MSS1          | Landsat 1 MSS |             | t |
- | 5 | MSS2          | Landsat 2 MSS |             | t |
- | 6 | MSS3          | Landsat 3 MSS |             | t |
- | 7 | MSS4          | Landsat 4 MSS |             | t |
- | 8 | MSS5          | Landsat 5 MSS |             | t |
+ | 4 | MSS          | Landsat 1 MSS |             | t |
+ | 5 | MSS          | Landsat 2 MSS |             | t |
+ | 6 | MSS          | Landsat 3 MSS |             | t |
+ | 7 | MSS          | Landsat 4 MSS |             | t |
+ | 8 | MSS          | Landsat 5 MSS |             | t |
+
+
+**Note:** The abbreviations are not unique. We will not be able to reconstite a
+mission sensor record from its abbreviation alone, but only in the context of
+its related sensor.
 
 
 **Note:** In the schema changes for this Work Package, a one-to-many
@@ -474,12 +554,22 @@ space does not allow for many permutations and readers of the abbreviation
 should do it in context of a specific mission-sensor, acquisition mode etc.  (for example
 by always presenting the mission abbreviation at the same time). 
 
+As a result of the above refactoring, an 'MS' acquisition mode will become
+multiple entries, one per sensor type e.g.
+
+ || ID | Abbreviation |                   Name                   | Mission Sensor |
+ |  7 | MSS          | Multispectral - Landsat 1                 |       7        |
+ |  8 | MSS          | Multispectral - Landsat 2                 |       8        |
+ |  9 | MSS          | Multispectral - Landsat 3                 |       9        |
+ |  10 | MSS          | Multispectral - Landsat 4                 |       10        |
+ |  11 | MSS          | Multispectral - Landsat 5                 |       11        |
+
 ==== Acquisition Modes ====
 
 Each sensor can operate in one or more modes. Thus there the list of
 acquisition modes should include at least one entry per sensor type. Where such
 an entry does not exist, a default one (named after the sensor type) shall be
-created.
+created. Acquisition modes pre-refactor looked like this:
 
  || ID   | Abbreviation |               Name               | Geometric Resolution | Band Count |
  |  1  | MS           | Multispectral                    |                    0 |          0   |
@@ -527,6 +617,18 @@ abbreviation should do it in context of a specific sensor type.  (for example
 by always presenting the sensor type, mission type and mission abbreviations at
 the same time). 
 
+As a result of the above refactoring, an 'MS' acquisition mode will become
+multiple entries, one per sensor type e.g.
+
+ || ID   | Abbreviation |               Name       | Geometric Resolution | Band Count | Sensor Type |
+ |  1  | MS           | Multispectral - Landsat 1  |                    0 |          0   |    7 |
+ |  2  | MS           | Multispectral - Landsat 2  |                    0 |          0   |    8 |
+ |  3  | MS           | Multispectral - Landsat 3  |                    0 |          0   |    9 |
+ |  4  | MS           | Multispectral - Landsat 4  |                    0 |          0   |    10 |
+ |  5  | MS           | Multispectral - Landsat 5  |                    0 |          0   |    11 |
+
+
+
 **Note:** The geometric resolution and band count columns in this table need to
 be populated by Wolfgang.
 
@@ -551,7 +653,7 @@ missions associated with it. Each mission shall be associated to only one
 mission group.``
 
 
-==== Notes on the proposed schema changes ====
+=== Notes on the proposed schema changes ===
 
 The proposed schema change will bring about the following advantages:
 
@@ -574,8 +676,60 @@ meaningful. Because of this composite products (e.g. a pan sharpened SPOT
 image) will not be modelled under generic sensor products but rather belong to
 a sub class GenericImageryProduct.
 
+=== Resolving the metadata to explicit records ===
+
+The input metadata we receive will be ambiguous for acquisition mode, sensor
+type, mission sensor. It is only with the presence of a mission abbreviation
+that these can be correctly resolved. For example:
+
+
+``L7-_ETM_HRF_SAM-_168-_00_077-_010530_------_L3Ab_UTM36S``
+
+``SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LLLL_PPPPPP``
+
+|| Code            | Description                                          |
+| SSS              | satellite (mission) name e.g. L5-; S5-               |
+| sss              | sensor (mission sensor) e.g. TM-; ETM                |
+| ttt              | type (sensor type) eg. HRF; HPN; HPM                 |
+| mmmm             | bumper (acquisition) mode eg. SAM- BUF-              |
+
+So we can see from this example, we have the following:
+
+||Satellite | Mission Sensor | Sensor Type | Acquisition Mode |
+| L7 | ETM | HRF | SAM |
+
+In cases where the entries for these dictionary terms do not exist, new records should be added to the tables using the following logic:
+
++ Add ``L7`` to the mission table and note the PKEY of the new record
++ Add abbreviation ``ETM``, description ``ETM:Landsat 7``, mission ``PKEY from above`` to the mission sensor table and note the PKEY of the new record
++ Add abbreviation `` HRF``, description ``HRF:ETM:Landsat 7``, mission_sensor ``PKEY from above`` to the sensor type table and note the PKEY of the new record
++ Add abbreviation ``SAM``, description ``SAM:HRF:ETM:Landsat 7``, sensor_type ``PKEY from above`` to the acquisition mode table.
++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%----------------------------------------------------------
+%----------------------------------------------------------
+%------------------ Optical Product   ---------------------
+%----------------------------------------------------------
+%----------------------------------------------------------
 
 == Optical products ==
+
+**Synopsis:** Vector and Raster products where data are grouped into discrete classes.
+
+**Concrete or Abstract:** Concrete
 
 Optical products are a specialisation of Generic Sensor Products. An Optical
 Product is a concrete class (i.e. one that should not be treated as abstract).
@@ -589,6 +743,12 @@ image and improve its native resolution.
 
 [img/optical-image-example-medium.png]
 
+=== Ordinal Product Properties ===
+
+=== Product ID Naming Scheme ===
+
+=== Ordinal Product Aggregation Rules ===
+
 === Optical Product Aggregation Rules ===
 
 In the DAG (Directed Acyclical Graph) that maps relationships between products
@@ -597,6 +757,12 @@ aggregates. This is because each sensor product has an explicit acquisition
 mode, sensor type etc. and such relationships are not mappable for aggregate
 products. In the case that you have have two **OpticalProducts** forming a new
 image, the new image should be modelled as a **GenericImageryProduct**.
+
+%----------------------------------------------------------
+%----------------------------------------------------------
+%------------------ Radar Product     ---------------------
+%----------------------------------------------------------
+%----------------------------------------------------------
 
 == Radar Products ==
 
@@ -609,8 +775,80 @@ mode, sensor type etc. and such relationships are not mappable for aggregate
 products. In the case that you have have two **RadarlProducts** forming a new
 image, the new image should be modelled as a **GenericImageryProduct**.
 
+
+=== Product ID Naming Scheme ===
+
+Follows the same scheme as defined in OpticalProduct documentation.
+
 == Geospatial Products ==
 
-=== Ordinal Products ===
+GeoSpatial products are pure abstract (they cannot exist on their own, only as
+a subclass).
 
-=== Continuous Products ===
+=== Product ID Naming Scheme ===
+
+Follows the same scheme as defined in OpticalProduct documentation.
+
+%----------------------------------------------------------
+%----------------------------------------------------------
+%------------------ Geospatial Product --------------------
+%----------------------------------------------------------
+%----------------------------------------------------------
+== Ordinal Products ==
+
+**Synopsis:** Vector and Raster products where data are grouped into discrete classes.
+
+**Concrete or Abstract:** Concrete
+
+=== Ordinal Product Properties ===
+
+=== Product ID Naming Scheme ===
+
+=== Ordinal Product Aggregation Rules ===
+
+=== Ordinal Product Dictionaries ===
+
+=== Dictionaries ===
+
+%----------------------------------------------------------
+%----------------------------------------------------------
+%------------------ Ordinal Product     ---------------------
+%----------------------------------------------------------
+%----------------------------------------------------------
+== Ordinal Products ==
+
+**Synopsis:** Vector and Raster products where data are grouped into discrete classes.
+
+**Concrete or Abstract:** Concrete
+
+=== Ordinal Product Properties ===
+
+=== Product ID Naming Scheme ===
+
+=== Ordinal Product Aggregation Rules ===
+
+=== Ordinal Product Dictionaries ===
+
+=== Dictionaries ===
+
+%----------------------------------------------------------
+%----------------------------------------------------------
+%------------------ Continuous Product  -------------------
+%----------------------------------------------------------
+%----------------------------------------------------------
+== Continuous Products ==
+
+**Synopsis:** Vector and Raster products where data are //not// grouped into
+discrete classes, but rather along a continuous value range.
+
+**Concrete or Abstract:** Concrete
+
+=== Continuos Product Properties ===
+
+=== Product ID Naming Scheme ===
+
+=== Continuous Product Aggregation Rules ===
+
+=== Continuous Product Dictionaries ===
+
+=== Dictionaries ===
