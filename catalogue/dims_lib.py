@@ -281,7 +281,7 @@ class dimsWriter(dimsBase):
     os.chdir(os.path.split(self._path)[0])
     tar_path = tar_path or os.path.join(os.getcwd(), self._get_tarball_name())
     tar = tarfile.open(tar_path, "w:gz")
-    tar.add(self._package_name, exclude = lambda x: -1 != x.find('ISOMetadata_template'))
+    tar.add(self._package_name, exclude=lambda x: -1 != x.find('ISOMetadata_template'))
     tar.close()
     logging.info("writing tarball %s" % tar_path)
     return tar_path
