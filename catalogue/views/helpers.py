@@ -3,11 +3,18 @@
 # Initialization, generic and helper methods
 #
 ###########################################################
+import logging
 
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.shortcuts import render_to_response, get_object_or_404
+from catalogue.models import *
+from django.template import RequestContext
+# for rendering template to email
+from django.template.loader import render_to_string
 
+# for sending email
+from django.core.mail import send_mail,send_mass_mail
 
 ###########################################################
 #
@@ -27,6 +34,7 @@ def notifySalesStaff(theUser, theOrderId):
   """
 
   if not settings.EMAIL_NOTIFICATIONS_ENABLED:
+    logging.info("Email sending disabled, set EMAIL_NOTIFICATIONS_ENABLED in settings")
     return
   myOrder = get_object_or_404(Order,id=theOrderId)
   myRecords = SearchRecord.objects.all().filter(user=theUser).filter(order=myOrder)
@@ -42,11 +50,18 @@ def notifySalesStaff(theUser, theOrderId):
   # Get a list of all the mission sensors involved in this order:
   myMissionSensors = []
   for myRecord in myRecords:
-    mySensor = myRecord.product.mission_sensor
-    if not mySensor in myMissionSensors:
-      myMissionSensors.append(mySensor)
+    try:
+      mySensor = myRecord.product.mission_sensor
+      if not mySensor in myMissionSensors:
+        myMissionSensors.append(mySensor)
+    except AttributeError:
+        logging.debug('Missing mission_sensor from class %s' % myRecord)
+        # TODO: see above
+        raise
+
   # Get a list of staff user's email addresses
   myMessagesList = [] # we will use mass_mail to prevent users seeing who other recipients are
+
   for myMissionSensor in myMissionSensors:
     myRecipients = OrderNotificationRecipients.objects.filter(sensors__id__exact=myMissionSensor.id)
     for myRecipient in myRecipients:
@@ -76,6 +91,7 @@ def notifySalesStaffOfTaskRequest(theUser, theId):
      >>> myUser
      >>> notifySalesStaffOfTaskRequest( myUser, 11 )"""
   if not settings.EMAIL_NOTIFICATIONS_ENABLED:
+    logging.info("Email sending disabled, set EMAIL_NOTIFICATIONS_ENABLED in settings")
     return
   myTaskingRequest = get_object_or_404(TaskingRequest,id=theId)
   myHistory = OrderStatusHistory.objects.all().filter(order=myTaskingRequest)

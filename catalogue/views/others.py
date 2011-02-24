@@ -10,9 +10,6 @@ from django.template import RequestContext
 from django.db.models import Count, Min, Max #for aggregate queries
 from django.forms.util import ErrorList
 
-# for rendering template to email
-from django.template.loader import render_to_string
-
 # python logging support to django logging middleware
 import logging
 
@@ -39,9 +36,6 @@ from PIL import Image, ImageFilter, ImageOps
 
 # For shopping cart and ajax product id search
 from django.utils import simplejson
-
-# for sending email
-from django.core.mail import send_mail,send_mass_mail
 
 # for get feature info
 import urllib2
