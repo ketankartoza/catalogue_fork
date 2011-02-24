@@ -58,5 +58,6 @@ Tim Sutton, 2008
 %!include: 004-installation-guide.t2t
 %!include: 201-reporting-tools.t2t
 %!include: 301-product-schema.t2t
+%!include: 302-order-schema.t2t
 %!include: 901-informix-acs-sync.t2t
 %!include: 902-importing-other-products.t2t
