@@ -1,0 +1,27 @@
+
+
+%------leave this line and the two above it
+
+= Catalogue Schema : Orders =
+
+**Note:** Before reading this section please read & understand the products schema notes.
+
+[img/order-wireframe.png]
+
+The schema relating to product orders can be summariesed as:
+
+[img/product-orders.png]
+
+
+== Filtering of CRS's ==
+
+The projections list can be long and irrelevant for many images if the complete
+list is shown. Thus the following logic applies:
+
+- When listing utm zones, only the zone in which the image centroid falls, and
+  the two zones to either side of that are shown.
+- EPSG:4326 Geographic is always listed
+- EPSG:900913 Google Mercator is always listed
+-
+
+
