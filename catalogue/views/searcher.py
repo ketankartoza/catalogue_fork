@@ -6,12 +6,11 @@ from django.contrib.gis.geos import *
 from catalogue.models import *
 # to be deprecated...
 from acscatalogue.models import *
-from catalogue.weblayers import *
 # for using django Q() query defs
 from django.db.models import Q
 from django.conf import settings
 import logging
-
+from helpers import *
 
 class Searcher:
   """
