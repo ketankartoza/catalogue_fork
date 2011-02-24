@@ -223,7 +223,7 @@ Sensor based product records).
 In the DAG (Directed Acyclical Graph) that maps relationships between products
 and their downstream constituent products, ImageryProducts can be made of:
 
-- Generic Imagery Products
+- Generie Imagery Products
 - Generic Sensor Products
 - Optical Products
 - Radar Products
@@ -373,11 +373,16 @@ MSS Multi-spectral
 **Note:** This list needs to be refactored such that aggregated entries are separated. e.g. Landsat 1,2,3,4,5 MSS would become:
 
  || ID | Abbreviation |         Name          | Description | Has Data |
- | 4 | MSS1          | Landsat 1 MSS |             | t |
- | 5 | MSS2          | Landsat 2 MSS |             | t |
- | 6 | MSS3          | Landsat 3 MSS |             | t |
- | 7 | MSS4          | Landsat 4 MSS |             | t |
- | 8 | MSS5          | Landsat 5 MSS |             | t |
+ | 4 | MSS          | Landsat 1 MSS |             | t |
+ | 5 | MSS          | Landsat 2 MSS |             | t |
+ | 6 | MSS          | Landsat 3 MSS |             | t |
+ | 7 | MSS          | Landsat 4 MSS |             | t |
+ | 8 | MSS          | Landsat 5 MSS |             | t |
+
+
+**Note:** The abbreviations are not unique. We will not be able to reconstite a
+mission sensor record from its abbreviation alone, but only in the context of
+its related sensor.
 
 
 **Note:** In the schema changes for this Work Package, a one-to-many
