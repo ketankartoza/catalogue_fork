@@ -425,45 +425,51 @@ below.
 
 ==== Mission Sensors ====
 
- || ID | Abbreviation |         Name          | Description | Has Data |
- | 1 | AVH          | NOAA AVHRR            |             | t |
- | 2 | AMI          | ERS AMI SAR           |             | t |
- | 3 | TM           | Landsat 4,5 TM        |             | t |
- | 4 | MSS          | Landsat 1,2,3,4,5 MSS |             | t |
- | 5 | ETM          | Landsat 7 ETM+        |             | t |
- | 6 | Xs           | Spot 1,2,3 HRV Xs     |             | t |
- | 7 | Xi           | Spot 4 G,R,NIR,SWIR   |             | t |
- | 8 | M            | Spot 4 Pan            |             | t |
- | 9 | Pan          | Spot 1,2,3 HRV Pan    |             | t |
- | 10 | HRG          | Spot 5 HRG            | Spot 5 HRG  | t |
- | 14 | CCD          | CBERS CCD             |             | t |
- | 15 | MRS          | SACC MRS              |             | t |
- | 13 | SMS          | Sumbandilasat MSS     |             | t |
+On board each space vehicle receiving EO data will be one or more sensors.
+Although the sensor may be nominally the same between two different missions
+(e.g. MSS), the specific properties of these sensors will vary between
+missions, and even between identical sensors on the same mission. 
+A sensor is basically a camera or other equipment capable of performing
+distance observation of the earth.
 
+ || ID | Abbreviation |         Name          | Description | Has Data | Mission |
+ | 1 | AVH          | NOAA AVHRR            |             | t |    NOAA             |
+ | 2 | AMI          | ERS AMI SAR           |             | t |    ERS             |
+ | 3 | TM          | Landsat 4 TM        |             | t |       L4           |
+ | 4 | TM          | Landsat 5 TM        |             | t |       L5           |
+ | 5 | MSS          | Landsat 1 MSS |             | t |            L1           |
+ | 6 | MSS          | Landsat 2 MSS |             | t |            L2           |
+ | 7 | MSS          | Landsat 3 MSS |             | t |            L3           |
+ | 8 | MSS          | Landsat 4 MSS |             | t |            L4           |
+ | 9 | MSS          | Landsat 5 MSS |             | t |            L5           |
+ | 10 | ETM          | Landsat 7 ETM+        |             | t |     L7         |
+ | 11 | Xs1           | Spot 1 HRV Xs     |             | t |        S1         |
+ | 12 | Xs2           | Spot 2 HRV Xs     |             | t |        S2         |
+ | 13 | Xs3           | Spot 3 HRV Xs     |             | t |        S3         |
+ | 14 | Xi           | Spot 4 G,R,NIR,SWIR   |             | t |     S4         |
+ | 15 | M            | Spot 4 Pan            |             | t |     S4         |
+ | 16 | Pan          | Spot 1 HRV Pan    |             | t |         S1         |
+ | 17 | Pan          | Spot 2 HRV Pan    |             | t |         S2         |
+ | 18 | Pan          | Spot 3 HRV Pan    |             | t |         S3         |
+ | 19 | HRG          | Spot 5 HRG            | Spot 5 HRG  | t |     S5         |
+ | 20 | CCD          | CBERS CCD             |             | t |     C2B        |
+ | 21 | MRS          | SACC MRS              |             | t |     S-C        |
+ | 22 | SMS          | Sumbandilasat MSS     |             | t |     ZA2        |
+
+**Note:** Ale, I would like to get rid of the has data field if poss. It is
+used to restrict the display of sensors to users to only those with data
+associated to them. Is there a cleaner way to do it? At mininimum we need to
+automate updating this field as data is added to and removed from the system.
 
 Sensors
 TM - Thematic Mapper 
 ETM - Enhanced thematic mapper
 MSS Multi-spectral
 
-**Note:** This list needs to be refactored such that aggregated entries are separated. e.g. Landsat 1,2,3,4,5 MSS would become:
-
- || ID | Abbreviation |         Name          | Description | Has Data |
- | 4 | MSS          | Landsat 1 MSS |             | t |
- | 5 | MSS          | Landsat 2 MSS |             | t |
- | 6 | MSS          | Landsat 3 MSS |             | t |
- | 7 | MSS          | Landsat 4 MSS |             | t |
- | 8 | MSS          | Landsat 5 MSS |             | t |
 
 
-**Note:** The abbreviations are not unique. We will not be able to reconstite a
-mission sensor record from its abbreviation alone, but only in the context of
-its related sensor.
-
-
-**Note:** In the schema changes for this Work Package, a one-to-many
-relationship will be created between mission sensor entities and their related
-mission - as illustrated here:
+**Note:** A one-to-many relationship will be created between mission sensor
+entities and their related mission - as illustrated here:
 
 ```
 +----------------+                +---------+
@@ -482,63 +488,53 @@ should do it in context of a specific mission, sensor type etc.  (for example
 by always presenting the mission abbreviation at the same time). 
 
 In some cases, no specific mission sensors will exist for a mission. In these
-cases, the mission sensor should be named directly after the mission e.g.
+cases, a placeholder mission sensor should be created, named directly after the
+mission e.g.
 
- || ID | Abbreviation |         Name          | Description | Has Data | Mission |
- | 1 | ERS          | ERS            |             | t | ERS
+ || ID | Abbreviation | Name  | Description | Has Data | Mission |
+ | 1 | ERS          | ERS |  ERS | t |  ERS |
 
-In the updated schema, the MissionSensor table will look like this:
-
- || ID | Abbreviation |         Name          | Description | Has Data | Mission |
- | 1 | AVH          | NOAA AVHRR            |             | t | 
- | 2 | AMI          | ERS AMI SAR           |             | t |
- | 3 | TM          | Landsat 4 TM        |             | t |
- | 4 | TM          | Landsat 5 TM        |             | t |
- | 5 | MSS          | Landsat 1 MSS |             | t |
- | 6 | MSS          | Landsat 2 MSS |             | t |
- | 7 | MSS          | Landsat 3 MSS |             | t |
- | 8 | MSS          | Landsat 4 MSS |             | t |
- | 9 | MSS          | Landsat 5 MSS |             | t |
- | 10 | ETM          | Landsat 7 ETM+        |             | t |
- | 11 | Xs1           | Spot 1 HRV Xs     |             | t |
- | 12 | Xs2           | Spot 2 HRV Xs     |             | t |
- | 13 | Xs3           | Spot 3 HRV Xs     |             | t |
- | 14 | Xi           | Spot 4 G,R,NIR,SWIR   |             | t |
- | 15 | M            | Spot 4 Pan            |             | t |
- | 16 | Pan          | Spot 1 HRV Pan    |             | t |
- | 17 | Pan          | Spot 2 HRV Pan    |             | t |
- | 18 | Pan          | Spot 3 HRV Pan    |             | t |
- | 19 | HRG          | Spot 5 HRG            | Spot 5 HRG  | t |
- | 20 | CCD          | CBERS CCD             |             | t |
- | 21 | MRS          | SACC MRS              |             | t |
- | 22 | SMS          | Sumbandilasat MSS     |             | t |
+Above assumes the pre-existance of a mission 'ERS'.
 
 
 ==== Sensor Types ====
 
 The sensor type describes a mission sensor. 'High end' satellites may use a
 custom sensor type with its own specific properties. 'Cheaper' satellites may
-use simple CCD (charge coupled device) style sensors. Each mission sensor
-should have at least one sensor  type associated with it. When a mission sensor
-exists with no associated sensor type, a default sensor type matching the
-mission sensor abbreviation should be created.
-
-**Note:** Wolfgang to supply a complete list if sensor types.
+use simple CCD (charge coupled device) style sensors. 
 
 
- || ID | Abbreviation |                   Name                   |
- |  1 | AVHR         | Advanced Very High Resolution Radiometer  |
- |  2 | AMI          | AMI                                       |
- |  3 | MST          | Multispectral + Thermal                   |
- |  4 | CAM2         | Spot Camera 2                             |
- |  5 | CAM1         | Spot Camera 1                             |
- |  6 | R3B          | R3B                                       |
- |  7 | MSS          | Multispectral                             |
- |  8 | RT           | RT                                        |
+ || ID | Abbreviation |                   Name                   | Mission Sensor |
+ |  1 | AVHR         | Advanced Very High Resolution Radiometer  |                |
+ |  2 | AMI          | AMI                                       |                |
+ |  3 | MST          | Multispectral + Thermal                   |                |
+ |  4 | CAM2         | Spot Camera 2                             |                |
+ |  5 | CAM1         | Spot Camera 1                             |                |
+ |  6 | R3B          | R3B                                       |                |
+ |  7 | MSS          | Multispectral                             |                |
+ |  8 | RT           | RT                                        |                |
 
-**Note:** In the schema changes for this Work Package, a one-to-many
-relationship will be created between mission sensor entities and their related
-mission - as illustrated here:
+**Note:** Wolfgang please populate the related mission sensor(s) per id above.
+
+Each mission sensor should have at least one sensor  type associated with it.
+When a mission sensor exists with no associated sensor type, a default sensor
+type matching the mission sensor abbreviation should be created e.g.
+
+ || ID | Abbreviation |                   Name       | Mission Sensor |
+ |  7 | MSS          | Multispectral - Landsat 1     | Landsat 1 MSS |
+ |  8 | MSS          | Multispectral - Landsat 2     | Landsat 2 MSS |
+ |  9 | MSS          | Multispectral - Landsat 3     | Landsat 3 MSS |
+ |  10 | MSS          | Multispectral - Landsat 4     | Landsat 4 MSS |
+ |  11 | MSS          | Multispectral - Landsat 5     | Landsat 5 MSS |
+
+The Abbreviation will **not** be unique per sensor type. Note that the 4 letter name
+space does not allow for many permutations and readers of the abbreviation
+should do it in context of a specific mission-sensor, acquisition mode etc.  (for example
+by always presenting the mission abbreviation at the same time). 
+
+
+**Note:** A one-to-many relationship will be created between mission sensor
+entities and their related mission - as illustrated here:
 
 ```
 +-------------+                +----------------+
@@ -549,44 +545,39 @@ mission - as illustrated here:
 **Relationship in plain english:** Each mission sensor can have one or more sensor 
 types associated with it. Each sensor type shall be associated to only one sensor.``
 
-The Abbreviation will **not** be unique per sensor type. Note that the 4 letter name
-space does not allow for many permutations and readers of the abbreviation
-should do it in context of a specific mission-sensor, acquisition mode etc.  (for example
-by always presenting the mission abbreviation at the same time). 
-
-As a result of the above refactoring, an 'MS' acquisition mode will become
-multiple entries, one per sensor type e.g.
-
- || ID | Abbreviation |                   Name                   | Mission Sensor |
- |  7 | MSS          | Multispectral - Landsat 1                 |       7        |
- |  8 | MSS          | Multispectral - Landsat 2                 |       8        |
- |  9 | MSS          | Multispectral - Landsat 3                 |       9        |
- |  10 | MSS          | Multispectral - Landsat 4                 |       10        |
- |  11 | MSS          | Multispectral - Landsat 5                 |       11        |
 
 ==== Acquisition Modes ====
 
 Each sensor can operate in one or more modes. Thus there the list of
 acquisition modes should include at least one entry per sensor type. Where such
 an entry does not exist, a default one (named after the sensor type) shall be
-created. Acquisition modes pre-refactor looked like this:
+created. Acquisition modes table example:
 
- || ID   | Abbreviation |               Name               | Geometric Resolution | Band Count |
- |  1  | MS           | Multispectral                    |                    0 |          0   |
- |  2  | VV           | Vertical / Vertical Polarisation |                    0 |          0   |
- |  3  | HRT          | Multispectral and Thermal        |                    0 |          0   |
- |  4  | X            | X                                |                    0 |          0   |
- |  5  | I            | I                                |                    0 |          0   |
- |  6  | M            | M                                |                    0 |          0   |
- |  7  | P            | P                                |                    0 |          0   |
- |  8  | J            | Multispectral                    |                    0 |          0   |
- |  9  | B            | Panchromatic                     |                    0 |          0   |
- |  10 | A            | Panchromatic                     |                    0 |          0   |
- |  11 | FMC4         | FMC4                             |                    0 |          0   |
- |  12 | 3BG          | 3BG                              |                    0 |          0   |
- |  13 | 5BF          | 5BF                              |                    0 |          0   |
- |  14 | 3BP          | 3BP                              |                    0 |          0   |
- |  15 | HR           | HR                               |                    0 |          0   |
+ || ID   | Abbreviation |               Name               | Geom Resolution | Band Count | Sensor Type |
+ |  1  | MS           | Multispectral                    |   0 |    0   |                              |
+ |  2  | VV           | Vertical / Vertical Polarisation |   0 |    0   |                              |
+ |  3  | HRT          | Multispectral and Thermal        |   0 |    0   |                              |
+ |  4  | X            | X                                |   0 |    0   |                              |
+ |  5  | I            | I                                |   0 |    0   |                              |
+ |  6  | M            | M                                |   0 |    0   |                              |
+ |  7  | P            | P                                |   0 |    0   |                              |
+ |  8  | J            | Multispectral                    |   0 |    0   |                              |
+ |  9  | B            | Panchromatic                     |   0 |    0   |                              |
+ |  10 | A            | Panchromatic                     |   0 |    0   |                              |
+ |  11 | FMC4         | FMC4                             |   0 |    0   |                              |
+ |  12 | 3BG          | 3BG                              |   0 |    0   |                              |
+ |  13 | 5BF          | 5BF                              |   0 |    0   |                              |
+ |  14 | 3BP          | 3BP                              |   0 |    0   |                              |
+ |  15 | HR           | HR                               |   0 |    0   |                              |
+
+
+**Note:** Wolfgang to populate sensor type. Entries should be duplicated for
+each sensor type that has that mode e.g.
+
+ || ID   | Abbreviation |               Name               | Geom Resolution | Band Count | Sensor Type |
+ |  1  | MS           | Multispectral - Landsat 1          |   0 |    0   |     Multispectral - Landsat 1  |
+ |  2  | MS           | Multispectral - Landsat 2          |   0 |    0   |     Multispectral - Landsat 2  |
+
 
 
 **Todo:** Check this list from Wolfgang is represented:
@@ -597,9 +588,8 @@ created. Acquisition modes pre-refactor looked like this:
 | HTM  | Thermal bands                |
 | HPM  | Pan-sharpened multi-spectral |
 
-**Note:** In the schema changes for this Work Package, a one-to-many
-relationship will be created between mission sensor entities and their related
-mission - as illustrated here:
+**Note:** A one-to-many relationship will be created between mission sensor
+entities and their related mission - as illustrated here:
 
 ```
 +------------------+                +----------------+
@@ -617,23 +607,10 @@ abbreviation should do it in context of a specific sensor type.  (for example
 by always presenting the sensor type, mission type and mission abbreviations at
 the same time). 
 
-As a result of the above refactoring, an 'MS' acquisition mode will become
-multiple entries, one per sensor type e.g.
-
- || ID   | Abbreviation |               Name       | Geometric Resolution | Band Count | Sensor Type |
- |  1  | MS           | Multispectral - Landsat 1  |                    0 |          0   |    7 |
- |  2  | MS           | Multispectral - Landsat 2  |                    0 |          0   |    8 |
- |  3  | MS           | Multispectral - Landsat 3  |                    0 |          0   |    9 |
- |  4  | MS           | Multispectral - Landsat 4  |                    0 |          0   |    10 |
- |  5  | MS           | Multispectral - Landsat 5  |                    0 |          0   |    11 |
-
 
 
 **Note:** The geometric resolution and band count columns in this table need to
 be populated by Wolfgang.
-
-**Note2:** The abbreviated sensor names that are single letter may run into
-uniqueness issues WL comment?
 
 ==== Mission Group ====
 
@@ -652,6 +629,11 @@ missions (satellites) to search on e.g. all Landsat missions.
 missions associated with it. Each mission shall be associated to only one
 mission group.``
 
+The mission group should be populated as follows:
+
+
+When a new mission is added, it should always be assigned to an existing
+mission group (with the mission group being created first if needed).
 
 === Notes on the proposed schema changes ===
 
