@@ -21,7 +21,9 @@ from catalogue.models import *
 from catalogue.forms import *
 from catalogue.renderDecorator import renderWithContext
 from catalogue.profileRequiredDecorator import requireProfile
-from catalogue.getFeaturesFromZipFile import *
+
+# SHP and KML readers
+from catalogue.featureReaders import *
 
 # View Helper classes
 from geoiputils import *
