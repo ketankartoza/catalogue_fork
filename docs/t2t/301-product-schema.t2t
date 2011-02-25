@@ -768,35 +768,31 @@ image, the new image should be modelled as a **GenericImageryProduct**.
 
 Follows the same scheme as defined in OpticalProduct documentation.
 
-== Geospatial Products ==
-
-GeoSpatial products are pure abstract (they cannot exist on their own, only as
-a subclass).
-
-=== Product ID Naming Scheme ===
-
-Follows the same scheme as defined in OpticalProduct documentation.
 
 %----------------------------------------------------------
 %----------------------------------------------------------
 %------------------ Geospatial Product --------------------
 %----------------------------------------------------------
 %----------------------------------------------------------
-== Ordinal Products ==
+== Geospatial Products ==
 
-**Synopsis:** Vector and Raster products where data are grouped into discrete classes.
+**Synopsis:** Level 4 products derived from imagery or by direct earth
+measurement (e.g. by conducting a survey with GPS).
 
-**Concrete or Abstract:** Concrete
+**Concrete or Abstract:** GeoSpatial products are pure abstract (they cannot
+exist on their own, only as a subclass).
 
-=== Ordinal Product Properties ===
+Geospatial Products incorporate all level 4 products. Geospatial products are
+abstract representations of features of the earths surface - as opposed to
+Imagery Products which are some form of obervation of the earth service.
+
+=== Geospatial Product Properties ===
 
 === Product ID Naming Scheme ===
 
-=== Ordinal Product Aggregation Rules ===
+=== Geospatial Product Aggregation Rules ===
 
-=== Ordinal Product Dictionaries ===
-
-=== Dictionaries ===
+=== Geospatial Product Dictionaries ===
 
 %----------------------------------------------------------
 %----------------------------------------------------------
