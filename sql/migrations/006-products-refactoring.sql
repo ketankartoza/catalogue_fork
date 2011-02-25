@@ -130,7 +130,7 @@ ALTER TABLE "catalogue_genericsensorproduct" DROP COLUMN mission_id;
 ALTER TABLE "catalogue_genericsensorproduct" DROP COLUMN mission_sensor_id;
 ALTER TABLE "catalogue_genericsensorproduct" DROP COLUMN sensor_type_id ;
 
--- create unique constraint on MissionSensor abbreviation
+-- create unique constraint on dictionary abbreviation + FK to next model in the hierarchy
 ALTER TABLE catalogue_missionsensor
   ADD CONSTRAINT catalogue_missionsensor_abbreviation_key UNIQUE(abbreviation, mission_id);
 
@@ -139,6 +139,26 @@ ALTER TABLE catalogue_sensortype
 
 ALTER TABLE catalogue_acquisitionmode
   ADD CONSTRAINT catalogue_acquisitionmode_abbreviation_key UNIQUE(abbreviation, sensor_type_id);
+
+
+-----------------------------------------------
+-- Missing indexes
+-----------------------------------------------
+
+-- Model: Mission
+CREATE INDEX "catalogue_mission_mission_group_id_idx"
+        ON "catalogue_mission" ("mission_group_id");
+-- Model: MissionSensor
+CREATE INDEX "catalogue_missionsensor_mission_id_idx"
+        ON "catalogue_missionsensor" ("mission_id");
+-- Model: SensorType
+CREATE INDEX "catalogue_sensortype_mission_sensor_id_idx"
+        ON "catalogue_sensortype" ("mission_sensor_id");
+-- Model: AcquisitionMode
+CREATE INDEX "catalogue_acquisitionmode_sensor_type_id_idx"
+        ON "catalogue_acquisitionmode" ("sensor_type_id");
+
+
 
 
 COMMIT;
