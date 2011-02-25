@@ -1,7 +1,8 @@
 """
 
-
 Unit tests for DIMS
+
+
 
 Tests reader
 
@@ -41,10 +42,10 @@ True
 >>> md.get('image_quality_code') == 'aaaabaaaaaaaaa'
 True
 
+
 Tests writer
 
 >>> d  = dimsWriter('catalogue/tests/dims_template', '0000000001')
-
 >>> products = {}
 >>> products['PRODUCT_00001'] = {}
 >>> products['PRODUCT_00001']['thumbnail']= 'catalogue/tests/sample_files/sample_thumbnail.jpg'
@@ -75,7 +76,6 @@ True
 False
 
 
-
 Test XML metadata export
 
 >>> from lxml import etree
@@ -84,7 +84,6 @@ Test XML metadata export
 '2011-01-24T14:29:43.278'
 >>> xml.find('//{http://www.isotc211.org/2005/gmd}MD_DataIdentification//{http://www.isotc211.org/2005/gmd}CI_Citation/{http://www.isotc211.org/2005/gmd}title/{http://www.isotc211.org/2005/gco}CharacterString').text
 'SPOT5.HRG.L1A'
-
 
 
 Test save to a given path
@@ -97,6 +96,7 @@ Test save to a given path
 True
 >>> os.path.split(tar_path2)[1]
 'test0001.tar.gz'
+
 
 Now tests that the test image and thumbnail are really in the tarball
 

@@ -42,7 +42,7 @@ class MissionSensor( models.Model ):
     app_label= 'catalogue'
     unique_together = ('mission', 'abbreviation')
   def __unicode__(self):
-     return self.name
+     return "%s:%s" % (self.abbreviation, self.mission)
 
 ###############################################################################
 
@@ -56,7 +56,7 @@ class SensorType( models.Model ):
     app_label= 'catalogue'
     unique_together = ('mission_sensor', 'abbreviation')
   def __unicode__(self):
-     return self.name
+    return "%s:%s" % (self.abbreviation, self.mission_sensor)
 
 ###############################################################################
 
@@ -79,7 +79,7 @@ class AcquisitionMode( models.Model ):
     app_label= 'catalogue'
     unique_together = ('sensor_type', 'abbreviation')
   def __unicode__(self):
-     return self.name
+    return "%s:%s" % (self.abbreviation, self.sensor_type)
 
 ###############################################################################
 

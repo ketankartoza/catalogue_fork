@@ -332,6 +332,8 @@ class GenericImageryProduct( GenericProduct ):
   geometric_resolution                = models.FloatField( help_text="Geometric resolution")
   geometric_resolution_x              = models.FloatField( help_text="Geometric resolution in mm (x direction)")
   geometric_resolution_y              = models.FloatField( help_text="Geometric resolution in mm (y direction)")
+  radiometric_resolution              = models.IntegerField( help_text="Bit depth of image e.g. 16bit")
+  band_count                          = models.IntegerField( help_text="Number of spectral bands in product")
 
   class Meta:
     app_label= 'catalogue'
@@ -350,8 +352,6 @@ class GenericSensorProduct( GenericImageryProduct ):
   geometric_accuracy_2sigma           = models.FloatField(null=True, blank=True )
   radiometric_signal_to_noise_ratio   = models.FloatField(null=True, blank=True )
   radiometric_percentage_error        = models.FloatField(null=True, blank=True )
-  radiometric_resolution              = models.IntegerField( help_text="Bit depth of image e.g. 16bit", null=True, blank=True)
-  spectral_resolution                 = models.IntegerField( help_text="Number of spectral bands in product", null=True, blank=True)
   spectral_accuracy                   = models.FloatField( help_text="Wavelength Deviation", null=True, blank=True )
   orbit_number                        = models.IntegerField(null=True, blank=True)
   path                                = models.IntegerField(null=True, blank=True) #K Path Orbit
