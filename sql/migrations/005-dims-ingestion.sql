@@ -9,8 +9,9 @@
 
 BEGIN;
 
-  -- drop "L"  from processing level
-  update catalogue_processinglevel set abbreviation = regexp_replace(abbreviation, '^L', '') where true;
+  alter table catalogue_genericsensorproduct alter spectral_resolution drop not null;
+  alter table catalogue_genericsensorproduct alter radiometric_resolution drop not null;
+  alter table catalogue_genericproduct alter remote_thumbnail_url drop not null;
 
 
 COMMIT;

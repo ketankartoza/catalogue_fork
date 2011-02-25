@@ -4,9 +4,8 @@ from django.contrib.gis.db import models
 # Product related model ancilliary tables
 ###############################################################################
 
-class Mission( models.Model ):
-  """Satellite or Mission"""
-  abbreviation = models.CharField( max_length="3", unique=True )
+class MissionGroup( models.Model ):
+  """Mission Group"""
   name = models.CharField( max_length="255" )
   class Meta:
     app_label= 'catalogue'
@@ -16,14 +15,46 @@ class Mission( models.Model ):
 
 ###############################################################################
 
-class MissionSensor( models.Model ):
-  """MissionSensor on the mission or satellite - e.g. HRV"""
+class Mission( models.Model ):
+  """Satellite or Mission"""
   abbreviation = models.CharField( max_length="3", unique=True )
+  name = models.CharField( max_length="255" )
+  mission_group = models.ForeignKey(MissionGroup) # e.g. S5
+  class Meta:
+    app_label= 'catalogue'
+  def __unicode__(self):
+     return self.name
+
+
+###############################################################################
+
+class MissionSensor( models.Model ):
+  """
+  MissionSensor on the mission or satellite - e.g. HRV
+  ABP: TODO: get rid of has_data (or auto-update with soft trigger ?)
+  """
+  abbreviation = models.CharField( max_length="3")
   name = models.CharField( max_length="255" )
   description = models.TextField()
   has_data = models.BooleanField(help_text='Mark false if there is no data for this sensor')
+  mission = models.ForeignKey(Mission) # e.g. S5
   class Meta:
     app_label= 'catalogue'
+    unique_together = ('mission', 'abbreviation')
+  def __unicode__(self):
+     return self.name
+
+###############################################################################
+
+class SensorType( models.Model ):
+  """Sensor type / camera number e.g. CAM1"""
+  abbreviation = models.CharField( max_length="4")
+  name = models.CharField( max_length="255" )
+  mission_sensor = models.ForeignKey(MissionSensor ) # e.g. HRV
+  is_taskable = models.BooleanField(default=True)
+  class Meta:
+    app_label= 'catalogue'
+    unique_together = ('mission_sensor', 'abbreviation')
   def __unicode__(self):
      return self.name
 
@@ -38,23 +69,15 @@ class AcquisitionMode( models.Model ):
            T = Panchromatic 2.5m
            X = Multispectral 20m
            JT = Pansharpened 2.5m Multispectral"""
-  abbreviation = models.CharField( max_length="4", unique=True )
+  sensor_type = models.ForeignKey(SensorType ) #e.g. CAM1
+  abbreviation = models.CharField( max_length="4")
   name = models.CharField( max_length="255" )
   geometric_resolution = models.IntegerField(help_text="Geometric resolution in mm")
   band_count = models.IntegerField()
+  is_grayscale = models.BooleanField(default=False)
   class Meta:
     app_label= 'catalogue'
-  def __unicode__(self):
-     return self.name
-
-###############################################################################
-
-class SensorType( models.Model ):
-  """Sensor type / camera number e.g. CAM1"""
-  abbreviation = models.CharField( max_length="4", unique=True )
-  name = models.CharField( max_length="255" )
-  class Meta:
-    app_label= 'catalogue'
+    unique_together = ('sensor_type', 'abbreviation')
   def __unicode__(self):
      return self.name
 

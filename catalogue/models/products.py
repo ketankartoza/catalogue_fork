@@ -16,8 +16,11 @@ from django_dag.models import node_factory, edge_factory
 class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.Model ) ):
   """
   A generic model (following R-5.1-160 of DIMS system architecture document).
+
   @NOTE: this is not an abstract base class since we are using django multi-table
   inheritance. See http://docs.djangoproject.com/en/dev/topics/db/models/#id7
+
+  see: signals, to set defaults product_acquisition_start
   """
   product_date          = models.DateTimeField(db_index=True)
   processing_level      = models.ForeignKey( ProcessingLevel )
@@ -245,15 +248,23 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
         object was found.
         """
     try:
-      return self.genericsensorproduct.opticalproduct, "Optical"
+      return self.genericimageryproduct.genericsensorproduct.opticalproduct, "Optical"
     except:
       pass
     try:
-      return self.genericsensorproduct.radarproduct, "Radar"
+      return self.genericimageryproduct.genericsensorproduct.radarproduct, "Radar"
     except:
       pass
     try:
-      return self.geospatialproduct, "Geospatial"
+      return self.genericimageryproduct, "Imagery"
+    except:
+      pass
+    try:
+      return self.geospatialproduct.ordinalproduct, "Ordinal"
+    except:
+      pass
+    try:
+      return self.geospatialproduct.continuousproduct, "Continuous"
     except:
       pass
 
@@ -308,41 +319,47 @@ class ProductLink (edge_factory('catalogue.GenericProduct', concrete = False, ba
   Links between products
   """
   class Meta:
-    """This is not an abstract base class although you should avoid dealing directly with it
-    see http://docs.djangoproject.com/en/dev/topics/db/models/#id7
-    """
     app_label= 'catalogue'
 
 
 ###############################################################################
 
-class GenericSensorProduct( GenericProduct ):
+class GenericImageryProduct( GenericProduct ):
+  """
+  Generic Imagery product, it is always a composite aggregated products
+  see: signals, to set geometric_resolution defaults and average
+  """
+  geometric_resolution                = models.FloatField( help_text="Geometric resolution")
+  geometric_resolution_x              = models.FloatField( help_text="Geometric resolution in mm (x direction)")
+  geometric_resolution_y              = models.FloatField( help_text="Geometric resolution in mm (y direction)")
+
+  class Meta:
+    app_label= 'catalogue'
+
+###############################################################################
+
+class GenericSensorProduct( GenericImageryProduct ):
   """
   Multitable inheritance class to hold common fields for satellite imagery
   """
-  mission                             = models.ForeignKey( 'catalogue.Mission' ) # e.g. S5
-  mission_sensor                      = models.ForeignKey( MissionSensor ) # e.g. HRV
-  sensor_type                         = models.ForeignKey( SensorType ) #e.g. CAM1
-  acquisition_mode                    = models.ForeignKey( AcquisitionMode ) #e.g. M X T J etc
-  product_acquisition_start           = models.DateTimeField(null=False,blank=False,db_index=True)
-  product_acquisition_end             = models.DateTimeField(null=True,blank=True,db_index=True)
-  geometric_accuracy_mean             = models.FloatField ( null=True,blank=True )
-  geometric_accuracy_1sigma           = models.FloatField ( null=True,blank=True )
-  geometric_accuracy_2sigma           = models.FloatField ( null=True,blank=True )
-  radiometric_signal_to_noise_ratio   = models.FloatField( null=True,blank=True )
-  radiometric_percentage_error        = models.FloatField( null=True,blank=True )
-  radiometric_resolution              = models.IntegerField( help_text="Bit depth of image e.g. 16bit", null=True,blank=True)
-  geometric_resolution_x              = models.FloatField( help_text="Geometric resolution in mm (x direction)", null=False,blank=False )
-  geometric_resolution_y              = models.FloatField( help_text="Geometric resolution in mm (y direction)", null=False,blank=False )
-  spectral_resolution                 = models.IntegerField( help_text="Number of spectral bands in product" , null=True,blank=True)
-  spectral_accuracy                   = models.FloatField( help_text="Wavelength Deviation",null=True,blank=True )
-  orbit_number                        = models.IntegerField(null=True,blank=True)
-  path                                = models.IntegerField(null=True,blank=True) #K Path Orbit
-  path_offset                         = models.IntegerField(null=True,blank=True)
-  row                                 = models.IntegerField(null=True,blank=True) #J Frame Row
-  row_offset                          = models.IntegerField(null=True,blank=True)
-  offline_storage_medium_id           = models.CharField( max_length=12, help_text="Identifier for the offline tape or other medium on which this scene is stored", null=True,blank=True )
-  online_storage_medium_id            = models.CharField( max_length=36, help_text="DIMS Product Id as defined by Werum e.g. S5_G2_J_MX_200902160841252_FG_001822",null=True,blank=True )
+  acquisition_mode                    = models.ForeignKey(AcquisitionMode ) #e.g. M X T J etc
+  product_acquisition_start           = models.DateTimeField(db_index=True)
+  product_acquisition_end             = models.DateTimeField(null=True, blank=True, db_index=True)
+  geometric_accuracy_mean             = models.FloatField(null=True, blank=True )
+  geometric_accuracy_1sigma           = models.FloatField(null=True, blank=True )
+  geometric_accuracy_2sigma           = models.FloatField(null=True, blank=True )
+  radiometric_signal_to_noise_ratio   = models.FloatField(null=True, blank=True )
+  radiometric_percentage_error        = models.FloatField(null=True, blank=True )
+  radiometric_resolution              = models.IntegerField( help_text="Bit depth of image e.g. 16bit", null=True, blank=True)
+  spectral_resolution                 = models.IntegerField( help_text="Number of spectral bands in product", null=True, blank=True)
+  spectral_accuracy                   = models.FloatField( help_text="Wavelength Deviation", null=True, blank=True )
+  orbit_number                        = models.IntegerField(null=True, blank=True)
+  path                                = models.IntegerField(null=True, blank=True) #K Path Orbit
+  path_offset                         = models.IntegerField(null=True, blank=True)
+  row                                 = models.IntegerField(null=True, blank=True) #J Frame Row
+  row_offset                          = models.IntegerField(null=True, blank=True)
+  offline_storage_medium_id           = models.CharField(max_length=12, help_text="Identifier for the offline tape or other medium on which this scene is stored", null=True,blank=True )
+  online_storage_medium_id            = models.CharField(max_length=36, help_text="DIMS Product Id as defined by Werum e.g. S5_G2_J_MX_200902160841252_FG_001822",null=True,blank=True )
 
   class Meta:
     """This is not an abstract base class although you should avoid dealing directly with it
@@ -507,6 +524,8 @@ class GeospatialProduct( GenericProduct ):
   objects = models.GeoManager()
   class Meta:
     app_label= 'catalogue'
+
+
 
 ###############################################################################
 
