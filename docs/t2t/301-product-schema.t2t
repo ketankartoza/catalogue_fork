@@ -608,9 +608,15 @@ by always presenting the sensor type, mission type and mission abbreviations at
 the same time). 
 
 
-
+--------------------------------------------
 **Note:** The geometric resolution and band count columns in this table need to
 be populated by Wolfgang.
+
+**Logic Rules:** The additional columns in the acquisition mode are used to provide implicit values for products if they are created without implicit values. In particular:
+
++ The geometric resolution will be used to populate the GenericSensorProduct fields of geometric_resolution, geometric_resolution_x and geometric_resolution_y. This is implemented by first populating the geometric_resolution field (NULL) when assigning acquisition mode, and then assigning the same value to both geometric_resolution_x and geometric_resolution_y.
++ The band_count in acquisition mode will be assigned to the GenericSensorProduct.band_count (formerly called spectral_resolution) if NULL at the moment of assignment.
++ 
 
 ==== Mission Group ====
 
