@@ -520,7 +520,7 @@ def metadata(theRequest, theId):
   to iterate through the product class properties using class introspection
   and generate a simple html document containing key/value pairs"""
   myGenericProduct = get_object_or_404( GenericProduct, id=theId )
-  myObject, myType = myGenericProduct.getConcreteInstance()
+  myObject, myType = myGenericProduct.getConcreteProduct()
   myDetails=[]
   myDetails.append( "<tr><th>Key</th><th>Value</th></tr>")
   if myObject:

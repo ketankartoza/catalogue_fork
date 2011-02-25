@@ -119,6 +119,9 @@ class Searcher:
     elif self.mSearch.search_type == Search.PRODUCT_SEARCH_GEOSPATIAL:
         logging.info('Search type is PRODUCT_SEARCH_GEOSPATIAL')
         self.mQuerySet = GeospatialProduct.objects.all()
+    elif self.mSearch.search_type == Search.PRODUCT_SEARCH_IMAGERY:
+        logging.info('Search type is PRODUCT_SEARCH_IMAGERY')
+        self.mQuerySet = GeospatialProduct.objects.all()
 
     # -----------------------------------------------------
     logging.info('filtering by search criteria ...')
@@ -156,7 +159,7 @@ class Searcher:
         # ABP: sensors is mandatory ? Better if not: too bad in product_id search!
         #assert self.mSearch.sensors.count() > 0, "Search contains no sensors informations"
         if self.mSearch.sensors.count() > 0:
-          self.mSensorQuery = Q( mission_sensor__in=self.mSearch.sensors.all()) #__in = match to one or more sensors
+          self.mSensorQuery = Q( acquisition_mode__sensor_type__mission_sensor__in=self.mSearch.sensors.all()) #__in = match to one or more sensors
           self.mQuerySet = self.mQuerySet.filter( self.mSensorQuery )
           self.mMessages.append("sensors <b>%s</b>" % self.mSearch.sensorsAsString())
           logging.info('Sensor in use is:' + str( self.mSearch.sensors.values_list( 'name',flat=True ) ) )
@@ -166,11 +169,11 @@ class Searcher:
           self.mQuerySet = self.mQuerySet.filter( self.mAcquisitionModeQuery )
         if self.mSearch.mission:
           self.mMessages.append('mission <b>%s</b>' % self.mSearch.mission)
-          self.mMissionQuery = Q(mission = self.mSearch.mission)
+          self.mMissionQuery = Q(acquisition_mode__sensor_type__mission_sensor__mission = self.mSearch.mission)
           self.mQuerySet = self.mQuerySet.filter( self.mMissionQuery )
         if self.mSearch.sensor_type:
           self.mMessages.append('sensor type <b>%s</b>' % self.mSearch.sensor_type)
-          self.mSensorTypeQuery = Q(sensor_type = self.mSearch.sensor_type)
+          self.mSensorTypeQuery = Q(acquisition_mode__sensor_type = self.mSearch.sensor_type)
           self.mQuerySet = self.mQuerySet.filter( self.mSensorTypeQuery )
         if self.mSearch.geometric_accuracy_mean:
           # ABP: this needs special handling to map from classes to floats

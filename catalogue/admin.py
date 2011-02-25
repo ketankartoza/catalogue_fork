@@ -63,7 +63,7 @@ class GenericProductAdmin( admin.GeoModelAdmin ):
 class GeospatialProductAdmin( admin.GeoModelAdmin ):
   pass
 class OpticalProductAdmin( admin.GeoModelAdmin ):
-  list_filter = ('mission', 'mission_sensor', 'sensor_type', 'processing_level', 'product_acquisition_start' )
+  list_filter = ('acquisition_mode',)
 class ResamplingMethodAdmin( admin.GeoModelAdmin ):
   pass
 class FileFormatAdmin( admin.GeoModelAdmin ):

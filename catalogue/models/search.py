@@ -72,21 +72,16 @@ class Search(models.Model):
   PRODUCT_SEARCH_OPTICAL       = 1
   PRODUCT_SEARCH_RADAR         = 2
   PRODUCT_SEARCH_GEOSPATIAL    = 3
+  PRODUCT_SEARCH_IMAGERY       = 4
 
   PRODUCT_SEARCH_TYPES = (
     (PRODUCT_SEARCH_GENERIC,    'Generic product search'),
     (PRODUCT_SEARCH_OPTICAL,    'Optical product search'),
     (PRODUCT_SEARCH_RADAR,      'Radar product search'),
     (PRODUCT_SEARCH_GEOSPATIAL, 'Geospatial product search'),
+    # ABP: has no idea if this make s sense
+    #(PRODUCT_SEARCH_IMAGERY,    'Generic imagery product search'),
   )
-
-  # ABP: utility hash to map search fields to search_type
-  SEARCH_FIELDS_MAP = {
-    PRODUCT_SEARCH_GENERIC:    (),
-    PRODUCT_SEARCH_OPTICAL:    (),
-    PRODUCT_SEARCH_RADAR:      (),
-    PRODUCT_SEARCH_GEOSPATIAL: (),
-  }
 
   search_type = models.IntegerField('Search type', default = 0, choices = PRODUCT_SEARCH_TYPES, db_index = True)
   user = models.ForeignKey(User)

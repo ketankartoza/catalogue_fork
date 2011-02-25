@@ -34,9 +34,8 @@ def setGeometricResolution(sender, instance, **kw):
   if not instance.geometric_resolution_y:
     instance.geometric_resolution_y = instance.acquisition_mode.geometric_resolution
     logging.debug('setting geometric_resolution_y to %s' % instance.geometric_resolution_y)
-  if not instance.geometric_resolution:
-    instance.geometric_resolution = (instance.geometric_resolution_y + instance.geometric_resolution_y  ) / 2.0
-    logging.debug('setting geometric_resolution to %s' % instance.geometric_resolution)
+  instance.geometric_resolution = (instance.geometric_resolution_y + instance.geometric_resolution_y  ) / 2.0
+  logging.debug('setting geometric_resolution to %s' % instance.geometric_resolution)
 
 models.signals.pre_save.connect(setGeometricResolution, sender = OpticalProduct)
 models.signals.pre_save.connect(setGeometricResolution, sender = RadarProduct)
