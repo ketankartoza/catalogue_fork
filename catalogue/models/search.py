@@ -4,7 +4,7 @@ import uuid
 import datetime
 #for user id foreign keys
 from django.contrib.auth.models import User
-from orders import Order
+from orders import Order, DeliveryDetail
 from products import GenericProduct
 from dictionaries import MissionSensor, AcquisitionMode, License, SensorType, Mission
 #for translation
@@ -29,6 +29,7 @@ class SearchRecord(models.Model):
   user = models.ForeignKey(User)
   order = models.ForeignKey( Order, null=True, blank=True )
   product = models.ForeignKey( GenericProduct, null=False, blank=False )
+  delivery_detail = models.ForeignKey( DeliveryDetail, null=True, blank=True )
   # Required because genericproduct fkey references a table with geometry
   objects = models.GeoManager()
 

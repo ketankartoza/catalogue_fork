@@ -107,16 +107,27 @@ class DeliveryMethod(models.Model):
 
 ###############################################################################
 
-class Order(models.Model):
+class DeliveryDetail(models.Model):
   user = models.ForeignKey(User)
-  notes = models.TextField(help_text="Make a note of any special requirements or processing instructions you may need. Please note that in the case of free products and priority products, they will only be supplied with default options.",null=True,blank=True)
   processing_level = models.ForeignKey(ProcessingLevel,verbose_name="Processing Level",default=3)
   projection = models.ForeignKey(Projection,verbose_name="Projection",default=3)
   datum = models.ForeignKey(Datum, verbose_name="Datum",default=1)
   resampling_method = models.ForeignKey(ResamplingMethod, verbose_name="Resampling Method",default=2) #cubic conv#cubic conv
   file_format = models.ForeignKey(FileFormat, verbose_name="File Format",default=1)
+
+  class Meta:
+    app_label= 'catalogue'
+    verbose_name = 'Delivery Detail'
+    verbose_name_plural = 'Delivery Details'
+
+###############################################################################
+
+class Order(models.Model):
+  user = models.ForeignKey(User)
+  notes = models.TextField(help_text="Make a note of any special requirements or processing instructions you may need. Please note that in the case of free products and priority products, they will only be supplied with default options.",null=True,blank=True)
   order_status = models.ForeignKey(OrderStatus,verbose_name="Order Status",default=1)
   delivery_method = models.ForeignKey(DeliveryMethod, verbose_name="Delivery Method", default=1)
+  delivery_detail = models.ForeignKey( DeliveryDetail, null=True, blank=True )
   order_date = models.DateTimeField(verbose_name="Order Date", auto_now=True, auto_now_add=True,
       help_text = "When the order was placed - not shown to users")
   #default manager
