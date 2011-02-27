@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{# page wrapped version of add.html for non ajax graceful degradation #}
+{% block body_load %}onload="if (window.init) init();"{% endblock %}
+{% block content%}
+
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+  {% box_start "" "" "" %}
+    <h2>{{ myTitle }}</h2>
+    {{  myMessage|safe }}
+
+    <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="horizontal" id="add_form">
+        <table>
+          {{myDeliveryDetailForm}}
+
+          {{myOrderForm}}
+
+        </table>  
+        {% if mySubmitLabel %}
+        <button type="submit" id="submitButton">{{ mySubmitLabel }}</button>
+        {% else %}
+        <button type="submit" id="submitButton">Save</button>
+        {% endif %}
+    </form>
+  {% box_end %}
+  <br />
+  {% if myShowCartContentsFlag %}
+    <div id="cart">
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% box_start "" "" "cart-contents" %}
+  {% if myCartTitle %}
+  <h2>{{ myCartTitle }}</h2>
+  {% endif %}
+  <table >
+    {% for myRecord in myRecords %}
+    <tr>
+      <td>{{ myRecord.product.tidySacId }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <div style="text-align: center;">
+    <b id="cart-item-count">{{ myRecords.count }}</b> item(s).
+  </div>
+  {% if myRecords %}
+  <div id="cart-download-div" style="text-align: center;">
+    <a href="/cartasshapefile/"><img src="/media/images/down_16.png" alt=""/> Download cart as shapefile.</a>
+  </div>
+  {% endif %}
+{% box_end %}
+    </div>
+  {% endif %}
+{% endblock %}
