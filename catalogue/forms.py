@@ -203,7 +203,12 @@ class OrderForm(forms.ModelForm):
   class Meta:
     model = Order
     #exclude = ('user','order_status')
-    exclude = ('user','order_status',"processing_level","projection","datum","resampling_method","file_format","delivery_method")
+    exclude = ('user','order_status','delivery_method','delivery_detail')
+
+class DeliveryDetailForm(forms.ModelForm):
+  class Meta:
+    model = DeliveryDetail
+    exclude = ('user')    
 
 class TaskingRequestForm(forms.ModelForm):
   geometry = forms.CharField(widget=GeometryWidget,required=False)

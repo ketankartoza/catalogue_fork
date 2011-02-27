@@ -276,18 +276,22 @@ def    addOrder( theRequest ):
   logging.info('Add Order called')
   if theRequest.method == 'POST':
     logging.debug("Order posted")
-    myForm = OrderForm( theRequest.POST,theRequest.FILES )
+
+    myOrderForm = OrderForm( theRequest.POST,theRequest.FILES )
+    myDeliveryDetailForm = DeliveryDetailForm( theRequest.POST,theRequest.FILES )
+    import ipdb;ipdb.set_trace()    
     myOptions =  {
-            'myForm': myForm,
+            'myOrderForm': myOrderForm,
+            'myDeliveryDetailForm': myDeliveryDetailForm,
             'myTitle': myTitle,
             'mySubmitLabel' : "Submit Order",
           }
     myOptions.update(myExtraOptions), #shortcut to join two dicts
-    if myForm.is_valid():
+    if myOrderForm.is_valid() and myDeliveryDetailForm.is_valid():
       logging.debug("Order valid")
       myObject = myForm.save(commit=False)
       myObject.user = theRequest.user
-      myObject.save()
+      #myObject.save()
       logging.debug("Order saved")
       logging.info('Add Order : data is valid')
       # Now add the cart contents to the order
@@ -297,23 +301,25 @@ def    addOrder( theRequest ):
         myRecord.save()
       logging.debug("Search records added")
       #return HttpResponse("Done")
-      notifySalesStaff(theRequest.user,myObject.id)
-      return HttpResponseRedirect(myRedirectPath + str(myObject.id))
+      #notifySalesStaff(theRequest.user,myObject.id)
+      #return HttpResponseRedirect(myRedirectPath + str(myObject.id))
     else:
       logging.info('Add Order: form is NOT valid')
-      return render_to_response("addPage.html",
+      return render_to_response("addOrder.html",
           myOptions,
           context_instance=RequestContext(theRequest))
   else: # new order
-    myForm = OrderForm( )
+    myOrderForm = OrderForm( )
+    myDeliveryDetailForm = DeliveryDetailForm( )    
     myOptions =  {
-          'myForm': myForm,
+          'myOrderForm': myOrderForm,
+          'myDeliveryDetailForm': myDeliveryDetailForm,
           'myTitle': myTitle,
           'mySubmitLabel' : "Submit Order",
         }
     myOptions.update(myExtraOptions), #shortcut to join two dicts
     logging.info( 'Add Order: new object requested' )
-    return render_to_response("addPage.html",
+    return render_to_response("addOrder.html",
         myOptions,
         context_instance=RequestContext(theRequest))
 
