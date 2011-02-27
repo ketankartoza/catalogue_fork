@@ -8,7 +8,10 @@
 
 [img/order-wireframe.png]
 
-The schema relating to product orders can be summariesed as:
+
+The purpose of the application logic is to allow a user to easily order one or more products. Since each order can consist of one or more products, and each product can be included in many orders, a 'many to many' relationship exists between products and orders. This is realised via the **SearchRecord** model. This model is also described in the Search section.
+
+The schema relating to product orders can be summarised as:
 
 [img/product-orders.png]
 
