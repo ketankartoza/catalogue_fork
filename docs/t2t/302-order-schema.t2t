@@ -170,6 +170,10 @@ A user can request that a product be delivered at a different processing level
 to the one recorded for the project. For example a user can request that an
 image at L1A be supplied as a L3Aa product.
 
+The processing levels are discussed in more detail in the 'dictionaries'
+section of the product schema discussion.
+
+----------------------------
 **Note:** Wolfgang to supply list of rules on how processing levels may be
 assigned.
 
