@@ -279,7 +279,8 @@ def    addOrder( theRequest ):
 
     myOrderForm = OrderForm( theRequest.POST,theRequest.FILES )
     myDeliveryDetailForm = DeliveryDetailForm( theRequest.POST,theRequest.FILES )
-    import ipdb;ipdb.set_trace()    
+    myProductForms = [DeliveryDetailForm(theRequest.POST,prefix='%i' % myRec.id) for myRec in myRecords]
+
     myOptions =  {
             'myOrderForm': myOrderForm,
             'myDeliveryDetailForm': myDeliveryDetailForm,
@@ -287,22 +288,38 @@ def    addOrder( theRequest ):
             'mySubmitLabel' : "Submit Order",
           }
     myOptions.update(myExtraOptions), #shortcut to join two dicts
-    if myOrderForm.is_valid() and myDeliveryDetailForm.is_valid():
+
+    if myOrderForm.is_valid() and myDeliveryDetailForm.is_valid() and all([form.is_valid() for form in myProductForms]):
       logging.debug("Order valid")
-      myObject = myForm.save(commit=False)
+      myDeliveryDetailObject = myDeliveryDetailForm.save(commit=False)
+      myDeliveryDetailObject.user = theRequest.user
+      myDeliveryDetailObject.save()
+      #save order
+      myObject = myOrderForm.save(commit=False)
       myObject.user = theRequest.user
-      #myObject.save()
+      myObject.delivery_detail = myDeliveryDetailObject
+      myObject.save()
       logging.debug("Order saved")
-      logging.info('Add Order : data is valid')
-      # Now add the cart contents to the order
-      myRecords = SearchRecord.objects.all().filter(user=theRequest.user).filter(order__isnull=True)
-      for myRecord in myRecords:
+
+      #save all of the subforms
+      for mySubDeliveryForm in myProductForms:
+        mySubData=mySubDeliveryForm.save(commit=False)
+        mySubData.user=theRequest.user
+        mySubData.save()
+
+        #update serachrecords
+        myRecord = myRecords.filter(pk=mySubDeliveryForm.cleaned_data.get('ref_id')).get()
+        myRecord.delivery_detail=mySubData
         myRecord.order=myObject
         myRecord.save()
+
+
+      logging.info('Add Order : data is valid')
+
       logging.debug("Search records added")
       #return HttpResponse("Done")
       #notifySalesStaff(theRequest.user,myObject.id)
-      #return HttpResponseRedirect(myRedirectPath + str(myObject.id))
+      return HttpResponseRedirect(myRedirectPath + str(myObject.id))
     else:
       logging.info('Add Order: form is NOT valid')
       return render_to_response("addOrder.html",
@@ -310,12 +327,14 @@ def    addOrder( theRequest ):
           context_instance=RequestContext(theRequest))
   else: # new order
     myOrderForm = OrderForm( )
-    myDeliveryDetailForm = DeliveryDetailForm( )    
+    myDeliveryDetailForm = DeliveryDetailForm()
+    for myRec in myRecords:
+      myRec.form = DeliveryDetailForm(initial={'ref_id':myRec.id},prefix='%i' % myRec.id)
     myOptions =  {
-          'myOrderForm': myOrderForm,
-          'myDeliveryDetailForm': myDeliveryDetailForm,
-          'myTitle': myTitle,
-          'mySubmitLabel' : "Submit Order",
+      'myOrderForm': myOrderForm,
+      'myDeliveryDetailForm': myDeliveryDetailForm,
+      'myTitle': myTitle,
+      'mySubmitLabel' : "Submit Order",
         }
     myOptions.update(myExtraOptions), #shortcut to join two dicts
     logging.info( 'Add Order: new object requested' )

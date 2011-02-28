@@ -206,6 +206,7 @@ class OrderForm(forms.ModelForm):
     exclude = ('user','order_status','delivery_method','delivery_detail')
 
 class DeliveryDetailForm(forms.ModelForm):
+  ref_id = forms.IntegerField(widget=forms.HiddenInput(),initial=0)
   class Meta:
     model = DeliveryDetail
     exclude = ('user')    

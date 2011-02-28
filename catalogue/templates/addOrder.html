@@ -20,7 +20,6 @@
         {% else %}
         <button type="submit" id="submitButton">Save</button>
         {% endif %}
-    </form>
   {% box_end %}
   <br />
   {% if myShowCartContentsFlag %}
@@ -34,9 +33,11 @@
     {% for myRecord in myRecords %}
     <tr>
       <td>{{ myRecord.product.tidySacId }}</td>
+      <td>{{ myRecord.form.as_p }}</td>
     </tr>
     {% endfor %}
   </table>
+</form>
   <div style="text-align: center;">
     <b id="cart-item-count">{{ myRecords.count }}</b> item(s).
   </div>
