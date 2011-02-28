@@ -36,6 +36,7 @@ def dataSummaryTable(theRequest):
     '''Non staff users cannot see this'''
     return
 
+  import ipy; ipy.shell()
   #myResultSet = GenericProduct.objects.values("mission_sensor").annotate(Count("id")).order_by().aggregate(Min('product_acquisition_start'),Max('product_acquisition_end'))
   #ABP: changed to GenericSensorProduct
   #ABP: changed to MissionSensor
@@ -206,7 +207,7 @@ def productIdSearch(theRequest, theGuid):
           setattr(mySearch, f, myForm.cleaned_data.get(f))
         mySearch.save()
       # Save m2m,
-      # ABP: sensors is not required anymore for pivot oo work
+      # ABP: sensors is not required anymore for pivot to work
       # ... should be required, but check anyway
       mySearch.sensors.clear()
       if myForm.cleaned_data.get('sensors'):

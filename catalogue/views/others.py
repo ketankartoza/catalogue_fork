@@ -1,13 +1,11 @@
 # Django helpers for forming html pages
-from django.core.context_processors import csrf
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseServerError
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.gis.shortcuts import render_to_kml, render_to_kmz
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template import RequestContext
-from django.db.models import Count, Min, Max #for aggregate queries
 from django.forms.util import ErrorList
 
 # python logging support to django logging middleware
@@ -17,7 +15,6 @@ import logging
 from catalogue.models import *
 from catalogue.forms import *
 from catalogue.renderDecorator import renderWithContext
-from catalogue.profileRequiredDecorator import requireProfile
 
 # SHP and KML readers
 from catalogue.featureReaders import *
@@ -27,19 +24,13 @@ from geoiputils import *
 from searcher import *
 from helpers import *
 
-#Dane Springmeyer's django-shapes app for exporting results as a shpfile
-from shapes.views import ShpResponder
-
 # PIL and os needed for making small thumbs
 import os
-from PIL import Image, ImageFilter, ImageOps
 
 # For shopping cart and ajax product id search
-from django.utils import simplejson
 
 # for get feature info
 import urllib2
-import sys
 
 # for error logging
 import traceback

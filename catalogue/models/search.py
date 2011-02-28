@@ -190,6 +190,27 @@ class Search(models.Model):
   def __unicode__(self):
     return "Start Date: " + str(self.start_date) + "End Date: " + str(self.end_date) + " Guid: " + self.guid + " User: " + str(self.user)
 
+  def getDictionaryMap(self, parm):
+    """
+    Returns the right join chain from a Product model to dictionary
+    parameter
+
+    for example:
+    getSensorDictionaryMap('mission')
+    will return
+    'acquisition_mode__sensor_type__mission_sensor__mission'
+    """
+    if parm == 'acquisition_mode':
+      return 'acquisition_mode'
+    if parm == 'sensor_type':
+      return 'acquisition_mode__sensor_type'
+    if parm == 'mission_sensor':
+      return 'acquisition_mode__sensor_type__mission_sensor'
+    if parm == 'mission':
+      return 'acquisition_mode__sensor_type__mission_sensor__mission'
+
+    return parm
+      
 
   @property
   def isAdvanced(self):

@@ -1,6 +1,5 @@
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from django.contrib.gis import gdal
 from django.contrib.gis.geos import *
 # Models and forms for our app
 from catalogue.models import *
@@ -349,27 +348,33 @@ class Searcher:
     myString =  "with a maximum cloud cover of %s%%" % myCloudAsPercent
     return myString
 
-  def describeQuery(self):
+  def describeQuery(self, unset_only=False):
     """
     Returns a struct with messages and SQL of mSearch query
+
+    unset_only parameter, define if the list of values should be returned
+    only when the corresponding search values is not set
     """
     # Get option for all related fields, exclude users
     values = {}
-    for field_name in [f.name for f in self.mSearch._meta.fields if f.rel]:
-      if field_name != 'user' and not getattr(self.mSearch, field_name , None):
+
+    for field_name in [f.name for f in self.mSearch._meta.fields if f.rel and f.name != 'user']:
+      if not unset_only or not getattr(self.mSearch, field_name , None):
         values[field_name] = self.getOption(field_name)
     # m2m
-    if not getattr(self.mSearch, 'sensors').count():
-        values['sensors'] = self.getOption('mission_sensor')
-    if not getattr(self.mSearch, 'license').count():
-        values['license'] = self.getOption('license')
+    if not unset_only or not getattr(self.mSearch, 'sensors').count():
+      values['sensors'] = self.getOption('mission_sensor')
+    if not unset_only or not getattr(self.mSearch, 'license').count():
+      values['license'] = self.getOption('license')
 
-    return { 'messages' : self.mMessages, 'query' : "%s" % self.mSqlString, 'count' : self.mRecordCount, 'values' : values }
+    if settings.DEBUG:
+      query = "%s" % self.mSqlString
+    else:
+      query = ''
+    return { 'messages' : self.mMessages, 'query' : query , 'count' : self.mRecordCount, 'values' : values }
 
   def getOption(self, field_name):
     """
     Returns a list of possible values that selected search parameters can assume for a given field
     """
-    return list(self.mQuerySet.distinct().values_list(field_name, flat = True).order_by())
-
-
+    return list(self.mQuerySet.distinct().values_list(self.mSearch.getDictionaryMap(field_name), flat = True).order_by())

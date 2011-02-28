@@ -42,21 +42,21 @@ class AdvancedSearchForm(forms.ModelForm):
       help_text='Digitising an area of interest is not required but is recommended. You can use the help tab in the map area for more information on how to use the map. Draw an area of interest on the map to refine the set of search results to a specific area.')
 
   geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
-                                  required = False,
+                                  required=False,
                                   help_text = 'Upload a zipped shapefile or KML/KMZ file of less than 1MB. If the shapefile contains\
                                               more than one polygon, only the first will be used. \
                                               Complex polygons will increase search time.')
 
   cloud_mean = forms.CharField(widget=SliderWidget(),
-                                  required = False,
+                                  required=False,
                                   label="Maximum cloud cover",
                                   help_text = 'Select the maximum cloud cover when searching for images. \
                                                Note that not all sensors support cloud cover filtering.\
                                               ')
-  isAdvanced = forms.CharField(widget=forms.HiddenInput(), required = False)
+  isAdvanced = forms.CharField(widget=forms.HiddenInput(), required=False)
   geometry = forms.CharField(widget=forms.HiddenInput(), required=False,
       help_text='Digitising an area of interest is not required but is recommended. You can use the help tab in the map area for more information on how to use the map. Draw an area of interest on the map to refine the set of search results to a specific area.')
-  aoi_geometry = AOIGeometryField(required = False)
+  aoi_geometry = AOIGeometryField(required=False)
 
 
   class Meta:
@@ -149,24 +149,24 @@ class ProductIdSearchForm( forms.Form ):
   building up a Product ID. This is intended to be used as an unbound form
   so the init function initialises the choices lists and so on.
   """
-  mission = AbbreviationModelChoiceField( None, empty_label="*" , required = False)
-  sensors = AbbreviationModelMultipleChoiceField(None, required = False)
-  acquisition_mode = AbbreviationModelChoiceField(None, empty_label="*", required = False)
-  sensor_type = AbbreviationModelChoiceField(None, empty_label="*", required = False)
+  mission = AbbreviationModelChoiceField( None, empty_label="*" , required=False)
+  sensors = AbbreviationModelMultipleChoiceField(None, required=False)
+  acquisition_mode = AbbreviationModelChoiceField(None, empty_label="*", required=False)
+  sensor_type = AbbreviationModelChoiceField(None, empty_label="*", required=False)
   myRange = range(1970, datetime.date.today().year + 1)
   #zip creates a 2-tuple out of an array e.g. ((1970,1970),(1971,1971),etc....)
   start_year = forms.ChoiceField([(None, '*')] + zip(myRange,myRange))
   start_month = forms.ChoiceField( zip( range(1,13), range(1,13) ) )
   start_day = forms.ChoiceField( zip( range(1,32), range(1,32) ) )
-  start_hour = forms.ChoiceField( zip( range(0,24), range(0,24) ), required = False)
-  start_minute = forms.ChoiceField( zip( range(0,60),range(0,60) ), required = False)
-  start_second = forms.ChoiceField( zip( range(0,60), range(0,60) ), required = False)
+  start_hour = forms.ChoiceField( zip( range(0,24), range(0,24) ), required=False)
+  start_minute = forms.ChoiceField( zip( range(0,60),range(0,60) ), required=False)
+  start_second = forms.ChoiceField( zip( range(0,60), range(0,60) ), required=False)
   end_year = forms.ChoiceField( zip(myRange,myRange) )
   end_month = forms.ChoiceField( zip( range(1,13), range(1,13) ) )
   end_day = forms.ChoiceField( zip( range(1,32), range(1,32) ) )
-  end_hour = forms.ChoiceField( zip( range(0,24), range(0,24) ), required = False)
-  end_minute = forms.ChoiceField( zip( range(0,60),range(0,60) ), required = False)
-  end_second = forms.ChoiceField( zip( range(0,60), range(0,60) ), required = False)
+  end_hour = forms.ChoiceField( zip( range(0,24), range(0,24) ), required=False)
+  end_minute = forms.ChoiceField( zip( range(0,60),range(0,60) ), required=False)
+  end_second = forms.ChoiceField( zip( range(0,60), range(0,60) ), required=False)
 
   def __init__(self,*args,**kwargs):
     """
@@ -208,7 +208,7 @@ class OrderForm(forms.ModelForm):
 class TaskingRequestForm(forms.ModelForm):
   geometry = forms.CharField(widget=GeometryWidget,required=False)
   geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
-                                  required = False,
+                                  required=False,
                                   help_text = 'Upload a zipped shapefile of less than 1MB. If the shapefile contains\
                                               more than one polygon, only the first will be used. \
                                               The computation time is related to polygon complexity.')
@@ -237,7 +237,7 @@ class ClipForm(forms.ModelForm):
   geometry = forms.CharField(widget=GeometryWidget,required=False,
       help_text='You can digitise your clip area directly, or alternatively use the file upload option below to upload the clip shapefile. You can use the help tab in the map area for more information on how to use the map. Draw an area of interest on the map to refine the set of search results to a specific area.')
   geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
-                                  required = False,
+                                  required=False,
                                   help_text = 'Upload a zipped shapefile of less than 1MB. If the shapefile contains\
                                               more than one polygon, only the first will be used. \
                                               The computation time is related to polygon complexity.')

@@ -9,7 +9,6 @@ import shutil
 import tempfile
 import tarfile
 import logging
-from datetime import datetime
 
 # Use faster lxml if available, fallback on pure python implementation
 try:
@@ -207,7 +206,6 @@ class dimsWriter(dimsBase):
                         self._get_metadata(product_data, 'processing_level_code'),
                         product_code + '.xml')
     tree = etree.parse(self._xml_template)
-    metadata = {}
     for md_name, md_xpath in self.METADATA.items():
       logging.info('searching for %s in path %s' % (md_name, md_xpath))
       try:
