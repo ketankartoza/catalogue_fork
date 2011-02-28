@@ -608,9 +608,15 @@ by always presenting the sensor type, mission type and mission abbreviations at
 the same time). 
 
 
-
+--------------------------------------------
 **Note:** The geometric resolution and band count columns in this table need to
 be populated by Wolfgang.
+
+**Logic Rules:** The additional columns in the acquisition mode are used to provide implicit values for products if they are created without implicit values. In particular:
+
++ The geometric resolution will be used to populate the GenericSensorProduct fields of geometric_resolution, geometric_resolution_x and geometric_resolution_y. This is implemented by first populating the geometric_resolution field (NULL) when assigning acquisition mode, and then assigning the same value to both geometric_resolution_x and geometric_resolution_y.
++ The band_count in acquisition mode will be assigned to the GenericSensorProduct.band_count (formerly called spectral_resolution) if NULL at the moment of assignment.
++ 
 
 ==== Mission Group ====
 
@@ -762,35 +768,31 @@ image, the new image should be modelled as a **GenericImageryProduct**.
 
 Follows the same scheme as defined in OpticalProduct documentation.
 
-== Geospatial Products ==
-
-GeoSpatial products are pure abstract (they cannot exist on their own, only as
-a subclass).
-
-=== Product ID Naming Scheme ===
-
-Follows the same scheme as defined in OpticalProduct documentation.
 
 %----------------------------------------------------------
 %----------------------------------------------------------
 %------------------ Geospatial Product --------------------
 %----------------------------------------------------------
 %----------------------------------------------------------
-== Ordinal Products ==
+== Geospatial Products ==
 
-**Synopsis:** Vector and Raster products where data are grouped into discrete classes.
+**Synopsis:** Level 4 products derived from imagery or by direct earth
+measurement (e.g. by conducting a survey with GPS).
 
-**Concrete or Abstract:** Concrete
+**Concrete or Abstract:** GeoSpatial products are pure abstract (they cannot
+exist on their own, only as a subclass).
 
-=== Ordinal Product Properties ===
+Geospatial Products incorporate all level 4 products. Geospatial products are
+abstract representations of features of the earths surface - as opposed to
+Imagery Products which are some form of obervation of the earth service.
+
+=== Geospatial Product Properties ===
 
 === Product ID Naming Scheme ===
 
-=== Ordinal Product Aggregation Rules ===
+=== Geospatial Product Aggregation Rules ===
 
-=== Ordinal Product Dictionaries ===
-
-=== Dictionaries ===
+=== Geospatial Product Dictionaries ===
 
 %----------------------------------------------------------
 %----------------------------------------------------------

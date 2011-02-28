@@ -2,7 +2,7 @@ SANSA Catalogue Documentation
 
 Tim Sutton, 2008
 
-%! target       : html
+%! target       : tex
 %! style        : style.css
 %! Options      : --toc --toc-level 1 --enum-title --css-sugar --css-inside
 %! preproc      : TUT_URL   https://qgis.org
@@ -59,5 +59,6 @@ Tim Sutton, 2008
 %!include: 201-reporting-tools.t2t
 %!include: 301-product-schema.t2t
 %!include: 302-order-schema.t2t
+%!include: 303-search-schema.t2t
 %!include: 901-informix-acs-sync.t2t
 %!include: 902-importing-other-products.t2t
