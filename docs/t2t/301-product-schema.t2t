@@ -246,18 +246,62 @@ products should have this applied?
 Each product should have a license associated with it. The license will detail
 any restrictions on redistribution or useage that applies for the product.
 
-Currently, only one license is defined, and all products have been assigned
-this license. 
+The following licenses are defined and all products have been assigned one of
+these licenses. 
 
- || ID |    Name     |   Details   |
- |  1 | SAC License | SAC License   |
+ || ID |    Name     |   Details   | Type |
+ |  1 | SAC Commercial License | SAC Commercial License   |  |
+ |  2 | SAC Free License | SAC Free License   |  |
+ |  3 | SAC Partner License | SAC Partner License   |  |
 
+License Type Enumeration: The license type is an enumerated list (managed
+directly in the model rather than in a separate dictionary via a foreign key
+constraint). The reason for this is that application logic specific to the
+license type is implemented (for example to determine if a product can be
+freely distributed to a client).
+
+Each license in the system is allocated a type. The following types and their
+meanings are defined:
+
+Free data, government license or commercial license or any.
+
+|| ID | Type | Description |
+|  1  | Free | Can be freely shared and redistributed without restriction |
+|  2  | Government License | Applies to products that can be freely redistributed to government departments. |
+|  3  | Commercial | Applies to product that can only be commercially distributed |
+|  4  | Any | The product may be distributed under any license. |
+
+
+The license type is determined on a sensor by sensor, product by product basis. The following rules hold true:
+
++ SPOT data are all under SAC Partner license
++ SAC-C, Sumbandilasat and CBERS are all under SAC Free License
++ When not explicitly defined, all products should be assigned the SAC Commercial License
++
+
+**Note:** Wolfgang to define any further rules
+
+**Note:** The allocation of license may not always reflect the cost of the data
+- where substantial processing has been requested by a user, SAC may charge a
+processing fee. The system currently makes no accommodation for calculation of
+such 'value added' fees.
+
+
+
+**Note:** For the Government license type The User profile for this catalogue
+includes a field  SacUserProfile::strategic_partner which is a boolean
+indicating if  the users is registered as a SAC Strategic Partner employee and
+thus granted unfettered access to certain products (e.g. Spot imagery). Where
+the user is not a Government employee, the product license should be considered
+to be commercial.
 
 ---------------------
 **Note:** Wolfgang - we need to define more completely the SAC License, or
 several variants of it, and add any other licenses that may apply. We would
 also need rules descibing how to select products which should have which
 license applied.
+
+**Note:** Wolfgang - does it make sense to have an 'any' license?
 
 %----------------------------------------------------------
 %----------------------------------------------------------
@@ -731,20 +775,24 @@ image and improve its native resolution.
 
 [img/optical-image-example-medium.png]
 
-=== Ordinal Product Properties ===
+Optical products are end nodes in the product heirarchy - they do not have any
+further specialisations.
+
+=== Optical Product Properties ===
 
 === Product ID Naming Scheme ===
-
-=== Ordinal Product Aggregation Rules ===
 
 === Optical Product Aggregation Rules ===
 
 In the DAG (Directed Acyclical Graph) that maps relationships between products
-and their downstream constituent products, **OpticalProducts** may **not** be
-aggregates. This is because each sensor product has an explicit acquisition
-mode, sensor type etc. and such relationships are not mappable for aggregate
-products. In the case that you have have two **OpticalProducts** forming a new
-image, the new image should be modelled as a **GenericImageryProduct**.
+and their downstream constituent products, **OpticalProducts** may **not**
+themselves be aggregates. This is because each sensor product has an explicit
+acquisition mode, sensor type etc. and such relationships are not mappable for
+aggregate products. OpticalProducts can however participate in aggregations.
+In the case that you have have two **OpticalProducts** forming a new image, the
+new image should be modelled as a **GenericImageryProduct**.
+
+
 
 %----------------------------------------------------------
 %----------------------------------------------------------
