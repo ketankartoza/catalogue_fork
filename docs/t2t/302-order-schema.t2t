@@ -37,6 +37,11 @@ The specific global and options are specified in the sections that follow. The
 global versus option specification process is also illustrated in the wireframe
 provided above.
 
+**Note:** The ordering system does not (yet) implement an e-commerce system and
+the processing of orders is not yet automated. When an order is placed for a
+product, the notifications to operators are automatic, but the process of
+fulfilling the orders remains operator controlled.
+
 == Schema ==
 
 The schema relating to product orders can be summarised as follows:
@@ -61,6 +66,77 @@ We can express the above diagram verbally:
   the **specific product**  associated with that SearchRecord should be
   delivered in.
 - Each order has a current order status and history of OrderStatus records.
+- Each order has a deliver method associated with it (e.g. ftp, portable disc,
+  dvd etc.)
+- 
+
+== Operational notes ==
+
+The following operation notes should be understood for the order system:
+
+=== General Users ===
+
+- In order for a user to initiate an order, they must have completed the
+  details of their personal profile. If this is not the case, they will first
+  be redirected to their profile page where they can complete their details. On
+  completion of their details, they are returned to the order page.
+- The user can remove products from the order at the point of making the order.
+  However if he removes the last product from the order, his basket becomes
+  empty and no order should be able to be placed.
+- The user cannot edit the order after it has been placed.
+- The user can request an order be cancelled after it has been placed, but
+  should be advised that their may be a fee payable if products have already
+  been procured.
+- The user can see a list of the orders they have made and their statuses.
+  Clicking on a specific order will take them to a detailed view of the order
+  where they can view its current status and review the products associated
+  with that order, and the history of status changes made for that order.
+- The list of orders visible to a user is restricted to those owned by that
+  user.
+- The user's address and other contact details are shown on the order form,
+  with a link that will take them to their profile editor so that they can
+  update their details. After updating their details they are returned to
+  the order.
+- The user's avatar is shown on the order so that the process feels
+  personalised to them.
+- For each status change to an order (including the initial placement of the
+  order itself), the user will recieve an email which will be provided in both
+  plain text and html format (falling back to plain text if html is not
+  supported by the email client being used). The email will be visually
+  consistent with the order page and include links to products that are
+  available for immediate download (see below).
+-
+
+=== SAC Staff ===
+
+- SAC Staff can view a master list of all orders and filter / sort those orders
+  by status, owner etc.
+- Staff can view any order and as appropriate adjust it's status (e.g. open, in
+  process, cancelled etc).
+- No status change will be accepted without keeping a log of who made the
+  change and what the reason was for the change.
+- Each status change is timestamped so that a proper audit trail can be
+  established.
+- The order comments system should be the primary communication mechanism with
+  the client, as it will provide a thorough audit trail.
+-
+
+== Instant product delivery ==
+
+In some cases products are available for instant download. The indicator for
+this is a populated GenericProduct::local_storage_path field which points to a
+valid resource on disk.
+
+Where products originate from DIMS, an extract request will be made via the
+Ordering Service for Earth Observation products (OS4EO) implemented on the DIMS
+server.
+
+In cases where instant delivery is made, download links will be included in
+notification emails and in the order summary visible to operators.
+
+In the case of DUMS OS4EO extracted products, these will be flushed after a
+period of 1 week from the server file system and the user advised to this fact
+when this happens.
 
 == Filtering of CRS's ==
 
@@ -77,4 +153,40 @@ list is shown. Thus the following logic applies:
 - EPSG:900913 Google Mercator is always listed
 -
 
+== Datum ==
 
+Currently only one datum is supported for order requests - WGS84:
+
+ || id | name | 
+ |  1 | WGS84 |
+
+Until additional datum options are available, the datum is not shown to end
+users since providing a datum choice selection with only a single entry is
+superfluous.
+
+== Processing Levels ==
+
+A user can request that a product be delivered at a different processing level
+to the one recorded for the project. For example a user can request that an
+image at L1A be supplied as a L3Aa product.
+
+**Note:** Wolfgang to supply list of rules on how processing levels may be
+assigned.
+
+== File Format ==
+
+The user making the order can request from one of a number of different
+delivery file formats. Currently these formats are defined as:
+
+ || Id |                  Name                   |
+ | 1 | GeoTiff                                   |
+ | 2 | ECW - ERMapper Compressed Wavelet         |
+ | 3 | JP2 - JPEG 2000                           |
+ | 4 | ESRI -ShapeFile (Vector products only)    |
+
+== Packaging ==
+
+
+By default products should be delivered inside of standard SAC packages. The
+packages will be placed in an ephemeral place in the file system (one where
+files older than 7 days are flushed daily).
