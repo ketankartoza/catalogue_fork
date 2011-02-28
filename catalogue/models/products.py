@@ -61,9 +61,11 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
       thumb for this file following the scheme <Sensor>/<YYYY>/<MM>/<DD>/
       The thumb itself will exist under this dir as <product_id>.jpg"""
     try:
-        return self.getConcreteInstance().thumbnailPath()
+      # Checks method is in concrete class
+      self.getConcreteInstance().__class__.__mro__[0].__dict__['thumbnailPath']
+      return self.getConcreteInstance().thumbnailPath()
     except:
-        raise NotImplementedError()
+      raise NotImplementedError()
 
   def thumbnail(self, theSize):
       """Return a thumbnail for this product of size "small" - 16x16, "medium" - 200x200 or "large" - 400x400
@@ -206,9 +208,11 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
       image itself following the scheme <Sensor>/<processinglevel>/<YYYY>/<MM>/<DD>/
       The image itself will exist under this dir as <product_id>.tif.bz2"""
     try:
-        return self.getConcreteInstance().imagePath()
+      # Checks method is in concrete class
+      self.getConcreteInstance().__class__.__mro__[0].__dict__['imagePath']
+      return self.getConcreteInstance().imagePath()
     except:
-        raise NotImplementedError()
+      raise NotImplementedError()
 
   def imageUrl( self ):
     """Returns a path to the actual imagery data as a url. You need to have
@@ -278,7 +282,6 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     """
     return self.getConcreteProduct()[0]
 
-
   def setSacProductId( self ):
     """A sac product id adheres to the following format:
 
@@ -286,9 +289,11 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
 
     """
     try:
-        return self.getConcreteInstance().setSacProductId()
+      # Checks method is in concrete class
+      self.getConcreteInstance().__class__.__mro__[0].__dict__['setSacProductId']
+      return self.getConcreteInstance().setSacProductId()
     except:
-        raise NotImplementedError()
+      raise NotImplementedError()
 
   def tidySacId( self ):
     """Return a tidy version of the SAC ID for use on web pages etc.
