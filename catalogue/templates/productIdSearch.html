@@ -10,15 +10,15 @@
       $('#productIdForm select option').show();
       for (id in options) {
         try {
-          console.log('Checking ' + id);
-          console.log(options[id]);
+          //console.log('Checking ' + id);
+          //console.log(options[id]);
           // To avoid hiding selected: " :not(:selected)"
           $('#id_' + id + ' option').each(function(e,e){
             if (e.value && $.inArray(parseInt(e.value), options[id]) == -1) {
               $(e).hide();
-              console.log('hiding ' + id + ' val:' + e.value);
+              //console.log('hiding ' + id + ' val:' + e.value);
             } else {
-              console.log('no match ' + id + ' val:' + e.value);
+              //console.log('no match ' + id + ' val:' + e.value);
             }
           });
         } catch(e) {

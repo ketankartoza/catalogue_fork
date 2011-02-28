@@ -69,6 +69,7 @@ urlpatterns = patterns('',
     (r'^searchresultshapefile/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultShapeFile),
     # show segment thumb for a segment by #
     (r'^thumbnailpage/(?P<theId>[0-9]+)/$', showThumbPage),
+    (r'^sensordictionaries/$', getSensorDictionaries),
     # returns image mime type - show segment thumb info for a segment
     (r'^thumbnail/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showThumb),
     # returns html mime type

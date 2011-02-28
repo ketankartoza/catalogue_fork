@@ -81,6 +81,7 @@ class AcquisitionMode( models.Model ):
   def __unicode__(self):
     return "%s:%s" % (self.abbreviation, self.sensor_type)
 
+
 ###############################################################################
 
 class ProcessingLevel( models.Model ):

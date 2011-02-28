@@ -1,5 +1,6 @@
 # Django helpers for forming html pages
 from django.core.context_processors import csrf
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseServerError
 from django.conf import settings
@@ -151,6 +152,43 @@ def search(theRequest):
 
 
 @login_required
+def getSensorDictionaries(theRequest):
+  """
+  Given a set of search sensor-releated criteria, returns
+  valid options for the selects.
+  """
+  values = {}
+  if theRequest.is_ajax():
+    # ABP: Returns a json object with the dictionary possible values
+    qs = AcquisitionMode.objects.order_by()
+    values['mission'] = list(qs.distinct().values_list('sensor_type__mission_sensor__mission', flat = True))
+    if theRequest.POST.get('mission'):
+      try:
+        qs = qs.filter(sensor_type__mission_sensor__mission=Mission.objects.get(pk=theRequest.POST.get('mission')))
+      except ObjectDoesNotExist:
+        raise Http500('Mission does not exists')
+    # m2m
+    values['sensors'] = list(qs.distinct().values_list('sensor_type__mission_sensor', flat = True))
+    if theRequest.POST.get('sensors'):
+      try:
+        qs = qs.filter(sensor_type__mission_sensor__in=MissionSensor.objects.filter(pk__in=theRequest.POST.getlist('sensors')))
+      except ObjectDoesNotExist:
+        raise Http500('SensorType does not exists')
+    values['sensor_type'] = list(qs.distinct().values_list('sensor_type', flat = True))
+    if theRequest.POST.get('sensor_type'):
+      try:
+        qs = qs.filter(sensor_type=SensorType.objects.get(pk=theRequest.POST.get('sensor_type')))
+      except ObjectDoesNotExist:
+        raise Http500('SensorType does not exists')
+    values['acquisition_mode'] = list(qs.distinct().values_list('pk', flat = True))
+    if  theRequest.POST.get('acquisition_mode'):
+      qs = qs.filter(pk=theRequest.POST.get('acquisition_mode'))
+    return HttpResponse(simplejson.dumps(values), mimetype='application/json')
+  raise Http500('This view must be called by XHR')
+
+
+
+@login_required
 def modifySearch(theRequest, theGuid):
   """
   Given a search guid, give the user a form prepopulated with
@@ -170,7 +208,7 @@ def modifySearch(theRequest, theGuid):
     'myHost' : settings.HOST,
     'myLayerDefinitions' : myLayerDefinitions,
     'myLayersList' : myLayersList,
-    'myActiveBaseMap' : myActiveBaseMap
+    'myActiveBaseMap' : myActiveBaseMap,
     }, context_instance=RequestContext(theRequest))
 
 
