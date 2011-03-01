@@ -16,6 +16,10 @@ Tim Sutton, 2008
 % Make the header row of tables have a dark background. light text
 %! PostProc(tex): '\\hline \\textbf' '\\hline \\rowcolor[rgb]{0,0,0} \\color{white} \\textbf'
 %! PostProc(tex): '& \\textbf' '& \\color{white} \\textbf'
+% Make verbatim text a little smaller
+%! PostProc(tex): '\\begin{verbatim}' '{\\tiny\n\\begin{verbatim}'
+%! PostProc(tex): '\\end{verbatim}' '\\end{verbatim}\n}'
+
 % Give alternating table rows different colours and use a smaller font in tables (\tiny)
 %! PostProc(tex): '\\begin{tabular}' '\\rowcolors{2}{tableShade}{white} \n\\tiny\\begin{tabular}'
 %! encoding: iso-8859-1
@@ -60,5 +64,6 @@ Tim Sutton, 2008
 %!include: 301-product-schema.t2t
 %!include: 302-order-schema.t2t
 %!include: 303-search-schema.t2t
+%!include: 401-metadata-standard.t2t
 %!include: 901-informix-acs-sync.t2t
 %!include: 902-importing-other-products.t2t
