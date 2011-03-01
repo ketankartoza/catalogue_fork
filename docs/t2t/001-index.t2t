@@ -60,5 +60,6 @@ Tim Sutton, 2008
 %!include: 301-product-schema.t2t
 %!include: 302-order-schema.t2t
 %!include: 303-search-schema.t2t
+%!include: 401-metadata-standard.t2t
 %!include: 901-informix-acs-sync.t2t
 %!include: 902-importing-other-products.t2t
