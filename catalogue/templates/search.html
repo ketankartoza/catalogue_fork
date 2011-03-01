@@ -84,8 +84,7 @@
 
 
     // ABP: new Ajax filtering
-
-    // Set select options
+    // Set select options for sensor related dictionaries
     function set_form_options(options){
       $('#search_form select option').show();
       for (id in options) {
@@ -149,8 +148,8 @@
     $(function(){
       // Next line: uncomment to add a blank option to multiple selects
       //$('#search_form select[multiple="multiple"]:first-child').prepend('<option value="">---------</option>');
-      $('#search_form select').change(get_dictionary_options);
-      {% if myGuid and myAdvancedFlag %}// Filter initial options
+      $('#search_form .filter select').change(get_dictionary_options);
+      {% if myAdvancedFlag %}// Filter initial options
       get_dictionary_options();
       {% endif %}
     });
