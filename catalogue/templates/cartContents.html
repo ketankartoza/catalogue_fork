@@ -18,3 +18,20 @@
   </div>
   {% endif %}
 {% box_end %}
+{# script for showing deliveryDetails#}
+<script>
+$(document).ready(function(){
+var show_delivery=$('a.show_delivery');
+show_delivery.bind('click', function (evt){
+var ref_id = $(this).attr('ref_id');
+$.ajax({
+url:"/showdeliverydetail/"+ref_id+"/",
+success: function (result){
+  $(result).dialog({title:'Delivery details'});
+}
+});
+evt.preventDefault();
+})
+});
+</script>
+
