@@ -45,7 +45,7 @@ True
 
 Tests writer
 
->>> d  = dimsWriter('catalogue/tests/dims_template', '0000000001')
+>>> d  = dimsWriter('resources/PackageTemplate', '0000000001')
 >>> products = {}
 >>> products['PRODUCT_00001'] = {}
 >>> products['PRODUCT_00001']['thumbnail']= 'catalogue/tests/sample_files/sample_thumbnail.jpg'

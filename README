@@ -30,6 +30,7 @@ Tim Sutton 2009
   16. SVN Ignoring files
   17. Troubleshooting
     17.1. settings.py not found
+  18. Running unit tests
 
 
 ------------------------------------------------------------------------
@@ -136,7 +137,7 @@ To install django, django authentication etc into our virtual environment do:
   pip install -r sac_catalogue/REQUIREMENTS.txt
 
 
-Then make sure the appropriate settings from djangodblog in settings.py.templ are 
+Then make sure the appropriate settings from djangodblog in settings.py.templ are
 deployed in your production settings.py
 
 
@@ -147,7 +148,7 @@ You may also want to read this:
 
 http://devdoodles.wordpress.com/2009/02/16/user-authentication-with-django-registration/
 
-if you want more info on how the registration stuff works.  
+if you want more info on how the registration stuff works.
 
 *Note:* that you need to log in to the admin area of the site and change the
 domain name in the sites table from something other than 'example.com',
@@ -158,15 +159,15 @@ url.
   2. Source code Check out
   ========================
 
-Check out this folder using 
+Check out this folder using
 
 
   svn co https://196.35.94.196/svn/trunk/sac_catalogue
   cd sac_catalogue
 
 
-Copy settings.py.template to settings.py and then 
-modify settings.py as needed (probably you just need to set 
+Copy settings.py.template to settings.py and then
+modify settings.py as needed (probably you just need to set
 the eth adapter and db connection settings).
 
 
@@ -200,7 +201,7 @@ And if you have the legacy acs catalogue do:
   python manage.py syncdb --database=acs
 
 
-The django fixtures included with this project should populate the 
+The django fixtures included with this project should populate the
 initial database when you run the above command.
 
 
@@ -218,7 +219,7 @@ To restore the backup do:
 
   pg_restore sac_postgis_30August2010.dmp | psql sac
   pg_restore acs_postgis_30August2010.dmp | psql acs
-  
+
 
 
 
@@ -229,7 +230,7 @@ Note: This will be deprecated in favour of mod_wsgi (see next section)
 
 Make sure you have mod_expires and mod_deflate installed.
 
-The assumption is that you are using name based virtual hosts and that the 
+The assumption is that you are using name based virtual hosts and that the
 catalogue will run at the root of such a virtual host. Add to you apache site config:
 
 
@@ -261,10 +262,10 @@ Now deploy the site:
   5. Setup apache (mod_wsgi way)
   ==============================
 
-The assumption is that you are using name based virtual hosts and that the 
+The assumption is that you are using name based virtual hosts and that the
 catalogue will run at the root of such a virtual host. Add to you apache site config:
 
-Modify as appropriate a copy of the apache-site-wsgi.templ file found in the apache 
+Modify as appropriate a copy of the apache-site-wsgi.templ file found in the apache
 dir in the source tree then link it to apache.
 
 
@@ -338,9 +339,9 @@ instance is on a different physical server*.
   sudo chmod +x /usr/lib/cgi-bin/proxy.cgi
 
 
-Once you have installed the proxy.cgi you need to configure it to tell it the 
-list of allowed servers it can proxy for. This is to prevent it becoming 
-an open relay on the internet. Edit /usr/lib/cgi-bin/proxy/cgi and change 
+Once you have installed the proxy.cgi you need to configure it to tell it the
+list of allowed servers it can proxy for. This is to prevent it becoming
+an open relay on the internet. Edit /usr/lib/cgi-bin/proxy/cgi and change
 line 18 to look like this:
 
 
@@ -361,8 +362,8 @@ See http://faq.openlayers.org/proxyhost/all/ for more info...
   10. Creating branches
   =====================
 
-When the code gets stabilised to a certain point you should create a branch 
-to mark that stable code base and then deploy it on the live server. To 
+When the code gets stabilised to a certain point you should create a branch
+to mark that stable code base and then deploy it on the live server. To
 create the branch do e.g.:
 
 
@@ -480,6 +481,14 @@ Then at the python prompt do
 The error you obtain there (if any) will be more descriptive.
 
 
+  17. Running unit tests
+  ======================
 
+A settings file for tests is available as `settings_test.py` this settings
+use the faster spatialite instead of createdb.
+
+Run tests for catalogue app as:
+
+  $ python manage.py test catalogue --settings=settings_test
 
 

@@ -104,10 +104,12 @@ class SacUserProfile(BaseProfile):
     verbose_name_plural = 'User Profiles'
 
 class OrderNotificationRecipients(models.Model):
-  """This class is used to map which staff members receive
-    notifications for which sensors so that the notices when
-    orders are placed/updated etc are targeted to the correct
-    individuals"""
+  """
+  This class is used to map which staff members receive
+  notifications for which sensors so that the notices when
+  orders are placed/updated etc are targeted to the correct
+  individuals
+  """
   user = models.ForeignKey(User)
   sensors = models.ManyToManyField(MissionSensor, verbose_name='Sensors', null=True,blank=True,
       help_text='Choosing one or more sensor is required. Use ctrl-click to select more than one.')

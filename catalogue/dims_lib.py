@@ -179,7 +179,7 @@ class dimsWriter(dimsBase):
       _p = os.path.join(self._path, p, processing_level_code)
       if not os.path.isdir(_p):
         logging.info("creating %s" % _p)
-        os.mkdir(_p)
+        os.makedirs(_p)
 
   def _get_metadata(self, product_data, key, silently_fail=False):
     """

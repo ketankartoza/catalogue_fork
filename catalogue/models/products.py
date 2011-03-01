@@ -37,6 +37,9 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
   metadata              = models.TextField(help_text="An xml document describing all known metadata for this product.")
   remote_thumbnail_url  = models.TextField( max_length=255,null=True,blank=True, help_text="Location on a remote server where this product's thumbnail resides. The value in this field will be nulled when a local copy is made of the thumbnail.")
 
+  # We need a flag to tell if this Product class can have instances (if it is abstract)
+  abstract              = True
+
   objects               = models.GeoManager()
 
   def __unicode__( self ):
@@ -340,6 +343,9 @@ class GenericImageryProduct( GenericProduct ):
   radiometric_resolution              = models.IntegerField( help_text="Bit depth of image e.g. 16bit")
   band_count                          = models.IntegerField( help_text="Number of spectral bands in product")
 
+  # We need a flag to tell if this Product class can have instances (if it is abstract)
+  abstract              = False
+
   class Meta:
     app_label= 'catalogue'
 
@@ -365,6 +371,9 @@ class GenericSensorProduct( GenericImageryProduct ):
   row_offset                          = models.IntegerField(null=True, blank=True)
   offline_storage_medium_id           = models.CharField(max_length=12, help_text="Identifier for the offline tape or other medium on which this scene is stored", null=True,blank=True )
   online_storage_medium_id            = models.CharField(max_length=36, help_text="DIMS Product Id as defined by Werum e.g. S5_G2_J_MX_200902160841252_FG_001822",null=True,blank=True )
+
+  # We need a flag to tell if this Product class can have instances (if it is abstract)
+  abstract              = True
 
   class Meta:
     """This is not an abstract base class although you should avoid dealing directly with it
@@ -506,30 +515,10 @@ class OpticalProduct( GenericSensorProduct ):
   solar_azimuth_angle = models.FloatField(null=True,blank=True)
   earth_sun_distance = models.FloatField(null=True,blank=True)
   objects = models.GeoManager()
+  # We need a flag to tell if this Product class can have instances (if it is abstract)
+  abstract              = False
   class Meta:
     app_label= 'catalogue'
-
-###############################################################################
-
-#ABP: this part will be completed with GeospatialProduct as an "abstract" class and Ordinal/Continuous
-#TODO:
-
-
-GEOSPATIAL_GEOMETRY_TYPE_CHOICES = ( ( 'R','Raster' ), ( 'VP', 'Vector - Points' ), ( 'VL', 'Vector - Lines' ) , ( 'VA', 'Vector - Areas / Polygons' ) )
-class GeospatialProduct( GenericProduct ):
-  """
-  Geospatial product, does not have sensors information. Geospatial products may be rasters
-  (that were derived from one or more satellite or other rasters) or vectors.
-  """
-  name = models.CharField(max_length = 255, null=False, blank=False, help_text="A descriptive name for this dataset");
-  data_type = models.CharField( max_length=1, choices=GEOSPATIAL_GEOMETRY_TYPE_CHOICES,null=True,blank=True, help_text="Is this a vector or raster dataset?" )
-  scale = models.IntegerField( help_text="The fractional part at the ideal maximum scale for this dataset. For example enter '50000' if it should not be used at scales larger that 1:50 000", null=True, blank=True, default=50000 )
-  processing_notes = models.TextField( null=True, blank=True, help_text="Description of how the product was created." )
-
-  objects = models.GeoManager()
-  class Meta:
-    app_label= 'catalogue'
-
 
 
 ###############################################################################
@@ -558,5 +547,30 @@ class RadarProduct( GenericSensorProduct ):
   calibration = models.CharField( max_length = 255,null=True,blank=True )
   incidence_angle = models.FloatField(null=True,blank=True)
   objects = models.GeoManager()
+  # We need a flag to tell if this Product class can have instances (if it is abstract)
+  abstract              = False
   class Meta:
     app_label= 'catalogue'
+
+###############################################################################
+
+#ABP: this part will be completed with GeospatialProduct as an "abstract" class and Ordinal/Continuous
+#TODO:
+
+
+GEOSPATIAL_GEOMETRY_TYPE_CHOICES = ( ( 'R','Raster' ), ( 'VP', 'Vector - Points' ), ( 'VL', 'Vector - Lines' ) , ( 'VA', 'Vector - Areas / Polygons' ) )
+class GeospatialProduct( GenericProduct ):
+  """
+  Geospatial product, does not have sensors information. Geospatial products may be rasters
+  (that were derived from one or more satellite or other rasters) or vectors.
+  """
+  name = models.CharField(max_length = 255, null=False, blank=False, help_text="A descriptive name for this dataset");
+  data_type = models.CharField( max_length=1, choices=GEOSPATIAL_GEOMETRY_TYPE_CHOICES,null=True,blank=True, help_text="Is this a vector or raster dataset?" )
+  scale = models.IntegerField( help_text="The fractional part at the ideal maximum scale for this dataset. For example enter '50000' if it should not be used at scales larger that 1:50 000", null=True, blank=True, default=50000 )
+  processing_notes = models.TextField( null=True, blank=True, help_text="Description of how the product was created." )
+  # We need a flag to tell if this Product class can have instances (if it is abstract)
+  abstract              = False
+  objects = models.GeoManager()
+  class Meta:
+    app_label= 'catalogue'
+

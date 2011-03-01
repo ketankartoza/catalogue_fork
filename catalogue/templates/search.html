@@ -123,23 +123,7 @@
           $("#working").slideUp('slow');
         },
         error: function(data) {
-          var errors = $.parseJSON (data.responseText);
-          var messages = '';
-          for (e in errors) {
-            try {
-              $('#id_' + e).css({border: 'solid 1px red'});
-              messages += '<p>Errors in field <b>' + e + '</b>:<ul><li>';
-              messages += errors[e].join('</li><li>');
-              messages += '</ul></p>';
-            } catch(e) {};
-          }
-          if (errors['__all__']) {
-              messages += '<p>Errors in form :<ul><li>';
-              messages += errors['__all__'].join('</li><li>');
-              messages += '</ul></p>';
-          }
-          $('#id_sensors').css({border: 'solid 1px red'});
-          $('#messages').html(messages).show('slow');
+          // No errors expected :)
           $("#working").slideUp('slow');
         }
       });
