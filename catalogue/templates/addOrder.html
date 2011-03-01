@@ -4,17 +4,18 @@
 {% block content%}
 
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
+<form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="horizontal" id="add_form">
   {% box_start "" "" "" %}
     <h2>{{ myTitle }}</h2>
     {{  myMessage|safe }}
 
-    <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="horizontal" id="add_form">
         <table>
           {{myDeliveryDetailForm}}
 
           {{myOrderForm}}
 
-        </table>  
+        </table>
+
         {% if mySubmitLabel %}
         <button type="submit" id="submitButton">{{ mySubmitLabel }}</button>
         {% else %}
@@ -33,11 +34,10 @@
     {% for myRecord in myRecords %}
     <tr>
       <td>{{ myRecord.product.tidySacId }}</td>
-      <td>{{ myRecord.form.as_p }}</td>
+      <td><a href="#" class="show_form" ref_id="{{ myRecord.id}}">Details</a>
     </tr>
     {% endfor %}
   </table>
-</form>
   <div style="text-align: center;">
     <b id="cart-item-count">{{ myRecords.count }}</b> item(s).
   </div>
@@ -47,6 +47,35 @@
   </div>
   {% endif %}
 {% box_end %}
+</form>
     </div>
   {% endif %}
+<script>
+  $(document).ready(function(){
+  var forms=$('a.show_form');
+  forms.button();
+  forms.bind('click',function (evt){
+    var order_product = $(this);
+    var ref_id = $(this).attr('ref_id');
+    $.ajax({
+      url:"/deliverydetailform/"+ref_id+"/",
+      success: function (result){
+        //append form
+        $(result).insertAfter(order_product);
+        //add ref_id to the main form
+        var myRefs = $("#add_form #id_ref_id");
+        var current_refs=myRefs.val();
+        if (current_refs.length){
+          current_refs=current_refs.split(',');
+        } else {
+          current_refs=[];
+        }
+        current_refs.push(ref_id);
+        myRefs.val(current_refs.join(','));
+      }
+    });
+  evt.preventDefault();
+  });
+  });
+</script>
 {% endblock %}
