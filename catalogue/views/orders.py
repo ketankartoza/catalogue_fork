@@ -223,6 +223,11 @@ def updateOrderHistory(theRequest):
       context_instance=RequestContext(theRequest))
 
 
+@renderWithContext("deliveryDetailForm.html")
+@login_required
+def createDeilveryDetailForm( theRequest, theref_id):
+  myDeliveryDetailForm = DeliveryDetailForm(initial={'ref_id':theref_id},prefix='%i' % int(theref_id))
+  return dict(myDeliveryDetailForm=myDeliveryDetailForm)
 
 @requireProfile('addorder')
 @login_required
@@ -279,7 +284,9 @@ def    addOrder( theRequest ):
 
     myOrderForm = OrderForm( theRequest.POST,theRequest.FILES )
     myDeliveryDetailForm = DeliveryDetailForm( theRequest.POST,theRequest.FILES )
-    myProductForms = [DeliveryDetailForm(theRequest.POST,prefix='%i' % myRec.id) for myRec in myRecords]
+
+    #get ref_ids of product details forms, if any, and generate forms for validation
+    myProductForms = [DeliveryDetailForm(theRequest.POST,prefix='%i' % int(myref)) for myref in myDeliveryDetailForm.data.get('ref_id').split(',')]
 
     myOptions =  {
             'myOrderForm': myOrderForm,
@@ -302,17 +309,20 @@ def    addOrder( theRequest ):
       logging.debug("Order saved")
 
       #save all of the subforms
+      myDeliveryDetailsProducts={}
       for mySubDeliveryForm in myProductForms:
         mySubData=mySubDeliveryForm.save(commit=False)
         mySubData.user=theRequest.user
         mySubData.save()
-
-        #update serachrecords
-        myRecord = myRecords.filter(pk=mySubDeliveryForm.cleaned_data.get('ref_id')).get()
-        myRecord.delivery_detail=mySubData
+        #temporary store reference to deliverydetails with search record ID as a key
+        myDeliveryDetailsProducts[int(mySubDeliveryForm.cleaned_data.get('ref_id'))]=mySubData
+      #update serachrecords
+      for myRecord in myRecords:
+        #check if this record has sepcific DeliveryDetails
+        if myDeliveryDetailsProducts.has_key(myRecord.id):
+          myRecord.delivery_detail=myDeliveryDetailsProducts[myRecord.id]
         myRecord.order=myObject
         myRecord.save()
-
 
       logging.info('Add Order : data is valid')
 

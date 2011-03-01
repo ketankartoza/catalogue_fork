@@ -87,6 +87,7 @@ urlpatterns = patterns('',
     # Order management and related lookup tables
     #
     (r'^addorder/', addOrder),
+    (r'^deliverydetailform/(?P<theref_id>\d*)/$', createDeilveryDetailForm),
     (r'^myorders/$', myOrders),
     (r'^listorders/$', listOrders),
     (r'^ordermonthlyreport/(?P<theyear>\d{4})/(?P<themonth>\d{1,2})/$', orderMonthlyReport),
