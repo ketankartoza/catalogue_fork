@@ -1,3 +1,4 @@
+from packagekit.enums import LICENSE_TPL
 from django.contrib.gis.db import models
 
 ###############################################################################
@@ -139,8 +140,24 @@ class Institution( models.Model ):
 ###############################################################################
 
 class License( models.Model ):
+  """
+  Licenses for Products
+  """
+  LICENSE_TYPE_FREE       = 1
+  LICENSE_TYPE_GOVERNMENT = 2
+  LICENSE_TYPE_COMMERCIAL = 3
+  LICENSE_TYPE_ANY        = 4
+
+  LICENSE_TYPE_CHOICES = (
+      (LICENSE_TYPE_FREE,       'Free'),
+      (LICENSE_TYPE_GOVERNMENT, 'Government'),
+      (LICENSE_TYPE_COMMERCIAL, 'Commercial'),
+      (LICENSE_TYPE_ANY,        'Any'),
+    )
   name = models.CharField( max_length="255" )
   details = models.TextField()
+  type = models.IntegerField(choices=LICENSE_TYPE_CHOICES)
+
   class Meta:
     app_label= 'catalogue'
   def __unicode__(self):
