@@ -32,15 +32,14 @@ def notifySalesStaff(theUser, theOrderId):
      >>> myUser
      >>> notifySalesStaff( myUser, 16 )
 
-    #TODO: ABP: GenericProduct does not have sensor informations anymore, notifications must be unbound from the sensors
   """
 
   if not settings.EMAIL_NOTIFICATIONS_ENABLED:
     logging.info("Email sending disabled, set EMAIL_NOTIFICATIONS_ENABLED in settings")
     return
   myOrder = get_object_or_404(Order,id=theOrderId)
-  myRecords = SearchRecord.objects.all().filter(user=theUser).filter(order=myOrder)
-  myHistory = OrderStatusHistory.objects.all().filter(order=myOrder)
+  myRecords = SearchRecord.objects.filter(user=theUser, order=myOrder).select_related()
+  myHistory = OrderStatusHistory.objects.filter(order=myOrder)
   myEmailSubject = 'SAC Order ' + str(myOrder.id) + ' status update (' + myOrder.order_status.name + ')'
   myEmailMessage = 'The status for order #' +  str(myOrder.id) + ' has changed. Please visit the order page:\n'
   myEmailMessage = myEmailMessage + 'http://' + settings.DOMAIN + '/vieworder/' + str(myOrder.id) + '/\n\n\n'
@@ -49,33 +48,26 @@ def notifySalesStaff(theUser, theOrderId):
                                                     'myRecords' : myRecords,
                                                     'myHistory' : myHistory
                                                   })
-  # Get a list of all the mission sensors involved in this order:
-  myMissionSensors = []
-  for myRecord in myRecords:
-    try:
-      mySensor = myRecord.product.mission_sensor
-      if not mySensor in myMissionSensors:
-        myMissionSensors.append(mySensor)
-    except AttributeError:
-        logging.debug('Missing mission_sensor from class %s' % myRecord)
-        # TODO: see above
-        raise
 
   # Get a list of staff user's email addresses
   myMessagesList = [] # we will use mass_mail to prevent users seeing who other recipients are
 
-  for myMissionSensor in myMissionSensors:
-    myRecipients = OrderNotificationRecipients.objects.filter(sensors__id__exact=myMissionSensor.id)
-    for myRecipient in myRecipients:
-      myAddress = myRecipient.user.email
-      myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, [myAddress]))
-      logging.info("Sending notice to : %s" % myAddress)
+  myRecipients = set()
+  # get the list of recipients
+  for myProduct in [s.product for s in myRecords]:
+    myRecipients.update(OrderNotificationRecipients.getUsersForProduct(myProduct))
+
+  for myRecipient in myRecipients:
+    myAddress = myRecipient.email
+    myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, [myAddress]))
+    logging.info("Sending notice to : %s" % myAddress)
+
   #also send an email to the originator of the order
   #We do this separately to avoid them seeing the staff cc list
   myClientAddress = theUser.email
   myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, [myClientAddress]))
   # mass mail expects a tuple (read-only list) so convert the list to tuple on send
-  logging.info("Sending messages: \n%s" % tuple(myMessagesList) )
+  logging.info("Sending messages: \n%s" % myMessagesList)
   send_mass_mail( tuple(myMessagesList),fail_silently=False )
   return
 
@@ -105,7 +97,7 @@ def notifySalesStaffOfTaskRequest(theUser, theId):
                                                     'myHistory' : myHistory
                                                   })
   myMessagesList = [] # we will use mass_mail to prevent users seeing who other recipients are
-  myRecipients = OrderNotificationRecipients.objects.filter(sensors__id__exact = myTaskingRequest.mission_sensor.id)
+  myRecipients = OrderNotificationRecipients.objects.filter(sensors=t.mission_sensor)
   for myRecipient in myRecipients:
     myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN,
           [myRecipient.user.email]))

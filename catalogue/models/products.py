@@ -38,7 +38,8 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
   remote_thumbnail_url  = models.TextField( max_length=255,null=True,blank=True, help_text="Location on a remote server where this product's thumbnail resides. The value in this field will be nulled when a local copy is made of the thumbnail.")
 
   # We need a flag to tell if this Product class can have instances (if it is abstract)
-  abstract              = True
+  # this flas is also used in admin back-end to get the list of classes for OrderNotificationRecipients
+  concrete              = False
 
   objects               = models.GeoManager()
 
@@ -62,116 +63,114 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
   def thumbnailPath( self ):
     """Returns the path (relative to whatever parent dir it is in) for the
       thumb for this file following the scheme <Sensor>/<YYYY>/<MM>/<DD>/
-      The thumb itself will exist under this dir as <product_id>.jpg"""
-    try:
-      # Checks method is in concrete class
-      self.getConcreteInstance().__class__.__mro__[0].__dict__['thumbnailPath']
-      return self.getConcreteInstance().thumbnailPath()
-    except:
-      raise NotImplementedError()
+      The thumb itself will exist under this dir as <product_id>.jpg
+    """
+    if [d for d in set(self.getConcreteInstance().__class__.__mro__).difference([self.__class__]) if 'thumbnailPath' in d.__dict__ ]:
+      return self.getConcreteInstance().imagePath()
+    raise NotImplementedError()
 
   def thumbnail(self, theSize):
-      """Return a thumbnail for this product of size "small" - 16x16, "medium" - 200x200 or "large" - 400x400
-         If a cached copy of the resampled thumb exists, that will be returned directly
-         @param a string "small","medium" or "large" - defaults to small
-         @return a PIL image object.
-      """
-      if theSize not in ["medium","large"]: theSize = "small"
-      mySize = 16
-      if theSize == "medium":
-        mySize = 200
-      elif theSize == "large":
-        mySize = 400
+    """Return a thumbnail for this product of size "small" - 16x16, "medium" - 200x200 or "large" - 400x400
+        If a cached copy of the resampled thumb exists, that will be returned directly
+        @param a string "small","medium" or "large" - defaults to small
+        @return a PIL image object.
+    """
+    if theSize not in ["medium","large"]: theSize = "small"
+    mySize = 16
+    if theSize == "medium":
+      mySize = 200
+    elif theSize == "large":
+      mySize = 400
 
-      logging.info("showThumb : id " + self.product_id)
-      myImageFile = os.path.join( self.thumbnailPath(), self.product_id + ".jpg" )
-      myFileName = str(settings.THUMBS_ROOT) + "/" + myImageFile
-      myThumbDir = os.path.join( settings.THUMBS_ROOT, self.thumbnailPath() )
-      # Paths for cache of scaled down thumbs (to reduce processing load)
-      myCacheThumbDir = os.path.join( settings.THUMBS_ROOT, "cache", theSize, self.thumbnailPath() )
-      myCacheImage = os.path.join( myCacheThumbDir, self.product_id + ".jpg" )
-      #
-      # Check if there is a scaled down version already cached and just return that if there is
-      #
-      if os.path.isfile( myCacheImage ):
-        myImage = Image.open( myCacheImage )
-        return ( myImage )
+    logging.info("showThumb : id " + self.product_id)
+    myImageFile = os.path.join( self.thumbnailPath(), self.product_id + ".jpg" )
+    myFileName = str(settings.THUMBS_ROOT) + "/" + myImageFile
+    myThumbDir = os.path.join( settings.THUMBS_ROOT, self.thumbnailPath() )
+    # Paths for cache of scaled down thumbs (to reduce processing load)
+    myCacheThumbDir = os.path.join( settings.THUMBS_ROOT, "cache", theSize, self.thumbnailPath() )
+    myCacheImage = os.path.join( myCacheThumbDir, self.product_id + ".jpg" )
+    #
+    # Check if there is a scaled down version already cached and just return that if there is
+    #
+    if os.path.isfile( myCacheImage ):
+      myImage = Image.open( myCacheImage )
+      return ( myImage )
 
-      #
-      # Cached minified thumb not available so lets make it!
-      #
+    #
+    # Cached minified thumb not available so lets make it!
+    #
 
-      # Hack to automatically fetch spot or other non local thumbs from their catalogue
-      # and store them locally
-      if self.remote_thumbnail_url:
-        if not os.path.isdir( myThumbDir  ):
-          logging.debug("Creating dir: %s" % myThumbDir)
-          try:
-            os.makedirs( myThumbDir )
-          except OSError:
-            logging.debug("Failed to make output directory...quitting")
-            return "Failed to make output dir."
-        logging.debug("Fetching image: %s" % self.remote_thumbnail_url)
-        myOpener = urllib2.build_opener()
-        myImagePage = myOpener.open(self.remote_thumbnail_url)
-        myImage = myImagePage.read()
-        logging.debug("Image fetched, saving as %s" % myImageFile)
-        myWriter = open(os.path.join(settings.THUMBS_ROOT,myImageFile), "wb")
-        myWriter.write(myImage)
-        myWriter.close()
-        self.remote_thumbnail_url=""
-        self.save()
-      # hack ends
-
-      # Specify background colour, should be the same as div background
-      myBackgroundColour = ( 255,255,255 )
-      myAngle = 0
-      myShadowFlag = False
-      logging.info ( "Creating thumbnail of : " + myFileName )
-      logging.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
-      logging.info('Media path    :   ' + str(settings.MEDIA_ROOT))
-      logging.info('Project root path:' + str(settings.ROOT_PROJECT_FOLDER))
-      myImage = None
-      if not os.path.isfile(myFileName):
-        #file does not exist so show an error icon
-        #return HttpResponse("%s not found" % myFileName)
-        myFileName = os.path.join(settings.MEDIA_ROOT, 'images','block_16.png')
-        myImage = Image.open( myFileName )
-        return ( myImage )
-
-      try:
-        myImage = Image.open( myFileName )
-      except:
-        #file is not valid for some reason so show an error icon
-        myFileName = os.path.join(settings.MEDIA_ROOT, 'images','block_16.png')
-        myImage = Image.open( myFileName )
-        return ( myImage )
-
-      if len( myImage.getbands() ) < 3:
-        myImage = ImageOps.expand( myImage, border = 5, fill = ( 255 ) )
-      else:
-        myImage = ImageOps.expand( myImage, border = 5, fill = ( 255, 255, 255 ) )
-      myBackground = None
-      if myShadowFlag:
-        myImage = dropShadow( myImage.convert( 'RGBA' ) ).rotate( myAngle , expand = 1 )
-        myBackground = Image.new( 'RGBA', myImage.size, myBackgroundColour )
-        myBackground.paste( myImage, ( 0, 0 ) , myImage )
-      else:
-        myBackground = Image.new( 'RGBA', myImage.size, myBackgroundColour )
-        myBackground.paste( myImage, ( 0, 0 ) )
-      myBackground.thumbnail( ( mySize, mySize ), Image.ANTIALIAS)
-
-      # Now cache the scaled thumb for faster access next time...
-      if not os.path.isdir( myCacheThumbDir  ):
-        logging.debug("Creating dir: %s" % myCacheThumbDir)
+    # Hack to automatically fetch spot or other non local thumbs from their catalogue
+    # and store them locally
+    if self.remote_thumbnail_url:
+      if not os.path.isdir( myThumbDir  ):
+        logging.debug("Creating dir: %s" % myThumbDir)
         try:
-          os.makedirs( myCacheThumbDir )
+          os.makedirs( myThumbDir )
         except OSError:
           logging.debug("Failed to make output directory...quitting")
-          return "Failed to make output dir"
-      logging.debug( "Caching image : %s" % myCacheImage )
-      myBackground.save( myCacheImage )
-      return ( myBackground )
+          return "Failed to make output dir."
+      logging.debug("Fetching image: %s" % self.remote_thumbnail_url)
+      myOpener = urllib2.build_opener()
+      myImagePage = myOpener.open(self.remote_thumbnail_url)
+      myImage = myImagePage.read()
+      logging.debug("Image fetched, saving as %s" % myImageFile)
+      myWriter = open(os.path.join(settings.THUMBS_ROOT,myImageFile), "wb")
+      myWriter.write(myImage)
+      myWriter.close()
+      self.remote_thumbnail_url=""
+      self.save()
+    # hack ends
+
+    # Specify background colour, should be the same as div background
+    myBackgroundColour = ( 255,255,255 )
+    myAngle = 0
+    myShadowFlag = False
+    logging.info ( "Creating thumbnail of : " + myFileName )
+    logging.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
+    logging.info('Media path    :   ' + str(settings.MEDIA_ROOT))
+    logging.info('Project root path:' + str(settings.ROOT_PROJECT_FOLDER))
+    myImage = None
+    if not os.path.isfile(myFileName):
+      #file does not exist so show an error icon
+      #return HttpResponse("%s not found" % myFileName)
+      myFileName = os.path.join(settings.MEDIA_ROOT, 'images','block_16.png')
+      myImage = Image.open( myFileName )
+      return ( myImage )
+
+    try:
+      myImage = Image.open( myFileName )
+    except:
+      #file is not valid for some reason so show an error icon
+      myFileName = os.path.join(settings.MEDIA_ROOT, 'images','block_16.png')
+      myImage = Image.open( myFileName )
+      return ( myImage )
+
+    if len( myImage.getbands() ) < 3:
+      myImage = ImageOps.expand( myImage, border = 5, fill = ( 255 ) )
+    else:
+      myImage = ImageOps.expand( myImage, border = 5, fill = ( 255, 255, 255 ) )
+    myBackground = None
+    if myShadowFlag:
+      myImage = dropShadow( myImage.convert( 'RGBA' ) ).rotate( myAngle , expand = 1 )
+      myBackground = Image.new( 'RGBA', myImage.size, myBackgroundColour )
+      myBackground.paste( myImage, ( 0, 0 ) , myImage )
+    else:
+      myBackground = Image.new( 'RGBA', myImage.size, myBackgroundColour )
+      myBackground.paste( myImage, ( 0, 0 ) )
+    myBackground.thumbnail( ( mySize, mySize ), Image.ANTIALIAS)
+
+    # Now cache the scaled thumb for faster access next time...
+    if not os.path.isdir( myCacheThumbDir  ):
+      logging.debug("Creating dir: %s" % myCacheThumbDir)
+      try:
+        os.makedirs( myCacheThumbDir )
+      except OSError:
+        logging.debug("Failed to make output directory...quitting")
+        return "Failed to make output dir"
+    logging.debug( "Caching image : %s" % myCacheImage )
+    myBackground.save( myCacheImage )
+    return ( myBackground )
 
   def dropShadow(
     theImage,
@@ -207,15 +206,15 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     return myBackground
 
   def imagePath( self ):
-    """Returns the path (relative to whatever parent dir it is in) for the
-      image itself following the scheme <Sensor>/<processinglevel>/<YYYY>/<MM>/<DD>/
-      The image itself will exist under this dir as <product_id>.tif.bz2"""
-    try:
-      # Checks method is in concrete class
-      self.getConcreteInstance().__class__.__mro__[0].__dict__['imagePath']
+    """
+    Returns the path (relative to whatever parent dir it is in) for the
+    image itself following the scheme <Sensor>/<processinglevel>/<YYYY>/<MM>/<DD>/
+    The image itself will exist under this dir as <product_id>.tif.bz2
+    """
+    # Checks method is in concrete class
+    if [d for d in set(self.getConcreteInstance().__class__.__mro__).difference([self.__class__]) if 'imagePath' in d.__dict__ ]:
       return self.getConcreteInstance().imagePath()
-    except:
-      raise NotImplementedError()
+    raise NotImplementedError()
 
   def imageUrl( self ):
     """Returns a path to the actual imagery data as a url. You need to have
@@ -344,7 +343,7 @@ class GenericImageryProduct( GenericProduct ):
   band_count                          = models.IntegerField( help_text="Number of spectral bands in product")
 
   # We need a flag to tell if this Product class can have instances (if it is abstract)
-  abstract              = False
+  concrete              = True
 
   class Meta:
     app_label= 'catalogue'
@@ -373,7 +372,7 @@ class GenericSensorProduct( GenericImageryProduct ):
   online_storage_medium_id            = models.CharField(max_length=36, help_text="DIMS Product Id as defined by Werum e.g. S5_G2_J_MX_200902160841252_FG_001822",null=True,blank=True )
 
   # We need a flag to tell if this Product class can have instances (if it is abstract)
-  abstract              = True
+  concrete              = False
 
   class Meta:
     """This is not an abstract base class although you should avoid dealing directly with it
@@ -516,7 +515,7 @@ class OpticalProduct( GenericSensorProduct ):
   earth_sun_distance = models.FloatField(null=True,blank=True)
   objects = models.GeoManager()
   # We need a flag to tell if this Product class can have instances (if it is abstract)
-  abstract              = False
+  concrete              = True
   class Meta:
     app_label= 'catalogue'
 
@@ -548,7 +547,7 @@ class RadarProduct( GenericSensorProduct ):
   incidence_angle = models.FloatField(null=True,blank=True)
   objects = models.GeoManager()
   # We need a flag to tell if this Product class can have instances (if it is abstract)
-  abstract              = False
+  concrete              = True
   class Meta:
     app_label= 'catalogue'
 
@@ -569,7 +568,7 @@ class GeospatialProduct( GenericProduct ):
   scale = models.IntegerField( help_text="The fractional part at the ideal maximum scale for this dataset. For example enter '50000' if it should not be used at scales larger that 1:50 000", null=True, blank=True, default=50000 )
   processing_notes = models.TextField( null=True, blank=True, help_text="Description of how the product was created." )
   # We need a flag to tell if this Product class can have instances (if it is abstract)
-  abstract              = False
+  concrete              = True
   objects = models.GeoManager()
   class Meta:
     app_label= 'catalogue'
