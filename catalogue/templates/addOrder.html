@@ -34,7 +34,7 @@
     {% for myRecord in myRecords %}
     <tr>
       <td>{{ myRecord.product.tidySacId }}</td>
-      <td><a href="#" class="show_form" ref_id="{{ myRecord.id}}">Details</a>
+      <td><a href="#" class="show_form" ref_id="{{ myRecord.id}}">Delivery details</a>
     </tr>
     {% endfor %}
   </table>
@@ -52,30 +52,7 @@
   {% endif %}
 <script>
   $(document).ready(function(){
-  var forms=$('a.show_form');
-  forms.button();
-  forms.bind('click',function (evt){
-    var order_product = $(this);
-    var ref_id = $(this).attr('ref_id');
-    $.ajax({
-      url:"/deliverydetailform/"+ref_id+"/",
-      success: function (result){
-        //append form
-        $(result).insertAfter(order_product);
-        //add ref_id to the main form
-        var myRefs = $("#add_form #id_ref_id");
-        var current_refs=myRefs.val();
-        if (current_refs.length){
-          current_refs=current_refs.split(',');
-        } else {
-          current_refs=[];
-        }
-        current_refs.push(ref_id);
-        myRefs.val(current_refs.join(','));
-      }
-    });
-  evt.preventDefault();
-  });
+    $('a.show_form').deliveryDetails();
   });
 </script>
 {% endblock %}
