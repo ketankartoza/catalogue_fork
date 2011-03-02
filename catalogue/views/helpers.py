@@ -18,6 +18,9 @@ from django.template.loader import render_to_string
 # for sending email
 from django.core.mail import send_mail,send_mass_mail
 
+# Read from settings
+CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS = getattr(settings, 'CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS', False )
+
 ###########################################################
 #
 # Email notification of orders to sac sales staff
@@ -62,6 +65,11 @@ def notifySalesStaff(theUser, theOrderId):
     myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, [myAddress]))
     logging.info("Sending notice to : %s" % myAddress)
 
+  # Add default
+  if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
+    logging.info("Sending notice to default recipients : %s" % CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
+    myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)))
+
   #also send an email to the originator of the order
   #We do this separately to avoid them seeing the staff cc list
   myClientAddress = theUser.email
@@ -103,6 +111,10 @@ def notifySalesStaffOfTaskRequest(theUser, theId):
           [myRecipient.user.email]))
     logging.info("Sending notices to : %s" % myRecipient.user.email)
 
+  # Add default
+  if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
+    logging.info("Sending notice to default recipients : %s" % CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
+    myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)))
 
   #also send an email to the originator of the order
   #We do this separately to avoid them seeing the staff cc list
