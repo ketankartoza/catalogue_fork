@@ -194,3 +194,31 @@ delivery file formats. Currently these formats are defined as:
 By default products should be delivered inside of standard SAC packages. The
 packages will be placed in an ephemeral place in the file system (one where
 files older than 7 days are flushed daily).
+
+== Staff Order Notifications ==
+
+The system can send notifications emails to staff based on product class or
+sensor ordered. If you look in the admin ui there is already a way to allocated
+users to sensors - we just need to extend that idea to include product classes
+as everything is not sensor based anymore.
+
+Product types are not aggregated. From a user perspective, staff log in and
+choose which sensors and product classes they subscribe to by picking one or
+more items from a select list.
+
+---
+
+In product id search, the user be able to put in ranges or comma
+delimited lists of rows and paths too e.g.
+
+Row: 80
+Path 80
+
+or 
+Row: 80-83
+Path: 80-83
+
+or
+Row: 80,90,112
+Path: 90, 101
+
