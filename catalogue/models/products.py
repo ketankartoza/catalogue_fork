@@ -11,7 +11,21 @@ from PIL import Image, ImageFilter, ImageOps
 
 from django_dag.models import node_factory, edge_factory
 
+from functools import wraps
 
+# Read from settings
+CATALOGUE_SCENES_PATH = getattr(settings, 'CATALOGUE_SCENES_PATH', "/mnt/cataloguestorage/scenes_out_projected_sorted/")
+
+def runconcrete(func):
+  """
+  This decorator calls the method in the concrete subclass
+  and raise an exception if the method found only in the base GenericProduct class
+  """
+  def wrapped_view(self, *args, **kwargs):
+    if [d for d in set(self.getConcreteInstance().__class__.__mro__).difference([self.__class__]) if func.__name__ in d.__dict__]:
+      return getattr(self.getConcreteInstance(), func.__name__)(*args, **kwargs)
+    raise NotImplementedError()
+  return wraps(func)(wrapped_view)
 
 class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.Model ) ):
   """
@@ -59,15 +73,13 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     abstract = False
     ordering = ('product_date',)
 
-
+  @runconcrete
   def thumbnailPath( self ):
     """Returns the path (relative to whatever parent dir it is in) for the
       thumb for this file following the scheme <Sensor>/<YYYY>/<MM>/<DD>/
       The thumb itself will exist under this dir as <product_id>.jpg
     """
-    if [d for d in set(self.getConcreteInstance().__class__.__mro__).difference([self.__class__]) if 'thumbnailPath' in d.__dict__ ]:
-      return self.getConcreteInstance().imagePath()
-    raise NotImplementedError()
+    pass
 
   def thumbnail(self, theSize):
     """Return a thumbnail for this product of size "small" - 16x16, "medium" - 200x200 or "large" - 400x400
@@ -205,6 +217,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
 
     return myBackground
 
+  @runconcrete
   def imagePath( self ):
     """
     Returns the path (relative to whatever parent dir it is in) for the
@@ -212,9 +225,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     The image itself will exist under this dir as <product_id>.tif.bz2
     """
     # Checks method is in concrete class
-    if [d for d in set(self.getConcreteInstance().__class__.__mro__).difference([self.__class__]) if 'imagePath' in d.__dict__ ]:
-      return self.getConcreteInstance().imagePath()
-    raise NotImplementedError()
+    pass
 
   def imageUrl( self ):
     """Returns a path to the actual imagery data as a url. You need to have
@@ -284,18 +295,14 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     """
     return self.getConcreteProduct()[0]
 
+  @runconcrete
   def setSacProductId( self ):
     """A sac product id adheres to the following format:
 
     SAT_SEN_TYP_MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL
 
     """
-    try:
-      # Checks method is in concrete class
-      self.getConcreteInstance().__class__.__mro__[0].__dict__['setSacProductId']
-      return self.getConcreteInstance().setSacProductId()
-    except:
-      raise NotImplementedError()
+    pass
 
   def tidySacId( self ):
     """Return a tidy version of the SAC ID for use on web pages etc.
@@ -385,7 +392,7 @@ class GenericSensorProduct( GenericImageryProduct ):
     """Returns the path (relative to whatever parent dir it is in) for the
       image itself following the scheme <Sensor>/<processinglevel>/<YYYY>/<MM>/<DD>/
       The image itself will exist under this dir as <product_id>.tif.bz2"""
-    return os.path.join( self.mission.abbreviation,
+    return os.path.join( self.acquisition_mode.sensor_type.mission_sensor.mission.abbreviation,
                     str( self.processing_level.abbreviation),
                     str( self.product_acquisition_start.year ),
                     str( self.product_acquisition_start.month ),
@@ -396,7 +403,7 @@ class GenericSensorProduct( GenericImageryProduct ):
     """Returns the path (relative to whatever parent dir it is in) for the
       thumb for this file following the scheme <Sensor>/<YYYY>/<MM>/<DD>/
       The thumb itself will exist under this dir as <product_id>.jpg"""
-    return os.path.join( self.mission.abbreviation,
+    return os.path.join( self.acquisition_mode.sensor_type.mission_sensor.mission.abbreviation,
                     str( self.product_acquisition_start.year ),
                     str( self.product_acquisition_start.month ),
                     str( self.product_acquisition_start.day ) )
@@ -432,10 +439,10 @@ class GenericSensorProduct( GenericImageryProduct ):
       """
     myPreviousId = self.product_id #store for thumb renaming just now
     myList = []
-    myList.append( self.pad( self.mission.abbreviation, 3 ) )
-    myList.append( self.pad( self.mission_sensor.abbreviation, 3 ) )
+    myList.append( self.pad( self.acquisition_mode.sensor_type.mission_sensor.mission.abbreviation, 3 ) )
+    myList.append( self.pad( self.acquisition_mode.sensor_type.mission_sensor.abbreviation, 3 ) )
     myList.append( self.pad( self.acquisition_mode.abbreviation, 3 ) )
-    myList.append( self.pad( self.sensor_type.abbreviation, 3 ) )
+    myList.append( self.pad( self.acquisition_mode.sensor_type.abbreviation, 3 ) )
     myList.append( self.zeroPad( str( self.path ),4 ) )
     myList.append( self.zeroPad( str( self.path_offset ),2 ) )
     myList.append(  self.zeroPad( str( self.row ),4 ) )
@@ -464,21 +471,18 @@ class GenericSensorProduct( GenericImageryProduct ):
       #it already has the correct name
       return
 
-    # TODO: softcode this into settings
-    mScenesPath = "/mnt/cataloguestorage/scenes_out_projected_sorted/"
-
     # Make a copy of the thumb all filed away nicely by sensor / yy / mm / dd
     # the thumb was saved as: myJpegThumbnail = os.path.join(mInScenesPath, str( theFrame.id ) + "-rectified-clipped.jpg")
-    myJpegThumbnail = os.path.join(mScenesPath, str( myPreviousId ) + ".jpg")
-    myWorldFile = os.path.join(mScenesPath, str( myPreviousId ) + ".wld")
+    myJpegThumbnail = os.path.join(CATALOGUE_SCENES_PATH, str( myPreviousId ) + ".jpg")
+    myWorldFile = os.path.join(CATALOGUE_SCENES_PATH, str( myPreviousId ) + ".wld")
     #print "myJpegThumbnail %s" % myJpegThumbnail
-    myOutputPath = os.path.join( mScenesPath, self.thumbnailPath() )
+    myOutputPath = os.path.join( CATALOGUE_SCENES_PATH, self.thumbnailPath() )
     if not os.path.isdir( myOutputPath ):
       #print "Creating dir: %s" % myOutputPath
       try:
         os.makedirs( myOutputPath )
       except OSError:
-        logging.debug("Failed to make output directory...quitting" )
+        logging.debug("Failed to make output directory (%s) ...quitting" % myOutputPath)
         return "False"
     else:
       #print "Exists: %s" % myOutputPath
