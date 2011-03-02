@@ -45,7 +45,12 @@ for any given metadata document. These are listed in the table that follows:
  - This is the person / institution responsible for the metadata information.
  - MD_Metadata > MD_DataIdentification.pointOfContact > CI_ResponsibleParty
  -
-+ **Lineage (O)** : (MD_Metadata > DQ_DataQuality.lineage > LI_Lineage) 
++ **Lineage (O)**
+ - Lineage describes how the product was created and where if comes from. Two options for describing lineage exist (which can be used together too):
+  + Using LI_Source (with properties: description(O), scaleDenominator(O), sourceReferenceSystem(O), sourceCitation(O), sourceExtent(O))
+  + Using LI_ProcessStep (with properties: description(C), rationale(O), dataTime(O), processor(O)) where processor represents a contact person
+  +
+ - MD_Metadata > DQ_DataQuality.lineage > LI_Lineage
 + **Geographic location of the dataset (C) by four coordinates or by geographic identifier** : 
 (MD_Metadata > MD_DataIdentification.extent > EX_Extent >
 EX_GeographicExtent > EX_GeographicBoundingBox  or EX_GeographicDescription)
