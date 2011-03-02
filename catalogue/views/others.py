@@ -363,6 +363,7 @@ def visitorReport( theRequest ):
 
   #render_to_response is done by the renderWithContext decorator
   return ( {
+    'myGraphLabel': ({'Country':'country'}),
     'myTopCountries': myTopCountries,
     'myScores': myScores,
     'myCurrentMonth': datetime.date.today()
@@ -397,6 +398,7 @@ def visitorMonthlyReport( theRequest, theyear, themonth):
   myTopCountries = myScores[0:10]
 
   return ({
+    'myGraphLabel': ({'Country':'country'}),
     'myTopCountries': myTopCountries,
     'myScores': myScores,
     'myCurrentDate': myDate,
