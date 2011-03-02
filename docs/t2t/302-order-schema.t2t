@@ -242,5 +242,5 @@ data) of a specific location.
 
 == Taskable Sensors ==
 
-The MissionSensor model includes an is_taskable member which is used to
+The SensorType model includes an is_taskable member which is used to
 determine which sensors a user may select from when making a tasking request.
