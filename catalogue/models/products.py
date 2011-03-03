@@ -19,13 +19,15 @@ CATALOGUE_SCENES_PATH = getattr(settings, 'CATALOGUE_SCENES_PATH', "/mnt/catalog
 def runconcrete(func):
   """
   This decorator calls the method in the concrete subclass
-  and raise an exception if the method found only in the base GenericProduct class
+  and raise an exception if the method is found only in the base
+  GenericProduct class
   """
-  def wrapped_view(self, *args, **kwargs):
+  @wraps(func)
+  def wrapper(self, *args, **kwargs):
     if [d for d in set(self.getConcreteInstance().__class__.__mro__).difference([self.__class__]) if func.__name__ in d.__dict__]:
       return getattr(self.getConcreteInstance(), func.__name__)(*args, **kwargs)
     raise NotImplementedError()
-  return wraps(func)(wrapped_view)
+  return wrapper
 
 class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.Model ) ):
   """

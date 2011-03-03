@@ -125,16 +125,16 @@ class OrderNotificationRecipients(models.Model):
     verbose_name = 'Order Notification Recipient'
     verbose_name_plural = 'Order Notification Recipients'
 
-  @classmethod
-  def getUsersForProduct(cls, product):
+  @staticmethod
+  def getUsersForProduct(product):
     """
     Returns all users registered to this product class or sensors
     """
-    # Determine the product concrete class, should raise an error if does not exists
+    # Determines the product concrete class, should raise an error if does not exists
     instance = product.getConcreteInstance()
     # Get class listeners
     listeners = set([o.user for o in OrderNotificationRecipients.objects.filter(classes=ContentType.objects.get_for_model(instance.__class__)).select_related()])
-    # Determine if is a sensor-based product and add sensor listeners
+    # Determines if is a sensor-based product and add sensor listeners
     if isinstance(instance, GenericSensorProduct):
       listeners.update([o.user for o in OrderNotificationRecipients.objects.filter(sensors=instance.acquisition_mode.sensor_type.mission_sensor).select_related()])
     return listeners
