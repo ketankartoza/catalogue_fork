@@ -11,7 +11,11 @@ Tests reader
 >>> d = dimsReader(os.path.join(os.path.split(__file__)[0], 'dims_packages', 'ORD_420882_20110124_20110124_SPOT-_V01_1.tar.gz'))
 >>> products = d.get_products()
 >>> product_code = products.keys()[0]
->>> products[product_code]['thumbnail'] # doctest:+ELLIPSIS
+>>> products[product_code]['thumbnail']
+<tarfile.ExFileObject object at ...>
+>>> products[product_code]['xml']
+<tarfile.ExFileObject object at ...>
+>>> products[product_code]['image']
 <tarfile.ExFileObject object at ...>
 
 >>> md = d.get_metadata(product_code)
@@ -41,7 +45,8 @@ True
 True
 >>> md.get('image_quality_code') == 'aaaabaaaaaaaaa'
 True
-
+>>> d.get_xml(product_code)
+<tarfile.ExFileObject object at ...>
 
 Tests writer
 

@@ -1,5 +1,8 @@
 """
 Dims ingestion command
+
+Ingestion of DIMS SPOT-5 OpticalProduct only
+
 """
 
 import os
@@ -11,11 +14,16 @@ from django.core.management.base import BaseCommand, CommandError
 from catalogue.models import *
 from catalogue.dims_lib import dimsReader
 
+
+
+
 class Command(BaseCommand):
-  help = "Import into the catalogue all dims packages in a given folder"
+  help = "Import into the catalogue all DIMS packages in a given folder, SPOT-5 OpticalProduct only"
   option_list = BaseCommand.option_list + (
       make_option('--folder', '-f', dest='folder', action='store',
           help='Scan the given folder, defaults to current.', default = os.getcwd()),
+      make_option('--store_data', '-s', dest='store_data', action='store_true',
+          help='Store the original image data extracted from the package.', default = os.getcwd()),
       make_option('--glob', '-g', dest='glob', action='store',
           help='A shell glob pattern for files to ingest.', default = '*.tar.gz'),
       make_option('--test_only', '-t', dest='test_only', action='store_true',
@@ -27,6 +35,7 @@ class Command(BaseCommand):
     folder        = options.get('folder')
     globparm      = options.get('glob')
     test_only     = options.get('test_only')
+    store_data    = options.get('store_data')
     verbose       = options.get('verbosity')
 
     # Build the path
@@ -54,8 +63,9 @@ class Command(BaseCommand):
         if not test_only:
           if verbose:
             print "processing product %s" % product_code
-            # Do the ingestion here....
-            for p in ['product_date',
+
+          # Do the ingestion here....
+          for p in ['product_date',
                       'processing_level',
                       'owner',
                       'license',
@@ -71,10 +81,25 @@ class Command(BaseCommand):
                       'acquisition_mode',
                       'product_acquisition_start',
                       'geometric_resolution_x',
-                      'geometric_resolution_y']:
+                      'geometric_resolution_y',
+                      'main_image'
+                      ]:
+                # check they are set
+                if verbose:
+                  print "checking mandatory data for product %s" % product_code
                 pass
 
-            op = OpticalProduct()
+          data = {
+            'metadata' : product_data['xml'],
+          }
+          op = OpticalProduct(**data)
+          op.save()
+          # Store thumbnail
+
+          # Store main image
+          if store_data:
+            if verbose:
+              print "storing main image for product %s: %s" % (product_code, )
 
         else:
           if verbose:
