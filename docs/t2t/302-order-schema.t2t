@@ -2,6 +2,11 @@
 
 %------leave this line and the two above it
 
+%---------------------------------------------
+%---------------------------------------------
+%--------------- Ordering --------------------
+%---------------------------------------------
+%---------------------------------------------
 = Catalogue Schema : Orders =
 
 **Note:** Before reading this section please read & understand the products schema notes.
@@ -222,3 +227,20 @@ or
 Row: 80,90,112
 Path: 90, 101
 
+%---------------------------------------------
+%---------------------------------------------
+%---------------Tasking ----------------------
+%---------------------------------------------
+%---------------------------------------------
+= Tasking Requests =
+
+The TaskingRequest model is a subclass of the Order model. Tasking requests
+differ from orders in that they have no products associated with them. Instead
+a tasking request has a sensor associated with it and other information
+germaine to tasking a satellite to capture and image (or other remotely sensed
+data) of a specific location.
+
+== Taskable Sensors ==
+
+The SensorType model includes an is_taskable member which is used to
+determine which sensors a user may select from when making a tasking request.

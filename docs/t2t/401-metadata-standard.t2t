@@ -11,13 +11,52 @@ complicated metadata documents with the majority of attributes unpopulated do
 to lack of sufficient information.
 
 The standard also specifies a core set of attributes that should be present
-for any given metadata document. These are listed in the table that follows:
+for any given metadata document. 
+  
+== Mandatory Core Items ==
+
+These are listed in the table that follows:
 
 + **Dataset title (M)**
  - This is the SAC product identifier for this dataset
  - MD_Metadata > MD_DataIdentification.citation >
    MD_Metadata > CI_Citation.title
+ - **Note:** Wolfgang in DIMS packages the ID is e.g. SPOT5.HRG.L1A but we should rather use SAC product ID here I think.
++ **Dataset reference date (M)**
+ - Date on which product was acquired or created. For imagery products it
+   should refer to the acquisition data where feasible. 
+ - MD_Metadata > MD_DataIdentification.citation > CI_Citation.date
  -
++ **Dataset topic category (M)**
+ -
+ - MD_Metadata > MD_DataIdentification.topicCategory
+ -
++ **Abstract describing the dataset (M)** 
+ -
+ - MD_Metadata > MD_DataIdentification.abstract
+ -
++ **Dataset language (M)**
+ - This will be set to English always for any product. There is currently no
+   provision for storing language of products in the catalogue data models.
+ - MD_Metadata > MD_DataIdentification.language
+ -
++ **Metadata point of contact (M)** 
+ - 
+ - MD_Metadata.contact > CI_ResponsibleParty
+ -
++ **Metadata date stamp (M)**
+ - This maps to the GenericProduct::product_date field
+ - MD_Metadata.dateStamp
+ -
++
+
+
+Above listing taken from section 6.5 'Core metadata for geographic subsets' of
+the ISO 19115:2003 specification. Items marked (M) are mandatory, (O) Optional
+and (C) Conditionally required.
+
+== Optional Core Items ==
+
 + **Spatial representation type (O)** 
  - A geographic dataset should be represented as one of the following type codes:
   - vector
@@ -29,11 +68,6 @@ for any given metadata document. These are listed in the table that follows:
   -
  - MD_DataIdentification.spatialRepresentationType
  - 
-+ **Dataset reference date (M)**
- - Date on which product was acquired or created. For imagery products it
-   should refer to the acquisition data where feasible. 
- - MD_Metadata > MD_DataIdentification.citation > CI_Citation.date
- -
 + **Reference system (O)**
  - The standard allows the reference system to be described either by means of 
    provision of projection, ellipsoid, datum, or by means of an identifier. In
@@ -45,40 +79,83 @@ for any given metadata document. These are listed in the table that follows:
  - This is the person / institution responsible for the metadata information.
  - MD_Metadata > MD_DataIdentification.pointOfContact > CI_ResponsibleParty
  -
-+ **Lineage (O)** : (MD_Metadata > DQ_DataQuality.lineage > LI_Lineage) 
-+ **Geographic location of the dataset (C) by four coordinates or by geographic identifier** : 
-(MD_Metadata > MD_DataIdentification.extent > EX_Extent >
-EX_GeographicExtent > EX_GeographicBoundingBox  or EX_GeographicDescription)
-+ **On-line resource (O)** : (MD_Metadata > MD_Distribution >
-MD_DigitalTransferOption.onLine > CI_OnlineResource)
-+ **Dataset language (M)** : (MD_Metadata > MD_DataIdentification.language) 
-+ **Dataset character set (C)** : (MD_Metadata >
-MD_DataIdentification.characterSet) 
-+ **Dataset topic category (M)** : (MD_Metadata >
-MD_DataIdentification.topicCategory)
-+ **Spatial resolution of the dataset (O)** : (MD_Metadata >
-MD_DataIdentification.spatialResolution > MD_Resolution.equivalentScale or
-MD_Resolution.distance) 
-+ **Abstract describing the dataset (M)** : (MD_Metadata >
-MD_DataIdentification.abstract) 
-+ **Distribution format (O)** : (MD_Metadata > MD_Distribution > MD_Format.name
-and MD_Format.version) 
++ **Lineage (O)**
+ - Lineage describes how the product was created and where if comes from. Two
+   options for describing lineage exist (which can be used together too):
+  + Using LI_Source (with properties: description(O), scaleDenominator(O),
+  sourceReferenceSystem(O), sourceCitation(O), sourceExtent(O))
+  + Using LI_ProcessStep (with properties: description(C), rationale(O),
+  dataTime(O), processor(O)) where processor represents a contact person
+  +
+ - MD_Metadata > DQ_DataQuality.lineage > LI_Lineage
++ **On-line resource (O)** 
+ - A permalink to an online record for this product. Any product will be
+   accessible by visting a specific url based on its product ID e.g.
+   ''http://catalogue.sac.co.za/showProduct/S4-_M--_M--_CAM2_0121_00_0404_00_061009_083518_L2A-_UTM34S/''
+ - MD_Metadata > MD_Distribution > MD_DigitalTransferOption.onLine > CI_OnlineResource MD_DataIdentification.characterSet
+ -
++ **Spatial resolution of the dataset (O)**
+ - 
+ - MD_Metadata > MD_DataIdentification.spatialResolution >
+   MD_Resolution.equivalentScale or MD_Resolution.distance
+ -
++ **Distribution format (O)**
+ -
+ - MD_Metadata > MD_Distribution > MD_Format.name and MD_Format.version
+ -
 + **Additional extent information for the dataset (vertical and temporal) (O)**
-: (MD_Metadata > MD_DataIdentification.extent > EX_Extent > EX_TemporalExtent
-or EX_VerticalExtent)
+ - 
+ - MD_Metadata > MD_DataIdentification.extent > EX_Extent > EX_TemporalExtent
+   or EX_VerticalExtent
+ -
 + **Metadata file identifier (O)** 
+ -
  - (MD_Metadata.fileIdentifier)
-+ **Metadata standard name (O)** : (MD_Metadata.metadataStandardName)
-+ **Metadata standard version (O)** : (MD_Metadata.metadataStandardVersion)
-+ **Metadata language (C)** : (MD_Metadata.language)
-+ **Metadata character set (C)** : (MD_Metadata.characterSet)
-+ **Metadata point of contact (M)** : (MD_Metadata.contact > CI_ResponsibleParty)
-+ **Metadata date stamp (M)** : (MD_Metadata.dateStamp)
+ -
++ **Metadata standard name (O)**
+ -
+ - MD_Metadata.metadataStandardName
+ -
++ **Metadata standard version (O)**
+ -
+ - MD_Metadata.metadataStandardVersion
+ -
 +
 
 Above listing taken from section 6.5 'Core metadata for geographic subsets' of
 the ISO 19115:2003 specification. Items marked (M) are mandatory, (O) Optional
 and (C) Conditionally required.
+
+== Conditional Core Items ==
+
++ **Geographic location of the dataset (C) by four coordinates or by geographic identifier**
+ - The footprint of the dataset in GML taken from GenericProduct::spatial_coverage
+ - If this element is not present and we are examining a product package (as
+   opposed to a metadata only package), geographic location will be retrieved
+   directly from teh project itself, using gdal.
+ - MD_Metadata > MD_DataIdentification.extent > EX_Extent > EX_GeographicExtent
+   > EX_GeographicBoundingBox  or EX_GeographicDescription
+ - **Note:** Wolfgang - DIMS should add the image footprint to the metadata
+ -
++ **Dataset character set (C)** 
+ -  MD_Metadata > characterSet
+ -
++ **Metadata language (C)** 
+ - This will be set to English always for any product. There is currently no
+   provision for storing language of products in the catalogue data models.
+ - MD_Metadata.language
+ -
++ **Metadata character set (C)** 
+ - 
+ - MD_Metadata.characterSet
+ -
++
+
+Above listing taken from section 6.5 'Core metadata for geographic subsets' of
+the ISO 19115:2003 specification. Items marked (M) are mandatory, (O) Optional
+and (C) Conditionally required.
+
+== Schema Representation in XML ==
 
 Taking just these core elements we can realise a minimalist document structure
 for raster data as listed below):

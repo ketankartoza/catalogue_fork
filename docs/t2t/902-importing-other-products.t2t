@@ -186,12 +186,28 @@ cd /opt/sac_catalogue/sac_live
 ```
 
 now edit ```scripts/sumb_importer.py``` and at the bottom of the file populate the 
-list of project folders to process. Also make sure that ```mSourcePath``` at the top 
+list of project folders to process. e.g.
+
+```
+def run():
+  myProjectsList = [
+      "20101122_20101201",
+      "20101206_20101213",
+      "20110125_20110214",
+      "20110215_20110228",
+                    ]
+```
+
+
+
+Also make sure that ```mSourcePath``` at the top 
 of the file is correct (you would typically not need to change it).
 
 Now run the script by typing:
 
 ```
+cd <path to catalogue dir>
+source ../python/bin/activate
 python manage.py runscript sumb_importer
 ```
 
