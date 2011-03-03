@@ -68,12 +68,12 @@ def notifySalesStaff(theUser, theOrderId):
   # Add default
   if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
     logging.info("Sending notice to default recipients : %s" % CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
-    myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)))
+    myMessagesList.append((myEmailSubject, myEmailMessage, settings.DEFAULT_FROM_EMAIL, list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)))
 
   #also send an email to the originator of the order
   #We do this separately to avoid them seeing the staff cc list
   myClientAddress = theUser.email
-  myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, [myClientAddress]))
+  myMessagesList.append((myEmailSubject, myEmailMessage, settings.DEFAULT_FROM_EMAIL, [myClientAddress]))
   # mass mail expects a tuple (read-only list) so convert the list to tuple on send
   logging.info("Sending messages: \n%s" % myMessagesList)
   send_mass_mail( tuple(myMessagesList),fail_silently=False )
@@ -114,11 +114,11 @@ def notifySalesStaffOfTaskRequest(theUser, theId):
   # Add default
   if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
     logging.info("Sending notice to default recipients : %s" % CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
-    myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)))
+    myMessagesList.append((myEmailSubject, myEmailMessage, settings.DEFAULT_FROM_EMAIL, list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)))
 
   #also send an email to the originator of the order
   #We do this separately to avoid them seeing the staff cc list
-  myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN,
+  myMessagesList.append((myEmailSubject, myEmailMessage, settings.DEFAULT_FROM_EMAIL,
           [ theUser.email ]))
   send_mass_mail(tuple(myMessagesList), fail_silently=False)
   return
