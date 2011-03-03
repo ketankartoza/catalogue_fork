@@ -152,6 +152,8 @@ def viewOrder (theRequest, theId):
          # myCartFlag
          # myRemoveFlag
          # myThumbFlag
+         # myShowDeliveryDetailsFlag
+         # myShowDeliveryDetailsFormFlag
          'myShowSensorFlag' : False,
          'myShowSceneIdFlag' : True,
          'myShowDateFlag': False,
@@ -160,6 +162,8 @@ def viewOrder (theRequest, theId):
          'myShowMetdataFlag' : False,
          'myCartFlag' : False, #used when you need to add an item to the cart only
          'myPreviewFlag' : False,
+         'myShowDeliveryDetailsFlag':True,
+         'myShowDeliveryDetailsFormFlag':False,
          'myForm' : myForm,
          'myHistory' : myHistory,
          'myCartTitle' : 'Product List',
@@ -235,10 +239,9 @@ def showDeilveryDetail( theRequest, theref_id):
   myDeliveryDetail = DeliveryDetail.objects.filter(pk__exact=theref_id).get()
   return dict(myDeliveryDetail=myDeliveryDetail)
 
-
 @requireProfile('addorder')
 @login_required
-def    addOrder( theRequest ):
+def addOrder( theRequest ):
   logging.debug("Order called")
   myTitle = 'Create a new order'
   myRedirectPath = '/vieworder/'
@@ -260,31 +263,35 @@ def    addOrder( theRequest ):
       logging.debug("Cart has records")
       logging.info("Cart contains : " + str(myRecords.count()) + " items")
   myExtraOptions = {
-         # Possible flags for the record template
-         # myShowSensorFlag
-         # myShowIdFlag
-         # myShowSceneIdFlag
-         # myShowDateFlag
-         # myShowCartFlag
-         # myShowRemoveIconFlag
-         # myShowPreviewFlag
-         'myShowSensorFlag' : False,
-         'myShowSceneIdFlag' : True,
-         'myShowDateFlag': False,
-         'myShowRemoveIconFlag': True,
-         'myShowRowFlag' : False,
-         'myShowPathFlag' : False,
-         'myShowCloudCoverFlag' : True,
-         'myShowMetdataFlag' : False,
-         'myShowCartFlag' : False, #used when you need to add an item to the cart only
-         'myShowCartContentsFlag' : True, #used when you need to add an item to the cart only
-         'myShowPreviewFlag' : False,
-         'myCartTitle' : 'Order Product List',
-         'myRecords' : myRecords,
-         'myBaseTemplate' : "emptytemplate.html", #propogated into the cart template
-         'mySubmitLabel' : "Submit Order",
-         'myMessage' : " <div>Please specify any details for your order requirements below. If you need specific processing steps taken on individual images, please use the notes area below to provide detailed instructions.</div>",
-         }
+    # Possible flags for the record template
+    # myShowSensorFlag
+    # myShowIdFlag
+    # myShowSceneIdFlag
+    # myShowDateFlag
+    # myShowCartFlag
+    # myShowRemoveIconFlag
+    # myShowPreviewFlag
+    # myShowDeliveryDetailsFlag
+    # myShowDeliveryDetailsFormFlag
+    'myShowSensorFlag' : False,
+    'myShowSceneIdFlag' : True,
+    'myShowDateFlag': False,
+    'myShowRemoveIconFlag': True,
+    'myShowRowFlag' : False,
+    'myShowPathFlag' : False,
+    'myShowCloudCoverFlag' : True,
+    'myShowMetdataFlag' : False,
+    'myShowCartFlag' : False, #used when you need to add an item to the cart only
+    'myShowCartContentsFlag' : True, #used when you need to add an item to the cart only
+    'myShowPreviewFlag' : False,
+    'myShowDeliveryDetailsFlag': False,
+    'myShowDeliveryDetailsFormFlag': True,
+    'myCartTitle' : 'Order Product List',
+    'myRecords' : myRecords,
+    'myBaseTemplate' : "emptytemplate.html", #propogated into the cart template
+    'mySubmitLabel' : "Submit Order",
+    'myMessage' : " <div>Please specify any details for your order requirements below. If you need specific processing steps taken on individual images, please use the notes area below to provide detailed instructions.</div>",
+    }
   logging.info('Add Order called')
   if theRequest.method == 'POST':
     logging.debug("Order posted")
@@ -339,7 +346,7 @@ def    addOrder( theRequest ):
       return HttpResponseRedirect(myRedirectPath + str(myObject.id))
     else:
       logging.info('Add Order: form is NOT valid')
-      return render_to_response("addOrder.html",
+      return render_to_response("addPage.html",
           myOptions,
           context_instance=RequestContext(theRequest))
   else: # new order
@@ -355,7 +362,7 @@ def    addOrder( theRequest ):
         }
     myOptions.update(myExtraOptions), #shortcut to join two dicts
     logging.info( 'Add Order: new object requested' )
-    return render_to_response("addOrder.html",
+    return render_to_response("addPage.html",
         myOptions,
         context_instance=RequestContext(theRequest))
 
@@ -374,6 +381,8 @@ def viewOrderItems(theRequest,theOrderId):
          # myShowCartFlag
          # myShowRemoveIconFlag
          # myShowPreviewFlag
+         # myShowDeliveryDetailsFlag
+         # myShowDeliveryDetailsFormFlag
          'myShowSensorFlag' : False,
          'myShowSceneIdFlag' : True,
          'myShowDateFlag': False,
@@ -384,6 +393,8 @@ def viewOrderItems(theRequest,theOrderId):
          'myShowMetdataFlag' : False,
          'myShowCartFlag' : False, #used when you need to add an item to the cart only
          'myShowPreviewFlag' : False,
+         'myShowDeliveryDetailsFlag':True,
+         'myShowDeliveryDetailsFormFlag':False,
          'myBaseTemplate' : 'emptytemplate.html',
          })
 

@@ -44,27 +44,28 @@
   };
   //]]>
   </script>
-  <div id="maptooltip">&nbsp;</div> 
+  <div id="maptooltip">&nbsp;</div>
+  <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="horizontal" id="add_form">
   {% box_start "" "" "" %}
     <h2>{{ myTitle }}</h2>
     {{  myMessage|safe }}
-
-    <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="horizontal" id="add_form">
         <table>
-          {{myForm}}
+          {{myDeliveryDetailForm}}
+
+          {{myOrderForm}}
         </table>  
         {% if mySubmitLabel %}
         <button type="submit" id="submitButton">{{ mySubmitLabel }}</button>
         {% else %}
         <button type="submit" id="submitButton">Save</button>
         {% endif %}
-    </form>
   {% box_end %}
   <br />
   {% if myShowCartContentsFlag %}
     <div id="cart">
     {% include "cartContents.html" %}
     </div>
+    </form>
   {% endif %}
   <!--
   {% for myField in myForm %}

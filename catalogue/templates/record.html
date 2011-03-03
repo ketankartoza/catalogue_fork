@@ -76,11 +76,20 @@
         </td>
         {% endif %}
 	{# show deliveryDetails if they exist #}
+        {% if myShowDeliveryDetailsFlag %}
 	<td>
 	  {% if myRecord.delivery_detail %}
 	  <a href="#" ref_id="{{ myRecord.delivery_detail.id }}" class="show_delivery">Show details</a>
 	  {% endif %}
 	</td>
+	{% endif %}
+	{# show deliveryDetailsForm #}
+        {% if myShowDeliveryDetailsFormFlag %}
+	<td>
+	  <a href="#" class="show_form" ref_id="{{ myRecord.id}}">Delivery details</a>
+	</td>
+	{% endif %}
+
       </tr>
       {% if myShowDetailFlag %}{# colspan below shamelessly hard coded for now#}
       <tr class="hidden" id="record-detail-row-{{myRecord.product.id}}"><td class="record-detail-cell-{{myRecord.product.id}}" colspan="6">hello</td></tr>
