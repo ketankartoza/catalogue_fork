@@ -417,6 +417,18 @@ The following key can be used to decode the above:
 | QQQQQQ           | 1:50000 topographic map name eg 3425CD               |
 | MT_yymmdd_yymmdd | multi-temporal time span: start date to end date     |
 
+**Note:** Elements Mission(SSS), MissionSensor(sss), SensorType(ttt) and
+AcquisitionMode (mmmm) are compulsory for GenericSensorProducts. Where these
+are not explicitly defined, they will be implicitly defined. That is to say, if
+no Sensor has been defined for a Mission, it will cause the creation and
+assignment of an implicit MissionSensor orbject named after the sensor. For
+example: A new product for fictitious sensor 'FOO' is imported. No sensor type
+is defined, so a default sensor type called 'FOO' is defined. This same logic
+applies to SensorType and Acquisition Mode. Another example: Mission L5 exists,
+Sensor MS exists, no sensor type exists so a default type of 'MS' is created
+and consequently a default acquisition mode of MS os also created.
+See 'placeholder' clauses in description that follow.
+
 === Generic Sensor Product Aggregation Rules ===
 
 Since this is an abstract class it may not be a node in a product aggregation tree.

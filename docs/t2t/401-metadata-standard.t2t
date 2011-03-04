@@ -21,7 +21,8 @@ These are listed in the table that follows:
  - This is the SAC product identifier for this dataset
  - MD_Metadata > MD_DataIdentification.citation >
    MD_Metadata > CI_Citation.title
- - **Note:** Wolfgang in DIMS packages the ID is e.g. SPOT5.HRG.L1A but we should rather use SAC product ID here I think.
+ - **Note:** Wolfgang in DIMS packages the ID is e.g. SPOT5.HRG.L1A but we
+   should rather use SAC product ID here I think.
 + **Dataset reference date (M)**
  - Date on which product was acquired or created. For imagery products it
    should refer to the acquisition data where feasible. 
@@ -301,6 +302,7 @@ There are a few different potential sources of metadata:
   records are being exported (e.g. when a user wishes to save their search
   results as a metadata record, when their cart product descriptions are
   downloaded or when products themselves are downloaded).
+-
 
 
 == Required modifications to the ISOMetadata.xml ==

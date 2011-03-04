@@ -419,8 +419,8 @@ class GenericSensorProduct( GenericImageryProduct ):
       Where:
       SAT    Satellite or mission          mandatory
       SEN    Sensor                        mandatory
-      MOD    Acquisition mode              mandatory?
-      TYP    Type                          mandatory?
+      MOD    Acquisition mode              mandatory
+      TYP    Type                          mandatory
       KKKK   Orbit path reference          optional?
       KS     Path shift                    optional?
       JJJJ   Orbit row reference           optional?
