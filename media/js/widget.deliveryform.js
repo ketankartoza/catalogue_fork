@@ -48,7 +48,7 @@ if (!Array.prototype.indexOf)
 	    this.element.button();
 	    //find input element in which we'll store ids of delivery details forms
 	    this.main_refs_id = $("#add_form #id_ref_id");
-
+	    this.form=null;
 	    this._setup_events();
 	},
 	
@@ -74,7 +74,13 @@ if (!Array.prototype.indexOf)
 			    current_refs.splice(index,1);
 			    self.main_refs_id.val(current_refs.join(','));
 			} else {
-			    $(result).insertAfter(order_product);
+			    self.form=$(result);
+			    self.form.insertAfter(order_product);
+			    //add 'toggle visibility' button
+			    $('<span style="margin-left:10px">Toggle visibility</span>').button().insertAfter(order_product).bind('click',function (evt){
+				evt.preventDefault();
+				self.form.toggle();
+			    });
 			    //add ref_id to the main form
 			    current_refs.push(ref_id);
 			    self.main_refs_id.val(current_refs.join(','));

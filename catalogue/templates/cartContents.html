@@ -24,6 +24,7 @@ $(document).ready(function(){
 
 {% if myShowDeliveryDetailsFlag %}
 var show_delivery=$('a.show_delivery');
+show_delivery.button();
 show_delivery.bind('click', function (evt){
 var ref_id = $(this).attr('ref_id');
 $.ajax({
