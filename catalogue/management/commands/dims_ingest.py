@@ -9,12 +9,13 @@ import os
 import glob
 import re
 from optparse import make_option
-
+from PIL import Image
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
 from catalogue.models import *
 from catalogue.dims_lib import dimsReader
+
 
 
 class Command(BaseCommand):
@@ -37,7 +38,7 @@ class Command(BaseCommand):
     folder        = options.get('folder')
     globparm      = options.get('glob')
     test_only     = options.get('test_only')
-    store_image    = options.get('store_image')
+    store_image   = options.get('store_image')
     verbose       = options.get('verbosity')
 
     def verblog(msg, level = 1):
@@ -64,37 +65,24 @@ class Command(BaseCommand):
         if not test_only:
           verblog("processing product %s" % product_code)
 
-          # Do the ingestion here....
-          for p in ['product_date',
-                      'processing_level',
-                      'owner',
-                      'license',
-                      'spatial_coverage',
-                      'projection',
-                      'quality',
-                      'creating_software',
-                      'product_id',
-                      'remote_thumbnail_url',
-                      'mission',
-                      'mission_sensor',
-                      'sensor_type',
-                      'acquisition_mode',
-                      'product_acquisition_start',
-                      'geometric_resolution_x',
-                      'geometric_resolution_y',
-                      'main_image'
-                      ]:
-                # check they are set
-                verblog("checking mandatory data for product %s" % product_code)
-                pass
+          # Extracts data from imagery
+          # Dictionary
+          mode_to_bpp = {'1':1, 'L':8, 'P':8, 'RGB':24, 'RGBA':32, 'CMYK':32, 'YCbCr':24, 'I':32, 'F':32}
+          img = Image.open(product_data['image'])
+          bands = img.getbands()
 
-          # Retrieve re
+          # Retrieve
           data = {
             'metadata' : product_data['xml'].read(),
-            ''
+            'spatial_coverage' : product_data['metadata']['spatial_coverage'],
+            'product_id' : product_data['metadata']['file_identifier'][:57],
+            'radiometric_resolution' : mode_to_bpp[bands[0]],
+            'band_count' : len(bands),
           }
 
           op = OpticalProduct(**data)
+          op.productIdReverse()
+
           try:
             op.setSacProductId()
             op.save()

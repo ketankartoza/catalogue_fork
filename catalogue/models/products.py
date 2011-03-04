@@ -2,6 +2,8 @@ from django.contrib.gis.db import models
 from dictionaries import *
 import logging
 import os
+import re
+import datetime
 import urllib2
 from django.conf import settings
 #for translation
@@ -19,12 +21,12 @@ CATALOGUE_SCENES_PATH = getattr(settings, 'CATALOGUE_SCENES_PATH', "/mnt/catalog
 def runconcrete(func):
   """
   This decorator calls the method in the concrete subclass
-  and raise an exception if the method is found only in the base
-  GenericProduct class
+  and raise an exception if the method is found only in a base
+  GenericProduct abstract class
   """
   @wraps(func)
   def wrapper(self, *args, **kwargs):
-    if [d for d in set(self.getConcreteInstance().__class__.__mro__).difference([self.__class__]) if func.__name__ in d.__dict__]:
+    if [d for d in set(self.getConcreteInstance().__class__.__mro__).difference([self.__class__]) if func.__name__ in d.__dict__ and getattr(d, 'concrete', False)]:
       return getattr(self.getConcreteInstance(), func.__name__)(*args, **kwargs)
     raise NotImplementedError()
   return wrapper
@@ -59,14 +61,6 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
 
   objects               = models.GeoManager()
 
-  def __unicode__( self ):
-     if self.product_id:
-        return self.product_id
-     return "Internal ID: %d" % self.pk
-
-  def __str__( self ):
-     return self.__unicode__()
-
   class Meta:
     """This is not an abstract base class although you should avoid dealing directly with it
     see http://docs.djangoproject.com/en/dev/topics/db/models/#id7
@@ -74,6 +68,11 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     app_label= 'catalogue'
     abstract = False
     ordering = ('product_date',)
+
+  def __unicode__( self ):
+     if self.product_id:
+        return u"%s" % self.product_id
+     return u"Internal ID: %d" % self.pk
 
   @runconcrete
   def thumbnailPath( self ):
@@ -306,6 +305,13 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     """
     pass
 
+  @runconcrete
+  def productIdReverse(self):
+    """
+    Parse a product_id and populates instance fields
+    """
+    pass
+
   def tidySacId( self ):
     """Return a tidy version of the SAC ID for use on web pages etc.
 
@@ -447,8 +453,8 @@ class GenericSensorProduct( GenericImageryProduct ):
     myList.append( self.pad( self.acquisition_mode.sensor_type.abbreviation, 3 ) )
     myList.append( self.zeroPad( str( self.path ),4 ) )
     myList.append( self.zeroPad( str( self.path_offset ),2 ) )
-    myList.append(  self.zeroPad( str( self.row ),4 ) )
-    myList.append(  self.zeroPad( str( self.row_offset ),2 ) )
+    myList.append( self.zeroPad( str( self.row ),4 ) )
+    myList.append( self.zeroPad( str( self.row_offset ),2 ) )
     myDate = str( self.product_acquisition_start.year )[2:4]
     myDate += self.zeroPad( str( self.product_acquisition_start.month ),2 )
     myDate += self.zeroPad( str( self.product_acquisition_start.day ),2 )
@@ -458,7 +464,8 @@ class GenericSensorProduct( GenericImageryProduct ):
     myTime += self.zeroPad( str( self.product_acquisition_start.second ),2)
     myList.append( myTime )
     myList.append( "L" + self.pad( self.processing_level.abbreviation, 3 ) )
-    myList.append( self.pad( self.projection.name,4 ) )
+    # ABP: changed from 4 to 6 (why was it 4 ? UTM34S is 6 chars)
+    myList.append( self.pad( self.projection.name,6 ) )
     #print "Product SAC ID %s" % "_".join(myList)
     myNewId = "_".join(myList)
     self.product_id = myNewId
@@ -499,6 +506,46 @@ class GenericSensorProduct( GenericImageryProduct ):
     except:
       logging.debug("Failed to move the thumbnail" )
     return
+
+  def productIdReverse(self):
+    """
+    Parse a product_id and populates instance fields
+     S5-_HRG_J--_CAM2_0172_+1_0388_00_110124_070818_L1A-_ORBIT--Vers.0.01
+    #SAT_SEN_TYP__MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
+
+    Where:
+    SAT    Satellite or mission          mandatory
+    SEN    Sensor                        mandatory
+    MOD    Acquisition mode              mandatory
+    TYP    Type                          mandatory
+    KKKK   Orbit path reference          optional?
+    KS     Path shift                    optional?
+    JJJJ   Orbit row reference           optional?
+    JS     Row shift                     optional?
+    YYMMDD Acquisition date              mandatory
+    HHMMSS Scene centre acquisition time mandatory
+    LEVL   Processing level              mandatory
+    PROJTN Projection                    mandatory
+    """
+    parts = self.product_id.replace('-', '').split('_')
+    # Searches for an existing acquisition_mode,
+    # raise an error if do not match
+    self.acquisition_mode = AcquisitionMode.objects.get(
+        sensor_type__mission_sensor__mission__abbreviation=parts[0],
+        sensor_type__mission_sensor__abbreviation=parts[1],
+        abbreviation=parts[2],
+        sensor_type__abbreviation=parts[3]
+      )
+    self.projection = Projection.objects.get(name=parts[11][:6])
+    # Skip L
+    self.processing_level = ProcessingLevel.objects.get(abbreviation=re.sub(r'^L', '', parts[10]))
+    self.path = int(parts[4]) #K Path Orbit
+    self.path_offset = int(parts[5])
+    self.row = int(parts[6]) #J Frame Row
+    self.row_offset = int(parts[7])
+    d = parts[8]
+    t = parts[9]
+    self.product_acquisition_start = datetime.datetime(int('20'+d[:2]), int(d[2:4]), int(d[-2:]), int(t[:2]), int(t[2:4]), int(t[-2:]))
 
 
 ###############################################################################

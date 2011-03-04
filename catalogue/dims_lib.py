@@ -104,7 +104,7 @@ class dimsReader(dimsBase):
       # extracts metadata
       metadata = self._read_metadata(product_path)
       # Extract coordinates
-      coordinates = zip(*[[float(j) for j in re.findall('(-?[\.0-9]+)', product_data['spatial_coverage'])][i::2] for i in range(2)])
+      coordinates = zip(*[[float(j) for j in re.findall('(-?[\.0-9]+)', metadata['spatial_coverage'])][i::2] for i in range(2)])
       # Build tuple for polygon
       coordinates = coordinates + coordinates[0:1]
       # Builds polygon
