@@ -306,9 +306,11 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     pass
 
   @runconcrete
-  def productIdReverse(self):
+  def productIdReverse(self, force=False):
     """
     Parse a product_id and populates instance fields
+    If force is set, the procedure will try to create
+    missing bits
     """
     pass
 
@@ -507,9 +509,12 @@ class GenericSensorProduct( GenericImageryProduct ):
       logging.debug("Failed to move the thumbnail" )
     return
 
-  def productIdReverse(self):
+  def productIdReverse(self, force=False):
     """
     Parse a product_id and populates instance fields
+
+    If force is set, try to create missing pieces
+
      S5-_HRG_J--_CAM2_0172_+1_0388_00_110124_070818_L1A-_ORBIT--Vers.0.01
     #SAT_SEN_TYP__MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
 
@@ -530,13 +535,31 @@ class GenericSensorProduct( GenericImageryProduct ):
     parts = self.product_id.replace('-', '').split('_')
     # Searches for an existing acquisition_mode,
     # raise an error if do not match
-    self.acquisition_mode = AcquisitionMode.objects.get(
-        sensor_type__mission_sensor__mission__abbreviation=parts[0],
-        sensor_type__mission_sensor__abbreviation=parts[1],
-        abbreviation=parts[2],
-        sensor_type__abbreviation=parts[3]
-      )
-    self.projection = Projection.objects.get(name=parts[11][:6])
+    try:
+      self.acquisition_mode = AcquisitionMode.objects.get(
+          sensor_type__mission_sensor__mission__abbreviation=parts[0],
+          sensor_type__mission_sensor__abbreviation=parts[1],
+          abbreviation=parts[2],
+          sensor_type__abbreviation=parts[3]
+        )
+    except ObjectDoesNotExist:
+      if not force:
+        raise
+      # Create missing pieces of the chain
+      mission = Mission.objects.get_or_create(abbreviation=parts[0], defaults={'mission_group':MissionGroup.objects.all()[0]})[0]
+      mission_sensor = MissionSensor.objects.get_or_create(abbreviation=parts[1],mission=mission)[0]
+      sensor_type = SensorType.objects.get_or_create(abbreviation=parts[3],mission_sensor=mission_sensor)[0]
+      self.acquisition_mode = AcquisitionMode.objects.get_or_create(abbreviation=parts[2], sensor_type=sensor_type, defaults={'geometric_resolution':0, 'band_count':1})[0]
+
+    try:
+      self.projection = Projection.objects.get(name=parts[11][:6])
+    except Projection.DoesNotExist:
+      if not force:
+        raise
+      # Create Projection
+      self.projection = Projection.objects.get_or_create(name=parts[11][:6], defaults={'epsg_code':0})
+
+
     # Skip L
     self.processing_level = ProcessingLevel.objects.get(abbreviation=re.sub(r'^L', '', parts[10]))
     self.path = int(parts[4]) #K Path Orbit

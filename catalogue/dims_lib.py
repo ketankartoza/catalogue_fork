@@ -1,6 +1,14 @@
 """
 Reads DIMS tar gnu zip compressed packages and extract metadata
 and/or imagery and thumbnails
+
+dimsReader returns a series of objects with metadata
+and file handles for thumbnail, XML metadata and main
+image. Handles are returned to avoid extracting the
+whole tarball to a temporary location.
+
+dimsWriter accepts a dictionary and files are specified
+as paths.
 """
 
 import os
@@ -52,17 +60,17 @@ class dimsBase(object):
       xmlns_gml   = "{http://www.opengis.net/gml}",
     )
 
-  #TODO: missing from ISO 'spatial_coverage':     PolygonField
   # Replaceable targets
   METADATA = dict(
       product_date            = '//{xmlns}dateStamp/{xmlns_gco}Date', # Product date
       file_identifier         = '//{xmlns}fileIdentifier/{xmlns_gco}CharacterString',
       vertical_cs             = '//{xmlns_gml}VerticalCS/{xmlns_gml}name', # Projection
       processing_level_code   = '//{xmlns}processingLevelCode//{xmlns}code/{xmlns_gco}CharacterString',
-      cloud_cover_percentage  = '//{xmlns}cloudCoverPercentage/{xmlns_gco}Real',
+      cloud_cover             = '//{xmlns}cloudCoverPercentage/{xmlns_gco}Real',
       md_data_identification  = '//{xmlns}MD_DataIdentification//{xmlns}CI_Citation/{xmlns}title/{xmlns_gco}CharacterString',
       md_product_date         = '//{xmlns}MD_DataIdentification//{xmlns}CI_Date//{xmlns_gco}Date',
       md_abstract             = '//{xmlns}MD_DataIdentification/{xmlns}abstract/{xmlns_gco}CharacterString', # Sat & sensor description
+      # ABP: this bbox is now substituted with spatial_coverage
       #bbox_west               = '//{xmlns}EX_GeographicBoundingBox/{xmlns}westBoundLongitude/{xmlns_gco}Decimal',
       #bbox_east               = '//{xmlns}EX_GeographicBoundingBox/{xmlns}eastBoundLongitude/{xmlns_gco}Decimal',
       #bbox_north              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}northBoundLatitude/{xmlns_gco}Decimal',
