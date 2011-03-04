@@ -24,7 +24,7 @@ class Mission( models.Model ):
   class Meta:
     app_label= 'catalogue'
   def __unicode__(self):
-     return self.name
+     return self.abbreviation
 
 
 ###############################################################################

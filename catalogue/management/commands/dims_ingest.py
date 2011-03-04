@@ -7,14 +7,14 @@ Ingestion of DIMS SPOT-5 OpticalProduct only
 
 import os
 import glob
+import re
 from optparse import make_option
 
 from django.core.management.base import BaseCommand, CommandError
+from django.conf import settings
 
 from catalogue.models import *
 from catalogue.dims_lib import dimsReader
-
-
 
 
 class Command(BaseCommand):
@@ -22,12 +22,14 @@ class Command(BaseCommand):
   option_list = BaseCommand.option_list + (
       make_option('--folder', '-f', dest='folder', action='store',
           help='Scan the given folder, defaults to current.', default = os.getcwd()),
-      make_option('--store_data', '-s', dest='store_data', action='store_true',
+      make_option('--store_image', '-s', dest='store_image', action='store_true',
           help='Store the original image data extracted from the package.', default = os.getcwd()),
       make_option('--glob', '-g', dest='glob', action='store',
           help='A shell glob pattern for files to ingest.', default = '*.tar.gz'),
       make_option('--test_only', '-t', dest='test_only', action='store_true',
           help='Just test, nothing will be written into the DB. ', default = False),
+      make_option('--defaults', '-d', dest='defaults', action='store',
+          help='Default key value pairs comma separated.'),
   )
 
   def handle(self, *args, **options):
@@ -35,34 +37,32 @@ class Command(BaseCommand):
     folder        = options.get('folder')
     globparm      = options.get('glob')
     test_only     = options.get('test_only')
-    store_data    = options.get('store_data')
+    store_image    = options.get('store_image')
     verbose       = options.get('verbosity')
+
+    def verblog(msg, level = 1):
+      if verbose >= level:
+        print msg
 
     # Build the path
     path          = os.path.join(folder, globparm)
     package_list  = glob.glob(path)
 
-    if verbose:
-      print "found %d packages in %s" % (len(package_list), path)
+    verblog("found %d packages in %s" % (len(package_list), path))
 
     for package in package_list:
 
-      if verbose:
-        print "ingesting %s" % package
+      verblog("ingesting %s" % package)
       reader = dimsReader(package)
       products = reader.get_products()
-      if verbose:
-        print "found %d products" % len(products)
+      verblog("found %d products" % len(products))
 
       for product_code, product_data in products.items():
-        if verbose:
-          print "product %s" % product_code
-          if verbose > 1:
-            print product_data
+        verblog("product %s" % product_code)
+        verblog(product_data, 2)
 
         if not test_only:
-          if verbose:
-            print "processing product %s" % product_code
+          verblog("processing product %s" % product_code)
 
           # Do the ingestion here....
           for p in ['product_date',
@@ -85,21 +85,38 @@ class Command(BaseCommand):
                       'main_image'
                       ]:
                 # check they are set
-                if verbose:
-                  print "checking mandatory data for product %s" % product_code
+                verblog("checking mandatory data for product %s" % product_code)
                 pass
 
+          # Retrieve re
           data = {
-            'metadata' : product_data['xml'],
+            'metadata' : product_data['xml'].read(),
+            ''
           }
-          op = OpticalProduct(**data)
-          op.save()
-          # Store thumbnail
 
-          # Store main image
-          if store_data:
-            if verbose:
-              print "storing main image for product %s: %s" % (product_code, )
+          op = OpticalProduct(**data)
+          try:
+            op.setSacProductId()
+            op.save()
+            # Store thumbnail
+            thumb_dir = os.path.join(settings.THUMBS_ROOT, os.thumbnailPath())
+            jpeg_thumb = os.path.join(thumb_dir, op.product_id + ".jpg")
+            handle = open(jpeg_thumb, '+wb')
+            handle.write(product_data['thumbnail'].read())
+            handle.close()
+            # Build .wld file
+            tiff_thumb = os.path.join(thumb_dir, op.product_id + ".tif")
+            cmd = "gdal_translate -of JPEG -co WORLDFILE=YES %s %s" % ( tiff_thumb, jpeg_thumb)
+            os.system(cmd)
+            # Clean away the tiff
+            os.remove(tiff_thumb)
+            # Store main image
+            if store_image:
+              main_image = ''
+              verblog("storing main image for product %s: %s" % (product_code, main_image))
+          except:
+
+            raise
 
         else:
           if verbose:

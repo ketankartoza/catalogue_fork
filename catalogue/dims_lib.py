@@ -9,6 +9,7 @@ import shutil
 import tempfile
 import tarfile
 import logging
+from django.contrib.gis.geos import Polygon
 
 try:
   import cStringIO as StringIO
@@ -62,11 +63,12 @@ class dimsBase(object):
       md_data_identification  = '//{xmlns}MD_DataIdentification//{xmlns}CI_Citation/{xmlns}title/{xmlns_gco}CharacterString',
       md_product_date         = '//{xmlns}MD_DataIdentification//{xmlns}CI_Date//{xmlns_gco}Date',
       md_abstract             = '//{xmlns}MD_DataIdentification/{xmlns}abstract/{xmlns_gco}CharacterString', # Sat & sensor description
-      bbox_west               = '//{xmlns}EX_GeographicBoundingBox/{xmlns}westBoundLongitude/{xmlns_gco}Decimal',
-      bbox_east               = '//{xmlns}EX_GeographicBoundingBox/{xmlns}eastBoundLongitude/{xmlns_gco}Decimal',
-      bbox_north              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}northBoundLatitude/{xmlns_gco}Decimal',
-      bbox_south              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}southBoundLatitude/{xmlns_gco}Decimal',
+      #bbox_west               = '//{xmlns}EX_GeographicBoundingBox/{xmlns}westBoundLongitude/{xmlns_gco}Decimal',
+      #bbox_east               = '//{xmlns}EX_GeographicBoundingBox/{xmlns}eastBoundLongitude/{xmlns_gco}Decimal',
+      #bbox_north              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}northBoundLatitude/{xmlns_gco}Decimal',
+      #bbox_south              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}southBoundLatitude/{xmlns_gco}Decimal',
       image_quality_code      = '//{xmlns}imageQualityCode//{xmlns}code/{xmlns_gco}CharacterString',
+      spatial_coverage        = '//{xmlns}EX_BoundingPolygon//{xmlns_gml}coordinates',
     )
 
 
@@ -99,12 +101,24 @@ class dimsReader(dimsBase):
       m = re.search('ISOMetadata/([^/]+)/([^/]+)\.xml$', product_path)
       processing_level_code, product = m.groups()
       logging.info("reading %s" % product)
+      # extracts metadata
+      metadata = self._read_metadata(product_path)
+      # Extract coordinates
+      coordinates = zip(*[[float(j) for j in re.findall('(-?[\.0-9]+)', product_data['spatial_coverage'])][i::2] for i in range(2)])
+      # Build tuple for polygon
+      coordinates = coordinates + coordinates[0:1]
+      # Builds polygon
+      spatial_coverage = Polygon(coordinates)
+      spatial_coverage.set_srid(4326)
       self._products[product] = {
-          'path':       product_path,
-          'xml':        self._read_file(product_path),
-          'metadata':   self._read_metadata(product_path),
-          'thumbnail':  self._read_file(product_path.replace('ISOMetadata', 'Thumbnails').replace('.xml', '.jpg')),
-          'image':      self._read_file(re.sub('(.*DN_)([^/]+)(.*)', r'\1\2_DIMAP\3', product_path.replace(os.path.join('Metadata', 'ISOMetadata'), os.path.join('Products', 'SacPackage', 'ORBIT')).replace('.xml', '.tif')))
+          'path':             product_path,
+          'xml':              self._read_file(product_path),
+          'metadata':         metadata,
+          'thumbnail':        self._read_file(product_path.replace('ISOMetadata', 'Thumbnails').replace('.xml', '.jpg')),
+          'image':            self._read_file(re.sub('(.*DN_)([^/]+)(.*)', r'\1\2_DIMAP\3',
+                              product_path.replace(os.path.join('Metadata', 'ISOMetadata'),
+                              os.path.join('Products', 'SacPackage', 'ORBIT')).replace('.xml', '.tif'))),
+          'spatial_coverage': spatial_coverage
         }
 
 

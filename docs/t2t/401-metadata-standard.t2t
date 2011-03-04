@@ -134,8 +134,9 @@ and (C) Conditionally required.
    opposed to a metadata only package), geographic location will be retrieved
    directly from teh project itself, using gdal.
  - MD_Metadata > MD_DataIdentification.extent > EX_Extent > EX_GeographicExtent
-   > EX_GeographicBoundingBox  or EX_GeographicDescription
- - **Note:** Wolfgang - DIMS should add the image footprint to the metadata
+   > EX_BoundingPolygon or EX_GeographicBoundingBox  or EX_GeographicDescription
+ - **Note:** Wolfgang - DIMS should add the image footprint to the metadata, this
+             can be achieved using EX_BoundingPolygon.
  -
 + **Dataset character set (C)** 
  -  MD_Metadata > characterSet
@@ -261,6 +262,15 @@ for raster data as listed below):
       <gmd:topicCategory>
         <gmd:MD_TopicCategoryCode>environment</gmd:MD_TopicCategoryCode>
       </gmd:topicCategory>
+      <!-- TO BE ADDED  
+        <igmd:extent>
+          <gmd:EX_Extent>
+            <gmd:geographicElement>
+              <gmd:EX_BoundingPolygon>
+                <gmd:polygon>
+                  <gml:outerBoundaryIs>
+                     <gml:LinearRing>
+      -->
     </gmd:MD_DataIdentification>
   </gmd:identificationInfo>
   <gmd:dataQualityInfo>
@@ -291,4 +301,16 @@ There are a few different potential sources of metadata:
   records are being exported (e.g. when a user wishes to save their search
   results as a metadata record, when their cart product descriptions are
   downloaded or when products themselves are downloaded).
+
+
+== Required modifications to the ISOMetadata.xml ==
+
+This list is about the modifications that has to be done to the 
+ISOMetadata.xml in order to ingest the DIMS packages.
+
++ We do need the spatial coverage extent for the image footprint, so 
+ the extent must be specified with EX_BoundingPolygon instead of 
+ EX_GeographicBoundingBox
+
++ 
 -
