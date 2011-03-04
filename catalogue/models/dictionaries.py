@@ -1,4 +1,4 @@
-from packagekit.enums import LICENSE_TPL
+#from packagekit.enums import LICENSE_TPL
 from django.contrib.gis.db import models
 
 ###############################################################################
