@@ -114,6 +114,10 @@ class DeliveryDetail(models.Model):
   datum = models.ForeignKey(Datum, verbose_name="Datum",default=1)
   resampling_method = models.ForeignKey(ResamplingMethod, verbose_name="Resampling Method",default=2) #cubic conv#cubic conv
   file_format = models.ForeignKey(FileFormat, verbose_name="File Format",default=1)
+  #geometry field
+  geometry = models.PolygonField(srid=4326,null=True,blank=True)
+  #geomanager
+  objects = models.GeoManager()
 
   class Meta:
     app_label= 'catalogue'

@@ -230,7 +230,7 @@ def updateOrderHistory(theRequest):
 @renderWithContext("deliveryDetailForm.html")
 @login_required
 def createDeilveryDetailForm( theRequest, theref_id):
-  myDeliveryDetailForm = DeliveryDetailForm(initial={'ref_id':theref_id},prefix='%i' % int(theref_id))
+  myDeliveryDetailForm = ProductDeliveryDetailForm(initial={'ref_id':theref_id},prefix='%i' % int(theref_id))
   return dict(myDeliveryDetailForm=myDeliveryDetailForm)
 
 @renderWithContext("deliveryDetail.html")
@@ -247,6 +247,21 @@ def addOrder( theRequest ):
   myRedirectPath = '/vieworder/'
   logging.info("Preparing order for user " + str(theRequest.user))
   myRecords = None
+  myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
+  myCartLayer = '''var myCartLayer = new OpenLayers.Layer.WMS("Cart", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=CART&user=''' + str(theRequest.user.username) + '''",
+          {
+             version: '1.1.1',
+             layers: 'Cart',
+             srs: 'EPSG:4326',
+             format: 'image/png',
+             transparent: 'true'
+           },
+           {isBaseLayer: false, singleTile:true});
+           '''
+
+  myLayersList=myLayersList[:-1]+', myCartLayer ]' #UGLY hack for adding Cart layer
+  myLayerDefinitions.append(myCartLayer)
+
   if str(theRequest.user) == "AnonymousUser":
     logging.debug("User is anonymous")
     logging.info("Anonymous users can't have items in their cart")
@@ -291,6 +306,10 @@ def addOrder( theRequest ):
     'myBaseTemplate' : "emptytemplate.html", #propogated into the cart template
     'mySubmitLabel' : "Submit Order",
     'myMessage' : " <div>Please specify any details for your order requirements below. If you need specific processing steps taken on individual images, please use the notes area below to provide detailed instructions.</div>",
+    'myLayerDefinitions' : myLayerDefinitions,
+    'myLayersList' : myLayersList,
+    'myActiveBaseMap' : myActiveBaseMap
+
     }
   logging.info('Add Order called')
   if theRequest.method == 'POST':
@@ -300,7 +319,7 @@ def addOrder( theRequest ):
     myDeliveryDetailForm = DeliveryDetailForm( theRequest.POST,theRequest.FILES )
 
     #get ref_ids of product details forms, if any, and generate forms for validation
-    myProductForms = [DeliveryDetailForm(theRequest.POST,prefix='%i' % int(myref)) for myref in myDeliveryDetailForm.data.get('ref_id').split(',')]
+    myProductForms = [ProductDeliveryDetailForm(theRequest.POST,prefix='%i' % int(myref)) for myref in myDeliveryDetailForm.data.get('ref_id').split(',') if len(myref)>0]
 
     myOptions =  {
             'myOrderForm': myOrderForm,
@@ -308,8 +327,7 @@ def addOrder( theRequest ):
             'myTitle': myTitle,
             'mySubmitLabel' : "Submit Order",
           }
-    myOptions.update(myExtraOptions), #shortcut to join two dicts
-
+    myOptions.update(myExtraOptions) #shortcut to join two dicts
     if myOrderForm.is_valid() and myDeliveryDetailForm.is_valid() and all([form.is_valid() for form in myProductForms]):
       logging.debug("Order valid")
       myDeliveryDetailObject = myDeliveryDetailForm.save(commit=False)

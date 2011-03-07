@@ -207,9 +207,25 @@ class OrderForm(forms.ModelForm):
 
 class DeliveryDetailForm(forms.ModelForm):
   ref_id = forms.CharField(widget=forms.HiddenInput(),required=False)
+  aoi_geometry = AOIGeometryField(required=False)
+  geometry = forms.CharField(widget=forms.HiddenInput(),required=False)
   class Meta:
     model = DeliveryDetail
-    exclude = ('user')    
+    exclude = ('user',)
+
+  def clean(self):
+    myCleanedData = self.cleaned_data
+    #if AOIgeometry is defined set it as default geometry
+    if myCleanedData.get('aoi_geometry'):
+      self.cleaned_data['geometry']=self.cleaned_data['aoi_geometry']
+
+    return self.cleaned_data
+
+class ProductDeliveryDetailForm(forms.ModelForm):
+  ref_id = forms.CharField(widget=forms.HiddenInput(),required=False)
+  class Meta:
+    model = DeliveryDetail
+    exclude = ('user','geometry',)
 
 class TaskingRequestForm(forms.ModelForm):
   geometry = forms.CharField(widget=GeometryWidget,required=False)
