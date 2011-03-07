@@ -103,13 +103,6 @@ class dimsReader(dimsBase):
       logging.info("reading %s" % product)
       # extracts metadata
       metadata = self._read_metadata(product_path)
-      # Extract coordinates
-      coordinates = zip(*[[float(j) for j in re.findall('(-?[\.0-9]+)', product_data['spatial_coverage'])][i::2] for i in range(2)])
-      # Build tuple for polygon
-      coordinates = coordinates + coordinates[0:1]
-      # Builds polygon
-      spatial_coverage = Polygon(coordinates)
-      spatial_coverage.set_srid(4326)
       self._products[product] = {
           'path':             product_path,
           'xml':              self._read_file(product_path),
@@ -118,16 +111,26 @@ class dimsReader(dimsBase):
           'image':            self._read_file(re.sub('(.*DN_)([^/]+)(.*)', r'\1\2_DIMAP\3',
                               product_path.replace(os.path.join('Metadata', 'ISOMetadata'),
                               os.path.join('Products', 'SacPackage', 'ORBIT')).replace('.xml', '.tif'))),
-          'spatial_coverage': spatial_coverage
         }
+      # Optional spatial_coverage
+      if metadata.get('spatial_coverage'):
+        # Extract coordinates
+        coordinates = zip(*[[float(j) for j in re.findall('(-?[\.0-9]+)', metadata['spatial_coverage'])][i::2] for i in range(2)])
+        # Build tuple for polygon
+        coordinates = coordinates + coordinates[0:1]
+        # Builds polygon
+        spatial_coverage = Polygon(coordinates)
+        spatial_coverage.set_srid(4326)
+      else:
+        spatial_coverage = None
+      self._products[product]['spatial_coverage'] = spatial_coverage
 
 
   def _read_metadata(self, product_path):
     """
     Extract metadata from an XML metadata file object and
     returns informations as a dictionary, parsing and validation
-    is left to the calling program. The only check is done here is
-    for mandatory metadata presence.
+    is left to the calling program.
     """
     tree = etree.parse(self._read_file(product_path))
     metadata = {}

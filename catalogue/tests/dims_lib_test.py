@@ -8,7 +8,7 @@ Tests reader
 
 >>> import os
 >>> from catalogue.dims_lib import dimsWriter, dimsReader
->>> d = dimsReader(os.path.join(os.path.split(__file__)[0], 'dims_packages', 'ORD_420882_20110124_20110124_SPOT-_V01_1.tar.gz'))
+>>> d = dimsReader(os.path.join(os.path.split(__file__)[0], 'sample_files', 'ORD_420882_20110124_20110124_SPOT-_V01_1.tar.gz'))
 >>> products = d.get_products()
 >>> product_code = products.keys()[0]
 >>> products[product_code]['thumbnail']
@@ -19,14 +19,6 @@ Tests reader
 <tarfile.ExFileObject object at ...>
 
 >>> md = d.get_metadata(product_code)
->>> md.get('bbox_east') == '13.778910'
-True
->>> md.get('bbox_north') == '-8.840805'
-True
->>> md.get('bbox_south') == '-8.190087'
-True
->>> md.get('bbox_west') == '13.121074'
-True
 >>> md.get('cloud_cover_percentage') == None
 True
 >>> md.get('file_identifier') == 'S5-_HRG_B--_CAM2_0094_00_0367_00_110122_092557_L1A-_ORBIT--Vers.0.01'

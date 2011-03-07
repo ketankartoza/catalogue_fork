@@ -2,6 +2,7 @@
 from django.contrib.gis.db import models
 from products import OpticalProduct, RadarProduct, GenericImageryProduct
 import datetime
+import logging
 
 def setGenericProductDate(sender, instance, **kw):
   """

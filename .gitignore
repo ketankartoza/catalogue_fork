@@ -28,3 +28,4 @@ ipy.py
 catalogue/tests/dims_packages
 init_*.sql
 nbproject/
+imagery_mastercopies/
