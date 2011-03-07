@@ -156,7 +156,7 @@ class License( models.Model ):
     )
   name = models.CharField( max_length="255" )
   details = models.TextField()
-  type = models.IntegerField(choices=LICENSE_TYPE_CHOICES)
+  type = models.IntegerField(choices=LICENSE_TYPE_CHOICES, default=LICENSE_TYPE_ANY)
 
   class Meta:
     app_label= 'catalogue'

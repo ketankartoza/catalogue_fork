@@ -1,14 +1,6 @@
 """
 Reads DIMS tar gnu zip compressed packages and extract metadata
 and/or imagery and thumbnails
-
-dimsReader returns a series of objects with metadata
-and file handles for thumbnail, XML metadata and main
-image. Handles are returned to avoid extracting the
-whole tarball to a temporary location.
-
-dimsWriter accepts a dictionary and files are specified
-as paths.
 """
 
 import os
@@ -60,17 +52,17 @@ class dimsBase(object):
       xmlns_gml   = "{http://www.opengis.net/gml}",
     )
 
+  #TODO: missing from ISO 'spatial_coverage':     PolygonField
   # Replaceable targets
   METADATA = dict(
       product_date            = '//{xmlns}dateStamp/{xmlns_gco}Date', # Product date
       file_identifier         = '//{xmlns}fileIdentifier/{xmlns_gco}CharacterString',
       vertical_cs             = '//{xmlns_gml}VerticalCS/{xmlns_gml}name', # Projection
       processing_level_code   = '//{xmlns}processingLevelCode//{xmlns}code/{xmlns_gco}CharacterString',
-      cloud_cover             = '//{xmlns}cloudCoverPercentage/{xmlns_gco}Real',
+      cloud_cover_percentage  = '//{xmlns}cloudCoverPercentage/{xmlns_gco}Real',
       md_data_identification  = '//{xmlns}MD_DataIdentification//{xmlns}CI_Citation/{xmlns}title/{xmlns_gco}CharacterString',
       md_product_date         = '//{xmlns}MD_DataIdentification//{xmlns}CI_Date//{xmlns_gco}Date',
       md_abstract             = '//{xmlns}MD_DataIdentification/{xmlns}abstract/{xmlns_gco}CharacterString', # Sat & sensor description
-      # ABP: this bbox is now substituted with spatial_coverage
       #bbox_west               = '//{xmlns}EX_GeographicBoundingBox/{xmlns}westBoundLongitude/{xmlns_gco}Decimal',
       #bbox_east               = '//{xmlns}EX_GeographicBoundingBox/{xmlns}eastBoundLongitude/{xmlns_gco}Decimal',
       #bbox_north              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}northBoundLatitude/{xmlns_gco}Decimal',
@@ -111,13 +103,6 @@ class dimsReader(dimsBase):
       logging.info("reading %s" % product)
       # extracts metadata
       metadata = self._read_metadata(product_path)
-      # Extract coordinates
-      coordinates = zip(*[[float(j) for j in re.findall('(-?[\.0-9]+)', metadata['spatial_coverage'])][i::2] for i in range(2)])
-      # Build tuple for polygon
-      coordinates = coordinates + coordinates[0:1]
-      # Builds polygon
-      spatial_coverage = Polygon(coordinates)
-      spatial_coverage.set_srid(4326)
       self._products[product] = {
           'path':             product_path,
           'xml':              self._read_file(product_path),
@@ -126,16 +111,26 @@ class dimsReader(dimsBase):
           'image':            self._read_file(re.sub('(.*DN_)([^/]+)(.*)', r'\1\2_DIMAP\3',
                               product_path.replace(os.path.join('Metadata', 'ISOMetadata'),
                               os.path.join('Products', 'SacPackage', 'ORBIT')).replace('.xml', '.tif'))),
-          'spatial_coverage': spatial_coverage
         }
+      # Optional spatial_coverage
+      if metadata.get('spatial_coverage'):
+        # Extract coordinates
+        coordinates = zip(*[[float(j) for j in re.findall('(-?[\.0-9]+)', metadata['spatial_coverage'])][i::2] for i in range(2)])
+        # Build tuple for polygon
+        coordinates = coordinates + coordinates[0:1]
+        # Builds polygon
+        spatial_coverage = Polygon(coordinates)
+        spatial_coverage.set_srid(4326)
+      else:
+        spatial_coverage = None
+      self._products[product]['spatial_coverage'] = spatial_coverage
 
 
   def _read_metadata(self, product_path):
     """
     Extract metadata from an XML metadata file object and
     returns informations as a dictionary, parsing and validation
-    is left to the calling program. The only check is done here is
-    for mandatory metadata presence.
+    is left to the calling program.
     """
     tree = etree.parse(self._read_file(product_path))
     metadata = {}

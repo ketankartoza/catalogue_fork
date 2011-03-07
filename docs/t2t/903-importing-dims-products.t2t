@@ -109,52 +109,50 @@ and made available for the catalogue:
 + original metadata, is the package's ISOMetadata.xml file
 + thumbnail, read from SacPackage Product folder
 + image, the original SacPackage Product tif image
-+ spatial_coverage, this is read from the metadata or directly
-  from the image if it is not found
++ spatial_coverage, this is read from the metadata or directly from the image if it is not found
 
 The following informations are read from the ISOMetadata:
+
 : product_date
 '//{xmlns}dateStamp/{xmlns_gco}Date', # Product date
 : file_identifier
 '//{xmlns}fileIdentifier/{xmlns_gco}CharacterString',
-: vertical_cs
-'//{xmlns_gml}VerticalCS/{xmlns_gml}name', # Projection
 : processing_level_code
 '//{xmlns}processingLevelCode//{xmlns}code/{xmlns_gco}CharacterString',
 : cloud_cover_percentage
 '//{xmlns}cloudCoverPercentage/{xmlns_gco}Real',
-: md_data_identification
-'//{xmlns}MD_DataIdentification//{xmlns}CI_Citation/{xmlns}title/{xmlns_gco}CharacterString',
-: md_product_date
-'//{xmlns}MD_DataIdentification//{xmlns}CI_Date//{xmlns_gco}Date',
-: md_abstract
-'//{xmlns}MD_DataIdentification/{xmlns}abstract/{xmlns_gco}CharacterString', # Sat & sensor description
 : image_quality_code
 '//{xmlns}imageQualityCode//{xmlns}code/{xmlns_gco}CharacterString',
 : spatial_coverage
 '//{xmlns}EX_BoundingPolygon//{xmlns_gml}coordinates',
 
-** Note:** The spatial_coverage is first read from //EX_BoundingPolygon// parameter
+""Note:"" The spatial_coverage is first read from //EX_BoundingPolygon// parameter
 in ISOMetadata.xml, and then read from the geotiff image if not found
+
 
 The following informations are read from the main image using **GDAL** library:
 
-: radiometric_resolution
-: band_count
-: spatial_coverage
++ radiometric_resolution
++ band_count
++ spatial_coverage
+
 
 The following informations are reverse-engineered from the **file_identifier**,
 the process is handled from the function call ``GenericSensorProduct.productIdReverse()``
 
-: acquisition_mode
-: projection
-: path
-: row
-: path shift
-: row shift
++ acquisition_mode
++ projection
++ path
++ row
++ path shift
++ row shift
 
 
-**Note:** The acquisition_mode is a foreign key to the sensors dictionaries, the
+""Note:"" The acquisition_mode is a foreign key to the sensors dictionaries, the
 ingestion process will take care of creating all the necessary entries when
 they are missing. The mission_type value is not present in **file_identifier** and
 is hence set to the first type existing in the catalogue.
+
+
+""Note:"" The projection is created if it does not exists, the epsg code is
+set to 0 by default.

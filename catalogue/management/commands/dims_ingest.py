@@ -11,14 +11,19 @@ import re
 from optparse import make_option
 from osgeo import gdal
 import tempfile
+from subprocess import call
 
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
+from django.contrib.gis.geos import Polygon
+from django.contrib.gis.gdal import SpatialReference
 
 from catalogue.models import *
 from catalogue.dims_lib import dimsReader
+
 
 class Command(BaseCommand):
   help = "Import into the catalogue all DIMS packages in a given folder, SPOT-5 OpticalProduct only"
@@ -37,8 +42,11 @@ class Command(BaseCommand):
           help='Name of the creating software. Defaults to: SARMES1', default='SARMES1'),
       make_option('--license', '-l', dest='license', action='store', default='SAC Commercial License',
           help='Name of the license. Defaults to: SAC Commercial License'),
+      make_option('--keep', '-k', dest='keep', action='store_true', default=False,
+          help='Do not delete the package after a successful import.'),
   )
 
+  @transaction.commit_manually
   def handle(self, *args, **options):
     """ command execution """
     folder        = options.get('folder')
@@ -49,49 +57,53 @@ class Command(BaseCommand):
     license       = options.get('license')
     owner         = options.get('owner')
     software      = options.get('creating_software')
-
-    # Get the mandatory params or die!
-    try:
-      software = CreatingSoftware.objects.get(name=software)
-    except CreatingSoftware.DoesNotExists:
-      print 'CreatingSoftware %s does not exists: aborting' % software
-      return
-    try:
-      license = License.objects.get(name=license)
-    except License.DoesNotExists:
-      print 'License %s does not exists: aborting' % license
-      return
-    try:
-      owner = Institution.objects.get(name=owner)
-    except Institution.DoesNotExist:
-      print 'Institution %s does not exists: aborting' % owner
-      return
-
+    keep          = options.get('keep')
 
     def verblog(msg, level = 1):
       if verbose > level:
         print msg
 
     verblog('Getting verbose (level=%s)... ' % verbose)
+    verblog('Creating software: %s' % software, 2)
+    verblog('Owner: %s' % owner, 2)
+    verblog('License: %s' % license, 2)
+
+    # Get the mandatory params
+    try:
+      software = CreatingSoftware.objects.get_or_create(name=software, defaults={'version' : 0})[0]
+    except CreatingSoftware.DoesNotExists:
+      print 'Creating Software %s does not exists and cannot create: aborting' % software
+      return
+    try:
+      license = License.objects.get_or_create(name=license, defaults={'type' : License.LICENSE_TYPE_ANY, 'details' : license})[0]
+    except License.DoesNotExists:
+      print 'License %s does not exists and cannot create: aborting' % license
+      return
+    try:
+      owner = Institution.objects.get_or_create(name=owner, defaults={'address1': '','address2': '','address3': '','post_code': '', })[0]
+    except Institution.DoesNotExist:
+      print 'Institution %s does not exists and cannot create: aborting' % owner
+      return
+
 
     # Build the path
     path          = os.path.join(folder, globparm)
     package_list  = glob.glob(path)
 
-    verblog("found %d packages in %s" % (len(package_list), path))
+    verblog("Found %d packages in %s" % (len(package_list), path))
 
     for package in package_list:
 
-      verblog("ingesting %s" % package)
+      verblog("Ingesting %s" % package)
       reader = dimsReader(package)
       products = reader.get_products()
-      verblog("found %d products" % len(products))
+      verblog("Found %d products" % len(products))
 
       for product_code, product_data in products.items():
-        verblog("product %s" % product_code)
+        verblog("Product %s" % product_code)
         verblog(product_data, 3)
 
-        verblog("processing product %s" % product_code)
+        verblog("Processing product %s" % product_code)
 
         # Extracts data from imagery
         temp_main_image = tempfile.mktemp('.tif')
@@ -159,6 +171,17 @@ class Command(BaseCommand):
           'quality' : Quality.objects.get_or_create(name=product_data['metadata'].get('image_quality_code'))[0],
         }
 
+        # Read spatial_coverage from gdal if none
+        if not data.get('spatial_coverage'):
+          poly_points = [(gcp.GCPX, gcp.GCPY) for gcp in gcps]
+          poly_points.append(poly_points[0])
+          data['spatial_coverage'] = Polygon(poly_points)
+          # Used here only, main record projection is set from product_id
+          srs = SpatialReference(dataset.GetGCPProjection())
+          data['spatial_coverage'].set_srid(srs.srid)
+          verblog('Got spatial_coverage from image: %s' % data['spatial_coverage'].ewkt)
+
+
         # Close dataset
         dataset = None
 
@@ -167,56 +190,73 @@ class Command(BaseCommand):
 
         # Check if it's still in catalogue:
         try:
-          op = GenericProduct.objects.get(product_id=data.get('product_id')).getConcreteInstance()
-          verblog('alredy in catalogue: updating')
+          op = OpticalProduct.objects.get(product_id=data.get('product_id')).getConcreteInstance()
+          verblog('Alredy in catalogue: updating')
+          is_new = False
           op.__dict__.update(data)
         except ObjectDoesNotExist:
           op = OpticalProduct(**data)
-          verblog('not in catalogue: creating')
+          verblog('Not in catalogue: creating')
+          is_new = True
           try:
             op.productIdReverse(True)
           except Exception, e:
+            transaction.rollback()
             raise CommandError('Cannot get all mandatory data from product id %s (%s)' % (product_code, e))
             # ?? op.setSacProductId()
 
-        if not test_only:
+        try:
+          op.save()
+          # Store thumbnail
+          thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailPath())
           try:
-            op.save()
-            # Store thumbnail
-            thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailPath())
+            os.makedirs(thumbnails_folder)
+          except:
+            pass
+          jpeg_thumb = os.path.join(thumbnails_folder, op.product_id + ".jpg")
+          handle = open(jpeg_thumb, 'wb+')
+          handle.write(product_data['thumbnail'].read())
+          handle.close()
+          # Store .wld file
+          jpeg_wld   =  os.path.join(thumbnails_folder, op.product_id + ".wld")
+          handle = open(jpeg_wld, 'w+')
+          handle.write(wld)
+          handle.close()
+          # Store main image
+          if store_image:
+            main_image_folder = os.path.join(settings.IMAGERY_ROOT, op.imagePath())
             try:
-              os.makedirs(thumbnails_folder)
+              os.makedirs(main_image_folder)
             except:
               pass
-            jpeg_thumb = os.path.join(thumbnails_folder, op.product_id + ".jpg")
-            handle = open(jpeg_thumb, 'wb+')
-            handle.write(product_data['thumbnail'].read())
-            handle.close()
-            # Store .wld file
-            jpeg_wld   =  os.path.join(thumbnails_folder, op.product_id + ".wld")
-            handle = open(jpeg_thumb, 'w+')
-            handle.write(wld)
-            handle.close()
-            # Store main image
-            if store_image:
-              main_image_folder = os.path.join(settings.IMAGERY_ROOT, op.imagePath())
-              try:
-                os.makedirs(main_image_folder)
-              except:
-                pass
-              main_image = os.path.join(main_image_folder, op.product_id + ".tif")
-              os.rename(temp_main_image, main_image)
-              verblog("storing main image for product %s: %s" % (product_code, main_image))
-            else:
-              # Remove imagery
-              os.remove(temp_main_image)
-            print 'Product %s imported.' % product_code
-          except Exception, e:
-            # Raise
+            main_image = os.path.join(main_image_folder, op.product_id + ".tif")
+            os.rename(temp_main_image, main_image)
+            # -f option: overwrites existing
+            call(["bzip2", "-f", main_image])
+            verblog("Storing main image for product %s: %s" % (product_code, main_image))
+          else:
+            # Remove imagery
             os.remove(temp_main_image)
-            raise CommandError('Cannot import: %s' % e)
-        else:
-          os.remove(temp_main_image)
-          verblog("testing only: processing %s skipped" % product_code)
+          if is_new:
+            print 'Product %s imported.' % product_code
+          else:
+            print 'Product %s updated.' % product_code
+          # Remove the package
+          if keep:
+            verblog('Keep flag is set: do not delete the package')
+          else:
+            os.remove(package)
+            verblog('Package removed: %s' % product_data['path'])
+        except Exception, e:
+          # Raise
+          transaction.rollback()
+          raise CommandError('Cannot import: %s' % e)
+
+    if test_only:
+      transaction.rollback()
+      verblog("Testing only: transaction rollback.")
+    else:
+      transaction.commit()
+      verblog("Committing transaction.")
 
 

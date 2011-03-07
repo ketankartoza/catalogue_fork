@@ -17,12 +17,9 @@ Tests reader
 <tarfile.ExFileObject object at ...>
 >>> products[product_code]['image']
 <tarfile.ExFileObject object at ...>
->>> products[product_code]['spatial_coverage'].wkt
-'POLYGON ((13.12...))'
 
 >>> md = d.get_metadata(product_code)
-
->>> md.get('cloud_cover') == None
+>>> md.get('cloud_cover_percentage') == None
 True
 >>> md.get('file_identifier') == 'S5-_HRG_B--_CAM2_0094_00_0367_00_110122_092557_L1A-_ORBIT--Vers.0.01'
 True
