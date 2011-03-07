@@ -496,8 +496,11 @@ def run():
   # this line is needed for blob retrieval to work!
   informixdb.Connection.Sblob(myConnection)
   mySQL = None
+  myMaxBlobNo = int(myLastBlobNo) + 20000
   try:
-    mySQL = "select * from t_aux_files where id > " + str( myLastBlobNo ) + ";"
+    #process a max of 20k imaes at a time
+    mySQL = "select * from t_aux_files where id > " + str( myLastBlobNo ) + " and id <= " + str( myMaxBlobNo ) + ";"
+
     print mySQL
     myCursor.execute(mySQL)
   except Exception as myError:
