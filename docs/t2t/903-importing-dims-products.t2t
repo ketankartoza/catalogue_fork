@@ -46,8 +46,9 @@ Options:
   -g GLOB, --glob=GLOB  A shell glob pattern for files to ingest.
   -t, --test_only       Just test, nothing will be written into the DB.
   -o OWNER, --owner=OWNER
-                        Name of the Institution package owner. Defaults to:
-                        Satellite Applications Centre
+                        Name of the Institution package owner. Metadata will
+                        be used if available, the program will fail if no
+                        metadata are available and no name is provided.
   -s CREATING_SOFTWARE, --creating_software=CREATING_SOFTWARE
                         Name of the creating software. Defaults to: SARMES1
   -l LICENSE, --license=LICENSE
@@ -80,9 +81,11 @@ Just test, nothing will be written into the DB or copied to
 the filesystem.
 : -o OWNER, --owner=OWNER
 Name of the institution, as a string.
-Defaults to: //Satellite Applications Centre//.
+Defaults to: None.
 Example: ``-o "Satellite Applications Centre"``
 Note: the institution will be created if it does not exist.
+Note: the institution will be read from metadata if not
+specified in the options.
 : -s CREATING_SOFTWARE, --creating_software=CREATING_SOFTWARE
 Name of the creating software. Defaults to: //SARMES1//
 Example: ``-s "SARMES1"``
@@ -127,6 +130,18 @@ The following information is read from the ISOMetadata:
 '//{xmlns}imageQualityCode//{xmlns}code/{xmlns_gco}CharacterString',
 : spatial_coverage
 '//{xmlns}EX_BoundingPolygon//{xmlns_gml}coordinates',
+: institution_name
+'//{xmlns}CI_ResponsibleParty/{xmlns}organisationName/{xmlns_gco}CharacterString',
+: institution_address
+'//{xmlns}CI_Address/{xmlns}deliveryPoint/{xmlns_gco}CharacterString',
+: institution_city
+'//{xmlns}CI_Address/{xmlns}city/{xmlns_gco}CharacterString',
+: institution_region
+'//{xmlns}CI_Address/{xmlns}administrativeArea/{xmlns_gco}CharacterString',
+: institution_postcode
+'//{xmlns}CI_Address/{xmlns}postalCode/{xmlns_gco}CharacterString',
+: institution_country
+'//{xmlns}CI_Address/{xmlns}country/{xmlns_gco}CharacterString',
 
 ""Note:"" The spatial_coverage is first read from //EX_BoundingPolygon// parameter
 in ISOMetadata.xml, and then read from the geotiff image if not found.
