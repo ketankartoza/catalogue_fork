@@ -18,6 +18,9 @@ from django.template.loader import render_to_string
 # for sending email
 from django.core.mail import send_mail,send_mass_mail
 
+# Read from settings
+CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS = getattr(settings, 'CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS', False )
+
 ###########################################################
 #
 # Email notification of orders to sac sales staff
@@ -32,15 +35,14 @@ def notifySalesStaff(theUser, theOrderId):
      >>> myUser
      >>> notifySalesStaff( myUser, 16 )
 
-    #TODO: ABP: GenericProduct does not have sensor informations anymore, notifications must be unbound from the sensors
   """
 
   if not settings.EMAIL_NOTIFICATIONS_ENABLED:
     logging.info("Email sending disabled, set EMAIL_NOTIFICATIONS_ENABLED in settings")
     return
   myOrder = get_object_or_404(Order,id=theOrderId)
-  myRecords = SearchRecord.objects.all().filter(user=theUser).filter(order=myOrder)
-  myHistory = OrderStatusHistory.objects.all().filter(order=myOrder)
+  myRecords = SearchRecord.objects.filter(user=theUser, order=myOrder).select_related()
+  myHistory = OrderStatusHistory.objects.filter(order=myOrder)
   myEmailSubject = 'SAC Order ' + str(myOrder.id) + ' status update (' + myOrder.order_status.name + ')'
   myEmailMessage = 'The status for order #' +  str(myOrder.id) + ' has changed. Please visit the order page:\n'
   myEmailMessage = myEmailMessage + 'http://' + settings.DOMAIN + '/vieworder/' + str(myOrder.id) + '/\n\n\n'
@@ -49,33 +51,31 @@ def notifySalesStaff(theUser, theOrderId):
                                                     'myRecords' : myRecords,
                                                     'myHistory' : myHistory
                                                   })
-  # Get a list of all the mission sensors involved in this order:
-  myMissionSensors = []
-  for myRecord in myRecords:
-    try:
-      mySensor = myRecord.product.mission_sensor
-      if not mySensor in myMissionSensors:
-        myMissionSensors.append(mySensor)
-    except AttributeError:
-        logging.debug('Missing mission_sensor from class %s' % myRecord)
-        # TODO: see above
-        raise
 
   # Get a list of staff user's email addresses
   myMessagesList = [] # we will use mass_mail to prevent users seeing who other recipients are
 
-  for myMissionSensor in myMissionSensors:
-    myRecipients = OrderNotificationRecipients.objects.filter(sensors__id__exact=myMissionSensor.id)
-    for myRecipient in myRecipients:
-      myAddress = myRecipient.user.email
-      myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, [myAddress]))
-      logging.info("Sending notice to : %s" % myAddress)
+  myRecipients = set()
+  # get the list of recipients
+  for myProduct in [s.product for s in myRecords]:
+    myRecipients.update(OrderNotificationRecipients.getUsersForProduct(myProduct))
+
+  for myRecipient in myRecipients:
+    myAddress = myRecipient.email
+    myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, [myAddress]))
+    logging.info("Sending notice to : %s" % myAddress)
+
+  # Add default
+  if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
+    logging.info("Sending notice to default recipients : %s" % CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
+    myMessagesList.append((myEmailSubject, myEmailMessage, settings.DEFAULT_FROM_EMAIL, list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)))
+
   #also send an email to the originator of the order
   #We do this separately to avoid them seeing the staff cc list
   myClientAddress = theUser.email
-  myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, [myClientAddress]))
+  myMessagesList.append((myEmailSubject, myEmailMessage, settings.DEFAULT_FROM_EMAIL, [myClientAddress]))
   # mass mail expects a tuple (read-only list) so convert the list to tuple on send
-  logging.info("Sending messages: \n%s" % tuple(myMessagesList) )
+  logging.info("Sending messages: \n%s" % myMessagesList)
   send_mass_mail( tuple(myMessagesList),fail_silently=False )
   return
 
@@ -105,51 +105,24 @@ def notifySalesStaffOfTaskRequest(theUser, theId):
                                                     'myHistory' : myHistory
                                                   })
   myMessagesList = [] # we will use mass_mail to prevent users seeing who other recipients are
-  myRecipients = OrderNotificationRecipients.objects.filter(sensors__id__exact = myTaskingRequest.mission_sensor.id)
+  myRecipients = OrderNotificationRecipients.objects.filter(sensors=t.mission_sensor)
   for myRecipient in myRecipients:
     myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN,
           [myRecipient.user.email]))
     logging.info("Sending notices to : %s" % myRecipient.user.email)
 
+  # Add default
+  if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
+    logging.info("Sending notice to default recipients : %s" % CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
+    myMessagesList.append((myEmailSubject, myEmailMessage, settings.DEFAULT_FROM_EMAIL, list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)))
 
   #also send an email to the originator of the order
   #We do this separately to avoid them seeing the staff cc list
-  myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN,
+  myMessagesList.append((myEmailSubject, myEmailMessage, settings.DEFAULT_FROM_EMAIL,
           [ theUser.email ]))
   send_mass_mail(tuple(myMessagesList), fail_silently=False)
   return
 
-
-###########################################################
-#
-# Try to extract a geometry if a shp was uploaded
-#
-###########################################################
-def getGeometryFromShapefile( theRequest, theForm, theFileField ):
-  """Retrieve an uploaded geometry from a shp file. Note in order for this to
-     work, you must have set your form to use multipart encoding type e.g.
-     <form enctype="multipart/form-data" action="/search/" method="post" id="search_form">"""
-  logging.info('Form cleaned data: ' + str(theForm.cleaned_data))
-  if theRequest.FILES[theFileField]:
-    logging.debug("Using geometry from shapefile.")
-    #if not theForm.cleaned_data.contains( "theFileField" ):
-    #  logging.error("Error: %s field not submitted with form" % theFileField)
-    #  return False
-    myExtension = theForm.cleaned_data[theFileField].name.split(".")[1]
-    if myExtension != "zip":
-      logging.info('Wrong format for uploaded geometry. Please select a ZIP archive.')
-      #render_to_response is done by the renderWithContext decorator
-      #@TODO return a clearer error spotmap just like Alert for the missing dates
-      return False
-    myFile = theForm.cleaned_data[theFileField]
-    myOutFile = '/tmp/%s' % myFile.name
-    destination = open(myOutFile, 'wb+')
-    for chunk in myFile.chunks():
-      destination.write(chunk)
-    destination.close()
-    extractedGeometries = getFeaturesFromZipFile(myOutFile, "Polygon", 1)
-    myGeometry = extractedGeometries[0]
-    return myGeometry
 
 """Layer definitions for use in conjunction with open layers"""
 WEB_LAYERS = {

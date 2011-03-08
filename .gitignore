@@ -24,7 +24,8 @@ doc-src
 settings_local.py
 ipy.py
 *.sqlite
-settings_test.py
+#settings_test.py
 catalogue/tests/dims_packages
 init_*.sql
 nbproject/
+imagery_mastercopies/

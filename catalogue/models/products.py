@@ -2,6 +2,8 @@ from django.contrib.gis.db import models
 from dictionaries import *
 import logging
 import os
+import re
+import datetime
 import urllib2
 from django.conf import settings
 #for translation
@@ -11,7 +13,23 @@ from PIL import Image, ImageFilter, ImageOps
 
 from django_dag.models import node_factory, edge_factory
 
+from functools import wraps
 
+# Read from settings
+CATALOGUE_SCENES_PATH = getattr(settings, 'CATALOGUE_SCENES_PATH', "/mnt/cataloguestorage/scenes_out_projected_sorted/")
+
+def runconcrete(func):
+  """
+  This decorator calls the method in the concrete subclass
+  and raise an exception if the method is found only in a base
+  GenericProduct abstract class
+  """
+  @wraps(func)
+  def wrapper(self, *args, **kwargs):
+    if [d for d in set(self.getConcreteInstance().__class__.__mro__).difference([self.__class__]) if func.__name__ in d.__dict__ and getattr(d, 'concrete', False)]:
+      return getattr(self.getConcreteInstance(), func.__name__)(*args, **kwargs)
+    raise NotImplementedError()
+  return wrapper
 
 class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.Model ) ):
   """
@@ -37,15 +55,11 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
   metadata              = models.TextField(help_text="An xml document describing all known metadata for this product.")
   remote_thumbnail_url  = models.TextField( max_length=255,null=True,blank=True, help_text="Location on a remote server where this product's thumbnail resides. The value in this field will be nulled when a local copy is made of the thumbnail.")
 
+  # We need a flag to tell if this Product class can have instances (if it is not abstract)
+  # this flas is also used in admin back-end to get the list of classes for OrderNotificationRecipients
+  concrete              = False
+
   objects               = models.GeoManager()
-
-  def __unicode__( self ):
-     if self.product_id:
-        return self.product_id
-     return "Internal ID: %d" % self.pk
-
-  def __str__( self ):
-     return self.__unicode__()
 
   class Meta:
     """This is not an abstract base class although you should avoid dealing directly with it
@@ -55,120 +69,121 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     abstract = False
     ordering = ('product_date',)
 
+  def __unicode__( self ):
+     if self.product_id:
+        return u"%s" % self.product_id
+     return u"Internal ID: %d" % self.pk
 
+  @runconcrete
   def thumbnailPath( self ):
     """Returns the path (relative to whatever parent dir it is in) for the
       thumb for this file following the scheme <Sensor>/<YYYY>/<MM>/<DD>/
-      The thumb itself will exist under this dir as <product_id>.jpg"""
-    try:
-      # Checks method is in concrete class
-      self.getConcreteInstance().__class__.__mro__[0].__dict__['thumbnailPath']
-      return self.getConcreteInstance().thumbnailPath()
-    except:
-      raise NotImplementedError()
+      The thumb itself will exist under this dir as <product_id>.jpg
+    """
+    pass
 
   def thumbnail(self, theSize):
-      """Return a thumbnail for this product of size "small" - 16x16, "medium" - 200x200 or "large" - 400x400
-         If a cached copy of the resampled thumb exists, that will be returned directly
-         @param a string "small","medium" or "large" - defaults to small
-         @return a PIL image object.
-      """
-      if theSize not in ["medium","large"]: theSize = "small"
-      mySize = 16
-      if theSize == "medium":
-        mySize = 200
-      elif theSize == "large":
-        mySize = 400
+    """Return a thumbnail for this product of size "small" - 16x16, "medium" - 200x200 or "large" - 400x400
+        If a cached copy of the resampled thumb exists, that will be returned directly
+        @param a string "small","medium" or "large" - defaults to small
+        @return a PIL image object.
+    """
+    if theSize not in ["medium","large"]: theSize = "small"
+    mySize = 16
+    if theSize == "medium":
+      mySize = 200
+    elif theSize == "large":
+      mySize = 400
 
-      logging.info("showThumb : id " + self.product_id)
-      myImageFile = os.path.join( self.thumbnailPath(), self.product_id + ".jpg" )
-      myFileName = str(settings.THUMBS_ROOT) + "/" + myImageFile
-      myThumbDir = os.path.join( settings.THUMBS_ROOT, self.thumbnailPath() )
-      # Paths for cache of scaled down thumbs (to reduce processing load)
-      myCacheThumbDir = os.path.join( settings.THUMBS_ROOT, "cache", theSize, self.thumbnailPath() )
-      myCacheImage = os.path.join( myCacheThumbDir, self.product_id + ".jpg" )
-      #
-      # Check if there is a scaled down version already cached and just return that if there is
-      #
-      if os.path.isfile( myCacheImage ):
-        myImage = Image.open( myCacheImage )
-        return ( myImage )
+    logging.info("showThumb : id " + self.product_id)
+    myImageFile = os.path.join( self.thumbnailPath(), self.product_id + ".jpg" )
+    myFileName = str(settings.THUMBS_ROOT) + "/" + myImageFile
+    myThumbDir = os.path.join( settings.THUMBS_ROOT, self.thumbnailPath() )
+    # Paths for cache of scaled down thumbs (to reduce processing load)
+    myCacheThumbDir = os.path.join( settings.THUMBS_ROOT, "cache", theSize, self.thumbnailPath() )
+    myCacheImage = os.path.join( myCacheThumbDir, self.product_id + ".jpg" )
+    #
+    # Check if there is a scaled down version already cached and just return that if there is
+    #
+    if os.path.isfile( myCacheImage ):
+      myImage = Image.open( myCacheImage )
+      return ( myImage )
 
-      #
-      # Cached minified thumb not available so lets make it!
-      #
+    #
+    # Cached minified thumb not available so lets make it!
+    #
 
-      # Hack to automatically fetch spot or other non local thumbs from their catalogue
-      # and store them locally
-      if self.remote_thumbnail_url:
-        if not os.path.isdir( myThumbDir  ):
-          logging.debug("Creating dir: %s" % myThumbDir)
-          try:
-            os.makedirs( myThumbDir )
-          except OSError:
-            logging.debug("Failed to make output directory...quitting")
-            return "Failed to make output dir."
-        logging.debug("Fetching image: %s" % self.remote_thumbnail_url)
-        myOpener = urllib2.build_opener()
-        myImagePage = myOpener.open(self.remote_thumbnail_url)
-        myImage = myImagePage.read()
-        logging.debug("Image fetched, saving as %s" % myImageFile)
-        myWriter = open(os.path.join(settings.THUMBS_ROOT,myImageFile), "wb")
-        myWriter.write(myImage)
-        myWriter.close()
-        self.remote_thumbnail_url=""
-        self.save()
-      # hack ends
-
-      # Specify background colour, should be the same as div background
-      myBackgroundColour = ( 255,255,255 )
-      myAngle = 0
-      myShadowFlag = False
-      logging.info ( "Creating thumbnail of : " + myFileName )
-      logging.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
-      logging.info('Media path    :   ' + str(settings.MEDIA_ROOT))
-      logging.info('Project root path:' + str(settings.ROOT_PROJECT_FOLDER))
-      myImage = None
-      if not os.path.isfile(myFileName):
-        #file does not exist so show an error icon
-        #return HttpResponse("%s not found" % myFileName)
-        myFileName = os.path.join(settings.MEDIA_ROOT, 'images','block_16.png')
-        myImage = Image.open( myFileName )
-        return ( myImage )
-
-      try:
-        myImage = Image.open( myFileName )
-      except:
-        #file is not valid for some reason so show an error icon
-        myFileName = os.path.join(settings.MEDIA_ROOT, 'images','block_16.png')
-        myImage = Image.open( myFileName )
-        return ( myImage )
-
-      if len( myImage.getbands() ) < 3:
-        myImage = ImageOps.expand( myImage, border = 5, fill = ( 255 ) )
-      else:
-        myImage = ImageOps.expand( myImage, border = 5, fill = ( 255, 255, 255 ) )
-      myBackground = None
-      if myShadowFlag:
-        myImage = dropShadow( myImage.convert( 'RGBA' ) ).rotate( myAngle , expand = 1 )
-        myBackground = Image.new( 'RGBA', myImage.size, myBackgroundColour )
-        myBackground.paste( myImage, ( 0, 0 ) , myImage )
-      else:
-        myBackground = Image.new( 'RGBA', myImage.size, myBackgroundColour )
-        myBackground.paste( myImage, ( 0, 0 ) )
-      myBackground.thumbnail( ( mySize, mySize ), Image.ANTIALIAS)
-
-      # Now cache the scaled thumb for faster access next time...
-      if not os.path.isdir( myCacheThumbDir  ):
-        logging.debug("Creating dir: %s" % myCacheThumbDir)
+    # Hack to automatically fetch spot or other non local thumbs from their catalogue
+    # and store them locally
+    if self.remote_thumbnail_url:
+      if not os.path.isdir( myThumbDir  ):
+        logging.debug("Creating dir: %s" % myThumbDir)
         try:
-          os.makedirs( myCacheThumbDir )
+          os.makedirs( myThumbDir )
         except OSError:
           logging.debug("Failed to make output directory...quitting")
-          return "Failed to make output dir"
-      logging.debug( "Caching image : %s" % myCacheImage )
-      myBackground.save( myCacheImage )
-      return ( myBackground )
+          return "Failed to make output dir."
+      logging.debug("Fetching image: %s" % self.remote_thumbnail_url)
+      myOpener = urllib2.build_opener()
+      myImagePage = myOpener.open(self.remote_thumbnail_url)
+      myImage = myImagePage.read()
+      logging.debug("Image fetched, saving as %s" % myImageFile)
+      myWriter = open(os.path.join(settings.THUMBS_ROOT,myImageFile), "wb")
+      myWriter.write(myImage)
+      myWriter.close()
+      self.remote_thumbnail_url=""
+      self.save()
+    # hack ends
+
+    # Specify background colour, should be the same as div background
+    myBackgroundColour = ( 255,255,255 )
+    myAngle = 0
+    myShadowFlag = False
+    logging.info ( "Creating thumbnail of : " + myFileName )
+    logging.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
+    logging.info('Media path    :   ' + str(settings.MEDIA_ROOT))
+    logging.info('Project root path:' + str(settings.ROOT_PROJECT_FOLDER))
+    myImage = None
+    if not os.path.isfile(myFileName):
+      #file does not exist so show an error icon
+      #return HttpResponse("%s not found" % myFileName)
+      myFileName = os.path.join(settings.MEDIA_ROOT, 'images','block_16.png')
+      myImage = Image.open( myFileName )
+      return ( myImage )
+
+    try:
+      myImage = Image.open( myFileName )
+    except:
+      #file is not valid for some reason so show an error icon
+      myFileName = os.path.join(settings.MEDIA_ROOT, 'images','block_16.png')
+      myImage = Image.open( myFileName )
+      return ( myImage )
+
+    if len( myImage.getbands() ) < 3:
+      myImage = ImageOps.expand( myImage, border = 5, fill = ( 255 ) )
+    else:
+      myImage = ImageOps.expand( myImage, border = 5, fill = ( 255, 255, 255 ) )
+    myBackground = None
+    if myShadowFlag:
+      myImage = dropShadow( myImage.convert( 'RGBA' ) ).rotate( myAngle , expand = 1 )
+      myBackground = Image.new( 'RGBA', myImage.size, myBackgroundColour )
+      myBackground.paste( myImage, ( 0, 0 ) , myImage )
+    else:
+      myBackground = Image.new( 'RGBA', myImage.size, myBackgroundColour )
+      myBackground.paste( myImage, ( 0, 0 ) )
+    myBackground.thumbnail( ( mySize, mySize ), Image.ANTIALIAS)
+
+    # Now cache the scaled thumb for faster access next time...
+    if not os.path.isdir( myCacheThumbDir  ):
+      logging.debug("Creating dir: %s" % myCacheThumbDir)
+      try:
+        os.makedirs( myCacheThumbDir )
+      except OSError:
+        logging.debug("Failed to make output directory...quitting")
+        return "Failed to make output dir"
+    logging.debug( "Caching image : %s" % myCacheImage )
+    myBackground.save( myCacheImage )
+    return ( myBackground )
 
   def dropShadow(
     theImage,
@@ -203,16 +218,15 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
 
     return myBackground
 
+  @runconcrete
   def imagePath( self ):
-    """Returns the path (relative to whatever parent dir it is in) for the
-      image itself following the scheme <Sensor>/<processinglevel>/<YYYY>/<MM>/<DD>/
-      The image itself will exist under this dir as <product_id>.tif.bz2"""
-    try:
-      # Checks method is in concrete class
-      self.getConcreteInstance().__class__.__mro__[0].__dict__['imagePath']
-      return self.getConcreteInstance().imagePath()
-    except:
-      raise NotImplementedError()
+    """
+    Returns the path (relative to whatever parent dir it is in) for the
+    image itself following the scheme <Sensor>/<processinglevel>/<YYYY>/<MM>/<DD>/
+    The image itself will exist under this dir as <product_id>.tif.bz2
+    """
+    # Checks method is in concrete class
+    pass
 
   def imageUrl( self ):
     """Returns a path to the actual imagery data as a url. You need to have
@@ -282,18 +296,23 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     """
     return self.getConcreteProduct()[0]
 
+  @runconcrete
   def setSacProductId( self ):
     """A sac product id adheres to the following format:
 
     SAT_SEN_TYP_MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL
 
     """
-    try:
-      # Checks method is in concrete class
-      self.getConcreteInstance().__class__.__mro__[0].__dict__['setSacProductId']
-      return self.getConcreteInstance().setSacProductId()
-    except:
-      raise NotImplementedError()
+    pass
+
+  @runconcrete
+  def productIdReverse(self, force=False):
+    """
+    Parse a product_id and populates instance fields
+    If force is set, the procedure will try to create
+    missing bits
+    """
+    pass
 
   def tidySacId( self ):
     """Return a tidy version of the SAC ID for use on web pages etc.
@@ -340,6 +359,9 @@ class GenericImageryProduct( GenericProduct ):
   radiometric_resolution              = models.IntegerField( help_text="Bit depth of image e.g. 16bit")
   band_count                          = models.IntegerField( help_text="Number of spectral bands in product")
 
+  # We need a flag to tell if this Product class can have instances (if it is not abstract)
+  concrete              = True
+
   class Meta:
     app_label= 'catalogue'
 
@@ -366,6 +388,9 @@ class GenericSensorProduct( GenericImageryProduct ):
   offline_storage_medium_id           = models.CharField(max_length=12, help_text="Identifier for the offline tape or other medium on which this scene is stored", null=True,blank=True )
   online_storage_medium_id            = models.CharField(max_length=36, help_text="DIMS Product Id as defined by Werum e.g. S5_G2_J_MX_200902160841252_FG_001822",null=True,blank=True )
 
+  # We need a flag to tell if this Product class can have instances (if it is not abstract)
+  concrete              = False
+
   class Meta:
     """This is not an abstract base class although you should avoid dealing directly with it
     see http://docs.djangoproject.com/en/dev/topics/db/models/#id7
@@ -377,7 +402,7 @@ class GenericSensorProduct( GenericImageryProduct ):
     """Returns the path (relative to whatever parent dir it is in) for the
       image itself following the scheme <Sensor>/<processinglevel>/<YYYY>/<MM>/<DD>/
       The image itself will exist under this dir as <product_id>.tif.bz2"""
-    return os.path.join( self.mission.abbreviation,
+    return os.path.join( self.acquisition_mode.sensor_type.mission_sensor.mission.abbreviation,
                     str( self.processing_level.abbreviation),
                     str( self.product_acquisition_start.year ),
                     str( self.product_acquisition_start.month ),
@@ -388,7 +413,7 @@ class GenericSensorProduct( GenericImageryProduct ):
     """Returns the path (relative to whatever parent dir it is in) for the
       thumb for this file following the scheme <Sensor>/<YYYY>/<MM>/<DD>/
       The thumb itself will exist under this dir as <product_id>.jpg"""
-    return os.path.join( self.mission.abbreviation,
+    return os.path.join( self.acquisition_mode.sensor_type.mission_sensor.mission.abbreviation,
                     str( self.product_acquisition_start.year ),
                     str( self.product_acquisition_start.month ),
                     str( self.product_acquisition_start.day ) )
@@ -402,8 +427,8 @@ class GenericSensorProduct( GenericImageryProduct ):
       Where:
       SAT    Satellite or mission          mandatory
       SEN    Sensor                        mandatory
-      MOD    Acquisition mode              mandatory?
-      TYP    Type                          mandatory?
+      MOD    Acquisition mode              mandatory
+      TYP    Type                          mandatory
       KKKK   Orbit path reference          optional?
       KS     Path shift                    optional?
       JJJJ   Orbit row reference           optional?
@@ -424,14 +449,14 @@ class GenericSensorProduct( GenericImageryProduct ):
       """
     myPreviousId = self.product_id #store for thumb renaming just now
     myList = []
-    myList.append( self.pad( self.mission.abbreviation, 3 ) )
-    myList.append( self.pad( self.mission_sensor.abbreviation, 3 ) )
+    myList.append( self.pad( self.acquisition_mode.sensor_type.mission_sensor.mission.abbreviation, 3 ) )
+    myList.append( self.pad( self.acquisition_mode.sensor_type.mission_sensor.abbreviation, 3 ) )
     myList.append( self.pad( self.acquisition_mode.abbreviation, 3 ) )
-    myList.append( self.pad( self.sensor_type.abbreviation, 3 ) )
+    myList.append( self.pad( self.acquisition_mode.sensor_type.abbreviation, 3 ) )
     myList.append( self.zeroPad( str( self.path ),4 ) )
     myList.append( self.zeroPad( str( self.path_offset ),2 ) )
-    myList.append(  self.zeroPad( str( self.row ),4 ) )
-    myList.append(  self.zeroPad( str( self.row_offset ),2 ) )
+    myList.append( self.zeroPad( str( self.row ),4 ) )
+    myList.append( self.zeroPad( str( self.row_offset ),2 ) )
     myDate = str( self.product_acquisition_start.year )[2:4]
     myDate += self.zeroPad( str( self.product_acquisition_start.month ),2 )
     myDate += self.zeroPad( str( self.product_acquisition_start.day ),2 )
@@ -441,7 +466,8 @@ class GenericSensorProduct( GenericImageryProduct ):
     myTime += self.zeroPad( str( self.product_acquisition_start.second ),2)
     myList.append( myTime )
     myList.append( "L" + self.pad( self.processing_level.abbreviation, 3 ) )
-    myList.append( self.pad( self.projection.name,4 ) )
+    # ABP: changed from 4 to 6 (why was it 4 ? UTM34S is 6 chars)
+    myList.append( self.pad( self.projection.name,6 ) )
     #print "Product SAC ID %s" % "_".join(myList)
     myNewId = "_".join(myList)
     self.product_id = myNewId
@@ -456,21 +482,18 @@ class GenericSensorProduct( GenericImageryProduct ):
       #it already has the correct name
       return
 
-    # TODO: softcode this into settings
-    mScenesPath = "/mnt/cataloguestorage/scenes_out_projected_sorted/"
-
     # Make a copy of the thumb all filed away nicely by sensor / yy / mm / dd
     # the thumb was saved as: myJpegThumbnail = os.path.join(mInScenesPath, str( theFrame.id ) + "-rectified-clipped.jpg")
-    myJpegThumbnail = os.path.join(mScenesPath, str( myPreviousId ) + ".jpg")
-    myWorldFile = os.path.join(mScenesPath, str( myPreviousId ) + ".wld")
+    myJpegThumbnail = os.path.join(CATALOGUE_SCENES_PATH, str( myPreviousId ) + ".jpg")
+    myWorldFile = os.path.join(CATALOGUE_SCENES_PATH, str( myPreviousId ) + ".wld")
     #print "myJpegThumbnail %s" % myJpegThumbnail
-    myOutputPath = os.path.join( mScenesPath, self.thumbnailPath() )
+    myOutputPath = os.path.join( CATALOGUE_SCENES_PATH, self.thumbnailPath() )
     if not os.path.isdir( myOutputPath ):
       #print "Creating dir: %s" % myOutputPath
       try:
         os.makedirs( myOutputPath )
       except OSError:
-        logging.debug("Failed to make output directory...quitting" )
+        logging.debug("Failed to make output directory (%s) ...quitting" % myOutputPath)
         return "False"
     else:
       #print "Exists: %s" % myOutputPath
@@ -485,6 +508,67 @@ class GenericSensorProduct( GenericImageryProduct ):
     except:
       logging.debug("Failed to move the thumbnail" )
     return
+
+  def productIdReverse(self, force=False):
+    """
+    Parse a product_id and populates instance fields
+
+    If force is set, try to create missing pieces
+
+     S5-_HRG_J--_CAM2_0172_+1_0388_00_110124_070818_L1A-_ORBIT--Vers.0.01
+    #SAT_SEN_TYP__MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
+
+    Where:
+    SAT    Satellite or mission          mandatory
+    SEN    Sensor                        mandatory
+    MOD    Acquisition mode              mandatory
+    TYP    Type                          mandatory
+    KKKK   Orbit path reference          optional?
+    KS     Path shift                    optional?
+    JJJJ   Orbit row reference           optional?
+    JS     Row shift                     optional?
+    YYMMDD Acquisition date              mandatory
+    HHMMSS Scene centre acquisition time mandatory
+    LEVL   Processing level              mandatory
+    PROJTN Projection                    mandatory
+    """
+    parts = self.product_id.replace('-', '').split('_')
+    # Searches for an existing acquisition_mode,
+    # raise an error if do not match
+    try:
+      self.acquisition_mode = AcquisitionMode.objects.get(
+          sensor_type__mission_sensor__mission__abbreviation=parts[0],
+          sensor_type__mission_sensor__abbreviation=parts[1],
+          abbreviation=parts[2],
+          sensor_type__abbreviation=parts[3]
+        )
+    except ObjectDoesNotExist:
+      if not force:
+        raise
+      # Create missing pieces of the chain
+      mission = Mission.objects.get_or_create(abbreviation=parts[0], defaults={'mission_group':MissionGroup.objects.all()[0]})[0]
+      mission_sensor = MissionSensor.objects.get_or_create(abbreviation=parts[1],mission=mission)[0]
+      sensor_type = SensorType.objects.get_or_create(abbreviation=parts[3],mission_sensor=mission_sensor)[0]
+      self.acquisition_mode = AcquisitionMode.objects.get_or_create(abbreviation=parts[2], sensor_type=sensor_type, defaults={'geometric_resolution':0, 'band_count':1})[0]
+
+    try:
+      self.projection = Projection.objects.get(name=parts[11][:6])
+    except Projection.DoesNotExist:
+      if not force:
+        raise
+      # Create Projection
+      self.projection = Projection.objects.get_or_create(name=parts[11][:6], defaults={'epsg_code':0})
+
+
+    # Skip L
+    self.processing_level = ProcessingLevel.objects.get(abbreviation=re.sub(r'^L', '', parts[10]))
+    self.path = int(parts[4]) #K Path Orbit
+    self.path_offset = int(parts[5])
+    self.row = int(parts[6]) #J Frame Row
+    self.row_offset = int(parts[7])
+    d = parts[8]
+    t = parts[9]
+    self.product_acquisition_start = datetime.datetime(int('20'+d[:2]), int(d[2:4]), int(d[-2:]), int(t[:2]), int(t[2:4]), int(t[-2:]))
 
 
 ###############################################################################
@@ -506,30 +590,10 @@ class OpticalProduct( GenericSensorProduct ):
   solar_azimuth_angle = models.FloatField(null=True,blank=True)
   earth_sun_distance = models.FloatField(null=True,blank=True)
   objects = models.GeoManager()
+  # We need a flag to tell if this Product class can have instances (if it is not abstract)
+  concrete              = True
   class Meta:
     app_label= 'catalogue'
-
-###############################################################################
-
-#ABP: this part will be completed with GeospatialProduct as an "abstract" class and Ordinal/Continuous
-#TODO:
-
-
-GEOSPATIAL_GEOMETRY_TYPE_CHOICES = ( ( 'R','Raster' ), ( 'VP', 'Vector - Points' ), ( 'VL', 'Vector - Lines' ) , ( 'VA', 'Vector - Areas / Polygons' ) )
-class GeospatialProduct( GenericProduct ):
-  """
-  Geospatial product, does not have sensors information. Geospatial products may be rasters
-  (that were derived from one or more satellite or other rasters) or vectors.
-  """
-  name = models.CharField(max_length = 255, null=False, blank=False, help_text="A descriptive name for this dataset");
-  data_type = models.CharField( max_length=1, choices=GEOSPATIAL_GEOMETRY_TYPE_CHOICES,null=True,blank=True, help_text="Is this a vector or raster dataset?" )
-  scale = models.IntegerField( help_text="The fractional part at the ideal maximum scale for this dataset. For example enter '50000' if it should not be used at scales larger that 1:50 000", null=True, blank=True, default=50000 )
-  processing_notes = models.TextField( null=True, blank=True, help_text="Description of how the product was created." )
-
-  objects = models.GeoManager()
-  class Meta:
-    app_label= 'catalogue'
-
 
 
 ###############################################################################
@@ -558,5 +622,30 @@ class RadarProduct( GenericSensorProduct ):
   calibration = models.CharField( max_length = 255,null=True,blank=True )
   incidence_angle = models.FloatField(null=True,blank=True)
   objects = models.GeoManager()
+  # We need a flag to tell if this Product class can have instances (if it is not abstract)
+  concrete              = True
   class Meta:
     app_label= 'catalogue'
+
+###############################################################################
+
+#ABP: this part will be completed with GeospatialProduct as an "abstract" class and Ordinal/Continuous
+#TODO:
+
+
+GEOSPATIAL_GEOMETRY_TYPE_CHOICES = ( ( 'R','Raster' ), ( 'VP', 'Vector - Points' ), ( 'VL', 'Vector - Lines' ) , ( 'VA', 'Vector - Areas / Polygons' ) )
+class GeospatialProduct( GenericProduct ):
+  """
+  Geospatial product, does not have sensors information. Geospatial products may be rasters
+  (that were derived from one or more satellite or other rasters) or vectors.
+  """
+  name = models.CharField(max_length = 255, null=False, blank=False, help_text="A descriptive name for this dataset");
+  data_type = models.CharField( max_length=1, choices=GEOSPATIAL_GEOMETRY_TYPE_CHOICES,null=True,blank=True, help_text="Is this a vector or raster dataset?" )
+  scale = models.IntegerField( help_text="The fractional part at the ideal maximum scale for this dataset. For example enter '50000' if it should not be used at scales larger that 1:50 000", null=True, blank=True, default=50000 )
+  processing_notes = models.TextField( null=True, blank=True, help_text="Description of how the product was created." )
+  # We need a flag to tell if this Product class can have instances (if it is not abstract)
+  concrete              = True
+  objects = models.GeoManager()
+  class Meta:
+    app_label= 'catalogue'
+

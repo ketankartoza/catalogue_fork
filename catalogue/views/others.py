@@ -223,14 +223,14 @@ def clip(theRequest):
       myObject.owner = theRequest.user
       myGeometry = None
       try:
-        myGeometry = getGeometryFromShapefile( theRequest, myForm, 'geometry_file' )
+        myGeometry = getGeometryFromUploadedFile( theRequest, myForm, 'geometry_file' )
         if myGeometry:
           myObject.geometry = myGeometry
         else:
-          logging.info("Failed to set clip area from uploaded shapefile")
+          logging.info("Failed to set clip area from uploaded geometry file")
           logging.info("Or no shapefile uploaded")
       except:
-        logging.info("An error occurred try to set clip area from uploaded shapefile")
+        logging.info("An error occurred try to set clip area from geometry file")
         logging.info(traceback.format_exc() )
       if not myObject.geometry:
         myErrors = myForm._errors.setdefault("geometry", ErrorList())
@@ -327,7 +327,7 @@ def visitorMap(theRequest):
     })
 
 
-@login_required
+@staff_member_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('visitorReport.html')
 def visitorReport( theRequest ):
@@ -354,12 +354,13 @@ def visitorReport( theRequest ):
 
   #render_to_response is done by the renderWithContext decorator
   return ( {
+    'myGraphLabel': ({'Country':'country'}),
     'myTopCountries': myTopCountries,
     'myScores': myScores,
     'myCurrentMonth': datetime.date.today()
     })
 
-@login_required
+@staff_member_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('visitorMonthlyReport.html')
 def visitorMonthlyReport( theRequest, theyear, themonth):
@@ -388,6 +389,7 @@ def visitorMonthlyReport( theRequest, theyear, themonth):
   myTopCountries = myScores[0:10]
 
   return ({
+    'myGraphLabel': ({'Country':'country'}),
     'myTopCountries': myTopCountries,
     'myScores': myScores,
     'myCurrentDate': myDate,

@@ -168,21 +168,17 @@ The SPOT high resolution optical instruments (HRG - High Geometric Resolution on
          </topicCategory>
          <extent>
             <EX_Extent>
+              <!-- Add EX_BoundingPolygon instead of the bounding box: we do need precise coordinates to show the footprint on the map -->
                <geographicElement>
-                  <EX_GeographicBoundingBox>
-                     <westBoundLongitude>
-                        <gco:Decimal>13.121074</gco:Decimal>
-                     </westBoundLongitude>
-                     <eastBoundLongitude>
-                        <gco:Decimal>13.778910</gco:Decimal>
-                     </eastBoundLongitude>
-                     <southBoundLatitude>
-                        <gco:Decimal>-8.190087</gco:Decimal>
-                     </southBoundLatitude>
-                     <northBoundLatitude>
-                        <gco:Decimal>-8.840805</gco:Decimal>
-                     </northBoundLatitude>
-                  </EX_GeographicBoundingBox>
+                 <EX_BoundingPolygon>
+                    <polygon>
+                       <gml:outerBoundaryIs>
+                         <gml:LinearRing>
+                           <gml:coordinates cs="," decimal="." ts=""></gml:coordinates>
+                         </gml:LinearRing>
+                        </gml:outerBoundaryIs>
+                      </polygon>
+                   </EX_BoundingPolygon>
                </geographicElement>
                <verticalElement>
                   <EX_VerticalExtent>

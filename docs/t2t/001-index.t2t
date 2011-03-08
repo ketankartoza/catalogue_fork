@@ -16,6 +16,10 @@ Tim Sutton, 2008
 % Make the header row of tables have a dark background. light text
 %! PostProc(tex): '\\hline \\textbf' '\\hline \\rowcolor[rgb]{0,0,0} \\color{white} \\textbf'
 %! PostProc(tex): '& \\textbf' '& \\color{white} \\textbf'
+% Make verbatim text a little smaller
+%! PostProc(tex): '\\begin{verbatim}' '{\\tiny\n\\begin{verbatim}'
+%! PostProc(tex): '\\end{verbatim}' '\\end{verbatim}\n}'
+
 % Give alternating table rows different colours and use a smaller font in tables (\tiny)
 %! PostProc(tex): '\\begin{tabular}' '\\rowcolors{2}{tableShade}{white} \n\\tiny\\begin{tabular}'
 %! encoding: iso-8859-1
@@ -25,7 +29,7 @@ Tim Sutton, 2008
 %This document is in text2tags format. You can generate html, plain text and
 %moinmoin formatted documentation by running txt2tags on this document. See the
 %txt2tags home page for more details.  Please insert manual line breaks in this
-%document as it makes diffing for changes much easier. To do this in vim 
+%document as it makes diffing for changes much easier. To do this in vim
 %automatically, select a section then issue (gq) command. Please dont
 %apply vim formatting to the whol document as it screws up some formatting
 %rather apply it selectively to paragraphs where needed.
@@ -51,14 +55,19 @@ Tim Sutton, 2008
 % Prefix of 60 = currently not used
 % Prefix of 70 = currently not used
 % Prefix of 80 = currently not used
-% Prefix of 90 = importing data & syncing 
+% Prefix of 90 = importing data & syncing
+
 
 %!include: 002-introduction.t2t
 %!include: 003-developer-guide.t2t
 %!include: 004-installation-guide.t2t
+%!include: 005-unit-tests.t2t
 %!include: 201-reporting-tools.t2t
 %!include: 301-product-schema.t2t
 %!include: 302-order-schema.t2t
 %!include: 303-search-schema.t2t
+%!include: 401-metadata-standard.t2t
 %!include: 901-informix-acs-sync.t2t
 %!include: 902-importing-other-products.t2t
+%!include: 903-importing-dims-products.t2t
+

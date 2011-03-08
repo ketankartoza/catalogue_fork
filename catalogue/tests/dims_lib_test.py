@@ -8,21 +8,17 @@ Tests reader
 
 >>> import os
 >>> from catalogue.dims_lib import dimsWriter, dimsReader
->>> d = dimsReader(os.path.join(os.path.split(__file__)[0], 'dims_packages', 'ORD_420882_20110124_20110124_SPOT-_V01_1.tar.gz'))
+>>> d = dimsReader(os.path.join(os.path.split(__file__)[0], 'sample_files', 'ORD_420882_20110124_20110124_SPOT-_V01_1.tar.gz'))
 >>> products = d.get_products()
 >>> product_code = products.keys()[0]
->>> products[product_code]['thumbnail'] # doctest:+ELLIPSIS
+>>> products[product_code]['thumbnail']
+<tarfile.ExFileObject object at ...>
+>>> products[product_code]['xml']
+<tarfile.ExFileObject object at ...>
+>>> products[product_code]['image']
 <tarfile.ExFileObject object at ...>
 
 >>> md = d.get_metadata(product_code)
->>> md.get('bbox_east') == '13.778910'
-True
->>> md.get('bbox_north') == '-8.840805'
-True
->>> md.get('bbox_south') == '-8.190087'
-True
->>> md.get('bbox_west') == '13.121074'
-True
 >>> md.get('cloud_cover_percentage') == None
 True
 >>> md.get('file_identifier') == 'S5-_HRG_B--_CAM2_0094_00_0367_00_110122_092557_L1A-_ORBIT--Vers.0.01'
@@ -41,11 +37,27 @@ True
 True
 >>> md.get('image_quality_code') == 'aaaabaaaaaaaaa'
 True
+>>> d.get_xml(product_code)
+<tarfile.ExFileObject object at ...>
+
+>>> md.get('institution_name') == 'CSIR Satellite Applications Centre'
+True
+>>> md.get('institution_address') == 'PO Box 395'
+True
+>>> md.get('institution_city') == 'Pretoria'
+True
+>>> md.get('institution_region') == 'Gauteng'
+True
+>>> md.get('institution_postcode') == '0001'
+True
+>>> md.get('institution_country') == 'South Africa'
+True
+
 
 
 Tests writer
 
->>> d  = dimsWriter('catalogue/tests/dims_template', '0000000001')
+>>> d  = dimsWriter('resources/PackageTemplate', '0000000001')
 >>> products = {}
 >>> products['PRODUCT_00001'] = {}
 >>> products['PRODUCT_00001']['thumbnail']= 'catalogue/tests/sample_files/sample_thumbnail.jpg'
@@ -64,8 +76,6 @@ Now tests that the test image and thumbnail are really in the tarball
 
 >>> import tarfile
 >>> t = tarfile.open(tar_path, 'r:gz')
->>> '0000000001/Products/SacPackage/ORBIT/DN_L1A_DIMAP/PRODUCT_00001.tif' in t.getnames()
-True
 >>> '0000000001/Products/SacPackage/ORBIT/DN_L1A_DIMAP/PRODUCT_00001.tif' in t.getnames()
 True
 >>> '0000000001/Metadata/ISOMetadata/DN_L1A/PRODUCT_00001.xml' in t.getnames()

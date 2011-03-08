@@ -449,13 +449,20 @@ def rectifyImage( theInputPath, theOutputPath, theAuxFile ):
   # the swath which may not hold true for every sensor.
   #
   myCandidates = []
-  for myArc in myGeometry.coords: #should only be a single arc in our case!
-    for myCoord in myArc[:-1]:
-      if coordIsOnBounds( myCoord, myExtents ):
-        myCandidates.append( myCoord )
+  try:
+    for myArc in myGeometry.coords: #should only be a single arc in our case!
+      for myCoord in myArc[:-1]:
+        if coordIsOnBounds( myCoord, myExtents ):
+          myCandidates.append( myCoord )
+  except:
+    return "False"
   #print "Candidates Before: %s %s " % (len(myCandidates), str( myCandidates ) )
   myCentroid = myGeometry.centroid
-  myCandidates = sortCandidates( myCandidates, myExtents, myCentroid )
+  myCandidates = None
+  try:
+    myCandidates = sortCandidates( myCandidates, myExtents, myCentroid )
+  except:
+    return "False"
   #print "Candidates After: %s %s " % (len(myCandidates), str( myCandidates ) )
   myTL = myCandidates[0]
   myTR = myCandidates[1]

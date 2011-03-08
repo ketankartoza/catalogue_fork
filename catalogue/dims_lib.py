@@ -9,6 +9,12 @@ import shutil
 import tempfile
 import tarfile
 import logging
+from django.contrib.gis.geos import Polygon
+
+try:
+  import cStringIO as StringIO
+except ImportError:
+  import StringIO
 
 # Use faster lxml if available, fallback on pure python implementation
 try:
@@ -62,6 +68,13 @@ class dimsBase(object):
       bbox_north              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}northBoundLatitude/{xmlns_gco}Decimal',
       bbox_south              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}southBoundLatitude/{xmlns_gco}Decimal',
       image_quality_code      = '//{xmlns}imageQualityCode//{xmlns}code/{xmlns_gco}CharacterString',
+      spatial_coverage        = '//{xmlns}EX_BoundingPolygon//{xmlns_gml}coordinates',
+      institution_name        = '//{xmlns}CI_ResponsibleParty/{xmlns}organisationName/{xmlns_gco}CharacterString',
+      institution_address     = '//{xmlns}CI_Address/{xmlns}deliveryPoint/{xmlns_gco}CharacterString',
+      institution_city        = '//{xmlns}CI_Address/{xmlns}city/{xmlns_gco}CharacterString',
+      institution_region      = '//{xmlns}CI_Address/{xmlns}administrativeArea/{xmlns_gco}CharacterString',
+      institution_postcode    = '//{xmlns}CI_Address/{xmlns}postalCode/{xmlns_gco}CharacterString',
+      institution_country     = '//{xmlns}CI_Address/{xmlns}country/{xmlns_gco}CharacterString',
     )
 
 
@@ -94,23 +107,38 @@ class dimsReader(dimsBase):
       m = re.search('ISOMetadata/([^/]+)/([^/]+)\.xml$', product_path)
       processing_level_code, product = m.groups()
       logging.info("reading %s" % product)
+      # extracts metadata
+      metadata = self._read_metadata(product_path)
       self._products[product] = {
-          'path':       product_path,
-          'metadata':   self._read_metadata(product_path),
-          'thumbnail':  self._read_file(product_path.replace('ISOMetadata', 'Thumbnails').replace('.xml', '.jpg')),
+          'path':             product_path,
+          'xml':              self._read_file(product_path),
+          'metadata':         metadata,
+          'thumbnail':        self._read_file(product_path.replace('ISOMetadata', 'Thumbnails').replace('.xml', '.jpg')),
+          'image':            self._read_file(re.sub('(.*DN_)([^/]+)(.*)', r'\1\2_DIMAP\3',
+                              product_path.replace(os.path.join('Metadata', 'ISOMetadata'),
+                              os.path.join('Products', 'SacPackage', 'ORBIT')).replace('.xml', '.tif'))),
         }
+      # Optional spatial_coverage
+      if metadata.get('spatial_coverage'):
+        # Extract coordinates
+        coordinates = zip(*[[float(j) for j in re.findall('(-?[\.0-9]+)', metadata['spatial_coverage'])][i::2] for i in range(2)])
+        # Build tuple for polygon
+        coordinates = coordinates + coordinates[0:1]
+        # Builds polygon
+        spatial_coverage = Polygon(coordinates)
+        spatial_coverage.set_srid(4326)
+      else:
+        spatial_coverage = None
+      self._products[product]['spatial_coverage'] = spatial_coverage
 
 
   def _read_metadata(self, product_path):
     """
     Extract metadata from an XML metadata file object and
     returns informations as a dictionary, parsing and validation
-    is left to the calling program. The only check is done here is
-    for mandatory metadata presence.
+    is left to the calling program.
     """
-    file_info = self._tar.getmember(product_path)
-    file_handle = self._tar.extractfile(file_info)
-    tree = etree.parse(file_handle)
+    tree = etree.parse(self._read_file(product_path))
     metadata = {}
     for md_name, md_xpath in self.METADATA.items():
       logging.info('searching for %s in path %s' % (md_name, md_xpath))
@@ -124,7 +152,7 @@ class dimsReader(dimsBase):
 
   def _read_file(self, file_path):
     """
-    Read a file from tar
+    Read a file from tar, returns a file-like handle
     """
     file_info = self._tar.getmember(file_path)
     return self._tar.extractfile(file_info)
@@ -141,6 +169,14 @@ class dimsReader(dimsBase):
     Returns metadata for the given product_code
     """
     return self._products.get(product_code).get('metadata')
+
+
+  def get_xml(self, product_code):
+    """
+    Returns metadata for the given product_code
+    """
+    return self._products.get(product_code).get('xml')
+
 
   def __str__(self):
     """
@@ -179,7 +215,7 @@ class dimsWriter(dimsBase):
       _p = os.path.join(self._path, p, processing_level_code)
       if not os.path.isdir(_p):
         logging.info("creating %s" % _p)
-        os.mkdir(_p)
+        os.makedirs(_p)
 
   def _get_metadata(self, product_data, key, silently_fail=False):
     """

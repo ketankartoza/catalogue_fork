@@ -26,6 +26,9 @@ from shapes.views import ShpResponder
 from catalogue.views.helpers import *
 from catalogue.views.searcher import *
 
+# SHP and KML readers
+from catalogue.featureReaders import *
+
 
 @staff_member_required
 def dataSummaryTable(theRequest):
@@ -87,13 +90,13 @@ def search(theRequest):
       mySearch.user = theRequest.user
       mySearch.deleted = False
       try:
-        myGeometry = getGeometryFromShapefile( theRequest, myForm, 'geometry_file' )
+        myGeometry = getGeometryFromUploadedFile( theRequest, myForm, 'geometry_file' )
         if myGeometry:
           mySearch.geometry = myGeometry
         else:
-          logging.info("Failed to set search area from uploaded shapefile")
+          logging.info("Failed to set search area from uploaded geometry file")
       except:
-        logging.info("An error occurred trying to set search area from uploaded shapefile")
+        logging.info("An error occurred trying to set search area from uploaded geometry file")
       #check if aoi_geometry exists
       myAOIGeometry = myForm.cleaned_data.get('aoi_geometry')
       if myAOIGeometry:

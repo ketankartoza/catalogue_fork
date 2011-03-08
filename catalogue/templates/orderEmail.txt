@@ -7,17 +7,17 @@ Date           {{myOrder.order_date}}
 Owner          {{myOrder.user}}
 Level          {{myOrder.processing_level}}
 Resampling     {{myOrder.resampling_method}}
-    
+
 Projection     {{myOrder.projection}}
 Datum          {{myOrder.datum}}
 Output Format  {{myOrder.outputformat}}
 File Format    {{myOrder.file_format}}
-    
+
 Full Name      {{myOrder.user.get_profile.firstname}} {{myOrder.user.get_profile.surname}}
 Email          {{myOrder.user.email}}
-    
-    
-Address   
+
+
+Address
       {% if myOrder.user.get_profile.organisation%}
       {{ myOrder.user.get_profile.organisation}}
       {% else %}
@@ -51,12 +51,12 @@ Address
       {% endif %}
 
 ---------------------------
-Order Notes: 
+Order Notes:
 ---------------------------
 {{myOrder.notes}}
 
 ---------------------------
-Order Products: 
+Order Products:
 ---------------------------
 {% for myRecord in myRecords %}
 {{ myRecord.product.product_id }}

@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 #for translation
 from userprofile.models import BaseProfile
 from dictionaries import MissionSensor
+from django.contrib.contenttypes.models import ContentType
+from catalogue.models.products import GenericSensorProduct
 
 ###############################################################################
 
@@ -104,13 +106,16 @@ class SacUserProfile(BaseProfile):
     verbose_name_plural = 'User Profiles'
 
 class OrderNotificationRecipients(models.Model):
-  """This class is used to map which staff members receive
-    notifications for which sensors so that the notices when
-    orders are placed/updated etc are targeted to the correct
-    individuals"""
+  """
+  This class is used to map which staff members receive
+  notifications for which sensors so that the notices when
+  orders are placed/updated etc are targeted to the correct
+  individuals
+  """
   user = models.ForeignKey(User)
-  sensors = models.ManyToManyField(MissionSensor, verbose_name='Sensors', null=True,blank=True,
-      help_text='Choosing one or more sensor is required. Use ctrl-click to select more than one.')
+  sensors = models.ManyToManyField(MissionSensor, verbose_name='Sensors', null=True, blank=True,
+      help_text='Please choose one or more sensor. Use ctrl-click to select more than one.')
+  classes = models.ManyToManyField(ContentType, null=True, blank=True, verbose_name='Product classes', help_text='Please subscribe to one ore more product class. Use ctrl-click to select more than one.')
 
   def __unicode(self):
     return str(self.user.name)
@@ -120,6 +125,19 @@ class OrderNotificationRecipients(models.Model):
     verbose_name = 'Order Notification Recipient'
     verbose_name_plural = 'Order Notification Recipients'
 
+  @staticmethod
+  def getUsersForProduct(product):
+    """
+    Returns all users registered to this product class or sensors
+    """
+    # Determines the product concrete class, should raise an error if does not exists
+    instance = product.getConcreteInstance()
+    # Get class listeners
+    listeners = set([o.user for o in OrderNotificationRecipients.objects.filter(classes=ContentType.objects.get_for_model(instance.__class__)).select_related()])
+    # Determines if is a sensor-based product and add sensor listeners
+    if isinstance(instance, GenericSensorProduct):
+      listeners.update([o.user for o in OrderNotificationRecipients.objects.filter(sensors=instance.acquisition_mode.sensor_type.mission_sensor).select_related()])
+    return listeners
 
 class WorldBorders(models.Model):
   iso2 = models.CharField(max_length=2)
