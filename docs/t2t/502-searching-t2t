@@ -58,7 +58,22 @@ GenericImageryProduct::geometric_resolution (which is an inherited property of
 optical product). The reason this is used rather than the
 AcquisitionMode::geometric_resolution is that the product may have been
 resampled during processing so (with the exception of level 1A products), the
-resolution may not correspond to the acquisition mode any more.
+resolution may not correspond to the acquisition mode any more. For ease of
+use, geometric accuracy is grouped as shown in the table below, and the user
+may select a single entry from this list.
+
+|| Class | Value Range |
+| < 1m | 0 - 1000mm |
+| 1m - 7m | 1001 - 7000mm |
+| 7m - 25m | 7001 - 25000mm |
+| 25m - 70m | 25001 - 70000mm |
+| 70m - 1km | 70001 - 1000000mm |
+| > 1km | 1000000mm + |
+
+**Note:** Internally, geometric resolution is specified in mm 
+
+**Wolfgang:** mm or m?
+
 
 **Bands** is used to identify the spectral resolution of the products being
 searched for. A user friendly grouping is listed in a select box allowing the
@@ -82,6 +97,22 @@ The specification of row and path ranges can be one in one of three ways:
 + A list e.g. 1,5,3 means include specifically row or paths numbered 1, 5 and 3.
 + A single item e.g. 10 means include only that row/path
 +
+
+The sematics of what constitutes a row and path (in a geospatial sense) varies
+from sensor to sensor. The search algorithm makes no special allowance for this
+so it should be noted that a row/path search of 30,50 for two different sensors
+my return imagery covering disparate areas.
+
+==== Processing levels ====
+
+The products can be filtered according to their processing level. The list of
+processing level list is not dynamic (i.e. it does not ajust its entries based
+on mission, sensor etc. selections) as it would be prohibitively CPU intensive
+to do so. As such there is no guarantee of being at least one product for each
+of the listed processing levels.
+
+One or more processing levels can be selected. If none are selected, it is
+assumed that products at all levels should be queried when searching.
 
 ==== Geometry ====
 
@@ -123,4 +154,28 @@ For example:
 20,-34,22,-32
 ```
 
+==== Date Ranges ====
 
+When conducting a search with the advanced search tool, the user can specify
+one or more date ranges. The start date for any date range will be restricted
+to be no earlier **1 January 1972**. The end date will be restricted to be no
+later than the current date. No facility is made for including time in the date
+range.
+
+The process of defining date ranges consists of:
+- Selecting a start date in the 'start' calendar
+- Selecting an end date in the 'end' calendar
+- Clicking the 'add' icon to add the date range to the range list
+-
+
+The user can remove a range from the list by selecting it and clicking the
+'remove' icon.
+
+
+==== Executing the search ====
+
+Once the user has completed the search definition process, pressing the
+'search' button will cause the search request to be posted to the server. If
+there are any validation errors, the user will be returned to the search form
+and the validation errors will be indicated. Assuming there were no errors, the
+user is redirected to the search results page.
