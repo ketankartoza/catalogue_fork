@@ -124,37 +124,6 @@ def notifySalesStaffOfTaskRequest(theUser, theId):
   return
 
 
-###########################################################
-#
-# Try to extract a geometry if a shp was uploaded
-#
-###########################################################
-def getGeometryFromShapefile( theRequest, theForm, theFileField ):
-  """Retrieve an uploaded geometry from a shp file. Note in order for this to
-     work, you must have set your form to use multipart encoding type e.g.
-     <form enctype="multipart/form-data" action="/search/" method="post" id="search_form">"""
-  logging.info('Form cleaned data: ' + str(theForm.cleaned_data))
-  if theRequest.FILES[theFileField]:
-    logging.debug("Using geometry from shapefile.")
-    #if not theForm.cleaned_data.contains( "theFileField" ):
-    #  logging.error("Error: %s field not submitted with form" % theFileField)
-    #  return False
-    myExtension = theForm.cleaned_data[theFileField].name.split(".")[1]
-    if myExtension != "zip":
-      logging.info('Wrong format for uploaded geometry. Please select a ZIP archive.')
-      #render_to_response is done by the renderWithContext decorator
-      #@TODO return a clearer error spotmap just like Alert for the missing dates
-      return False
-    myFile = theForm.cleaned_data[theFileField]
-    myOutFile = '/tmp/%s' % myFile.name
-    destination = open(myOutFile, 'wb+')
-    for chunk in myFile.chunks():
-      destination.write(chunk)
-    destination.close()
-    extractedGeometries = getFeaturesFromZipFile(myOutFile, "Polygon", 1)
-    myGeometry = extractedGeometries[0]
-    return myGeometry
-
 """Layer definitions for use in conjunction with open layers"""
 WEB_LAYERS = {
             # Streets and boundaries for SA base map with an underlay of spot 2009 2m mosaic
