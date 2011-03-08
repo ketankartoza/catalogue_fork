@@ -213,6 +213,40 @@ When you want to get back to the original again do:
 git checkout origin/master
 ```
 
+== Tracking Linfiniti in your local repo and pushing changes to orasac1 ==
+
+In this scenario, we want to have our master repo on the linfiniti development
+server, and then periodically push changes over to orasac1 production repo. Our
+checkout is on a third, deskop computer. So we do:
+
+```
+git clone git@linfiniti2:sac_catalogue.git sac_catalogue
+```
+
+That gives us a local repo whose remote master is on linfiniti. Now we add a
+new remote (you can have multiple remote repos and sync between them):
+
+```
+git remote add orasac1 timlinux@orasac1:/opt/git/sac_catalogue
+git pull
+```
+
+Ok now our local repo is 'aware' of the remote repo on orasac1. So lets make a
+branch that tracks master on orasac1:
+
+```
+git branch --track orasac1-master orasac1/master
+git checkout orasac1-master
+```
+
+Now it is simple to pull changes down from linfiniti and push them over to orasac1:
+
+```
+git merge master
+git push
+```
+
+Since the branch is tracking orasac1/master they will automatically get pushed there.
 
 
 = System logic and rules =
