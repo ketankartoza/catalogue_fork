@@ -16,7 +16,13 @@ An advanced search for optical products allows the user to create a refined
 subset of OpticalProduct records based on various properties.
 The options selected in the advanced search form are cumulative.
 
-In the wireframe above, you can see the options available in advanced search. Some things should be noted:
+In the wireframe above, you can see the options available in advanced search.
+
+
+==== Sensor Details ====
+
+The sensor details area of the form allows the user to define which products
+should be found based on the sensors that acquired them.
 
 - When selecting one or more missions, the sensors, modes, types and bands
   entries will be filtered to show only those items permissible for the given
@@ -27,13 +33,94 @@ In the wireframe above, you can see the options available in advanced search. So
   to show only those items permissible for the given types.
 - When selecting one or more modes, the band entries will be filtered to show
   only those items permissible for the given modes.
-- Images with NULL cloud_cover  will be assumed to have 100% cloud cover for purposes of filtering.
-- Images with NULL sensor_viewing_angle will be assumed to be excluded when filtering by sensor viewing angle.
-- 
+-
+
+==== Image Details ====
+
+The image details area of the form allows the user to define which products
+should be found based on the product / image properties.
+
+**Cloud cover** can optionally be used to filter products that have been determined
+to have less than a given amount of cloud cover. Images with NULL cloud_cover
+will be assumed to have 100% cloud cover for purposes of filtering. If the
+checkbox next to the cloud cover slider is unchecked, cloud cover will be
+ignored when filtering.
+
+The **acquisition angle** is used to limit search results to products that were
+acquired with the sensor orientated between a range of viewing angles. Images
+with NULL sensor_viewing_angle will be assumed to be excluded when filtering by
+sensor viewing angle. If either the min or max value is unpopulated, this will
+be ignored in the search.
+
+**Geometric accuracy** is used to filter products based on image pixel size. On a
+technical note, the pixel size is determined by checking the
+GenericImageryProduct::geometric_resolution (which is an inherited property of
+optical product). The reason this is used rather than the
+AcquisitionMode::geometric_resolution is that the product may have been
+resampled during processing so (with the exception of level 1A products), the
+resolution may not correspond to the acquisition mode any more.
+
+**Bands** is used to identify the spectral resolution of the products being
+searched for. A user friendly grouping is listed in a select box allowing the
+user to select a single band range. These are:
+
+|| Name | Notes |
+| Panchromatic | Single band imagery |
+| Truecolour RGB (3) | Three bands representing red green blue |
+| Multispectral (4-8) | 4 to 8 bands |
+| Superspectral (9-40) | 9 to 40 bands |
+| Hyperspectral (>40) | more than 40 bands |
+
+Technical note: As with geometric accuracy, the number of bands used for filtering is taken
+from  GenericImageryProduct::band_count rather than AcquisitionMode::band_count.
+
+
+==== Row / Path Ranges ====
 
 The specification of row and path ranges can be one in one of three ways:
 + A range e.g. [0,15] means include all rows/paths inclusively from 0 to 15.
 + A list e.g. 1,5,3 means include specifically row or paths numbered 1, 5 and 3.
 + A single item e.g. 10 means include only that row/path
 +
+
+==== Geometry ====
+
+A geometry can be defined for a search in one of four ways:
++ Digitising an area on the map directly
++ Uploading a shapefile or kml demarcating the area of interest
++ Specifying point and radius geometry in an input box
++ Specifying a bounding box in an input box
++
+
+[img/sac01.png]
+
+For digitising, the user should select the 'capture polygon' tool on the map.
+
+For the geometry upload functions, only the first feature in the uploaded
+shapefile / kml will be used. The shapefile should have a polygon geometry type
+and have a Coordinate Reference System of EPSG:4326 (Geographic WGS84).
+
+The input box for geometry can be used to create a circular geometry by
+entering the coordinate of the center point and a radius in kilometers. For example:
+
+```
+20.5,-32.3,100
+```
+
+The values should be entered as easting (use negative number to indicate west),
+northing (use negative number to indicate south), radius (in km). The
+easting/northing values are specified in decimal degrees.
+
+Finally, the bounding box can also be entered in the form:
+
+```
+xmin,ymin,xmax,ymax
+```
+
+For example:
+
+```
+20,-34,22,-32
+```
+
 
