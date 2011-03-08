@@ -11,3 +11,29 @@
 === Optical Products ===
 
 [img/advanced-search-optical.png]
+
+An advanced search for optical products allows the user to create a refined
+subset of OpticalProduct records based on various properties.
+The options selected in the advanced search form are cumulative.
+
+In the wireframe above, you can see the options available in advanced search. Some things should be noted:
+
+- When selecting one or more missions, the sensors, modes, types and bands
+  entries will be filtered to show only those items permissible for the given
+  missions.
+- When selecting one or more sensors, the modes, types and bands entries will
+  be filtered to show only those items permissible for the given sensors.
+- When selecting one or more types, the mode and band entries will be filtered
+  to show only those items permissible for the given types.
+- When selecting one or more modes, the band entries will be filtered to show
+  only those items permissible for the given modes.
+- Images with NULL cloud_cover  will be assumed to have 100% cloud cover for purposes of filtering.
+- Images with NULL sensor_viewing_angle will be assumed to be excluded when filtering by sensor viewing angle.
+- 
+
+The specification of row and path ranges can be one in one of three ways:
++ A range e.g. [0,15] means include all rows/paths inclusively from 0 to 15.
++ A list e.g. 1,5,3 means include specifically row or paths numbered 1, 5 and 3.
++ A single item e.g. 10 means include only that row/path
++
+
