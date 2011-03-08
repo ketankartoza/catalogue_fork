@@ -325,6 +325,10 @@ Sensor based product records).
 
 === Product ID Naming Scheme ===
 
+Generic imagery products do not have an associated Mission, Sensor, Sensor Type
+or Acquisition Mode, and thus the naming system differers from final (having no
+ancestors) sensor based products.
+
 ------------------------
 **Note:** Wolfgang to define or we must devise something
 
@@ -672,10 +676,19 @@ the same time).
 **Note:** The geometric resolution and band count columns in this table need to
 be populated by Wolfgang.
 
-**Logic Rules:** The additional columns in the acquisition mode are used to provide implicit values for products if they are created without implicit values. In particular:
+**Logic Rules:** The additional columns in the acquisition mode are used to
+provide implicit values for products if they are created without implicit
+values. In particular:
 
-+ The geometric resolution will be used to populate the GenericSensorProduct fields of geometric_resolution, geometric_resolution_x and geometric_resolution_y. This is implemented by first populating the geometric_resolution field (NULL) when assigning acquisition mode, and then assigning the same value to both geometric_resolution_x and geometric_resolution_y.
-+ The band_count in acquisition mode will be assigned to the GenericSensorProduct.band_count (formerly called spectral_resolution) if NULL at the moment of assignment.
++ The geometric resolution will be used to populate the GenericSensorProduct
+  fields of geometric_resolution, geometric_resolution_x and
+  geometric_resolution_y. This is implemented by first populating the
+  geometric_resolution field (NULL) when assigning acquisition mode, and then
+  assigning the same value to both geometric_resolution_x and
+  geometric_resolution_y.
++ The band_count in acquisition mode will be assigned to the
+  GenericSensorProduct.band_count (formerly called spectral_resolution) if NULL
+  at the moment of assignment.
 + 
 
 ==== Mission Group ====
@@ -1014,11 +1027,18 @@ For ordinal we define thematic accuracy by means of the following fields:
 
 === Product ID Naming Scheme ===
 
+The product ID for Ordinal products is described in the GeospatialProduct model
+description. Ordinal products are prefixed with the string 'ORD'.
+
 === Ordinal Product Aggregation Rules ===
+
+Ordingal products may be part of aggregations and their lineage may include
+aggregations.
 
 === Ordinal Product Dictionaries ===
 
-=== Dictionaries ===
+No additional dictionaries are introduced by the ordinal product model.
+
 
 %----------------------------------------------------------
 %----------------------------------------------------------
@@ -1034,17 +1054,27 @@ discrete classes, but rather along a continuous value range.
 
 === Continuous Product Properties ===
 
-For Continuous data we need two additional fields:
- - z min
- - z max
- -
+For Continuous data there are two additional fields:
 
+ - range_min
+ - range_max
+ - unit
+
+The range_min is the smallest value in the 
 
 
 === Product ID Naming Scheme ===
 
+The product ID for Ordinal products is described in the GeospatialProduct model
+description. Continuous products are prefixed with the string 'CON'.
+
 === Continuous Product Aggregation Rules ===
 
+Continuous products may be part of aggregations and their lineage may include
+aggregations.
+
 === Continuous Product Dictionaries ===
+
+Unit - a look up table storing measurement units that can be present 
 
 === Dictionaries ===

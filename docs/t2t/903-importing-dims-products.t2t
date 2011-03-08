@@ -59,7 +59,7 @@ Options:
 ```
 
 
-=== Options in details ===
+=== Options in detail ===
 
 : -f FOLDER, --folder=FOLDER
 This is the folder in which the packages to ingest are searched, defaults to the
@@ -82,7 +82,7 @@ the filesystem.
 Name of the institution, as a string.
 Defaults to: //Satellite Applications Centre//.
 Example: ``-o "Satellite Applications Centre"``
-Note: the institution will be created if it does not exists.
+Note: the institution will be created if it does not exist.
 : -s CREATING_SOFTWARE, --creating_software=CREATING_SOFTWARE
 Name of the creating software. Defaults to: //SARMES1//
 Example: ``-s "SARMES1"``
@@ -109,9 +109,11 @@ and made available for the catalogue:
 + original metadata, is the package's ISOMetadata.xml file
 + thumbnail, read from SacPackage Product folder
 + image, the original SacPackage Product tif image
-+ spatial_coverage, this is read from the metadata or directly from the image if it is not found
++ spatial_coverage, this is read from the metadata or directly from the image
+  if it is not found
++
 
-The following informations are read from the ISOMetadata:
+The following information is read from the ISOMetadata:
 
 : product_date
 '//{xmlns}dateStamp/{xmlns_gco}Date', # Product date
@@ -127,17 +129,18 @@ The following informations are read from the ISOMetadata:
 '//{xmlns}EX_BoundingPolygon//{xmlns_gml}coordinates',
 
 ""Note:"" The spatial_coverage is first read from //EX_BoundingPolygon// parameter
-in ISOMetadata.xml, and then read from the geotiff image if not found
+in ISOMetadata.xml, and then read from the geotiff image if not found.
 
 
-The following informations are read from the main image using **GDAL** library:
+The following information is read from the main image using **GDAL** library:
 
 + radiometric_resolution
 + band_count
 + spatial_coverage
++
 
 
-The following informations are reverse-engineered from the **file_identifier**,
+The following information are reverse-engineered from the **file_identifier**,
 the process is handled from the function call ``GenericSensorProduct.productIdReverse()``
 
 + acquisition_mode
@@ -146,12 +149,18 @@ the process is handled from the function call ``GenericSensorProduct.productIdRe
 + row
 + path shift
 + row shift
-
++
 
 ""Note:"" The acquisition_mode is a foreign key to the sensors dictionaries, the
 ingestion process will take care of creating all the necessary entries when
-they are missing. The mission_type value is not present in **file_identifier** and
-is hence set to the first type existing in the catalogue.
+they are missing. The mission_group value is not present in **file_identifier** and
+is hence set to the first type existing in the catalogue, should a new Mission
+record need to be created during the ingestion process. In practice the Mission
+dictionary entries should pre-exist and this situation should not arise.
+
+""Note:"" If a new license is created during the ingestion process, the type is
+defaulted to License.LICENSE_TYPE_ANY
+
 
 
 ""Note:"" The projection is created if it does not exists, the epsg code is
