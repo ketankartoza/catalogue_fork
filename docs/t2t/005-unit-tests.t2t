@@ -1,0 +1,17 @@
+
+
+%---------------------------------
+
+= Running unit tests =
+
+A settings file for tests is available as `settings_test.py` this settings
+use the faster spatialite instead of createdb.
+
+**Note** You must enable the virtual environment first.
+
+Run tests for catalogue app as:
+
+```
+  $ python manage.py test catalogue --settings=settings_test
+```
+

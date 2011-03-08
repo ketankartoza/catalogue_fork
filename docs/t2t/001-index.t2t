@@ -57,9 +57,11 @@ Tim Sutton, 2008
 % Prefix of 80 = currently not used
 % Prefix of 90 = importing data & syncing
 
+
 %!include: 002-introduction.t2t
 %!include: 003-developer-guide.t2t
 %!include: 004-installation-guide.t2t
+%!include: 005-unit-tests.t2t
 %!include: 201-reporting-tools.t2t
 %!include: 301-product-schema.t2t
 %!include: 302-order-schema.t2t
