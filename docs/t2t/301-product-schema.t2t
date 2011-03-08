@@ -269,7 +269,6 @@ Free data, government license or commercial license or any.
 |  1  | Free | Can be freely shared and redistributed without restriction |
 |  2  | Government License | Applies to products that can be freely redistributed to government departments. |
 |  3  | Commercial | Applies to product that can only be commercially distributed |
-|  4  | Any | The product may be distributed under any license. |
 
 
 The license type is determined on a sensor by sensor, product by product basis. The following rules hold true:
