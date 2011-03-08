@@ -130,6 +130,12 @@ pip install -r sac_catalogue/REQUIREMENTS.txt
 Then make sure the appropriate settings from djangodblog in settings.py.templ are 
 deployed in your production settings.py
 
+The full list of packages installed using the REQUIREMENTS file is:
+
+%quotes on next line so file is included as a formated block
+%!include: ``../../REQUIREMENTS.txt``
+
+
 === Further info on django registration ===
 
 You may also want to read this:
