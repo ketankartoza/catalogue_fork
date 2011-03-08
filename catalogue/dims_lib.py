@@ -63,12 +63,18 @@ class dimsBase(object):
       md_data_identification  = '//{xmlns}MD_DataIdentification//{xmlns}CI_Citation/{xmlns}title/{xmlns_gco}CharacterString',
       md_product_date         = '//{xmlns}MD_DataIdentification//{xmlns}CI_Date//{xmlns_gco}Date',
       md_abstract             = '//{xmlns}MD_DataIdentification/{xmlns}abstract/{xmlns_gco}CharacterString', # Sat & sensor description
-      #bbox_west               = '//{xmlns}EX_GeographicBoundingBox/{xmlns}westBoundLongitude/{xmlns_gco}Decimal',
-      #bbox_east               = '//{xmlns}EX_GeographicBoundingBox/{xmlns}eastBoundLongitude/{xmlns_gco}Decimal',
-      #bbox_north              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}northBoundLatitude/{xmlns_gco}Decimal',
-      #bbox_south              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}southBoundLatitude/{xmlns_gco}Decimal',
+      bbox_west               = '//{xmlns}EX_GeographicBoundingBox/{xmlns}westBoundLongitude/{xmlns_gco}Decimal',
+      bbox_east               = '//{xmlns}EX_GeographicBoundingBox/{xmlns}eastBoundLongitude/{xmlns_gco}Decimal',
+      bbox_north              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}northBoundLatitude/{xmlns_gco}Decimal',
+      bbox_south              = '//{xmlns}EX_GeographicBoundingBox/{xmlns}southBoundLatitude/{xmlns_gco}Decimal',
       image_quality_code      = '//{xmlns}imageQualityCode//{xmlns}code/{xmlns_gco}CharacterString',
       spatial_coverage        = '//{xmlns}EX_BoundingPolygon//{xmlns_gml}coordinates',
+      institution_name        = '//{xmlns}CI_ResponsibleParty/{xmlns}organisationName/{xmlns_gco}CharacterString',
+      institution_address     = '//{xmlns}CI_Address/{xmlns}deliveryPoint/{xmlns_gco}CharacterString',
+      institution_city        = '//{xmlns}CI_Address/{xmlns}city/{xmlns_gco}CharacterString',
+      institution_region      = '//{xmlns}CI_Address/{xmlns}administrativeArea/{xmlns_gco}CharacterString',
+      institution_postcode    = '//{xmlns}CI_Address/{xmlns}postalCode/{xmlns_gco}CharacterString',
+      institution_country     = '//{xmlns}CI_Address/{xmlns}country/{xmlns_gco}CharacterString',
     )
 
 

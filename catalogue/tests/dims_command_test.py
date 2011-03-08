@@ -69,6 +69,35 @@ Test that the package was not deleted
 True
 
 
+
+###############################################
+
+Test update reading owner from metadata
+
+###############################################
+
+
+Delete the image so that we can test store_image=False
+
+>>> os.remove(os.path.join(settings.IMAGERY_ROOT, p.imagePath(), p.product_id + '.tif.bz2'))
+>>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.imagePath(), p.product_id + '.tif.bz2'))
+False
+
+Delete product
+
+>>> p=OpticalProduct.objects.get(product_id='S5-_HRG_B--_CAM2_0094_00_0367_00_110122_092557_L1A-_ORBIT-')
+>>> p.delete()
+
+Import
+
+>>> call_command('dims_ingest', keep=True, folder='catalogue/tests/sample_files/', glob='*_copy.tar.gz', license='CC-BY-SA', creating_software='QGIS')
+Product S5-_HRG_B--_CAM2_0094_00_0367_00_110122_092557_L1A-_ORBIT- imported.
+
+>>> p=OpticalProduct.objects.get(product_id='S5-_HRG_B--_CAM2_0094_00_0367_00_110122_092557_L1A-_ORBIT-')
+>>> p.owner
+<Institution: CSIR Satellite Applications Centre>
+
+
 ###############################################
 
 Test update
@@ -112,7 +141,6 @@ Product S5-_HRG_B--_CAM2_0094_00_0367_00_110122_092557_L1A-_ORBIT- updated.
 True
 >>> os.path.isfile(package)
 False
-
 
 ###############################################
 
