@@ -11,6 +11,7 @@ from catalogue.models import *
 from catalogue.forms import *
 from catalogue.renderDecorator import renderWithContext
 from catalogue.profileRequiredDecorator import requireProfile
+from django.db.models import Count, Min, Max #for aggregate queries
 
 # For shopping cart and ajax product id search
 from django.utils import simplejson
