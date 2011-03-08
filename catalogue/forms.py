@@ -209,6 +209,9 @@ class DeliveryDetailForm(forms.ModelForm):
   ref_id = forms.CharField(widget=forms.HiddenInput(),required=False)
   aoi_geometry = AOIGeometryField(required=False)
   geometry = forms.CharField(widget=forms.HiddenInput(),required=False)
+  geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
+                                  required=False,
+                                  help_text = 'Upload a zipped shapefile or KML/KMZ file of less than 1MB. If the shapefile contains more than one polygon, only the first will be used. Complex polygons will increase search time.')
   class Meta:
     model = DeliveryDetail
     exclude = ('user',)

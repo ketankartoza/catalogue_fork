@@ -23,6 +23,9 @@ from searcher import *
 # for error logging
 import traceback
 
+# SHP and KML readers
+from catalogue.featureReaders import *
+
 ###########################################################
 #
 # Ordering related views
@@ -331,7 +334,18 @@ def addOrder( theRequest ):
     myOptions.update(myExtraOptions) #shortcut to join two dicts
     if myOrderForm.is_valid() and myDeliveryDetailForm.is_valid() and all([form.is_valid() for form in myProductForms]):
       logging.debug("Order valid")
+
       myDeliveryDetailObject = myDeliveryDetailForm.save(commit=False)
+      myDeliveryDetailObject.user = theRequest.user
+      #check if user uploaded file and try to extract geometry
+      try:
+        myGeometry = getGeometryFromUploadedFile( theRequest, myDeliveryDetailForm, 'geometry_file' )
+        if myGeometry:
+          myDeliveryDetailObject.geometry = myGeometry
+        else:
+          logging.info("Failed to set search area from uploaded geometry file")
+      except:
+        logging.info("An error occurred trying to set search area from uploaded geometry file")
       myDeliveryDetailObject.user = theRequest.user
       myDeliveryDetailObject.save()
       #save order
