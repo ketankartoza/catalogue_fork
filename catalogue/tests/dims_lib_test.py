@@ -40,6 +40,21 @@ True
 >>> d.get_xml(product_code)
 <tarfile.ExFileObject object at ...>
 
+>>> md.get('institution_name') == 'CSIR Satellite Applications Centre'
+True
+>>> md.get('institution_address') == 'PO Box 395'
+True
+>>> md.get('institution_city') == 'Pretoria'
+True
+>>> md.get('institution_region') == 'Gauteng'
+True
+>>> md.get('institution_postcode') == '0001'
+True
+>>> md.get('institution_country') == 'South Africa'
+True
+
+
+
 Tests writer
 
 >>> d  = dimsWriter('resources/PackageTemplate', '0000000001')
@@ -61,8 +76,6 @@ Now tests that the test image and thumbnail are really in the tarball
 
 >>> import tarfile
 >>> t = tarfile.open(tar_path, 'r:gz')
->>> '0000000001/Products/SacPackage/ORBIT/DN_L1A_DIMAP/PRODUCT_00001.tif' in t.getnames()
-True
 >>> '0000000001/Products/SacPackage/ORBIT/DN_L1A_DIMAP/PRODUCT_00001.tif' in t.getnames()
 True
 >>> '0000000001/Metadata/ISOMetadata/DN_L1A/PRODUCT_00001.xml' in t.getnames()
