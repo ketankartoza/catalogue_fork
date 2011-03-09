@@ -38,8 +38,8 @@
   }
 
     function check_search_dates() {
-        var sd = $("#id_start_date-widget").datepicker("getDate");
-        var ed = $("#id_end_date-widget").datepicker("getDate");
+        var sd = $("#id_start_datepicker-widget").datepicker("getDate");
+        var ed = $("#id_end_datepicker-widget").datepicker("getDate");
         if (sd > ed) {
             alert ("The Start Date is later than the End Date.");
         };

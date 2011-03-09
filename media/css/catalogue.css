@@ -315,3 +315,23 @@ ul.dropdown ul {
   width: 220px;
 }
 
+/* ABP: advancedSearch date range */
+.dr_row input {
+  width: 98px;
+  color: inherit;
+  background: inherit;
+  border: none;
+  margin: 0;
+}
+div.dr_row {
+  border: solid 1px #333;
+  background-color: white;
+}
+.dr_row:hover {
+  border: solid 1px #333;
+  background-color: #ddd;
+}
+.dr_row.selected {
+  background-color: #00277B;
+  color: white;
+}

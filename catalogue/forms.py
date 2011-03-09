@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ModelForm
+from django.forms.models import BaseInlineFormSet
 from django.utils.translation import ugettext_lazy as _
 import logging
 
@@ -21,6 +21,27 @@ DATE_FORMATS = (
         '%d %B %Y', '%d %B, %Y',            # '25 October 2006', '25 October, 2006'
         )
 
+class DateRangeFormSet(BaseInlineFormSet):
+  """
+  Date range search formsets with validation
+  """
+  def clean(self):
+    if any(self.errors):
+        # Don't bother validating the formset unless each form is valid on its own
+        return
+    if not self.total_form_count():
+      raise forms.ValidationError, "At least one date range is required."
+    for i in range(0, self.total_form_count()):
+      form = self.forms[i]
+      start_date = form.cleaned_data.get('start_date')
+      end_date = form.cleaned_data.get('end_date')
+      if not(start_date and end_date):
+        raise forms.ValidationError, "Start date and end date are mandatory."
+      if start_date > end_date:
+        raise forms.ValidationError, "Start date must be before or equal to end date."
+
+
+
 class AdvancedSearchForm(forms.ModelForm):
   """ Let the user perform searches on sensors, by date and/or geometry digitised on map. """
   #keywords = forms.CharField(widget=forms.TextInput(attrs={'cols':'32'}),required=False)
@@ -29,13 +50,12 @@ class AdvancedSearchForm(forms.ModelForm):
   # Note2: Only custom fields are added here. Fields that need no tweaking are
   #        pulled by the form generator directly from the model
 
-
   # ABP: the common part: will be searched on GenericProducts class only
-  start_date = forms.DateField(widget=DateTimeWidget,required=True,input_formats=DATE_FORMATS,
-      error_messages={'required': '''Entering a start date for your search is required.'''},
+  start_datepicker = forms.DateField(widget=DateTimeWidget,required=False, label="Start date", input_formats=DATE_FORMATS,
+      error_messages={'required': 'Entering a start date for your search is required.'},
       help_text='Start date is required. DD-MM-YYYY.')
-  end_date = forms.DateField(widget=DateTimeWidget,required=True,input_formats=DATE_FORMATS,
-      error_messages={'required': '''Entering an end date for your search is required.'''},
+  end_datepicker = forms.DateField(widget=DateTimeWidget,required=False, label="End date", input_formats=DATE_FORMATS,
+      error_messages={'required': 'Entering an end date for your search is required.'},
       help_text='End date is required. DD-MM-YYYY.'
       )
   geometry = forms.CharField(widget=forms.HiddenInput(), required=False,
@@ -106,13 +126,6 @@ class AdvancedSearchForm(forms.ModelForm):
   def clean(self):
     myCleanedData = self.cleaned_data
     logging.info('cleaned data: ' + str(myCleanedData))
-    try:
-      myStartDate = myCleanedData.get("start_date")
-      myEndDate = myCleanedData.get("end_date")
-      if myEndDate and (myEndDate < myStartDate):
-        raise forms.ValidationError("Error: Start date can not be after the end date!")
-    except:
-      raise forms.ValidationError("Error: Start date can not be after the end date! Both dates must be entered.")
 
     # ABP: checks for advanced search only (not in cleaned_data because it does not belong to Search model)
     if self.data.get('isAdvanced') == 'true':
@@ -209,7 +222,7 @@ class DeliveryDetailForm(forms.ModelForm):
   ref_id = forms.CharField(widget=forms.HiddenInput(),required=False)
   class Meta:
     model = DeliveryDetail
-    exclude = ('user')    
+    exclude = ('user')
 
 class TaskingRequestForm(forms.ModelForm):
   geometry = forms.CharField(widget=GeometryWidget,required=False)

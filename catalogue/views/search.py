@@ -15,6 +15,8 @@ import logging
 # Models and forms for our app
 from catalogue.models import *
 from catalogue.forms import *
+from django.forms.models import inlineformset_factory
+
 from catalogue.renderDecorator import renderWithContext
 
 # Helper classes
@@ -68,6 +70,8 @@ def search(theRequest):
   """
   Perform an attribute and spatial search for imagery
   """
+  DateRangeInlineFormSet = inlineformset_factory(Search, SearchDateRange, extra=1, max_num=1, formset=DateRangeFormSet)
+
   myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
   logging.debug(("Post vars:" + str(theRequest.POST)))
   logging.info( 'search called')
@@ -75,78 +79,92 @@ def search(theRequest):
     myForm = AdvancedSearchForm(theRequest.POST, theRequest.FILES)
     if myForm.is_valid():
       mySearch = myForm.save(commit=False)
-      myLatLong = {'longitude':0,'latitude':0}
-      if settings.USE_GEOIP:
+      myFormset = DateRangeInlineFormSet(theRequest.POST, theRequest.FILES, instance=mySearch)
+      #import ipy; ipy.shell()
+      if myFormset.is_valid():
+        logging.info('formset is VALID')
+        myLatLong = {'longitude':0,'latitude':0}
+        if settings.USE_GEOIP:
+          try:
+            myGeoIpUtils = GeoIpUtils()
+            myIp = myGeoIpUtils.getMyIp(theRequest)
+            myLatLong = myGeoIpUtils.getMyLatLong(theRequest)
+          except:
+            #raise forms.ValidationError( "Could not get geoip for this request" + traceback.format_exc() )
+            # do nothing - better in a production environment
+            pass
+        if myLatLong:
+          mySearch.ip_position = "SRID=4326;POINT(" + str(myLatLong['longitude']) + " " + str(myLatLong['latitude']) + ")"
+        mySearch.user = theRequest.user
+        mySearch.deleted = False
         try:
-          myGeoIpUtils = GeoIpUtils()
-          myIp = myGeoIpUtils.getMyIp(theRequest)
-          myLatLong = myGeoIpUtils.getMyLatLong(theRequest)
+          myGeometry = getGeometryFromUploadedFile( theRequest, myForm, 'geometry_file' )
+          if myGeometry:
+            mySearch.geometry = myGeometry
+          else:
+            logging.info("Failed to set search area from uploaded geometry file")
         except:
-          #raise forms.ValidationError( "Could not get geoip for this request" + traceback.format_exc() )
-          # do nothing - better in a production environment
-          pass
-      if myLatLong:
-        mySearch.ip_position = "SRID=4326;POINT(" + str(myLatLong['longitude']) + " " + str(myLatLong['latitude']) + ")"
-      mySearch.user = theRequest.user
-      mySearch.deleted = False
-      try:
-        myGeometry = getGeometryFromUploadedFile( theRequest, myForm, 'geometry_file' )
-        if myGeometry:
-          mySearch.geometry = myGeometry
-        else:
-          logging.info("Failed to set search area from uploaded geometry file")
-      except:
-        logging.info("An error occurred trying to set search area from uploaded geometry file")
-      #check if aoi_geometry exists
-      myAOIGeometry = myForm.cleaned_data.get('aoi_geometry')
-      if myAOIGeometry:
-        logging.info("Using AOI geometry, specified by user")
-        mySearch.geometry = myAOIGeometry
-      # else use the on-the-fly digitised geometry
-      mySearch.save()
-      """Another side effect of using commit=False is seen when your model has
-      a many-to-many relation with another model. If your model has a
-      many-to-many relation and you specify commit=False  when you save a form,
-      Django cannot immediately save the form data for the many-to-many
-      relation. This is because it isn't possible to save many-to-many data for
-      an instance until the instance exists in the database.
+          logging.info("An error occurred trying to set search area from uploaded geometry file")
+        #check if aoi_geometry exists
+        myAOIGeometry = myForm.cleaned_data.get('aoi_geometry')
+        if myAOIGeometry:
+          logging.info("Using AOI geometry, specified by user")
+          mySearch.geometry = myAOIGeometry
+        # else use the on-the-fly digitised geometry
+        mySearch.save()
+        """Another side effect of using commit=False is seen when your model has
+        a many-to-many relation with another model. If your model has a
+        many-to-many relation and you specify commit=False  when you save a form,
+        Django cannot immediately save the form data for the many-to-many
+        relation. This is because it isn't possible to save many-to-many data for
+        an instance until the instance exists in the database.
 
-      To work around this problem, every time you save a form using
-      commit=False, Django adds a save_m2m() method to your ModelForm subclass.
-      After you've manually saved the instance produced by the form, you can
-      invoke save_m2m() to save the many-to-many form data.
+        To work around this problem, every time you save a form using
+        commit=False, Django adds a save_m2m() method to your ModelForm subclass.
+        After you've manually saved the instance produced by the form, you can
+        invoke save_m2m() to save the many-to-many form data.
 
-      ref: http://docs.djangoproject.com/en/dev/topics/forms/modelforms/#the-save-method
-      """
-      myForm.save_m2m()
-      logging.debug("Search: " + str( mySearch ))
-      logging.info('form is VALID after editing')
-      #test of registered user messaging system
-      theRequest.user.message_set.create(message="Your search was carried out successfully.")
-      return HttpResponseRedirect('/searchresult/' + mySearch.guid)
+        ref: http://docs.djangoproject.com/en/dev/topics/forms/modelforms/#the-save-method
+        """
+        myForm.save_m2m()
+        logging.debug("Search: " + str( mySearch ))
+        logging.info('form is VALID after editing')
+        myFormset.save()
+        #test of registered user messaging system
+        theRequest.user.message_set.create(message="Your search was carried out successfully.")
+        return HttpResponseRedirect('/searchresult/' + mySearch.guid)
+      else:
+        logging.info('formset is INVALID')
+        logging.debug('%s' % myFormset.errors)
+        import ipy; ipy.shell()
     else:
+      myFormset = DateRangeInlineFormSet(theRequest.POST, theRequest.FILES)
 
-      logging.info('form is INVALID after editing')
-      #render_to_response is done by the renderWithContext decorator
-      return render_to_response ( 'search.html' ,{
-        'myAdvancedFlag' : theRequest.POST['isAdvanced'] == 'true',
-        'mySearchType' :  theRequest.POST['search_type'],
-        'myForm': myForm,
-        'myHost' : settings.HOST,
-        'myLegendFlag' : True, #used to show the legend in the accordion
-        'myLayerDefinitions' : myLayerDefinitions,
-        'myLayersList' : myLayersList,
-        'myActiveBaseMap' : myActiveBaseMap
-        }, context_instance=RequestContext(theRequest))
+    logging.info('form is INVALID after editing')
+    #render_to_response is done by the renderWithContext decorator
+    return render_to_response ( 'search.html' ,{
+      'myAdvancedFlag' : theRequest.POST['isAdvanced'] == 'true',
+      'mySearchType' :  theRequest.POST['search_type'],
+      'myForm': myForm,
+      'myHost' : settings.HOST,
+      'myFormset' : myFormset,
+      'myLegendFlag' : True, #used to show the legend in the accordion
+      'myLayerDefinitions' : myLayerDefinitions,
+      'myLayersList' : myLayersList,
+      'myActiveBaseMap' : myActiveBaseMap
+      }, context_instance=RequestContext(theRequest))
+
   else:
     logging.info('initial search form being rendered')
     myForm = AdvancedSearchForm()
+    myFormset = DateRangeInlineFormSet(theRequest.POST, theRequest.FILES)
     #render_to_response is done by the renderWithContext decorator
     return render_to_response ( 'search.html' ,{
       'myAdvancedFlag' : False,
       'mySearchType' :  None,
       'myLegendFlag' : True, #used to show the legend in the accordion
       'myForm': myForm,
+      'myFormset' : myFormset,
       'myHost' : settings.HOST,
       'myLayerDefinitions' : myLayerDefinitions,
       'myLayersList' : myLayersList,

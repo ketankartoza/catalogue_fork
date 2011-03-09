@@ -174,7 +174,6 @@ class Search(models.Model):
   # ABP: new additions
   acquisition_mode  = models.ForeignKey(AcquisitionMode, blank=True, null=True, help_text = 'Choose the acquisition mode.') #e.g. M X T J etc
   license_type = models.IntegerField(choices=License.LICENSE_TYPE_CHOICES, blank=True, null=True, help_text='Choose a license type.')
-  #license = models.ManyToManyField(License, blank=True, null=True, help_text = 'Choose one or more licenses.')
   band_count = models.IntegerField(choices=BAND_COUNT_CHOICES, blank=True, null=True, help_text='Select the spectral resolution.')
   geometric_accuracy_mean = models.IntegerField(null=True, blank=True, choices = ACCURACY_MEAN_OPTIONS, help_text = 'Select mean resolution class.')
   # sensor_inclination_angle: range
@@ -196,7 +195,7 @@ class Search(models.Model):
     super(Search, self).save()
 
   def __unicode__(self):
-    return "Start Date: " + str(self.start_date) + "End Date: " + str(self.end_date) + " Guid: " + self.guid + " User: " + str(self.user)
+    return "%s Guid: %s User: %s" % (self.search_date, self.guid, self.user)
 
   @staticmethod
   def getDictionaryMap(parm):
@@ -226,14 +225,11 @@ class Search(models.Model):
     advanced parameter is set
     """
     return  self.search_type \
-            or self.license.count() \
             or self.processing_level.count() \
             or self.sensors.count() \
             or self.keywords \
-            or self.k_orbit_path_min \
-            or self.j_frame_row_min \
-            or self.k_orbit_path_max \
-            or self.j_frame_row_max \
+            or self.k_orbit_path \
+            or self.j_frame_row \
             or self.use_cloud_cover \
             or self.acquisition_mode \
             or self.geometric_accuracy_mean \
@@ -241,6 +237,7 @@ class Search(models.Model):
             or self.sensor_inclination_angle_start \
             or self.sensor_inclination_angle_end \
             or self.mission \
+            or self.license_type \
             or self.sensor_type
 
   def sensorsAsString( self ):
@@ -288,6 +285,9 @@ class SearchDateRange(models.Model):
   search = models.ForeignKey(Search)
   class Meta:
     app_label= 'catalogue'
+
+  def __unicode__(self):
+    return "%s <-> %s Guid: %s" % (self.start_date, self.end_date, self.search.guid)
 
 ###############################################################################
 

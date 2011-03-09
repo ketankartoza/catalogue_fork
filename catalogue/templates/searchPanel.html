@@ -29,7 +29,29 @@
         {% endifnotequal %}
       {% endfor %}
     });
-  </script>
+
+    function cloneMore(selector, type, start_date, end_date) {
+        var newElement = $(selector).clone(true);
+        var total = $('#id_' + type + '-TOTAL_FORMS').val();
+        newElement.find(':input').each(function() {
+            var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        });
+        newElement.find('label').each(function() {
+            var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
+            $(this).attr('for', newFor);
+        });
+        newElement.find('.dr_delcb').remove();
+        total++;
+        $('#id_' + type + '-TOTAL_FORMS').val(total);
+        var dates = newElement.find('input');
+        $(dates[0]).val(start_date.split('-').reverse().join('-'));
+        $(dates[1]).val(end_date.split('-').reverse().join('-'));
+        newElement.find('.dr_text').html(start_date + ' - ' + end_date);
+        return $(selector).after(newElement);
+    }
+    </script>
 
   {% if myForm %}
     <form enctype="multipart/form-data" action="/search/" method="post" id="search_form" class="inline">
@@ -37,41 +59,96 @@
       <div id="simpleSearchDiv">
         <div class="span-6 prepend-2 append-bottom">
             <div class="span-6 last">
-            <img id="{{myForm.start_date.html_name}}Button"
+            <img id="{{myForm.start_datepicker.html_name}}Button"
                 src="/media/images/info_16.png"
                 style="cursor: pointer;"
                 alt="Click for help"
                 />
-            {{ myForm.start_date.label }}
+            {{ myForm.start_datepicker.label }}
             </div>
             <div class="span-6 last">
-            {{ myForm.start_date }}
+            {{ myForm.start_datepicker }}
             </div>
-            {% if myForm.start_date.errors %}
+            {% if myForm.start_datepicker.errors %}
             <div class="span-6 last">
             <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-            <strong>Alert:</strong> {{ myForm.start_date.errors }} </p>
+            <strong>Alert:</strong> {{ myForm.start_datepicker.errors }} </p>
             </div>
             {% endif %}
         </div> {# end of column 1 #}
         <div class="span-6 append-bottom">
             <div class="span-6 last">
-            <img id="{{myForm.end_date.html_name}}Button"
+            <img id="{{myForm.end_datepicker.html_name}}Button"
                 src="/media/images/info_16.png"
                 style="cursor: pointer;"
                 alt="Click for help"
                 />
-            {{ myForm.end_date.label }}
+            {{ myForm.end_datepicker.label }}
             </div>
             <div class="span-6 last">
-            {{ myForm.end_date }}
+            {{ myForm.end_datepicker }}
             </div>
-            {% if myForm.end_date.errors %}
+            {% if myForm.end_datepicker.errors %}
             <div class="span-6 last">
             <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-            <strong>Alert:</strong> {{ myForm.end_date.errors }} </p>
+            <strong>Alert:</strong> {{ myForm.end_datepicker.errors }} </p>
             </div>
             {% endif %}
+        </div>
+        <div class="span-6 append-bottom">
+          <div><a id="dr_add" href="javascript:void(0)">&gt;&gt;</a></div>
+          <div><a id="dr_del" href="javascript:void(0)">&lt;&lt;</a></div>
+        </div>
+        <div class="span-6 append-bottom">
+          <h3>Date ranges</h3>
+          {{ myFormset.management_form }}
+          {% for form in myFormset.forms %}
+              <div class='dr_row'>
+                <div style="display:none;">{% if form.pk %}<span class="dr_delcb">{{ form.DELETE }}</span>{% endif %}{{ form.start_date }} - {{ form.end_date }}</div>
+                <div class="dr_text"></div>
+              </div>
+          {% endfor %}
+            {% if myFormset.non_form_errors %}
+            <div class="span-6 last">
+            <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+            <strong>Alert:</strong> {{ myFormset.non_form_errors }} </p>
+            </div>
+            {% endif %}
+          <script>
+              $('#dr_add').click(function() {
+                var sd_ob = $("#id_start_datepicker-widget").datepicker("getDate");
+                var ed_ob = $("#id_end_datepicker-widget").datepicker("getDate");
+                var sd = $("#id_start_datepicker").val();
+                var ed = $("#id_end_datepicker").val();
+                if(sd_ob && ed_ob) {
+                  if (sd_ob <= ed_ob) {
+                    cloneMore('.dr_row:last', 'searchdaterange_set',sd, ed, sd_ob, ed_ob);
+                  } else {
+                    alert('Please check the date range.')
+                  }
+                } else {
+                  alert('Please select both start and end dates.');
+                }
+                return false;
+              });
+              $('#dr_del').click(function(){
+                $('.dr_row.selected').each(function(){
+                  // Has the cb for deletion ?
+                  if($(this).find('.dr_delcb')) {
+                    $(this).find('.dr_delcb').attr('checked', 'checked');
+                    $(this).hide('slow');
+                  } else {
+                    $(this).remove();
+                  }
+                });
+              });
+              $('.dr_row').click(function(){
+                $(this).toggleClass('selected');
+              });
+              $('.dr_row input:first-child').each(function(){
+                $(this).closest('.dr_row').find('.dr_text').html($(this).val() + ' - ' + $(this).siblings().val());
+              });
+          </script>
         </div>
 
         <div class="span-6 append-bottom last">
@@ -306,7 +383,6 @@
         <!-- end: optical only -->
 
         <!-- new generic sensor fields -->
-
         <div class="span-6 append-bottom last adv_search_1 adv_search_2 adv_fld">
           <div class="span-6 last">
           <img id="{{myForm.mission.html_name}}Button"

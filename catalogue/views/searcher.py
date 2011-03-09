@@ -128,7 +128,8 @@ class Searcher:
     # ABP: new logic is to get directly from the request which kind of product to search on
 
     # ABP: common "simple search" parameters
-    if self.mSearch.start_date and self.mSearch.end_date:
+    #import ipy; ipy.shell()
+    if self.mSearch.searchdaterange_set.count():
       self.mDateQuery = Q(product_date__range=(self.mSearch.start_date,self.mSearch.end_date))
       self.mMessages.append('dates between <b>%s and %s</b>' % (self.mSearch.start_date, self.mSearch.end_date))
       self.mQuerySet = self.mQuerySet.filter( self.mDateQuery )
