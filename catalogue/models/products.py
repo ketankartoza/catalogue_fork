@@ -353,9 +353,9 @@ class GenericImageryProduct( GenericProduct ):
   Generic Imagery product, it is always a composite aggregated products
   see: signals, to set geometric_resolution defaults and average
   """
-  geometric_resolution                = models.FloatField( help_text="Geometric resolution in mm")
-  geometric_resolution_x              = models.FloatField( help_text="Geometric resolution in mm (x direction)")
-  geometric_resolution_y              = models.FloatField( help_text="Geometric resolution in mm (y direction)")
+  geometric_resolution                = models.FloatField( help_text="Geometric resolution")
+  geometric_resolution_x              = models.FloatField( help_text="Geometric resolution in m (x direction)")
+  geometric_resolution_y              = models.FloatField( help_text="Geometric resolution in m (y direction)")
   radiometric_resolution              = models.IntegerField( help_text="Bit depth of image e.g. 16bit")
   band_count                          = models.IntegerField( help_text="Number of spectral bands in product")
 
