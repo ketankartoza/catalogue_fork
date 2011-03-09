@@ -4,9 +4,92 @@
 
 = Searching for data on the Catalogue =
 
+There are two ways that a user can carry out a search on the catalogue:
++ Basic search - for novice / casual users this is the easiest since it
+requires very little domain knowledge.
++ Advanced search - for power users and remote sensing professinals. Requires
+moderate to in-depth domain knowledge.
++
+
+These two search environments are described in the sections that follow.
+
+In addition to the advanced search, there is also the option for the user to
+refine searches using a 'product id refinement'. In this process, the user can
+further filter their search results and view the updated result set in real
+time.
+
 == Basic Search ==
 
+Basic search requires only the specification of a date range and optionally the
+digitisation of a search area on a map. A wireframe illustrating this is
+provided below.
+
+
+[img/simple-search.png]
+
+At any time, the user can switch to the advanced search dialog (as described in
+the next sections) by using the 'Toggle Advanced Search' button.
+
+The map area of the search window (which remains when the search is toggled to
+advanced mode) is provided above the search form. A button on the search form
+will launch a dialog that shows useful information on using the map. This is
+illustrated below.
+
+
+[img/sac02.png]
+
+The map itself can be customised by selecting the 'Layers' tab to the right and
+switching it to use a different backdrop layer. The layers listed may vary
+based on the user rights of the person currently logged in. Users that have
+been assigned 'partner' status will see higher resolution SPOT5 mosaics (which
+are not shown to general users due to licensing restrictions).
+
+The toolbar below the map has a number of tools which can be used to interact
+with the map. These allow the activities of:
+
+- zooming in
+- zooming out
+- panning (shifting the map extents north, south, east or west)
+- stepping back in the history of areas of extents places you have panned or zoomed to)
+- stepping forward in the history of areas of extents (places you have panned or zoomed to)
+- digitising an area of interest for your search
+- editing the digitised area of interest
+- deleting the digitised area of interest
+-
+
+In addition, to the bottom right of the map area, two icons are present. These allow you to:
+- restore the map size to default
+- grow the size of the map such that if occupies the entire browser window area
+-
+
+It should be noted that for the latter item, the search form and related
+buttons are shifted down to 'below the fold' (i.e. below the bottom edge of the
+window), requiring the user to scroll the window down to once again see the
+other input controls on the form.
+
+Below the map are two additional elements:
+- the current position of the cursor in decimal degrees
+- a scale bar with units in kilometers
+-
+
+**Technical note:** The backdrop layers shown in the map areas are in the
+'Google Mercator' coordinate reference system (EPSG:90013)
+
+In the image below, the various map elements described above are shown. The map
+is shown in 'maximised state'.
+
+
+[img/sac03.png]
+
+
+
 == Advanced Search ==
+
+For casual users, the simple search functionality may be sufficient, but there
+is a class of users that demand more control over the search criteria. These
+users include SAC staff members, remote sensing specialists and other
+professional users. To cater to the needs of this demographic, we have
+implemented the advanced search functionality.
 
 === Optical Products ===
 
@@ -65,17 +148,12 @@ use, geometric accuracy is grouped as shown in the table below, and the user
 may select a single entry from this list.
 
 || Class | Value Range |
-| < 1m | 0 - 1000mm |
-| 1m - 7m | 1001 - 7000mm |
-| 7m - 25m | 7001 - 25000mm |
-| 25m - 70m | 25001 - 70000mm |
-| 70m - 1km | 70001 - 1000000mm |
-| > 1km | 1000000mm + |
-
-**Note:** Internally, geometric resolution is specified in mm 
-
-**Wolfgang:** mm or m?
-
+| < 1m | 0 - 1m |
+| 1m - 7m | 1 - 7m |
+| 7m - 25m | 7 - 250m |
+| 25m - 70m | 25 - 70m |
+| 70m - 1km | 70 - 1000m |
+| > 1km | 1000m + |
 
 **Bands** is used to identify the spectral resolution of the products being
 searched for. A user friendly grouping is listed in a select box allowing the
@@ -188,22 +266,50 @@ user is redirected to the search results page.
 
 Radar products share many properties in common with Optical products, so you
 should read the description of the Advanced Search for Optical Products above
-first. There are four principle differences in the Radar Search dialog:
+first. There are five principle differences in the Radar Search dialog:
 + There is no option to choose a cloud cover rating.
 + There is an option added for polarisation mode.
 + Acquisition angle is replaced with incidence angle (RadarProduct::incidence_angle).
 + The Mission, Mission Sensor, Type and Mode selectors are constrained to show
   only radar products (based on MissionSensor::is_radar property).
++ There is no option to choose a number of bands.
 +
 
-**Note:** Wolfgang to confirm if row/path, spatial resolution and bands are
-still relevant to radar.
+It should be noted that radar products will often not have row/path data. In
+this situation the row/path and offsets should have been defined using the
+product centroid system as illustrated below. For this reason the row/path inputs
+remain.
 
+[img/centroid_based_row_path.png]
+
+The centroid based the row/path schema uses N/S/E/W suffixes to indicate
+hemisphere, however the row/path range definition expects numeric entries. As
+such negative values in the row box will indicate west and negative values in
+the path will indicate south.
 
 == Generic Imagery Search ==
 
+The purpose of the generic imagery search is to allow the user to locate
+GenericImageryProducts and their class heirarchy descendents (currently Optical
+and Radar products). The generic imagery search uses a reduced set of options
+in order to cater for the range of different imagery types.
+
 [img/advanced-search-generic.png]
 
+In particular:
+
+- There are no options related to the selection of a mission,
+sensor, sensor type or acquisition mode.
+- There are no options related to acquisition angle or incidence angle.
+- There are no options relating to polarisation mode.
+- There are no options relating to Row / Path.
+-
+
+
+Because of the diverse results that may be returned apon completing a generic
+imagery search, there is no post search product id filtering catered for.
+However the user may refine the search from the search results screen where
+they will be returned to a pre-populated instance of the original search form.
 
 == GeospatialProduct Search ==
 
