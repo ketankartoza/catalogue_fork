@@ -632,8 +632,7 @@ class RadarProduct( GenericSensorProduct ):
 #ABP: this part will be completed with GeospatialProduct as an "abstract" class and Ordinal/Continuous
 #TODO:
 
-
-GEOSPATIAL_GEOMETRY_TYPE_CHOICES = ( ( 'R','Raster' ), ( 'VP', 'Vector - Points' ), ( 'VL', 'Vector - Lines' ) , ( 'VA', 'Vector - Areas / Polygons' ) )
+GEOSPATIAL_GEOMETRY_TYPE_CHOICES = ( ( 'RA','Raster' ), ( 'VP', 'Vector - Points' ), ( 'VL', 'Vector - Lines' ) , ( 'VA', 'Vector - Areas / Polygons' ) )
 class GeospatialProduct( GenericProduct ):
   """
   Geospatial product, does not have sensors information. Geospatial products may be rasters
@@ -647,10 +646,36 @@ class GeospatialProduct( GenericProduct ):
   temporal_extent_start           = models.DateTimeField(db_index=True, help_text="The start of the timespan covered by this dataset. If left blank will default to time of accession.")
   temporal_extent_end             = models.DateTimeField(null=True, blank=True, db_index=True, help_text="The start of the timespan covered by this dataset. If left blank will default to start date.")
   place_type = models.ForeignKey( PlaceType, help_text="Select the type of geographic region covered by this dataset" )
-  place = models.ForeignKey( Place )
+  place = models.ForeignKey( Place, help_text="Nearest place, town, country region etc. to this product" )
   primary_topic = models.ForeignKey( Topic, help_text="Select the most appopriate topic for this dataset. You can add additional keywords in the tags box." ) #e.g. Landuse etc
   #
-  # elpaso to implement tagging support
+  # elpaso to implement tagging support please....
+  #
+  # We need a flag to tell if this Product class can have instances (if it is not abstract)
+  concrete              = True
+  objects = models.GeoManager()
+  class Meta:
+    app_label= 'catalogue'
+
+###############################################################################
+
+class OrdinalProduct( GenericProduct ):
+  """
+  Ordinal product, does not have sensors information. Ordinal products are class based products e.g. roads, landuse, etc.
+  Products may be rasters (that were derived from one or more satellite or other rasters) or vectors.
+  """
+  name = models.CharField(max_length = 255, null=False, blank=False, help_text="A descriptive name for this dataset");
+  description = models.TextField( null=True, blank=True, help_text="Description of the product." )
+  processing_notes = models.TextField( null=True, blank=True, help_text="Description of how the product was created." )
+  equivalent_scale = models.IntegerField( help_text="The fractional part at the ideal maximum scale for this dataset. For example enter '50000' if it should not be used at scales larger that 1:50 000", null=True, blank=True, default=1000000 )
+  data_type = models.CharField( max_length=1, choices=GEOSPATIAL_GEOMETRY_TYPE_CHOICES,null=True,blank=True, help_text="Is this a vector or raster dataset?" )
+  temporal_extent_start           = models.DateTimeField(db_index=True, help_text="The start of the timespan covered by this dataset. If left blank will default to time of accession.")
+  temporal_extent_end             = models.DateTimeField(null=True, blank=True, db_index=True, help_text="The start of the timespan covered by this dataset. If left blank will default to start date.")
+  place_type = models.ForeignKey( PlaceType, help_text="Select the type of geographic region covered by this dataset" )
+  place = models.ForeignKey( Place, help_text="Nearest place, town, country region etc. to this product" )
+  primary_topic = models.ForeignKey( Topic, help_text="Select the most appopriate topic for this dataset. You can add additional keywords in the tags box." ) #e.g. Landuse etc
+  #
+  # elpaso to implement tagging support please....
   #
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   concrete              = True

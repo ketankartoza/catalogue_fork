@@ -926,6 +926,7 @@ All geospatial products share the following properties:
  - place
  - primary_topic
  - tags
+ -
 
 Properties from GenericProduct are also inherited. 
 
@@ -950,6 +951,21 @@ suitable for use at 1:50000 scale or smaller. A default of 1000000 (one
 million) shall be assigned to any dataset where the scale is not explicitly
 defined.
 
+The **data_type** property describes what type of data is represented in the
+dataset. The options for data_type are defined in a dictionary in the
+GeospatialProduct model viz:
+
+|| Abbreviation | Name | 
+| RA | Raster |
+| VP | Vector - Points |
+| VL | Vector - Lines |
+| VA | Vector - Areas / Polygons |
+
+**Note:** The ISO-19115 spec defines an MD_SpatialRepresentationTypeCode but
+this is not granular to the feature type level. As such a programmatic mapping
+shall be such that types VP/VL/VA are mapped to
+MD_SpatialRepresentationTypeCode 'vector 001' and RA is mapped to
+MD_SpatialRepresentationTypeCode 'grid'.
 
 The **temporal extent** maps to the gmd::EX_TemporalExtent element in the ISO_19136
 standard. e.g.
@@ -992,7 +1008,7 @@ region will be reflected in an EX_GeographicDescription element. e.g.
 </xs:complexType
 ```
 
-Note that although the ISO19139 specification allows a sequence (i.e. multiple
+**Note:** that although the ISO19139 specification allows a sequence (i.e. multiple
 geography description elements), our schema only accommodates a single
 geographic place. These elements must be defined by the script performing
 ingestion which is out of scope for this work package. As such the only current
@@ -1028,17 +1044,23 @@ The following scheme will be used when allocating product ID's to GeoSpatial pro
 || Field | Description |
 | TTT | Type, ORD for Ordinal products, CON for continuous products |
 | TOPIC | 10 character abbreviation for topic, hyphen padded e.g. ROADS----- |
+| TY | 2 character abbreviation e.g. RA for raster |
+| PLACENAME | First 10 chars of place name with spaces/whitespace removed e.g. CAPETOWN-- |
 | yymmdd           | temporal extent start date                              |
 | yymmdd           | temporal extent end date                             |
-| LLLL             | processing Level code eg. L2A; L4Ab                  |
+| LLLL             | processing Level code eg. L4Aa; L4Ab                  |
 | EPSG             | EPSG Code for coordinate reference system of dataset |
-| REG | Place name |
-This a sample GeoSpatial product ID may look like this:
+
+All id text elements will be converted to upper case. This a sample GeoSpatial
+product ID may look like this:
 
 ```
-ORD_LANDUSE---_110101_11_02_11_L4Ab_4326_ZA
+ORD_LANDUSE---_VL_ZA--------_110101_110211_L4Ab_4326
 ```
 
+The order is of the id elements is designed so that when listing products using
+e.g. the unix '''ls''' command they naturally appear grouped thematically, then
+by data type and then by place.
 
 
 === Geospatial Product Aggregation Rules ===
@@ -1062,6 +1084,7 @@ A place type can be one of:
 | 5 | State e.g. WCAPE |
 | 6 | Town or City |
 | 7 | Local area - nearest named place |
+| 8 | Quarter Degree Square - using ZA convention e.g 3318BC |
 
 Administering the place types list is not an end-user activity and should be
 done in consultation with developers.
@@ -1070,18 +1093,19 @@ done in consultation with developers.
 
 For places, a dictionary based on GeoNames provides a near-exhaustive list of
 local areas and towns. The geonames table will be augmented on an adhoc manner
-as required via the admin panel.
+as required via the admin panel. When the place represents an area, the centroid 
+of that area will be used in the geometry.
 
-The region model looks like this:
+The place model looks like this:
 
 || ID | Type | Name | Long Name | Geometry |
-| 1   | 1 | Global | Global | point |
-| 2   | 2 | Africa | African Continent | point |
-| 3   | 3 | SADC | Southern African Development Community |point |
-| 4   | 4 | ZA | South Africa |point |
-| 5   | 5 | GP | Gauteng Province |point |
-| 6   | 6 | Pretoria | Pretoria |point |
-| 7   | 7 | Mamelodi | Mamelodi |point |
+| 1   | 1 | Global | Global |  |
+| 2   | 2 | Africa | African Continent |  |
+| 3   | 3 | SADC | Southern African Development Community | |
+| 4   | 4 | ZA | South Africa | |
+| 5   | 5 | GP | Gauteng Province | |
+| 6   | 6 | Pretoria | Pretoria | |
+| 7   | 7 | Mamelodi | Mamelodi | |
 
 **Note:** Alessandro we need an admin ui for this
 
@@ -1097,17 +1121,31 @@ The region model looks like this:
 
 **Concrete or Abstract:** Concrete
 
+For ordinal products, there are three types of accuracy defined:
+
++ spatial
++ temporal
++ thematic
++
+
+The first two are catered for by the GeospatialProduct abstract base class (
+equivalent_scale, temporal_extent_start and temporal_extent_end). Thematic
+accuracy for a product is described by adding the fields
+
 === Ordinal Product Properties ===
 
 
 For ordinal products we define thematic accuracy by means of the following fields:
- - class count - not null integer
- - confusion matrix - 
- - kappa score
+ - class_count
+ - confusion_matrix 
+ - kappa_score
  -
 
 
+The **class count** property is a simple numeric value representing how many
+classes are defined in the dataset.
 
+The **[confusion_matrix http://en.wikipedia.org/wiki/Confusion_matrix]** property xxxxxx continue here xxxxxxxxxxxxx
 
 === Product ID Naming Scheme ===
 
