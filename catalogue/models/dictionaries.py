@@ -73,7 +73,7 @@ class AcquisitionMode( models.Model ):
   sensor_type = models.ForeignKey(SensorType ) #e.g. CAM1
   abbreviation = models.CharField( max_length="4")
   name = models.CharField( max_length="255" )
-  geometric_resolution = models.IntegerField(help_text="Geometric resolution in mm")
+  geometric_resolution = models.IntegerField(help_text="Geometric resolution in m")
   band_count = models.IntegerField()
   is_grayscale = models.BooleanField(default=False)
   class Meta:
