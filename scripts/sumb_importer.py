@@ -106,7 +106,7 @@ def importMetadata( theProjectDir ):
     myProduct.radiometric_percentage_error = None
     myProduct.geometric_resolution_x = 3000
     myProduct.geometric_resolution_y = 3000
-    myProduct.spectral_resolution = 7
+    myProduct.band_count = 7
     myProduct.radiometric_resolution = 0
     #/S/INT/RI/SS1/2010_04_09/raw/20100326_I0137_Jakarta_Indonesia/16bit
     #use 7th token e.g. 20100326_I0137_Jakarta_Indonesia

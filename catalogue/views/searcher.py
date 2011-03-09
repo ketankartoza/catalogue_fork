@@ -179,9 +179,9 @@ class Searcher:
           self.mMessages.append('geometric accuracy mean between <b>%sm and %sm</b>' % Search.ACCURACY_MEAN_RANGE.get(self.mSearch.geometric_accuracy_mean))
           self.mGeometryAccuracyMeanQuery = Q(geometric_accuracy_mean__range = Search.ACCURACY_MEAN_RANGE.get(self.mSearch.geometric_accuracy_mean))
           self.mQuerySet = self.mQuerySet.filter( self.mGeometryAccuracyMeanQuery )
-        if self.mSearch.spectral_resolution:
-          self.mMessages.append('spectral resolution <b>%s</b>' % self.mSearch.spectral_resolution)
-          self.mSpectralResolutionQuery = Q(spectral_resolution = self.mSearch.spectral_resolution)
+        if self.mSearch.band_count:
+          self.mMessages.append('spectral resolution <b>%s</b>' % self.mSearch.band_count)
+          self.mSpectralResolutionQuery = Q(band_count = self.mSearch.band_count)
           self.mQuerySet = self.mQuerySet.filter( self.mSpectralResolutionQuery)
 
         logging.info('checking if we should use landsat path / row filtering...')

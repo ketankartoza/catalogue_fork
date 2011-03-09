@@ -36,7 +36,7 @@ import time
 import Image
 from importutils import *
 ########################################################
-# globals 
+# globals
 ########################################################
 
 mReportFile = file( "blob_extract_report.txt","wt" )
@@ -57,20 +57,20 @@ mScenesPathBase = "/mnt/cataloguestorage/thumbnail_processing/georeferenced_thum
 # available to users of the catalogue
 mProductionThumbsDirPath = "/mnt/cataloguestorage/thumbnails_master_copy/"
 # Start blob number when the script starts fetching blobs
-# we will use this to ensure we don't try to import old data 
+# we will use this to ensure we don't try to import old data
 # that is already imported
 mStartBlob = 0
 # End blob number at the end of initial blob extraction
 mEndBlob = 0
 
 ########################################################
-# Helper functions for blob extraction to jpgs 
+# Helper functions for blob extraction to jpgs
 ########################################################
 
 def getBlockPositionsForBlob( theBlob ):
-  """In each blob is a series of embedded jpg images. This 
-     function computes the offset of the start of each 
-     jpg image by looking for the initial JFIF tag. It 
+  """In each blob is a series of embedded jpg images. This
+     function computes the offset of the start of each
+     jpg image by looking for the initial JFIF tag. It
      returns a list of these block offsets"""
   myLength = len( theBlob )
   #print "File Length: %s" % myLength
@@ -82,7 +82,7 @@ def getBlockPositionsForBlob( theBlob ):
     theFileNo = theFileNo + 1
     myLastPosition = myPosition
     #print "Searching from : %s" % ( myPosition + 10 )
-    myPosition = theBlob.find( "JFIF", myPosition + 10 ) - 6 
+    myPosition = theBlob.find( "JFIF", myPosition + 10 ) - 6
     #print "JFIF at %s" % (myPosition )
     if myLastPosition > 0 and myPosition > 0:
       myList.append( myPosition )
@@ -92,12 +92,12 @@ def getBlockPositionsForBlob( theBlob ):
       myList.append( myLength )
     #print "myPosition: %s " % myPosition
     #print "myLastPosition: %s " % myLastPosition
-    
+
   return myList
 
 def blockToData( theStart, theEnd, theBlob ):
   """Extracts a block of binary date from a blob"""
-  theBlob.seek( theStart ) 
+  theBlob.seek( theStart )
   myBlockValue = theBlob.read( theEnd - theStart )
   return myBlockValue
 
@@ -117,7 +117,7 @@ def createGroupFile( theFileList, theOutputFile ):
   myImage = Image.open( theFileList[0] )
   # Get the image metrics nicely so we can paste it into the quad image
   mySize = myImage.size
-  myX = mySize[0] 
+  myX = mySize[0]
   myY = mySize[1]
   #print str(myX) + "," + str(myY)
   mySize = ( myX, myY*len( theFileList, ) )
@@ -135,12 +135,12 @@ def createGroupFile( theFileList, theOutputFile ):
     except IOError as e:
       traceback.print_exc(file=sys.stdout)
       raise e
-  # save up    
+  # save up
   print "Saving %s" % theOutputFile
   myOutImage.save( theOutputFile )
 
 def removeBlocks( theArray ):
-  """This function removes temporary files containing blocks 
+  """This function removes temporary files containing blocks
      (individual jpg sub images)."""
   for myBlockFile in theArray:
     try:
@@ -158,7 +158,7 @@ def getSortedFileList( theDir ):
      Taken from : http://www.daniweb.com/code/snippet216688.html#
      Returns an array of tuples where array[x][0] is time and array[x][1] is the file name
   """
-  
+
   # use a folder you have ...
   myFileList = []
   for myFile in glob.glob( os.path.join ( theDir, '*.blob' ) ):
@@ -176,7 +176,7 @@ def getSortedFileList( theDir ):
 
 def getFilenameIndex( theArray, theFilename ):
   """Returns the position in the array where the given filename occurs.
-     Useful if you want to partially process the glob of blob files 
+     Useful if you want to partially process the glob of blob files
      e.g. in cases where processing was stopped and then restarted"""
   for myIndex, myValue in enumerate( theArray ):
     if myValue[1] == theFilename:
@@ -199,7 +199,7 @@ def extractBlobToJpegs( theFile, theSegmentJpegDir ):
   myArray = getBlockPositionsForBlob( myValue )
   #print myArray
   # used to hold filenames that will be combined into a single file
-  myGroupFileArray = [] 
+  myGroupFileArray = []
   myBlockTally = 0
   myErrorTally = 0
   #print "%s block(s) in this file" % ( len( myArray ) - 1 )
@@ -213,13 +213,13 @@ def extractBlobToJpegs( theFile, theSegmentJpegDir ):
     myJpgFile = "/tmp/block%s.jpg" % ( myBlockTally )
     dataToImage( myData, myJpgFile )
     myGroupFileArray.append( myJpgFile )
-  # We are accummulating files in blocks of myBlocksInGroup 
+  # We are accummulating files in blocks of myBlocksInGroup
   # or any remaining at the end of the segment
   #write this group of myBlocksInGroup files into a single file
   #print "Block Tally: %s" % myBlockTally
   myJpgFile = "%s/%ssegment.jpg" % ( theSegmentJpegDir, myFileBase )
   #print 'Writing %s' % myJpgFile
-  try: 
+  try:
     createGroupFile( myGroupFileArray, myJpgFile )
     removeBlocks( myGroupFileArray )
   except IOError as e:
@@ -332,7 +332,7 @@ def loadFrames( theRectifiedScenesPath, theAuxFile ):
     myProduct.radiometric_percentage_error = None
     myProduct.geometric_resolution_x = 3000
     myProduct.geometric_resolution_y = 3000
-    myProduct.spectral_resolution = 7
+    myProduct.band_count = 7
     myProduct.radiometric_resolution = 0
     myProduct.original_product_id = myFrame.localization.original_id
     myProduct.orbit_number = None

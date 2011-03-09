@@ -75,7 +75,7 @@ class Command(BaseCommand):
       print 'Creating Software %s does not exists and cannot create: aborting' % software
       return
     try:
-      license = License.objects.get_or_create(name=license, defaults={'type' : License.LICENSE_TYPE_ANY, 'details' : license})[0]
+      license = License.objects.get_or_create(name=license, defaults={'type' : License.LICENSE_TYPE_COMMERCIAL, 'details' : license})[0]
     except License.DoesNotExists:
       print 'License %s does not exists and cannot create: aborting' % license
       return
