@@ -143,6 +143,11 @@
     </tr>
   </tbody>
 </table>
+    {% if user.is_staff %}
+    {% if myOrder.delivery_detail.geometry %}
+    <a href="/downloadclipgeometry/{{ myOrder.id }}/">Download clip geometry</a>
+    {% endif %}
+    {% endif %}
 {% box_end %}
 <br />
 <div id="items">

@@ -2,6 +2,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseServerError
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.template import RequestContext
 # python logging support to django logging middleware
 import logging
@@ -15,6 +16,9 @@ from django.db.models import Count, Min, Max #for aggregate queries
 
 # For shopping cart and ajax product id search
 from django.utils import simplejson
+
+#shpresponder
+from shapes.views import ShpResponder
 
 # Helper classes
 from helpers import *
@@ -123,6 +127,13 @@ def orderMonthlyReport( theRequest, theyear, themonth):
     'myNextDate':myDate + datetime.timedelta(days=31)
     })
 
+
+@staff_member_required
+def downloadClipGeometry(theRequest,theId):
+  myOrder = get_object_or_404(Order,id=theId)
+  myResponder = ShpResponder( myOrder )
+  myResponder.file_name = u'clip_geometry_order_%s' % myOrder.id
+  return  myResponder.write_delivery_details( myOrder )
 
 @login_required
 def viewOrder (theRequest, theId):
