@@ -353,7 +353,7 @@ class GenericImageryProduct( GenericProduct ):
   Generic Imagery product, it is always a composite aggregated products
   see: signals, to set geometric_resolution defaults and average
   """
-  geometric_resolution                = models.FloatField( help_text="Geometric resolution")
+  geometric_resolution                = models.FloatField( help_text="Geometric resolution in m")
   geometric_resolution_x              = models.FloatField( help_text="Geometric resolution in m (x direction)")
   geometric_resolution_y              = models.FloatField( help_text="Geometric resolution in m (y direction)")
   radiometric_resolution              = models.IntegerField( help_text="Bit depth of image e.g. 16bit")
@@ -580,8 +580,8 @@ class OpticalProduct( GenericSensorProduct ):
   See http://docs.djangoproject.com/en/dev/topics/db/models/#id7 for more info."""
   ##Descriptors for optical products
   cloud_cover = models.IntegerField(null=True,blank=True)
-  sensor_inclination_angle = models.FloatField(null=True,blank=True)
-  sensor_viewing_angle = models.FloatField(null=True,blank=True)
+  sensor_inclination_angle = models.FloatField(null=True,blank=True,help_text="Orientation of the vehicle on which the sensor is mounted")
+  sensor_viewing_angle = models.FloatField(null=True,blank=True,help_text="Angle of acquisition for the image")
   gain_name = models.CharField( max_length=200, null=True,blank=True)
   gain_value_per_channel = models.CharField( max_length=200, help_text="Comma separated list of gain values", null=True,blank=True )
   gain_change_per_channel = models.CharField( max_length=200, help_text="Comma separated list of gain change values", null=True,blank=True )

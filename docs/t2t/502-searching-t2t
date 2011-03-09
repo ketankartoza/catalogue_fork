@@ -33,6 +33,8 @@ should be found based on the sensors that acquired them.
   to show only those items permissible for the given types.
 - When selecting one or more modes, the band entries will be filtered to show
   only those items permissible for the given modes.
+- The Mission, Mission Sensor, Type and Mode selectors are constrained to show
+  only non-radar products (based on MissionSensor::is_radar property).
 -
 
 ==== Image Details ====
@@ -179,3 +181,31 @@ Once the user has completed the search definition process, pressing the
 there are any validation errors, the user will be returned to the search form
 and the validation errors will be indicated. Assuming there were no errors, the
 user is redirected to the search results page.
+
+== Radar Search ==
+
+[img/advanced-search-radar.png]
+
+Radar products share many properties in common with Optical products, so you
+should read the description of the Advanced Search for Optical Products above
+first. There are four principle differences in the Radar Search dialog:
++ There is no option to choose a cloud cover rating.
++ There is an option added for polarisation mode.
++ Acquisition angle is replaced with incidence angle (RadarProduct::incidence_angle).
++ The Mission, Mission Sensor, Type and Mode selectors are constrained to show
+  only radar products (based on MissionSensor::is_radar property).
++
+
+**Note:** Wolfgang to confirm if row/path, spatial resolution and bands are
+still relevant to radar.
+
+
+== Generic Imagery Search ==
+
+[img/advanced-search-generic.png]
+
+
+== GeospatialProduct Search ==
+
+[img/advanced-search-geospatial.png]
+
