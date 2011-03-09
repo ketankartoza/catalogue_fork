@@ -146,17 +146,15 @@ class License( models.Model ):
   LICENSE_TYPE_FREE       = 1
   LICENSE_TYPE_GOVERNMENT = 2
   LICENSE_TYPE_COMMERCIAL = 3
-  LICENSE_TYPE_ANY        = 4
 
   LICENSE_TYPE_CHOICES = (
       (LICENSE_TYPE_FREE,       'Free'),
       (LICENSE_TYPE_GOVERNMENT, 'Government'),
       (LICENSE_TYPE_COMMERCIAL, 'Commercial'),
-      (LICENSE_TYPE_ANY,        'Any'),
     )
   name = models.CharField( max_length="255" )
   details = models.TextField()
-  type = models.IntegerField(choices=LICENSE_TYPE_CHOICES, default=LICENSE_TYPE_ANY)
+  type = models.IntegerField(choices=LICENSE_TYPE_CHOICES, default=LICENSE_TYPE_COMMERCIAL)
 
   class Meta:
     app_label= 'catalogue'
