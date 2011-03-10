@@ -316,16 +316,22 @@ ul.dropdown ul {
 }
 
 /* ABP: advancedSearch date range */
-.dr_row input {
-  width: 98px;
-  color: inherit;
-  background: inherit;
-  border: none;
-  margin: 0;
+div#dr_container {
+  width: 160px;
+  border: solid 1px #999;
+  background-color: white;
+  line-height: 1.5em;
+  min-height: 180px;
+}
+div.dr_row .dr_input{
+  display:none;
+}
+div.dr_text {
+  padding: 0.25em;
+  cursor: pointer;
 }
 div.dr_row {
-  border: solid 1px #333;
-  background-color: white;
+  border: solid 1px #DDD;
 }
 .dr_row:hover {
   border: solid 1px #333;

@@ -23,33 +23,48 @@
             }
           }
         });
-        $('#{{myField.html_name}}Button').click(function() {
+        $('#{{myField.html_name}}Button').click(function(){
           $('#{{myField.html_name}}Help').dialog('open');
         });
         {% endifnotequal %}
       {% endfor %}
     });
 
-    function cloneMore(selector, type, start_date, end_date) {
-        var newElement = $(selector).clone(true);
+    /*
+    <div class="dr_row">
+      <div class="dr_input"><input type="text" id="id_searchdaterange_set-0-start_date" name="searchdaterange_set-0-start_date"> - <input type="text" id="id_searchdaterange_set-0-end_date" name="searchdaterange_set-0-end_date"></div>
+      <div class="dr_text"> - </div>
+    </div>
+    */
+
+    function cloneMore(type, sd, ed, iso_sd, iso_ed){
+        var tpl = '<div class="dr_row">';
+        tpl    += '<div class="dr_input"><input type="text" id="id_searchdaterange_set-$num-start_date" name="searchdaterange_set-$num-start_date"> : <input type="text" id="id_searchdaterange_set-$num-end_date" name="searchdaterange_set-$num-end_date"></div>';
+        tpl    += '<div class="dr_text" title="Click to select."></div>';
+        tpl    += '</div>';
+
+        var newElement = $(tpl); //$(selector).clone(true);
         var total = $('#id_' + type + '-TOTAL_FORMS').val();
+        var oldTotal = 0; //total - 1;
+        var toReplace = '-$num-'; //'-' + oldTotal + '-'
+        var replaceWith = '-' + total + '-';
         newElement.find(':input').each(function() {
-            var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+            var name = $(this).attr('name').replace(toReplace, replaceWith);
             var id = 'id_' + name;
             $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
         });
         newElement.find('label').each(function() {
-            var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
+            var newFor = $(this).attr('for').replace(toReplace,replaceWith);
             $(this).attr('for', newFor);
         });
-        newElement.find('.dr_delcb').remove();
+        //newElement.find('.dr_delcb').remove();
         total++;
         $('#id_' + type + '-TOTAL_FORMS').val(total);
         var dates = newElement.find('input');
-        $(dates[0]).val(start_date.split('-').reverse().join('-'));
-        $(dates[1]).val(end_date.split('-').reverse().join('-'));
-        newElement.find('.dr_text').html(start_date + ' - ' + end_date);
-        return $(selector).after(newElement);
+        $(dates[0]).val(iso_sd);
+        $(dates[1]).val(iso_ed);
+        newElement.find('.dr_text').html(sd + ' : ' + ed);
+        return newElement;
     }
     </script>
 
@@ -57,7 +72,7 @@
     <form enctype="multipart/form-data" action="/search/" method="post" id="search_form" class="inline">
       {{ myForm.non_field_errors }}
       <div id="simpleSearchDiv">
-        <div class="span-6 prepend-2 append-bottom">
+        <div class="span-6 prepend-1 append-bottom">
             <div class="span-6 last">
             <img id="{{myForm.start_datepicker.html_name}}Button"
                 src="/media/images/info_16.png"
@@ -95,59 +110,83 @@
             </div>
             {% endif %}
         </div>
-        <div class="span-6 append-bottom">
-          <div><a id="dr_add" href="javascript:void(0)">&gt;&gt;</a></div>
-          <div><a id="dr_del" href="javascript:void(0)">&lt;&lt;</a></div>
+
+        <div class="span-1 append-bottom">
+          <div class="span-1 last">
+            <div style="margin-top:80px"><a id="dr_add" title="Select the dates in the calendar and click here to add to the list." href="javascript:void(0)">&gt;&gt;</a></div>
+            <div><a id="dr_del" title="Select the ranges in the list and click here to remove." href="javascript:void(0)">&lt;&lt;</a></div>
+          </div>
         </div>
+
         <div class="span-6 append-bottom">
-          <h3>Date ranges</h3>
-          {{ myFormset.management_form }}
-          {% for form in myFormset.forms %}
-              <div class='dr_row'>
-                <div style="display:none;">{% if form.pk %}<span class="dr_delcb">{{ form.DELETE }}</span>{% endif %}{{ form.start_date }} - {{ form.end_date }}</div>
-                <div class="dr_text"></div>
-              </div>
-          {% endfor %}
-            {% if myFormset.non_form_errors %}
-            <div class="span-6 last">
-            <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-            <strong>Alert:</strong> {{ myFormset.non_form_errors }} </p>
+          <div class="span-6 last">
+            Date range
+          </div>
+          <div class="span-6 last">
+            {{ myFormset.management_form }}
+            <div id="dr_container" class="ui-corner-all" >
+            {% for form in myFormset.forms %}
+                <div class='dr_row'>
+                  <div class="dr_input">{% if form.pk %}<span class="dr_delcb">{{ form.DELETE }}</span>{% endif %}{{ form.start_date }} : {{ form.end_date }}</div>
+                  <div class="dr_text" title="Click to select."></div>
+                </div>
+            {% endfor %}
             </div>
-            {% endif %}
+          </div>
+          {% if myFormset.non_form_errors %}
+          <div class="span-6 last">
+          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+          <strong>Alert:</strong> {{ myFormset.non_form_errors }} </p>
+          </div>
+          {% endif %}
           <script>
-              $('#dr_add').click(function() {
-                var sd_ob = $("#id_start_datepicker-widget").datepicker("getDate");
-                var ed_ob = $("#id_end_datepicker-widget").datepicker("getDate");
-                var sd = $("#id_start_datepicker").val();
-                var ed = $("#id_end_datepicker").val();
-                if(sd_ob && ed_ob) {
-                  if (sd_ob <= ed_ob) {
-                    cloneMore('.dr_row:last', 'searchdaterange_set',sd, ed, sd_ob, ed_ob);
+            $('#dr_add').click(function() {
+              var sd = $("#id_start_datepicker").val();
+              var ed = $("#id_end_datepicker").val();
+              var iso_sd = sd.split('-').reverse().join('-');
+              var iso_ed = ed.split('-').reverse().join('-');
+              if(sd && ed) {
+                if (iso_sd <= iso_ed) {
+                  var in_list;
+                  in_list = false;
+                  $('.dr_text').each(function(){
+                    if($(this).text() == sd + ' : ' + ed){
+                      in_list = true;
+                    };
+                  });
+                  // TODO: find overlapping ranges
+                  if(in_list){
+                    alert('The date range is already in the list.')
                   } else {
-                    alert('Please check the date range.')
-                  }
+                    $('#dr_container').append(cloneMore('searchdaterange_set', sd, ed, iso_sd, iso_ed));
+                  };
                 } else {
-                  alert('Please select both start and end dates.');
+                  alert('Please check the date range.');
                 }
-                return false;
-              });
-              $('#dr_del').click(function(){
-                $('.dr_row.selected').each(function(){
-                  // Has the cb for deletion ?
-                  if($(this).find('.dr_delcb')) {
-                    $(this).find('.dr_delcb').attr('checked', 'checked');
-                    $(this).hide('slow');
-                  } else {
+              } else {
+                alert('Please select both start and end dates.');
+              }
+              return false;
+            });
+            $('#dr_del').click(function(){
+              $('.dr_row.selected').each(function(){
+                // Has the cb for deletion ?
+                if($(this).find('.dr_delcb').length) {
+                  $(this).find('.dr_delcb').attr('checked', 'checked');
+                  $(this).hide('slow');
+                } else {
+                  $(this).hide('slow', function(){
                     $(this).remove();
-                  }
-                });
+                  });
+                }
               });
-              $('.dr_row').click(function(){
-                $(this).toggleClass('selected');
-              });
-              $('.dr_row input:first-child').each(function(){
-                $(this).closest('.dr_row').find('.dr_text').html($(this).val() + ' - ' + $(this).siblings().val());
-              });
+            });
+            $('.dr_row').live('click', function(){
+              $(this).toggleClass('selected');
+            });
+            $('.dr_row input:first-child').each(function(){
+              $(this).closest('.dr_row').find('.dr_text').html($(this).val() + ' - ' + $(this).siblings().val());
+            });
           </script>
         </div>
 

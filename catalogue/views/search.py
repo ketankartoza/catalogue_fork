@@ -70,7 +70,7 @@ def search(theRequest):
   """
   Perform an attribute and spatial search for imagery
   """
-  DateRangeInlineFormSet = inlineformset_factory(Search, SearchDateRange, extra=1, max_num=1, formset=DateRangeFormSet)
+  DateRangeInlineFormSet = inlineformset_factory(Search, SearchDateRange, extra=0, max_num=0, formset=DateRangeFormSet)
 
   myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
   logging.debug(("Post vars:" + str(theRequest.POST)))
@@ -136,7 +136,6 @@ def search(theRequest):
       else:
         logging.info('formset is INVALID')
         logging.debug('%s' % myFormset.errors)
-        import ipy; ipy.shell()
     else:
       myFormset = DateRangeInlineFormSet(theRequest.POST, theRequest.FILES)
 

@@ -26,19 +26,52 @@ class DateRangeFormSet(BaseInlineFormSet):
   Date range search formsets with validation
   """
   def clean(self):
+    """
+    Delete incomplete forms
+    TODO: simplify overlapping ranges (or raise exception), priority: low
+    """
     if any(self.errors):
         # Don't bother validating the formset unless each form is valid on its own
         return
-    if not self.total_form_count():
-      raise forms.ValidationError, "At least one date range is required."
+    empty_forms = []
     for i in range(0, self.total_form_count()):
       form = self.forms[i]
       start_date = form.cleaned_data.get('start_date')
       end_date = form.cleaned_data.get('end_date')
+      # Checks for empty forms
       if not(start_date and end_date):
-        raise forms.ValidationError, "Start date and end date are mandatory."
-      if start_date > end_date:
+        empty_forms.append(i)
+      elif start_date > end_date:
         raise forms.ValidationError, "Start date must be before or equal to end date."
+    # Delete empty forms
+    empty_forms.reverse()
+    for i in empty_forms:
+      del(self.forms[i])
+    self.management_form.cleaned_data['TOTAL_FORMS']=len(self.forms)
+    if not self.total_form_count():
+      raise forms.ValidationError, "At least one date range is required."
+
+  def is_valid(self):
+      """
+      Returns True if form.errors is empty for every form in self.forms.
+      ABP: changed the range to len(self.forms)
+      """
+      if not self.is_bound:
+          return False
+      # We loop over every form.errors here rather than short circuiting on the
+      # first failure to make sure validation gets triggered for every form.
+      forms_valid = True
+      err = self.errors
+      for i in range(0, len(self.forms)):
+          form = self.forms[i]
+          if self.can_delete:
+              if self._should_delete_form(form):
+                  # This form is going to be deleted so any of its errors
+                  # should not cause the entire formset to be invalid.
+                  continue
+          if bool(self.errors[i]):
+              forms_valid = False
+      return forms_valid and not bool(self.non_form_errors())
 
 
 

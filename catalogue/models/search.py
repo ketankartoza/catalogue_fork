@@ -280,7 +280,7 @@ class SearchDateRange(models.Model):
   """
   Stores the date ranges for the Search model
   """
-  start_date = models.DateField(default = datetime.datetime.now(),help_text='Product date is required. YYYY-MM-DD.')
+  start_date = models.DateField(help_text='Product date is required. YYYY-MM-DD.')
   end_date = models.DateField(help_text='Product date is required. YYYY-MM-DD.')
   search = models.ForeignKey(Search)
   class Meta:
