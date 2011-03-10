@@ -349,7 +349,7 @@ Use central scene for date and time
 --------------------
 
 Composite files - time series:
-
+be
 ``MT_yymmdd_yymmdd_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
 
 Use central time scene for date and time
@@ -418,7 +418,6 @@ products inherit from. It inherits from Generic Imagery product.
 
 The following scheme is used for assigning product id's for sensor based products:
 
---------------------
 
 Single scene file names:
 
@@ -426,24 +425,6 @@ Single scene file names:
 
 e.g. L7-_ETM_HRF_SAM-_168-_00_077-_010530_------_L3Ab_UTM36S
 
---------------------
-
-
-Composite files -mosaics:
-
-``QQQQQQ_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
-
-Use central scene for date and time
-
---------------------
-
-Composite files - time series:
-
-``MT_yymmdd_yymmdd_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
-
-Use central time scene for date and time
-
---------------------
 
 The following key can be used to decode the above:
 
@@ -460,8 +441,6 @@ The following key can be used to decode the above:
 | hhmmss           | time                                                 |
 | LLLL             | processing Level code eg. L2A; L4Ab                  |
 | PPPPPP           | Projection eg. UTM35S; LATLON; ORBIT-                |
-| QQQQQQ           | 1:50000 topographic map name eg 3425CD               |
-| MT_yymmdd_yymmdd | multi-temporal time span: start date to end date     |
 
 **Note:** Elements Mission(SSS), MissionSensor(sss), SensorType(ttt) and
 AcquisitionMode (mmmm) are compulsory for GenericSensorProducts. Where these
@@ -1070,7 +1049,8 @@ derivation from one or more other products.
 
 === Geospatial Product Dictionaries ===
 
-The following dictionaries are implemented to support
+The following dictionaries are implemented to support the creation of
+geospatial products.
 
 ==== Place Type ====
 
@@ -1142,10 +1122,30 @@ For ordinal products we define thematic accuracy by means of the following field
  -
 
 
-The **class count** property is a simple numeric value representing how many
-classes are defined in the dataset.
+The **class count** property is a compulsory simple numeric value representing
+how many classes are defined in the dataset.
 
-The **[confusion_matrix http://en.wikipedia.org/wiki/Confusion_matrix]** property xxxxxx continue here xxxxxxxxxxxxx
+The **[confusion_matrix http://en.wikipedia.org/wiki/Confusion_matrix]**
+property is a collection of comma separated integers representing (in order):
++ true positive (tp)
++ false negative (fn)
++ false positive (fp)
++ true negative (tn)
++
+
+Thus an entry of 10,5,2,8 signfies:
+
++ tp=10
++ fn=5
++ fp=2
++ tn=8
++
+
+The confusion matrix entry is not mandatory.
+
+The **[kappa score http://en.wikipedia.org/wiki/Cohen's_kappa]** is a
+""statistical measure of inter-rater agreement for categorical items"".
+It is represented as a single, non-compulsory real number.
 
 === Product ID Naming Scheme ===
 
@@ -1176,13 +1176,22 @@ discrete classes, but rather along a continuous value range.
 
 === Continuous Product Properties ===
 
-For Continuous data there are two additional fields:
+For Continuous data there are three additional fields:
 
  - range_min - floating point not null
  - range_max - floating point not null
  - unit - foreign key
+ -
 
-The range_min is the smallest value in the continuim of data represented in the dataset.
+The **range_min** is the smallest value in the continuim of data represented in the
+dataset. This value is required.
+
+The **range_max** is the largest value in the continuim of data represented in
+the dataset. This value is required.
+
+The **unit** property is a reference to the unit dictionary and it describes
+the units of measurement for the data represented in the dataset. This value is
+required.
 
 
 === Product ID Naming Scheme ===
@@ -1197,6 +1206,10 @@ aggregations.
 
 === Continuous Product Dictionaries ===
 
-Unit - a look up table storing measurement units that can be present 
+Unit - a look up table storing measurement units:
 
-=== Dictionaries ===
+|| Abbreviation | Name |
+| m | Meters
+| km | Kilometers |
+| etc. ||
+
