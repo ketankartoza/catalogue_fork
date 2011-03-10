@@ -152,7 +152,7 @@ div.formSpacer {
   position:relative;
   height:40px;
   padding-top: 20px;
-  width: 180px;
+  width: 160px;
   float: left;
 }
 
@@ -191,7 +191,7 @@ div.formSpacer {
   background:url(/media/images/slider-bar.png) no-repeat;
   top: 16px;
   height:4px;
-  width:160px;
+  width:140px;
   position:relative;
   float:left;
   z-index: 100;
@@ -303,16 +303,9 @@ ul.dropdown ul {
     display: none;
 }
 
-#advancedSearchDiv {
-    margin-left: 80px;
-}
 
 #product-id-search-list #id_sensors {
   height: 3em;
-}
-
-#advancedSearchDiv #id_sensor_type {
-  width: 220px;
 }
 
 /* ABP: advancedSearch date range */
@@ -340,4 +333,42 @@ div.dr_row {
 .dr_row.selected {
   background-color: #00277B;
   color: white;
+}
+div.button-bar {
+  text-align: right;
+}
+div.button-bar ul {
+  padding-left:0;
+}
+div.button-bar ul li {
+  list-style-type:none;
+  display: inline;
+}
+#search_form {
+  margin: 1em;
+}
+#search_form fieldset {
+  line-height: 1.5em;
+  border: 1px solid #A0A0A0;
+  background: #EEE;
+  padding: 1em;
+  margin:1em 0;
+}
+#search_form fieldset legend {
+  background: #CCC;
+  padding: 6px;
+  font-weight: bold;
+}
+
+#search_form .ui-icon-alert {
+  float: left;
+  margin-right: .3em;
+}
+
+#search_form input[type="text"],
+#search_form .adv_search_ui select,
+#search_form .adv_search_ui select option {
+  margin:0;
+  max-width: 170px;
+  min-width: 170px;
 }

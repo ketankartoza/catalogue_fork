@@ -132,12 +132,12 @@ class Search(models.Model):
     #(PRODUCT_SEARCH_IMAGERY,    'Generic imagery product search'),
   )
 
-  search_type = models.IntegerField('Search type', default = 0, choices = PRODUCT_SEARCH_TYPES, db_index = True)
+  search_type = models.IntegerField('Search type', default=0, choices=PRODUCT_SEARCH_TYPES, db_index=True)
   user = models.ForeignKey(User)
-  keywords = models.CharField('Keywords', max_length=255,blank=True)
+  keywords = models.CharField('Keywords', max_length=255, blank=True)
   # foreign keys require the first arg to the be the relation name
   # so we explicitly have to use verbose_name for the user friendly name
-  sensors = models.ManyToManyField(MissionSensor, verbose_name='Sensors', null=True,blank=True,
+  sensors = models.ManyToManyField(MissionSensor, verbose_name='Sensors', null=True, blank=True,
       help_text='Choosing one or more sensor is required. Use ctrl-click to select more than one.')
   geometry = models.PolygonField(srid=4326, null=True, blank=True,
       help_text='Digitising an area of interest is not required but is recommended.')
@@ -170,20 +170,20 @@ class Search(models.Model):
       null=False,
       default = False,
       help_text='If you want to limit searches to optical products with a certain cloud cover, enable this.')
-  cloud_mean = models.IntegerField(null=True, blank=True, default=5, verbose_name="Max Clouds", help_text = "Select the maximum permissible cloud cover.", max_length=1)
+  cloud_mean = models.IntegerField(null=True, blank=True, default=5, verbose_name="Max Clouds", help_text="Select the maximum permissible cloud cover.", max_length=1)
   # ABP: new additions
-  acquisition_mode  = models.ForeignKey(AcquisitionMode, blank=True, null=True, help_text = 'Choose the acquisition mode.') #e.g. M X T J etc
+  acquisition_mode  = models.ForeignKey(AcquisitionMode, blank=True, null=True, help_text='Choose the acquisition mode.') #e.g. M X T J etc
   license_type = models.IntegerField(choices=License.LICENSE_TYPE_CHOICES, blank=True, null=True, help_text='Choose a license type.')
   band_count = models.IntegerField(choices=BAND_COUNT_CHOICES, blank=True, null=True, help_text='Select the spectral resolution.')
-  geometric_accuracy_mean = models.IntegerField(null=True, blank=True, choices = ACCURACY_MEAN_OPTIONS, help_text = 'Select mean resolution class.')
+  geometric_accuracy_mean = models.IntegerField(null=True, blank=True, choices = ACCURACY_MEAN_OPTIONS, help_text='Select mean resolution class.')
   # sensor_inclination_angle: range
-  sensor_inclination_angle_start = models.FloatField(null=True, blank=True, help_text = 'Select sensor inclination angle start.')
-  sensor_inclination_angle_end = models.FloatField(null=True, blank=True, help_text = 'Select sensor inclination angle end.')
+  sensor_inclination_angle_start = models.FloatField(null=True, blank=True, help_text='Select sensor inclination angle start.')
+  sensor_inclination_angle_end = models.FloatField(null=True, blank=True, help_text='Select sensor inclination angle end.')
   # ABP: 2 new FKs
-  mission = models.ForeignKey( Mission, null=True, blank=True, help_text = 'Select satellite mission.') # e.g. S5
+  mission = models.ForeignKey( Mission, null=True, blank=True, help_text='Select satellite mission.') # e.g. S5
   sensor_type = models.ForeignKey( SensorType, null=True, blank=True, related_name = 'search_sensor_type') #e.g. CAM1
   # ABP: one more FK
-  processing_level = models.ManyToManyField( ProcessingLevel, null=True, blank=True, help_text = 'Select one or more processing level.')
+  processing_level = models.ManyToManyField( ProcessingLevel, null=True, blank=True, help_text='Select one or more processing level.')
 
   # Use the geo manager to handle geometry
   objects = models.GeoManager()
@@ -298,7 +298,7 @@ class Clip( models.Model ):
   by email and/or via a view that shows all clips and their status."""
   guid = models.CharField(max_length=40)
   owner = models.ForeignKey( User )
-  date = models.DateTimeField(verbose_name="Date", auto_now=True, auto_now_add=True, help_text = "Not shown to users")
+  date = models.DateTimeField(verbose_name="Date", auto_now=True, auto_now_add=True, help_text="Not shown to users")
   ## provisory hardcoded choices for clipped image source.
   image = models.CharField( max_length=20,
                             choices = [(0,"zaSpot2mMosaic2009"),

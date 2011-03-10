@@ -7,6 +7,7 @@
   /* <![CDATA[ */
   {# use init rather than jquery document.ready() for ie support! #}
   function init() {
+
     if (OpenLayers.Util.getBrowserName() == "msie" && !window.ieLoaded) {
       window.ieLoaded = true;
       setTimeout(init, 2000);
@@ -58,30 +59,6 @@
         advSearchActivate({{ mySearchType }});
     });
     {% endif %}
-
-    $(function(){
-        // for toggling advanced search on / off
-        $('#advancedSearch').click(function(event)
-        {
-          $('.adv_search_ui').toggle('slow', function(){
-              $('#id_isAdvanced').val($('#advancedSearchDiv').is(':visible'));
-              if ($('#advancedSearchDiv').is(':visible')) {
-                $('#advancedSearch').val('Toggle Simple Search');
-              } else {
-                $('#advancedSearch').val('Toggle Advanced Search');
-              }
-          });
-        });
-        {% if myAdvancedFlag %}{# activate advanced search tab #}
-        advSearchActivate({{ mySearchType }});
-        {% endif %}
-        $('#id_search_type').change(function(e){
-            advSearchActivate(e.currentTarget.value);
-        });
-        $('#id_sensor_inclination_angle_start').change(check_sensor_inclination_angles);
-        $('#id_sensor_inclination_angle_end').change(check_sensor_inclination_angles);
-    });
-
 
     // ABP: new Ajax filtering
     // Set select options for sensor related dictionaries

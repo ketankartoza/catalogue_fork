@@ -102,7 +102,7 @@ class AdvancedSearchForm(forms.ModelForm):
 
   cloud_mean = forms.CharField(widget=SliderWidget(),
                                   required=False,
-                                  label="Maximum cloud cover",
+                                  label="Cloud cover",
                                   help_text = 'Select the maximum cloud cover when searching for images. \
                                                Note that not all sensors support cloud cover filtering.\
                                               ')

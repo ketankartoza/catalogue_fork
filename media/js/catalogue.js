@@ -176,7 +176,7 @@ function enableNavigation()
   mMap.getControlsByClass('OpenLayers.Control.Navigation')[0].activate();
 }
 
-/* 
+/*
  * Populates mMapControls with appropriate editing controls for layer type
  * @note Since we are putting the controls into a panel outside the map,
  * we need to explicitly define the styles for the icons etc.
@@ -299,7 +299,7 @@ function removeFromCart(theId, theObject)
 {
   //check if this product has delivery details form
   var myOrderForm_refs = $('#add_form #id_ref_id');
-    if (myOrderForm_refs.length >0){	
+    if (myOrderForm_refs.length >0){
 	var current_refs=myOrderForm_refs.val();
 	//check if current_refs are empty, and convert to array
 	if (current_refs.length){
@@ -555,24 +555,6 @@ function setupBaseMap()
   mMap.addControl(new OpenLayers.Control.MousePosition({'div': document.getElementById("map-location")}));
   mMap.addControl(mNavigationPanel);
 }
-
-/*
- * @param num : search_type enum value
-*/
-function advSearchActivate(search_type){
-    if(typeof search_type == 'undefined') {
-        search_type = 0;
-    }
-    $('.adv_search_ui .adv_fld').not('.adv_search_' + search_type).hide();
-    // Check if #advancedSearch is visible
-    if($('#advancedSearchDiv').is(':visible')){
-        $('.adv_search_' + search_type).show('slow');
-    } else {
-        $('.adv_search_' + search_type).show();
-        $('.adv_search_ui').show('slow');
-    }
-    $('#id_isAdvanced').val(true);
-};
 
 /*
  * @param theLayers and array of layers that should be added to the map
