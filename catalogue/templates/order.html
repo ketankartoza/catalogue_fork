@@ -145,7 +145,10 @@
 </table>
     {% if user.is_staff %}
     {% if myOrder.delivery_detail.geometry %}
-    <a href="/downloadclipgeometry/{{ myOrder.id }}/">Download clip geometry</a>
+    Download clip geometry:
+    <a class="geom_download_link" href="/downloadclipgeometry/{{ myOrder.id }}/?shp">SHP</a>
+    <a class="geom_download_link" href="/downloadclipgeometry/{{ myOrder.id }}/?kml">KML</a>
+    <a class="geom_download_link" href="/downloadclipgeometry/{{ myOrder.id }}/?kmz">KMZ</a>
     {% endif %}
     {% endif %}
 {% box_end %}
@@ -178,3 +181,9 @@ Order History
       </form>
   </div>
 {% endif %}
+
+<script>
+$(document).ready(function (){
+$('.geom_download_link').button();
+});
+</script>

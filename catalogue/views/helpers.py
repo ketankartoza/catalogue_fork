@@ -8,7 +8,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse
 
 from catalogue.models import *
 from django.template import RequestContext
@@ -17,6 +17,10 @@ from django.template.loader import render_to_string
 
 # for sending email
 from django.core.mail import send_mail,send_mass_mail
+
+# for kmz
+import zipfile
+from cStringIO import StringIO
 
 # Read from settings
 CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS = getattr(settings, 'CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS', False )
@@ -531,3 +535,24 @@ def standardLayers(theRequest):
     myLayersList = "[zaSpot10mMosaic2009,zaSpot10mMosaic2008,zaSpot10mMosaic2007,zaRoadsBoundaries]"
     myActiveBaseMap =  "zaSpot10mMosaic2009"
   return myLayersList, myLayerDefinitions, myActiveBaseMap
+
+
+#render_to_kml helpers
+def render_to_kml(theTemplate,theContext,filename):
+  response = HttpResponse(render_to_string(theTemplate,theContext))
+  response['Content-Type'] = 'application/vnd.google-earth.kml+xml'
+  response['Content-Disposition'] = 'attachment; filename=%s.kml' % filename
+  return response
+
+def render_to_kmz(theTemplate,theContext,filename):
+  response = HttpResponse(render_to_string(theTemplate,theContext))
+  kmz = StringIO()
+  f = zipfile.ZipFile(kmz, 'w', zipfile.ZIP_DEFLATED)
+  f.writestr('%s.kml' % filename, response.content)
+  f.close()
+  response.content = kmz.getvalue()
+  kmz.close()
+  response['Content-Type']        = 'application/vnd.google-earth.kmz'
+  response['Content-Disposition'] = 'attachment; filename=%s.kmz' % filename
+  response['Content-Length']      = str(len(response.content))
+  return response

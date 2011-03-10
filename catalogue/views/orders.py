@@ -6,6 +6,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.template import RequestContext
 # python logging support to django logging middleware
 import logging
+from django.conf import settings
 
 # Models and forms for our app
 from catalogue.models import *
@@ -131,9 +132,18 @@ def orderMonthlyReport( theRequest, theyear, themonth):
 @staff_member_required
 def downloadClipGeometry(theRequest,theId):
   myOrder = get_object_or_404(Order,id=theId)
-  myResponder = ShpResponder( myOrder )
-  myResponder.file_name = u'clip_geometry_order_%s' % myOrder.id
-  return  myResponder.write_delivery_details( myOrder )
+
+  if theRequest.GET.has_key('shp'):
+    myResponder = ShpResponder( myOrder )
+    myResponder.file_name = u'clip_geometry_order_%s' % myOrder.id
+    return  myResponder.write_delivery_details( myOrder )
+  elif theRequest.GET.has_key('kml'):
+    return render_to_kml("kml/clipGeometry.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL},u'clip_geometry_order_%s' % myOrder.id)
+  elif theRequest.GET.has_key('kmz'):
+    return render_to_kmz("kml/clipGeometry.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL},u'clip_geometry_order_%s' % myOrder.id)
+  else:
+    logging.info('Request cannot be proccesed, unsupported download file type')
+    raise Http404
 
 @login_required
 def viewOrder (theRequest, theId):
