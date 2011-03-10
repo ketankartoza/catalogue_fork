@@ -783,7 +783,7 @@ that these can be correctly resolved. For example:
 
 So we can see from this example, we have the following:
 
-||Satellite | Mission Sensor | Sensor Type | Acquisition Mode |
+|| Satellite | Mission Sensor | Sensor Type | Acquisition Mode |
 | L7 | ETM | HRF | SAM |
 
 In cases where the entries for these dictionary terms do not exist, new records should be added to the tables using the following logic:
@@ -815,7 +815,9 @@ In cases where the entries for these dictionary terms do not exist, new records 
 
 == Optical products ==
 
-**Synopsis:** Vector and Raster products where data are grouped into discrete classes.
+**Synopsis:** Imagery where each pixel represents the reflectance value of
+light waves reflected from a remote target within a given segment of the light
+spectrum.
 
 **Concrete or Abstract:** Concrete
 
@@ -836,7 +838,25 @@ further specialisations.
 
 === Optical Product Properties ===
 
+The optical product model introduces a number of properies in addition to those
+inherited from the GenericSensorProduct base class.
+
+ - cloud_cover 
+ - sensor_inclination_angle 
+ - sensor_viewing_angle
+ - gain_name 
+ - gain_value_per_channel 
+ - gain_change_per_channel 
+ - bias_per_channel 
+ - solar_zenith_angle 
+ - solar_azimuth_angle 
+ - earth_sun_distance 
+ -
+
 === Product ID Naming Scheme ===
+
+The naming of optical products follows the rules from its base class,
+GenericSensorProduct.
 
 === Optical Product Aggregation Rules ===
 
@@ -858,6 +878,12 @@ new image should be modelled as a **GenericImageryProduct**.
 
 == Radar Products ==
 
+**Synopsis:** Imagery where each pixel represents the reflectance value of
+radio waves reflected from a remote target.
+
+**Concrete or Abstract:** Concrete
+
+
 === Radar Product Aggregation Rules ===
 
 In the DAG (Directed Acyclical Graph) that maps relationships between products
@@ -872,6 +898,23 @@ image, the new image should be modelled as a **GenericImageryProduct**.
 
 Follows the same scheme as defined in OpticalProduct documentation.
 
+=== Optical Product Properties ===
+
+The radar product model introduces a number of properies in addition to those
+inherited from the GenericSensorProduct base class. These properties are not
+shared with optical products.
+
+ - imaging_mode
+ - look_direction
+ - antenna_receive_configuration
+ - polarising_mode
+ - polarising_list
+ - slant_range_resolution
+ - azimuth_range_resolution
+ - orbit_direction
+ - calibration
+ - incidence_angle
+ -
 
 %----------------------------------------------------------
 %----------------------------------------------------------
