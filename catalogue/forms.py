@@ -203,7 +203,7 @@ class OrderForm(forms.ModelForm):
   class Meta:
     model = Order
     #exclude = ('user','order_status')
-    exclude = ('user','order_status','delivery_method','delivery_detail')
+    exclude = ('user','order_status','delivery_detail')
 
 class DeliveryDetailForm(forms.ModelForm):
   ref_id = forms.CharField(widget=forms.HiddenInput(),required=False)
