@@ -9,7 +9,9 @@ class AOIGeometryField(forms.CharField):
   def __init__(self, *args,**kwargs):
     super(AOIGeometryField,self).__init__(*args, **kwargs)
     self.label = "Area of interest"
-    self.help_text ="Enter bounding box coordinates separated by comma for West, South, East and North edges i.e. (20,-34,22,-32), or enter single coordinate which defines circle center and radius in kilometers (20,-32,100)"
+    #if we dont supply help_text use this as default
+    if not(kwargs.has_key('help_text')):
+      self.help_text ="Enter bounding box coordinates separated by comma for West, South, East and North edges i.e. (20,-34,22,-32), or enter single coordinate which defines circle center and radius in kilometers (20,-32,100)"
 
   def clean(self,value):
     """ AOI geometry validator """

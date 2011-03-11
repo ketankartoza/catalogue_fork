@@ -138,9 +138,9 @@ def downloadOrder(theRequest,theId):
     myResponder.file_name = u'products_for_order_%s' % myOrder.id
     return  myResponder.write_order_products( myOrder.searchrecord_set.all() )
   elif theRequest.GET.has_key('kml'):
-    return render_to_kml("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL},u'products_for_order_%s' % myOrder.id)
+    return render_to_kml("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL, 'transparentStyle':True},u'products_for_order_%s' % myOrder.id)
   elif theRequest.GET.has_key('kmz'):
-    return render_to_kmz("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL},u'products_for_order_%s' % myOrder.id)
+    return render_to_kmz("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL, 'transparentStyle':True},u'products_for_order_%s' % myOrder.id)
   else:
     logging.info('Request cannot be proccesed, unsupported download file type')
     raise Http404
@@ -154,9 +154,9 @@ def downloadClipGeometry(theRequest,theId):
     myResponder.file_name = u'clip_geometry_order_%s' % myOrder.id
     return  myResponder.write_delivery_details( myOrder )
   elif theRequest.GET.has_key('kml'):
-    return render_to_kml("kml/clipGeometry.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL},u'clip_geometry_order_%s' % myOrder.id)
+    return render_to_kml("kml/clipGeometry.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL, 'transparentStyle':True},u'clip_geometry_order_%s' % myOrder.id)
   elif theRequest.GET.has_key('kmz'):
-    return render_to_kmz("kml/clipGeometry.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL},u'clip_geometry_order_%s' % myOrder.id)
+    return render_to_kmz("kml/clipGeometry.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL,'transparentStyle':True},u'clip_geometry_order_%s' % myOrder.id)
   else:
     logging.info('Request cannot be proccesed, unsupported download file type')
     raise Http404
@@ -348,7 +348,7 @@ def addOrder( theRequest ):
     'myRecords' : myRecords,
     'myBaseTemplate' : "emptytemplate.html", #propogated into the cart template
     'mySubmitLabel' : "Submit Order",
-    'myMessage' : " <div>Please specify any details for your order requirements below. If you need specific processing steps taken on individual images, please use the notes area below to provide detailed instructions.</div>",
+    'myMessage' : " <div>Please specify any details for your order requirements below. If you need specific processing steps taken on individual images, please use the notes area below to provide detailed instructions. If you would like the product(s) to be clipped and masked to a specific geographic region, you can digitise that region using the map above, or the geometry input field below.</div>",
     'myLayerDefinitions' : myLayerDefinitions,
     'myLayersList' : myLayersList,
     'myActiveBaseMap' : myActiveBaseMap
