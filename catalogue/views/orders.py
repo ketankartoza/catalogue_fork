@@ -175,10 +175,10 @@ def viewOrder (theRequest, theId):
     myTemplatePath = "orderPageAjax.html"
     logging.debug("Request is ajax enabled")
   myOrder = get_object_or_404(Order,id=theId)
-  myRecords = SearchRecord.objects.all().filter(user=theRequest.user).filter(order=myOrder)
+  myRecords = SearchRecord.objects.all().filter(order=myOrder)
   if not ((myOrder.user == theRequest.user) or (theRequest.user.is_staff)):
     raise Http404
-  myHistory = OrderStatusHistory.objects.all().filter(order=theId)
+  myHistory = OrderStatusHistory.objects.all().filter(order=myOrder)
   myForm = None
   if theRequest.user.is_staff:
     myForm = OrderStatusHistoryForm()
@@ -443,7 +443,11 @@ def addOrder( theRequest ):
 @renderWithContext('cartContents.html')
 def viewOrderItems(theRequest,theOrderId):
   """Just returns a table element - meant for use with ajax"""
-  myRecords = SearchRecord.objects.all().filter(user=theRequest.user).filter(order=theOrderId)
+  myOrder = get_object_or_404(Order,id=theOrderId)
+  if not ((myOrder.user == theRequest.user) or (theRequest.user.is_staff)):
+    raise Http404
+  myRecords = SearchRecord.objects.all().filter(order=theOrderId)
+
   return ({
          'myRecords' : myRecords,
          # Possible flags for the record template
