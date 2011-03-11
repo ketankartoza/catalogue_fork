@@ -242,16 +242,16 @@ def updateOrderHistory(theRequest):
     return HttpResponse("<html><head></head><body>Query error - please report to SAC staff</body></html>")
   myOrder.order_status=myNewStatus
   myOrder.save()
-  myHistory = OrderStatusHistory.objects.all().filter(order=myOrderId)
+  myHistory = OrderStatusHistory.objects.all().filter(order=myOrder)
   # These next few lines and the long list of options below needed for no ajax fallback
-  myRecords = SearchRecord.objects.all().filter(user=theRequest.user).filter(order=myOrder)
+  myRecords = SearchRecord.objects.all().filter(order=myOrder)
   myForm = None
   if theRequest.user.is_staff:
     myForm = OrderStatusHistoryForm()
   if TaskingRequest.objects.filter(id=myOrderId):
-    notifySalesStaffOfTaskRequest(theRequest.user,myOrderId)
+    notifySalesStaffOfTaskRequest(myOrder.user,myOrderId)
   else:
-    notifySalesStaff(theRequest.user,myOrderId)
+    notifySalesStaff(myOrder.user,myOrderId)
   return render_to_response(myTemplatePath,
       {  'myOrder': myOrder,
          'myRecords' : myRecords,
