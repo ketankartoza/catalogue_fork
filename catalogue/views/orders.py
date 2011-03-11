@@ -129,6 +129,22 @@ def orderMonthlyReport( theRequest, theyear, themonth):
     })
 
 
+@login_required
+def downloadOrder(theRequest,theId):
+  myOrder = get_object_or_404(Order,id=theId)
+
+  if theRequest.GET.has_key('shp'):
+    myResponder = ShpResponder( myOrder )
+    myResponder.file_name = u'products_for_order_%s' % myOrder.id
+    return  myResponder.write_order_products( myOrder.searchrecord_set.all() )
+  elif theRequest.GET.has_key('kml'):
+    return render_to_kml("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL},u'products_for_order_%s' % myOrder.id)
+  elif theRequest.GET.has_key('kmz'):
+    return render_to_kmz("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL},u'products_for_order_%s' % myOrder.id)
+  else:
+    logging.info('Request cannot be proccesed, unsupported download file type')
+    raise Http404
+
 @staff_member_required
 def downloadClipGeometry(theRequest,theId):
   myOrder = get_object_or_404(Order,id=theId)
@@ -179,6 +195,7 @@ def viewOrder (theRequest, theId):
          # myThumbFlag
          # myShowDeliveryDetailsFlag
          # myShowDeliveryDetailsFormFlag
+         # myDownloadOrderFlag
          'myShowSensorFlag' : False,
          'myShowSceneIdFlag' : True,
          'myShowDateFlag': False,
@@ -189,6 +206,7 @@ def viewOrder (theRequest, theId):
          'myPreviewFlag' : False,
          'myShowDeliveryDetailsFlag':True,
          'myShowDeliveryDetailsFormFlag':False,
+         'myDownloadOrderFlag':True,
          'myForm' : myForm,
          'myHistory' : myHistory,
          'myCartTitle' : 'Product List',

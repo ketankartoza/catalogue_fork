@@ -572,3 +572,103 @@ class ShpResponder(object):
         ds.Destroy()
         mimetype='application/zip'
         return self.zip_response(tmp.name,self.file_name,mimetype)
+
+    def write_order_products(self,theRecordsArray):
+        """
+          Write a shapefile out to a file from a ordered products geometry
+        """
+        tmp = tempfile.NamedTemporaryFile(suffix='.shp', mode = 'w+b')
+        # we must close the file for GDAL to be able to open and write to it
+        tmp.close()
+
+        dr = ogr.GetDriverByName('ESRI Shapefile')
+        ds = dr.CreateDataSource(tmp.name)
+        if ds is None:
+            raise Exception('Could not create file!')
+
+        native_srs = osr.SpatialReference()
+        native_srs.ImportFromEPSG(4326) # latlong wgs84
+
+        if self.proj_transform:
+            output_srs = osr.SpatialReference()
+            output_srs.ImportFromEPSG(self.proj_transform)
+        else:
+            output_srs = native_srs
+
+        ogr_type = OGRGeomType('POLYGON').num
+        layer = ds.CreateLayer('lyr',srs=output_srs,geom_type=ogr_type)
+
+        attributes = []
+        attributes.append("product_id")
+        attributes.append("mission")
+        attributes.append("mission_sensor")
+        attributes.append("sensor_type")
+        attributes.append("acquisition_mode")
+        attributes.append("processing_level")
+        attributes.append("owner")
+        attributes.append("license")
+        attributes.append("product_acquisition_start")
+        attributes.append("product_acquisition_end")
+        attributes.append("projection")
+        attributes.append("quality")
+        attributes.append("geometric_accuracy_mean")
+        attributes.append("geometric_accuracy_1sigma")
+        attributes.append("geometric_accuracy_2sigma")
+        attributes.append("spectral_accuracy")
+        attributes.append("radiometric_signal_to_noise_ratio")
+        attributes.append("radiometric_percentage_error")
+        attributes.append("geometric_resolution_x")
+        attributes.append("geometric_resolution_y")
+        attributes.append("spectral_resolution")
+        attributes.append("radiometric_resolution")
+        attributes.append("creating_software")
+        attributes.append("original_product_id")
+        attributes.append("orbit_number")
+        attributes.append("product_revision")
+        attributes.append("path")
+        attributes.append("path_offset")
+        attributes.append("row")
+        attributes.append("row_offset")
+
+        for field in attributes:
+            field_defn = ogr.FieldDefn(str(field),ogr.OFTString)
+            field_defn.SetWidth( 255 )
+            if layer.CreateField(field_defn) != 0:
+                raise Exception('Faild to create field')
+
+        feature_def = layer.GetLayerDefn()
+
+        for item in theRecordsArray:
+            feat = ogr.Feature( feature_def )
+
+            for field in attributes:
+                #ABP: added getConcreteProduct and None
+                value = getattr(item.product.getConcreteInstance(),field,None)
+                logging.info("Shape writer: Setting %s to %s" % (field,value))
+                try:
+                    string_value = str(value)
+                except UnicodeEncodeError, E:
+                    string_value = ''
+                    logging.info( "Unicode conversion error" )
+                #truncate field name to 10 letters to deal with shp limitations
+                logging.info("Truncated field name: %s" % str(field[0:10]))
+                feat.SetField(str(field[0:10]),string_value)
+
+            geom = getattr(item.product,"spatial_coverage")
+
+            if geom:
+                ogr_geom = ogr.CreateGeometryFromWkt(geom.wkt)
+                if self.proj_transform:
+                    ct = osr.CoordinateTransformation(native_srs, output_srs)
+                    ogr_geom.Transform(ct)
+                check_err(feat.SetGeometry(ogr_geom))
+            else:
+                pass
+
+            check_err(layer.CreateFeature(feat))
+
+        ds.Destroy()
+        #Next line for debugging only if you want to see log info in debugtoolbar
+        #return HttpResponse("<html><head></head><body>Done</body></html>")
+        mimetype='application/zip'
+        return self.zip_response(tmp.name,self.file_name,mimetype)
