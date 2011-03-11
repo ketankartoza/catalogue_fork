@@ -92,6 +92,7 @@ and all new products are assigned to this institution:
 || ID |             Name              |   Address1    | Address2 |   Address3   | Post Code |
 |  1 | Satellite Applications Centre | Hartebeeshoek | Gauteng  | South Africa | 0000       |
 
+**Constraint:** Name must be unique.
 
 ----------------------
 **Note:** Wolfgang verify that we won't be storing the original data owner
@@ -172,6 +173,7 @@ The following processing levels are listed in the database.
  |  17 | 3Bb         | Level 3Bb |
  |  18 | 4           | Level 4   |
 
+**Constraints:** Name and abbreviation must both be unique.
 
 ---------------------------
 **Note:** These should be updated to include a proper description with each in
@@ -199,6 +201,7 @@ the EPSG code. For reference, an extract of the entries is provided in the table
  |  7 |     32629 | UTM29N |
  |  8 |     32731 | UTM31S |
 
+**Constraints:** EPSG Code must be unique.
 
 ==== Quality ====
 
@@ -234,6 +237,8 @@ available:
  | 1 | Unknown | None      |
  | 2 | SARMES1 | Sarmes1   |
 
+**Constraints:** Name must be unique.
+
 Sarmes2 will be added to this list in the future, and other additional packages
 as needed.
 
@@ -254,6 +259,9 @@ these licenses.
  |  2 | SAC Free License | SAC Free License   |  |
  |  3 | SAC Partner License | SAC Partner License   |  |
 
+
+**Constraints:** Name must be unique.
+
 License Type Enumeration: The license type is an enumerated list (managed
 directly in the model rather than in a separate dictionary via a foreign key
 constraint). The reason for this is that application logic specific to the
@@ -269,6 +277,7 @@ Free data, government license or commercial license or any.
 |  1  | Free | Can be freely shared and redistributed without restriction |
 |  2  | Government License | Applies to products that can be freely redistributed to government departments. |
 |  3  | Commercial | Applies to product that can only be commercially distributed |
+
 
 
 The license type is determined on a sensor by sensor, product by product basis. The following rules hold true:
@@ -513,6 +522,7 @@ below.
 
 **Note:** RE - RapidEye needs to be added to this list
 
+**Constraints:** Name and abbreviation must be unique_together. Name must be unique.
 
 ==== Mission Sensors ====
 
@@ -557,6 +567,7 @@ TM - Thematic Mapper
 ETM - Enhanced thematic mapper
 MSS Multi-spectral
 
+**Constraints:** Name and abbreviation must be unique_together. Name must be unique.
 
 
 **Note:** A one-to-many relationship will be created between mission sensor
