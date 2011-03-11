@@ -315,3 +315,6 @@ ul.dropdown ul {
   width: 220px;
 }
 
+.geom_download_link {
+  text-decoration:none;
+}
