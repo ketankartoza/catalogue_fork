@@ -16,11 +16,27 @@
       {% endif %}
       {% if myLayersList %}
         setupBaseMap();
+        mMap.addControl(new OpenLayers.Control.LayerSwitcher());
         mMap.addLayers( {{ myLayersList|safe }} );
+
+        mVectorLayer = new OpenLayers.Layer.Vector("search_geometry");
+        mMap.addLayer(mVectorLayer);
+        // Add geometry specific panel of toolbar controls
+        setupEditingPanel(mVectorLayer);
+
+        mWKTFormat = new OpenLayers.Format.WKT();
+        mVectorLayer.events.on({"featuremodified" : modifyWKT});
+        mVectorLayer.events.on({"featureadded" : addWKT});
+
+        var bounds = new OpenLayers.Bounds(16.3477, -35.2411, 33.3984, -21.9727);
+        bounds.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
+        mMap.zoomToExtent(bounds);
+
       {% endif %}
       {% if myTaskingRequestFlag %}
         setupTaskingMap({{ myLayersList|safe }} );
       {% endif %}
+/*
       {% for myField in myForm %}
         $("#{{myField.html_name}}Help").dialog({
         autoOpen: false, 
@@ -38,6 +54,7 @@
         return false;
       }); 
       {% endfor %}
+*/
 {# // add tooltip #}
     $("#map-navigation-panel div[title]").tooltip('#maptooltip');
     $('#OpenLayers_Control_MaximizeDiv_innerImage').css({'height':'100px'}); {# //dirty hack, OL sets 'style' element which cannot be overriden by CSS #}
@@ -48,6 +65,14 @@
   <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="horizontal" id="add_form">
   {% box_start "" "" "" %}
     <h2>{{ myTitle }}</h2>
+    <div id="map-container" class="span-21 ui-widget-content ui-state-highlight ui-corner-all last"> {# thus nested jquery widget container #}
+      <div id="map" class="span-21 last"></div>
+      <div id="map-panel" class="span-21 last">
+        <div id="map-navigation-panel" class="span-7 append-1"></div>
+        <div id="map-location"  class="prepend-1 span-4 append-1 small"></div>{# small class from blueprint css #}
+        <div class="olControlScalebar span-6 append-1" id="map-scale"></div>
+      </div>
+    </div>
     {{  myMessage|safe }}
         <table>
           {{myDeliveryDetailForm}}

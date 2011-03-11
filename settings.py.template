@@ -212,3 +212,6 @@ LOGIN_URL = '/accounts/login/'
 I18N_URLS = False
 DEFAULT_AVATAR = os.path.join(MEDIA_ROOT, 'generic.jpg')
 AVATAR_WEBSEARCH = False
+
+#external site URL, used in KML data generation
+EXTERNAL_SITE_URL = 'http://catalogue.sac.co.za'
