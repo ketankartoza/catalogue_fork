@@ -1,7 +1,11 @@
+import logging
+import datetime
+import re
+
 from django import forms
 from django.forms.models import BaseInlineFormSet
 from django.utils.translation import ugettext_lazy as _
-import logging
+from django.core.exceptions import ValidationError
 
 from catalogue.models import *
 from catalogue.datetimewidget import *
@@ -10,8 +14,6 @@ from catalogue.sliderwidget import *
 # Used for reading shapefiles etc
 #from django.contrib.gis.gdal import DataSource
 from catalogue.aoigeometry import AOIGeometryField
-
-import datetime
 
 # Support dmy formats (see http://dantallis.blogspot.com/2008/11/date-validation-in-django.html )
 DATE_FORMATS = (
@@ -24,6 +26,10 @@ DATE_FORMATS = (
 class DateRangeFormSet(BaseInlineFormSet):
   """
   Date range search formsets with validation
+
+  This class needs some override to handle the case of
+  missing (deleted) forms.
+
   """
   def clean(self):
     """
@@ -34,22 +40,23 @@ class DateRangeFormSet(BaseInlineFormSet):
         # Don't bother validating the formset unless each form is valid on its own
         return
     empty_forms = []
-    for i in range(0, self.total_form_count()):
+    for i in range(0, len(self.forms)):
       form = self.forms[i]
       start_date = form.cleaned_data.get('start_date')
       end_date = form.cleaned_data.get('end_date')
       # Checks for empty forms
-      if not(start_date and end_date):
+      if not(start_date and end_date) or self._should_delete_form(form):
         empty_forms.append(i)
       elif start_date > end_date:
         raise forms.ValidationError, "Start date must be before or equal to end date."
-    # Delete empty forms
+    # Delete empty/deleted forms
     empty_forms.reverse()
     for i in empty_forms:
       del(self.forms[i])
     self.management_form.cleaned_data['TOTAL_FORMS']=len(self.forms)
-    if not self.total_form_count():
+    if not len(self.forms):
       raise forms.ValidationError, "At least one date range is required."
+    logging.debug('Date range forms:', self.forms)
 
   def is_valid(self):
       """
@@ -73,6 +80,75 @@ class DateRangeFormSet(BaseInlineFormSet):
               forms_valid = False
       return forms_valid and not bool(self.non_form_errors())
 
+  def ___construct_forms(self):
+    """
+    instantiate all the forms and put them in self.forms
+
+    ABP: pass on key exception
+    """
+    #import ipy; ipy.shell()
+    self.forms = []
+    for i in xrange(self.total_form_count()):
+      try:
+        self.forms.append(self._construct_form(i))
+      except (KeyError, IndexError), e:
+        raise
+        import ipy; ipy.shell()
+
+  def full_clean(self):
+    """
+    Cleans all of self.data and populates self._errors.
+    ABP: changed the range to len(self.forms)
+    """
+    self._errors = []
+    if not self.is_bound: # Stop further processing.
+      return
+    for i in range(0, len(self.forms)):
+      form = self.forms[i]
+      self._errors.append(form.errors)
+    # Give self.clean() a chance to do cross-form validation.
+    try:
+      self.clean()
+    except ValidationError, e:
+      self._non_form_errors = self.error_class(e.messages)
+
+
+###############################################################################
+#
+# Custom print intervals like field
+#
+###############################################################################
+class IntegersCSVIntervalsField(forms.RegexField):
+  """
+  Accepts ranges: 1-2 3-55, comma separated values and single values
+  """
+  regex='[1-9]\d*[-][1-9]\d*|[1-9]\d*'
+  def __init__(self, *args, **kwargs):
+    return super(IntegersCSVIntervalsField, self).__init__(regex=IntegersCSVIntervalsField.regex, *args, **kwargs)
+
+  @staticmethod
+  def to_tuple(value):
+    """
+    Normalize data to a list of integer single values and tuples for ranges
+    """
+    # Return an empty list if no input was given.
+    values = []
+    for token in re.findall(IntegersCSVIntervalsField.regex, value):
+      values.append(tuple(map(lambda x: int(x), token.split('-'))))
+    return values
+
+  def validate(self, values):
+      """
+      Checks the intervals
+      """
+      # Use the parent's handling of required fields, etc.
+      super(IntegersCSVIntervalsField, self).validate(values)
+
+      for value in IntegersCSVIntervalsField.to_tuple(values):
+        if len(value) == 2:
+          if not value[1] > value[0]:
+            raise ValidationError, 'The range values are not correct: %d %d' % value
+
 
 
 class AdvancedSearchForm(forms.ModelForm):
@@ -83,6 +159,8 @@ class AdvancedSearchForm(forms.ModelForm):
   # Note2: Only custom fields are added here. Fields that need no tweaking are
   #        pulled by the form generator directly from the model
 
+  POLARISING_MODE_CHOICES = { '': 'All'}
+  POLARISING_MODE_CHOICES.update(dict(RadarProduct.POLARISING_MODE_CHOICES))
   # ABP: the common part: will be searched on GenericProducts class only
   start_datepicker = forms.DateField(widget=DateTimeWidget,required=False, label="Start date", input_formats=DATE_FORMATS,
       error_messages={'required': 'Entering a start date for your search is required.'},
@@ -107,9 +185,13 @@ class AdvancedSearchForm(forms.ModelForm):
                                                Note that not all sensors support cloud cover filtering.\
                                               ')
   isAdvanced = forms.CharField(widget=forms.HiddenInput(), required=False)
+  polarising_mode = forms.ChoiceField(choices=POLARISING_MODE_CHOICES, required=False)
   geometry = forms.CharField(widget=forms.HiddenInput(), required=False,
       help_text='Digitising an area of interest is not required but is recommended. You can use the help tab in the map area for more information on how to use the map. Draw an area of interest on the map to refine the set of search results to a specific area.')
   aoi_geometry = AOIGeometryField(required=False)
+
+  k_orbit_path = IntegersCSVIntervalsField(required=False)
+  j_frame_row = IntegersCSVIntervalsField(required=False)
 
 
   class Meta:
@@ -162,12 +244,18 @@ class AdvancedSearchForm(forms.ModelForm):
 
     # ABP: checks for advanced search only (not in cleaned_data because it does not belong to Search model)
     if self.data.get('isAdvanced') == 'true':
+      if not myCleanedData.get('geometric_accuracy_mean'):
+        self._errors["geometric_accuracy_mean"] = self.error_class(["Error: Spatial resolution is required for advanced search!"])
+        raise forms.ValidationError('Error: One or more required values are missing!')
       myStartSensorAngle = myCleanedData.get('sensor_inclination_angle_start')
       myEndSensorAngle = myCleanedData.get('sensor_inclination_angle_end')
       if (myStartSensorAngle and myEndSensorAngle) and (myEndSensorAngle < myStartSensorAngle):
+        self._errors["sensor_inclination_angle_start"] = self.error_class(["Check values."])
+        self._errors["sensor_inclination_angle_end"] = self.error_class(["Check values."])
         raise forms.ValidationError("Error: Start sensor angle can not be greater than the end sensor angle!")
 
       if int(myCleanedData.get('search_type')) in (Search.PRODUCT_SEARCH_OPTICAL, Search.PRODUCT_SEARCH_RADAR) and not myCleanedData.get('sensors'):
+        self._errors["sensors"] = self.error_class(["Please select one or more sensors."])
         raise forms.ValidationError("Error: Sensors are mandatory for sensors-based products search!")
 
     return self.cleaned_data

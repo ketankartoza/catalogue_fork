@@ -7,7 +7,7 @@ from django.contrib.gis.db import models
 
 class MissionGroup( models.Model ):
   """Mission Group"""
-  name = models.CharField( max_length="255" )
+  name = models.CharField( max_length="255", unique=True )
   class Meta:
     app_label= 'catalogue'
   def __unicode__(self):
@@ -19,7 +19,7 @@ class MissionGroup( models.Model ):
 class Mission( models.Model ):
   """Satellite or Mission"""
   abbreviation = models.CharField( max_length="3", unique=True )
-  name = models.CharField( max_length="255" )
+  name = models.CharField( max_length="255", unique=True )
   mission_group = models.ForeignKey(MissionGroup) # e.g. S5
   class Meta:
     app_label= 'catalogue'
@@ -39,6 +39,7 @@ class MissionSensor( models.Model ):
   description = models.TextField()
   has_data = models.BooleanField(help_text='Mark false if there is no data for this sensor')
   mission = models.ForeignKey(Mission) # e.g. S5
+  is_radar = models.BooleanField(help_text='Mark true if this sensor is a radar sensor', default=False)
   class Meta:
     app_label= 'catalogue'
     unique_together = ('mission', 'abbreviation')
@@ -105,8 +106,8 @@ class ProcessingLevel( models.Model ):
 ###############################################################################
 
 class Projection( models.Model ):
-  epsg_code = models.IntegerField()
-  name = models.CharField('Name', max_length=128, db_index=True,unique=True)
+  epsg_code = models.IntegerField(unique=True)
+  name = models.CharField('Name', max_length=128, db_index=True, unique=True)
 
   def __unicode__(self):
     return "EPSG:" + str( self.epsg_code ) + " " + self.name
@@ -126,7 +127,7 @@ class Projection( models.Model ):
 ###############################################################################
 
 class Institution( models.Model ):
-  name = models.CharField( max_length="255" )
+  name = models.CharField( max_length="255", unique=True )
   address1 = models.CharField( max_length="255" )
   address2 = models.CharField( max_length="255" )
   address3 = models.CharField( max_length="255" )
@@ -152,7 +153,7 @@ class License( models.Model ):
       (LICENSE_TYPE_GOVERNMENT, 'Government'),
       (LICENSE_TYPE_COMMERCIAL, 'Commercial'),
     )
-  name = models.CharField( max_length="255" )
+  name = models.CharField( max_length="255", unique=True )
   details = models.TextField()
   type = models.IntegerField(choices=LICENSE_TYPE_CHOICES, default=LICENSE_TYPE_COMMERCIAL)
 
@@ -165,7 +166,7 @@ class License( models.Model ):
 ###############################################################################
 
 class Quality( models.Model ):
-  name = models.CharField( max_length="255" )
+  name = models.CharField( max_length="255" , unique=True)
   def __unicode__(self):
      return self.name
   class Meta:
@@ -176,7 +177,7 @@ class Quality( models.Model ):
 ###############################################################################
 
 class CreatingSoftware( models.Model ):
-  name = models.CharField( max_length="255" )
+  name = models.CharField( max_length="255", unique=True )
   version = models.CharField( max_length="100" )
   class Meta:
     app_label= 'catalogue'

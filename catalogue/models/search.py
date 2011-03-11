@@ -5,7 +5,7 @@ import datetime
 #for user id foreign keys
 from django.contrib.auth.models import User
 from orders import Order, DeliveryDetail
-from products import GenericProduct
+from products import GenericProduct, RadarProduct
 from dictionaries import MissionSensor, AcquisitionMode, License, SensorType, Mission, ProcessingLevel
 #for translation
 
@@ -54,6 +54,7 @@ class SearchRecord(models.Model):
 
   class Admin:
     pass
+
 
 
 ###############################################################################
@@ -124,15 +125,15 @@ class Search(models.Model):
   PRODUCT_SEARCH_IMAGERY        = 4
 
   PRODUCT_SEARCH_TYPES = (
-    (PRODUCT_SEARCH_GENERIC,    'Generic product search'),
+    #(PRODUCT_SEARCH_GENERIC,    'Generic product search'),
     (PRODUCT_SEARCH_OPTICAL,    'Optical product search'),
     (PRODUCT_SEARCH_RADAR,      'Radar product search'),
     (PRODUCT_SEARCH_GEOSPATIAL, 'Geospatial product search'),
     # ABP: has no idea if this makes sense
-    #(PRODUCT_SEARCH_IMAGERY,    'Generic imagery product search'),
+    (PRODUCT_SEARCH_IMAGERY,    'Generic imagery product search'),
   )
 
-  search_type = models.IntegerField('Search type', default=0, choices=PRODUCT_SEARCH_TYPES, db_index=True)
+  search_type = models.IntegerField('Search type', default=1, choices=PRODUCT_SEARCH_TYPES, db_index=True)
   user = models.ForeignKey(User)
   keywords = models.CharField('Keywords', max_length=255, blank=True)
   # foreign keys require the first arg to the be the relation name
@@ -175,7 +176,7 @@ class Search(models.Model):
   acquisition_mode  = models.ForeignKey(AcquisitionMode, blank=True, null=True, help_text='Choose the acquisition mode.') #e.g. M X T J etc
   license_type = models.IntegerField(choices=License.LICENSE_TYPE_CHOICES, blank=True, null=True, help_text='Choose a license type.')
   band_count = models.IntegerField(choices=BAND_COUNT_CHOICES, blank=True, null=True, help_text='Select the spectral resolution.')
-  geometric_accuracy_mean = models.IntegerField(null=True, blank=True, choices = ACCURACY_MEAN_OPTIONS, help_text='Select mean resolution class.')
+  geometric_accuracy_mean = models.IntegerField(null=True, blank=True, verbose_name='Spatial resolution', choices=ACCURACY_MEAN_OPTIONS, help_text='Select mean spatial resolution class.')
   # sensor_inclination_angle: range
   sensor_inclination_angle_start = models.FloatField(null=True, blank=True, help_text='Select sensor inclination angle start.')
   sensor_inclination_angle_end = models.FloatField(null=True, blank=True, help_text='Select sensor inclination angle end.')
@@ -184,7 +185,8 @@ class Search(models.Model):
   sensor_type = models.ForeignKey( SensorType, null=True, blank=True, related_name = 'search_sensor_type') #e.g. CAM1
   # ABP: one more FK
   processing_level = models.ManyToManyField( ProcessingLevel, null=True, blank=True, help_text='Select one or more processing level.')
-
+  # ABP: new additions 2
+  polarising_mode = models.CharField(max_length=1, choices=RadarProduct.POLARISING_MODE_CHOICES, null=True, blank=True )
   # Use the geo manager to handle geometry
   objects = models.GeoManager()
 
@@ -224,8 +226,7 @@ class Search(models.Model):
     Condition for being an advanced search is that at least one of the
     advanced parameter is set
     """
-    return  self.search_type \
-            or self.processing_level.count() \
+    return  self.processing_level.count() \
             or self.sensors.count() \
             or self.keywords \
             or self.k_orbit_path \

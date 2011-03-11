@@ -3,6 +3,7 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.contrib.gis.geos import *
 # Models and forms for our app
 from catalogue.models import *
+from catalogue.forms import IntegersCSVIntervalsField
 # to be deprecated...
 from acscatalogue.models import *
 # for using django Q() query defs
@@ -106,21 +107,22 @@ class Searcher:
     # ABP: Create the query set based on the type of class we're going to search in
     assert self.mSearch.search_type in dict(Search.PRODUCT_SEARCH_TYPES).keys()
 
-    if self.mSearch.search_type == Search.PRODUCT_SEARCH_GENERIC:
-        logging.info('Search type is PRODUCT_SEARCH_GENERIC')
-        self.mQuerySet = GenericProduct.objects.all()
+    if not self.mSearch.isAdvanced or \
+      self.mSearch.search_type == Search.PRODUCT_SEARCH_GENERIC:
+      logging.info('Search type is PRODUCT_SEARCH_GENERIC')
+      self.mQuerySet = GenericProduct.objects.all()
     elif self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL:
-        logging.info('Search type is PRODUCT_SEARCH_OPTICAL')
-        self.mQuerySet = OpticalProduct.objects.all()
+      logging.info('Search type is PRODUCT_SEARCH_OPTICAL')
+      self.mQuerySet = OpticalProduct.objects.all()
     elif self.mSearch.search_type == Search.PRODUCT_SEARCH_RADAR:
-        logging.info('Search type is PRODUCT_SEARCH_RADAR')
-        self.mQuerySet = RadarProduct.objects.all()
+      logging.info('Search type is PRODUCT_SEARCH_RADAR')
+      self.mQuerySet = RadarProduct.objects.all()
     elif self.mSearch.search_type == Search.PRODUCT_SEARCH_GEOSPATIAL:
-        logging.info('Search type is PRODUCT_SEARCH_GEOSPATIAL')
-        self.mQuerySet = GeospatialProduct.objects.all()
+      logging.info('Search type is PRODUCT_SEARCH_GEOSPATIAL')
+      self.mQuerySet = GeospatialProduct.objects.all()
     elif self.mSearch.search_type == Search.PRODUCT_SEARCH_IMAGERY:
-        logging.info('Search type is PRODUCT_SEARCH_IMAGERY')
-        self.mQuerySet = GeospatialProduct.objects.all()
+      logging.info('Search type is PRODUCT_SEARCH_IMAGERY')
+      self.mQuerySet = GeospatialProduct.objects.all()
 
     # -----------------------------------------------------
     logging.info('filtering by search criteria ...')
@@ -128,10 +130,12 @@ class Searcher:
     # ABP: new logic is to get directly from the request which kind of product to search on
 
     # ABP: common "simple search" parameters
-    #import ipy; ipy.shell()
     if self.mSearch.searchdaterange_set.count():
-      self.mDateQuery = Q(product_date__range=(self.mSearch.start_date,self.mSearch.end_date))
-      self.mMessages.append('dates between <b>%s and %s</b>' % (self.mSearch.start_date, self.mSearch.end_date))
+      self.mDateQuery = Q()
+      for date_range in self.mSearch.searchdaterange_set.all():
+        self.mDateQuery = self.mDateQuery | Q(product_date__range=(date_range.start_date, date_range.end_date))
+        # TODO: format dates in dd-mm-yyyy
+        self.mMessages.append('dates between <b>%s and %s</b>' % (date_range.start_date, date_range.end_date))
       self.mQuerySet = self.mQuerySet.filter( self.mDateQuery )
 
     if self.mSearch.geometry:
@@ -144,8 +148,8 @@ class Searcher:
       # ABP: adds informations about search_type
       self.mMessages.append('search type <b>%s</b>' % dict(self.mSearch.PRODUCT_SEARCH_TYPES)[self.mSearch.search_type])
       # ABP: advanced search parameters, not sensor-specific
-      if self.mSearch.license.count():
-        self.mMessages.append('licenses %s' % ' ,'.join(["<b>%s</b>" % l for l in self.mSearch.license.all()]))
+      if self.mSearch.license_type:
+        self.mMessages.append('license type %s' % License.LICENSE_TYPE_CHOICES.get(self.mSearch.license_type))
         # ABP: m2m
         self.mLicenseQuery = Q(license__in = self.mSearch.license.all())
         self.mQuerySet = self.mQuerySet.filter( self.mLicenseQuery )
@@ -154,6 +158,10 @@ class Searcher:
       # ABP: sensor only (advanced  query for Radar and Optical)
       # I don't really like this kind of checks... bad OOP ...
       # this should be sooner or later heavily refactored
+
+      ##
+      # radar and optical (genericsensor)
+      #
       if self.mSearch.search_type in (Search.PRODUCT_SEARCH_OPTICAL, Search.PRODUCT_SEARCH_RADAR):
         logging.info('GenericSensorProduct advanced search activated')
         # ABP: sensors is mandatory ? Better if not: too bad in product_id search!
@@ -184,24 +192,42 @@ class Searcher:
           self.mMessages.append('spectral resolution <b>%s</b>' % self.mSearch.band_count)
           self.mSpectralResolutionQuery = Q(band_count = self.mSearch.band_count)
           self.mQuerySet = self.mQuerySet.filter( self.mSpectralResolutionQuery)
-
         logging.info('checking if we should use landsat path / row filtering...')
-        if self.mSearch.k_orbit_path_min > 0 \
-            and self.mSearch.k_orbit_path_max > 0 \
-            and self.mSearch.j_frame_row_min > 0 \
-            and self.mSearch.j_frame_row_max > 0:
+        if self.mSearch.k_orbit_path and self.mSearch.j_frame_row:
           logging.info('path row filtering is enabled')
           # used for scene searches only (landsat only)
-          self.mKOrbitPathQuery = Q(path__range=[self.mSearch.k_orbit_path_min, self.mSearch.k_orbit_path_max])
-          # used for scene searches only (landsat only)
-          self.mJFrameRowQuery = Q(row__range=[self.mSearch.j_frame_row_min,self.mSearch.j_frame_row_max])
+          self.mKOrbitPathQuery = Q()
+          #import ipy; ipy.shell()
+          for _k in IntegersCSVIntervalsField.to_tuple(self.mSearch.k_orbit_path):
+            if len(_k) == 2:
+              self.mKOrbitPathQuery = self.mKOrbitPathQuery | Q(path__range=(_k[0], _k[1]))
+            else:
+              self.mKOrbitPathQuery = self.mKOrbitPathQuery | Q(path=_k[0])
+          self.mJFrameRowQuery = Q()
+          for _j in IntegersCSVIntervalsField.to_tuple(self.mSearch.j_frame_row):
+            if len(_j) == 2:
+              self.mJFrameRowQuery = self.mJFrameRowQuery | Q(path__range=(_j[0], _j[1]))
+            else:
+              self.mJFrameRowQuery = self.mJFrameRowQuery | Q(path=_j[0])
           self.mQuerySet = self.mQuerySet.filter( self.mKOrbitPathQuery )
           self.mQuerySet = self.mQuerySet.filter( self.mJFrameRowQuery )
           self.mMessages.append(self.rowPathAsString())
         else:
           logging.info( 'path row filtering is DISABLED' )
 
-      # ABP: optical only
+      ##
+      # radar only
+      #
+      if self.mSearch.search_type == Search.PRODUCT_SEARCH_RADAR:
+        logging.info('RadarProduct advanced search activated')
+        if self.mSearch.polarising_mode:
+          self.mMessages.append('polarisation mode <b>%s</b>' % self.mSearch.polarising_mode)
+          self.mPolarisingModeQuery = Q(polarising_mode = self.mSearch.polarising_mode)
+          self.mQuerySet = self.mQuerySet.filter( self.mPolarisingModeQuery)
+
+      ##
+      # optical only
+      #
       if self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL:
         logging.info('OpticalProduct advanced search activated')
         if self.mSearch.use_cloud_cover:
@@ -214,13 +240,12 @@ class Searcher:
           self.mQuerySet = self.mQuerySet.filter( self.mSensorInclinationAngleQuery )
           self.mMessages.append('sensor inclination angle between <b>%s and %s</b>' % (self.mSearch.sensor_inclination_angle_start, self.mSearch.sensor_inclination_angle_end))
 
-      # ABP: radar only
-      if self.mSearch.search_type == Search.PRODUCT_SEARCH_RADAR:
-        logging.info('RadarProduct advanced search activated')
-
-      # ABP: geospatial only
+      ##
+      # geospatial only
+      #
       if self.mSearch.search_type == Search.PRODUCT_SEARCH_GEOSPATIAL:
         logging.info('GeospatialProduct advanced search activated')
+
     else:
       logging.info('Search is simple (advanced flag is not set)')
 
@@ -330,11 +355,9 @@ class Searcher:
     return ()
 
   def rowPathAsString(self):
-    if self.mSearch.k_orbit_path_min > 0 \
-      and self.mSearch.k_orbit_path_max > 0 \
-      and self.mSearch.j_frame_row_min > 0 \
-      and self.mSearch.j_frame_row_max > 0:
-      myString =  "Row [%s,%s], Path [%s,%s]." % ( self.mSearch.j_frame_row_min , self.mSearch.j_frame_row_max , self.mSearch.k_orbit_path_min, self.mSearch.k_orbit_path_max )
+    if self.mSearch.k_orbit_path \
+      and self.mSearch.j_frame_row:
+      myString =  "Row [%s], Path [%s]" % ( self.mSearch.j_frame_row, self.mSearch.k_orbit_path )
       return myString
     else:
       return ""

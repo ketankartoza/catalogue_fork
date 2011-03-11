@@ -63,6 +63,7 @@ def dataSummaryTable(theRequest):
   return HttpResponse(myResults)
 
 
+DateRangeInlineFormSet = inlineformset_factory(Search, SearchDateRange, extra=0, max_num=0, formset=DateRangeFormSet)
 
 @login_required
 #theRequest context decorator not used here since we have different return paths
@@ -70,7 +71,6 @@ def search(theRequest):
   """
   Perform an attribute and spatial search for imagery
   """
-  DateRangeInlineFormSet = inlineformset_factory(Search, SearchDateRange, extra=0, max_num=0, formset=DateRangeFormSet)
 
   myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
   logging.debug(("Post vars:" + str(theRequest.POST)))
@@ -79,8 +79,9 @@ def search(theRequest):
     myForm = AdvancedSearchForm(theRequest.POST, theRequest.FILES)
     if myForm.is_valid():
       mySearch = myForm.save(commit=False)
-      myFormset = DateRangeInlineFormSet(theRequest.POST, theRequest.FILES, instance=mySearch)
-      #import ipy; ipy.shell()
+      # ABP: save_as_new is necessary due to the fact that a new Search object is always
+      # created even on Search modify pages
+      myFormset = DateRangeInlineFormSet(theRequest.POST, theRequest.FILES, instance=mySearch, save_as_new=True)
       if myFormset.is_valid():
         logging.info('formset is VALID')
         myLatLong = {'longitude':0,'latitude':0}
@@ -140,6 +141,8 @@ def search(theRequest):
       myFormset = DateRangeInlineFormSet(theRequest.POST, theRequest.FILES)
 
     logging.info('form is INVALID after editing')
+    logging.debug('%s' % myForm.errors)
+    logging.debug('%s' % myFormset.errors)
     #render_to_response is done by the renderWithContext decorator
     return render_to_response ( 'search.html' ,{
       'myAdvancedFlag' : theRequest.POST['isAdvanced'] == 'true',
@@ -218,11 +221,13 @@ def modifySearch(theRequest, theGuid):
   myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
   logging.info('initial search form being rendered')
   mySearch = get_object_or_404( Search, guid=theGuid )
-  myForm = AdvancedSearchForm( instance = mySearch )
-  #render_to_response is done by the renderWithContext decorator
+  myForm = AdvancedSearchForm( instance=mySearch )
+  #import ipy; ipy.shell()
+  myFormset = DateRangeInlineFormSet(instance=mySearch)
   return render_to_response ( 'search.html' ,{
     'myAdvancedFlag' :  mySearch.isAdvanced,
     'mySearchType' :  mySearch.search_type,
+    'myFormset' : myFormset,
     'myForm': myForm,
     'myGuid' : theGuid,
     'myHost' : settings.HOST,

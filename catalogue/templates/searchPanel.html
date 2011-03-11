@@ -59,8 +59,8 @@
       $('#dr_del').live('click', function(){
         $('.dr_row.selected').each(function(){
           // Has the cb for deletion ?
-          if($(this).find('.dr_delcb').length) {
-            $(this).find('.dr_delcb').attr('checked', 'checked');
+          if($(this).find('input[type=checkbox]').length) {
+            $(this).find('input[type=checkbox]').attr('checked', 'checked');
             $(this).hide('slow');
           } else {
             $(this).hide('slow', function(){
@@ -72,8 +72,9 @@
       $('.dr_row').live('click', function(){
         $(this).toggleClass('selected');
       });
-      $('.dr_row input:first-child').each(function(){
-        $(this).closest('.dr_row').find('.dr_text').html($(this).val() + ' - ' + $(this).siblings().val());
+      // Initial fill of dr_text
+      $('.dr_row .dr_input input[type=text]:nth-child(2)').each(function(){
+        $(this).closest('.dr_row').find('.dr_text').html($(this).val() + ' - ' + $(this).siblings('input[type=text]').val());
       });
     });
 
@@ -128,7 +129,7 @@
 
     function cloneMore(type, sd, ed, iso_sd, iso_ed){
         var tpl = '<div class="dr_row">';
-        tpl    += '<div class="dr_input"><input type="text" id="id_searchdaterange_set-$num-start_date" name="searchdaterange_set-$num-start_date"> : <input type="text" id="id_searchdaterange_set-$num-end_date" name="searchdaterange_set-$num-end_date"></div>';
+        tpl    += '<div class="dr_input"><label>Start date</label><input type="text" id="id_searchdaterange_set-$num-start_date" name="searchdaterange_set-$num-start_date"> : <input type="text" id="id_searchdaterange_set-$num-end_date" name="searchdaterange_set-$num-end_date"></div>';
         tpl    += '<div class="dr_text" title="Click to select."></div>';
         tpl    += '</div>';
 
@@ -148,6 +149,7 @@
         });
         total++;
         $('#id_' + type + '-TOTAL_FORMS').val(total);
+        $('#id_' + type + '-INITIAL_FORMS').val(total);
         var dates = newElement.find('input');
         $(dates[0]).val(iso_sd);
         $(dates[1]).val(iso_ed);
@@ -569,7 +571,7 @@
             <div id="dr_container" class="ui-corner-all" >
             {% for form in myFormset.forms %}
                 <div class='dr_row'>
-                  <div class="dr_input">{% if form.pk %}<span class="dr_delcb">{{ form.DELETE }}</span>{% endif %}{{ form.start_date }} : {{ form.end_date }}</div>
+                  <div class="dr_input">{{ form }}</div>
                   <div class="dr_text" title="Click to select."></div>
                 </div>
             {% endfor %}

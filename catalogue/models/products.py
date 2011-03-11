@@ -48,12 +48,12 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
   projection            = models.ForeignKey( Projection )
   quality               = models.ForeignKey( Quality )
   creating_software     = models.ForeignKey( CreatingSoftware, null=False,blank=False )
-  original_product_id   = models.CharField( max_length="255", null=True,blank=True )
+  original_product_id   = models.CharField( max_length="255", null=True, blank=True )
   product_id            = models.CharField( help_text="SAC Formatted product ID", max_length="255", db_index=True,unique=True )
-  product_revision      = models.CharField( max_length="255",null=True,blank=True )
-  local_storage_path    = models.CharField( max_length=255, help_text="Location on local storage if this product is offered for immediate download.", null=True,blank=True)
+  product_revision      = models.CharField( max_length="255",null=True, blank=True )
+  local_storage_path    = models.CharField( max_length=255, help_text="Location on local storage if this product is offered for immediate download.", null=True, blank=True)
   metadata              = models.TextField(help_text="An xml document describing all known metadata for this product.")
-  remote_thumbnail_url  = models.TextField( max_length=255,null=True,blank=True, help_text="Location on a remote server where this product's thumbnail resides. The value in this field will be nulled when a local copy is made of the thumbnail.")
+  remote_thumbnail_url  = models.TextField( max_length=255,null=True, blank=True, help_text="Location on a remote server where this product's thumbnail resides. The value in this field will be nulled when a local copy is made of the thumbnail.")
 
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   # this flas is also used in admin back-end to get the list of classes for OrderNotificationRecipients
@@ -385,8 +385,8 @@ class GenericSensorProduct( GenericImageryProduct ):
   path_offset                         = models.IntegerField(null=True, blank=True)
   row                                 = models.IntegerField(null=True, blank=True) #J Frame Row
   row_offset                          = models.IntegerField(null=True, blank=True)
-  offline_storage_medium_id           = models.CharField(max_length=12, help_text="Identifier for the offline tape or other medium on which this scene is stored", null=True,blank=True )
-  online_storage_medium_id            = models.CharField(max_length=36, help_text="DIMS Product Id as defined by Werum e.g. S5_G2_J_MX_200902160841252_FG_001822",null=True,blank=True )
+  offline_storage_medium_id           = models.CharField(max_length=12, help_text="Identifier for the offline tape or other medium on which this scene is stored", null=True, blank=True )
+  online_storage_medium_id            = models.CharField(max_length=36, help_text="DIMS Product Id as defined by Werum e.g. S5_G2_J_MX_200902160841252_FG_001822",null=True, blank=True )
 
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   concrete              = False
@@ -579,16 +579,16 @@ class OpticalProduct( GenericSensorProduct ):
   myOpticalProduct = GenericProduct.objects.get(id=1).opticalproduct
   See http://docs.djangoproject.com/en/dev/topics/db/models/#id7 for more info."""
   ##Descriptors for optical products
-  cloud_cover = models.IntegerField(null=True,blank=True)
-  sensor_inclination_angle = models.FloatField(null=True,blank=True,help_text="Orientation of the vehicle on which the sensor is mounted")
-  sensor_viewing_angle = models.FloatField(null=True,blank=True,help_text="Angle of acquisition for the image")
-  gain_name = models.CharField( max_length=200, null=True,blank=True)
-  gain_value_per_channel = models.CharField( max_length=200, help_text="Comma separated list of gain values", null=True,blank=True )
-  gain_change_per_channel = models.CharField( max_length=200, help_text="Comma separated list of gain change values", null=True,blank=True )
-  bias_per_channel = models.CharField( max_length=200, help_text="Comma separated list of bias values", null=True,blank=True )
-  solar_zenith_angle = models.FloatField(null=True,blank=True)
-  solar_azimuth_angle = models.FloatField(null=True,blank=True)
-  earth_sun_distance = models.FloatField(null=True,blank=True)
+  cloud_cover = models.IntegerField(null=True, blank=True)
+  sensor_inclination_angle = models.FloatField(null=True, blank=True,help_text="Orientation of the vehicle on which the sensor is mounted")
+  sensor_viewing_angle = models.FloatField(null=True, blank=True,help_text="Angle of acquisition for the image")
+  gain_name = models.CharField( max_length=200, null=True, blank=True)
+  gain_value_per_channel = models.CharField( max_length=200, help_text="Comma separated list of gain values", null=True, blank=True )
+  gain_change_per_channel = models.CharField( max_length=200, help_text="Comma separated list of gain change values", null=True, blank=True )
+  bias_per_channel = models.CharField( max_length=200, help_text="Comma separated list of bias values", null=True, blank=True )
+  solar_zenith_angle = models.FloatField(null=True, blank=True)
+  solar_azimuth_angle = models.FloatField(null=True, blank=True)
+  earth_sun_distance = models.FloatField(null=True, blank=True)
   objects = models.GeoManager()
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   concrete              = True
@@ -599,10 +599,6 @@ class OpticalProduct( GenericSensorProduct ):
 ###############################################################################
 
 #TODO use lookup tables rather?
-LOOK_DIRECTION_CHOICES = ( ( 'L','Left' ), ( 'R', 'Right' ) )
-RECEIVE_CONFIGURATION_CHOICES = ( ( 'V','Vertical' ), ( 'H','Horizontal' ) )
-POLARISING_MODE_CHOICES = ( ('S','Single Pole' ), ( 'D','Dual Pole' ), ( 'Q', 'Quad Pole' ) )
-ORBIT_DIRECTION_CHOICES = ( ('A', 'Ascending' ), ('D', 'Descending' ) )
 
 class RadarProduct( GenericSensorProduct ):
   """We are using multitable inheritance so you can do this to get this
@@ -611,16 +607,22 @@ class RadarProduct( GenericSensorProduct ):
   See http://docs.djangoproject.com/en/dev/topics/db/models/#id7 for more info."""
   # Note for radar products row and path will be computed as
   # the Degrees (2 digits) Minutes (2 Digits) and the offset will be used to store seconds (2 digits)
-  imaging_mode = models.CharField( max_length=200,null=True,blank=True )
-  look_direction = models.CharField( max_length=1, choices=LOOK_DIRECTION_CHOICES,null=True,blank=True )
-  antenna_receive_configuration = models.CharField( max_length=1, choices=RECEIVE_CONFIGURATION_CHOICES,null=True,blank=True )
-  polarising_mode = models.CharField( max_length=1, choices=POLARISING_MODE_CHOICES,null=True,blank=True )
-  polarising_list = models.CharField( max_length=200, help_text="Comma separated list of V/H/VV/VH/HV/HH (vertical and horizontal polarisation.)",null=True,blank=True )
-  slant_range_resolution = models.FloatField(null=True,blank=True)
-  azimuth_range_resolution = models.FloatField(null=True,blank=True)
-  orbit_direction = models.CharField( max_length=1, choices=ORBIT_DIRECTION_CHOICES,null=True,blank=True )
-  calibration = models.CharField( max_length = 255,null=True,blank=True )
-  incidence_angle = models.FloatField(null=True,blank=True)
+
+  LOOK_DIRECTION_CHOICES = ( ( 'L','Left' ), ( 'R', 'Right' ) )
+  RECEIVE_CONFIGURATION_CHOICES = ( ( 'V','Vertical' ), ( 'H','Horizontal' ) )
+  POLARISING_MODE_CHOICES = ( ('S','Single Pole' ), ( 'D','Dual Pole' ), ( 'Q', 'Quad Pole' ) )
+  ORBIT_DIRECTION_CHOICES = ( ('A', 'Ascending' ), ('D', 'Descending' ) )
+
+  imaging_mode = models.CharField( max_length=200,null=True, blank=True )
+  look_direction = models.CharField( max_length=1, choices=LOOK_DIRECTION_CHOICES,null=True, blank=True )
+  antenna_receive_configuration = models.CharField( max_length=1, choices=RECEIVE_CONFIGURATION_CHOICES, null=True, blank=True )
+  polarising_mode = models.CharField( max_length=1, choices=POLARISING_MODE_CHOICES,null=True, blank=True )
+  polarising_list = models.CharField( max_length=200, help_text="Comma separated list of V/H/VV/VH/HV/HH (vertical and horizontal polarisation.)", null=True, blank=True )
+  slant_range_resolution = models.FloatField(null=True, blank=True)
+  azimuth_range_resolution = models.FloatField(null=True, blank=True)
+  orbit_direction = models.CharField( max_length=1, choices=ORBIT_DIRECTION_CHOICES,null=True, blank=True )
+  calibration = models.CharField( max_length = 255,null=True, blank=True )
+  incidence_angle = models.FloatField(null=True, blank=True)
   objects = models.GeoManager()
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   concrete              = True
@@ -629,20 +631,18 @@ class RadarProduct( GenericSensorProduct ):
 
 ###############################################################################
 
-#ABP: this part will be completed with GeospatialProduct as an "abstract" class and Ordinal/Continuous
-#TODO:
 
-GEOSPATIAL_GEOMETRY_TYPE_CHOICES = ( ( 'RA','Raster' ), ( 'VP', 'Vector - Points' ), ( 'VL', 'Vector - Lines' ) , ( 'VA', 'Vector - Areas / Polygons' ) )
 class GeospatialProduct( GenericProduct ):
   """
   Geospatial product, does not have sensors information. Geospatial products may be rasters
   (that were derived from one or more satellite or other rasters) or vectors.
   """
+  GEOSPATIAL_GEOMETRY_TYPE_CHOICES = ( ( 'RA','Raster' ), ( 'VP', 'Vector - Points' ), ( 'VL', 'Vector - Lines' ) , ( 'VA', 'Vector - Areas / Polygons' ) )
   name = models.CharField(max_length = 255, null=False, blank=False, help_text="A descriptive name for this dataset");
   description = models.TextField( null=True, blank=True, help_text="Description of the product." )
   processing_notes = models.TextField( null=True, blank=True, help_text="Description of how the product was created." )
   equivalent_scale = models.IntegerField( help_text="The fractional part at the ideal maximum scale for this dataset. For example enter '50000' if it should not be used at scales larger that 1:50 000", null=True, blank=True, default=1000000 )
-  data_type = models.CharField( max_length=1, choices=GEOSPATIAL_GEOMETRY_TYPE_CHOICES,null=True,blank=True, help_text="Is this a vector or raster dataset?" )
+  data_type = models.CharField( max_length=1, choices=GEOSPATIAL_GEOMETRY_TYPE_CHOICES,null=True, blank=True, help_text="Is this a vector or raster dataset?" )
   temporal_extent_start           = models.DateTimeField(db_index=True, help_text="The start of the timespan covered by this dataset. If left blank will default to time of accession.")
   temporal_extent_end             = models.DateTimeField(null=True, blank=True, db_index=True, help_text="The start of the timespan covered by this dataset. If left blank will default to start date.")
   place_type = models.ForeignKey( PlaceType, help_text="Select the type of geographic region covered by this dataset" )
@@ -667,7 +667,7 @@ class OrdinalProduct( GenericProduct ):
   class_count = models.IntegerField( help_text="Number of spectral bands in product")
   confusion_matrix = models.CommaSeparatedIntegerField( max_length=80, null=True, unique=False, blank=True,help_text="Confusion matrix in the format: true positive,false negative,false positive,true negative")
   kappa_score = models.FloatField( null=True, blank=True, help_text="Enter a value between 0 and 1 representing the kappa score." )
-  
+
 
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   concrete              = True
