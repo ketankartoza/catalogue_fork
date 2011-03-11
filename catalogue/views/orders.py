@@ -2,9 +2,11 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseServerError
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.template import RequestContext
 # python logging support to django logging middleware
 import logging
+from django.conf import settings
 
 # Models and forms for our app
 from catalogue.models import *
@@ -16,12 +18,18 @@ from django.db.models import Count, Min, Max #for aggregate queries
 # For shopping cart and ajax product id search
 from django.utils import simplejson
 
+#shpresponder
+from shapes.views import ShpResponder
+
 # Helper classes
 from helpers import *
 from searcher import *
 
 # for error logging
 import traceback
+
+# SHP and KML readers
+from catalogue.featureReaders import *
 
 ###########################################################
 #
@@ -122,6 +130,38 @@ def orderMonthlyReport( theRequest, theyear, themonth):
 
 
 @login_required
+def downloadOrder(theRequest,theId):
+  myOrder = get_object_or_404(Order,id=theId)
+
+  if theRequest.GET.has_key('shp'):
+    myResponder = ShpResponder( myOrder )
+    myResponder.file_name = u'products_for_order_%s' % myOrder.id
+    return  myResponder.write_order_products( myOrder.searchrecord_set.all() )
+  elif theRequest.GET.has_key('kml'):
+    return render_to_kml("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL},u'products_for_order_%s' % myOrder.id)
+  elif theRequest.GET.has_key('kmz'):
+    return render_to_kmz("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL},u'products_for_order_%s' % myOrder.id)
+  else:
+    logging.info('Request cannot be proccesed, unsupported download file type')
+    raise Http404
+
+@staff_member_required
+def downloadClipGeometry(theRequest,theId):
+  myOrder = get_object_or_404(Order,id=theId)
+
+  if theRequest.GET.has_key('shp'):
+    myResponder = ShpResponder( myOrder )
+    myResponder.file_name = u'clip_geometry_order_%s' % myOrder.id
+    return  myResponder.write_delivery_details( myOrder )
+  elif theRequest.GET.has_key('kml'):
+    return render_to_kml("kml/clipGeometry.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL},u'clip_geometry_order_%s' % myOrder.id)
+  elif theRequest.GET.has_key('kmz'):
+    return render_to_kmz("kml/clipGeometry.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL},u'clip_geometry_order_%s' % myOrder.id)
+  else:
+    logging.info('Request cannot be proccesed, unsupported download file type')
+    raise Http404
+
+@login_required
 def viewOrder (theRequest, theId):
   '''This view is strictly for staff only or the order owner'''
   # check if the post ended with /?xhr
@@ -155,6 +195,7 @@ def viewOrder (theRequest, theId):
          # myThumbFlag
          # myShowDeliveryDetailsFlag
          # myShowDeliveryDetailsFormFlag
+         # myDownloadOrderFlag
          'myShowSensorFlag' : False,
          'myShowSceneIdFlag' : True,
          'myShowDateFlag': False,
@@ -165,6 +206,7 @@ def viewOrder (theRequest, theId):
          'myPreviewFlag' : False,
          'myShowDeliveryDetailsFlag':True,
          'myShowDeliveryDetailsFormFlag':False,
+         'myDownloadOrderFlag':True,
          'myForm' : myForm,
          'myHistory' : myHistory,
          'myCartTitle' : 'Product List',
@@ -231,7 +273,7 @@ def updateOrderHistory(theRequest):
 @renderWithContext("deliveryDetailForm.html")
 @login_required
 def createDeilveryDetailForm( theRequest, theref_id):
-  myDeliveryDetailForm = DeliveryDetailForm(initial={'ref_id':theref_id},prefix='%i' % int(theref_id))
+  myDeliveryDetailForm = ProductDeliveryDetailForm(initial={'ref_id':theref_id},prefix='%i' % int(theref_id))
   return dict(myDeliveryDetailForm=myDeliveryDetailForm)
 
 @renderWithContext("deliveryDetail.html")
@@ -248,6 +290,21 @@ def addOrder( theRequest ):
   myRedirectPath = '/vieworder/'
   logging.info("Preparing order for user " + str(theRequest.user))
   myRecords = None
+  myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
+  myCartLayer = '''var myCartLayer = new OpenLayers.Layer.WMS("Cart", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=CART&user=''' + str(theRequest.user.username) + '''",
+          {
+             version: '1.1.1',
+             layers: 'Cart',
+             srs: 'EPSG:4326',
+             format: 'image/png',
+             transparent: 'true'
+           },
+           {isBaseLayer: false, singleTile:true});
+           '''
+
+  myLayersList=myLayersList[:-1]+', myCartLayer ]' #UGLY hack for adding Cart layer
+  myLayerDefinitions.append(myCartLayer)
+
   if str(theRequest.user) == "AnonymousUser":
     logging.debug("User is anonymous")
     logging.info("Anonymous users can't have items in their cart")
@@ -292,6 +349,10 @@ def addOrder( theRequest ):
     'myBaseTemplate' : "emptytemplate.html", #propogated into the cart template
     'mySubmitLabel' : "Submit Order",
     'myMessage' : " <div>Please specify any details for your order requirements below. If you need specific processing steps taken on individual images, please use the notes area below to provide detailed instructions.</div>",
+    'myLayerDefinitions' : myLayerDefinitions,
+    'myLayersList' : myLayersList,
+    'myActiveBaseMap' : myActiveBaseMap
+
     }
   logging.info('Add Order called')
   if theRequest.method == 'POST':
@@ -301,7 +362,7 @@ def addOrder( theRequest ):
     myDeliveryDetailForm = DeliveryDetailForm( theRequest.POST,theRequest.FILES )
 
     #get ref_ids of product details forms, if any, and generate forms for validation
-    myProductForms = [DeliveryDetailForm(theRequest.POST,prefix='%i' % int(myref)) for myref in myDeliveryDetailForm.data.get('ref_id').split(',')]
+    myProductForms = [ProductDeliveryDetailForm(theRequest.POST,prefix='%i' % int(myref)) for myref in myDeliveryDetailForm.data.get('ref_id').split(',') if len(myref)>0]
 
     myOptions =  {
             'myOrderForm': myOrderForm,
@@ -309,11 +370,21 @@ def addOrder( theRequest ):
             'myTitle': myTitle,
             'mySubmitLabel' : "Submit Order",
           }
-    myOptions.update(myExtraOptions), #shortcut to join two dicts
-
+    myOptions.update(myExtraOptions) #shortcut to join two dicts
     if myOrderForm.is_valid() and myDeliveryDetailForm.is_valid() and all([form.is_valid() for form in myProductForms]):
       logging.debug("Order valid")
+
       myDeliveryDetailObject = myDeliveryDetailForm.save(commit=False)
+      myDeliveryDetailObject.user = theRequest.user
+      #check if user uploaded file and try to extract geometry
+      try:
+        myGeometry = getGeometryFromUploadedFile( theRequest, myDeliveryDetailForm, 'geometry_file' )
+        if myGeometry:
+          myDeliveryDetailObject.geometry = myGeometry
+        else:
+          logging.info("Failed to set search area from uploaded geometry file")
+      except:
+        logging.info("An error occurred trying to set search area from uploaded geometry file")
       myDeliveryDetailObject.user = theRequest.user
       myDeliveryDetailObject.save()
       #save order

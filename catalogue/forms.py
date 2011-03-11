@@ -253,9 +253,28 @@ class OrderForm(forms.ModelForm):
 
 class DeliveryDetailForm(forms.ModelForm):
   ref_id = forms.CharField(widget=forms.HiddenInput(),required=False)
+  aoi_geometry = AOIGeometryField(required=False)
+  geometry = forms.CharField(widget=forms.HiddenInput(),required=False)
+  geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
+                                  required=False,
+                                  help_text = 'Upload a zipped shapefile or KML/KMZ file of less than 1MB. If the shapefile contains more than one polygon, only the first will be used. Complex polygons will increase search time.')
   class Meta:
     model = DeliveryDetail
-    exclude = ('user')
+    exclude = ('user',)
+
+  def clean(self):
+    myCleanedData = self.cleaned_data
+    #if AOIgeometry is defined set it as default geometry
+    if myCleanedData.get('aoi_geometry'):
+      self.cleaned_data['geometry']=self.cleaned_data['aoi_geometry']
+
+    return self.cleaned_data
+
+class ProductDeliveryDetailForm(forms.ModelForm):
+  ref_id = forms.CharField(widget=forms.HiddenInput(),required=False)
+  class Meta:
+    model = DeliveryDetail
+    exclude = ('user','geometry',)
 
 class TaskingRequestForm(forms.ModelForm):
   geometry = forms.CharField(widget=GeometryWidget,required=False)

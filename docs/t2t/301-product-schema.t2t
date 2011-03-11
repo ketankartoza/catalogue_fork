@@ -328,8 +328,51 @@ Generic imagery products do not have an associated Mission, Sensor, Sensor Type
 or Acquisition Mode, and thus the naming system differers from final (having no
 ancestors) sensor based products.
 
+
+
 ------------------------
-**Note:** Wolfgang to define or we must devise something
+**Note:** Wolfgang to define or we must devise something. The follow section
+was from Wolfgang's notes but it does not model well:
+ - composite products my span multiple modes, types, sensors and even missions.
+ - scenes may span long time periods and the concept of a central scene is ambiguous
+ - products may span larger areas than a single QDS map and in other countries 
+   mapping units may differ.
+ - composite products may include other imagery types eg. aerial photos.
+ -
+
+Composite files -mosaics:
+
+``QQQQQQ_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
+
+Use central scene for date and time
+
+--------------------
+
+Composite files - time series:
+be
+``MT_yymmdd_yymmdd_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
+
+Use central time scene for date and time
+
+--------------------
+
+The following key can be used to decode the above:
+
+|| Code            | Description                                          |
+| SSS              | satellite (mission) name e.g. L5-; S5-               |
+| sss              | sensor (mission sensor) e.g. TM-; ETM                |
+| ttt              | type (sensor type) eg. HRF; HPN; HPM                 |
+| mmmm             | bumper (acquisition) mode eg. SAM- BUF-              |
+| pppp             | path (k)                                             |
+| ps               | path shift                                           |
+| rrrr             | row (j)                                              |
+| rs               | row span                                             |
+| yymmdd           | date                                                 |
+| hhmmss           | time                                                 |
+| LLLL             | processing Level code eg. L2A; L4Ab                  |
+| PPPPPP           | Projection eg. UTM35S; LATLON; ORBIT-                |
+| QQQQQQ           | 1:50000 topographic map name eg 3425CD               |
+| MT_yymmdd_yymmdd | multi-temporal time span: start date to end date     |
 
 === Imagery product Properties ===
 
@@ -375,7 +418,6 @@ products inherit from. It inherits from Generic Imagery product.
 
 The following scheme is used for assigning product id's for sensor based products:
 
---------------------
 
 Single scene file names:
 
@@ -383,24 +425,6 @@ Single scene file names:
 
 e.g. L7-_ETM_HRF_SAM-_168-_00_077-_010530_------_L3Ab_UTM36S
 
---------------------
-
-
-Composite files -mosaics:
-
-``QQQQQQ_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
-
-Use central scene for date and time
-
---------------------
-
-Composite files - time series:
-
-``MT_yymmdd_yymmdd_SSS_sss_ttt_mmmm_pppp_ps_rrrr_rs_yymmdd_hhmmss_LBLL_PPPPPP``
-
-Use central time scene for date and time
-
---------------------
 
 The following key can be used to decode the above:
 
@@ -409,16 +433,14 @@ The following key can be used to decode the above:
 | sss              | sensor (mission sensor) e.g. TM-; ETM                |
 | ttt              | type (sensor type) eg. HRF; HPN; HPM                 |
 | mmmm             | bumper (acquisition) mode eg. SAM- BUF-              |
-| pppp             | path                                                 |
+| pppp             | path (k)                                             |
 | ps               | path shift                                           |
-| rrrr             | row                                                  |
+| rrrr             | row (j)                                              |
 | rs               | row span                                             |
 | yymmdd           | date                                                 |
 | hhmmss           | time                                                 |
 | LLLL             | processing Level code eg. L2A; L4Ab                  |
 | PPPPPP           | Projection eg. UTM35S; LATLON; ORBIT-                |
-| QQQQQQ           | 1:50000 topographic map name eg 3425CD               |
-| MT_yymmdd_yymmdd | multi-temporal time span: start date to end date     |
 
 **Note:** Elements Mission(SSS), MissionSensor(sss), SensorType(ttt) and
 AcquisitionMode (mmmm) are compulsory for GenericSensorProducts. Where these
@@ -432,9 +454,15 @@ Sensor MS exists, no sensor type exists so a default type of 'MS' is created
 and consequently a default acquisition mode of MS os also created.
 See 'placeholder' clauses in description that follow.
 
-Where Row (rrrr) and Path (pppp) are not know or not applicable for a sensor, the 
+Where Row (rrrr) and Path (pppp) are not know for a sensor, the 
 word 'None' will be written out in the  product id to differentiate from 0000
 which may be a valid row or path.
+
+Where Row and Path are not applicable for a sensor (e.g. Sumbandilasat, some
+Radar sensors), a centroid derived Path, Path offset, Row and Row offset will
+be assigned as per the illustration below:
+
+[img/centroid_based_row_path.png]
 
 === Generic Sensor Product Aggregation Rules ===
 
@@ -755,7 +783,7 @@ that these can be correctly resolved. For example:
 
 So we can see from this example, we have the following:
 
-||Satellite | Mission Sensor | Sensor Type | Acquisition Mode |
+|| Satellite | Mission Sensor | Sensor Type | Acquisition Mode |
 | L7 | ETM | HRF | SAM |
 
 In cases where the entries for these dictionary terms do not exist, new records should be added to the tables using the following logic:
@@ -787,7 +815,9 @@ In cases where the entries for these dictionary terms do not exist, new records 
 
 == Optical products ==
 
-**Synopsis:** Vector and Raster products where data are grouped into discrete classes.
+**Synopsis:** Imagery where each pixel represents the reflectance value of
+light waves reflected from a remote target within a given segment of the light
+spectrum.
 
 **Concrete or Abstract:** Concrete
 
@@ -808,7 +838,25 @@ further specialisations.
 
 === Optical Product Properties ===
 
+The optical product model introduces a number of properies in addition to those
+inherited from the GenericSensorProduct base class.
+
+ - cloud_cover 
+ - sensor_inclination_angle 
+ - sensor_viewing_angle
+ - gain_name 
+ - gain_value_per_channel 
+ - gain_change_per_channel 
+ - bias_per_channel 
+ - solar_zenith_angle 
+ - solar_azimuth_angle 
+ - earth_sun_distance 
+ -
+
 === Product ID Naming Scheme ===
+
+The naming of optical products follows the rules from its base class,
+GenericSensorProduct.
 
 === Optical Product Aggregation Rules ===
 
@@ -830,6 +878,12 @@ new image should be modelled as a **GenericImageryProduct**.
 
 == Radar Products ==
 
+**Synopsis:** Imagery where each pixel represents the reflectance value of
+radio waves reflected from a remote target.
+
+**Concrete or Abstract:** Concrete
+
+
 === Radar Product Aggregation Rules ===
 
 In the DAG (Directed Acyclical Graph) that maps relationships between products
@@ -844,6 +898,23 @@ image, the new image should be modelled as a **GenericImageryProduct**.
 
 Follows the same scheme as defined in OpticalProduct documentation.
 
+=== Optical Product Properties ===
+
+The radar product model introduces a number of properies in addition to those
+inherited from the GenericSensorProduct base class. These properties are not
+shared with optical products.
+
+ - imaging_mode
+ - look_direction
+ - antenna_receive_configuration
+ - polarising_mode
+ - polarising_list
+ - slant_range_resolution
+ - azimuth_range_resolution
+ - orbit_direction
+ - calibration
+ - incidence_angle
+ -
 
 %----------------------------------------------------------
 %----------------------------------------------------------
@@ -866,32 +937,59 @@ Imagery Products which are some form of obervation of the earth service.
 
 All geospatial products share the following properties:
 
+ - name
  - description
+ - processing_notes
  - equivalent_scale
+ - data_type
  - temporal_extent_start
  - temporal_extent_end
- - region_type
- - region
+ - place_type
+ - place
  - primary_topic
  - tags
  -
 
 Properties from GenericProduct are also inherited. 
 
-The description property defines a generalised description of the product. It
+The **name** property is a descriptive name (in plain english) for the dataset e.g.
+"""Landcover map of South Africa, 2010"""
+
+The **description** property defines a generalised description of the product. It
 will be incorporated into the product abstract that is autogenerated when
 subclasses re-implement GenericProduct::abstract(). The description is
 free-form text that describes the product and any special information relating
 to it.
 
+The **processing notes** property is a freeform text field where any specific notes
+and logging information relating to the processing of the dataset can be
+recorded. This data should be provided in plain text format.
+
 In the case of geospatial products, their spatial resolution is expressed as
-equivalent scale (after MD_Metadata > MD_DataIdentification.spatialResolution >
+**equivalent scale** (after MD_Metadata > MD_DataIdentification.spatialResolution >
 MD_Resolution.equivalentScale) from the ISO19115 specification. Only the
 denominator is store so, for example, a value of 50000 indicates the product is
-suitable for use at 1:50000 scale or smaller.
+suitable for use at 1:50000 scale or smaller. A default of 1000000 (one
+million) shall be assigned to any dataset where the scale is not explicitly
+defined.
 
+The **data_type** property describes what type of data is represented in the
+dataset. The options for data_type are defined in a dictionary in the
+GeospatialProduct model viz:
 
-The temporal extent maps to the gmd::EX_TemporalExtent element in the ISO_19136
+|| Abbreviation | Name | 
+| RA | Raster |
+| VP | Vector - Points |
+| VL | Vector - Lines |
+| VA | Vector - Areas / Polygons |
+
+**Note:** The ISO-19115 spec defines an MD_SpatialRepresentationTypeCode but
+this is not granular to the feature type level. As such a programmatic mapping
+shall be such that types VP/VL/VA are mapped to
+MD_SpatialRepresentationTypeCode 'vector 001' and RA is mapped to
+MD_SpatialRepresentationTypeCode 'grid'.
+
+The **temporal extent** maps to the gmd::EX_TemporalExtent element in the ISO_19136
 standard. e.g.
 
 ```
@@ -907,14 +1005,18 @@ standard. e.g.
 </gmd:temporalElement>
 ```
 
-**Note:** The GenericSensorProduct includes 367
+**Note:** The GenericSensorProduct includes 
 GenericSensorProduct::product_acquisition_start and
 GenericSensorProduct::product_acquisition_end fields but their semantics are
 different - they define the actual imagery acquisition period, whereas in Level
 4 / GeoSpatial products the temporal_extent_start and temporal_extent_end
 describe the complete date range of data represented within the dataset.
+If not specified, the temporal extent **start** shall default to the
+current data and time at the moment of product ingestion / creation.
+If not specified, the temporal extent **end** shall default to be the same
+value as the temporal extent start.
 
-The **region** and **region_type** fields are used to define the geographic
+The **place** and **place_type** fields are used to define the geographic
 region of interest for this dataset. When represented using ISO Metadata, the
 region will be reflected in an EX_GeographicDescription element. e.g.
 
@@ -928,20 +1030,34 @@ region will be reflected in an EX_GeographicDescription element. e.g.
 </xs:complexType
 ```
 
-Note that although the ISO19139 specification allows a sequence (i.e. multiple
-geography description elements), our schema only accommodates a singly
-geographic place. As such GeoSpatiaProducts are assigned the named place that is
-nearest to the centroid of the product geometry, unless they have been manualy
-assigned. In order to assign types 1-5 (see dictionaries section below), manual
-intervention must be made.
+**Note:** that although the ISO19139 specification allows a sequence (i.e. multiple
+geography description elements), our schema only accommodates a single
+geographic place. These elements must be defined by the script performing
+ingestion which is out of scope for this work package. As such the only current
+way to add new geospatial products is manually through the admin panel, or by
+writing a simple python tool.
 
 
-Primary topic is the main categorisation for this dataset. Additional tags can
+**Note**: Future work package, not in spec:
+```
+In order to auto-assign place types 1-6 (see dictionaries section
+below), the closest place of that type to the centroid of the dataset will be
+used. If no region type and region are specified at point of ingestion, the
+product shall use default values of 'Local area - nearest named place'
+(place_type 7 as listed in the next section) for place_type and are assigned
+the named place that is nearest to the centroid of the product geometry (based
+on geonames dataset lodged in the **place** dictionary), unless they have been
+manually assigned. 
+```
+
+**Primary topic** is the main categorisation for this dataset. Additional tags can
 be assigned to the dataset via the tags field (see below). The topic will be
 used when assembling the SAC product id for GeoSpatial products.
 
-Tags are used to provide keyword based descriptive information for the product.
+**Tags** are used to provide keyword based descriptive information for the product.
 Example tags might be: landcover, roads, trig beacons etc.
+
+**Note for Alessandro:** use one of the django tagging apps for this.
 
 === Product ID Naming Scheme ===
 
@@ -950,17 +1066,23 @@ The following scheme will be used when allocating product ID's to GeoSpatial pro
 || Field | Description |
 | TTT | Type, ORD for Ordinal products, CON for continuous products |
 | TOPIC | 10 character abbreviation for topic, hyphen padded e.g. ROADS----- |
+| TY | 2 character abbreviation e.g. RA for raster |
+| PLACENAME | First 10 chars of place name with spaces/whitespace removed e.g. CAPETOWN-- |
 | yymmdd           | temporal extent start date                              |
 | yymmdd           | temporal extent end date                             |
-| LLLL             | processing Level code eg. L2A; L4Ab                  |
+| LLLL             | processing Level code eg. L4Aa; L4Ab                  |
 | EPSG             | EPSG Code for coordinate reference system of dataset |
-| REG | Region name |
-This a sample GeoSpatial product ID may look like this:
+
+All id text elements will be converted to upper case. This a sample GeoSpatial
+product ID may look like this:
 
 ```
-ORD_LANDUSE---_110101_11_02_11_L4Ab_4326_ZA
+ORD_LANDUSE---_VL_ZA--------_110101_110211_L4Ab_4326
 ```
 
+The order is of the id elements is designed so that when listing products using
+e.g. the unix '''ls''' command they naturally appear grouped thematically, then
+by data type and then by place.
 
 
 === Geospatial Product Aggregation Rules ===
@@ -970,11 +1092,12 @@ derivation from one or more other products.
 
 === Geospatial Product Dictionaries ===
 
-The following dictionaries are implemented to support
+The following dictionaries are implemented to support the creation of
+geospatial products.
 
-==== Region Type ====
+==== Place Type ====
 
-A region type can be one of:
+A place type can be one of:
 
 || ID | Type |
 | 1 | Global |
@@ -984,45 +1107,88 @@ A region type can be one of:
 | 5 | State e.g. WCAPE |
 | 6 | Town or City |
 | 7 | Local area - nearest named place |
+| 8 | Quarter Degree Square - using ZA convention e.g 3318BC |
 
-==== Regions ====
+Administering the place types list is not an end-user activity and should be
+done in consultation with developers.
 
-For regions, a dictionary based on GeoNames provides an exhaustive list of
-local areas and towns.
+==== Place ====
 
-The region model looks like this:
+For places, a dictionary based on GeoNames provides a near-exhaustive list of
+local areas and towns. The geonames table will be augmented on an adhoc manner
+as required via the admin panel. When the place represents an area, the centroid 
+of that area will be used in the geometry.
 
-|| ID | Type | Name | Long Name |
-| 1   | 1 | Global | Global |
-| 2   | 2 | Africa | African Continent |
-| 3   | 3 | SADC | Southern African Development Community |
-| 4   | 4 | ZA | South Africa |
-| 5   | 5 | GP | Gauteng Province |
-| 6   | 6 | Pretoria | Pretoria |
-| 7   | 7 | Mamelodi | Mamelodi |
+The place model looks like this:
 
+|| ID | Type | Name | Long Name | Geometry |
+| 1   | 1 | Global | Global |  |
+| 2   | 2 | Africa | African Continent |  |
+| 3   | 3 | SADC | Southern African Development Community | |
+| 4   | 4 | ZA | South Africa | |
+| 5   | 5 | GP | Gauteng Province | |
+| 6   | 6 | Pretoria | Pretoria | |
+| 7   | 7 | Mamelodi | Mamelodi | |
+
+**Note:** Alessandro we need an admin ui for this
 
 %----------------------------------------------------------
 %----------------------------------------------------------
 %------------------ Ordinal Product     ---------------------
 %----------------------------------------------------------
 %----------------------------------------------------------
+
 == Ordinal Products ==
 
 **Synopsis:** Vector and Raster products where data are grouped into discrete classes.
 
 **Concrete or Abstract:** Concrete
 
+For ordinal products, there are three types of accuracy defined:
+
++ spatial
++ temporal
++ thematic
++
+
+The first two are catered for by the GeospatialProduct abstract base class (
+equivalent_scale, temporal_extent_start and temporal_extent_end). Thematic
+accuracy for a product is described by adding the fields
+
 === Ordinal Product Properties ===
 
 
-For ordinal we define thematic accuracy by means of the following fields:
- - class count
- - confusion matrix
- - kappa score
+For ordinal products we define thematic accuracy by means of the following fields:
+ - class_count
+ - confusion_matrix 
+ - kappa_score
  -
 
- -
+
+The **class count** property is a compulsory simple numeric value representing
+how many classes are defined in the dataset.
+
+The **[confusion_matrix http://en.wikipedia.org/wiki/Confusion_matrix]**
+property is a collection of comma separated integers representing (in order):
++ true positive (tp)
++ false negative (fn)
++ false positive (fp)
++ true negative (tn)
++
+
+Thus an entry of 10,5,2,8 signfies:
+
++ tp=10
++ fn=5
++ fp=2
++ tn=8
++
+
+The confusion matrix entry is not mandatory.
+
+The **[kappa score http://en.wikipedia.org/wiki/Cohen's_kappa]** is a
+""statistical measure of inter-rater agreement for categorical items"".
+It is represented as a single, non-compulsory real number.
 
 === Product ID Naming Scheme ===
 
@@ -1053,13 +1219,22 @@ discrete classes, but rather along a continuous value range.
 
 === Continuous Product Properties ===
 
-For Continuous data there are two additional fields:
+For Continuous data there are three additional fields:
 
- - range_min
- - range_max
- - unit
+ - range_min - floating point not null
+ - range_max - floating point not null
+ - unit - foreign key
+ -
 
-The range_min is the smallest value in the 
+The **range_min** is the smallest value in the continuim of data represented in the
+dataset. This value is required.
+
+The **range_max** is the largest value in the continuim of data represented in
+the dataset. This value is required.
+
+The **unit** property is a reference to the unit dictionary and it describes
+the units of measurement for the data represented in the dataset. This value is
+required.
 
 
 === Product ID Naming Scheme ===
@@ -1074,6 +1249,10 @@ aggregations.
 
 === Continuous Product Dictionaries ===
 
-Unit - a look up table storing measurement units that can be present 
+Unit - a look up table storing measurement units:
 
-=== Dictionaries ===
+|| Abbreviation | Name |
+| m | Meters
+| km | Kilometers |
+| etc. ||
+

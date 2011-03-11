@@ -12,10 +12,19 @@
   <div style="text-align: center;">
     <b id="cart-item-count">{{ myRecords.count }}</b> item(s).
   </div>
+  {% if myDownloadOrderFlag %}
+  <div id="cart-download-div" style="text-align: center;">
+    <img src="/media/images/down_16.png" alt=""/> Download order as
+    <a class="geom_download_link" href="/downloadorder/{{ myOrder.id }}/?shp">SHP</a>
+    <a class="geom_download_link" href="/downloadorder/{{ myOrder.id }}/?kml">KML</a>
+    <a class="geom_download_link" href="/downloadorder/{{ myOrder.id }}/?kmz">KMZ</a>
+  </div>
+  {% else %}
   {% if myRecords %}
   <div id="cart-download-div" style="text-align: center;">
     <a href="/cartasshapefile/"><img src="/media/images/down_16.png" alt=""/> Download cart as shapefile.</a>
   </div>
+  {% endif %}
   {% endif %}
 {% box_end %}
 {# script for showing deliveryDetails#}

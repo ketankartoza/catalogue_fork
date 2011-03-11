@@ -353,7 +353,7 @@ class GenericImageryProduct( GenericProduct ):
   Generic Imagery product, it is always a composite aggregated products
   see: signals, to set geometric_resolution defaults and average
   """
-  geometric_resolution                = models.FloatField( help_text="Geometric resolution")
+  geometric_resolution                = models.FloatField( help_text="Geometric resolution in m")
   geometric_resolution_x              = models.FloatField( help_text="Geometric resolution in m (x direction)")
   geometric_resolution_y              = models.FloatField( help_text="Geometric resolution in m (y direction)")
   radiometric_resolution              = models.IntegerField( help_text="Bit depth of image e.g. 16bit")
@@ -580,8 +580,8 @@ class OpticalProduct( GenericSensorProduct ):
   See http://docs.djangoproject.com/en/dev/topics/db/models/#id7 for more info."""
   ##Descriptors for optical products
   cloud_cover = models.IntegerField(null=True,blank=True)
-  sensor_inclination_angle = models.FloatField(null=True,blank=True)
-  sensor_viewing_angle = models.FloatField(null=True,blank=True)
+  sensor_inclination_angle = models.FloatField(null=True,blank=True,help_text="Orientation of the vehicle on which the sensor is mounted")
+  sensor_viewing_angle = models.FloatField(null=True,blank=True,help_text="Angle of acquisition for the image")
   gain_name = models.CharField( max_length=200, null=True,blank=True)
   gain_value_per_channel = models.CharField( max_length=200, help_text="Comma separated list of gain values", null=True,blank=True )
   gain_change_per_channel = models.CharField( max_length=200, help_text="Comma separated list of gain change values", null=True,blank=True )
@@ -632,17 +632,59 @@ class RadarProduct( GenericSensorProduct ):
 #ABP: this part will be completed with GeospatialProduct as an "abstract" class and Ordinal/Continuous
 #TODO:
 
-
-GEOSPATIAL_GEOMETRY_TYPE_CHOICES = ( ( 'R','Raster' ), ( 'VP', 'Vector - Points' ), ( 'VL', 'Vector - Lines' ) , ( 'VA', 'Vector - Areas / Polygons' ) )
+GEOSPATIAL_GEOMETRY_TYPE_CHOICES = ( ( 'RA','Raster' ), ( 'VP', 'Vector - Points' ), ( 'VL', 'Vector - Lines' ) , ( 'VA', 'Vector - Areas / Polygons' ) )
 class GeospatialProduct( GenericProduct ):
   """
   Geospatial product, does not have sensors information. Geospatial products may be rasters
   (that were derived from one or more satellite or other rasters) or vectors.
   """
   name = models.CharField(max_length = 255, null=False, blank=False, help_text="A descriptive name for this dataset");
-  data_type = models.CharField( max_length=1, choices=GEOSPATIAL_GEOMETRY_TYPE_CHOICES,null=True,blank=True, help_text="Is this a vector or raster dataset?" )
-  scale = models.IntegerField( help_text="The fractional part at the ideal maximum scale for this dataset. For example enter '50000' if it should not be used at scales larger that 1:50 000", null=True, blank=True, default=50000 )
+  description = models.TextField( null=True, blank=True, help_text="Description of the product." )
   processing_notes = models.TextField( null=True, blank=True, help_text="Description of how the product was created." )
+  equivalent_scale = models.IntegerField( help_text="The fractional part at the ideal maximum scale for this dataset. For example enter '50000' if it should not be used at scales larger that 1:50 000", null=True, blank=True, default=1000000 )
+  data_type = models.CharField( max_length=1, choices=GEOSPATIAL_GEOMETRY_TYPE_CHOICES,null=True,blank=True, help_text="Is this a vector or raster dataset?" )
+  temporal_extent_start           = models.DateTimeField(db_index=True, help_text="The start of the timespan covered by this dataset. If left blank will default to time of accession.")
+  temporal_extent_end             = models.DateTimeField(null=True, blank=True, db_index=True, help_text="The start of the timespan covered by this dataset. If left blank will default to start date.")
+  place_type = models.ForeignKey( PlaceType, help_text="Select the type of geographic region covered by this dataset" )
+  place = models.ForeignKey( Place, help_text="Nearest place, town, country region etc. to this product" )
+  primary_topic = models.ForeignKey( Topic, help_text="Select the most appopriate topic for this dataset. You can add additional keywords in the tags box." ) #e.g. Landuse etc
+  #
+  # elpaso to implement tagging support please....
+  #
+  # We need a flag to tell if this Product class can have instances (if it is not abstract)
+  concrete              = False
+  objects = models.GeoManager()
+  class Meta:
+    app_label= 'catalogue'
+
+###############################################################################
+
+class OrdinalProduct( GenericProduct ):
+  """
+  Ordinal product, does not have sensors information. Ordinal products are class based products e.g. roads, landuse, etc.
+  Products may be rasters (that were derived from one or more satellite or other rasters) or vectors.
+  """
+  class_count = models.IntegerField( help_text="Number of spectral bands in product")
+  confusion_matrix = models.CommaSeparatedIntegerField( max_length=80, null=True, unique=False, blank=True,help_text="Confusion matrix in the format: true positive,false negative,false positive,true negative")
+  kappa_score = models.FloatField( null=True, blank=True, help_text="Enter a value between 0 and 1 representing the kappa score." )
+  
+
+  # We need a flag to tell if this Product class can have instances (if it is not abstract)
+  concrete              = True
+  objects = models.GeoManager()
+  class Meta:
+    app_label= 'catalogue'
+
+###############################################################################
+
+class ContinuousProduct( GenericProduct ):
+  """
+  Continuousproduct, does not have sensors information. These products represent continuous data e.g. elevation, rainfall etc.
+  Products may be rasters (that were derived from measurements, one or more satellite or other rasters) or vectors.
+  """
+  range_min = models.FloatField( null=False, blank=False, help_text="The minimum value in the range of values represented in this dataset." )
+  range_max = models.FloatField( null=False, blank=False, help_text="The maximum value in the range of values represented in this dataset." )
+  unit = models.ForeignKey( Unit, help_text="Units for the values represented in this dataset." )
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   concrete              = True
   objects = models.GeoManager()

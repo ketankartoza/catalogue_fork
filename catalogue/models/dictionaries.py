@@ -185,3 +185,45 @@ class CreatingSoftware( models.Model ):
 
 ###############################################################################
 
+class Topic( models.Model ):
+  """A dictionary to define geospatial dataset topics e.g. LANDUSE, ROADS etc."""
+  abbreviation = models.CharField( max_length="10", unique=True, null=False )
+  name = models.CharField( max_length="255", unique=True, null=False )
+  class Meta:
+    app_label= 'catalogue'
+  def __unicode__(self):
+     return self.name
+
+###############################################################################
+
+class PlaceType( models.Model ):
+  """A dictionary to define place types e.g. Global, Continent, Region, Country, Province, City etc."""
+  name = models.CharField( max_length="255", unique=True, null=False )
+  class Meta:
+    app_label= 'catalogue'
+  def __unicode__(self):
+     return self.name
+
+###############################################################################
+
+class Place( models.Model ):
+  """A collection on named places based largely on geonames (which all get a place type of Nearest named place)"""
+  name = models.CharField( max_length="255", null=False )
+  place_type = models.ForeignKey( PlaceType, help_text="Type of place" )
+  geometry  = models.PointField( srid=4326, help_text="Place geometry", null=False )
+  class Meta:
+    app_label= 'catalogue'
+  def __unicode__(self):
+     return self.name
+  objects = models.GeoManager()
+
+###############################################################################
+
+class Unit( models.Model ):
+  """A dictionary to define unit types e.g. m, km etc."""
+  abbreviation = models.CharField( max_length="10", unique=True, null=False )
+  name = models.CharField( max_length="255", unique=True, null=False )
+  class Meta:
+    app_label= 'catalogue'
+  def __unicode__(self):
+     return self.name
