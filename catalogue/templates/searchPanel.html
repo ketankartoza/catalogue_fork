@@ -225,7 +225,7 @@
         </div>
 
         <div class="span-10 adv_search_1 adv_search_2 adv_fld">
-          <div class="span-5">
+          <div class="span-5 required">
             <img id="{{myForm.sensors.html_name}}Button"
                   src="/media/images/info_16.png"
                   style="cursor: pointer;"
@@ -365,8 +365,8 @@
             {% endif %}
         </div>
         <!-- second row in image details -->
-        <div class="span-10 adv_search_1 adv_search_2 adv_fld">
-            <div class="span-5">
+        <div class="span-10 adv_search_all adv_fld">
+            <div class="span-5 required">
             <img id="{{myForm.geometric_accuracy_mean.html_name}}Button"
                 src="/media/images/info_16.png"
                 style="cursor: pointer;"
@@ -384,7 +384,7 @@
             </div>
             {% endif %}
         </div>
-        <div class="span-10 adv_search_1 adv_search_2 adv_fld">
+        <div class="span-10 adv_search_all adv_fld">
             <div class="span-5">
             <img id="{{myForm.band_count.html_name}}Button"
                 src="/media/images/info_16.png"
@@ -427,7 +427,7 @@
             {% endif %}
         </div>
 
-        <div class="span-10 last adv_search_1 adv_search_2 adv_fld">
+        <div class="span-10 last adv_search_all adv_fld">
             <div class="span-5">
             <img id="{{myForm.processing_level.html_name}}Button"
                 src="/media/images/info_16.png"
@@ -446,7 +446,7 @@
             </div>
             {% endif %}
         </div>
-§        <div class="span-10 adv_search_1 adv_search_2 adv_fld">
+        <div class="span-10 adv_search_1 adv_search_2 adv_fld">
             <div class="span-5">
             <img id="{{myForm.j_frame_row.html_name}}Button"
                 src="/media/images/info_16.png"
@@ -561,8 +561,8 @@
         </div>
 
         <div class="span-5 append-bottom last">
-          <div class="span-5">
-            Date range
+          <div class="span-5 required">
+            <label for="id_searchdaterange_set">Date range</label>
           </div>
           <div class="span-5">
             {{ myFormset.management_form }}
@@ -585,6 +585,7 @@
       </fieldset>
 
       <div class="button-bar">
+        <div class="required" style="float:left"><label>&nbsp;</label> = required field.</div>
         <ul>
           <li><input type="submit" value="Search" class="default" name="_search" /></li>
         </ul>
