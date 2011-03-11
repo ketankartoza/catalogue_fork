@@ -348,7 +348,7 @@ def addOrder( theRequest ):
     'myRecords' : myRecords,
     'myBaseTemplate' : "emptytemplate.html", #propogated into the cart template
     'mySubmitLabel' : "Submit Order",
-    'myMessage' : " <div>Please specify any details for your order requirements below. If you need specific processing steps taken on individual images, please use the notes area below to provide detailed instructions.</div>",
+    'myMessage' : " <div>Please specify any details for your order requirements below. If you need specific processing steps taken on individual images, please use the notes area below to provide detailed instructions. If you would like the product(s) to be clipped and masked to a specific geographic region, you can digitise that region using the map above, or the geometry input field below.</div>",
     'myLayerDefinitions' : myLayerDefinitions,
     'myLayersList' : myLayersList,
     'myActiveBaseMap' : myActiveBaseMap
