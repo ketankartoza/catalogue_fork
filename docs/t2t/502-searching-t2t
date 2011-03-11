@@ -183,6 +183,10 @@ from sensor to sensor. The search algorithm makes no special allowance for this
 so it should be noted that a row/path search of 30,50 for two different sensors
 my return imagery covering disparate areas.
 
+**Note:** Although the normal expectation is that both a row and a path are
+provided, this is a soft requirement, and a user may enter one or the other (or
+neither) if they desire.
+
 ==== Processing levels ====
 
 The products can be filtered according to their processing level. The list of
