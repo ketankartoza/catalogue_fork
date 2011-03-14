@@ -21,7 +21,7 @@ CATALOGUE_SCENES_PATH = getattr(settings, 'CATALOGUE_SCENES_PATH', "/mnt/catalog
 def runconcrete(func):
   """
   This decorator calls the method in the concrete subclass
-  and raise an exception if the method is found only in a base
+  and raise an exception if the method is found only in the base
   GenericProduct abstract class
   """
   @wraps(func)
@@ -398,7 +398,7 @@ class GenericSensorProduct( GenericImageryProduct ):
     app_label= 'catalogue'
     abstract = False
 
-  def imagePath( self ):
+  def _imagePath( self ):
     """Returns the path (relative to whatever parent dir it is in) for the
       image itself following the scheme <Sensor>/<processinglevel>/<YYYY>/<MM>/<DD>/
       The image itself will exist under this dir as <product_id>.tif.bz2"""
@@ -409,7 +409,7 @@ class GenericSensorProduct( GenericImageryProduct ):
                     str( self.product_acquisition_start.day ) )
 
 
-  def thumbnailPath( self ):
+  def _thumbnailPath( self ):
     """Returns the path (relative to whatever parent dir it is in) for the
       thumb for this file following the scheme <Sensor>/<YYYY>/<MM>/<DD>/
       The thumb itself will exist under this dir as <product_id>.jpg"""
@@ -592,8 +592,22 @@ class OpticalProduct( GenericSensorProduct ):
   objects = models.GeoManager()
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   concrete              = True
+
   class Meta:
     app_label= 'catalogue'
+
+  def imagePath( self ):
+    """
+    A wrapper to run concrete from GenericSensorProduct
+    """
+    return self._imagePath()
+
+
+  def thumbnailPath( self ):
+    """
+    A wrapper to run concrete from GenericSensorProduct
+    """
+    return self._thumbnailPath()
 
 
 ###############################################################################
@@ -626,8 +640,22 @@ class RadarProduct( GenericSensorProduct ):
   objects = models.GeoManager()
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   concrete              = True
+
   class Meta:
     app_label= 'catalogue'
+
+  def imagePath( self ):
+    """
+    A wrapper to run concrete from GenericSensorProduct
+    """
+    return self._imagePath()
+
+
+  def thumbnailPath( self ):
+    """
+    A wrapper to run concrete from GenericSensorProduct
+    """
+    return self._thumbnailPath()
 
 ###############################################################################
 
@@ -654,6 +682,7 @@ class GeospatialProduct( GenericProduct ):
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   concrete              = False
   objects = models.GeoManager()
+
   class Meta:
     app_label= 'catalogue'
 

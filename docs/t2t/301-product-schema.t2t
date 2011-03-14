@@ -15,13 +15,13 @@ of different type of geodata:
   discrete classes) e.g. landcover maps
 - vector and raster data of a continuous nature (where the data are arranged
   within a numeric scale) e.g. rainfall monitoring points
-- 
+-
 
 The catalogue implements a model (see figure below) that caters for these
 different types of product and tries to deal with them in a consistent way, and
 groups them in a manner that cross cutting properties and behaviours can be
 assigned to any given  product based on the family of products to which it
-belongs. 
+belongs.
 
 [img/product-heirarchy2.png]
 
@@ -189,7 +189,7 @@ official EPSG CRS list.
 The EPSG name is a more user friendly and easily recognisable representation of
 the EPSG code. For reference, an extract of the entries is provided in the table below:
 
- || ID | Epsg Code |  Name | 
+ || ID | Epsg Code |  Name |
  |  1 |     32737 | UTM37S |
  |  2 |     32733 | UTM33S |
  |  3 |     32738 | UTM38S |
@@ -204,7 +204,7 @@ the EPSG code. For reference, an extract of the entries is provided in the table
 
 The quality is intended to provide a well defined dictionary of terms for
 qualitative assessment of products. Different product vendors use different
-schemes for describing product quality. 
+schemes for describing product quality.
 
 For example Spot Image describes quality in terms of an imaginary grid overlaid
 (and bisecting the image into equal sized units). Each grid cell is then given
@@ -212,7 +212,7 @@ a ranking e.g. ''AABBAAAABB''.
 
 Currently only one entry exists:
 
- || ID |  Name  | 
+ || ID |  Name  |
  |  1 | Unknown |
 
 This presence of a quality indicator is mandatory for GenericProduct, but the
@@ -247,7 +247,7 @@ Each product should have a license associated with it. The license will detail
 any restrictions on redistribution or useage that applies for the product.
 
 The following licenses are defined and all products have been assigned one of
-these licenses. 
+these licenses.
 
  || ID |    Name     |   Details   | Type |
  |  1 | SAC Commercial License | SAC Commercial License   |  |
@@ -335,7 +335,7 @@ ancestors) sensor based products.
 was from Wolfgang's notes but it does not model well:
  - composite products my span multiple modes, types, sensors and even missions.
  - scenes may span long time periods and the concept of a central scene is ambiguous
- - products may span larger areas than a single QDS map and in other countries 
+ - products may span larger areas than a single QDS map and in other countries
    mapping units may differ.
  - composite products may include other imagery types eg. aerial photos.
  -
@@ -392,7 +392,7 @@ and their downstream constituent products, ImageryProducts can be made of:
 - Optical Products
 - Radar Products
 - Geospatial Products and subclasses of Geospatial products
-- 
+-
 
 **Note:** Self referencing is not allowed. That is, a Imagery product may not
 include itself in any leaf node.
@@ -454,7 +454,7 @@ Sensor MS exists, no sensor type exists so a default type of 'MS' is created
 and consequently a default acquisition mode of MS os also created.
 See 'placeholder' clauses in description that follow.
 
-Where Row (rrrr) and Path (pppp) are not know for a sensor, the 
+Where Row (rrrr) and Path (pppp) are not know for a sensor, the
 word 'None' will be written out in the  product id to differentiate from 0000
 which may be a valid row or path.
 
@@ -478,6 +478,8 @@ visualised in the following diagram:
 
 These dictionaries and their interrelationships are described in more detail in
 the text below.
+
+
 
 ==== Mission ====
 
@@ -509,6 +511,9 @@ below.
  |  20 | C2B          | CBERS           |
  |  21 | S-C          | SAC-C           |
 
+
+The mission abbreviation and name must be unique.
+
 **Note:** Wolfgang we are using ZA2 instead of SS here.
 
 **Note:** RE - RapidEye needs to be added to this list
@@ -519,7 +524,7 @@ below.
 On board each space vehicle receiving EO data will be one or more sensors.
 Although the sensor may be nominally the same between two different missions
 (e.g. MSS), the specific properties of these sensors will vary between
-missions, and even between identical sensors on the same mission. 
+missions, and even between identical sensors on the same mission.
 A sensor is basically a camera or other equipment capable of performing
 distance observation of the earth.
 
@@ -547,13 +552,17 @@ distance observation of the earth.
  | 21 | MRS          | SACC MRS              |             | t |     S-C        |
  | 22 | SMS          | Sumbandilasat MSS     |             | t |     ZA2        |
 
+
+The abbreviation field and the foreign key to Mission must be unique together.
+
+
 **Note:** Ale, I would like to get rid of the has data field if poss. It is
 used to restrict the display of sensors to users to only those with data
 associated to them. Is there a cleaner way to do it? At mininimum we need to
 automate updating this field as data is added to and removed from the system.
 
 Sensors
-TM - Thematic Mapper 
+TM - Thematic Mapper
 ETM - Enhanced thematic mapper
 MSS Multi-spectral
 
@@ -576,7 +585,7 @@ mission.``
 The Abbreviation will **not** be unique per sensor. Note that the 4 letter name
 space does not allow for many permutations and readers of the abbreviation
 should do it in context of a specific mission, sensor type etc.  (for example
-by always presenting the mission abbreviation at the same time). 
+by always presenting the mission abbreviation at the same time).
 
 In some cases, no specific mission sensors will exist for a mission. In these
 cases, a placeholder mission sensor should be created, named directly after the
@@ -592,7 +601,7 @@ Above assumes the pre-existance of a mission 'ERS'.
 
 The sensor type describes a mission sensor. 'High end' satellites may use a
 custom sensor type with its own specific properties. 'Cheaper' satellites may
-use simple CCD (charge coupled device) style sensors. 
+use simple CCD (charge coupled device) style sensors.
 
 
  || ID | Abbreviation |                   Name                   | Mission Sensor |
@@ -604,6 +613,11 @@ use simple CCD (charge coupled device) style sensors.
  |  6 | R3B          | R3B                                       |                |
  |  7 | MSS          | Multispectral                             |                |
  |  8 | RT           | RT                                        |                |
+
+
+
+The abbreviation field and the foreign key to MissionSensor must be unique together.
+
 
 **Note:** Wolfgang please populate the related mission sensor(s) per id above.
 
@@ -621,7 +635,7 @@ type matching the mission sensor abbreviation should be created e.g.
 The Abbreviation will **not** be unique per sensor type. Note that the 4 letter name
 space does not allow for many permutations and readers of the abbreviation
 should do it in context of a specific mission-sensor, acquisition mode etc.  (for example
-by always presenting the mission abbreviation at the same time). 
+by always presenting the mission abbreviation at the same time).
 
 
 **Note:** A one-to-many relationship will be created between mission sensor
@@ -633,7 +647,7 @@ entities and their related mission - as illustrated here:
 +-------------+                +----------------+
 ```
 
-**Relationship in plain english:** Each mission sensor can have one or more sensor 
+**Relationship in plain english:** Each mission sensor can have one or more sensor
 types associated with it. Each sensor type shall be associated to only one sensor.``
 
 
@@ -660,6 +674,9 @@ created. Acquisition modes table example:
  |  13 | 5BF          | 5BF                              |   0 |    0   |                              |
  |  14 | 3BP          | 3BP                              |   0 |    0   |                              |
  |  15 | HR           | HR                               |   0 |    0   |                              |
+
+
+The abbreviation field and the foreign key to SensorType must be unique together.
 
 
 **Note:** Wolfgang to populate sensor type. Entries should be duplicated for
@@ -696,7 +713,7 @@ The Abbreviation will **not** be unique per acquisition mode. Note that the 4
 letter name space does not allow for many permutations and readers of the
 abbreviation should do it in context of a specific sensor type.  (for example
 by always presenting the sensor type, mission type and mission abbreviations at
-the same time). 
+the same time).
 
 
 --------------------------------------------
@@ -716,7 +733,7 @@ values. In particular:
 + The band_count in acquisition mode will be assigned to the
   GenericSensorProduct.band_count (formerly called spectral_resolution) if NULL
   at the moment of assignment.
-+ 
++
 
 ==== Mission Group ====
 
@@ -763,6 +780,21 @@ based product, assigning these entities to derived products will not be
 meaningful. Because of this composite products (e.g. a pan sharpened SPOT
 image) will not be modelled under generic sensor products but rather belong to
 a sub class GenericImageryProduct.
+
+
+===== Dictionaries naming rules =====
+
+Given the relationships above mentioned for sensors dictionaries, the
+following rules are applied in cascade mode in order to build a unique
+dictionary item in the tree:
+
+|| Dictionary         | Naming scheme               | Constraints (unique together if in brackets)      | Example       |
+| Mission             | abbreviation                | abbreviation, name                                | L5            |
+| MissionSensor       | abbreviation:Mission        | [abbreviation, Mission]                           | TM:L5         |
+| SensorType          | abbreviation:MissionSensor  | [abbreviation, MissionSensor]                     | MST:TM:L5     |
+| AcquisitionMode     | abbreviation:SensorType     | [abbreviation, SensorType]                        | HRT:MST:TM:L5 |
+
+
 
 === Resolving the metadata to explicit records ===
 
@@ -829,7 +861,7 @@ the spectrum and consist of one or more bands, each covering a different part
 of the spectrum. Generally the bands (in multiple band images) are co-aligned -
 meaning the cover the same geographical footprint. In some cases however, the
 bands are offset from each other, creating an opportunity to super-sample the
-image and improve its native resolution. 
+image and improve its native resolution.
 
 [img/optical-image-example-medium.png]
 
@@ -841,16 +873,16 @@ further specialisations.
 The optical product model introduces a number of properies in addition to those
 inherited from the GenericSensorProduct base class.
 
- - cloud_cover 
- - sensor_inclination_angle 
+ - cloud_cover
+ - sensor_inclination_angle
  - sensor_viewing_angle
- - gain_name 
- - gain_value_per_channel 
- - gain_change_per_channel 
- - bias_per_channel 
- - solar_zenith_angle 
- - solar_azimuth_angle 
- - earth_sun_distance 
+ - gain_name
+ - gain_value_per_channel
+ - gain_change_per_channel
+ - bias_per_channel
+ - solar_zenith_angle
+ - solar_azimuth_angle
+ - earth_sun_distance
  -
 
 === Product ID Naming Scheme ===
@@ -950,7 +982,7 @@ All geospatial products share the following properties:
  - tags
  -
 
-Properties from GenericProduct are also inherited. 
+Properties from GenericProduct are also inherited.
 
 The **name** property is a descriptive name (in plain english) for the dataset e.g.
 """Landcover map of South Africa, 2010"""
@@ -977,7 +1009,7 @@ The **data_type** property describes what type of data is represented in the
 dataset. The options for data_type are defined in a dictionary in the
 GeospatialProduct model viz:
 
-|| Abbreviation | Name | 
+|| Abbreviation | Name |
 | RA | Raster |
 | VP | Vector - Points |
 | VL | Vector - Lines |
@@ -1005,7 +1037,7 @@ standard. e.g.
 </gmd:temporalElement>
 ```
 
-**Note:** The GenericSensorProduct includes 
+**Note:** The GenericSensorProduct includes
 GenericSensorProduct::product_acquisition_start and
 GenericSensorProduct::product_acquisition_end fields but their semantics are
 different - they define the actual imagery acquisition period, whereas in Level
@@ -1047,7 +1079,7 @@ product shall use default values of 'Local area - nearest named place'
 (place_type 7 as listed in the next section) for place_type and are assigned
 the named place that is nearest to the centroid of the product geometry (based
 on geonames dataset lodged in the **place** dictionary), unless they have been
-manually assigned. 
+manually assigned.
 ```
 
 **Primary topic** is the main categorisation for this dataset. Additional tags can
@@ -1116,7 +1148,7 @@ done in consultation with developers.
 
 For places, a dictionary based on GeoNames provides a near-exhaustive list of
 local areas and towns. The geonames table will be augmented on an adhoc manner
-as required via the admin panel. When the place represents an area, the centroid 
+as required via the admin panel. When the place represents an area, the centroid
 of that area will be used in the geometry.
 
 The place model looks like this:
@@ -1160,7 +1192,7 @@ accuracy for a product is described by adding the fields
 
 For ordinal products we define thematic accuracy by means of the following fields:
  - class_count
- - confusion_matrix 
+ - confusion_matrix
  - kappa_score
  -
 

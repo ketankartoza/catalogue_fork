@@ -1,13 +1,15 @@
 from django.contrib.gis.db import models
 # for generating globally unique id's - I think python 2.5 is required
 import uuid
-import datetime
+from datetime import datetime
 #for user id foreign keys
 from django.contrib.auth.models import User
 from orders import Order, DeliveryDetail
 from products import GenericProduct, RadarProduct
 from dictionaries import MissionSensor, AcquisitionMode, License, SensorType, Mission, ProcessingLevel
 #for translation
+
+from catalogue.fields import IntegersCSVIntervalsField
 
 ###############################################################################
 
@@ -190,6 +192,12 @@ class Search(models.Model):
   # Use the geo manager to handle geometry
   objects = models.GeoManager()
 
+  class Meta:
+    app_label= 'catalogue'
+    verbose_name = 'Search'
+    verbose_name_plural = 'Searches'
+    ordering = ('search_date',)
+
   def save(self):
     #makes a random globally unique id
     if not self.guid or self.guid=='null':
@@ -246,30 +254,31 @@ class Search(models.Model):
     myString = ", ".join(myList)
     return myString
 
-  def productIdAsHash(self):
+  def getRowChoices(self):
     """
-    Returns field values suitable for initial ProductIdSearchForm population
+    Returns a list of choices
     """
-    return {
-        'mission':            self.mission_id,
-        'sensors':            [m.pk for m in self.sensors.all()],
-        'acquisition_mode':   self.acquisition_mode_id,
-        'sensor_type':        self.sensor_type_id,
-        'start_year':         self.start_date.year,
-        'start_month':        self.start_date.month,
-        'start_day':          self.start_date.day,
-        'end_year':           self.end_date.year,
-        'end_month':          self.end_date.month,
-        'end_day':            self.end_date.day,
-      }
+    choices = []
+    for r in IntegersCSVIntervalsField.to_tuple(self.k_orbit_path):
+      if len(r) == 1:
+        choices.append(r[0])
+      else:
+        choices.extend(range(r[0], r[1]+1))
+    choices.sort()
+    return choices
 
-  class Meta:
-    app_label= 'catalogue'
-    verbose_name = 'Search'
-    verbose_name_plural = 'Searches'
-    ordering = ('search_date',)
-
-
+  def getPathChoices(self):
+    """
+    Returns a list of choices
+    """
+    choices = []
+    for r in IntegersCSVIntervalsField.to_tuple(self.j_frame_row):
+      if len(r) == 1:
+        choices.append(r[0])
+      else:
+        choices.extend(range(r[0], r[1]+1))
+    choices.sort()
+    return choices
 
 ###############################################################################
 #
@@ -281,6 +290,9 @@ class SearchDateRange(models.Model):
   """
   Stores the date ranges for the Search model
   """
+
+  local_format_string = '%d-%m-%Y'
+
   start_date = models.DateField(help_text='Product date is required. YYYY-MM-DD.')
   end_date = models.DateField(help_text='Product date is required. YYYY-MM-DD.')
   search = models.ForeignKey(Search)
@@ -289,6 +301,20 @@ class SearchDateRange(models.Model):
 
   def __unicode__(self):
     return "%s <-> %s Guid: %s" % (self.start_date, self.end_date, self.search.guid)
+
+  def local_format(self):
+    """
+    TODO: move into a widget
+    """
+    return "%s : %s" % (self.start_date.strftime(SearchDateRange.local_format_string), self.end_date.strftime(SearchDateRange.local_format_string))
+
+  @staticmethod
+  def from_local_format(formatted_value):
+    """
+    TODO: move into a widget
+    """
+    return datetime.strptime(formatted_value[:10], SearchDateRange.local_format_string), datetime.strptime(formatted_value[-10:], SearchDateRange.local_format_string)
+
 
 ###############################################################################
 

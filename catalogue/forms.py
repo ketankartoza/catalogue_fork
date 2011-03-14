@@ -6,7 +6,9 @@ from django import forms
 from django.forms.models import BaseInlineFormSet
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.core.validators import EMPTY_VALUES
 
+from catalogue.fields import *
 from catalogue.models import *
 from catalogue.datetimewidget import *
 from catalogue.geometrywidget import *
@@ -80,20 +82,21 @@ class DateRangeFormSet(BaseInlineFormSet):
               forms_valid = False
       return forms_valid and not bool(self.non_form_errors())
 
-  def ___construct_forms(self):
-    """
-    instantiate all the forms and put them in self.forms
+  #def _construct_forms(self):
+    #"""
+    #instantiate all the forms and put them in self.forms
 
-    ABP: pass on key exception
-    """
-    #import ipy; ipy.shell()
-    self.forms = []
-    for i in xrange(self.total_form_count()):
-      try:
-        self.forms.append(self._construct_form(i))
-      except (KeyError, IndexError), e:
-        raise
-        import ipy; ipy.shell()
+    #ABP: pass on key exception
+    #"""
+    ##import ipy; ipy.shell()
+    #self.forms = []
+    #for i in xrange(self.total_form_count()):
+      #try:
+        #self.forms.append(self._construct_form(i))
+      #except (KeyError, IndexError), e:
+        ##import ipy; ipy.shell()
+        ##raise
+        #pass
 
   def full_clean(self):
     """
@@ -111,44 +114,6 @@ class DateRangeFormSet(BaseInlineFormSet):
       self.clean()
     except ValidationError, e:
       self._non_form_errors = self.error_class(e.messages)
-
-
-###############################################################################
-#
-# Custom print intervals like field
-#
-###############################################################################
-class IntegersCSVIntervalsField(forms.RegexField):
-  """
-  Accepts ranges: 1-2 3-55, comma separated values and single values
-  """
-  regex='[1-9]\d*[-][1-9]\d*|[1-9]\d*'
-  def __init__(self, *args, **kwargs):
-    return super(IntegersCSVIntervalsField, self).__init__(regex=IntegersCSVIntervalsField.regex, *args, **kwargs)
-
-  @staticmethod
-  def to_tuple(value):
-    """
-    Normalize data to a list of integer single values and tuples for ranges
-    """
-    # Return an empty list if no input was given.
-    values = []
-    for token in re.findall(IntegersCSVIntervalsField.regex, value):
-      values.append(tuple(map(lambda x: int(x), token.split('-'))))
-    return values
-
-  def validate(self, values):
-      """
-      Checks the intervals
-      """
-      # Use the parent's handling of required fields, etc.
-      super(IntegersCSVIntervalsField, self).validate(values)
-
-      for value in IntegersCSVIntervalsField.to_tuple(values):
-        if len(value) == 2:
-          if not value[1] > value[0]:
-            raise ValidationError, 'The range values are not correct: %d %d' % value
-
 
 
 class AdvancedSearchForm(forms.ModelForm):
@@ -192,7 +157,6 @@ class AdvancedSearchForm(forms.ModelForm):
 
   k_orbit_path = IntegersCSVIntervalsField(required=False)
   j_frame_row = IntegersCSVIntervalsField(required=False)
-
 
   class Meta:
     model = Search
@@ -261,23 +225,115 @@ class AdvancedSearchForm(forms.ModelForm):
     return self.cleaned_data
 
 
+class ProductIdSearchForm(forms.ModelForm):
+  """
+  Form for product id search refine
+  """
+  k_orbit_path = forms.ModelChoiceField((), required=False)
+  j_frame_row = forms.ModelChoiceField((), required=False)
+  date_range = NoValidationChoiceField((),required=False)
+  isAdvanced = forms.CharField(widget=forms.HiddenInput(), required=False, initial=True)
 
-class AbbreviationModelChoiceField( forms.ModelChoiceField ):
-  """Custom model choice field that shows abbreviated name rather than the default unicode representation
-  so that we can show compact combo boxes. The associated model must have a field called abbreviation."""
-  def label_from_instance(self, obj):
-    return obj.abbreviation
+  mission = AbbreviationModelChoiceField( None, empty_label="All" , required=False)
+  sensors = AbbreviationModelChoiceField(None, empty_label="All", required=False)
+  acquisition_mode = AbbreviationModelChoiceField(None, empty_label="All", required=False)
+  sensor_type = AbbreviationModelChoiceField(None, empty_label="All", required=False)
+  processing_level = AbbreviationModelChoiceField( None, empty_label="All" , required=False)
+
+  class Meta:
+    model = Search
+    fields = ('acquisition_mode', 'sensors', 'sensor_type', 'mission', 'acquisition_mode', 'sensor_type', 'k_orbit_path', 'j_frame_row', 'processing_level')
+
+  def __init__(self, *args, **kwargs):
+    """
+    Populate lists and set UI CSS class
+    """
+
+    # This form cannot create new objects, only edit existing instances
+    assert 'instance' in kwargs
+
+    super(ProductIdSearchForm, self).__init__(*args, **kwargs)
+    for myField in self.fields:
+      try:
+        self.fields[myField].widget.attrs['class'] = 'ui-corner-all'
+      except AttributeError:
+        pass
+
+    search_instance = self.instance
+
+    #self.fields['sensors'].queryset = search_instance.sensors.all()
+    #if search_instance.acquisition_mode:
+      #self.fields['acquisition_mode'].queryset = AcquisitionMode.objects.filter(pk=search_instance.acquisition_mode.pk)
+    #else:
+      #self.fields['acquisition_mode'].queryset = AcquisitionMode.objects.filter(sensor_type__mission_sensor__in=search_instance.sensors.all())
+    #if search_instance.sensor_type:
+      #self.fields['sensor_type'].queryset = SensorType.objects.filter(pk=search_instance.sensor_type.pk)
+    #else:
+      #self.fields['sensor_type'].queryset = SensorType.objects.filter(mission_sensor__in=search_instance.sensors.all())
+    #if search_instance.mission:
+      #self.fields['mission'].queryset = Mission.objects.filter(pk=search_instance.mission.pk)
+    #else:
+      #self.fields['mission'].queryset = Mission.objects.filter(missionsensor__in=search_instance.sensors.all())
+    #if search_instance.processing_level:
+      #self.fields['processing_level'].queryset = search_instance.processing_level.all()
+    #else:
+      #self.fields['processing_level'].queryset = ProcessingLevel.objects.all()
+
+    self.fields['acquisition_mode'].queryset = AcquisitionMode.objects.all()
+    self.fields['sensor_type'].queryset = SensorType.objects.all()
+    self.fields['mission'].queryset = Mission.objects.all()
+    self.fields['processing_level'].queryset = ProcessingLevel.objects.all()
+    self.fields['sensors'].queryset = MissionSensor.objects.all()
+
+    choices = [('', 'All')]
+    choices.extend([(i.local_format(), i.local_format()) for i in  search_instance.searchdaterange_set.all()])
+    self.fields['date_range'].choices = choices
+
+    row_choices = [('', 'All')]
+    row_choices.extend([(l, l) for l in search_instance.getRowChoices()])
+    path_choices = [('', 'All')]
+    path_choices.extend([(l, l) for l in search_instance.getPathChoices()])
+
+    self.fields['k_orbit_path'].choices = path_choices
+    self.fields['j_frame_row'].choices = row_choices
+
+  def clean_sensors(self):
+    """
+    Transform
+    """
+    data = self.cleaned_data['sensors']
+    if not data:
+      return MissionSensor.objects.all()
+    else:
+      return MissionSensor.objects.filter(pk=data.pk)
+
+  def clean_date_range(self):
+    """
+    Transform
+    """
+    ranges = self.cleaned_data['date_range']
+    if not ranges:
+      return None
+
+    try:
+      start_date, end_date = SearchDateRange.from_local_format(ranges)
+    except ValueError, e:
+      raise forms.ValidationError ('Error: date is not valid. %s' % e)
+    if not start_date <=  end_date:
+      raise forms.ValidationError ('Error: date range is not valid.')
+    return {'start_date' : start_date, 'end_date' : end_date }
+
+  def clean_processing_level(self):
+    """
+    Transform
+    """
+    if not self.cleaned_data['processing_level']:
+      return []
+    return [self.cleaned_data['processing_level']]
 
 
-class AbbreviationModelMultipleChoiceField( forms.ModelMultipleChoiceField ):
-  """Custom model choice field that shows abbreviated name rather than the default unicode representation
-  so that we can show compact combo boxes. The associated model must have a field called abbreviation."""
-  def label_from_instance(self, obj):
-    return obj.abbreviation
 
-
-
-class ProductIdSearchForm( forms.Form ):
+class _ProductIdSearchForm( forms.Form ):
   """
   A special class of search form that allows to construct the search by
   building up a Product ID. This is intended to be used as an unbound form

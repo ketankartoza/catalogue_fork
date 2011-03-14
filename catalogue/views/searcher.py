@@ -110,6 +110,7 @@ class Searcher:
     if not self.mSearch.isAdvanced or \
       self.mSearch.search_type == Search.PRODUCT_SEARCH_GENERIC:
       logging.info('Search type is PRODUCT_SEARCH_GENERIC')
+      self.mSearch.search_type = Search.PRODUCT_SEARCH_GENERIC
       self.mQuerySet = GenericProduct.objects.all()
     elif self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL:
       logging.info('Search type is PRODUCT_SEARCH_OPTICAL')
@@ -380,8 +381,11 @@ class Searcher:
     only when the corresponding search values is not set
     """
     # Get option for all related fields, exclude users
-    values = {}
 
+
+    assert self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL or self.mSearch.search_type == Search.PRODUCT_SEARCH_RADAR, 'Search type is GENERIC'
+
+    values = {}
     for field_name in [f.name for f in self.mSearch._meta.fields if f.rel and f.name != 'user']:
       if not unset_only or not getattr(self.mSearch, field_name , None):
         values[field_name] = self.getOption(field_name)
@@ -401,4 +405,4 @@ class Searcher:
     """
     Returns a list of possible values that selected search parameters can assume for a given field
     """
-    return list(self.mQuerySet.distinct().values_list(self.mSearch.getDictionaryMap(field_name), flat = True).order_by())
+    return list(self.mQuerySet.distinct().values_list(self.mSearch.getDictionaryMap(field_name), flat=True).order_by())

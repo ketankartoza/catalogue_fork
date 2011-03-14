@@ -28,9 +28,6 @@ BEGIN;
     MissionGroup.name
     Mission.abbreviation
     Mission.name
-    MissionSensor.name (it should be unique even though abbreviation isnt)
-    SensorType.name (it should be unique even though abbreviation isnt)
-    AcquisitionMode.name
     ProcessingLeve.abbreviation
     ProcessingLevel.name
     Projection.epsg_code

@@ -31,6 +31,9 @@
       $('#product-search-button').click(function(){
         $('#productIdForm').submit();
       });
+      $('#product-clear-button').click(function(){
+        $('#productIdForm select option').show();
+      });
 
       // Form ajax handling
       $('#productIdForm').submit(function(){
@@ -86,39 +89,34 @@
 
 {% block content %}
 {% box_start "" "" "" %}
-<div id="messages" style="display:none;background:white"></div>
-<pre>SAT SEN TYP MOD YYMMDD HHMMSS</pre>
-<ul id="product-id-search-list">
+  <div id="messages" style="display:none;background:white"></div>
   <form id="productIdForm" action="/productIdSearch/{{ theGuid }}/">
   {% csrf_token %}
-  <table>
-    <tr>
-      <td>{{ myForm.mission }}</td>
-      <td rowspan="2">{{ myForm.sensors }}</td>
-      <td>{{ myForm.acquisition_mode }}</td>
-      <td>{{ myForm.sensor_type }}</td>
-      <td>{{ myForm.start_year }}</td>
-      <td>{{ myForm.start_month }}</td>
-      <td>{{ myForm.start_day }}</td>
-      <td>{{ myForm.start_hour }}</td>
-      <td>{{ myForm.start_minute }}</td>
-      <td>{{ myForm.start_second }}</td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td colspan="2" style="text-align:right;">End date:</td>
-      <td>{{ myForm.end_year }}</td>
-      <td>{{ myForm.end_month }}</td>
-      <td>{{ myForm.end_day }}</td>
-      <td>{{ myForm.end_hour }}</td>
-      <td>{{ myForm.end_minute }}</td>
-      <td>{{ myForm.end_second }}</td>
-    </tr>
-  </table>
-
+    <table>
+      <tr>
+        <th>{{ myForm.mission.label_tag}}</th>
+        <th>{{ myForm.sensors.label_tag}}</th>
+        <th>{{ myForm.acquisition_mode.label_tag}}</th>
+        <th>{{ myForm.sensor_type.label_tag}}</th>
+        <th>{{ myForm.j_frame_row.label_tag}}</th>
+        <th>{{ myForm.k_orbit_path.label_tag}}</th>
+        <th>{{ myForm.date_range.label_tag}}</th>
+        <th>{{ myForm.processing_level.label_tag}}</th>
+        <th>&nbsp;</th>
+      </tr>
+      <tr>
+        <td>{{ myForm.mission }}</td>
+        <td>{{ myForm.sensors }}</td>
+        <td>{{ myForm.acquisition_mode }}</td>
+        <td>{{ myForm.sensor_type }}</td>
+        <td>{{ myForm.j_frame_row}}</td>
+        <td>{{ myForm.k_orbit_path}}</td>
+        <td>{{ myForm.date_range}}</td>
+        <td>{{ myForm.processing_level}}</td>
+        <td><input type="button" value="Clear!" id="product-clear-button" /><br /><input type="button" value="Search!" id="product-search-button" /></td>
+      </tr>
+    </table>
   </form>
-</ul>
-<input type="button" value="Search!" id="product-search-button" />
 {% box_end %}
 {{ block.super }}
 {% endblock %}

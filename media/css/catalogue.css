@@ -429,10 +429,6 @@ ul.dropdown ul {
   }
 
 
-#product-id-search-list #id_sensors {
-    height: 3em;
-  }
-
 /* ABP: advancedSearch date range */
 
 div#dr_container {
@@ -528,4 +524,8 @@ div.required label {
     background-position : center right;
     background-repeat : no-repeat;
   }
+
+#productIdForm select {
+  width: 50px;
+}
 
