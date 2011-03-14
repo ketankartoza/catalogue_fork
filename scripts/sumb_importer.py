@@ -36,8 +36,9 @@ def importMetadata( theProjectDir ):
     myJpegThumbnail = os.path.join(myInputThumbnailsPath, str( myRecord.sceneid.replace("1A-","1Ab")) + ".jpg")
     # if this thumb does not exist, stop this iteration right here
     # since the sumb rec we have is probably from another project
-    # folder that is still to be processed.
-    if not os.path.exists(myJpegThumbnail):
+    # folder that is still to be processed. We test for the pox file
+    # in case we are re-running the processing and the jpg has already been filed away
+    if not os.path.exists(myJpegThumbnail+".pox"):
       print "%s missing, skipping rec" % myJpegThumbnail
       myPreviousRecord = None
       continue
@@ -176,10 +177,13 @@ def importMetadata( theProjectDir ):
       myNewJpgFile =  os.path.join( myOutputPath, myProduct.product_id + ".jpg" )
       myNewWorldFile =  os.path.join( myOutputPath, myProduct.product_id + ".wld" )
       print "New filename: %s" % myNewJpgFile
-      shutil.move( myJpegThumbnail, myNewJpgFile )
+      shutil.copy( myJpegThumbnail, myNewJpgFile )
       #currently there are no world files for sumb
       #shutil.copy( myWorldFile, myNewWorldFile )
-
+    except:
+      pass
+  
+    try:
       # Now run the code to bring in the 1ab product
       if not importL1Ab( theProjectDir, myProduct ):
         myErrorCount += 1
@@ -188,8 +192,8 @@ def importMetadata( theProjectDir ):
         myErrorCount += 1
 
     except:
+      traceback.print_exc(file=sys.stdout)
       myThumbErrorCount += 1
-
 
     # Show progress occasionaly
     if mySuccessCount % mProgressInterval == 0:
@@ -203,20 +207,29 @@ def importL1Ab( theProjectDir, theProduct ):
   myPixSourceFile = os.path.join( mSourcePath, theProjectDir, "imp", theProduct.product_id + ".pix" )
   myTiffSourceFile = os.path.join( mSourcePath, theProjectDir, "imp", theProduct.product_id + ".tif" )
   myBzipSourceFile = myTiffSourceFile + ".bz2"
+  if os.path.isfile( myTiffSourceFile ):
+    print "Removing old tif"
+    os.remove( myTiffSourceFile )
+  if os.path.isfile( myBzipSourceFile ):
+    print "Removing old tif.bz2"
+    os.remove( myBzipSourceFile )
   if os.path.isfile( myPixSourceFile ):
     myString = "gdal_translate -of GTIFF %s %s" % ( myPixSourceFile, myTiffSourceFile )
     print myString
+    print "Converting to tiff now"
     os.system( myString )
-    os.system( "bzip2 %s" % mySourceFile )
+    print "Bzipping now using \n bzip2 %s" % myTiffSourceFile
+    os.system( "bzip2 %s" % myTiffSourceFile )
+    print "File bzipped now"
   if not os.path.isdir( myOutputPath ):
-    #print "Creating dir: %s" % myOutputPath
+    print "Creating dir: %s" % myOutputPath
     try:
       os.makedirs( myOutputPath )
     except OSError:
       print "Failed to make output directory...quitting"
       return False
   else:
-    #print "Exists: %s" % myOutputPath
+    print "Exists: %s" % myOutputPath
     pass
   print "Move: %s to %s" % (myBzipSourceFile, myOutputFile)
   try:
@@ -232,14 +245,14 @@ def importL1Ab( theProjectDir, theProduct ):
 
 
 
-def importL1Ab( theProjectDir, theProduct ):
+def importL1Aa( theProjectDir, theProduct ):
   """Sort raw imagery into a standard folder heirachy"""
   myCwd = os.getcwd()
   myRawSourceDirParent = os.path.join( mSourcePath, theProjectDir, "raw" )
   os.chdir(myRawSourceDirParent)
   print "L1Aa import for %s" % theProduct.product_id
   myOutputPath = os.path.join( settings.IMAGERY_ROOT, theProduct.imagePath().replace("1Ab","1Aa") )
-  myOutputFile = os.path.join( myOutputPath, theProduct.product_id.replace("L1Ab","L1Aa") + ".bz2" )
+  myOutputFile = os.path.join( myOutputPath, theProduct.product_id.replace("L1Ab","L1Aa") + ".tar.bz2" )
   mySourceDir = theProduct.original_product_id
   if not os.path.isdir( myOutputPath ):
     print "Creating dir: %s" % myOutputPath
@@ -276,13 +289,14 @@ def importL1Ab( theProjectDir, theProduct ):
 
 
 def run():
-  myProjectsList = [  "20100801_20100830",
-                      "20100901_20100910",
-                      "20100901_20100922",
-                      "20100927_20101014",
-                      "20101018_20101108",
-                      "20101109_20101112",
-                      "20101116_20101119" ]
+  myProjectsList = [ 
+      "20101122_20101201",
+      "20101206_20101213",
+      "20110125_20110214",
+      "20110215_20110228",
+      "20100901_20100922",
+      "20100801_20100830"
+                   ]
   print "Processing sumbandilasat"
   for myProject in myProjectsList:
     print "Processing %s" % myProject

@@ -243,12 +243,18 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     """Returns a path to the actual RAW imagery data as a url. You need to have
     apache set up so share this directory. If no file is encountered at the computed path,
     None will be returned"""
-    myPath = os.path.join( settings.IMAGERY_ROOT, self.imagePath(), self.product_id + ".bz2" )
+    myPath = os.path.join( settings.IMAGERY_ROOT, self.imagePath(), self.product_id + ".tar.bz2" )
     myLevel = self.processing_level.abbreviation
     myLevel = myLevel.replace( "L","" )
+    # since we want *RAW* image in this method set processing level to 1Aa
     myPath = myPath.replace( myLevel, "1Aa" )
-    myUrl = settings.IMAGERY_URL_ROOT + self.imagePath() + "/" + self.product_id + ".bz2"
+    myUrl = settings.IMAGERY_URL_ROOT + self.imagePath() + "/" + self.product_id + ".tar.bz2"
     myUrl = myUrl.replace( myLevel, "1Aa" )
+    # In some cases products may not be in bzipped tarballs so check if that is
+    # present if the bz2 on its own isn't present
+    if not os.path.isfile( myPath ):
+      myPath = myPath.replace( ".tar.bz2", ".bz2" )
+      myUrl = myUrl.replace( ".tar.bz2", ".bz2" )
     logging.info("Raw Image Path: %s" % myPath )
     logging.info("Raw Image Url: %s" % myUrl )
     if os.path.isfile( myPath ):

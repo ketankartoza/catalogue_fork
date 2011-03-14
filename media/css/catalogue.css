@@ -529,3 +529,6 @@ div.required label {
   width: 50px;
 }
 
+.geom_download_link {
+  text-decoration:none;
+}

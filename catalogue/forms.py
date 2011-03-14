@@ -397,7 +397,7 @@ class OrderForm(forms.ModelForm):
 
 class DeliveryDetailForm(forms.ModelForm):
   ref_id = forms.CharField(widget=forms.HiddenInput(),required=False)
-  aoi_geometry = AOIGeometryField(required=False)
+  aoi_geometry = AOIGeometryField(required=False,help_text='Enter bounding box coordinates separated by comma for West, South, East and North edges i.e. (20,-34,22,-32), or enter single coordinate which defines circle center and radius in kilometers (20,-32,100). Alternatively, digitise the clip area in the map.')
   geometry = forms.CharField(widget=forms.HiddenInput(),required=False)
   geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
                                   required=False,
