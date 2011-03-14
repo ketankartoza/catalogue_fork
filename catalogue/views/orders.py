@@ -131,6 +131,7 @@ def orderMonthlyReport( theRequest, theyear, themonth):
 
 @login_required
 def downloadOrder(theRequest,theId):
+  """Dispaches request and returns geometry of ordered products in desired file format"""
   myOrder = get_object_or_404(Order,id=theId)
 
   if theRequest.GET.has_key('shp'):
@@ -147,6 +148,7 @@ def downloadOrder(theRequest,theId):
 
 @staff_member_required
 def downloadClipGeometry(theRequest,theId):
+  """Dispaches request and returns clip geometry for order in desired file format"""
   myOrder = get_object_or_404(Order,id=theId)
 
   if theRequest.GET.has_key('shp'):
@@ -423,9 +425,7 @@ def addOrder( theRequest ):
           context_instance=RequestContext(theRequest))
   else: # new order
     myOrderForm = OrderForm( )
-    myDeliveryDetailForm = DeliveryDetailForm()
-    for myRec in myRecords:
-      myRec.form = DeliveryDetailForm(initial={'ref_id':myRec.id},prefix='%i' % myRec.id)
+    myDeliveryDetailForm = DeliveryDetailForm(myRecords)
     myOptions =  {
       'myOrderForm': myOrderForm,
       'myDeliveryDetailForm': myDeliveryDetailForm,
