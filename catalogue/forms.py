@@ -239,7 +239,8 @@ class ProductDeliveryDetailForm(forms.ModelForm):
 
   def __init__(self,*args,**kwargs):
     super(ProductDeliveryDetailForm, self).__init__(*args, **kwargs)
-    myProduct = SearchRecord.objects.filter(pk__exact=kwargs.get('initial').get('ref_id')).get().product
+    myPK = kwargs.get('prefix')
+    myProduct = SearchRecord.objects.filter(pk__exact=myPK).get().product
     myDefaultProjections=set((('4326','EPSG 4326'),('900913','EPSG 900913')))
     self.fields['projection'] =  forms.ModelChoiceField(queryset=Projection.objects.filter(epsg_code__in=[k for k,v in myProduct.getUTMZones(1) | myDefaultProjections]).all(), empty_label=None)
 
