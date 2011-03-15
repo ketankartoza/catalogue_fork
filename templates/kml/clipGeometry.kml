@@ -2,7 +2,7 @@
 {% block records %}
 <Placemark>
     <name>Clip geometry for order {{ order.id }} </name>
-    <description>{{ external_site_url }}/vieworder/{{ order.id }}/</description>
+    <description>http://{{ external_site_url }}/vieworder/{{ order.id }}/</description>
     
     {{ order.delivery_detail.geometry.kml|safe }}
     </Placemark>

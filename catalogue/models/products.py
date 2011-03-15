@@ -15,6 +15,8 @@ from django_dag.models import node_factory, edge_factory
 
 from functools import wraps
 
+from catalogue.utmzonecalc import utmZoneFromLatLon
+
 # Read from settings
 CATALOGUE_SCENES_PATH = getattr(settings, 'CATALOGUE_SCENES_PATH', "/mnt/cataloguestorage/scenes_out_projected_sorted/")
 
@@ -342,6 +344,12 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     myLength = len (theString)
     myString = "0"*(theLength-myLength) + theString
     return myString
+
+  def getUTMZones(self,theBuffer=0):
+    """ return UTM zones which overlap this product
+    theBuffer - specifies how many adjecent zones to return"""
+
+    return set(utmZoneFromLatLon(*self.spatial_coverage.extent[:2],theBuffer=theBuffer)+utmZoneFromLatLon(*self.spatial_coverage.extent[2:],theBuffer=theBuffer))
 
 
 class ProductLink (edge_factory('catalogue.GenericProduct', concrete = False, base_model = models.Model)):

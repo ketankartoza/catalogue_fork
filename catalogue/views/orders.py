@@ -131,6 +131,7 @@ def orderMonthlyReport( theRequest, theyear, themonth):
 
 @login_required
 def downloadOrder(theRequest,theId):
+  """Dispaches request and returns geometry of ordered products in desired file format"""
   myOrder = get_object_or_404(Order,id=theId)
 
   if theRequest.GET.has_key('shp'):
@@ -138,15 +139,16 @@ def downloadOrder(theRequest,theId):
     myResponder.file_name = u'products_for_order_%s' % myOrder.id
     return  myResponder.write_order_products( myOrder.searchrecord_set.all() )
   elif theRequest.GET.has_key('kml'):
-    return render_to_kml("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL, 'transparentStyle':True},u'products_for_order_%s' % myOrder.id)
+    return render_to_kml("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.DOMAIN, 'transparentStyle':True},u'products_for_order_%s' % myOrder.id)
   elif theRequest.GET.has_key('kmz'):
-    return render_to_kmz("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL, 'transparentStyle':True},u'products_for_order_%s' % myOrder.id)
+    return render_to_kmz("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.DOMAIN, 'transparentStyle':True},u'products_for_order_%s' % myOrder.id)
   else:
     logging.info('Request cannot be proccesed, unsupported download file type')
     raise Http404
 
 @staff_member_required
 def downloadClipGeometry(theRequest,theId):
+  """Dispaches request and returns clip geometry for order in desired file format"""
   myOrder = get_object_or_404(Order,id=theId)
 
   if theRequest.GET.has_key('shp'):
@@ -154,9 +156,9 @@ def downloadClipGeometry(theRequest,theId):
     myResponder.file_name = u'clip_geometry_order_%s' % myOrder.id
     return  myResponder.write_delivery_details( myOrder )
   elif theRequest.GET.has_key('kml'):
-    return render_to_kml("kml/clipGeometry.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL, 'transparentStyle':True},u'clip_geometry_order_%s' % myOrder.id)
+    return render_to_kml("kml/clipGeometry.kml", {'order' : myOrder,'external_site_url':settings.DOMAIN, 'transparentStyle':True},u'clip_geometry_order_%s' % myOrder.id)
   elif theRequest.GET.has_key('kmz'):
-    return render_to_kmz("kml/clipGeometry.kml", {'order' : myOrder,'external_site_url':settings.EXTERNAL_SITE_URL,'transparentStyle':True},u'clip_geometry_order_%s' % myOrder.id)
+    return render_to_kmz("kml/clipGeometry.kml", {'order' : myOrder,'external_site_url':settings.DOMAIN,'transparentStyle':True},u'clip_geometry_order_%s' % myOrder.id)
   else:
     logging.info('Request cannot be proccesed, unsupported download file type')
     raise Http404
@@ -359,7 +361,7 @@ def addOrder( theRequest ):
     logging.debug("Order posted")
 
     myOrderForm = OrderForm( theRequest.POST,theRequest.FILES )
-    myDeliveryDetailForm = DeliveryDetailForm( theRequest.POST,theRequest.FILES )
+    myDeliveryDetailForm = DeliveryDetailForm( myRecords,theRequest.POST,theRequest.FILES)
 
     #get ref_ids of product details forms, if any, and generate forms for validation
     myProductForms = [ProductDeliveryDetailForm(theRequest.POST,prefix='%i' % int(myref)) for myref in myDeliveryDetailForm.data.get('ref_id').split(',') if len(myref)>0]
@@ -423,9 +425,7 @@ def addOrder( theRequest ):
           context_instance=RequestContext(theRequest))
   else: # new order
     myOrderForm = OrderForm( )
-    myDeliveryDetailForm = DeliveryDetailForm()
-    for myRec in myRecords:
-      myRec.form = DeliveryDetailForm(initial={'ref_id':myRec.id},prefix='%i' % myRec.id)
+    myDeliveryDetailForm = DeliveryDetailForm(myRecords)
     myOptions =  {
       'myOrderForm': myOrderForm,
       'myDeliveryDetailForm': myDeliveryDetailForm,

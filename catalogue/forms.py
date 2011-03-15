@@ -393,7 +393,7 @@ class OrderForm(forms.ModelForm):
   class Meta:
     model = Order
     #exclude = ('user','order_status')
-    exclude = ('user','order_status','delivery_method','delivery_detail')
+    exclude = ('user','order_status','delivery_detail')
 
 class DeliveryDetailForm(forms.ModelForm):
   ref_id = forms.CharField(widget=forms.HiddenInput(),required=False)
@@ -402,6 +402,16 @@ class DeliveryDetailForm(forms.ModelForm):
   geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
                                   required=False,
                                   help_text = 'Upload a zipped shapefile or KML/KMZ file of less than 1MB. If the shapefile contains more than one polygon, only the first will be used. Complex polygons will increase search time.')
+  def __init__(self,theRecords,*args,**kwargs):
+    super(DeliveryDetailForm, self).__init__(*args, **kwargs)
+    #determine UTM zones for all products
+    myProductZones = set()
+    for record in theRecords:
+      myProductZones=myProductZones.union(record.product.getUTMZones())
+
+    myDefaultProjections=set((('4326','EPSG 4326'),('900913','EPSG 900913')))
+    self.fields['projection'] =  forms.ModelChoiceField(queryset=Projection.objects.filter(epsg_code__in=[k for k,v in  myProductZones | myDefaultProjections]).all(), empty_label=None)
+
   class Meta:
     model = DeliveryDetail
     exclude = ('user',)
@@ -416,6 +426,14 @@ class DeliveryDetailForm(forms.ModelForm):
 
 class ProductDeliveryDetailForm(forms.ModelForm):
   ref_id = forms.CharField(widget=forms.HiddenInput(),required=False)
+
+  def __init__(self,*args,**kwargs):
+    super(ProductDeliveryDetailForm, self).__init__(*args, **kwargs)
+    myPK = kwargs.get('prefix')
+    myProduct = SearchRecord.objects.filter(pk__exact=myPK).get().product
+    myDefaultProjections=set((('4326','EPSG 4326'),('900913','EPSG 900913')))
+    self.fields['projection'] =  forms.ModelChoiceField(queryset=Projection.objects.filter(epsg_code__in=[k for k,v in myProduct.getUTMZones(1) | myDefaultProjections]).all(), empty_label=None)
+
   class Meta:
     model = DeliveryDetail
     exclude = ('user','geometry',)
