@@ -136,7 +136,7 @@ class Searcher:
       for date_range in self.mSearch.searchdaterange_set.all():
         self.mDateQuery = self.mDateQuery | Q(product_date__range=(date_range.start_date, date_range.end_date))
         # TODO: format dates in dd-mm-yyyy
-        self.mMessages.append('dates between <b>%s and %s</b>' % (date_range.start_date, date_range.end_date))
+        self.mMessages.append('date range <b>%s</b>' % date_range.local_format())
       self.mQuerySet = self.mQuerySet.filter( self.mDateQuery )
 
     if self.mSearch.geometry:
@@ -184,35 +184,40 @@ class Searcher:
           self.mMessages.append('sensor type <b>%s</b>' % self.mSearch.sensor_type)
           self.mSensorTypeQuery = Q(acquisition_mode__sensor_type = self.mSearch.sensor_type)
           self.mQuerySet = self.mQuerySet.filter( self.mSensorTypeQuery )
-        if self.mSearch.geometric_accuracy_mean:
+        # Check for none since it can be 0
+        if self.mSearch.geometric_accuracy_mean is not None:
           # ABP: this needs special handling to map from classes to floats
           self.mMessages.append('geometric accuracy mean between <b>%sm and %sm</b>' % Search.ACCURACY_MEAN_RANGE.get(self.mSearch.geometric_accuracy_mean))
           self.mGeometryAccuracyMeanQuery = Q(geometric_accuracy_mean__range = Search.ACCURACY_MEAN_RANGE.get(self.mSearch.geometric_accuracy_mean))
           self.mQuerySet = self.mQuerySet.filter( self.mGeometryAccuracyMeanQuery )
-        if self.mSearch.band_count:
+        # Check for none since it can be 0
+        if self.mSearch.band_count is not None:
           self.mMessages.append('spectral resolution <b>%s</b>' % self.mSearch.band_count)
           self.mSpectralResolutionQuery = Q(band_count = self.mSearch.band_count)
           self.mQuerySet = self.mQuerySet.filter( self.mSpectralResolutionQuery)
         logging.info('checking if we should use landsat path / row filtering...')
-        if self.mSearch.k_orbit_path and self.mSearch.j_frame_row:
+        if self.mSearch.k_orbit_path or self.mSearch.j_frame_row:
           logging.info('path row filtering is enabled')
           # used for scene searches only (landsat only)
-          self.mKOrbitPathQuery = Q()
           #import ipy; ipy.shell()
-          for _k in IntegersCSVIntervalsField.to_tuple(self.mSearch.k_orbit_path):
-            if len(_k) == 2:
-              self.mKOrbitPathQuery = self.mKOrbitPathQuery | Q(path__range=(_k[0], _k[1]))
-            else:
-              self.mKOrbitPathQuery = self.mKOrbitPathQuery | Q(path=_k[0])
-          self.mJFrameRowQuery = Q()
-          for _j in IntegersCSVIntervalsField.to_tuple(self.mSearch.j_frame_row):
-            if len(_j) == 2:
-              self.mJFrameRowQuery = self.mJFrameRowQuery | Q(path__range=(_j[0], _j[1]))
-            else:
-              self.mJFrameRowQuery = self.mJFrameRowQuery | Q(path=_j[0])
-          self.mQuerySet = self.mQuerySet.filter( self.mKOrbitPathQuery )
-          self.mQuerySet = self.mQuerySet.filter( self.mJFrameRowQuery )
-          self.mMessages.append(self.rowPathAsString())
+          if self.mSearch.k_orbit_path:
+            self.mKOrbitPathQuery = Q()
+            self.mMessages.append('Path: <b>%s</b>' % self.mSearch.k_orbit_path)
+            for _k in IntegersCSVIntervalsField.to_tuple(self.mSearch.k_orbit_path):
+              if len(_k) == 2:
+                self.mKOrbitPathQuery = self.mKOrbitPathQuery | Q(path__range=(_k[0], _k[1]))
+              else:
+                self.mKOrbitPathQuery = self.mKOrbitPathQuery | Q(path=_k[0])
+            self.mQuerySet = self.mQuerySet.filter( self.mKOrbitPathQuery )
+          if self.mSearch.j_frame_row:
+            self.mJFrameRowQuery = Q()
+            self.mMessages.append('Row: <b>%s</b>' % self.mSearch.j_frame_row)
+            for _j in IntegersCSVIntervalsField.to_tuple(self.mSearch.j_frame_row):
+              if len(_j) == 2:
+                self.mJFrameRowQuery = self.mJFrameRowQuery | Q(path__range=(_j[0], _j[1]))
+              else:
+                self.mJFrameRowQuery = self.mJFrameRowQuery | Q(path=_j[0])
+            self.mQuerySet = self.mQuerySet.filter( self.mJFrameRowQuery )
         else:
           logging.info( 'path row filtering is DISABLED' )
 
@@ -252,6 +257,9 @@ class Searcher:
 
     self.mSqlString = self.mQuerySet.query
     self.mRecordCount =  self.mQuerySet.count()
+    # Updates self.mSearch with the new count
+    self.mSearch.record_count = self.mRecordCount
+    self.mSearch.save()
 
 
   def __init__(self, theRequest, theGuid):
@@ -354,14 +362,6 @@ class Searcher:
     logging.info('extent of search results page...' + str(self.mExtent))
     self.logResults()
     return ()
-
-  def rowPathAsString(self):
-    if self.mSearch.k_orbit_path \
-      and self.mSearch.j_frame_row:
-      myString =  "Row [%s], Path [%s]" % ( self.mSearch.j_frame_row, self.mSearch.k_orbit_path )
-      return myString
-    else:
-      return ""
 
   def meanCloudString(self):
     myCloudAsPercent = None

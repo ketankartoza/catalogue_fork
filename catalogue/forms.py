@@ -82,22 +82,6 @@ class DateRangeFormSet(BaseInlineFormSet):
               forms_valid = False
       return forms_valid and not bool(self.non_form_errors())
 
-  #def _construct_forms(self):
-    #"""
-    #instantiate all the forms and put them in self.forms
-
-    #ABP: pass on key exception
-    #"""
-    ##import ipy; ipy.shell()
-    #self.forms = []
-    #for i in xrange(self.total_form_count()):
-      #try:
-        #self.forms.append(self._construct_form(i))
-      #except (KeyError, IndexError), e:
-        ##import ipy; ipy.shell()
-        ##raise
-        #pass
-
   def full_clean(self):
     """
     Cleans all of self.data and populates self._errors.
@@ -208,9 +192,10 @@ class AdvancedSearchForm(forms.ModelForm):
 
     # ABP: checks for advanced search only (not in cleaned_data because it does not belong to Search model)
     if self.data.get('isAdvanced') == 'true':
-      if not myCleanedData.get('geometric_accuracy_mean'):
-        self._errors["geometric_accuracy_mean"] = self.error_class(["Error: Spatial resolution is required for advanced search!"])
-        raise forms.ValidationError('Error: One or more required values are missing!')
+      # ABP: disabled because the DB has NULL in all rows
+      #if not myCleanedData.get('geometric_accuracy_mean'):
+        #self._errors["geometric_accuracy_mean"] = self.error_class(["Error: Spatial resolution is required for advanced search!"])
+        #raise forms.ValidationError('Error: One or more required values are missing!')
       myStartSensorAngle = myCleanedData.get('sensor_inclination_angle_start')
       myEndSensorAngle = myCleanedData.get('sensor_inclination_angle_end')
       if (myStartSensorAngle and myEndSensorAngle) and (myEndSensorAngle < myStartSensorAngle):
@@ -229,8 +214,8 @@ class ProductIdSearchForm(forms.ModelForm):
   """
   Form for product id search refine
   """
-  k_orbit_path = forms.ModelChoiceField((), required=False)
-  j_frame_row = forms.ModelChoiceField((), required=False)
+  k_orbit_path = NoValidationChoiceField((), required=False)
+  j_frame_row = NoValidationChoiceField((), required=False)
   date_range = NoValidationChoiceField((),required=False)
   isAdvanced = forms.CharField(widget=forms.HiddenInput(), required=False, initial=True)
 
@@ -330,59 +315,6 @@ class ProductIdSearchForm(forms.ModelForm):
     if not self.cleaned_data['processing_level']:
       return []
     return [self.cleaned_data['processing_level']]
-
-
-
-class _ProductIdSearchForm( forms.Form ):
-  """
-  A special class of search form that allows to construct the search by
-  building up a Product ID. This is intended to be used as an unbound form
-  so the init function initialises the choices lists and so on.
-  """
-  mission = AbbreviationModelChoiceField( None, empty_label="*" , required=False)
-  sensors = AbbreviationModelMultipleChoiceField(None, required=False)
-  acquisition_mode = AbbreviationModelChoiceField(None, empty_label="*", required=False)
-  sensor_type = AbbreviationModelChoiceField(None, empty_label="*", required=False)
-  myRange = range(1970, datetime.date.today().year + 1)
-  #zip creates a 2-tuple out of an array e.g. ((1970,1970),(1971,1971),etc....)
-  start_year = forms.ChoiceField([(None, '*')] + zip(myRange,myRange))
-  start_month = forms.ChoiceField( zip( range(1,13), range(1,13) ) )
-  start_day = forms.ChoiceField( zip( range(1,32), range(1,32) ) )
-  start_hour = forms.ChoiceField( zip( range(0,24), range(0,24) ), required=False)
-  start_minute = forms.ChoiceField( zip( range(0,60),range(0,60) ), required=False)
-  start_second = forms.ChoiceField( zip( range(0,60), range(0,60) ), required=False)
-  end_year = forms.ChoiceField( zip(myRange,myRange) )
-  end_month = forms.ChoiceField( zip( range(1,13), range(1,13) ) )
-  end_day = forms.ChoiceField( zip( range(1,32), range(1,32) ) )
-  end_hour = forms.ChoiceField( zip( range(0,24), range(0,24) ), required=False)
-  end_minute = forms.ChoiceField( zip( range(0,60),range(0,60) ), required=False)
-  end_second = forms.ChoiceField( zip( range(0,60), range(0,60) ), required=False)
-
-  def __init__(self,*args,**kwargs):
-    """
-    Querysets will be filtered by existing search instance if passed in init
-    """
-    super ( ProductIdSearchForm, self ).__init__(*args,**kwargs)
-    self.fields['mission'].queryset = Mission.objects.all()
-    self.fields['sensors'].queryset = MissionSensor.objects.all()
-    self.fields['acquisition_mode'].queryset = AcquisitionMode.objects.all()
-    self.fields['sensor_type'].queryset = SensorType.objects.all()
-
-  def clean(self):
-    cleaned_data = self.cleaned_data
-    try:
-      self.cleaned_data['start_date'] = datetime.datetime(int(cleaned_data.get('start_year')), int(cleaned_data.get('start_month')), int(cleaned_data.get('start_day')), int(cleaned_data.get('start_hour')), int(cleaned_data.get('start_minute')), int(cleaned_data.get('start_second')))
-    except ValueError, e:
-      raise forms.ValidationError ('Error: start date is not valid. %s' % e)
-    try:
-      self.cleaned_data['end_date'] = datetime.datetime(int(cleaned_data.get('end_year')), int(cleaned_data.get('end_month')), int(cleaned_data.get('end_day')), int(cleaned_data.get('end_hour')), int(cleaned_data.get('end_minute')), int(cleaned_data.get('end_second')))
-    except ValueError, e:
-      raise forms.ValidationError ('Error: end date is not valid. %s' % e)
-
-    if not self.cleaned_data['start_date'] <=  self.cleaned_data['end_date']:
-      raise forms.ValidationError ('Error: date range is not valid.')
-
-    return self.cleaned_data
 
 
 class OrderStatusForm(forms.ModelForm):

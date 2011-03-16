@@ -239,6 +239,18 @@ def modifySearch(theRequest, theGuid):
 
 
 @login_required
+def productIdSearchClone(theRequest, theGuid):
+  """
+  Creates a clone of the Search and redirect to productIdSearch
+  """
+  mySearch = get_object_or_404( Search, guid=theGuid)
+  logging.info('Original Search %s' % mySearch)
+  mySearchClone = duplicate(mySearch, field='guid', value='')
+  logging.info('Cloned Search %s' % mySearchClone)
+  return HttpResponseRedirect('/productIdSearch/' + mySearchClone.guid)
+
+
+@login_required
 #theRequest context decorator not used here since we have different return paths
 def productIdSearch(theRequest, theGuid):
   """

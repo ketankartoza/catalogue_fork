@@ -11,10 +11,10 @@
         <b>Sensor(s)</b>
       </th>
       <th>
-        <b>Start Date</b>
+        <b>Date ranges</b>
       </th>
       <th>
-        <b>End Date</b>
+        <b>Results</b>
       </th>
       <th>
         <b>View</b>
@@ -25,19 +25,19 @@
     {% for mySearch in mySearches %}
     <tr>
       <td>
-        {{ mySearch.search_date|date:"D, d M Y, H:m" }} 
+        {{ mySearch.search_date|date:"D, d M Y, H:m" }}
       </td>
       <td>
-        {{ mySearch.sensorsAsString }} 
+        {{ mySearch.sensorsAsString }}
       </td>
       <td>
-        {{ mySearch.start_date }} 
+        {{ mySearch.datesAsString }}
       </td>
       <td>
-        {{ mySearch.end_date }} 
+        {% firstof mySearch.record_count 'N/D' %}
       </td>
       <td>
-        <a href="/searchresult/{{mySearch.guid}}/"><img src="/media/images/search_16.png" style="cursor: pointer;" 
+        <a href="/searchresult/{{mySearch.guid}}/"><img src="/media/images/search_16.png" style="cursor: pointer;"
           class="blocking-link"/></a>{# blocking link class used to trap clicks and show block ui while page redirect runs #}
       </td>
       <td>

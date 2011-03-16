@@ -272,13 +272,13 @@ function showMiniCart( )
   {
     $("#accordion").accordion("activate", 2);
   }
-  $("#working").slideUp('slow');
+  $(".working").slideUp('slow');
 }
 function addToCart( theId )
 {
   // Show a wait image before we hit our ajax call
-  $("#working").html('<p>Adding, please wait...<img src="/media/images/ajax-loader.gif"></p>');
-  $("#working").slideDown('slow');
+  $(".working").html('<p>Adding, please wait...<img src="/media/images/ajax-loader.gif"></p>');
+  $(".working").slideDown('slow');
   $.get("/addtocart/" + theId + "/?xhr","", showMiniCart);
   // prevent page jumping around on empty hyperlink clicks
   return false;
@@ -292,7 +292,7 @@ function layerRemoved()
   //See: http://openlayers.org/pipermail/users/2006-October/000064.html
   myLayer.mergeNewParams({'version':Math.random()});
   myLayer.redraw();
-  $("#working").toggle('slide');
+  $(".working").toggle('slide');
   return false;
 }
 function removeFromCart(theId, theObject)
@@ -330,14 +330,14 @@ function removeFromCart(theId, theObject)
 function removeFromMiniCart(theId, theObject)
 {
   //theObject is the remove icon - we use it to find its parent row and remove that
-  $("#working").html('<p>Removing, please wait...<img src="/media/images/ajax-loader.gif"></p>');
-  $("#working").slideDown('slow');
+  $(".working").html('<p>Removing, please wait...<img src="/media/images/ajax-loader.gif"></p>');
+  $(".working").slideDown('slow');
   removeFromCart( theId, theObject );
 }
 function showCart()
 {
   $("#cart").load("/showcartcontents/","", zebraTables);
-  $("#working").slideUp('slow');
+  $(".working").slideUp('slow');
 }
 
 function getElement( id )
@@ -385,8 +385,8 @@ function getFeatureByProductId( theProductId )
 function revealTable()
 {
   zebraTables();
-  $("#working").slideUp('slow');
-  $("#working").html('');
+  $(".working").slideUp('slow');
+  $(".working").html('');
   $("#table").slideDown('slow');
 }
 
@@ -394,8 +394,8 @@ function loadPage( theNumber, theSearchGuid )
 {
   $("#table").slideUp('slow');
   // Show a wait image before we hit our ajax call
-  $("#working").html('<p>Loading, please wait...<img src="/media/images/ajax-loader.gif"></p>');
-  $("#working").slideDown('slow');
+  $(".working").html('<p>Loading, please wait...<img src="/media/images/ajax-loader.gif"></p>');
+  $(".working").slideDown('slow');
   $("#results-table").parent().load("/searchpage/" + theSearchGuid + "/?page=" + theNumber,"",revealTable);
 }
 
@@ -418,8 +418,8 @@ function resizeTable()
 // see http://trac.openlayers.org/wiki/GetFeatureInfo
 function showFeatureInfo(event)
 {
-  $("#working").html('<p>Adding, please wait...<img src="/media/images/ajax-loader.gif"></p>');
-  $("#working").slideDown('slow');
+  $(".working").html('<p>Adding, please wait...<img src="/media/images/ajax-loader.gif"></p>');
+  $(".working").slideDown('slow');
   myMousePos = mMap.getLonLatFromPixel(event.xy);
   myBoundingBox = mMap.getExtent().toBBOX();
   myPixelX = event.xy.x;
@@ -434,7 +434,7 @@ function showFeatureInfo(event)
   $("#mapquery").html("<p><input type=button id='hidemapquery' value='Hide'></p>" + data);
   });
   Event.stop(event);
-  $("#working").slideUp('slow');
+  $(".working").slideUp('slow');
 }
 
 function setHTML(response)
@@ -670,8 +670,8 @@ function setupTaskingMap( theLayers )
 
 function featureSelected( theEvent )
 {
-  $("#working").html(theEvent.feature.product_id);
-  $("#working").slideDown('slow');
+  $(".working").html(theEvent.feature.product_id);
+  $(".working").slideDown('slow');
   hightlightRecord(theEvent.feature.id, false);
 }
 

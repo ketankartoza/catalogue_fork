@@ -388,15 +388,15 @@ class GenericSensorProduct( GenericImageryProduct ):
   acquisition_mode                    = models.ForeignKey(AcquisitionMode ) #e.g. M X T J etc
   product_acquisition_start           = models.DateTimeField(db_index=True)
   product_acquisition_end             = models.DateTimeField(null=True, blank=True, db_index=True)
-  geometric_accuracy_mean             = models.FloatField(null=True, blank=True )
+  geometric_accuracy_mean             = models.FloatField(null=True, blank=True, db_index=True )
   geometric_accuracy_1sigma           = models.FloatField(null=True, blank=True )
   geometric_accuracy_2sigma           = models.FloatField(null=True, blank=True )
   radiometric_signal_to_noise_ratio   = models.FloatField(null=True, blank=True )
   radiometric_percentage_error        = models.FloatField(null=True, blank=True )
   spectral_accuracy                   = models.FloatField( help_text="Wavelength Deviation", null=True, blank=True )
   orbit_number                        = models.IntegerField(null=True, blank=True)
-  path                                = models.IntegerField(null=True, blank=True) #K Path Orbit
-  path_offset                         = models.IntegerField(null=True, blank=True)
+  path                                = models.IntegerField(null=True, blank=True, db_index=True) #K Path Orbit
+  path_offset                         = models.IntegerField(null=True, blank=True, db_index=True)
   row                                 = models.IntegerField(null=True, blank=True) #J Frame Row
   row_offset                          = models.IntegerField(null=True, blank=True)
   offline_storage_medium_id           = models.CharField(max_length=12, help_text="Identifier for the offline tape or other medium on which this scene is stored", null=True, blank=True )

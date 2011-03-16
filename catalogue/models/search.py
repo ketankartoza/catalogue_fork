@@ -162,7 +162,7 @@ class Search(models.Model):
   search_date = models.DateTimeField('Search Date', auto_now=True, auto_now_add=True,
       help_text="When the search was made - not shown to users")
   # e.g. 16fd2706-8baf-433b-82eb-8c7fada847da
-  guid = models.CharField(max_length=40)
+  guid = models.CharField(max_length=40, unique=True)
   deleted = models.NullBooleanField('Deleted?',
       blank=True,
       null=True,
@@ -189,6 +189,8 @@ class Search(models.Model):
   processing_level = models.ManyToManyField( ProcessingLevel, null=True, blank=True, help_text='Select one or more processing level.')
   # ABP: new additions 2
   polarising_mode = models.CharField(max_length=1, choices=RadarProduct.POLARISING_MODE_CHOICES, null=True, blank=True )
+  # ABP: added record_count
+  record_count = models.IntegerField(blank=True, null=True, editable=False)
   # Use the geo manager to handle geometry
   objects = models.GeoManager()
 
@@ -250,16 +252,25 @@ class Search(models.Model):
             or self.sensor_type
 
   def sensorsAsString( self ):
-    myList = self.sensors.values_list( 'name',flat=True )
+    myList = self.sensors.values_list('name', flat=True)
     myString = ", ".join(myList)
     return myString
+
+  def datesAsString(self):
+    """
+    Date ranges formatted
+    """
+    result = []
+    for d in self.searchdaterange_set.all():
+      results.append(d.local_format())
+    return ", ".join(result)
 
   def getRowChoices(self):
     """
     Returns a list of choices
     """
     choices = []
-    for r in IntegersCSVIntervalsField.to_tuple(self.k_orbit_path):
+    for r in IntegersCSVIntervalsField.to_tuple(self.j_frame_row):
       if len(r) == 1:
         choices.append(r[0])
       else:
@@ -272,7 +283,7 @@ class Search(models.Model):
     Returns a list of choices
     """
     choices = []
-    for r in IntegersCSVIntervalsField.to_tuple(self.j_frame_row):
+    for r in IntegersCSVIntervalsField.to_tuple(self.k_orbit_path):
       if len(r) == 1:
         choices.append(r[0])
       else:
@@ -296,22 +307,23 @@ class SearchDateRange(models.Model):
   start_date = models.DateField(help_text='Product date is required. YYYY-MM-DD.')
   end_date = models.DateField(help_text='Product date is required. YYYY-MM-DD.')
   search = models.ForeignKey(Search)
+
   class Meta:
     app_label= 'catalogue'
 
   def __unicode__(self):
-    return "%s <-> %s Guid: %s" % (self.start_date, self.end_date, self.search.guid)
+    return "%s Guid: %s" % (self.local_format(), self.search.guid)
 
   def local_format(self):
     """
-    TODO: move into a widget
+    Returns a string describing locally formatted date range
     """
     return "%s : %s" % (self.start_date.strftime(SearchDateRange.local_format_string), self.end_date.strftime(SearchDateRange.local_format_string))
 
   @staticmethod
   def from_local_format(formatted_value):
     """
-    TODO: move into a widget
+    Returns the date range tuple
     """
     return datetime.strptime(formatted_value[:10], SearchDateRange.local_format_string), datetime.strptime(formatted_value[-10:], SearchDateRange.local_format_string)
 

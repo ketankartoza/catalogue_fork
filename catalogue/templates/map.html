@@ -91,7 +91,7 @@
 {% block body_load %}onload="init()";{% endblock %}
 
 {% block table %}
-<div id="working"></div> {# used to display ajax status updates #}
+<div class="working"></div> {# used to display ajax status updates #}
 <div id="recordtooltip">&nbsp;</div> {# used to display record tooltips #}
 <div id="maptooltip">&nbsp;</div> {# used to display map tooltips #}
     {% include "page.html" %}
@@ -134,8 +134,8 @@
         {% if myRecords %}
         <a href="/searchresultshapefile/{{mySearchGuid}}/"><img src="/media/images/down_16.png" alt=""/> Download search as a shapefile.</a>
         {% endif %}
-        <br /><a href="/modifysearch/{{mySearchGuid}}/" class="button-link">Modify this search</a>
-        {% if myProductIdSearch %}<br /><a href="/productIdSearch/{{mySearchGuid}}/" class="button-link">Product ID search</a>{% endif %}
+        <br /><a href="/modifysearch/{{mySearchGuid}}/" class="button-link" alt="Returns to the main search page (works on a copy of the current search)">Modify this search</a>
+        {% if myProductIdSearch %}<br /><a href="/productIdSearchClone/{{mySearchGuid}}/" class="button-link" title="Refine this search (works on a copy of the current search)">Product ID search</a>{% endif %}
         {#% if user.is_staff %}<div id="sql" style="display: none;">{{ mySqlString }}</div><input type=button id="sql-button" value="Show SQL" />{% endif %#}
     </div>
   {% endif %}

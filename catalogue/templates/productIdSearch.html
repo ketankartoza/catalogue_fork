@@ -37,8 +37,8 @@
 
       // Form ajax handling
       $('#productIdForm').submit(function(){
-        $("#working").html('<p>Searching, please wait...<img src="/media/images/ajax-loader.gif"></p>');
-        $("#working").slideDown('slow');
+        $(".working").html('<p>Searching, please wait...<img src="/media/images/ajax-loader.gif"></p>');
+        $(".working").slideDown('slow');
         $.ajax({
           type: "POST",
           url: "/productIdSearch/{{ theGuid }}/",
@@ -50,7 +50,7 @@
             $('#search-messages').html('<b>' + data.count + '</b> record found for ' + data.messages.join(', ') + '.');
             set_form_options(data.values);
             $('#results-table').parent().load('/searchpage/{{ theGuid }}/',revealTable);
-            $("#working").slideUp('slow');
+            $(".working").slideUp('slow');
           },
           error: function(data) {
             var errors = $.parseJSON (data.responseText);
@@ -70,7 +70,7 @@
             }
             $('#id_sensors').css({border: 'solid 1px red'});
             $('#messages').html(messages).show('slow');
-            $("#working").slideUp('slow');
+            $(".working").slideUp('slow');
           }
         });
         return false;
@@ -117,6 +117,7 @@
       </tr>
     </table>
   </form>
+  <div class="working"></div> {# used to display ajax status updates #}
 {% box_end %}
 {{ block.super }}
 {% endblock %}
