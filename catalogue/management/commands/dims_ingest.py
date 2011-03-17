@@ -64,30 +64,28 @@ class Command(BaseCommand):
         print msg
 
     verblog('Getting verbose (level=%s)... ' % verbose)
-    verblog('Creating software: %s' % software, 2)
-    verblog('Owner: %s' % owner, 2)
-    verblog('License: %s' % license, 2)
+    verblog('Creating software: %s' % software)
+    verblog('Owner: %s' % owner)
+    verblog('License: %s' % license)
 
-    # Get the mandatory params
+    # Get the params
     try:
       software = CreatingSoftware.objects.get_or_create(name=software, defaults={'version' : 0})[0]
     except CreatingSoftware.DoesNotExists:
-      print 'Creating Software %s does not exists and cannot create: aborting' % software
-      return
+      raise CommandError, 'Creating Software %s does not exists and cannot create: aborting' % software
     try:
       license = License.objects.get_or_create(name=license, defaults={'type' : License.LICENSE_TYPE_COMMERCIAL, 'details' : license})[0]
     except License.DoesNotExists:
-      print 'License %s does not exists and cannot create: aborting' % license
-      return
+      raise  CommandError, 'License %s does not exists and cannot create: aborting' % license
 
     # Institution is optional
     if owner:
       try:
         owner = Institution.objects.get_or_create(name=owner, defaults={'address1': '','address2': '','address3': '','post_code': '', })[0]
       except Institution.DoesNotExist:
-        verblog('Institution %s does not exists and cannot be creates, it will be read from metadata.' % owner, 2)
+        verblog('Institution %s does not exists and cannot be created, it will be read from metadata.' % owner)
     else:
-      verblog('Institution was not specified, it will be read from metadata.', 2)
+      verblog('Institution was not specified, it will be read from metadata.')
 
     # Build the path
     path          = os.path.join(folder, globparm)
@@ -104,7 +102,7 @@ class Command(BaseCommand):
 
         for product_code, product_data in products.items():
           verblog("Product %s" % product_code)
-          verblog(product_data, 3)
+          verblog(product_data, 2)
 
           verblog("Processing product %s" % product_code)
 
@@ -208,7 +206,7 @@ class Command(BaseCommand):
           verblog('Ingesting data:', 3)
           verblog(data, 3)
 
-          # Check if it's still in catalogue:
+          # Check if it's already in catalogue:
           try:
             op = OpticalProduct.objects.get(product_id=data.get('product_id')).getConcreteInstance()
             verblog('Alredy in catalogue: updating')

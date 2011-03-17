@@ -1,0 +1,127 @@
+
+
+% Leave the blank space above here
+
+= Procedures for importing data from RapidEye packages into the catalogue =
+
+""Note:"" This document should be considered compulsory reading before you
+attempt to import any data into the catalogue.
+
+""Note2:"" This document //must// be kept up to date when you make changes to
+import scripts etc.
+
+== Importing the packages from a the remote catalogue ==
+
+The import process is done by a Django management command that can be called
+by a cron job.
+
+To see all available options you can call the command with `-h` or `help`
+parameter:
+
+```
+$ python manage.py -h
+
+TODO:
+
+
+```
+
+=== Implementation detail ===
+
+Pseudocode:
+
++ given a year and month
++ download the shapefiles with all imagery for that period of time
++ optionally clip to a bounding polygon to restrict area of interest
++ for each image:
++     calculate product_id
++     search in catalogue
++     if already in catalogue, process the next product
++     download thumbnail and main image
++     ingest in catalogue
+
+
+== Metadata constants ==
+
+The following metadata are hardcoded constants:
+
+band_count = 5
+radiometric_resolution = 16
+
+
+=== Options in detail ===
+
+: -i, --store_image
+Store the original image data extracted from the package.
+This flag indicates to the program that the original image
+must be stored locally. The destination folder is calculated
+by chaining ``settings.IMAGERY_ROOT`` and the result from
+the function call ``GenericSensorProduct.imagePath()``, the image
+is compressed with ``bzip2`` and added a ".bz2" suffix.
+: -t, --test_only
+Just test, nothing will be written into the DB or copied to
+the filesystem.
+: -o OWNER, --owner=OWNER
+Name of the institution, as a string.
+Defaults to: None.
+Example: ``-o "Satellite Applications Centre"``
+Note: the institution will be created if it does not exist.
+Note: the institution will be read from metadata if not
+specified in the options.
+: -s CREATING_SOFTWARE, --creating_software=CREATING_SOFTWARE
+Name of the creating software. Defaults to: //SARMES1//
+Example: ``-s "SARMES1"``
+Note: the software will be created if it does not exists.
+Version of the software will be set to a blank string.
+: -l LICENSE, --license=LICENSE
+Name of the license. Defaults to: //SAC Commercial License//
+Example: ``-l "SAC Free License"``
+Note: will be created if it does not exists. License type
+will be automatically set to //LICENSE_TYPE_ANY// (4)
+
+
+== Implementation details ==
+
+Details on the implementation, mainly regarding the source of
+the data used to populate the catalogue database.
+
+=== Data and metadata extraction ===
+
+
+""Note:"" The spatial_coverage is first read from //EX_BoundingPolygon// parameter
+in ISOMetadata.xml, and then read from the geotiff image if not found.
+
+
+The following information is read from the main image using **GDAL** library:
+
++ radiometric_resolution
++ band_count
++ spatial_coverage
++
+
+
+The following information are reverse-engineered from the **file_identifier**,
+the process is handled from the function call ``GenericSensorProduct.productIdReverse()``
+
++ acquisition_mode
++ projection
++ path
++ row
++ path shift
++ row shift
++
+
+""Note:"" The acquisition_mode is a foreign key to the sensors dictionaries, the
+ingestion process will take care of creating all the necessary entries when
+they are missing. The mission_group value is not present in **file_identifier** and
+is hence set to the first type existing in the catalogue, should a new Mission
+record need to be created during the ingestion process. In practice the Mission
+dictionary entries should pre-exist and this situation should not arise.
+
+""Note:"" If a new license is created during the ingestion process, the type is
+defaulted to License.LICENSE_TYPE_ANY
+
+
+
+""Note:"" The projection is created if it does not exists, the epsg code is
+set to 0 by default.

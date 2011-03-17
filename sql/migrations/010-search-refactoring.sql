@@ -57,7 +57,7 @@ BEGIN;
   ;
   CREATE INDEX "catalogue_searchdaterange_search_id" ON "catalogue_searchdaterange" ("search_id");
 
-  -- fixex legacy error
+  -- fixed legacy error
   ALTER TABLE "catalogue_search" ALTER "end_date" TYPE DATE;
   -- adds date ranges
   INSERT INTO "catalogue_searchdaterange" ("search_id", "start_date", "end_date") SELECT "id", "start_date", "end_date" FROM "catalogue_search";
