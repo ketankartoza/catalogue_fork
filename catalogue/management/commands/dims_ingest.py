@@ -31,7 +31,7 @@ class Command(BaseCommand):
       make_option('--folder', '-f', dest='folder', action='store',
           help='Scan the given folder, defaults to current.', default=os.getcwd()),
       make_option('--store_image', '-i', dest='store_image', action='store_true',
-          help='Store the original image data extracted from the package.', default=os.getcwd()),
+          help='Store the original image data extracted from the package.', default=True),
       make_option('--glob', '-g', dest='glob', action='store',
           help='A shell glob pattern for files to ingest.', default='*.tar.gz'),
       make_option('--test_only', '-t', dest='test_only', action='store_true',
