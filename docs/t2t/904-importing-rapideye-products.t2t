@@ -88,21 +88,27 @@ Pseudocode:
 + download the shapefiles with all imagery metadata for that period of time
 + optionally clip to a bounding polygon to restrict area of interest
 + for each image:
-+     calculate product_id
-+     search in catalogue
-+     if already in catalogue, process the next product
-+     download thumbnail
-+     ingest in catalogue
+  + calculate product_id
+  + search in catalogue
+  + if already in catalogue, process the next product
+  + download thumbnail
+  + ingest in catalogue
 
 
 === Data and metadata extraction ===
 
 
-The following metadata are hardcoded constants:
+The following metadata are hardcoded constants and can be changed at the top of the script `catalogue/management/commands/rapideye_harvest.py`:
 
 || Parameter            | Value                |
 | band_count            | 5 |
 | radiometric_resolution | 16 |
+| geometric_resolution | 5 |
+| mission_sensor | REI |
+| sensor_type | REI |
+| acquisition_mode | REI |
+| projection | ORBIT |
+
 
 The following metadata are passed to the script as option parameters:
 
@@ -119,7 +125,7 @@ The following metadata are read from the shapefile:
 | original_product_id   | PATH |
 | product_acquisition_start | ACQ_DATE |
 | row/path informations | footprint centroid |
-| mission and sensors informations | CRAFT_ID |
+| mission | CRAFT_ID |
 | cloud_cover | CCP |
 | sensor_viewing_angle | VW_ANGLE |
 | solar_zenith_angle | 90° - SUNELVN |

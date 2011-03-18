@@ -16,34 +16,10 @@ here: https://eyefind.rapideye.de Download Catalog can be found here:
 https://delivery.rapideye.de/catalogue/
 
 
-['CAT_ID',
- 'IT_CAT_ID',
- 'UDP',
- 'CCP',
- 'BFP',
- 'TILE_ID',
- 'SUNAZMT',
- 'SUNELVN',
- 'ACQ_DATE',
- 'IND_ANGLE',
- 'AZMT_ANGLE',
- 'HORZ_UNCER',
- 'CRAFT_ID',
- 'VW_ANGLE',
- 'BAND1',
- 'BAND2',
- 'BAND3',
- 'BAND4',
- 'BAND5',
- 'PATH']
-
-
 """
-#import os
-#import glob
-#import re
+
+import os
 from optparse import make_option
-#from osgeo import gdal
 import tempfile
 import subprocess
 
@@ -57,6 +33,17 @@ from django.contrib.gis.gdal.geometries import Polygon
 
 from catalogue.models import *
 from catalogue.dims_lib import dimsWriter
+
+
+# Hardcoded constants
+PROJECTION            = 'ORBIT'
+BAND_COUNT            = 5
+RADIOMETRIC_RESOLUTION= 16
+MISSION_SENSOR        = 'REI'
+SENSOR_TYPE           = 'REI'
+ACQUISITION_MODE      = 'REI'
+GEOMETRIC_RESOLUTION  = 5
+
 
 
 def get_row_path_from_polygon(poly, as_int=False, no_compass=False):
@@ -165,13 +152,15 @@ class Command(BaseCommand):
     processing_level      = options.get('processing_level')
 
     # Hardcoded
-    projection            = 'ORBIT'
-    band_count            = 5
-    radiometric_resolution= 16
-    #mission               = read from CRAFT_ID
-    mission_sensor        = 'REI'
-    sensor_type           = 'REI'
-    acquisition_mode      = 'REI'
+    projection            = PROJECTION
+    band_count            = BAND_COUNT
+    radiometric_resolution= RADIOMETRIC_RESOLUTION
+    mission_sensor        = MISSION_SENSOR
+    sensor_type           = SENSOR_TYPE
+    acquisition_mode      = ACQUISITION_MODE
+    geometric_resolution  = GEOMETRIC_RESOLUTION
+
+
     area_of_interest  = None
 
     def verblog(msg, level=1):
@@ -292,6 +281,7 @@ class Command(BaseCommand):
             'original_product_id': package.get('PATH'),
             'solar_zenith_angle': 90 - package.get('SUNELVN'),
             'solar_azimuth_angle': package.get('SUNAZMT'),
+            'geometric_resolution': geometric_resolution,
           }
           verblog(data, 2)
 
