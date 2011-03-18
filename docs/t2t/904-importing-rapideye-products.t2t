@@ -103,12 +103,13 @@ The following metadata are hardcoded constants and can be changed at the top of 
 || Parameter            | Value                |
 | band_count            | 5 |
 | radiometric_resolution | 16 |
-| geometric_resolution | 5 |
+| geometric_resolution_x | 5 |
+| geometric_resolution_y | 5 |
 | mission_sensor | REI |
 | sensor_type | REI |
 | acquisition_mode | REI |
 | projection | ORBIT |
-
+| product_acquisition_start_time | 09:00 |
 
 The following metadata are passed to the script as option parameters:
 
@@ -123,7 +124,7 @@ The following metadata are read from the shapefile:
 
 || Parameter            | From |
 | original_product_id   | PATH |
-| product_acquisition_start | ACQ_DATE |
+| product_acquisition_start[1] | ACQ_DATE |
 | row/path informations | footprint centroid |
 | mission | CRAFT_ID |
 | cloud_cover | CCP |
@@ -132,4 +133,4 @@ The following metadata are read from the shapefile:
 | solar_azimuth_angle | SUNAZMT |
 | sensor_inclination_angle | IND_ANGLE |
 
-
+[1] time taken from constant product_acquisition_start_time

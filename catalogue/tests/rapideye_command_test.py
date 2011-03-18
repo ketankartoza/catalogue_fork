@@ -47,9 +47,15 @@ Tests import was complete
 
 Test a product in the middle of the import
 
->>> p=OpticalProduct.objects.get(product_id='RE2_REI_REI_REI_0022_83_0002_28_110312_000000_1B--_ORBIT-')
+>>> p=OpticalProduct.objects.get(product_id='RE2_REI_REI_REI_0022_83_0002_28_110312_090000_1B--_ORBIT-')
 >>> p.radiometric_resolution
 16
+>>> p.geometric_resolution
+5
+>>> p.product_acquisition_start
+datetime.datetime(2011, 3, 12, 9, 0)
+
+
 >>> int(p.solar_azimuth_angle)
 117
 >>> p.band_count

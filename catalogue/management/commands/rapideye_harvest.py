@@ -43,7 +43,7 @@ MISSION_SENSOR        = 'REI'
 SENSOR_TYPE           = 'REI'
 ACQUISITION_MODE      = 'REI'
 GEOMETRIC_RESOLUTION  = 5
-
+PRODUCT_ACQUISITION_START_TIME = '0900'
 
 
 def get_row_path_from_polygon(poly, as_int=False, no_compass=False):
@@ -257,7 +257,7 @@ class Command(BaseCommand):
             'JJJJ': row.rjust(4, '0'),
             'JS': row_shift.rjust(2, '0'),
             'YYMMDD': package.get('ACQ_DATE').strftime('%y%m%d'),
-            'HHMMSS': '000000',
+            'HHMMSS': "%s00" % PRODUCT_ACQUISITION_START_TIME,
             'LEVL' : processing_level.ljust(4, '-'),
             'PROJTN': projection.ljust(6, '-')
           }
@@ -281,7 +281,8 @@ class Command(BaseCommand):
             'original_product_id': package.get('PATH'),
             'solar_zenith_angle': 90 - package.get('SUNELVN'),
             'solar_azimuth_angle': package.get('SUNAZMT'),
-            'geometric_resolution': geometric_resolution,
+            'geometric_resolution_x': geometric_resolution,
+            'geometric_resolution_y': geometric_resolution,
           }
           verblog(data, 2)
 
