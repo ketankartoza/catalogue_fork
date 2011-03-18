@@ -334,6 +334,7 @@ class Command(BaseCommand):
               subprocess.check_call(["gdal_translate", "-q", "-co", "worldfile=on", "-of", "JPEG", tiff_thumb, jpeg_thumb])
               # Removes xml
               os.remove("%s.%s" % (jpeg_thumb, 'aux.xml'))
+              os.remove(tiff_thumb)
             if is_new:
               verblog('Product %s imported.' % product_id)
             else:
