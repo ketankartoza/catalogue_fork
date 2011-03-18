@@ -525,12 +525,25 @@ class GenericSensorProduct( GenericImageryProduct ):
 
   def productIdReverse(self, force=False):
     """
-    Parse a product_id and populates instance fields
+    Parse a product_id and populates the following instance fields:
 
-    If force is set, try to create missing pieces
+    mission *
+    mission_sensor *
+    sensor_type *
+    acquisition_mode *
+    projection *
+    processing_level *
+    path
+    path_offset
+    row
+    row_offset
+    product_acquisition_start
 
-     S5-_HRG_J--_CAM2_0172_+1_0388_00_110124_070818_L1A-_ORBIT--Vers.0.01
-    #SAT_SEN_TYP__MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
+    [*] If "force" is set, the missing pieces are created on-the-fly if not exists
+
+
+    S5-_HRG_J--_CAM2_0172_+1_0388_00_110124_070818_L1A-_ORBIT--Vers.0.01
+    #SAT_SEN_TYP_MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
 
     Where:
     SAT    Satellite or mission          mandatory
@@ -560,9 +573,9 @@ class GenericSensorProduct( GenericImageryProduct ):
       if not force:
         raise
       # Create missing pieces of the chain
-      mission = Mission.objects.get_or_create(abbreviation=parts[0], defaults={'mission_group':MissionGroup.objects.all()[0]})[0]
-      mission_sensor = MissionSensor.objects.get_or_create(abbreviation=parts[1],mission=mission)[0]
-      sensor_type = SensorType.objects.get_or_create(abbreviation=parts[3],mission_sensor=mission_sensor)[0]
+      mission = Mission.objects.get_or_create(abbreviation=parts[0], defaults={'name': parts[0], 'mission_group':MissionGroup.objects.all()[0]})[0]
+      mission_sensor = MissionSensor.objects.get_or_create(abbreviation=parts[1], mission=mission)[0]
+      sensor_type = SensorType.objects.get_or_create(abbreviation=parts[3], mission_sensor=mission_sensor)[0]
       self.acquisition_mode = AcquisitionMode.objects.get_or_create(abbreviation=parts[2], sensor_type=sensor_type, defaults={'geometric_resolution':0, 'band_count':1})[0]
 
     try:
@@ -573,9 +586,8 @@ class GenericSensorProduct( GenericImageryProduct ):
       # Create Projection
       self.projection = Projection.objects.get_or_create(name=parts[11][:6], defaults={'epsg_code':0})
 
-
-    # Skip L
-    self.processing_level = ProcessingLevel.objects.get(abbreviation=re.sub(r'^L', '', parts[10]))
+    # Skip "L"
+    self.processing_level = ProcessingLevel.objects.get_or_create(abbreviation=re.sub(r'^L', '', parts[10]), defaults={'name' : 'Level %s' % re.sub(r'^L', '', parts[10])})[0]
     self.path = int(parts[4]) #K Path Orbit
     self.path_offset = int(parts[5])
     self.row = int(parts[6]) #J Frame Row

@@ -45,7 +45,7 @@ https://delivery.rapideye.de/catalogue/
 from optparse import make_option
 #from osgeo import gdal
 import tempfile
-#from subprocess import call
+import subprocess
 
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
@@ -59,8 +59,30 @@ from catalogue.models import *
 from catalogue.dims_lib import dimsWriter
 
 
+def get_row_path_from_polygon(poly, as_int=False, no_compass=False):
+  """
+  Given a polygon, returns row, row_shift, path, path_shift
+  informations of the centroid as a string
+  As indicated in the docs (8.1.3)
+  """
+  path, path_shift = ("%.2f" % poly.centroid.x).split('.')
+  row, row_shift = ("%.2f" % poly.centroid.y).split('.')
+  if as_int:
+    return int(path), int(path_shift), int(row), int(row_shift)
+  if no_compass:
+    return path, path_shift, row, row_shift
+  if poly.centroid.x < 0:
+    path = "%sW" % path
+  else:
+    path = "%sE" % path
+  if poly.centroid.y < 0:
+    row = "%sS" % row
+  else:
+    row = "%sN" % row
+  return path, path_shift, row, row_shift
+
 class Command(BaseCommand):
-  help = "Import into the catalogue all RapidEye packages"
+  help = "Imports RapidEye packages into the SAC catalogue"
   option_list = BaseCommand.option_list + (
       make_option('--username', '-u', dest='username', action='store',
           help='Username for HTTP Authentication. Defaults is read from settings.py.', default=getattr(settings, 'CATALOGUE_RAPIDEYE_USERNAME', None)),
@@ -71,9 +93,9 @@ class Command(BaseCommand):
       make_option('--test_only', '-t', dest='test_only', action='store_true',
           help='Just test, nothing will be written into the DB.', default=False),
       make_option('--owner', '-o', dest='owner', action='store',
-          help='Name of the Institution package owner. Defaults to: RapidEye.', default='RapidEye'),
+          help='Name of the Institution package owner. Defaults to: Rapideye AG.', default='Rapideye AG'),
       make_option('--creating_software', '-s', dest='creating_software', action='store',
-          help='Name of the creating software. Defaults to: RapidEye.', default='RapidEye'),
+          help='Name of the creating software. Defaults to: Unknown.', default='Unknown'),
       make_option('--year', '-y', dest='year', action='store',
           help='Year to ingest (4 digits). Defaults to: current year', default=datetime.datetime.strftime(datetime.datetime.now(), '%Y')),
       make_option('--day', '-d', dest='day', action='store',
@@ -82,22 +104,13 @@ class Command(BaseCommand):
           help='Month to ingest (2 digits). Defaults to: current month', default=datetime.datetime.strftime(datetime.datetime.now(),'%m')),
       make_option('--license', '-l', dest='license', action='store', default='SAC Commercial License',
           help='Name of the license. Defaults to: SAC Commercial License'),
-      make_option('--area', '-a', dest='polygon', action='store',
+      make_option('--area', '-a', dest='area', action='store',
           help='Area of interest, images which are external to this area will not be imported (WKT Polygon, SRID=4326)'),
       make_option('--quality', '-q', dest='quality', action='store',
-          help='Quality code (will be created if does not exists). Defaults to: Unknown'),
+          help='Quality code (will be created if does not exists). Defaults to: Unknown', default='Unknown'),
       make_option('--processing_level', '-r', dest='processing_level', action='store',
-          help='Processing level code (will be created if does not exists). Defaults to: 3A'),
+          help='Processing level code (will be created if does not exists). Defaults to: 1B', default='1B'),
   )
-
-
-  @staticmethod
-  def build_product_id(package):
-    """
-    Creates the product_id
-    """
-    import ipy; ipy.shell()
-
 
   @staticmethod
   def fetch_geometries(index_url_base, area_of_interest):
@@ -136,173 +149,202 @@ class Command(BaseCommand):
   @transaction.commit_manually
   def handle(self, *args, **options):
     """ command execution """
-    username          = options.get('username')
-    password          = options.get('password')
-    base_url          = options.get('base_url')
-    year              = options.get('year')
-    day               = options.get('day')
-    month             = options.get('month')
-    test_only         = options.get('test_only')
-    verbose           = int(options.get('verbosity'))
-    license           = options.get('license')
-    owner             = options.get('owner')
-    software          = options.get('creating_software')
-    clip              = options.get('polygon')
-    quality           = options.get('quality')
-    processing_level  = options.get('processing_level')
+    username              = options.get('username')
+    password              = options.get('password')
+    base_url              = options.get('base_url')
+    year                  = options.get('year')
+    day                   = options.get('day')
+    month                 = options.get('month')
+    test_only             = options.get('test_only')
+    verbose               = int(options.get('verbosity'))
+    license               = options.get('license')
+    owner                 = options.get('owner')
+    software              = options.get('creating_software')
+    area                  = options.get('area')
+    quality               = options.get('quality')
+    processing_level      = options.get('processing_level')
 
+    # Hardcoded
+    projection            = 'ORBIT'
+    band_count            = 5
+    radiometric_resolution= 16
+    #mission               = read from CRAFT_ID
+    mission_sensor        = 'REI'
+    sensor_type           = 'REI'
+    acquisition_mode      = 'REI'
     area_of_interest  = None
 
-    def verblog(msg, level = 1):
-      if verbose > level:
+    def verblog(msg, level=1):
+      if verbose >= level:
         print msg
 
-    verblog('Getting verbose (level=%s)... ' % verbose)
+    verblog('Getting verbose (level=%s)... ' % verbose, 2)
+    if test_only:
+        verblog('Testing mode activated.', 2)
 
     try:
       # Try connection
       try:
-        verblog('Opening connection...')
+        verblog('Opening connection...', 2)
         password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
         password_mgr.add_password(None, base_url, username, password)
         handler = urllib2.HTTPBasicAuthHandler(password_mgr)
         opener = urllib2.build_opener(handler)
         opener.open(base_url)
         urllib2.install_opener(opener)
-        verblog('Connection open.')
+        verblog('Connection open.', 2)
       except urllib2.HTTPError, e:
         raise CommandError('Unable to establish a connection: %s.' % e)
 
       # Validate area_of_interest
-      if clip:
+      if area:
         try:
-          area_of_interest = Polygon(clip)
+          area_of_interest = Polygon(area)
           if not area_of_interest.area:
             raise CommandError('Unable to create the area of interest polygon: invalid polygon.')
           if not area_of_interest.geom_type.name == 'Polygon':
             raise CommandError('Unable to create the area of interest polygon: not a polygon.')
         except Exception, e:
           raise CommandError('Unable to create the area of interest polygon: %s.' % e)
-        verblog('Area of interest filtering activated.')
+        verblog('Area of interest filtering activated.', 2)
 
       # Get the params
       try:
-        software = CreatingSoftware.objects.get_or_create(name=software, defaults={'version' : 0})[0]
+        software = CreatingSoftware.objects.get_or_create(name=software, defaults={'version': 0})[0]
       except CreatingSoftware.DoesNotExists:
         raise CommandError, 'Creating Software %s does not exists and cannot create: aborting' % software
       try:
-        license = License.objects.get_or_create(name=license, defaults={'type' : License.LICENSE_TYPE_COMMERCIAL, 'details' : license})[0]
+        license = License.objects.get_or_create(name=license, defaults={'type': License.LICENSE_TYPE_COMMERCIAL, 'details': license})[0]
       except License.DoesNotExists:
         raise CommandError, 'License %s does not exists and cannot create: aborting' % license
 
       try:
         owner = Institution.objects.get_or_create(name=owner, defaults={'address1': '','address2': '','address3': '','post_code': '', })[0]
       except Institution.DoesNotExist:
-        verblog('Institution %s does not exists and cannot be created.' % owner)
+        verblog('Institution %s does not exists and cannot be created.' % owner, 2)
         raise CommandError, 'Institution %s does not exists and cannot create: aborting' % owner
 
       try:
         quality = Quality.objects.get_or_create(name=quality)[0]
       except Quality.DoesNotExist:
-        verblog('Quality %s does not exists and cannot be creates, it will be read from metadata.' % quality)
+        verblog('Quality %s does not exists and cannot be creates, it will be read from metadata.' % quality, 2)
         raise CommandError, 'Quality %s does not exists and cannot be created: aborting' % quality
-
-      try:
-        processing_level = ProcessingLevel.objects.get_or_create(abbreviation=processing_level, defaults={'name' : "Level %s" % processing_level})[0]
-      except ProcessingLevel.DoesNotExist:
-        verblog('ProcessingLevel %s does not exists and cannot be created.' % processing_level)
-        raise CommandError, 'ProcessingLevel %s does not exists and cannot create: aborting' % processing_level
 
       # Builds the path:  https://delivery.rapideye.de/catalogue/shapes/2011/03/accum_itt_shape_2011-03.shp
       if day:
         base_index_url = os.path.join(base_url, 'shapes', year, month, day, 'itt_shape_%s-%s' % (year, month))
-        verblog('Day filtering activated.')
+        verblog('Day filtering activated.', 2)
         base_index_url = "%s-%s" % (base_index_url,day)
       else:
         base_index_url = os.path.join(base_url, 'shapes', year, month, 'accum_itt_shape_%s-%s' % (year, month))
 
-      verblog('Index base url: %s. (+ extension)' % base_index_url)
+      verblog('Index base url: %s. (+ extension)' % base_index_url, 2)
 
       try:
         imported = 0
+        verblog('Starting index dowload...', 2)
         for package in Command.fetch_geometries(base_index_url, area_of_interest):
-          verblog("Ingesting %s" % package)
+          verblog("Ingesting %s" % package, 2)
+
+          path, path_shift, row, row_shift = get_row_path_from_polygon(package.geom, no_compass=True)
+          # Gets the mission
+          mission_id = package.get('CRAFT_ID')[-1]
+          if not int(mission_id) in (1,2,3,4,5):
+            raise CommandError('Unknown RapidEye mission number (should be 1-5) %s.' % mission_id)
+
+          # Defaults
+          mission = "RE%s" % mission_id
+
+          # Fills the the product_id
+          #SAT_SEN_TYP_MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
+          product_id = "%(SAT)s_%(SEN)s_%(TYP)s_%(MOD)s_%(KKKK)s_%(KS)s_%(JJJJ)s_%(JS)s_%(YYMMDD)s_%(HHMMSS)s_%(LEVL)s_%(PROJTN)s" % \
+          {
+            'SAT': mission.ljust(3, '-'),
+            'SEN': mission_sensor.ljust(3, '-'),
+            'TYP': sensor_type.ljust(3, '-'),
+            'MOD': acquisition_mode.ljust(3, '-'),
+            'KKKK': path.rjust(4, '0'),
+            'KS': path_shift.rjust(2, '0'),
+            'JJJJ': row.rjust(4, '0'),
+            'JS': row_shift.rjust(2, '0'),
+            'YYMMDD': package.get('ACQ_DATE').strftime('%y%m%d'),
+            'HHMMSS': '000000',
+            'LEVL' : processing_level.ljust(4, '-'),
+            'PROJTN': projection.ljust(6, '-')
+          }
+
+          verblog("Product ID %s" % product_id, 2)
 
           # Do the ingestion here...
           data = {
-            'metadata' : '',
-            'spatial_coverage' : package.geom,
-            'product_id' : Command.build_product_id(package),
-            'radiometric_resolution' : 16,
-            'band_count' : 5,
-            'cloud_cover' : package.fields['CCP'],
-            'owner' : record_owner,
-            'license' : license,
-            'creating_software' : software,
-            'quality' : quality,
-            'processing_level' : processing_level,
+            'metadata': '',
+            'spatial_coverage': package.geom.geos,
+            'product_id': product_id,
+            'radiometric_resolution': radiometric_resolution,
+            'band_count': band_count,
+            'cloud_cover': package.get('CCP'),
+            'owner': owner,
+            'license': license,
+            'creating_software': software,
+            'quality': quality,
+            'sensor_inclination_angle': package.get('IND_ANGLE'),
+            'sensor_viewing_angle': package.get('VW_ANGLE'),
+            'original_product_id': package.get('PATH'),
+            'solar_zenith_angle': 90 - package.get('SUNELVN'),
+            'solar_azimuth_angle': package.get('SUNAZMT'),
           }
+          verblog(data, 2)
 
           # Check if it's already in catalogue:
           try:
             op = OpticalProduct.objects.get(product_id=data.get('product_id')).getConcreteInstance()
-            verblog('Alredy in catalogue: updating')
+            verblog('Alredy in catalogue: updating.', 2)
             is_new = False
             op.__dict__.update(data)
           except ObjectDoesNotExist:
             op = OpticalProduct(**data)
-            verblog('Not in catalogue: creating')
+            verblog('Not in catalogue: creating.', 2)
             is_new = True
             try:
               op.productIdReverse(True)
             except Exception, e:
-              transaction.rollback()
-              raise CommandError('Cannot get all mandatory data from product id %s (%s)' % (product_code, e))
+              raise CommandError('Cannot get all mandatory data from product id %s (%s).' % (product_id, e))
 
           try:
             op.save()
-            # Store thumbnail
-            thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailPath())
-            try:
-              os.makedirs(thumbnails_folder)
-            except:
-              pass
-            # Download original geotiff thumbnail and creates a thumbnail
-
-            jpeg_thumb = os.path.join(thumbnails_folder, op.product_id + ".jpg")
-            handle = open(jpeg_thumb, 'wb+')
-            thumbnail.urllib2.urlopen(feature['PATH'])
-            handle.write(thumbnail.read())
-            thumbnail.close()
-            handle.close()
-            # Store .wld file
-            jpeg_wld   =  os.path.join(thumbnails_folder, op.product_id + ".wld")
-            handle = open(jpeg_wld, 'w+')
-            handle.write(wld)
-            handle.close()
-            # Store main image
-            if store_image:
-              main_image_folder = os.path.join(settings.IMAGERY_ROOT, op.imagePath())
+            if test_only:
+              verblog('Testing: image not saved.', 2)
+            else:
+              # Store thumbnail
+              thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailPath())
               try:
-                os.makedirs(main_image_folder)
+                os.makedirs(thumbnails_folder)
               except:
                 pass
-              main_image = os.path.join(main_image_folder, op.product_id + ".tif")
-              os.rename(temp_main_image, main_image)
-              # -f option: overwrites existing
-              call(["bzip2", "-f", main_image])
-              verblog("Storing main image for product %s: %s" % (product_code, main_image))
-            else:
-              # Remove imagery
-              os.remove(temp_main_image)
+              # Download original geotiff thumbnail and creates a thumbnail
+              tiff_thumb = os.path.join(thumbnails_folder, op.product_id + ".tiff")
+              handle = open(tiff_thumb, 'wb+')
+              thumbnail = urllib2.urlopen(package.get('PATH'))
+              handle.write(thumbnail.read())
+              thumbnail.close()
+              handle.close()
+              # Transform and store .wld file
+              jpeg_thumb = os.path.join(thumbnails_folder, op.product_id + ".jpg")
+              # gdal_translate' -co worldfile=on -of JPEG 3259709_2011-03-08_5719804_5719908_browse.tiff 3259709_2011-03-08_5719804_5719908_browse.jpg
+              subprocess.check_call(["gdal_translate", "-q", "-co", "worldfile=on", "-of", "JPEG", tiff_thumb, jpeg_thumb])
+              # Removes xml
+              os.remove("%s.%s" % (jpeg_thumb, 'aux.xml'))
             if is_new:
-              print 'Product %s imported.' % product_code
+              verblog('Product %s imported.' % product_id)
             else:
-              print 'Product %s updated.' % product_code
+              verblog('Product %s updated.' % product_id)
             imported = imported + 1
           except Exception, e:
+            try:
+              os.remove(tiff_thumb)
+            except:
+              pass
             raise CommandError('Cannot import: %s' % e)
-
 
         verblog("%s packages imported" % imported)
 
@@ -311,12 +353,17 @@ class Command(BaseCommand):
           verblog("Testing only: transaction rollback.")
         else:
           transaction.commit()
-          verblog("Committing transaction.")
+          verblog("Committing transaction.", 2)
       except Exception, e:
         raise CommandError('Uncaught exception: %s' % e)
 
 
     except Exception, e:
+      verblog('Rolling back transaction due to exception.')
+      if test_only:
+        from django.db import connection
+        verblog(connection.queries)
+
       transaction.rollback()
       raise CommandError("%s" % e)
 

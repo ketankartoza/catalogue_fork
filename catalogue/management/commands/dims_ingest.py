@@ -59,22 +59,22 @@ class Command(BaseCommand):
     software      = options.get('creating_software')
     keep          = options.get('keep')
 
-    def verblog(msg, level = 1):
-      if verbose > level:
+    def verblog(msg, level=1):
+      if verbose >= level:
         print msg
 
-    verblog('Getting verbose (level=%s)... ' % verbose)
-    verblog('Creating software: %s' % software)
-    verblog('Owner: %s' % owner)
-    verblog('License: %s' % license)
+    verblog('Getting verbose (level=%s)... ' % verbose, 2)
+    verblog('Creating software: %s' % software, 2)
+    verblog('Owner: %s' % owner, 2)
+    verblog('License: %s' % license, 2)
 
     # Get the params
     try:
-      software = CreatingSoftware.objects.get_or_create(name=software, defaults={'version' : 0})[0]
+      software = CreatingSoftware.objects.get_or_create(name=software, defaults={'version': 0})[0]
     except CreatingSoftware.DoesNotExists:
       raise CommandError, 'Creating Software %s does not exists and cannot create: aborting' % software
     try:
-      license = License.objects.get_or_create(name=license, defaults={'type' : License.LICENSE_TYPE_COMMERCIAL, 'details' : license})[0]
+      license = License.objects.get_or_create(name=license, defaults={'type': License.LICENSE_TYPE_COMMERCIAL, 'details': license})[0]
     except License.DoesNotExists:
       raise  CommandError, 'License %s does not exists and cannot create: aborting' % license
 
@@ -83,28 +83,28 @@ class Command(BaseCommand):
       try:
         owner = Institution.objects.get_or_create(name=owner, defaults={'address1': '','address2': '','address3': '','post_code': '', })[0]
       except Institution.DoesNotExist:
-        verblog('Institution %s does not exists and cannot be created, it will be read from metadata.' % owner)
+        verblog('Institution %s does not exists and cannot be created, it will be read from metadata.' % owner, 2)
     else:
-      verblog('Institution was not specified, it will be read from metadata.')
+      verblog('Institution was not specified, it will be read from metadata.', 2)
 
     # Build the path
     path          = os.path.join(folder, globparm)
     package_list  = glob.glob(path)
 
-    verblog("Found %d packages in %s" % (len(package_list), path))
+    verblog("Found %d packages in %s" % (len(package_list), path), 2)
 
     try:
       for package in package_list:
-        verblog("Ingesting %s" % package)
+        verblog("Ingesting %s" % package, 2)
         reader = dimsReader(package)
         products = reader.get_products()
-        verblog("Found %d products" % len(products))
+        verblog("Found %d products" % len(products), 2)
 
         for product_code, product_data in products.items():
-          verblog("Product %s" % product_code)
+          verblog("Product %s" % product_code, 2)
           verblog(product_data, 2)
 
-          verblog("Processing product %s" % product_code)
+          verblog("Processing product %s" % product_code, 2)
 
           # Extracts data from imagery
           temp_main_image = tempfile.mktemp('.tif')
@@ -164,29 +164,28 @@ class Command(BaseCommand):
           if not owner:
             try:
               record_owner = Institution.objects.get_or_create(name=product_data['metadata']['institution_name'], defaults={
-                    'address1' : product_data['metadata'].get('institution_address', ''),
-                    'address2' : product_data['metadata'].get('institution_city', ''),
-                    'address3' : "%s %s" % (product_data['metadata'].get('institution_region', ''),  product_data['metadata'].get('institution_country', '')),
-                    'post_code' : product_data['metadata'].get('institution_postcode', ''),
+                    'address1': product_data['metadata'].get('institution_address', ''),
+                    'address2': product_data['metadata'].get('institution_city', ''),
+                    'address3': "%s %s" % (product_data['metadata'].get('institution_region', ''),  product_data['metadata'].get('institution_country', '')),
+                    'post_code': product_data['metadata'].get('institution_postcode', ''),
                 })[0]
             except KeyError, e:
               raise CommandError('Cannot create Institution record for product id %s (%s)' % (product_code, e))
 
           else:
-
             record_owner = owner
 
           data = {
-            'metadata' : product_data['xml'].read(),
-            'spatial_coverage' : product_data.get('spatial_coverage'),
-            'product_id' : product_data['metadata'].get('file_identifier')[:58],
-            'radiometric_resolution' : GDT_dict[dataset.GetRasterBand(1).DataType],
-            'band_count' : dataset.RasterCount,
-            'cloud_cover' : product_data['metadata'].get('cloud_cover'),
-            'owner' : record_owner,
-            'license' : license,
-            'creating_software' : software,
-            'quality' : Quality.objects.get_or_create(name=product_data['metadata'].get('image_quality_code'))[0],
+            'metadata': product_data['xml'].read(),
+            'spatial_coverage': product_data.get('spatial_coverage'),
+            'product_id': product_data['metadata'].get('file_identifier')[:58],
+            'radiometric_resolution': GDT_dict[dataset.GetRasterBand(1).DataType],
+            'band_count': dataset.RasterCount,
+            'cloud_cover': product_data['metadata'].get('cloud_cover'),
+            'owner': record_owner,
+            'license': license,
+            'creating_software': software,
+            'quality': Quality.objects.get_or_create(name=product_data['metadata'].get('image_quality_code'))[0],
           }
 
           # Read spatial_coverage from gdal if none
@@ -197,7 +196,7 @@ class Command(BaseCommand):
             # Used here only, main record projection is set from product_id
             srs = SpatialReference(dataset.GetGCPProjection())
             data['spatial_coverage'].set_srid(srs.srid)
-            verblog('Got spatial_coverage from image: %s' % data['spatial_coverage'].ewkt)
+            verblog('Got spatial_coverage from image: %s' % data['spatial_coverage'].ewkt, 2)
 
 
           # Close dataset
@@ -209,12 +208,12 @@ class Command(BaseCommand):
           # Check if it's already in catalogue:
           try:
             op = OpticalProduct.objects.get(product_id=data.get('product_id')).getConcreteInstance()
-            verblog('Alredy in catalogue: updating')
+            verblog('Alredy in catalogue: updating', 2)
             is_new = False
             op.__dict__.update(data)
           except ObjectDoesNotExist:
             op = OpticalProduct(**data)
-            verblog('Not in catalogue: creating')
+            verblog('Not in catalogue: creating', 2)
             is_new = True
             try:
               op.productIdReverse(True)
@@ -251,20 +250,20 @@ class Command(BaseCommand):
               os.rename(temp_main_image, main_image)
               # -f option: overwrites existing
               call(["bzip2", "-f", main_image])
-              verblog("Storing main image for product %s: %s" % (product_code, main_image))
+              verblog("Storing main image for product %s: %s" % (product_code, main_image), 2)
             else:
               # Remove imagery
               os.remove(temp_main_image)
             if is_new:
-              print 'Product %s imported.' % product_code
+              verblog('Product %s imported.' % product_code)
             else:
-              print 'Product %s updated.' % product_code
+              verblog('Product %s updated.' % product_code)
             # Remove the package
             if keep:
-              verblog('Keep flag is set: do not delete the package')
+              verblog('Keep flag is set: do not delete the package', 2)
             else:
               os.remove(package)
-              verblog('Package removed: %s' % product_data['path'])
+              verblog('Package removed: %s' % product_data['path'], 2)
           except Exception, e:
             # Raise
             transaction.rollback()
@@ -275,7 +274,7 @@ class Command(BaseCommand):
         verblog("Testing only: transaction rollback.")
       else:
         transaction.commit()
-        verblog("Committing transaction.")
+        verblog("Committing transaction.", 2)
     except Exception, e:
       transaction.rollback()
       raise CommandError('Uncaught exception: %s' % e)

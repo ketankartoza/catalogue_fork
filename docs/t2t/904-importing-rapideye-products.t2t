@@ -19,65 +19,62 @@ To see all available options you can call the command with `-h` or `help`
 parameter:
 
 ```
-$ python manage.py -h
+$ python manage.py rapideye_harvest -h
+Usage: manage.py rapideye_harvest [options]
 
-TODO:
+Imports RapidEye packages into the SAC catalogue
 
-
+Options:
+  -v VERBOSITY, --verbosity=VERBOSITY
+                        Verbosity level; 0=minimal output, 1=normal output,
+                        2=all output
+  --settings=SETTINGS   The Python path to a settings module, e.g.
+                        "myproject.settings.main". If this isn't provided, the
+                        DJANGO_SETTINGS_MODULE environment variable will be
+                        used.
+  --pythonpath=PYTHONPATH
+                        A directory to add to the Python path, e.g.
+                        "/home/djangoprojects/myproject".
+  --traceback           Print traceback on exception
+  -u USERNAME, --username=USERNAME
+                        Username for HTTP Authentication. Defaults is read
+                        from settings.py.
+  -p PASSWORD, --password=PASSWORD
+                        Password for HTTP Authentication. Defaults is read
+                        from settings.py.
+  -b BASE_URL, --base_url=BASE_URL
+                        Base catalogue URL. Defaults is read from settings.py.
+  -t, --test_only       Just test, nothing will be written into the DB.
+  -o OWNER, --owner=OWNER
+                        Name of the Institution package owner. Defaults to:
+                        Rapideye AG.
+  -s CREATING_SOFTWARE, --creating_software=CREATING_SOFTWARE
+                        Name of the creating software. Defaults to: Unknown.
+  -y YEAR, --year=YEAR  Year to ingest (4 digits). Defaults to: current year
+  -d DAY, --day=DAY     Day to ingest (2 digits). Defaults to None
+  -m MONTH, --month=MONTH
+                        Month to ingest (2 digits). Defaults to: current month
+  -l LICENSE, --license=LICENSE
+                        Name of the license. Defaults to: SAC Commercial
+                        License
+  -a AREA, --area=AREA  Area of interest, images which are external to this
+                        area will not be imported (WKT Polygon, SRID=4326)
+  -q QUALITY, --quality=QUALITY
+                        Quality code (will be created if does not exists).
+                        Defaults to: Unknown
+  -r PROCESSING_LEVEL, --processing_level=PROCESSING_LEVEL
+                        Processing level code (will be created if does not
+                        exists). Defaults to: 1B
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
 ```
 
-=== Implementation detail ===
+Running the command:
 
-Pseudocode:
+```
+$ python manage.py rapideye_harvest -v 2 -a 'POLYGON(( 22 3, 23 3, 23 2, 22 2, 22 3))' -d 12 -y 2011 -m 03
+```
 
-+ given a year and month
-+ download the shapefiles with all imagery for that period of time
-+ optionally clip to a bounding polygon to restrict area of interest
-+ for each image:
-+     calculate product_id
-+     search in catalogue
-+     if already in catalogue, process the next product
-+     download thumbnail and main image
-+     ingest in catalogue
-
-
-== Metadata constants ==
-
-The following metadata are hardcoded constants:
-
-band_count = 5
-radiometric_resolution = 16
-
-
-=== Options in detail ===
-
-: -i, --store_image
-Store the original image data extracted from the package.
-This flag indicates to the program that the original image
-must be stored locally. The destination folder is calculated
-by chaining ``settings.IMAGERY_ROOT`` and the result from
-the function call ``GenericSensorProduct.imagePath()``, the image
-is compressed with ``bzip2`` and added a ".bz2" suffix.
-: -t, --test_only
-Just test, nothing will be written into the DB or copied to
-the filesystem.
-: -o OWNER, --owner=OWNER
-Name of the institution, as a string.
-Defaults to: None.
-Example: ``-o "Satellite Applications Centre"``
-Note: the institution will be created if it does not exist.
-Note: the institution will be read from metadata if not
-specified in the options.
-: -s CREATING_SOFTWARE, --creating_software=CREATING_SOFTWARE
-Name of the creating software. Defaults to: //SARMES1//
-Example: ``-s "SARMES1"``
-Note: the software will be created if it does not exists.
-Version of the software will be set to a blank string.
-: -l LICENSE, --license=LICENSE
-Name of the license. Defaults to: //SAC Commercial License//
-Example: ``-l "SAC Free License"``
-Note: will be created if it does not exists. License type
-will be automatically set to //LICENSE_TYPE_ANY// (4)
 
 
 == Implementation details ==
@@ -85,43 +82,48 @@ will be automatically set to //LICENSE_TYPE_ANY// (4)
 Details on the implementation, mainly regarding the source of
 the data used to populate the catalogue database.
 
+Pseudocode:
+
++ given the year and month (and optionally the day)
++ download the shapefiles with all imagery metadata for that period of time
++ optionally clip to a bounding polygon to restrict area of interest
++ for each image:
++     calculate product_id
++     search in catalogue
++     if already in catalogue, process the next product
++     download thumbnail
++     ingest in catalogue
+
+
 === Data and metadata extraction ===
 
 
-""Note:"" The spatial_coverage is first read from //EX_BoundingPolygon// parameter
-in ISOMetadata.xml, and then read from the geotiff image if not found.
+The following metadata are hardcoded constants:
+
+|| Parameter            | Value                |
+| band_count            | 5 |
+| radiometric_resolution | 16 |
+
+The following metadata are passed to the script as option parameters:
+
+|| Parameter            | Default                |
+| license               | SAC Commercial License |
+| owner                 | Rapideye AG |
+| processing_level      | 1B                     |
+| creating_software     | Unknown                |
 
 
-The following information is read from the main image using **GDAL** library:
+The following metadata are read from the shapefile:
 
-+ radiometric_resolution
-+ band_count
-+ spatial_coverage
-+
-
-
-The following information are reverse-engineered from the **file_identifier**,
-the process is handled from the function call ``GenericSensorProduct.productIdReverse()``
-
-+ acquisition_mode
-+ projection
-+ path
-+ row
-+ path shift
-+ row shift
-+
-
-""Note:"" The acquisition_mode is a foreign key to the sensors dictionaries, the
-ingestion process will take care of creating all the necessary entries when
-they are missing. The mission_group value is not present in **file_identifier** and
-is hence set to the first type existing in the catalogue, should a new Mission
-record need to be created during the ingestion process. In practice the Mission
-dictionary entries should pre-exist and this situation should not arise.
-
-""Note:"" If a new license is created during the ingestion process, the type is
-defaulted to License.LICENSE_TYPE_ANY
+|| Parameter            | From |
+| original_product_id   | PATH |
+| product_acquisition_start | ACQ_DATE |
+| row/path informations | footprint centroid |
+| mission and sensors informations | CRAFT_ID |
+| cloud_cover | CCP |
+| sensor_viewing_angle | VW_ANGLE |
+| solar_zenith_angle | 90° - SUNELVN |
+| solar_azimuth_angle | SUNAZMT |
+| sensor_inclination_angle | IND_ANGLE |
 
 
-
-""Note:"" The projection is created if it does not exists, the epsg code is
-set to 0 by default.
