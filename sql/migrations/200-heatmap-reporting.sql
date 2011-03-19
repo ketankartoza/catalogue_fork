@@ -48,7 +48,7 @@ WHILE lon_min>lon_max LOOP
   x:=0;
   WHILE lat_min<lat_max LOOP
     bla:='POLYGON(('||lat_min||' '||lon_min||','||lat_min+cell_size||' '|| lon_min||','||lat_min+cell_size||' '||lon_min+cell_size||','||lat_min||' '||lon_min+cell_size||','||lat_min||' '||lon_min||'))';
-    RAISE NOTICE 'x: %, y: %, (%, %), polygon: %', x,y,lat_min,lon_min,bla;
+    --RAISE NOTICE 'x: %, y: %, (%, %), polygon: %', x,y,lat_min,lon_min,bla;
     INSERT INTO heatmap_grid (x_cell,y_cell,geometry) VALUES (x,y,ST_PolygonFromText(bla,4326));
     lat_min:=lat_min+cell_size;
     x:=x+1;
@@ -75,7 +75,7 @@ WHERE date_trunc('day',catalogue_search.search_date) >= date_of_search
 GROUP BY heatmap_grid.id,date_trunc('day',catalogue_search.search_date);
 
 END;$BODY$
-  LANGUAGE plpgsql VOLATILE
+  LANGUAGE plpgsql VOLATILE;
 
 -- Function: heatmap(date, date)
 CREATE OR REPLACE FUNCTION heatmap(from_date date DEFAULT '1900-01-01'::date, to_date date DEFAULT now(),OUT geometry geometry,OUT hits bigint)
@@ -86,6 +86,6 @@ from heatmap_values a inner join heatmap_grid b on a.grid_id=b.id
 where search_date between $1 AND $2 
 group by grid_id,st_centroid(geometry);
 $BODY$
-  LANGUAGE sql VOLATILE
+  LANGUAGE sql VOLATILE;
 
 COMMIT;
