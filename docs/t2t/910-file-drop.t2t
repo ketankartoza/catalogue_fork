@@ -12,9 +12,20 @@ to the server and not **pulled** from other servers on the network. This will
 allow the system to be configured without making holes through the firewall
 to facilititate file transfers off internal servers.
 
+[img/network-dmz.png]
+
+
+
+
 To achieve a drop directory capability, the installation on the catalogue
 server provides rsync (remote synchronisation) access over ssh (secure shell)
 using rssh (restricted shell).
+
+The following diagram illustrates the logic flow for the filedrop.
+
+[img/filedrop.png]
+
+== Setup rssh ==
 
 ```
 sudo apt-get install rssh
