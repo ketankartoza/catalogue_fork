@@ -237,4 +237,38 @@ On the client system, create a directory that will contain files to be
 synchronised, and do a test, manual rsync of that directory to the lion
 filedrop home:
 
+```
+cd /cxfs/datapickup
+mkdir filedrop
+echo "The filedrop directory was created by Tim for " > filedrop-README.txt
+echo "synchronising files over to lion:/mnt/cataloguestorage2/filedrop" >> filedrop-README.txt
+echo "Take a look at root's crontab for details on synchronisation frequency." >> filedrop-README.txt
+cd filedrop
+touch test
+rsync -ave ssh . lion:/mnt/cataloguestorage2/filedrop/
+```
 
+Assuming that works correctly, we create a simple script that we will run from cron that 
+performs a sync every 30 minutes. The script also flushes any files that are older then 
+7 days.
+
+```
+#!/bin/bash
+rsync -ave ssh /cxfs/datapickup/filedrop/. lion:/mnt/cataloguestorage2/filedrop/
+# be very very careful if you change this!
+find /cxfs/datapickup/filedrop -name "*" -mtime +8 -exec rm -f {} \;
+```
+
+== Lion Cron Jobs ==
+
+On the lion server side, a similar cron job is run to:
+- ingest any new packages that have arrived
+- clear away any filedrop files older than 7 days
+-
+
+
+```
+# be very very careful if you change this!
+# avoid the .ssh dir and other user profile stuff
+find /mnt/cataloguestorage2/filedrop -name "*" -mtime +8 -exec rm -f {} \;
+```
