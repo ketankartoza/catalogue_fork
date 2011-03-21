@@ -16,9 +16,8 @@ Prepare testing, load fixtures
 
 Load an initial fixture with dictionaries
 
->>> call_command('loaddata', 'fixtures/catalogue_dictionaries.json')
-Installing json fixture 'fixtures/catalogue_dictionaries' from absolute path.
-Installed ...
+>>> call_command('loaddata', 'fixtures/catalogue_dictionaries.json', verbosity=0)
+
 
 ###############################################
 
