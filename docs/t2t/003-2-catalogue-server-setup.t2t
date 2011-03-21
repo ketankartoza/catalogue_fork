@@ -1,0 +1,280 @@
+
+
+% keep the above two blank lines
+
+=  Configuring the Lion Catalogue server =
+
+The 'Lion' server provides web mapping services for the SAC Catalogue.
+
+It contains the following key components:
+
+- apache web server
+- mapserver cgi with ecw support via custom built gdal
+- tilecache
+- an instance of the django catalogue software used
+- IBM informix client sdk software
+- the python informix DB adapter
+- 
+
+In addition the lion server is connected to two 14TB Fujitsu Siemens storage arrays.
+
+The Server is an IA 64 processor machine installed with ubuntu server 10.04 LTS.
+
+== Package installations ==
+
+```
+sudo apt-get install bc xterm build-essential lxde rpm mc sun-java6-jre \
+firefox vim ntpdate lxde xinit rpl django python-django subversion \
+utidy python-utidylib python-psycopg2 python-geoip python-django-registration
+```
+
+== Informix Client Setup ==
+
+When following the Informix install procedure, do it as root locally on
+the server since I had problems trying to run the sdk setup tool remotely over
+an ssh -X connection.
+
+For specific notes on how to set up the client see 003-3-informix_access.t2t
+
+== Nightly database sync ==
+
+We should sync the ACS data to our own catalogue database nightly. When all 
+the prerequisites are installed on the Lion server, the updateInformix.sh script 
+can be used to do this on an ad hoc basis. Automating the process requires 
+creation of a cron job:
+
+```
+crontab -e
+```
+
+Now add the following (adjusing paths if needed):
+
+```
+# Added by Tim for others to see how crontab works
+#*     *     *     *     *  command to be executed
+#-     -     -     -     -
+#|     |     |     |     |
+#|     |     |     |     +----- day of week (0 - 6) (Sunday=0)
+#|     |     |     +------- month (1 - 12)
+#|     |     +--------- day of month (1 - 31)
+#|     +----------- hour (0 - 23)
+#+------------- min (0 - 59)
+
+
+# Run a test command every minute to see if crontab is working nicely
+# comment out when done testing
+#*/1 * * * * date >> /tmp/date.txt
+
+# Run informix stats update nightly to keep responsiveness good
+# Job will run 5 min after midnight
+5 0 * * * /home/timlinux/dev/python/sac_catalogue/updateInformix.sh
+# Job will run 2:05 am each day
+5 2 * * * /home/timlinux/bin/pgbackups
+```
+
+The second job described above takes a backup of the gis and catalogue 
+databases on a nightly basis. The pgbackups script looks like this:
+
+```
+#/bin/bash
+
+cd /mnt/cataloguestorage/backups/
+tar cfz /mnt/cataloguestorage/backups/opt_`date +%d%B%Y`.tar.gz /opt/
+export PGPASSWORD=XXXXX
+
+pg_dump -U timlinux -h elephant -i -Fc -f gis_postgis_`date +%d%B%Y`.dmp -x -O gis
+pg_dump -U timlinux -h elephant -i -Fc -f sac_postgis_`date +%d%B%Y`.dmp -x -O sac
+
+```
+
+To restore you do:
+
+```
+createdb sac
+createdb gis
+pg_restore sac_[filename].dmp | psql sac
+pg_restore gis_[filename].dmp | psql gis
+```
+
+== Set up the web mapping dir ==
+
+**TODO:** Update these notes to use git rather.
+
+The web mapping dir contains mapserver configuration files and resources. It
+should be checked out of SVN and then the map.templ files copied over to map
+files. The .templ files are stored as templates because they contain sensitive
+info such as passwords for database connections.
+
+```
+cd /opt
+svn co https://196.35.94.196/svn/sac/python/sac_catalogue/mapserver webmapping
+```
+
+(You may need to adjust permissions of /opt in order to be allowed to do a
+check out into it)
+
+Now copy each of the mapfile templates listed below and then update them to 
+have appropriate credentials for database access.
+
+```
+cd mapfiles
+for FILE in *.templ; do NEWFILE=$(echo "$FILE" | sed 's/\.templ//g'); \
+  cp $FILE $NEWFILE; done
+```
+
+
+== Mapserver with fastcgi ==
+
+First of all you need to compile mapserver from source since we need 
+ecw and MrSid support. See mapserver_notes.t2t for detailed runthrough.
+
+Ensure that after doing the above, your mapserver install supports fastcgi:
+
+```
+/usr/lib/cgi-bin/mapserv -v MapServer version 5.0.3 
+OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG OUTPUT=WBMP OUTPUT=SVG SUPPORTS=PROJ
+SUPPORTS=AGG SUPPORTS=FREETYPE SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT
+SUPPORTS=WFS_SERVER SUPPORTS=WFS_CLIENT SUPPORTS=WCS_SERVER SUPPORTS=FASTCGI
+SUPPORTS=THREADS SUPPORTS=GEOS INPUT=EPPL7 INPUT=POSTGIS INPUT=OGR INPUT=GDAL
+INPUT=SHAPEFILE
+```
+
+
+```
+sudo apt-get install libapache2-mod-fcgid
+```
+
+Add these map file paths to your /etc/apache2/sites-enabled/default file:
+
+```
+NameVirtualHost *
+<VirtualHost *>
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/
+  #set to anything to ensure only explicitly named mapfiles are used
+  SetEnv MS_MAP_NO_PATH "foo"
+  #set the ZA_VECTOR e.g. http://localhost/cgi-bin/mapserv?map=ZA_VECTOR&mode=...
+  SetEnv ZA_VECTOR "/opt/webmapping/mapfiles/za_vector.map"
+  SetEnv ZA_VECTOR_TEST "/opt/webmapping/mapfiles/za_vector_test.map"
+  SetEnv ZA_VECTOR_ECW "/opt/webmapping/mapfiles/za_vector_spot2008_2_5m_ecw.map"
+  SetEnv ZA_VECTOR_SPOT10M "/opt/webmapping/mapfiles/za_vector_spot2008_10m.map"
+  SetEnv ZA_SPOT "/opt/webmapping/mapfiles/spot.map"
+  SetEnv ZA_NBI "/opt/webmapping/mapfiles/za_nbi.map"
+  SetEnv WORLD "/opt/webmapping/mapfiles/world.map"
+  SetEnv SEARCHES "/opt/webmapping/mapfiles/searches.map"
+  SetEnv CART "/opt/webmapping/mapfiles/cart.map"
+  SetEnv VISITORS "/opt/webmapping/mapfiles/visitors.map"
+  <Directory /var/www/>
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride None
+    Order allow,deny
+    allow from all
+  </Directory>
+  ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+  <Directory "/usr/lib/cgi-bin">
+    #Next two lines added by Tim for PyWPS
+    SetEnv PYWPS_CFG /etc/pywps.cfg
+    SetEnv PYWPS_PROCESSES /opt/wps-processes/sac
+    PythonPath "['/opt/','/opt/wps-processes/sac'] + sys.path"
+    AllowOverride None
+    #Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+    #changed from above for pywps
+    Options +ExecCGI -MultiViews +FollowSymLinks
+    Order allow,deny
+    Allow from all
+  </Directory>
+
+  #Alias and dir below added for pywps
+  Alias /wps_outputs/ "/tmp/wps_outputs"
+  <Directory "/tmp/wps_outputs/">
+    Options Indexes MultiViews FollowSymLinks
+    AllowOverride None
+  </Directory>
+
+  <Location "/sarmes2">
+    AuthType Basic
+    AuthName "sac"
+    AuthUserFile /etc/apache2/dims.passwd
+    Require valid-user
+  </Location>
+
+
+  ErrorLog /var/log/apache2/error.log
+
+  # Possible values include: debug, info, notice, warn, error, crit,
+  # alert, emerg.
+  LogLevel warn
+
+  CustomLog /var/log/apache2/access.log combined
+  ServerSignature On
+  # For webmapping
+  Alias /tmp/ "/tmp/ms_tmp/"
+</VirtualHost>
+
+```
+
+== Fibrecat storage arrays config ==
+
+
+
+=== Catalogue Storage 1 ===
+
+IP Address: 192.168.1.142
+
+Rack Position: **Upper** device as you look at the rack
+
+A  WWN: 207000c0ff03a2c3 196.35.94.142 Catalogue Storage
+
+```
+RAID Controller B       Yes     Failed  System Detected Failure         862821-0743MV00AK       Down
+"cataloguestorage" Volume Information
+Number  Name                    LUN     Size (Mbytes)
+1       cataloguestorage1       0       15002850
+```
+
+
+```
+Status  Size (GB)       Manufacturer Model:Revision     Node WWN Serial Number  Chan:LoopID Port0 Port1         Enclosure
+Up      1500.30GB       ATA             ST31500341AS    WWN:5000c5001120e443    SN:9VS1CC29     0:11   ----
+```
+
+
+=== Catalogue Storage 2 (old Sarmes Storage) ===
+
+IP Address: 192.168.1.141
+
+
+A  WWN: 207000c0ff0a66c8 196.35.94.141 Sarmes Storage
+
+Rack Position: **Lower** device as you look at the rack
+
+
+
+=== Lion configuration as fibrecat client ===
+
+```
+timlinux@lion:~$ dmesg | grep scsi
+[    1.505180] scsi0 : ata_piix
+[    1.505252] scsi1 : ata_piix
+[    1.506339] scsi2 : ata_piix
+[    1.506396] scsi3 : ata_piix
+[    1.809264] scsi 2:0:0:0: Direct-Access     ATA      ST3750640NS      n/a  PQ: 0 ANSI: 5
+[    1.809395] sd 2:0:0:0: Attached scsi generic sg0 type 0
+[    1.813674] scsi 3:0:0:0: Direct-Access     ATA      ST3750640NS      n/a  PQ: 0 ANSI: 5
+[    1.813810] sd 3:0:0:0: Attached scsi generic sg1 type 0
+[    2.271356] scsi4 : qla2xxx
+[    2.630121] scsi5 : qla2xxx
+[    3.602342] scsi 4:0:0:0: Enclosure         FSC      FibreCAT_SX1     J200 PQ: 0 ANSI: 4
+[    3.603234] scsi 4:0:1:0: Enclosure         FSC      FibreCAT_SX1     J200 PQ: 0 ANSI: 4
+[    3.610832] scsi 4:0:0:0: Attached scsi generic sg2 type 13
+[    3.610957] scsi 4:0:1:0: Attached scsi generic sg3 type 13
+[    3.962310] scsi 5:0:0:0: Direct-Access     FSC      FibreCAT_SX1     J110 PQ: 0 ANSI: 3
+[    3.963175] scsi 5:0:1:0: Enclosure         FSC      FibreCAT_SX1     J110 PQ: 0 ANSI: 3
+[    3.972099] sd 5:0:0:0: Attached scsi generic sg4 type 0
+[    3.972210] ses 5:0:1:0: Attached scsi generic sg5 type 13
+```
+
+
+
+
+

@@ -57,9 +57,16 @@ Tim Sutton, 2008
 % Prefix of 80 = currently not used
 % Prefix of 90 = importing data & syncing
 
+**Note:** This system currently has no automated backup procedure. The main
+system (Lion) includes around 26TB of online storage that we have no effective
+way of backing up. This should be addressed as a priority!
 
 %!include: 002-introduction.t2t
 %!include: 003-developer-guide.t2t
+%!include: 003-1-database-server-setup.t2t
+%!include: 003-2-catalogue-server-setup.t2t
+%!include: 003-3-informix-access.t2t
+%!include: 003-4-storage_array_setup.t2t
 %!include: 004-installation-guide.t2t
 %!include: 005-unit-tests.t2t
 %!include: 201-reporting-tools.t2t
@@ -72,4 +79,4 @@ Tim Sutton, 2008
 %!include: 902-importing-other-products.t2t
 %!include: 903-importing-dims-products.t2t
 %!include: 904-importing-rapideye-products.t2t
-
+%!include: 910-file-drop.t2t
