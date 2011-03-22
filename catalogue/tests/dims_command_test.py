@@ -55,6 +55,8 @@ Test that everything was imported correctly
 <Institution: LINFINITI>
 >>> p.creating_software
 <CreatingSoftware: QGIS>
+>>> p.local_storage_path == os.path.join(p.imagePath(), p.product_id + '.tif.bz2')
+True
 
 >>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.jpg'))
 True
