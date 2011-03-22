@@ -1,47 +1,6 @@
 """
 Modis harvesting
 
-For the modis ingestion, Wolfgang would like us to fetch products from here:
-
-ftp://e4ftl01u.ecs.nasa.gov/MOTA/MCD43A2.005/
-
-The products have metadata package_list from which requisite information should be parsed. Where such info is not available, add comments on this ticket for Wolfgang to address. Here is an example xml metadata file:
-
-ftp://e4ftl01u.ecs.nasa.gov/MOTA/MCD43A2.005/2011.02.26/MCD43A2.A2011057.h00v08.005.2011077192640.hdf.xml
-
-Please store the original product id in the original_id field.
-
-The data is in hdf format (supported by gdal but you need to add hdf libs to your system first).
-
-For this ingestion, the product itself should be filed using the standard path / file name convention as per dims and sumbandilasat etc.
-
-The original xml metadata should be stored in the metadata field.
-
-A thumbnail should be produced by mapping bands: 1 - Red, 4 Green, 3 Blue.
-
-We only need products from our region, so those MOD09 and MCD43 products with the gridds (KJ) being:
-
-h19v09
-h20v09
-h21v09
-h19v10
-h20v10
-h21v10
-h22v10
-h19v11
-h20v11
-h21v11
-h22v11
-h19v12
-h20v12
-h21v12
-
-Since there are many products, the harvester script should be able to restart efficiently, skipping already retrieved records.
-
-If you make it a management command, that will be great so we can run it weekly on a cron job to update the catalogue after the initial backlog harvesting.
-
-Metadata readme: http://g.icess.ucsb.edu/modis/LstUsrGuide/usrguide_1dtil.html
-
 """
 
 import os
