@@ -251,6 +251,9 @@ class Command(BaseCommand):
               # -f option: overwrites existing
               call(["bzip2", "-f", main_image])
               verblog("Storing main image for product %s: %s" % (product_code, main_image), 2)
+              # Save in local_storage_path
+              op.local_storage_path = os.path.join(op.imagePath(), op.product_id + ".tif" + '.bz2')
+              op.save()
             else:
               # Remove imagery
               os.remove(temp_main_image)
