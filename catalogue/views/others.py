@@ -631,7 +631,41 @@ def recentSearches(theRequest):
   searchHistory = Search.objects.filter(deleted=False).order_by('-search_date')
   if len( searchHistory ) > 50:
     searchHistory = searchHistory[0:50]
-  return ({'mySearches' : searchHistory})
+  return ({'mySearches' : searchHistory,'myCurrentMonth':datetime.date.today()})
+
+#monthly search report by user ip_position
+@staff_member_required
+@renderWithContext('searchMonthlyReport.html')
+def searchMonthlyReport( theRequest, theyear, themonth):
+  #construct date object
+  if not(theyear and themonth):
+    myDate=datetime.date.today()
+  else:
+    try:
+      myDate=datetime.date(int(theyear),int(themonth),1)
+    except:
+      logging.error("Date arguments cannot be parsed")
+      logging.info(traceback.format_exc())
+
+  myQuerySet = Search()
+  myCountryStats = myQuerySet.customSQL("""
+  SELECT name,date_trunc('month',search_date) as date_of_search, count(*) as searches
+  FROM (SELECT a.name, b.search_date FROM catalogue_worldborders a INNER JOIN catalogue_search b ON st_intersects(a.geometry,b.ip_position) OFFSET 0) ss
+  WHERE search_date BETWEEN to_date(%(date)s,'MM-YYYY') AND to_date(%(date)s,'MM-YYYY') + interval '1 month'
+  GROUP BY name,date_trunc('month',search_date)
+  ORDER BY searches DESC""",['country','month','count'],{'date':myDate.strftime('%m-%Y')})
+
+  myScores = []
+  for myRec in myCountryStats:
+    myScores.append({'country' : myRec['country'],'count' : myRec['count']})
+
+  return ({
+    'myGraphLabel': ({'Country':'country'}),
+    'myScores': myScores,
+    'myCurrentDate': myDate,
+    'myPrevDate':myDate - datetime.timedelta(days=1),
+    'myNextDate':myDate + datetime.timedelta(days=31),
+    })
 
 @login_required
 def deleteSearch(theRequest, theId):

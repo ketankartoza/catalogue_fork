@@ -2,6 +2,8 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% box_start "" "" ""%}
   <h2>Recent Search History</h2>
+  <a href="/recentsearches/?pdf">PDF</a>
+  <a href="/searchmonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/">Monthly reports of user origin</a>
   <table width="100%" style="border-bottom: solid 1px; border-top: solid 1px; margin-top: 3px;">
     <tr>
       <th>
