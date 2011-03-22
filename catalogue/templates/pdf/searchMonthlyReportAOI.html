@@ -7,7 +7,7 @@
 
 {% if myScores %}
 
-<div class="h2">Searches by country of user origin for {{ myCurrentDate|date:'F, Y' }}</div>
+<div class="h2">Searches by country of AOI for {{ myCurrentDate|date:'F, Y' }}</div>
 <center>
   <img src="{% gPieChart myScores myGraphLabel %}" />
 </center>
@@ -17,9 +17,11 @@
 <div class="h2">All Countries</div>
 <table>
   
-  <thead> 
-    <th width="150px">Country</th>
-    <th width="100px">Searches</th>
+  <thead>
+    <tr>
+      <th width="150px">Country</th>
+      <th width="100px">Searches</th>
+    </tr>
   </thead>
   <tbody>
     {% for myCountry in myScores %}
@@ -30,7 +32,7 @@
     {% endfor %}
   </tbody>
 </table>
-</div>
+
 {% else %}
 <p>No reports to generate.</p>
 {% endif %}
