@@ -69,11 +69,13 @@ $ python manage.py modis_harvest
 
 An rc file is created or updated after every single successful import.
 
-The rc file is located in the project's main folder and named ``modis_harvest.rc``
+The rc file is located in the project's main folder and named modis_harvest.rc
 
 The rc file contains the following informations:
+
 + last_folder
 + last_package
++
 
 Example:
 
@@ -105,9 +107,10 @@ Pseudocode:
     + skip if already in catalogue
     + creates the thumbnail
     + ingest in catalogue
+    +
 
 
-=== Data and metadata extraction ===
+== Data and metadata extraction ==
 
 
 The following metadata are hardcoded constants and can be changed at the top of the script `catalogue/management/commands/rapideye_harvest.py`:
@@ -149,6 +152,7 @@ The thumbnail is built using external gdal calls in three steps:
 + gdal_translate extracts sub dataset from hdf image (creates 4 tiffs, one for each sub dataset)
 + gdal_merge.py merge bands 1 4 3 into RGB tiff
 + gdal_translate creates a JPEG 400x400 px thumbnail with a world file
++
 
 == External programs required ==
 
@@ -156,3 +160,4 @@ The thumbnail is built using external gdal calls in three steps:
 + gdal_translate
 + gdal_merge
 + bzip2
++

@@ -1,5 +1,5 @@
 from settings import *
-
+import os
 
 DATABASES = {
         'default': { #new db that does not mimic acs system
@@ -21,3 +21,8 @@ DATABASES = {
         }
 
 
+ROOT_PROJECT_FOLDER = os.path.join(os.path.dirname(__file__), 'catalogue', 'tests')
+# Added by Tim - url that holds directories of thumbnails...
+THUMBS_ROOT = os.path.join(ROOT_PROJECT_FOLDER,'thumbs_out')
+# And this is the dir that holds imagery
+IMAGERY_ROOT = os.path.join(ROOT_PROJECT_FOLDER,'imagery_mastercopies')
