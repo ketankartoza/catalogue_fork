@@ -200,11 +200,11 @@ class Command(BaseCommand):
       # Get the params
       try:
         software = CreatingSoftware.objects.get_or_create(name=software, defaults={'version': 0})[0]
-      except CreatingSoftware.DoesNotExists:
+      except CreatingSoftware.DoesNotExist:
         raise CommandError, 'Creating Software %s does not exists and cannot create: aborting' % software
       try:
         license = License.objects.get_or_create(name=license, defaults={'type': License.LICENSE_TYPE_COMMERCIAL, 'details': license})[0]
-      except License.DoesNotExists:
+      except License.DoesNotExist:
         raise CommandError, 'License %s does not exists and cannot create: aborting' % license
 
       try:

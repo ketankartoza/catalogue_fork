@@ -71,11 +71,11 @@ class Command(BaseCommand):
     # Get the params
     try:
       software = CreatingSoftware.objects.get_or_create(name=software, defaults={'version': 0})[0]
-    except CreatingSoftware.DoesNotExists:
+    except CreatingSoftware.DoesNotExist:
       raise CommandError, 'Creating Software %s does not exists and cannot create: aborting' % software
     try:
       license = License.objects.get_or_create(name=license, defaults={'type': License.LICENSE_TYPE_COMMERCIAL, 'details': license})[0]
-    except License.DoesNotExists:
+    except License.DoesNotExist:
       raise  CommandError, 'License %s does not exists and cannot create: aborting' % license
 
     # Institution is optional
@@ -251,6 +251,9 @@ class Command(BaseCommand):
               # -f option: overwrites existing
               call(["bzip2", "-f", main_image])
               verblog("Storing main image for product %s: %s" % (product_code, main_image), 2)
+              # Save in local_storage_path
+              op.local_storage_path = os.path.join(op.imagePath(), op.product_id + ".tif" + '.bz2')
+              op.save()
             else:
               # Remove imagery
               os.remove(temp_main_image)

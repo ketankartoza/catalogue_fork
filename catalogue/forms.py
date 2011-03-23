@@ -139,8 +139,8 @@ class AdvancedSearchForm(forms.ModelForm):
       help_text='Digitising an area of interest is not required but is recommended. You can use the help tab in the map area for more information on how to use the map. Draw an area of interest on the map to refine the set of search results to a specific area.')
   aoi_geometry = AOIGeometryField(required=False)
 
-  k_orbit_path = IntegersCSVIntervalsField(required=False)
-  j_frame_row = IntegersCSVIntervalsField(required=False)
+  k_orbit_path = IntegersCSVIntervalsField(required=False, help_text='Insert the orbit path as a list of comma separated values or ranges (e.g. : "10,20,30" or  "20-40")')
+  j_frame_row = IntegersCSVIntervalsField(required=False, help_text='Insert the frame row as a list of comma separated values or ranges (e.g. : "10,20,30" or "20-40")')
 
   class Meta:
     model = Search
