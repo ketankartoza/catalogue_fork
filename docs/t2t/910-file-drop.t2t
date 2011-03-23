@@ -242,7 +242,7 @@ cd /cxfs/datapickup
 mkdir filedrop
 echo "The filedrop directory was created by Tim for " > filedrop-README.txt
 echo "synchronising files over to lion:/mnt/cataloguestorage2/filedrop" >> filedrop-README.txt
-echo "Take a look at root's crontab for details on synchronisation frequency." >> filedrop-README.txt
+echo "Take a look at filedrop user's crontab for details on synchronisation frequency." >> filedrop-README.txt
 cd filedrop
 touch test
 rsync -ave ssh . lion:/mnt/cataloguestorage2/filedrop/
@@ -265,6 +265,9 @@ On the lion server side, a similar cron job is run to:
 - ingest any new packages that have arrived
 - clear away any filedrop files older than 7 days
 -
+
+The cron job should not be run as root in order to avoid any potential side
+effects that may occur from broken scripts etc.
 
 
 ```

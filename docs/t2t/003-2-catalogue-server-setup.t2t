@@ -96,6 +96,106 @@ pg_restore sac_[filename].dmp | psql sac
 pg_restore gis_[filename].dmp | psql gis
 ```
 
+== Compile and install GDAL ==
+
+
+=== Building with ECW Support ===
+
+**Note:** you can only compress images up to 500mb (though as far as I know
+there is no limit to decompression size)
+
+Install dependencies:
+
+```
+sudo apt-get install build-essential libjpeg62-dev libtiff4-dev
+```
+
+
+Go to the erdas ecw sdk web page:
+
+http://www.erdas.com/Products/ERDASProductInformation/tabid/84/CurrentID/1142/Default.aspx
+
+(or just search their site for 'ecw sdk')
+
+Get the ECW JPEG2000 Codec SDK Source Code (second item listed - first if win version)
+
+After the download you should have:
+
+```
+ecw_jpeg_2000_sdk_3_3_source.zip
+```
+
+Now unzip it:
+
+```
+cd /tmp
+unzip ecw_jpeg_2000_sdk_3_3_source.zip
+unzip ImageCompressionSDKSourceCode3.3Setup_20070509.zip
+sudo mv libecwj2-3.3 /usr/local/src/
+cd /usr/local/src/
+sudo chown -R timlinux libecwj2-3.3/
+cd libecwj2-3.3
+```
+
+Make user you have a gnu build toolchain installed:
+
+```
+sudo apt-get install build-essential
+```
+
+Now build the ecw lib:
+
+```
+./configure
+make
+sudo make install
+```
+
+Next gdal must be (re)built with the ecw flag:
+
+```
+cd <gdal src>
+make clean
+./configure --with-libtiff=internal --with-geotiff=internal \
+  --with-ecw=/usr/local --with-python
+make -j8
+sudo make install
+```
+
+See also http://trac.osgeo.org/gdal/wiki/ECW
+
+We configure gdal to build with its own internal copy of libtiff otherwise we 
+encounter problems with assertion errors if the system tiff lib is not compatible.
+(see http://trac.osgeo.org/gdal/ticket/3139 for more details).
+
+== Gdal MrSid Support ==
+
+To add mr sid support, you need the MrSid geosdk and then to reconfigure and build gdal like this:
+
+```
+./configure --with-libtiff=internal \
+            --with-geotiff=internal \
+            --with-ecw=/usr/local \
+            --with-python \
+            --with-mrsid=/usr/local/Geo_DSDK-7.0.0.2167/ \
+            --without-jp2mrs
+```
+
+== Hdf4 and Hdf5 support ==
+
+```
+sudo apt-get install libhdf5-serial-dev libhdf5-serial-1.6.6-0 libhdf4g-dev libhdf4g libhdf4g-doc
+```
+
+
+```
+cd <gdal src>
+make clean
+./configure --with-ecw=/usr/local
+make -j8
+sudo make install
+```
+
 == Set up the web mapping dir ==
 
 **TODO:** Update these notes to use git rather.
@@ -149,16 +249,22 @@ Add these map file paths to your /etc/apache2/sites-enabled/default file:
 ```
 NameVirtualHost *
 <VirtualHost *>
-  ServerAdmin webmaster@localhost
+  ServerAdmin tim@linfiniti.com 
+  ServerName 196.35.94.243
   DocumentRoot /var/www/
   #set to anything to ensure only explicitly named mapfiles are used
   SetEnv MS_MAP_NO_PATH "foo"
   #set the ZA_VECTOR e.g. http://localhost/cgi-bin/mapserv?map=ZA_VECTOR&mode=...
   SetEnv ZA_VECTOR "/opt/webmapping/mapfiles/za_vector.map"
   SetEnv ZA_VECTOR_TEST "/opt/webmapping/mapfiles/za_vector_test.map"
-  SetEnv ZA_VECTOR_ECW "/opt/webmapping/mapfiles/za_vector_spot2008_2_5m_ecw.map"
-  SetEnv ZA_VECTOR_SPOT10M "/opt/webmapping/mapfiles/za_vector_spot2008_10m.map"
-  SetEnv ZA_SPOT "/opt/webmapping/mapfiles/spot.map"
+  SetEnv ZA_SPOT2007 "/opt/webmapping/mapfiles/za_vector_spot2007_2_5m_ecw.map"
+  SetEnv ZA_SPOT2008 "/opt/webmapping/mapfiles/za_vector_spot2008_2_5m_ecw.map"
+  SetEnv ZA_SPOT2009 "/opt/webmapping/mapfiles/za_vector_spot2009_2_5m_ecw.map"
+  SetEnv ZA_SPOT2010 "/opt/webmapping/mapfiles/za_vector_spot2010_2_5m_tif.map"
+  SetEnv ZA_SPOT10m2007 "/opt/webmapping/mapfiles/za_vector_spot2007_10m_ecw.map"
+  SetEnv ZA_SPOT10m2008 "/opt/webmapping/mapfiles/za_vector_spot2008_10m_ecw.map"
+  SetEnv ZA_SPOT10m2009 "/opt/webmapping/mapfiles/za_vector_spot2009_10m_ecw.map"
+  SetEnv L7_MOSAIC "/opt/webmapping/mapfiles/landsat7-global-mosaic.map"
   SetEnv ZA_NBI "/opt/webmapping/mapfiles/za_nbi.map"
   SetEnv WORLD "/opt/webmapping/mapfiles/world.map"
   SetEnv SEARCHES "/opt/webmapping/mapfiles/searches.map"
@@ -170,6 +276,26 @@ NameVirtualHost *
     Order allow,deny
     allow from all
   </Directory>
+
+  Alias /ss1 /mnt/cataloguestorage/sumbandilasat/SS1
+  <Directory /mnt/cataloguestorage/sumbandilasat/SS1>
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride None
+    Order allow,deny
+    allow from all
+  </Directory>
+
+  Alias /shade /mnt/cataloguestorage/data/world/aster_dem/final
+  <Directory /mnt/cataloguestorage/data/world/aster_dem/final>
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride None
+    Order allow,deny
+    allow from all
+  </Directory>
+
+  # Options for fastcgi support:
+  # FastCgiConfig -appConnTimeout 60 -idle-timeout 60 -init-start-delay 1 -minProcesses 2 -maxClassProcesses 20 -startDelay 5
+
   ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
   <Directory "/usr/lib/cgi-bin">
     #Next two lines added by Tim for PyWPS
@@ -187,8 +313,8 @@ NameVirtualHost *
   #Alias and dir below added for pywps
   Alias /wps_outputs/ "/tmp/wps_outputs"
   <Directory "/tmp/wps_outputs/">
-    Options Indexes MultiViews FollowSymLinks
-    AllowOverride None
+      Options Indexes MultiViews FollowSymLinks
+      AllowOverride None
   </Directory>
 
   <Location "/sarmes2">
@@ -207,11 +333,57 @@ NameVirtualHost *
 
   CustomLog /var/log/apache2/access.log combined
   ServerSignature On
+
   # For webmapping
   Alias /tmp/ "/tmp/ms_tmp/"
+  # For munin server monitoring
+  Alias /munin/ "/var/www/munin/"
+
+
+  # Reverse proxy to the ordering service on dims
+  ProxyRequests Off
+
+  <Proxy *>
+  Order deny,allow
+  Allow from all
+  </Proxy>
+
+  ProxyPass /os4eo http://196.35.94.248:8080/hma/ordering
+  ProxyPassReverse /os4eo http://196.35.94.248:8080/hma/ordering
+
+
+
 </VirtualHost>
 
+
 ```
+
+
+== Proxying Ordering Service Requests ==
+
+The ordering service on jackal is not a publicly accessible server so we
+proxy access to it via lion.
+
+```
+sudo apt-get install libapache2-mod-proxy-html
+sudo a2enmod proxy_http proxy_html headers
+```
+
+Now add proxy config to 000-default
+
+```
+  # Reverse proxy to the ordering service on dims
+  ProxyRequests Off
+
+  <Proxy *>
+  Order deny,allow
+  Allow from all
+  </Proxy>
+
+  ProxyPass /os4eo http://196.35.94.248:8080/hma/ordering
+  ProxyPassReverse /os4eo http://196.35.94.248:8080/hma/ordering
+```
+
 
 == Fibrecat storage arrays config ==
 
