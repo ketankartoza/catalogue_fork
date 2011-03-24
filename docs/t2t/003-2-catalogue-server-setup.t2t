@@ -449,4 +449,104 @@ timlinux@lion:~$ dmesg | grep scsi
 
 
 
+== File System Layout on the catalogue server ==
 
+The following are the key areas of the file system you should be aware of:
+
+=== Opt ===
+
+```
+/opt
++-- sac_catalogue
+|   +-- python
+|   +-- sac_live
+|   +-- sac_test
++-- webmapping
+    +-- config
+    +-- data -> /mnt/cataloguestorage/data/
+    +-- fonts
+    +-- mapfiles
+    +-- scripts
+    +-- symbols
+    +-- templates
+```
+
+=== /usr/local ===
+
+This is the recommended place in which user compile applications should be
+installed to. Our installations of gdal, mapserver etc have been placed in this
+part of the filesystem when installed.
+
+=== /mnt/cataloguestorage ===
+
+This is the first of two ~13TB storage arrays connected to the server. In this 
+storage system, all of the thumbnailas, online remote sensing dataset, backups
+and data that is being processed are stored.
+
+```
+/mnt/cataloguestorage
++-- backups
+|   +-- 2010
+|   +-- 2011
++-- data
+|   +-- africa
+|   +-- thumbs
+|   +-- world
+|   +-- za
++-- imagery_master_copy
+|   +-- C2B
+|   +-- S-C
+|   +-- ZA2
++-- imagery_processing
+|   +-- cbers
+|   +-- sacc
+|   +-- sumbandilasat
++-- mapproxy
+|   +-- etc
+|   +-- tmp
+|   +-- var
++-- thumbnail_processing
+|   +-- georeferenced_segments_out
+|   +-- georeferenced_thumbs_out
+|   +-- segments_out
+|   +-- thumb_blobs
+|   +-- to_erase
++-- thumbnails_master_copy
+|   +-- C2B
+|   +-- cache
+|   +-- E1
+|   +-- E2
+|   +-- L2
+|   +-- L3
+|   +-- L4
+|   +-- L5
+|   +-- L7
+|   +-- N11
+|   +-- N12
+|   +-- N14
+|   +-- N15
+|   +-- N16
+|   +-- N17
+|   +-- N9
+|   +-- S1
+|   +-- S2
+|   +-- S4
+|   +-- S5
+|   +-- SACC
+|   +-- S-C
+|   +-- ZA2
++-- tilecache
+    +-- README
+    +-- spot5mosaic10m2007
+    +-- spot5mosaic10m2007_4326
+    +-- spot5mosaic10m2008
+    +-- spot5mosaic10m2008_4326
+    +-- spot5mosaic10m2009
+    +-- spot5mosaic10m2098_4326
+    +-- spot5mosaic2m2007
+    +-- spot5mosaic2m2008
+    +-- spot5mosaic2m2009
+    +-- za_vector
+
+
+```
