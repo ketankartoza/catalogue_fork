@@ -8,9 +8,6 @@ scenes_out_projected/
 settings.py
 thumbs_out/
 *.*~
-<<<<<<< HEAD
-media/avatars/
-=======
 catalogue.log
 media/avatars/
 *.swp
@@ -21,7 +18,6 @@ index.out
 index.tex
 index.toc
 doc-src
->>>>>>> e84ad87465a603710f0c6ade20ee083295fc7f29
 
 
 # ABP:
