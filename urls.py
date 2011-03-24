@@ -82,6 +82,7 @@ urlpatterns = patterns('',
     (r'^removefromcart/(?P<theId>[0-9]+)/$', removeFromCart),
     # cart contents for embedding into other pages
     (r'^cartasshapefile/$', cartAsShapefile),
+    (r'^downloadcart/$', downloadCart),
     (r'^showcartcontents/$', showCartContents),
     (r'^showminicartcontents/$', showMiniCartContents),
     #

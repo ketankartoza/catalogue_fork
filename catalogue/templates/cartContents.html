@@ -22,6 +22,10 @@
   {% else %}
   {% if myRecords %}
   <div id="cart-download-div" style="text-align: center;">
+    <img src="/media/images/down_16.png" alt=""/> Download cart as
+    <a class="geom_download_link" href="/downloadcart/?shp">SHP</a>
+    <a class="geom_download_link" href="/downloadcart/?kml">KML</a>
+    <a class="geom_download_link" href="/downloadcart/?kmz">KMZ</a>
     <a href="/cartasshapefile/"><img src="/media/images/down_16.png" alt=""/> Download cart as shapefile.</a>
   </div>
   {% endif %}
@@ -30,6 +34,10 @@
 {# script for showing deliveryDetails#}
 <script>
 $(document).ready(function(){
+
+{% if myRecords %}
+$('.geom_download_link').button();
+{% endif %}
 
 {% if myShowDeliveryDetailsFlag %}
 var show_delivery=$('a.show_delivery');
