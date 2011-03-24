@@ -46,6 +46,12 @@ def downloadCart(theRequest):
     raise Http404
 
 @login_required
+def downloadCartMetadata(theRequest):
+  """Returns ISO 19115 metadata for ordered products"""
+  myRecords = SearchRecord.objects.all().filter(user=theRequest.user).filter(order__isnull=True)
+  return downloadISOmetadata(myRecords,'Cart-%s' % theRequest.user.username)
+
+@login_required
 def addToCart(theRequest, theId):
   logging.info("addToCart : id " + theId)
 

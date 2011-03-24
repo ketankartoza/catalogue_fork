@@ -83,6 +83,7 @@ urlpatterns = patterns('',
     # cart contents for embedding into other pages
     (r'^cartasshapefile/$', cartAsShapefile),
     (r'^downloadcart/$', downloadCart),
+    (r'^downloadcartmetadata/$', downloadCartMetadata),
     (r'^showcartcontents/$', showCartContents),
     (r'^showminicartcontents/$', showMiniCartContents),
     #
