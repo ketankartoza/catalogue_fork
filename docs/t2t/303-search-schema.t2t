@@ -87,11 +87,11 @@ takes care of:
 The JS code responsible for this is in the view template catalogue/templates/ProductIdSearch.html
 and updates the select options hiding/showing the available values
 
-** Note ** in order to avoid a narrow/one-way only search, all options must be
+**Note:** in order to avoid a narrow/one-way only search, all options must be
   nullable, this means that also sensors multiple select was changed to be not
   mandatory.
 
-** Note ** catalogue.views.searcher.Searcher.describeQuery accepts an optional
+**Note:** catalogue.views.searcher.Searcher.describeQuery accepts an optional
   parameter (unset_only=False) that if activated, returns only values for
   parameter that are not set in current Search, this allows for a pivot-like
   way of obtaining the values: "tell me all the possible values for
