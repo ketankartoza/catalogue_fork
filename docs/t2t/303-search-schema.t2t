@@ -1,0 +1,21 @@
+
+
+% Leave the above two lines blank!
+
+= Search Schema =
+
+This section covers the logic and schema related to search. The search process
+begins when the user clicks 'Search' on the main application toolbar. They have
+the option then of performing a simple search or an advanced search. Regardless
+of which search type they use, the outcome is the same - the catalogue
+application internally creates a collection of unserialised **SearchRecord**
+objects. These objects are simple mappings between a search and the products
+that match the criteria of that search.
+
+The matching search records are shown to the user as a paginated table of
+entries, each entry corresponding to one product. If a user chooses to add that
+product to their basket, the SearchRecord is then serialised (saved
+persistently in the database). By definition, the basket can be defined as
+//"all serialised **SearchRecords** for a given user which have **no** Order
+associated with them"//. In the ordering section we describe the order process
+in more detail.

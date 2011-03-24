@@ -1,0 +1,395 @@
+# Django helpers for forming html pages
+from django.core.context_processors import csrf
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render_to_response, get_object_or_404
+from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseServerError
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.template import RequestContext
+from django.db.models import Count, Min, Max #for aggregate queries
+
+# python logging support to django logging middleware
+import logging
+
+# Models and forms for our app
+from catalogue.models import *
+from catalogue.forms import *
+from django.forms.models import inlineformset_factory
+
+from catalogue.renderDecorator import renderWithContext
+
+# Helper classes
+# For shopping cart and ajax product id search
+from django.utils import simplejson
+#Dane Springmeyer's django-shapes app for exporting results as a shpfile
+from shapes.views import ShpResponder
+
+from catalogue.views.helpers import *
+from catalogue.views.searcher import *
+
+# SHP and KML readers
+from catalogue.featureReaders import *
+
+
+@staff_member_required
+def dataSummaryTable(theRequest):
+  """
+  Summary of available records
+  ABP: TODO: better use a template here
+  """
+  if not theRequest.user.is_staff:
+    '''Non staff users cannot see this'''
+    return
+
+  import ipy; ipy.shell()
+  #myResultSet = GenericProduct.objects.values("mission_sensor").annotate(Count("id")).order_by().aggregate(Min('product_acquisition_start'),Max('product_acquisition_end'))
+  #ABP: changed to GenericSensorProduct
+  #ABP: changed to MissionSensor
+  myResultSet = MissionSensor.objects.annotate(id__count=Count('sensortype__acquisitionmode__genericsensorproduct'))
+    #[{'mission_sensor': 6, 'id__count': 288307}, {'mission_sensor': 9, 'id__count': 289028}, {'mission_sensor': 3, 'id__count': 120943}, {'mission_sensor': 7, 'id__count': 222429}, {'mission_sensor': 5, 'id__count': 16624}, {'mission_sensor': 1, 'id__count': 3162}, {'mission_sensor': 2, 'id__count': 20896}, {'mission_sensor': 4, 'id__count': 17143}, {'mission_sensor': 8, 'id__count': 186269}]
+
+  myResults = "<table><thead>"
+  myResults += "</thead>"
+  myResults += "<tbody>"
+  myResults += "<tr><th>Sensor</th><th>Count</th></tr>"
+  myCount = 0
+  for myRecord in myResultSet:
+    myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( myRecord, myRecord.id__count)
+    myCount += myRecord.id__count
+  myResults += "</tbody>"
+  myResults += "<tr><th>All</th><th>%s</th></tr>" % ( myCount )
+  myResults += "</table>"
+  return HttpResponse(myResults)
+
+
+DateRangeInlineFormSet = inlineformset_factory(Search, SearchDateRange, extra=0, max_num=0, formset=DateRangeFormSet)
+
+@login_required
+#theRequest context decorator not used here since we have different return paths
+def search(theRequest):
+  """
+  Perform an attribute and spatial search for imagery
+  """
+
+  myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
+  logging.debug(("Post vars:" + str(theRequest.POST)))
+  logging.info( 'search called')
+  if theRequest.method == 'POST':
+    myForm = AdvancedSearchForm(theRequest.POST, theRequest.FILES)
+    if myForm.is_valid():
+      mySearch = myForm.save(commit=False)
+      # ABP: save_as_new is necessary due to the fact that a new Search object is always
+      # created even on Search modify pages
+      myFormset = DateRangeInlineFormSet(theRequest.POST, theRequest.FILES, instance=mySearch, save_as_new=True)
+      if myFormset.is_valid():
+        logging.info('formset is VALID')
+        myLatLong = {'longitude':0,'latitude':0}
+        if settings.USE_GEOIP:
+          try:
+            myGeoIpUtils = GeoIpUtils()
+            myIp = myGeoIpUtils.getMyIp(theRequest)
+            myLatLong = myGeoIpUtils.getMyLatLong(theRequest)
+          except:
+            #raise forms.ValidationError( "Could not get geoip for this request" + traceback.format_exc() )
+            # do nothing - better in a production environment
+            pass
+        if myLatLong:
+          mySearch.ip_position = "SRID=4326;POINT(" + str(myLatLong['longitude']) + " " + str(myLatLong['latitude']) + ")"
+        mySearch.user = theRequest.user
+        mySearch.deleted = False
+        try:
+          myGeometry = getGeometryFromUploadedFile( theRequest, myForm, 'geometry_file' )
+          if myGeometry:
+            mySearch.geometry = myGeometry
+          else:
+            logging.info("Failed to set search area from uploaded geometry file")
+        except:
+          logging.info("An error occurred trying to set search area from uploaded geometry file")
+        #check if aoi_geometry exists
+        myAOIGeometry = myForm.cleaned_data.get('aoi_geometry')
+        if myAOIGeometry:
+          logging.info("Using AOI geometry, specified by user")
+          mySearch.geometry = myAOIGeometry
+        # else use the on-the-fly digitised geometry
+        mySearch.save()
+        """Another side effect of using commit=False is seen when your model has
+        a many-to-many relation with another model. If your model has a
+        many-to-many relation and you specify commit=False  when you save a form,
+        Django cannot immediately save the form data for the many-to-many
+        relation. This is because it isn't possible to save many-to-many data for
+        an instance until the instance exists in the database.
+
+        To work around this problem, every time you save a form using
+        commit=False, Django adds a save_m2m() method to your ModelForm subclass.
+        After you've manually saved the instance produced by the form, you can
+        invoke save_m2m() to save the many-to-many form data.
+
+        ref: http://docs.djangoproject.com/en/dev/topics/forms/modelforms/#the-save-method
+        """
+        myForm.save_m2m()
+        logging.debug("Search: " + str( mySearch ))
+        logging.info('form is VALID after editing')
+        myFormset.save()
+        #test of registered user messaging system
+        theRequest.user.message_set.create(message="Your search was carried out successfully.")
+        return HttpResponseRedirect('/searchresult/' + mySearch.guid)
+      else:
+        logging.info('formset is INVALID')
+        logging.debug('%s' % myFormset.errors)
+    else:
+      myFormset = DateRangeInlineFormSet(theRequest.POST, theRequest.FILES, save_as_new=True)
+
+    logging.info('form is INVALID after editing')
+    logging.debug('%s' % myForm.errors)
+    logging.debug('%s' % myFormset.errors)
+    #render_to_response is done by the renderWithContext decorator
+    return render_to_response ( 'search.html' ,{
+      'myAdvancedFlag' : theRequest.POST['isAdvanced'] == 'true',
+      'mySearchType' :  theRequest.POST['search_type'],
+      'myForm': myForm,
+      'myHost' : settings.HOST,
+      'myFormset' : myFormset,
+      'myLegendFlag' : True, #used to show the legend in the accordion
+      'myLayerDefinitions' : myLayerDefinitions,
+      'myLayersList' : myLayersList,
+      'myActiveBaseMap' : myActiveBaseMap
+      }, context_instance=RequestContext(theRequest))
+
+  else:
+    logging.info('initial search form being rendered')
+    myForm = AdvancedSearchForm()
+    myFormset = DateRangeInlineFormSet(theRequest.POST, theRequest.FILES)
+    #render_to_response is done by the renderWithContext decorator
+    return render_to_response ( 'search.html' ,{
+      'myAdvancedFlag' : False,
+      'mySearchType' :  None,
+      'myLegendFlag' : True, #used to show the legend in the accordion
+      'myForm': myForm,
+      'myFormset' : myFormset,
+      'myHost' : settings.HOST,
+      'myLayerDefinitions' : myLayerDefinitions,
+      'myLayersList' : myLayersList,
+      'myActiveBaseMap' : myActiveBaseMap
+      }, context_instance=RequestContext(theRequest))
+
+
+@login_required
+def getSensorDictionaries(theRequest):
+  """
+  Given a set of search sensor-releated criteria, returns
+  valid options for the selects.
+  """
+  values = {}
+  if theRequest.is_ajax():
+    # ABP: Returns a json object with the dictionary possible values
+    qs = AcquisitionMode.objects.order_by()
+    values['mission'] = list(qs.distinct().values_list('sensor_type__mission_sensor__mission', flat = True))
+    if theRequest.POST.get('mission'):
+      try:
+        qs = qs.filter(sensor_type__mission_sensor__mission=Mission.objects.get(pk=theRequest.POST.get('mission')))
+      except ObjectDoesNotExist:
+        raise Http500('Mission does not exists')
+    # m2m
+    values['sensors'] = list(qs.distinct().values_list('sensor_type__mission_sensor', flat = True))
+    if theRequest.POST.get('sensors'):
+      try:
+        qs = qs.filter(sensor_type__mission_sensor__in=MissionSensor.objects.filter(pk__in=theRequest.POST.getlist('sensors')))
+      except ObjectDoesNotExist:
+        raise Http500('SensorType does not exists')
+    values['sensor_type'] = list(qs.distinct().values_list('sensor_type', flat = True))
+    if theRequest.POST.get('sensor_type'):
+      try:
+        qs = qs.filter(sensor_type=SensorType.objects.get(pk=theRequest.POST.get('sensor_type')))
+      except ObjectDoesNotExist:
+        raise Http500('SensorType does not exists')
+    values['acquisition_mode'] = list(qs.distinct().values_list('pk', flat = True))
+    if  theRequest.POST.get('acquisition_mode'):
+      qs = qs.filter(pk=theRequest.POST.get('acquisition_mode'))
+    return HttpResponse(simplejson.dumps(values), mimetype='application/json')
+  raise Http500('This view must be called by XHR')
+
+
+
+@login_required
+def modifySearch(theRequest, theGuid):
+  """
+  Given a search guid, give the user a form prepopulated with
+  that search's criteria so they can modify their search easily.
+  A new search will be created from the modified one.
+  """
+  myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
+  logging.info('initial search form being rendered')
+  mySearch = get_object_or_404( Search, guid=theGuid )
+  myForm = AdvancedSearchForm( instance=mySearch )
+  #import ipy; ipy.shell()
+  myFormset = DateRangeInlineFormSet(instance=mySearch)
+  return render_to_response ( 'search.html' ,{
+    'myAdvancedFlag' :  mySearch.isAdvanced,
+    'mySearchType' :  mySearch.search_type,
+    'myFormset' : myFormset,
+    'myForm': myForm,
+    'myGuid' : theGuid,
+    'myHost' : settings.HOST,
+    'myLayerDefinitions' : myLayerDefinitions,
+    'myLayersList' : myLayersList,
+    'myActiveBaseMap' : myActiveBaseMap,
+    }, context_instance=RequestContext(theRequest))
+
+
+
+@login_required
+#theRequest context decorator not used here since we have different return paths
+def productIdSearch(theRequest, theGuid):
+  """
+  Display the product id builder, based on initial existing Search values,
+  the following interaction is ajax based.
+  This kind of search is only available when search_type is PRODUCT_SEARCH_OPTICAL
+  """
+  myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
+  mySearch = get_object_or_404( Search, guid=theGuid)
+
+  if mySearch.search_type != Search.PRODUCT_SEARCH_OPTICAL:
+    raise Http500('productIdSearch is only available for products of type PRODUCT_SEARCH_OPTICAL')
+
+  logging.info('productIdSearch initializing values from existing search %s' % theGuid)
+  mySearcher = Searcher(theRequest, theGuid)
+  mySearcher.search()
+  myTemplateData = mySearcher.templateData()
+
+  if theRequest.method == 'POST':
+    myForm = ProductIdSearchForm(theRequest.POST, theRequest.FILES, instance=mySearch)
+    if myForm.is_valid():
+      logging.info('productIdSearch form is VALID after editing')
+      logging.info('productIdSearch cleaned_data: %s' % myForm.cleaned_data)
+      myForm.save()
+      # Save new date ranges
+      if myForm.cleaned_data.get('date_range'):
+        mySearch.searchdaterange_set.all().delete()
+        mySearch.searchdaterange_set.add(SearchDateRange(**myForm.cleaned_data.get('date_range')))
+      # Save new sensors
+      #import ipy; ipy.shell()
+      if myForm.cleaned_data.get('sensors'):
+        for sensor in myForm.cleaned_data.get('sensors'):
+          mySearch.sensors.add(sensor)
+      if theRequest.is_ajax():
+        # ABP: Returns a json object with query description.
+        # We need to instanciate the Searcher since search logic
+        # is not in the Search class :(
+        mySearcher = Searcher(theRequest,theGuid)
+        return HttpResponse(simplejson.dumps(mySearcher.describeQuery()), mimetype='application/json')
+      else:
+        #test of registered user messaging system
+        theRequest.user.message_set.create(message="Your search was modified successfully.")
+        return HttpResponseRedirect('/searchresult/' + mySearch.guid)
+
+    else:
+      logging.info('form is INVALID after editing')
+      if theRequest.is_ajax():
+        # Sends a 500
+        return HttpResponseServerError(simplejson.dumps(myForm.errors), mimetype='application/json')
+      return render_to_response ( 'productIdSearch.html' ,{
+        'mySearch' : mySearch,
+        'myForm': myForm,
+        'theGuid' : theGuid,
+      }, context_instance=RequestContext(theRequest))
+  else:
+    myForm = ProductIdSearchForm(instance=mySearch)
+    logging.info('initial search form being rendered')
+    myTemplateData['mySearch'] = mySearch
+    myTemplateData['myForm'] = myForm
+    myTemplateData['theGuid'] = theGuid
+    myTemplateData['filterValues'] = simplejson.dumps(mySearcher.describeQuery()['values'])
+    return render_to_response ( 'productIdSearch.html' , myTemplateData, context_instance=RequestContext(theRequest))
+
+
+@login_required
+#theRequest context decorator not used here since we have different return paths
+def _productIdSearch(theRequest, theGuid):
+  """
+  Display the product id builder, based on initial existing Search values,
+  the following interaction is ajax based.
+  This kind of search is only available when search_type is PRODUCT_SEARCH_OPTICAL
+  """
+  myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
+  mySearch = get_object_or_404( Search, guid=theGuid)
+
+  if mySearch.search_type != Search.PRODUCT_SEARCH_OPTICAL:
+    raise Http500('productIdSearch is only available for products of type PRODUCT_SEARCH_OPTICAL')
+
+  logging.info('productIdSearch initializing values from existing search %s' % theGuid)
+  mySearcher = Searcher(theRequest, theGuid)
+  mySearcher.search()
+  myTemplateData = mySearcher.templateData()
+
+  if theRequest.method == 'POST':
+    myForm = ProductIdSearchForm(theRequest.POST, theRequest.FILES, instance=mySearch)
+    if myForm.is_valid():
+      logging.info('productIdSearch form is VALID after editing')
+      logging.info('productIdSearch cleaned_data: %s' % myForm.cleaned_data)
+      # Bind data
+      for f in [f.name for f in mySearch._meta.fields]:
+        if myForm.cleaned_data.has_key(f):
+          setattr(mySearch, f, myForm.cleaned_data.get(f))
+        mySearch.save()
+      # Save m2m,
+      # ABP: sensors is not required anymore for pivot to work
+      # ... should be required, but check anyway
+      mySearch.sensors.clear()
+      if myForm.cleaned_data.get('sensors'):
+        for s in myForm.cleaned_data.get('sensors'):
+          mySearch.sensors.add(s)
+      if theRequest.is_ajax():
+        # ABP: Returns a json object with query description.
+        # We need to instanciate the Searcher since search logic
+        # is not in the Search class :(
+        # mySearcher = Searcher(theRequest,theGuid)
+        return HttpResponse(simplejson.dumps(mySearcher.describeQuery()), mimetype='application/json')
+      else:
+        myForm.save()
+    else:
+      logging.info('form is INVALID after editing')
+      if theRequest.is_ajax():
+        # Sends a 500
+        return HttpResponseServerError(simplejson.dumps(myForm.errors), mimetype='application/json')
+      return render_to_response ( 'productIdSearch.html' ,{
+        'myForm': myForm,
+        'theGuid' : theGuid,
+      }, context_instance=RequestContext(theRequest))
+
+  myForm = ProductIdSearchForm(instance=mySearch)
+  logging.info('initial search form being rendered')
+  myTemplateData['myForm'] = myForm
+  myTemplateData['theGuid'] = theGuid
+  myTemplateData['filterValues'] = simplejson.dumps(mySearcher.describeQuery()['values'])
+  return render_to_response ( 'productIdSearch.html' , myTemplateData, context_instance=RequestContext(theRequest))
+
+
+@login_required
+#renderWithContext is explained in renderWith.py
+@renderWithContext('map.html')
+def searchResultMap(theRequest, theGuid):
+  """Renders a search results page including the map
+  and all attendant html content"""
+  mySearcher = Searcher(theRequest,theGuid)
+  mySearcher.search()
+  return(mySearcher.templateData())
+
+@login_required
+#renderWithContext is explained in renderWith.py
+@renderWithContext('page.html')
+def searchResultPage(theRequest, theGuid):
+  """Does the same as searchResultMap but renders only
+  enough html to be inserted into a div"""
+  mySearcher = Searcher(theRequest,theGuid)
+  mySearcher.search()
+  return(mySearcher.templateData())
+
+@login_required
+def searchResultShapeFile(theRequest, theGuid):
+  """Return the search results as a shapefile"""
+  mySearcher = Searcher(theRequest,theGuid)
+  mySearcher.search( False ) # dont paginate
+  myResponder = ShpResponder( SearchRecord )
+  myResponder.file_name = theGuid + "-imagebounds"
+  return myResponder.write_search_records( mySearcher.mSearchRecords )

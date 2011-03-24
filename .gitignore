@@ -8,10 +8,29 @@ scenes_out_projected/
 settings.py
 thumbs_out/
 *.*~
+<<<<<<< HEAD
 media/avatars/
+=======
+catalogue.log
+media/avatars/
+*.swp
+catalogue.log
+index.aux
+index.log
+index.out
+index.tex
+index.toc
+doc-src
+>>>>>>> e84ad87465a603710f0c6ade20ee083295fc7f29
 
 
-# ABP
+# ABP:
 settings_local.py
 ipy.py
-
+*.sqlite
+#settings_test.py
+catalogue/tests/dims_packages
+init_*.sql
+nbproject/
+imagery_mastercopies/
+.directory

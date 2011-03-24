@@ -1,19 +1,20 @@
 {# included in search.html or pulled in by ajax #}
 {# we are using blueprint css too layout the form #}
-  <div class="span-20 prepend-1 append-1 prepend-top last">
+
+  <div class="span-20  append-1 prepend-top last">
     <h3><img src="/media/images/search_16.png" alt="" />&nbsp;Search Criteria (you can optionally digitise a search area above)</h3>
   </div>
   <script type="text/javascript">
    $( function () {
-       {% if myAdvancedFlag %}
+       {#% if myAdvancedFlag %#}
        {# restyle the file choose using jquery stylefile plugin #}
        $("input[type=file]").filestyle({ image: "/media/images/choose-file.gif", imageheight : 22, imagewidth : 160, width : 0 });
-       {% endif %}
+       {#% endif %#}
 
       {% for myField in myForm %}
         {% ifnotequal myField.html_name "geometry" %}
         $("#{{myField.html_name}}Help").dialog({
-        autoOpen: false,  
+        autoOpen: false,
         bgiframe: true,
         modal: true,
         buttons: {
@@ -22,236 +23,582 @@
             }
           }
         });
-        $('#{{myField.html_name}}Button').click(function() {  
-          $('#{{myField.html_name}}Help').dialog('open');  
-        });  
+        $('#{{myField.html_name}}Button').click(function(){
+          $('#{{myField.html_name}}Help').dialog('open');
+        });
         {% endifnotequal %}
       {% endfor %}
+      $('#dr_add').live('click', function() {
+        var sd = $("#id_start_datepicker").val();
+        var ed = $("#id_end_datepicker").val();
+        var iso_sd = sd.split('-').reverse().join('-');
+        var iso_ed = ed.split('-').reverse().join('-');
+        if(sd && ed) {
+          if (iso_sd <= iso_ed) {
+            var in_list;
+            in_list = false;
+            $('.dr_text').each(function(){
+              if($(this).text() == sd + ' : ' + ed){
+                in_list = true;
+              };
+            });
+            // TODO: find overlapping ranges
+            if(in_list){
+              alert('The date range is already in the list.')
+            } else {
+              $('#dr_container').append(cloneMore('searchdaterange_set', sd, ed, iso_sd, iso_ed));
+            };
+          } else {
+            alert('Please check the date range.');
+          }
+        } else {
+          alert('Please select both start and end dates.');
+        }
+        return false;
+      });
+      $('#dr_del').live('click', function(){
+        $('.dr_row.selected').each(function(){
+          // Has the cb for deletion ?
+          if($(this).find('input[type=checkbox]').length) {
+            $(this).find('input[type=checkbox]').attr('checked', 'checked');
+            $(this).hide('slow');
+          } else {
+            $(this).hide('slow', function(){
+              $(this).remove();
+            });
+          }
+        });
+      });
+      $('.dr_row').live('click', function(){
+        $(this).toggleClass('selected');
+      });
+      // Initial fill of dr_text
+      $('.dr_row .dr_input input[type=text]:nth-child(2)').each(function(){
+        $(this).closest('.dr_row').find('.dr_text').html($(this).val() + ' - ' + $(this).siblings('input[type=text]').val());
+      });
     });
-  </script>
+
+    $(function(){
+        // for toggling advanced search on / off
+        $('#advancedSearch').click(function(event){
+          //console.log('clicked - val: ' + $('#id_isAdvanced').val());
+          // if AS is active
+          if($('#id_isAdvanced').val() == 'true') {
+            // Hide all AS fields
+            $('.adv_fld').hide('fast', function(){
+              // Hide fieldset
+              $('fieldset.adv_search_ui input:visible, fieldset.adv_search_ui select:visible').closest('fieldset').hide();
+              $('#advancedSearch').val('Toggle Advanced Search');
+              $('#id_isAdvanced').val('false');
+            });
+          } else {
+            advSearchActivate($('#id_search_type').val());
+            $('#advancedSearch').val('Toggle Simple Search');
+            $('#id_isAdvanced').val('true');
+          };
+        });
+        {% if myAdvancedFlag %}{# activate advanced search tab #}
+        advSearchActivate({{ mySearchType }});
+        {% endif %}
+        $('#id_search_type').change(function(e){
+            advSearchActivate(e.currentTarget.value);
+        });
+        $('#id_sensor_inclination_angle_start').change(check_sensor_inclination_angles);
+        $('#id_sensor_inclination_angle_end').change(check_sensor_inclination_angles);
+    });
+
+    /*
+    * @param num : search_type enum value
+    */
+    function advSearchActivate(search_type){
+        if(typeof search_type == 'undefined') {
+            search_type = 0;
+        }
+        //console.log('advSearchActivate:' + search_type);
+        $('.adv_search_ui .adv_search_all').show('slow').closest('fieldset').show('slow');
+        $('.adv_search_ui .adv_search_' + search_type).show('slow').closest('fieldset').show('slow');
+        $('.adv_search_ui .adv_fld').not('.adv_search_all, .adv_search_' + search_type).hide();
+        $('fieldset.adv_search_ui').each(function(){
+          if(!$(this).find('.adv_fld:visible').length){
+            $(this).hide();
+          };
+        });
+        // redundant
+        //$('#id_isAdvanced').val('true');
+    };
+
+    function cloneMore(type, sd, ed, iso_sd, iso_ed){
+        var tpl = '<div class="dr_row">';
+        tpl    += '<div class="dr_input"><label>Start date</label><input type="text" id="id_searchdaterange_set-$num-start_date" name="searchdaterange_set-$num-start_date"> : <input type="text" id="id_searchdaterange_set-$num-end_date" name="searchdaterange_set-$num-end_date"></div>';
+        tpl    += '<div class="dr_text" title="Click to select."></div>';
+        tpl    += '</div>';
+
+        var newElement = $(tpl);
+        var total = $('#id_' + type + '-TOTAL_FORMS').val();
+        var oldTotal = 0;
+        var toReplace = '-$num-';
+        var replaceWith = '-' + total + '-';
+        newElement.find(':input').each(function() {
+            var name = $(this).attr('name').replace(toReplace, replaceWith);
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        });
+        newElement.find('label').each(function() {
+            var newFor = $(this).attr('for').replace(toReplace,replaceWith);
+            $(this).attr('for', newFor);
+        });
+        total++;
+        $('#id_' + type + '-TOTAL_FORMS').val(total);
+        $('#id_' + type + '-INITIAL_FORMS').val(total);
+        var dates = newElement.find('input');
+        $(dates[0]).val(iso_sd);
+        $(dates[1]).val(iso_ed);
+        newElement.find('.dr_text').html(sd + ' : ' + ed);
+        return newElement;
+    }
+    </script>
 
   {% if myForm %}
     <form enctype="multipart/form-data" action="/search/" method="post" id="search_form" class="inline">
-      <div class="span-6 prepend-2 append-bottom">{#column 1, first row----------------------- #}
-        <div class="span-6 last">
-          <img id="{{myForm.start_date.html_name}}Button" 
-               src="/media/images/info_16.png"
-               style="cursor: pointer;"
-               alt="Click for help"
-               />
-          {{ myForm.start_date.label }}
-        </div>
-        <div class="span-6 last">
-          {{ myForm.start_date }}
-        </div>
-        {% if myForm.start_date.errors %}
-        <div class="span-6 last">
-          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-          <strong>Alert:</strong> {{ myForm.start_date.errors }} </p>
-        </div>
-        {% endif %}
-      </div> {# end of column 1 #}
-      <div class="span-6 append-bottom">{#column 2 ------------------------------------------ #}
-        <div class="span-6 last">
-          <img id="{{myForm.end_date.html_name}}Button" 
-               src="/media/images/info_16.png"
-               style="cursor: pointer;"
-               alt="Click for help"
-               />
-          {{ myForm.end_date.label }}
-        </div>
-        <div class="span-6 last">
-          {{ myForm.end_date }}
-        </div>
-        {% if myForm.end_date.errors %}
-        <div class="span-6 last">
-          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-          <strong>Alert:</strong> {{ myForm.end_date.errors }} </p>
-        </div>
-        {% endif %}
-      </div> {# end of column 2 #}
-      <div class="span-6 append-bottom last">{# column 3 ----------------------------------------- #}
-        <div class="span-6 last">
-          <img id="{{myForm.sensors.html_name}}Button" 
-               src="/media/images/info_16.png"
-               style="cursor: pointer;"
-               alt="Click for help"
-               />
-          {{ myForm.sensors.label }}
-        </div>
-        <div class="span-6 last">
-          {{ myForm.sensors }}
-        </div>
-        {% if myForm.sensors.errors %}
-        <div class="span-6 last">
-          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-          <strong>Alert:</strong> {{ myForm.sensors.errors }} </p>
-        </div>
-        {% endif %}
-      </div> {# end of column 3 #}
-      <div class="span-6 prepend-2 append-bottom">{# bottom row col 1---------------------------------- #}
-        <div class="span-6 last">
-          <img id="{{myForm.aoi_geometry.html_name}}Button"
-               src="/media/images/info_16.png"
-               style="cursor: pointer;"
-               alt="Click for help"
-               />
-          {{ myForm.aoi_geometry.label }}
-          {{ myForm.aoi_geometry }}
-        </div>
-        {% if myForm.aoi_geometry.errors %}
-        <div class="span-6 last">
-          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-          <strong>Alert:</strong> {{ myForm.aoi_geometry.errors }} </p>
-        </div>
-        {% endif %}
+      {{ myForm.non_field_errors }}
+      {{ myForm.isAdvanced }}
+      <div class="button-bar">
+        <ul>
+          <li><input type="button" value="{% if myAdvancedFlag %}Toggle Simple Search{% else %}Toggle Advanced Search{% endif %}" id="advancedSearch"/></li>
+          <li><input type="button" value="Map Help" id="map-help-button"/></li>
+          <li><input type="submit" value="Search" class="default" name="_search" /></li>
+        </ul>
+      </div>
+      {{ myForm.geometry }}
 
+      <fieldset class="adv_search_ui">
+        <legend>Product type details:</legend>
+        <div class="span-10 adv_search_all adv_fld">
+          <div class="span-5">
+            {{ myForm.search_type.label_tag }}
+          </div>
+          <div class="span-5 last">
+            {{ myForm.search_type }}
+          </div>
+        </div>
 
-        <div class="span-6 last">
-          <img id="{{myForm.use_cloud_cover.html_name}}Button" 
-               src="/media/images/info_16.png"
-               style="cursor: pointer;"
-               alt="Click for help"
-               />
-          {{ myForm.use_cloud_cover.label }}
-          {{ myForm.use_cloud_cover }}
+        <div class="span-10 adv_search_all adv_fld">
+          <div class="span-5">
+            <img id="{{myForm.license.html_name}}Button"
+                  src="/media/images/info_16.png"
+                  style="cursor: pointer;"
+                  alt="Click for help"
+                  />
+              {{ myForm.license_type.label_tag }}
+          </div>
+          <div class="span-5 last">
+              {{ myForm.license_type }}
+          </div>
+          {% if myForm.license.errors %}
+          <div class="span-5 last">
+            <p><span class="ui-icon ui-icon-alert"></span>
+            <strong>Alert:</strong> {{ myForm.license.errors }} </p>
+          </div>
+          {% endif %}
         </div>
-        {% if myForm.use_cloud_cover.errors %}
-        <div class="span-6 last">
-          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-          <strong>Alert:</strong> {{ myForm.use_cloud_cover.errors }} </p>
-        </div>
-        {% endif %}
-        <div class="span-6 last">
-          <img id="{{myForm.cloud_mean.html_name}}Button" 
-               src="/media/images/info_16.png"
-               style="cursor: pointer;"
-               alt="Click for help"
-               />
-          {{ myForm.cloud_mean.label }}
-        </div>
-        <div class="span-6 last">
-          {{ myForm.cloud_mean }}
-        </div>
-        {% if myForm.cloud_mean.errors %}
-        <div class="span-6 last">
-          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-          <strong>Alert:</strong> {{ myForm.cloud_mean.errors }} </p>
-        </div>
-        {% endif %}
-      </div> {# end of column 1 #}
-      <div class="span-6 append-bottom">{# bottom row col 2---------------------------------- #}
+      </fieldset>
 
+      <fieldset class="adv_search_ui">
+        <legend>Sensor details:</legend>
 
-        {% if myAdvancedFlag %}
-
-        <div class="span-6 last">
-          <img id="{{myForm.k_orbit_path_min.html_name}}Button" 
-               src="/media/images/info_16.png"
-               style="cursor: pointer;"
-               alt="Click for help"
-               />
-          {{ myForm.k_orbit_path_min.label }}
-          {{ myForm.k_orbit_path_min }}
+        <div class="span-10 adv_search_1 adv_search_2 adv_fld">
+          <div class="span-5">
+            <img id="{{myForm.mission.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.mission.label_tag }}
+          </div>
+          <div class="span-5 last filter">
+            {{ myForm.mission }}
+          </div>
+          {% if myForm.mission.errors %}
+          <div class="span-5">
+            <p><span class="ui-icon ui-icon-alert"></span>
+            <strong>Alert:</strong> {{ myForm.mission.errors }} </p>
+          </div>
+          {% endif %}
         </div>
-        {% if myForm.k_orbit_path_min.errors %}
-        <div class="span-6 last">
-          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-          <strong>Alert:</strong> {{ myForm.k_orbit_path_min.errors }} </p>
-        </div>
-        {% endif %}
 
-
-        <div class="span-6 last">
-          <img id="{{myForm.j_frame_row_min.html_name}}Button" 
-               src="/media/images/info_16.png"
-               style="cursor: pointer;"
-               alt="Click for help"
-               />
-          {{ myForm.j_frame_row_min.label }}
-          {{ myForm.j_frame_row_min }}
+        <div class="span-10 adv_search_1 adv_search_2 adv_fld">
+          <div class="span-5 required">
+            <img id="{{myForm.sensors.html_name}}Button"
+                  src="/media/images/info_16.png"
+                  style="cursor: pointer;"
+                  alt="Click for help"
+                  />
+            {{ myForm.sensors.label_tag }}
+          </div>
+          <div class="span-5 last filter">
+            {{ myForm.sensors }}
+          </div>
+          {% if myForm.sensors.errors %}
+          <div class="span-5 last">
+            <p>
+              <span class="ui-icon ui-icon-alert"></span>
+              <strong>Alert:</strong> {{ myForm.sensors.errors }}
+            </p>
+          </div>
+          {% endif %}
         </div>
-        {% if myForm.j_frame_row_min.errors %}
-        <div class="span-6 last">
-          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-          <strong>Alert:</strong> {{ myForm.j_frame_row_min.errors }} </p>
-        </div>
-        {% endif %}
 
-        <div class="span-6 last">
-          <img id="{{myForm.k_orbit_path_max.html_name}}Button" 
-               src="/media/images/info_16.png"
-               style="cursor: pointer;"
-               alt="Click for help"
-               />
-          {{ myForm.k_orbit_path_max.label }}
-          {{ myForm.k_orbit_path_max }}
+        <div class="span-10 adv_search_1 adv_search_2 adv_fld">
+          <div class="span-5">
+          <img id="{{myForm.sensor_type.html_name}}Button"
+              src="/media/images/info_16.png"
+              style="cursor: pointer;"
+              alt="Click for help"
+              />
+            {{ myForm.sensor_type.label_tag }}
+          </div>
+          <div class="span-5 last filter">
+            {{ myForm.sensor_type }}
+          </div>
+          {% if myForm.sensor_type.errors %}
+          <div class="span-5">
+            <p><span class="ui-icon ui-icon-alert"></span>
+            <strong>Alert:</strong> {{ myForm.sensor_type.errors }} </p>
+          </div>
+          {% endif %}
         </div>
-        {% if myForm.k_orbit_path_max.errors %}
-        <div class="span-6 last">
-          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-          <strong>Alert:</strong> {{ myForm.k_orbit_path_max.errors }} </p>
+
+        <div class="span-10 adv_search_1 adv_search_2 adv_fld">
+          <div class="span-5">
+          <img id="{{myForm.acquisition_mode.html_name}}Button"
+              src="/media/images/info_16.png"
+              style="cursor: pointer;"
+              alt="Click for help"
+              />
+            {{ myForm.acquisition_mode.label_tag }}
+          </div>
+          <div class="span-5 last filter">
+            {{ myForm.acquisition_mode }}
+          </div>
+          {% if myForm.acquisition_mode.errors %}
+          <div class="span-5 last">
+            <p><span class="ui-icon ui-icon-alert"></span>
+            <strong>Alert:</strong> {{ myForm.acquisition_mode.errors }} </p>
+          </div>
+          {% endif %}
         </div>
-        {% endif %}
 
+      </fieldset>
 
-        <div class="span-6 last">
-          <img id="{{myForm.j_frame_row_max.html_name}}Button" 
-               src="/media/images/info_16.png"
-               style="cursor: pointer;"
-               alt="Click for help"
-               />
-          {{ myForm.j_frame_row_max.label }}
-          {{ myForm.j_frame_row_max }}
+      <fieldset class="adv_search_ui">
+        <legend>Image details:</legend>
+        <div class="span-10 adv_search_1 adv_fld">
+          <div class="span-5">
+            <img id="{{myForm.use_cloud_cover.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.use_cloud_cover.label_tag }}
+            {{ myForm.use_cloud_cover }}
+          </div>
+          {% if myForm.use_cloud_cover.errors %}
+          <div class="span-5">
+            <p><span class="ui-icon ui-icon-alert"></span>
+            <strong>Alert:</strong> {{ myForm.use_cloud_cover.errors }} </p>
+          </div>
+          {% endif %}
         </div>
-        {% if myForm.j_frame_row_max.errors %}
-        <div class="span-6 last">
-          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-          <strong>Alert:</strong> {{ myForm.j_frame_row_max.errors }} </p>
+        <div class="span-10 adv_search_1 adv_fld">
+          <div class="span-5">
+            <img id="{{myForm.cloud_mean.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.cloud_mean.label_tag}}
+          </div>
+          <div class="span-5 last">
+            {{ myForm.cloud_mean }}
+          </div>
+          {% if myForm.cloud_mean.errors %}
+          <div class="span-5 last">
+            <p><span class="ui-icon ui-icon-alert"></span>
+            <strong>Alert:</strong> {{ myForm.cloud_mean.errors }} </p>
+          </div>
+          {% endif %}
         </div>
-        {% endif %}
-
-        {% endif %}{# end of advanced flag #}
-
-      </div> {# end of column 2 #}
-      <div class="span-6 append-bottom last">{# bottom row col 3---------------------------------- #}
-        {% if myAdvancedFlag %}
-
-        <div class="span-6 last">
-          <img id="{{myForm.geometry_file.html_name}}Button" 
-               src="/media/images/info_16.png"
-               style="cursor: pointer;"
-               alt="Click for help"
-               />
-          {{ myForm.geometry_file.label }}
-          {{ myForm.geometry_file }}
+        <div class="span-10 adv_search_1 adv_fld">
+            <div class="span-5">
+            <img id="{{myForm.sensor_inclination_angle_start.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.sensor_inclination_angle_start.label_tag}}
+            </div>
+            <div class="span-5 last">
+            {{ myForm.sensor_inclination_angle_start }}
+            </div>
+            {% if myForm.sensor_inclination_angle_start.errors %}
+            <div class="span-5 last">
+                <p><span class="ui-icon ui-icon-alert"></span>
+                <strong>Alert:</strong> {{ myForm.sensor_inclination_angle_start.errors }} </p>
+            </div>
+            {% endif %}
         </div>
-        {% if myForm.geometry_file.errors %}
-        <div class="span-6 last">
-          <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
-          <strong>Alert:</strong> {{ myForm.geometry_file.errors }} </p>
+        <div class="span-10 adv_search_1 adv_fld">
+            <div class="span-5">
+            <img id="{{myForm.sensor_inclination_angle_end.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.sensor_inclination_angle_end.label_tag}}
+            </div>
+            <div class="span-5 last">
+            {{ myForm.sensor_inclination_angle_end }}
+            </div>
+            {% if myForm.sensor_inclination_angle_end.errors %}
+            <div class="span-5 last">
+                <p><span class="ui-icon ui-icon-alert"></span>
+                <strong>Alert:</strong> {{ myForm.sensor_inclination_angle_end.errors }} </p>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
+        <!-- second row in image details -->
+        <div class="span-10 adv_search_all adv_fld">
+            <div class="span-5 required">
+            <img id="{{myForm.geometric_accuracy_mean.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.geometric_accuracy_mean.label_tag}}
+            </div>
+            <div class="span-5 last">
+              {{ myForm.geometric_accuracy_mean }}
+            </div>
+            {% if myForm.geometric_accuracy_mean.errors %}
+            <div class="span-5 last">
+                <p><span class="ui-icon ui-icon-alert"></span>
+                <strong>Alert:</strong> {{ myForm.geometric_accuracy_mean.errors }} </p>
+            </div>
+            {% endif %}
+        </div>
+        <div class="span-10 adv_search_all adv_fld">
+            <div class="span-5">
+            <img id="{{myForm.band_count.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.band_count.label_tag}}
+            </div>
+            <div class="span-5 last">
+            {{ myForm.band_count }}
+            </div>
+            {% if myForm.band_count.errors %}
+            <div class="span-5 last">
+                <p><span class="ui-icon ui-icon-alert"></span>
+                <strong>Alert:</strong> {{ myForm.band_count.errors }} </p>
+            </div>
+            {% endif %}
+        </div>
+      </fieldset>
 
-        <input type="button" value="Toggle Simple Search" id="simpleSearch"/>  
-        <input type="hidden" name="advanced" value="true"/>
-        {% else %}
-        <input type="button" value="Toggle Advanced Search" id="advancedSearch"/>  
-        {% endif %}
-        <input type="submit" value="Search" class="default" name="_search" />
-        <input type="button" value="Map Help" id="map-help-button"/>  
-        {{ myForm.geometry }}
-      </div> {# end of column 3 bottom row #}
+      <fieldset class="adv_search_ui">
+        <legend>Row &amp; path:</legend>
+        <div class="span-10 adv_search_1 adv_search_2 adv_fld">
+            <div class="span-5">
+            <img id="{{myForm.k_orbit_path.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.k_orbit_path.label_tag}}
+            </div>
+            <div class="span-5 last">
+            {{ myForm.k_orbit_path }}
+            </div>
+            {% if myForm.k_orbit_path.errors %}
+            <div class="span-5 last">
+                <p><span class="ui-icon ui-icon-alert"></span>
+                <strong>Alert:</strong> {{ myForm.k_orbit_path.errors }} </p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="span-10 last adv_search_all adv_fld">
+            <div class="span-5">
+            <img id="{{myForm.processing_level.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.processing_level.label_tag}}
+            </div>
+            <div class="span-5 last">
+            {{ myForm.processing_level }}
+            </div>
+            {% if myForm.processing_level.errors %}
+            <div class="span-5 last">
+                <p><span class="ui-icon ui-icon-alert"></span>
+                <strong>Alert:</strong> {{ myForm.processing_level.errors }} </p>
+            </div>
+            {% endif %}
+        </div>
+        <div class="span-10 adv_search_1 adv_search_2 adv_fld">
+            <div class="span-5">
+            <img id="{{myForm.j_frame_row.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.j_frame_row.label_tag}}
+            </div>
+            <div class="span-5 last">
+            {{ myForm.j_frame_row }}
+            </div>
+            {% if myForm.j_frame_row.errors %}
+            <div class="span-5 last">
+                <p><span class="ui-icon ui-icon-alert"></span>
+                <strong>Alert:</strong> {{ myForm.j_frame_row.errors }} </p>
+            </div>
+            {% endif %}
+        </div>
+
+      </fieldset>
+
+      <fieldset class="adv_search_ui">
+        <legend>Geometry:</legend>
+        <div class="span-10 adv_search_all adv_fld ">
+          <div class="span-5">
+            <img id="{{myForm.aoi_geometry.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.aoi_geometry.label_tag}}
+          </div>
+          <div class="span-5 last">
+            {{ myForm.aoi_geometry }}
+          </div>
+          {% if myForm.aoi_geometry.errors %}
+          <div class="span-5 last">
+            <p><span class="ui-icon ui-icon-alert"></span>
+            <strong>Alert:</strong> {{ myForm.aoi_geometry.errors }} </p>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="span-10 adv_search_all adv_fld ">
+          <div class="span-5">
+              <img id="{{myForm.geometry_file.html_name}}Button"
+                  src="/media/images/info_16.png"
+                  style="cursor: pointer;"
+                  alt="Click for help"
+                  />
+              {{ myForm.geometry_file.label_tag}}
+          </div>
+          <div class="span-5 last">
+              {{ myForm.geometry_file }}
+          </div>
+          {% if myForm.geometry_file.errors %}
+          <div class="span-5 last">
+              <p><span class="ui-icon ui-icon-alert"></span>
+              <strong>Alert:</strong> {{ myForm.geometry_file.errors }} </p>
+          </div>
+          {% endif %}
+          <div class="clr"></div>
+        </div>
+      </fieldset>
+
+      <fieldset class="prepend-1 simple_search" >
+        <legend>Dates:</legend>
+        <div class="span-6 append-bottom">
+            <div class="span-5">
+            <img id="{{myForm.start_datepicker.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.start_datepicker.label_tag}}
+            </div>
+            <div class="span-5">
+            {{ myForm.start_datepicker }}
+            </div>
+            {% if myForm.start_datepicker.errors %}
+            <div class="span-5">
+            <p><span class="ui-icon ui-icon-alert"></span>
+            <strong>Alert:</strong> {{ myForm.start_datepicker.errors }} </p>
+            </div>
+            {% endif %}
+        </div>
+        <div class="span-6 append-bottom">
+            <div class="span-5">
+            <img id="{{myForm.end_datepicker.html_name}}Button"
+                src="/media/images/info_16.png"
+                style="cursor: pointer;"
+                alt="Click for help"
+                />
+            {{ myForm.end_datepicker.label_tag}}
+            </div>
+            <div class="span-5">
+            {{ myForm.end_datepicker }}
+            </div>
+            {% if myForm.end_datepicker.errors %}
+            <div class="span-5">
+            <p><span class="ui-icon ui-icon-alert"></span>
+            <strong>Alert:</strong> {{ myForm.end_datepicker.errors }} </p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="span-1 append-bottom">
+          <div class="span-1 last">
+            <div style="margin-top:80px"><a id="dr_add" title="Select the dates in the calendar and click here to add to the list." href="javascript:void(0)"><img src="/media/images/selector-add.gif" /></a></div>
+            <div><a id="dr_del" title="Select the ranges in the list and click here to remove." href="javascript:void(0)"><img src="/media/images/selector-remove.gif" /></a></div>
+          </div>
+        </div>
+
+        <div class="span-5 append-bottom last">
+          <div class="span-5 required">
+            <label for="id_searchdaterange_set">Date range</label>
+          </div>
+          <div class="span-5">
+            {{ myFormset.management_form }}
+            <div id="dr_container" class="ui-corner-all" >
+            {% for form in myFormset.forms %}
+                <div class='dr_row'>
+                  <div class="dr_input">{{ form }}</div>
+                  <div class="dr_text" title="Click to select."></div>
+                </div>
+            {% endfor %}
+            </div>
+          </div>
+          {% if myFormset.non_form_errors %}
+          <div class="span-5">
+          <p><span class="ui-icon ui-icon-alert"></span>
+          <strong>Alert:</strong> {{ myFormset.non_form_errors }} </p>
+          </div>
+          {% endif %}
+        </div>
+      </fieldset>
+
+      <div class="button-bar">
+        <div class="required" style="float:left"><label>&nbsp;</label> = required field.</div>
+        <ul>
+          <li><input type="submit" value="Search" class="default" name="_search" /></li>
+        </ul>
+      </div>
     </form>
-
-
-
 
 
     {% for myField in myForm %}
       {# popup help for this field #}
       {% ifnotequal myField.html_name "geometry" %}
-      <div id="{{myField.html_name}}Help" title="{{ myField.label }}">
+      <div id="{{myField.html_name}}Help" title="{{ myField.label}}">
         <p>
           <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
           {{ myField.help_text }}

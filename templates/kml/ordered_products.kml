@@ -1,0 +1,14 @@
+{% extends "kml/base.kml" %}
+{% block records %}
+{% for item in order.searchrecord_set.all %}
+<Placemark>
+    <name>Geometry for product {{ item.product.product_id }} </name>
+    {% if transparentStyle %}
+    <styleUrl>#transparentPolyStyle</styleUrl>
+    {% endif %}
+    <description>http://{{ external_site_url }}/showProduct/{{ item.product.product_id }}/</description>
+    
+    {{ item.product.spatial_coverage.kml|safe }}
+    </Placemark>
+{% endfor %}
+{% endblock %}

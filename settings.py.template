@@ -7,12 +7,15 @@ from catalogue.middleware.stripwhitespace import StripWhitespaceMiddleware
 
 ROOT_PROJECT_FOLDER = os.path.dirname(__file__)
 MEDIA_ROOT = os.path.join(ROOT_PROJECT_FOLDER,'media')
+# external site URL, used in KML data generation and elsewhere
+# No terminating slash
+EXTERNAL_SITE_URL = 'http://catalogue.sac.co.za'
 # Added by Tim - url that holds directories of thumbnails...
 THUMBS_ROOT = os.path.join(ROOT_PROJECT_FOLDER,'thumbs_out')
 # And this is the dir that holds imagery
 IMAGERY_ROOT = os.path.join(ROOT_PROJECT_FOLDER,'imagery_mastercopies')
 # And this is the public visible url that imagery should be accessed from (include trailing /)
-IMAGERY_URL_ROOT = "http://catalogue.sac.co.za/imagery/"
+IMAGERY_URL_ROOT = EXTERNAL_SITE_URL + "/imagery/"
 
 GEOS_LIBRARY_PATH='/usr/lib/libgeos_c.so.1'
 GEOIP_LIBRARY_PATH='/usr/lib/libGeoIP.so.1'
@@ -212,3 +215,4 @@ LOGIN_URL = '/accounts/login/'
 I18N_URLS = False
 DEFAULT_AVATAR = os.path.join(MEDIA_ROOT, 'generic.jpg')
 AVATAR_WEBSEARCH = False
+

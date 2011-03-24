@@ -1,42 +1,61 @@
 from django.contrib.gis import admin
 from models import *
-
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
+from django import forms
 
 #
 # Search and visitors admin
 #
 class SearchAdmin(admin.GeoModelAdmin):
-  field = (None, {'fields': ('keywords')})
-  field = (None, {'fields': ('geometry')})
-  field = (None, {'fields': ('ip_position')})
-  field = (None, {'fields': ('start_date')})
-  field = (None, {'fields': ('end_date')})
-  list_display = ('search_date', 'user', 'guid','start_date','end_date' )
+  list_display = ('search_date', 'user', 'guid','search_date')
   list_filter = ('search_date', 'user', )
 
 class VisitAdmin(admin.GeoModelAdmin):
-  field = (None, {'fields': ('city')})
-  field = (None, {'fields': ('country')})
-  field = (None, {'fields': ('ip_address')})
-  field = (None, {'fields': ('ip_position')})
-
+  pass
 
 class SacUserProfileAdmin (admin.GeoModelAdmin):
   list_display = ('user','strategic_partner' )
   list_filter = ('user','strategic_partner' )
-  field = (None, {'fields': ('strategic_partner')})
 
 class OrderStatusAdmin(admin.GeoModelAdmin):
-  field = (None, {'fields': ('name')})
+  pass
+
+
+class OrderNotificationRecipientsAdminForm(forms.ModelForm):
+  class Meta:
+    model = OrderNotificationRecipients
+
+  def clean(self):
+    """
+    Validates that at least one of the m2m has values
+    """
+    if not self.cleaned_data["classes"] and not self.cleaned_data["sensors"]:
+      raise ValidationError(u'Classes and sensors cannot be simultaneously blank')
+    return self.cleaned_data
+
 
 class OrderNotificationRecipientsAdmin(admin.GeoModelAdmin):
   list_display = ('user', )
+  form = OrderNotificationRecipientsAdminForm
 
   # This next method will filter the users list in the admin form
   # so that only staff members can be chosen from the users list
   def render_change_form(self, request, context, *args, **kwargs):
     context['adminform'].form.fields['user'].queryset = User.objects.filter(is_staff=True)
     return super(OrderNotificationRecipientsAdmin, self).render_change_form(request, context, args, kwargs)
+
+  def formfield_for_manytomany(self, db_field, request, **kwargs):
+    """
+    Filters abstract product classes
+    """
+    if db_field.name == "classes":
+      form_field = super(OrderNotificationRecipientsAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+      form_field.choices = [c for c in form_field.choices if getattr(ContentType.objects.get(pk=c[0]).model_class(), 'concrete', False)]
+      return form_field
+    return super(OrderNotificationRecipientsAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+
+
 
 #################################################
 # Admin models for new generic product model
@@ -60,8 +79,10 @@ class CreatingSoftwareAdmin( admin.GeoModelAdmin ):
   pass
 class GenericProductAdmin( admin.GeoModelAdmin ):
   pass
+class GeospatialProductAdmin( admin.GeoModelAdmin ):
+  pass
 class OpticalProductAdmin( admin.GeoModelAdmin ):
-  list_filter = ('mission', 'mission_sensor', 'sensor_type', 'processing_level', 'product_acquisition_start' )
+  list_filter = ('acquisition_mode',)
 class ResamplingMethodAdmin( admin.GeoModelAdmin ):
   pass
 class FileFormatAdmin( admin.GeoModelAdmin ):
@@ -94,6 +115,7 @@ admin.site.register(Quality, QualityAdmin)
 admin.site.register(CreatingSoftware, CreatingSoftwareAdmin)
 admin.site.register(GenericProduct, GenericProductAdmin)
 admin.site.register(OpticalProduct, OpticalProductAdmin)
+admin.site.register(GeospatialProduct, GeospatialProductAdmin)
 admin.site.register(OrderNotificationRecipients, OrderNotificationRecipientsAdmin)
 
 #################################################

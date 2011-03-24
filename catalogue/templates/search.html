@@ -7,11 +7,12 @@
   /* <![CDATA[ */
   {# use init rather than jquery document.ready() for ie support! #}
   function init() {
+
     if (OpenLayers.Util.getBrowserName() == "msie" && !window.ieLoaded) {
       window.ieLoaded = true;
       setTimeout(init, 2000);
       return;
-    }  
+    }
 
     // Extra layer definitions passed in by view
     {% if myLayerDefinitions %}
@@ -24,7 +25,7 @@
     layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Open Street Map");
     //myLayersList.unshift(layerMapnik); // add to start of array
     myLayersList.push(layerMapnik); // add to end of array
-                                                    
+
     {% if myLayersList %}
       setupSearchMap( myLayersList );
     {% endif %}
@@ -36,22 +37,92 @@
     {# //add tooltip div #}
     $("#map-navigation-panel div[title],#resizer_toolbox img[title]").tooltip('#maptooltip');
   }
-/* ]]> */
 
     function check_search_dates() {
-        var sd = $("#id_start_date-widget").datepicker("getDate");
-        var ed = $("#id_end_date-widget").datepicker("getDate");
+        var sd = $("#id_start_datepicker-widget").datepicker("getDate");
+        var ed = $("#id_end_datepicker-widget").datepicker("getDate");
         if (sd > ed) {
             alert ("The Start Date is later than the End Date.");
         };
     };
 
+    function check_sensor_inclination_angles() {
+        var sv = parseInt($("#id_sensor_inclination_angle_start").val());
+        var ev = parseInt($("#id_sensor_inclination_angle_end").val());
+        if (sv && ev && (sv > ev)) {
+            alert ("The sensor inclination angle start value is greater than the end.");
+        };
+    };
+
+    {% if myAdvancedFlag %}{# activate advanced search tab #}
+    $(function(){
+        advSearchActivate({{ mySearchType }});
+    });
+    {% endif %}
+
+    // ABP: new Ajax filtering
+    // Set select options for sensor related dictionaries
+    function set_form_options(options){
+      $('#search_form select option').show();
+      for (id in options) {
+        try {
+          //console.log('Checking ' + id);
+          //console.log(options[id]);
+          // To avoid hiding selected: " :not(:selected)"
+          // To avoid filtering when the select has a value: "!$(e).parent().val() && "
+          // To avoid filtering on multiple: "!$(e).parent().attr('multiple')"
+          // Current logic: hide the options if the select has no value(s)
+          $('#id_' + id + ' option').each(function(e,e){
+            if (e.value && $.inArray(parseInt(e.value), options[id]) == -1) {
+              $(e).hide();
+              $(e).attr('selected', false);
+              //console.log('hiding ' + id + ' val:' + e.value);
+            } else {
+              //console.log('no match ' + id + ' val:' + e.value);
+            }
+          });
+        } catch(e) {
+        };
+      };
+    };
+
+    /* Ajax call to get options for sensor dictionaries */
+    function get_dictionary_options(){
+      $("#working").slideDown('slow');
+      $.ajax({
+        type: "POST",
+        url: "/sensordictionaries/",
+        data: $('#search_form').serialize(),
+        success: function(data) {
+          // Just in case...
+          $('#search_form select').css({border: 'none'});
+          set_form_options(data);
+          $("#working").slideUp('slow');
+        },
+        error: function(data) {
+          // No errors expected :)
+          $("#working").slideUp('slow');
+        }
+      });
+    };
+
+    $(function(){
+      // Next line: uncomment to add a blank option to multiple selects
+      //$('#search_form select[multiple="multiple"]:first-child').prepend('<option value="">---------</option>');
+      $('#search_form .filter select').change(get_dictionary_options);
+      {% if myAdvancedFlag %}// Filter initial options
+      get_dictionary_options();
+      {% endif %}
+    });
+
+
+  /* ]]> */
   </script>
 
 {% endblock %}
-{% block body_load %}onload="init()";{% endblock %}
+{% block body_load %}onload="init()"{% endblock %}
 {% block content%}
-<div id="maptooltip">&nbsp;</div> 
+<div id="maptooltip">&nbsp;</div>
   {# layout done with blueprint.css we inherit 22 cols of space from base.html #}
   <div class="span-22 append-bottom last"> {# recommended to use blueprint divs only for layout ... #}
     <div id="map-container" class="span-22 ui-widget-content ui-state-highlight ui-corner-all last"> {# thus nested jquery widget container #}

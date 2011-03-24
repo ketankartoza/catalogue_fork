@@ -1,7 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-{# Note: this page uses the blueprint.css http://www.blueprintcss.org framework - read there to understand the span-? classes #}
-{% load boxtag %} {# Custom tag defined in templatetags/ #}
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:olv="urn:schemas-microsoft-com:vml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">{# Note: this page uses the blueprint.css http://www.blueprintcss.org framework - read there to understand the span-? classes #}{% load boxtag %} {# Custom tag defined in templatetags/ #}<html xmlns="http://www.w3.org/1999/xhtml" xmlns:olv="urn:schemas-microsoft-com:vml">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>{% block title %}SAC Catalogue{% endblock %}</title>
@@ -29,13 +27,14 @@
       <script type="text/javascript" src="https://www.google.com/jsapi"></script>
       {# <script type="text/javascript" src="/media/js/catalogue.js-uncompressed"></script> #}
       <script type="text/javascript" src="/media/js/catalogue.js"></script>
-      {# load map.Resizer widget #}
+      {# load map.Resizer and deliveryForm widget #}
       <script type="text/javascript" src="/media/js/widget.mapResizer.js"></script>
+      <script type="text/javascript" src="/media/js/widget.deliveryform.js"></script>
       {# used for freecss dropdown menu if running older ie #}
       <!--[if lte IE 7]>
       <script type="text/javascript" src="/media/js/jquery-plugins/jquery.helper.js"></script>
       <![endif]-->
-      
+
     {% endblock %}
     {% block extracss %}
       {# Be very careful about changing the order of these css includes as it can have unintended side effects #}
@@ -51,7 +50,7 @@
         /* Theme */
         @import "/media/css/dropdown/themes/default/default.linear.css";
       </style>
-      <link href="/media/css/blueprint/screen.css"  rel="stylesheet" type="text/css" media="screen, projection" /> 
+      <link href="/media/css/blueprint/screen.css"  rel="stylesheet" type="text/css" media="screen, projection" />
       <link href="/media/css/blueprint/print.css"  rel="stylesheet" type="text/css"  media="print" />
       <!--[if lt IE 8]><link rel="stylesheet" href="/media/css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
       {# keep this last as it overrides varios selectors in the above stylesheets #}
@@ -62,7 +61,7 @@
     {% block extraHeaders %}
     {% endblock %}
     <link rel="shortcut icon" href="/media/images/favicon.ico"/>
-    <link rel="icon" href="/media/images/favicon.ico"/> 
+    <link rel="icon" href="/media/images/animated_favicon.gif" type="image/gif" />
   </head>
   <body {% block body_load %}{% endblock %}>
     <div id="header" class=""><div id="logo"></div></div>
@@ -91,22 +90,22 @@
           <img src="/media/images/dst_logo_small.png" class="left" />This catalogue was funded by the <a
             href="http://www.dst.gov.za/">Department of Science and
             Technology.</a>
-          {% box_end %}  
+          {% box_end %}
         </div>
         <div id="user-box" class="span-6 append-1">
           {% box_start "" "" "" %}
-          {% if user.is_authenticated %}     
+          {% if user.is_authenticated %}
           {% load avatars %}
           {# left css class defined by blueprint css #}
           <img id="avatarimg" src="{% avatar 96 %}" class="left"/>
           You are logged in as {{user}}
           {% endif %}
-          {% box_end %}  
+          {% box_end %}
         </div>{# end of footer #}
-        <div id="legal" class="span-7 append-1 last"> 
+        <div id="legal" class="span-7 append-1 last">
           {% box_start "" "" "" %}
           Website &copy; 2008 CSIR, Satellite Applications Centre. &copy; 2010 SANSA, Earth Observation. All Rights Reserved. This catalogue was developed by <a href="http://linfiniti.com">Linfiniti Consulting CC.</a>
-          {% box_end %}  
+          {% box_end %}
         </div>
       </div>
     </div>{# end of container #}

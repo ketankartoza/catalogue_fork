@@ -70,20 +70,18 @@
     <tr>
       <td>{{myOrder.order_date}}</td>
       <td>{{myOrder.user}}</td>
-      <td>{{myOrder.processing_level}}</td>
-      <td>{{myOrder.resampling_method}}</td>
+      <td>{{myOrder.delivery_detail.processing_level}}</td>
+      <td>{{myOrder.delivery_detail.resampling_method}}</td>
     </tr>
     <tr>
-      <th>Projection</th>
+      <th colspan="2">Projection</th>
       <th>Datum</th>
-      <th>Output Format</th>
       <th>File Format</th>
     </tr>
     <tr>
-      <td>{{myOrder.projection}}</td>
-      <td>{{myOrder.datum}}</td>
-      <td>{{myOrder.outputformat}}</td>
-      <td>{{myOrder.file_format}}</td>
+      <td colspan="2">{{myOrder.delivery_detail.projection}}</td>
+      <td>{{myOrder.delivery_detail.datum}}</td>
+      <td>{{myOrder.delivery_detail.file_format}}</td>
     </tr>
     <tr>
       <th colspan="2">Full Name</th>
@@ -145,6 +143,14 @@
     </tr>
   </tbody>
 </table>
+    {% if user.is_staff %}
+    {% if myOrder.delivery_detail.geometry %}
+    Download clip geometry:
+    <a class="geom_download_link" href="/downloadclipgeometry/{{ myOrder.id }}/?shp">SHP</a>
+    <a class="geom_download_link" href="/downloadclipgeometry/{{ myOrder.id }}/?kml">KML</a>
+    <a class="geom_download_link" href="/downloadclipgeometry/{{ myOrder.id }}/?kmz">KMZ</a>
+    {% endif %}
+    {% endif %}
 {% box_end %}
 <br />
 <div id="items">
@@ -175,3 +181,9 @@ Order History
       </form>
   </div>
 {% endif %}
+
+<script>
+$(document).ready(function (){
+$('.geom_download_link').button();
+});
+</script>

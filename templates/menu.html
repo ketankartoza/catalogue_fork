@@ -1,7 +1,7 @@
 <ul id="menu" class="dropdown dropdown-linear">
 
   <li><a href="/"><img src="/media/images/home_16.png" alt=""/>&nbsp;Home</a></li>
-{% if user.is_authenticated %}     
+{% if user.is_authenticated %}
   <li><a href="/search/"><img src="/media/images/search_16.png" alt=""/>&nbsp;Search</a></li>
   <li>
     <a href="/showcartcontents" onclick='$("#content").load("/showcartcontents/"); return false;'>
@@ -34,7 +34,7 @@
         <a href="/mytaskingrequests" onclick='$("#content").load("/mytaskingrequests/","",zebraTables); return false;'>
           <img src="/media/images/tasking_16.png" alt=""/>&nbsp;My Tasking Requests</a>
       </li>
-      <li><a href="/whereami"><img src="/media/images/wherami_16.png">&nbsp;Where am I?</a></li>
+      <li><a href="/whereami"><img src="/media/images/wherami_16.png" />&nbsp;Where am I?</a></li>
     </ul>
   </li>
   {# Partners menu #}
@@ -47,7 +47,7 @@
   </li>
   {% endif %}
   {# staff menu #}
-  {% if user.is_staff %}     
+  {% if user.is_staff %}
   <li>
     <span class="dir"><img src="/media/images/users_16.png" alt="" />&nbsp;Staff</span>
     <ul>

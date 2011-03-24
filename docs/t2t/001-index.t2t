@@ -1,0 +1,74 @@
+SANSA Catalogue Documentation
+
+Tim Sutton, 2008
+
+%! target       : tex
+%! style        : style.css
+%! Options      : --toc --toc-level 1 --enum-title --css-sugar --css-inside
+%! preproc      : TUT_URL   https://qgis.org
+%! PostProc(html): '(?i)(<pre>)' '<div class="code">\1'
+%! PostProc(html): '(?i)(</pre>)' '\1</div>'
+% scartcl is from the koma script document class (apt-get install texlive-latex-recommended ttf-komatuna)
+%! PostProc(tex): '\\documentclass{article}' '\\documentclass{scrartcl}'
+%! PostProc(tex): '\\includegraphics' '\\includegraphics[width=100mm]'
+% use the color table and table packages so we can pimp the tables a little
+%! PostProc(tex): '\\usepackage{style.css}  % user defined' '\\usepackage{colortbl} \n\\usepackage [table]{xcolor}\n\\definecolor{tableShade}{HTML}{cecece} '
+% Make the header row of tables have a dark background. light text
+%! PostProc(tex): '\\hline \\textbf' '\\hline \\rowcolor[rgb]{0,0,0} \\color{white} \\textbf'
+%! PostProc(tex): '& \\textbf' '& \\color{white} \\textbf'
+% Make verbatim text a little smaller
+%! PostProc(tex): '\\begin{verbatim}' '{\\tiny\n\\begin{verbatim}'
+%! PostProc(tex): '\\end{verbatim}' '\\end{verbatim}\n}'
+
+% Give alternating table rows different colours and use a smaller font in tables (\tiny)
+%! PostProc(tex): '\\begin{tabular}' '\\rowcolors{2}{tableShade}{white} \n\\tiny\\begin{tabular}'
+%! encoding: iso-8859-1
+% These are comments and will not be generated in any output
+% -------------------
+
+%This document is in text2tags format. You can generate html, plain text and
+%moinmoin formatted documentation by running txt2tags on this document. See the
+%txt2tags home page for more details.  Please insert manual line breaks in this
+%document as it makes diffing for changes much easier. To do this in vim
+%automatically, select a section then issue (gq) command. Please dont
+%apply vim formatting to the whol document as it screws up some formatting
+%rather apply it selectively to paragraphs where needed.
+
+% To generate the text version of this document:
+% txt2tags -t txt -o index index.t2t
+% To generate the moinmoin version of this document
+% txt2tags -t moin -o index.moin  index.t2t
+% To generate the html version of this document
+% txt2tags -t html -o index.html index.t2t
+% To generate a LaTeX / pdf
+% txt2tags -t tex -o index.tex index.t2t; pdflatex index.tex
+
+% End of comments
+% -------------------
+
+% Prefix of 00 = introduction to the system & setup
+% Prefix of 10 = end user guide to the user interface
+% Prefix of 20 = staff user guide to the staff & admin interface
+% Prefix of 30 = details of django system design, models etc
+% Prefix of 40 = metadata
+% Prefix of 50 = user interface
+% Prefix of 60 = currently not used
+% Prefix of 70 = currently not used
+% Prefix of 80 = currently not used
+% Prefix of 90 = importing data & syncing
+
+
+%!include: 002-introduction.t2t
+%!include: 003-developer-guide.t2t
+%!include: 004-installation-guide.t2t
+%!include: 005-unit-tests.t2t
+%!include: 201-reporting-tools.t2t
+%!include: 301-product-schema.t2t
+%!include: 302-order-schema.t2t
+%!include: 303-search-schema.t2t
+%!include: 401-metadata-standard.t2t
+%!include: 502-searching-t2t
+%!include: 901-informix-acs-sync.t2t
+%!include: 902-importing-other-products.t2t
+%!include: 903-importing-dims-products.t2t
+

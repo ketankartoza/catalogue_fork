@@ -1,8 +1,14 @@
-from django import forms
-from django.forms import ModelForm
-from django.utils.translation import ugettext_lazy as _
 import logging
+import datetime
+import re
 
+from django import forms
+from django.forms.models import BaseInlineFormSet
+from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ValidationError
+from django.core.validators import EMPTY_VALUES
+
+from catalogue.fields import *
 from catalogue.models import *
 from catalogue.datetimewidget import *
 from catalogue.geometrywidget import *
@@ -10,8 +16,6 @@ from catalogue.sliderwidget import *
 # Used for reading shapefiles etc
 #from django.contrib.gis.gdal import DataSource
 from catalogue.aoigeometry import AOIGeometryField
-
-import datetime
 
 # Support dmy formats (see http://dantallis.blogspot.com/2008/11/date-validation-in-django.html )
 DATE_FORMATS = (
@@ -21,39 +25,147 @@ DATE_FORMATS = (
         '%d %B %Y', '%d %B, %Y',            # '25 October 2006', '25 October, 2006'
         )
 
-class SearchForm(forms.ModelForm):
+class DateRangeFormSet(BaseInlineFormSet):
+  """
+  Date range search formsets with validation
+
+  This class needs some override to handle the case of
+  missing (deleted) forms.
+
+  """
+  def clean(self):
+    """
+    Delete incomplete forms
+    TODO: simplify overlapping ranges (or raise exception), priority: low
+    """
+    if any(self.errors):
+        # Don't bother validating the formset unless each form is valid on its own
+        return
+    empty_forms = []
+    for i in range(0, len(self.forms)):
+      form = self.forms[i]
+      start_date = form.cleaned_data.get('start_date')
+      end_date = form.cleaned_data.get('end_date')
+      # Checks for empty forms
+      if not(start_date and end_date) or self._should_delete_form(form):
+        empty_forms.append(i)
+      elif start_date > end_date:
+        raise forms.ValidationError, "Start date must be before or equal to end date."
+    # Delete empty/deleted forms
+    empty_forms.reverse()
+    for i in empty_forms:
+      del(self.forms[i])
+    self.management_form.cleaned_data['TOTAL_FORMS']=len(self.forms)
+    if not len(self.forms):
+      raise forms.ValidationError, "At least one date range is required."
+    logging.debug('Date range forms:', self.forms)
+
+  def is_valid(self):
+      """
+      Returns True if form.errors is empty for every form in self.forms.
+      ABP: changed the range to len(self.forms)
+      """
+      if not self.is_bound:
+          return False
+      # We loop over every form.errors here rather than short circuiting on the
+      # first failure to make sure validation gets triggered for every form.
+      forms_valid = True
+      err = self.errors
+      for i in range(0, len(self.forms)):
+          form = self.forms[i]
+          if self.can_delete:
+              if self._should_delete_form(form):
+                  # This form is going to be deleted so any of its errors
+                  # should not cause the entire formset to be invalid.
+                  continue
+          if bool(self.errors[i]):
+              forms_valid = False
+      return forms_valid and not bool(self.non_form_errors())
+
+  #def _construct_forms(self):
+    #"""
+    #instantiate all the forms and put them in self.forms
+
+    #ABP: pass on key exception
+    #"""
+    ##import ipy; ipy.shell()
+    #self.forms = []
+    #for i in xrange(self.total_form_count()):
+      #try:
+        #self.forms.append(self._construct_form(i))
+      #except (KeyError, IndexError), e:
+        ##import ipy; ipy.shell()
+        ##raise
+        #pass
+
+  def full_clean(self):
+    """
+    Cleans all of self.data and populates self._errors.
+    ABP: changed the range to len(self.forms)
+    """
+    self._errors = []
+    if not self.is_bound: # Stop further processing.
+      return
+    for i in range(0, len(self.forms)):
+      form = self.forms[i]
+      self._errors.append(form.errors)
+    # Give self.clean() a chance to do cross-form validation.
+    try:
+      self.clean()
+    except ValidationError, e:
+      self._non_form_errors = self.error_class(e.messages)
+
+
+class AdvancedSearchForm(forms.ModelForm):
   """ Let the user perform searches on sensors, by date and/or geometry digitised on map. """
   #keywords = forms.CharField(widget=forms.TextInput(attrs={'cols':'32'}),required=False)
   # Note1: the help_text strings are duplicated from the model help text
   #        since I didnt find a simple way to reuse it if adding custom fields
   # Note2: Only custom fields are added here. Fields that need no tweaking are
   #        pulled by the form generator directly from the model
-  start_date = forms.DateField(widget=DateTimeWidget,required=True,input_formats=DATE_FORMATS,
-      error_messages={'required': '''Entering a start date for your search is required.'''},
+
+  POLARISING_MODE_CHOICES = { '': 'All'}
+  POLARISING_MODE_CHOICES.update(dict(RadarProduct.POLARISING_MODE_CHOICES))
+  # ABP: the common part: will be searched on GenericProducts class only
+  start_datepicker = forms.DateField(widget=DateTimeWidget,required=False, label="Start date", input_formats=DATE_FORMATS,
+      error_messages={'required': 'Entering a start date for your search is required.'},
       help_text='Start date is required. DD-MM-YYYY.')
-  end_date = forms.DateField(widget=DateTimeWidget,required=True,input_formats=DATE_FORMATS,
-      error_messages={'required': '''Entering an end date for your search is required.'''},
+  end_datepicker = forms.DateField(widget=DateTimeWidget,required=False, label="End date", input_formats=DATE_FORMATS,
+      error_messages={'required': 'Entering an end date for your search is required.'},
       help_text='End date is required. DD-MM-YYYY.'
       )
+  geometry = forms.CharField(widget=forms.HiddenInput(), required=False,
+      help_text='Digitising an area of interest is not required but is recommended. You can use the help tab in the map area for more information on how to use the map. Draw an area of interest on the map to refine the set of search results to a specific area.')
+
+  geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
+                                  required=False,
+                                  help_text = 'Upload a zipped shapefile or KML/KMZ file of less than 1MB. If the shapefile contains\
+                                              more than one polygon, only the first will be used. \
+                                              Complex polygons will increase search time.')
+
   cloud_mean = forms.CharField(widget=SliderWidget(),
-                                  required = False,
-                                  label="Maximum cloud cover",
+                                  required=False,
+                                  label="Cloud cover",
                                   help_text = 'Select the maximum cloud cover when searching for images. \
                                                Note that not all sensors support cloud cover filtering.\
                                               ')
+  isAdvanced = forms.CharField(widget=forms.HiddenInput(), required=False)
+  polarising_mode = forms.ChoiceField(choices=POLARISING_MODE_CHOICES, required=False)
   geometry = forms.CharField(widget=forms.HiddenInput(), required=False,
       help_text='Digitising an area of interest is not required but is recommended. You can use the help tab in the map area for more information on how to use the map. Draw an area of interest on the map to refine the set of search results to a specific area.')
-  aoi_geometry = AOIGeometryField(required = False)
+  aoi_geometry = AOIGeometryField(required=False)
 
+  k_orbit_path = IntegersCSVIntervalsField(required=False)
+  j_frame_row = IntegersCSVIntervalsField(required=False)
 
   class Meta:
     model = Search
-    exclude = ('ip_position','guid','keywords','geometry_file','user', 'k_orbit_path_min', 'j_frame_row_min', 'k_orbit_path_max', 'j_frame_row_max', 'deleted' )
+    exclude = ('ip_position' ,'guid' ,'keywords' ,'geometry_file' ,'user' ,'deleted' )
 
   # Simple way to assign css class to every field
   def __init__(self, *args, **kwargs):
 
-    super(SearchForm, self).__init__(*args, **kwargs)
+    super(AdvancedSearchForm, self).__init__(*args, **kwargs)
     for myField in self.fields:
       self.fields[myField].widget.attrs['class'] = 'ui-corner-all'
 
@@ -93,62 +205,185 @@ class SearchForm(forms.ModelForm):
   def clean(self):
     myCleanedData = self.cleaned_data
     logging.info('cleaned data: ' + str(myCleanedData))
-    try:
-      myStartDate = myCleanedData.get("start_date")
-      myEndDate = myCleanedData.get("end_date")
-      if myEndDate and (myEndDate < myStartDate):
-        raise forms.ValidationError("Error: Start date can not be after the end date!")
-      return self.cleaned_data
-    except:
-      raise forms.ValidationError("Error: Start date can not be after the end date! Both dates must be entered.")
 
-class AdvancedSearchForm( SearchForm ):
-  """ Adds to SearchForm the field to load polygon from a zipped shapefile. """
-  geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
-                                  required = False,
-                                  help_text = """Upload a zipped shapefile or KML/KMZ of less than 1MB. If the
-                                  shapefile contains more than one polygon, only the first will be
-                                  used. Complex polygons will increase search time.""")
+    # ABP: checks for advanced search only (not in cleaned_data because it does not belong to Search model)
+    if self.data.get('isAdvanced') == 'true':
+      if not myCleanedData.get('geometric_accuracy_mean'):
+        self._errors["geometric_accuracy_mean"] = self.error_class(["Error: Spatial resolution is required for advanced search!"])
+        raise forms.ValidationError('Error: One or more required values are missing!')
+      myStartSensorAngle = myCleanedData.get('sensor_inclination_angle_start')
+      myEndSensorAngle = myCleanedData.get('sensor_inclination_angle_end')
+      if (myStartSensorAngle and myEndSensorAngle) and (myEndSensorAngle < myStartSensorAngle):
+        self._errors["sensor_inclination_angle_start"] = self.error_class(["Check values."])
+        self._errors["sensor_inclination_angle_end"] = self.error_class(["Check values."])
+        raise forms.ValidationError("Error: Start sensor angle can not be greater than the end sensor angle!")
+
+      if int(myCleanedData.get('search_type')) in (Search.PRODUCT_SEARCH_OPTICAL, Search.PRODUCT_SEARCH_RADAR) and not myCleanedData.get('sensors'):
+        self._errors["sensors"] = self.error_class(["Please select one or more sensors."])
+        raise forms.ValidationError("Error: Sensors are mandatory for sensors-based products search!")
+
+    return self.cleaned_data
+
+
+class ProductIdSearchForm(forms.ModelForm):
+  """
+  Form for product id search refine
+  """
+  k_orbit_path = forms.ModelChoiceField((), required=False)
+  j_frame_row = forms.ModelChoiceField((), required=False)
+  date_range = NoValidationChoiceField((),required=False)
+  isAdvanced = forms.CharField(widget=forms.HiddenInput(), required=False, initial=True)
+
+  mission = AbbreviationModelChoiceField( None, empty_label="All" , required=False)
+  sensors = AbbreviationModelChoiceField(None, empty_label="All", required=False)
+  acquisition_mode = AbbreviationModelChoiceField(None, empty_label="All", required=False)
+  sensor_type = AbbreviationModelChoiceField(None, empty_label="All", required=False)
+  processing_level = AbbreviationModelChoiceField( None, empty_label="All" , required=False)
 
   class Meta:
     model = Search
-    exclude = ('ip_position','guid','keywords','user', 'deleted' )
+    fields = ('acquisition_mode', 'sensors', 'sensor_type', 'mission', 'acquisition_mode', 'sensor_type', 'k_orbit_path', 'j_frame_row', 'processing_level')
 
-class AbbreviationModelChoiceField( forms.ModelChoiceField ):
-  """Custom model choice field that shows abbreviated name rather than the default unicode representation
-  so that we can show compact combo boxes. The associated model must have a field called abbreviation."""
-  def label_from_instance(self, obj):
-    return obj.abbreviation
+  def __init__(self, *args, **kwargs):
+    """
+    Populate lists and set UI CSS class
+    """
+
+    # This form cannot create new objects, only edit existing instances
+    assert 'instance' in kwargs
+
+    super(ProductIdSearchForm, self).__init__(*args, **kwargs)
+    for myField in self.fields:
+      try:
+        self.fields[myField].widget.attrs['class'] = 'ui-corner-all'
+      except AttributeError:
+        pass
+
+    search_instance = self.instance
+
+    #self.fields['sensors'].queryset = search_instance.sensors.all()
+    #if search_instance.acquisition_mode:
+      #self.fields['acquisition_mode'].queryset = AcquisitionMode.objects.filter(pk=search_instance.acquisition_mode.pk)
+    #else:
+      #self.fields['acquisition_mode'].queryset = AcquisitionMode.objects.filter(sensor_type__mission_sensor__in=search_instance.sensors.all())
+    #if search_instance.sensor_type:
+      #self.fields['sensor_type'].queryset = SensorType.objects.filter(pk=search_instance.sensor_type.pk)
+    #else:
+      #self.fields['sensor_type'].queryset = SensorType.objects.filter(mission_sensor__in=search_instance.sensors.all())
+    #if search_instance.mission:
+      #self.fields['mission'].queryset = Mission.objects.filter(pk=search_instance.mission.pk)
+    #else:
+      #self.fields['mission'].queryset = Mission.objects.filter(missionsensor__in=search_instance.sensors.all())
+    #if search_instance.processing_level:
+      #self.fields['processing_level'].queryset = search_instance.processing_level.all()
+    #else:
+      #self.fields['processing_level'].queryset = ProcessingLevel.objects.all()
+
+    self.fields['acquisition_mode'].queryset = AcquisitionMode.objects.all()
+    self.fields['sensor_type'].queryset = SensorType.objects.all()
+    self.fields['mission'].queryset = Mission.objects.all()
+    self.fields['processing_level'].queryset = ProcessingLevel.objects.all()
+    self.fields['sensors'].queryset = MissionSensor.objects.all()
+
+    choices = [('', 'All')]
+    choices.extend([(i.local_format(), i.local_format()) for i in  search_instance.searchdaterange_set.all()])
+    self.fields['date_range'].choices = choices
+
+    row_choices = [('', 'All')]
+    row_choices.extend([(l, l) for l in search_instance.getRowChoices()])
+    path_choices = [('', 'All')]
+    path_choices.extend([(l, l) for l in search_instance.getPathChoices()])
+
+    self.fields['k_orbit_path'].choices = path_choices
+    self.fields['j_frame_row'].choices = row_choices
+
+  def clean_sensors(self):
+    """
+    Transform
+    """
+    data = self.cleaned_data['sensors']
+    if not data:
+      return MissionSensor.objects.all()
+    else:
+      return MissionSensor.objects.filter(pk=data.pk)
+
+  def clean_date_range(self):
+    """
+    Transform
+    """
+    ranges = self.cleaned_data['date_range']
+    if not ranges:
+      return None
+
+    try:
+      start_date, end_date = SearchDateRange.from_local_format(ranges)
+    except ValueError, e:
+      raise forms.ValidationError ('Error: date is not valid. %s' % e)
+    if not start_date <=  end_date:
+      raise forms.ValidationError ('Error: date range is not valid.')
+    return {'start_date' : start_date, 'end_date' : end_date }
+
+  def clean_processing_level(self):
+    """
+    Transform
+    """
+    if not self.cleaned_data['processing_level']:
+      return []
+    return [self.cleaned_data['processing_level']]
 
 
-class ProductIdSearchForm( forms.Form ):
-  """ A special class of search form that allows to construct the search by
+
+class _ProductIdSearchForm( forms.Form ):
+  """
+  A special class of search form that allows to construct the search by
   building up a Product ID. This is intended to be used as an unbound form
-  so the init function initialises the choices lists and so on."""
-  mission = AbbreviationModelChoiceField( None, empty_label="---" )
-  mission_sensor = AbbreviationModelChoiceField( None, empty_label="---" )
-  acquisition_mode = AbbreviationModelChoiceField( None, empty_label="---" )
-  sensor_type = AbbreviationModelChoiceField( None, empty_label="---" )
-  myRange = range(1970, datetime.date.today().year)
+  so the init function initialises the choices lists and so on.
+  """
+  mission = AbbreviationModelChoiceField( None, empty_label="*" , required=False)
+  sensors = AbbreviationModelMultipleChoiceField(None, required=False)
+  acquisition_mode = AbbreviationModelChoiceField(None, empty_label="*", required=False)
+  sensor_type = AbbreviationModelChoiceField(None, empty_label="*", required=False)
+  myRange = range(1970, datetime.date.today().year + 1)
   #zip creates a 2-tuple out of an array e.g. ((1970,1970),(1971,1971),etc....)
-  year = forms.ChoiceField( zip(myRange,myRange) )
-  month = forms.ChoiceField( zip( range(1,13), range(1,13) ) )
-  day = forms.ChoiceField( zip( range(1,32), range(1,32) ) )
-  hour = forms.ChoiceField( zip( range(0,24), range(0,24) ) )
-  minute = forms.ChoiceField( zip( range(0,60),range(0,60) ) )
-  second = forms.ChoiceField( zip( range(0,60), range(0,60) ) )
-  
+  start_year = forms.ChoiceField([(None, '*')] + zip(myRange,myRange))
+  start_month = forms.ChoiceField( zip( range(1,13), range(1,13) ) )
+  start_day = forms.ChoiceField( zip( range(1,32), range(1,32) ) )
+  start_hour = forms.ChoiceField( zip( range(0,24), range(0,24) ), required=False)
+  start_minute = forms.ChoiceField( zip( range(0,60),range(0,60) ), required=False)
+  start_second = forms.ChoiceField( zip( range(0,60), range(0,60) ), required=False)
+  end_year = forms.ChoiceField( zip(myRange,myRange) )
+  end_month = forms.ChoiceField( zip( range(1,13), range(1,13) ) )
+  end_day = forms.ChoiceField( zip( range(1,32), range(1,32) ) )
+  end_hour = forms.ChoiceField( zip( range(0,24), range(0,24) ), required=False)
+  end_minute = forms.ChoiceField( zip( range(0,60),range(0,60) ), required=False)
+  end_second = forms.ChoiceField( zip( range(0,60), range(0,60) ), required=False)
+
   def __init__(self,*args,**kwargs):
+    """
+    Querysets will be filtered by existing search instance if passed in init
+    """
     super ( ProductIdSearchForm, self ).__init__(*args,**kwargs)
     self.fields['mission'].queryset = Mission.objects.all()
-    self.fields['mission_sensor'].queryset = MissionSensor.objects.all()
+    self.fields['sensors'].queryset = MissionSensor.objects.all()
     self.fields['acquisition_mode'].queryset = AcquisitionMode.objects.all()
     self.fields['sensor_type'].queryset = SensorType.objects.all()
 
-  class Meta:
-    #model = Search
-    pass
-  
+  def clean(self):
+    cleaned_data = self.cleaned_data
+    try:
+      self.cleaned_data['start_date'] = datetime.datetime(int(cleaned_data.get('start_year')), int(cleaned_data.get('start_month')), int(cleaned_data.get('start_day')), int(cleaned_data.get('start_hour')), int(cleaned_data.get('start_minute')), int(cleaned_data.get('start_second')))
+    except ValueError, e:
+      raise forms.ValidationError ('Error: start date is not valid. %s' % e)
+    try:
+      self.cleaned_data['end_date'] = datetime.datetime(int(cleaned_data.get('end_year')), int(cleaned_data.get('end_month')), int(cleaned_data.get('end_day')), int(cleaned_data.get('end_hour')), int(cleaned_data.get('end_minute')), int(cleaned_data.get('end_second')))
+    except ValueError, e:
+      raise forms.ValidationError ('Error: end date is not valid. %s' % e)
+
+    if not self.cleaned_data['start_date'] <=  self.cleaned_data['end_date']:
+      raise forms.ValidationError ('Error: date range is not valid.')
+
+    return self.cleaned_data
+
 
 class OrderStatusForm(forms.ModelForm):
   class Meta:
@@ -158,12 +393,55 @@ class OrderForm(forms.ModelForm):
   class Meta:
     model = Order
     #exclude = ('user','order_status')
-    exclude = ('user','order_status',"processing_level","projection","datum","resampling_method","file_format","delivery_method")
+    exclude = ('user','order_status','delivery_detail')
+
+class DeliveryDetailForm(forms.ModelForm):
+  ref_id = forms.CharField(widget=forms.HiddenInput(),required=False)
+  aoi_geometry = AOIGeometryField(required=False,help_text='Enter bounding box coordinates separated by comma for West, South, East and North edges i.e. (20,-34,22,-32), or enter single coordinate which defines circle center and radius in kilometers (20,-32,100). Alternatively, digitise the clip area in the map.')
+  geometry = forms.CharField(widget=forms.HiddenInput(),required=False)
+  geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
+                                  required=False,
+                                  help_text = 'Upload a zipped shapefile or KML/KMZ file of less than 1MB. If the shapefile contains more than one polygon, only the first will be used. Complex polygons will increase search time.')
+  def __init__(self,theRecords,*args,**kwargs):
+    super(DeliveryDetailForm, self).__init__(*args, **kwargs)
+    #determine UTM zones for all products
+    myProductZones = set()
+    for record in theRecords:
+      myProductZones=myProductZones.union(record.product.getUTMZones())
+
+    myDefaultProjections=set((('4326','EPSG 4326'),('900913','EPSG 900913')))
+    self.fields['projection'] =  forms.ModelChoiceField(queryset=Projection.objects.filter(epsg_code__in=[k for k,v in  myProductZones | myDefaultProjections]).all(), empty_label=None)
+
+  class Meta:
+    model = DeliveryDetail
+    exclude = ('user',)
+
+  def clean(self):
+    myCleanedData = self.cleaned_data
+    #if AOIgeometry is defined set it as default geometry
+    if myCleanedData.get('aoi_geometry'):
+      self.cleaned_data['geometry']=self.cleaned_data['aoi_geometry']
+
+    return self.cleaned_data
+
+class ProductDeliveryDetailForm(forms.ModelForm):
+  ref_id = forms.CharField(widget=forms.HiddenInput(),required=False)
+
+  def __init__(self,*args,**kwargs):
+    super(ProductDeliveryDetailForm, self).__init__(*args, **kwargs)
+    myPK = kwargs.get('prefix')
+    myProduct = SearchRecord.objects.filter(pk__exact=myPK).get().product
+    myDefaultProjections=set((('4326','EPSG 4326'),('900913','EPSG 900913')))
+    self.fields['projection'] =  forms.ModelChoiceField(queryset=Projection.objects.filter(epsg_code__in=[k for k,v in myProduct.getUTMZones(1) | myDefaultProjections]).all(), empty_label=None)
+
+  class Meta:
+    model = DeliveryDetail
+    exclude = ('user','geometry',)
 
 class TaskingRequestForm(forms.ModelForm):
   geometry = forms.CharField(widget=GeometryWidget,required=False)
   geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
-                                  required = False,
+                                  required=False,
                                   help_text = 'Upload a zipped shapefile of less than 1MB. If the shapefile contains\
                                               more than one polygon, only the first will be used. \
                                               The computation time is related to polygon complexity.')
@@ -192,7 +470,7 @@ class ClipForm(forms.ModelForm):
   geometry = forms.CharField(widget=GeometryWidget,required=False,
       help_text='You can digitise your clip area directly, or alternatively use the file upload option below to upload the clip shapefile. You can use the help tab in the map area for more information on how to use the map. Draw an area of interest on the map to refine the set of search results to a specific area.')
   geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
-                                  required = False,
+                                  required=False,
                                   help_text = 'Upload a zipped shapefile of less than 1MB. If the shapefile contains\
                                               more than one polygon, only the first will be used. \
                                               The computation time is related to polygon complexity.')

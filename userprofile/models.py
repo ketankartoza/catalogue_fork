@@ -21,7 +21,6 @@ class BaseProfile(models.Model):
     """
     User profile model
     """
-
     user = models.ForeignKey(User, unique=True)
     date = models.DateTimeField(default=datetime.datetime.now)
     country = CountryField(null=True, blank=True)
