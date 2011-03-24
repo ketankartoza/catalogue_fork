@@ -262,7 +262,7 @@ class Search(models.Model):
     """
     result = []
     for d in self.searchdaterange_set.all():
-      results.append(d.local_format())
+      result.append(d.local_format())
     return ", ".join(result)
 
   def getRowChoices(self):
