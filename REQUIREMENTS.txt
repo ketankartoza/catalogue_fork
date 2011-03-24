@@ -9,10 +9,16 @@ psycopg2
 pil
 gdata
 GDAL
+<<<<<<< HEAD
+=======
 django-dag
+>>>>>>> e84ad87465a603710f0c6ade20ee083295fc7f29
 html5lib==0.90
 reportlab==2.5
 pisa==3.0.33
 pygooglechart==0.3.0
+<<<<<<< HEAD
+=======
 lxml
 pysqlite
+>>>>>>> e84ad87465a603710f0c6ade20ee083295fc7f29
