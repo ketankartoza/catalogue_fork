@@ -551,8 +551,8 @@ def searchesMap(theRequest):
   myMessages.append('<h3>All searches</h3>')
   myCount = Search.objects.count()
   myMessages.append('Total Searches: ' + str(myCount))
-  myLayerDefinitions = [ WEB_LAYERS['BlueMarble'],WEB_LAYERS['Searches'] ]
-  myLayersList = "[BlueMarble,searches]"
+  myLayerDefinitions = [ WEB_LAYERS['BlueMarble'],WEB_LAYERS['Searches'],WEB_LAYERS['Heatmap'] ]
+  myLayersList = "[BlueMarble,searches,heatmap_all]"
   #myLayerDefinitions = [ WEB_LAYERS['ZaSpot10mMosaic2009'],WEB_LAYERS['ZaRoadsBoundaries'], WEB_LAYERS['Searches'] ]
   #myLayersList = "[zaSpot10mMosaic2009,zaRoadsBoundaries,searches]"
 

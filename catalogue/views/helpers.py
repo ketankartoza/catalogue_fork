@@ -426,7 +426,21 @@ WEB_LAYERS = {
            "Google Satellite",
            {type: G_SATELLITE_MAP}
            );
-        '''
+        ''',
+        #
+        # Heatmap - all
+        #
+        'Heatmap' : '''var heatmap_all = new OpenLayers.Layer.Image(
+                'Heatmap All',
+                '/media/heatmaps/heatmap-total.png',
+                new OpenLayers.Bounds(-20037508.343,-16222639.241,20019734.329,16213801.068),
+                new OpenLayers.Size(1252,1013),
+                {isBaseLayer: false,
+                maxResolution: 156543.0339,
+                opacity:0.8
+                }
+            );
+        ''',
         }
 
 mLayerJs = {'VirtualEarth' : '''<script src='http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1'></script>
