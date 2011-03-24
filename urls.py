@@ -68,6 +68,8 @@ urlpatterns = patterns('',
     (r'^searchpage/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultPage),
     # return the results of a search as a shapefile
     (r'^searchresultshapefile/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultShapeFile),
+    (r'^downloadsearchresults/(?P<theGuid>[a-h0-9\-]{36})/$', downloadSearchResult),
+    (r'^downloadsearchmetadata/(?P<theGuid>[a-h0-9\-]{36})/$', downloadSearchResultMetadata),
     # show segment thumb for a segment by #
     (r'^thumbnailpage/(?P<theId>[0-9]+)/$', showThumbPage),
     (r'^sensordictionaries/$', getSensorDictionaries),

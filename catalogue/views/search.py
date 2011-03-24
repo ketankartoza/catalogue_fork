@@ -405,3 +405,31 @@ def searchResultShapeFile(theRequest, theGuid):
   myResponder = ShpResponder( SearchRecord )
   myResponder.file_name = theGuid + "-imagebounds"
   return myResponder.write_search_records( mySearcher.mSearchRecords )
+
+@login_required
+def downloadSearchResult(theRequest, theGuid):
+  """Dispaches request and returns searchresults in desired file format"""
+  mySearcher = Searcher(theRequest,theGuid)
+  mySearcher.search( False ) # dont paginate
+
+  myFilename = u'%s-imagebounds' % theGuid
+  if theRequest.GET.has_key('shp'):
+    myResponder = ShpResponder( SearchRecord )
+    myResponder.file_name = myFilename
+    return myResponder.write_search_records( mySearcher.mSearchRecords )
+  elif theRequest.GET.has_key('kml'):
+    return render_to_kml("kml/searchresults.kml", {'searchresults' : mySearcher.mSearchRecords,'external_site_url':settings.DOMAIN, 'transparentStyle':True},myFilename)
+  elif theRequest.GET.has_key('kmz'):
+    return render_to_kmz("kml/searchresults.kml", {'searchresults' : mySearcher.mSearchRecords,'external_site_url':settings.DOMAIN,'transparentStyle':True},myFilename)
+  else:
+    logging.info('Request cannot be proccesed, unsupported download file type')
+    raise Http404
+
+@login_required
+def downloadSearchResultMetadata(theRequest,theGuid):
+  """Returns ISO 19115 metadata for searchresults"""
+
+  mySearcher = Searcher(theRequest,theGuid)
+  mySearcher.search( False ) # dont paginate
+
+  return downloadISOmetadata(mySearcher.mSearchRecords,'Search-%s' % theGuid)
