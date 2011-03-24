@@ -31,6 +31,7 @@ import traceback
 # SHP and KML readers
 from catalogue.featureReaders import *
 
+
 ###########################################################
 #
 # Ordering related views
@@ -162,6 +163,12 @@ def downloadClipGeometry(theRequest,theId):
   else:
     logging.info('Request cannot be proccesed, unsupported download file type')
     raise Http404
+
+@login_required
+def downloadOrderMetadata(theRequest,theId):
+  """Returns ISO 19115 metadata for ordered products"""
+  myOrder = get_object_or_404(Order,id=theId)
+  return downloadISOmetadata(myOrder.searchrecord_set.all(),'Order-%s' % myOrder.id)
 
 @login_required
 def viewOrder (theRequest, theId):

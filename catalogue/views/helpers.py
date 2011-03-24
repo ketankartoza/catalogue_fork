@@ -640,3 +640,20 @@ def render_to_kmz(theTemplate,theContext,filename):
   response['Content-Disposition'] = 'attachment; filename=%s.kmz' % filename
   response['Content-Length']      = str(len(response.content))
   return response
+
+def downloadISOmetadata(theProducts,theName):
+  """ returns ZIPed XML metadata files for each product """
+  response = HttpResponse()
+  myZipData = StringIO()
+  myZip = zipfile.ZipFile(myZipData,'w', zipfile.ZIP_DEFLATED)
+  for myProduct in theProducts:
+    myMetadata = myProduct.product.getISOMetadata()
+    myZip.writestr('%s.xml' % myProduct.product.product_id, myMetadata)
+  myZip.close()
+  response.content=myZipData.getvalue()
+  myZipData.close()
+  filename = 'SANSA-%s-Metadata.zip' % theName
+  response['Content-Type']        = 'application/zip'
+  response['Content-Disposition'] = 'attachment; filename=%s' % filename
+  response['Content-Length']      = str(len(response.content))
+  return response
