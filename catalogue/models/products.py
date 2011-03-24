@@ -351,6 +351,15 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
 
     return set(utmZoneFromLatLon(*self.spatial_coverage.extent[:2],theBuffer=theBuffer)+utmZoneFromLatLon(*self.spatial_coverage.extent[2:],theBuffer=theBuffer))
 
+  @runconcrete
+  def getISOMetadata(self):
+    """ return ISO 19115 (SAC Profile) metadata in XML format
+    for this product
+
+    this must be implemented in each concrete product type
+    """
+    pass
+
 
 class ProductLink (edge_factory('catalogue.GenericProduct', concrete = False, base_model = models.Model)):
   """
@@ -378,6 +387,14 @@ class GenericImageryProduct( GenericProduct ):
 
   class Meta:
     app_label= 'catalogue'
+
+  def getISOMetadata(self):
+    """ return ISO 19115 (SAC Profile) metadata in XML format
+    for this product
+
+    **NOTE**: currently returns only a simple token
+    """
+    return '<product>'+self.product_id+'</product>'
 
 ###############################################################################
 
@@ -635,6 +652,13 @@ class OpticalProduct( GenericSensorProduct ):
     """
     return self._thumbnailPath()
 
+  def getISOMetadata(self):
+    """ return ISO 19115 (SAC Profile) metadata in XML format
+    for this product
+
+    **NOTE**: currently returns only a simple token
+    """
+    return '<product>'+self.product_id+'</product>'
 
 ###############################################################################
 
@@ -683,6 +707,14 @@ class RadarProduct( GenericSensorProduct ):
     """
     return self._thumbnailPath()
 
+  def getISOMetadata(self):
+    """ return ISO 19115 (SAC Profile) metadata in XML format
+    for this product
+
+    **NOTE**: currently returns only a simple token
+    """
+    return '<product>'+self.product_id+'</product>'
+
 ###############################################################################
 
 
@@ -712,6 +744,15 @@ class GeospatialProduct( GenericProduct ):
   class Meta:
     app_label= 'catalogue'
 
+  def getISOMetadata(self):
+    """ return ISO 19115 (SAC Profile) metadata in XML format
+    for this product
+
+    **NOTE**: currently returns only a simple token
+    """
+    return '<product>'+self.product_id+'</product>'
+
+
 ###############################################################################
 
 class OrdinalProduct( GenericProduct ):
@@ -730,6 +771,15 @@ class OrdinalProduct( GenericProduct ):
   class Meta:
     app_label= 'catalogue'
 
+  def getISOMetadata(self):
+    """ return ISO 19115 (SAC Profile) metadata in XML format
+    for this product
+
+    **NOTE**: currently returns only a simple token
+    """
+    return '<product>'+self.product_id+'</product>'
+
+
 ###############################################################################
 
 class ContinuousProduct( GenericProduct ):
@@ -746,3 +796,10 @@ class ContinuousProduct( GenericProduct ):
   class Meta:
     app_label= 'catalogue'
 
+  def getISOMetadata(self):
+    """ return ISO 19115 (SAC Profile) metadata in XML format
+    for this product
+
+    **NOTE**: currently returns only a simple token
+    """
+    return '<product>'+self.product_id+'</product>'
