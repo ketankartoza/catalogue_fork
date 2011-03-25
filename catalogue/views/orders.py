@@ -423,7 +423,7 @@ def addOrder( theRequest ):
 
       logging.debug("Search records added")
       #return HttpResponse("Done")
-      #notifySalesStaff(theRequest.user,myObject.id)
+      notifySalesStaff(theRequest.user,myObject.id)
       return HttpResponseRedirect(myRedirectPath + str(myObject.id))
     else:
       logging.info('Add Order: form is NOT valid')
