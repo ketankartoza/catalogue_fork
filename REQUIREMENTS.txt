@@ -16,3 +16,4 @@ pisa==3.0.33
 pygooglechart==0.3.0
 lxml
 pysqlite
+elementsoap

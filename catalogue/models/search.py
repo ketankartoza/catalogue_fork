@@ -34,6 +34,10 @@ class SearchRecord(models.Model):
   delivery_detail = models.ForeignKey( DeliveryDetail, null=True, blank=True )
   # Required because genericproduct fkey references a table with geometry
   objects = models.GeoManager()
+  # DIMS ordering related fields
+  internal_order_id = models.IntegerField(null=True, blank=True)
+  # Default to False unless there is a populated local_storage_path in the product (see overridden save() below)
+  product_ready = models.BooleanField(default=False)
 
   class Meta:
     verbose_name = 'Record'
@@ -53,6 +57,14 @@ class SearchRecord(models.Model):
     myRecord.product = theProduct
 
     return myRecord
+
+  def save(self, *args, **kwargs):
+    """
+    Set product_ready according to local_storage_path
+    """
+    if not self.pk and self.local_storage_path:
+      self.product_ready = False
+    super(SearchRecord, self).save(*args, **kwargs)
 
   class Admin:
     pass

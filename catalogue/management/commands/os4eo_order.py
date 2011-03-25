@@ -1,5 +1,7 @@
 """
-Modis harvesting
+OS4EO ordering
+
+http://196.35.94.243/os4eo
 
 """
 
@@ -7,154 +9,31 @@ import os
 from optparse import make_option
 import tempfile
 import subprocess
-import ftplib
-import shutil
-from osgeo import gdal
+from SOAPpy import WSDL
 
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
-from django.db import transaction
-from django.contrib.gis.gdal import DataSource
-from django.contrib.gis.geos import Polygon
 
 from catalogue.models import *
-from catalogue.dims_lib import dimsWriter
 
 
 # Hardcoded constants
-BASE_DOMAIN           = 'e4ftl01u.ecs.nasa.gov'
-BASE_FOLDER           = 'MOTA/MCD43A2.005'
-ALLOWED_ZONES         = (
-    'h19v09',
-    'h20v09',
-    'h21v09',
-    'h19v10',
-    'h20v10',
-    'h21v10',
-    'h22v10',
-    'h19v11',
-    'h20v11',
-    'h21v11',
-    'h22v11',
-    'h19v12',
-    'h20v12',
-    'h21v12',
-  )
-
-PROJECTION            = 'ORBIT'
-BAND_COUNT            = 4 # Note: do not change this value without a code revision (search for assert below)
-RADIOMETRIC_RESOLUTION= 8 # it's 8, 16 and 32 ....
-MISSION_MAP           = {
-    'Aqua': 'MYD',
-    'Terra': 'MOD',
-    'MODIS-A-T': 'MCD',
-  }
-MISSION_SENSOR_MAP    = MISSION_MAP
-SENSOR_TYPE           = 'MOD'
-ACQUISITION_MODE      = 'MOD'
-GEOMETRIC_RESOLUTION  = 500
-RC_FILE               = 'modis_harvest.rc'
-
-
-def get_row_path_from_polygon(poly, as_int=False, no_compass=False):
-  """
-  Given a polygon, returns row, row_shift, path, path_shift
-  informations of the centroid as a string
-  As indicated in the docs (8.1.3)
-  """
-  path, path_shift = ("%.2f" % poly.centroid.x).split('.')
-  row, row_shift = ("%.2f" % poly.centroid.y).split('.')
-  if as_int:
-    return int(path), int(path_shift), int(row), int(row_shift)
-  if no_compass:
-    return path, path_shift, row, row_shift
-  if poly.centroid.x < 0:
-    path = "%sW" % path
-  else:
-    path = "%sE" % path
-  if poly.centroid.y < 0:
-    row = "%sS" % row
-  else:
-    row = "%sN" % row
-  return path, path_shift, row, row_shift
+WS_ENDPOINT = 'http://196.35.94.243/os4eo?wsdl'
 
 class Command(BaseCommand):
-  help = "Imports MODIS packages into the SAC catalogue"
+  help = "Place orders"
   option_list = BaseCommand.option_list + (
-      make_option('--store_image', '-i', dest='store_image', action='store_true',
-          help='Store the original image data extracted from the package.', default=True),
-      make_option('--maxproducts', '-m', dest='maxproducts', action='store',
-          help='Import at most n products.', default=0),
       make_option('--test_only', '-t', dest='test_only', action='store_true',
           help='Just test, nothing will be written into the DB.', default=False),
-      make_option('--rcfileskip', '-s', dest='rcfileskip', action='store_true',
-          help='Do not read or write the run control file.', default=False),
-      make_option('--owner', '-o', dest='owner', action='store',
-          help='Name of the Institution package owner. Defaults to: MODIS.', default='MODIS'),
-      make_option('--license', '-l', dest='license', action='store', default='SAC Free License',
-          help='Name of the license. Defaults to: SAC Commercial License'),
-      make_option('--quality', '-q', dest='quality', action='store',
-          help='Quality code (will be created if does not exists). Defaults to: Unknown', default='Unknown'),
-      make_option('--processing_level', '-r', dest='processing_level', action='store',
-          help='Processing level code (will be created if does not exists). Defaults to: 1B', default='1B'),
   )
 
-  @staticmethod
-  def fetch_geometries(index_url_base, area_of_interest):
-    """
-    Download the index and parses it, returns a generator list of features
-    """
-    try:
-      temp_base = tempfile.mktemp()
-      for ext in ('shp', 'shx', 'dbf'):
-        _url = "%s.%s" % (index_url_base, ext)
-        _index = urllib2.urlopen(_url)
-        _tmp = open("%s.%s" % (temp_base, ext), 'wb+')
-        _tmp.write(_index.read())
-        _index.close()
-        _tmp.close()
-      data_source = DataSource("%s.%s" % (temp_base, 'shp'))
-    except urllib2.HTTPError, e:
-      raise CommandError('Cannot download index (%s): %s.' % (_url, e))
-    except Exception, e:
-      raise CommandError("Loading index failed %s" % e)
-
-    for pt in data_source[0]:
-      if not area_of_interest or area_of_interest.intersects(pt.geom):
-        yield pt
-
-    del(data_source)
-
-    for ext in ('shp', 'shx', 'dbf'):
-      _f = "%s.%s" % (temp_base, ext)
-      try:
-        os.remove(_f)
-      except:
-        print 'Cannot delete temporary file %s.' % _f
-        pass
 
   @transaction.commit_manually
   def handle(self, *args, **options):
     """ command execution """
-    store_image           = options.get('store_image')
     test_only             = options.get('test_only')
     verbose               = int(options.get('verbosity'))
-    license               = options.get('license')
-    owner                 = options.get('owner')
-    quality               = options.get('quality')
-    rcfileskip            = options.get('rcfileskip')
-    processing_level      = options.get('processing_level')
-    maxproducts           = int(options.get('maxproducts'))
 
-    # Hardcoded
-    projection            = PROJECTION
-    band_count            = BAND_COUNT
-    radiometric_resolution= RADIOMETRIC_RESOLUTION
-    sensor_type           = SENSOR_TYPE
-    acquisition_mode      = ACQUISITION_MODE
-    geometric_resolution  = GEOMETRIC_RESOLUTION
 
     def verblog(msg, level=1):
       if verbose >= level:

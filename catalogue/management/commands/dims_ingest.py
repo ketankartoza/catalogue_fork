@@ -175,6 +175,7 @@ class Command(BaseCommand):
           else:
             record_owner = owner
 
+          # TODO: original_product_id
           data = {
             'metadata': product_data['xml'].read(),
             'spatial_coverage': product_data.get('spatial_coverage'),
@@ -186,6 +187,7 @@ class Command(BaseCommand):
             'license': license,
             'creating_software': software,
             'quality': Quality.objects.get_or_create(name=product_data['metadata'].get('image_quality_code'))[0],
+            #'original_product_id' : product_data['metadata'].get('to be defined')
           }
 
           # Read spatial_coverage from gdal if none
