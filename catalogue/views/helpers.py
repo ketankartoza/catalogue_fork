@@ -16,7 +16,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 
 # for sending email
-from django.core.mail import send_mail,send_mass_mail
+from django.core import mail
 
 # for kmz
 import zipfile
@@ -148,23 +148,28 @@ def notifySalesStaff(theUser, theOrderId):
   for myProduct in [s.product for s in myRecords]:
     myRecipients.update(OrderNotificationRecipients.getUsersForProduct(myProduct))
 
-  for myRecipient in myRecipients:
-    myAddress = myRecipient.email
-    myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, [myAddress]))
-    logging.info("Sending notice to : %s" % myAddress)
-
   # Add default
   if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
     logging.info("Sending notice to default recipients : %s" % CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
-    myMessagesList.append((myEmailSubject, myEmailMessage, settings.DEFAULT_FROM_EMAIL, list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)))
+    myRecipients.update(list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS))
+
+  for myRecipient in myRecipients:
+    myAddress = myRecipient.email
+    myMsg = mail.EmailMultiAlternatives(myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN, [myAddress])
+    logging.info("Sending notice to : %s" % myAddress)
+    myMsg.attach_alternative('<html>test html</html>','text/html')
+    myMessagesList.append(myMsg)
 
   #also send an email to the originator of the order
   #We do this separately to avoid them seeing the staff cc list
-  myClientAddress = theUser.email
-  myMessagesList.append((myEmailSubject, myEmailMessage, settings.DEFAULT_FROM_EMAIL, [myClientAddress]))
-  # mass mail expects a tuple (read-only list) so convert the list to tuple on send
+  #myClientAddress = theUser.email
+  #myMessagesList.append((myEmailSubject, myEmailMessage, settings.DEFAULT_FROM_EMAIL, [myClientAddress]))
+
   logging.info("Sending messages: \n%s" % myMessagesList)
-  send_mass_mail( tuple(myMessagesList),fail_silently=False )
+  # initiate email connection, and send messages in bulk
+  myEmailConnection = mail.get_connection()
+  myEmailConnection.send_messages(myMessagesList)
+  myEmailConnection.close()
   return
 
 ###########################################################
@@ -208,7 +213,7 @@ def notifySalesStaffOfTaskRequest(theUser, theId):
   #We do this separately to avoid them seeing the staff cc list
   myMessagesList.append((myEmailSubject, myEmailMessage, settings.DEFAULT_FROM_EMAIL,
           [ theUser.email ]))
-  send_mass_mail(tuple(myMessagesList), fail_silently=False)
+  mail.send_mass_mail(tuple(myMessagesList), fail_silently=False)
   return
 
 
