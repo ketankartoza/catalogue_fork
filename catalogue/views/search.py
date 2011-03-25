@@ -398,15 +398,6 @@ def searchResultPage(theRequest, theGuid):
   return(mySearcher.templateData())
 
 @login_required
-def searchResultShapeFile(theRequest, theGuid):
-  """Return the search results as a shapefile"""
-  mySearcher = Searcher(theRequest,theGuid)
-  mySearcher.search( False ) # dont paginate
-  myResponder = ShpResponder( SearchRecord )
-  myResponder.file_name = theGuid + "-imagebounds"
-  return myResponder.write_search_records( mySearcher.mSearchRecords )
-
-@login_required
 def downloadSearchResult(theRequest, theGuid):
   """Dispaches request and returns searchresults in desired file format"""
   mySearcher = Searcher(theRequest,theGuid)

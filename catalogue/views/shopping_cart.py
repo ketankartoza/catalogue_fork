@@ -20,14 +20,6 @@ from helpers import *
 ###########################################################
 
 @login_required
-def cartAsShapefile(theRequest):
-  """Return the search results as a shapefile"""
-  myRecords = SearchRecord.objects.all().filter(user=theRequest.user).filter(order__isnull=True)
-  myResponder = ShpResponder( SearchRecord )
-  myResponder.file_name = theRequest.user.username + '-cart'
-  return myResponder.write_search_records( myRecords )
-
-@login_required
 def downloadCart(theRequest):
   """Dispaches request and returns products in cart in desired file format"""
   myRecords = SearchRecord.objects.all().filter(user=theRequest.user).filter(order__isnull=True)

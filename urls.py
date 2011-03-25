@@ -67,7 +67,6 @@ urlpatterns = patterns('',
     #show a single search page to insert into search result map
     (r'^searchpage/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultPage),
     # return the results of a search as a shapefile
-    (r'^searchresultshapefile/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultShapeFile),
     (r'^downloadsearchresults/(?P<theGuid>[a-h0-9\-]{36})/$', downloadSearchResult),
     (r'^downloadsearchmetadata/(?P<theGuid>[a-h0-9\-]{36})/$', downloadSearchResultMetadata),
     # show segment thumb for a segment by #
@@ -83,7 +82,6 @@ urlpatterns = patterns('',
     (r'^addtocart/(?P<theId>[0-9]+)/$', addToCart),
     (r'^removefromcart/(?P<theId>[0-9]+)/$', removeFromCart),
     # cart contents for embedding into other pages
-    (r'^cartasshapefile/$', cartAsShapefile),
     (r'^downloadcart/$', downloadCart),
     (r'^downloadcartmetadata/$', downloadCartMetadata),
     (r'^showcartcontents/$', showCartContents),
