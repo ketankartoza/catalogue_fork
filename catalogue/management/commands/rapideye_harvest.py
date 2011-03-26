@@ -24,8 +24,6 @@ import tempfile
 import subprocess
 from mercurial import lock, error
 
-
-
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -141,11 +139,10 @@ class Command(BaseCommand):
     """ command execution """
 
     try:
-      lockfile = lock.lock("/tmp/modis_harvest.lock", timeout=60)
+      lockfile = lock.lock("/tmp/rapideye_harvest.lock", timeout=60)
     except error.LockHeld:
       # couldn't take the lock
       raise CommandError, 'Could not acquire lock.'
-
 
     username              = options.get('username')
     password              = options.get('password')
@@ -359,14 +356,11 @@ class Command(BaseCommand):
           verblog("Committing transaction.", 2)
       except Exception, e:
         raise CommandError('Uncaught exception: %s' % e)
-
-
     except Exception, e:
       verblog('Rolling back transaction due to exception.')
       if test_only:
         from django.db import connection
         verblog(connection.queries)
-
       transaction.rollback()
       raise CommandError("%s" % e)
     finally:
