@@ -22,6 +22,9 @@ import os
 from optparse import make_option
 import tempfile
 import subprocess
+from mercurial import lock, error
+
+
 
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
@@ -136,6 +139,14 @@ class Command(BaseCommand):
   @transaction.commit_manually
   def handle(self, *args, **options):
     """ command execution """
+
+    try:
+      lockfile = lock.lock("/tmp/modis_harvest.lock", timeout=60)
+    except error.LockHeld:
+      # couldn't take the lock
+      raise CommandError, 'Could not acquire lock.'
+
+
     username              = options.get('username')
     password              = options.get('password')
     base_url              = options.get('base_url')
@@ -358,4 +369,6 @@ class Command(BaseCommand):
 
       transaction.rollback()
       raise CommandError("%s" % e)
+    finally:
+      lockfile.release()
 
