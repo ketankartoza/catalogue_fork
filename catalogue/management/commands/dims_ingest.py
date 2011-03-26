@@ -12,6 +12,7 @@ from optparse import make_option
 from osgeo import gdal
 import tempfile
 from subprocess import call
+from mercurial import lock, error
 
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
@@ -23,7 +24,6 @@ from django.contrib.gis.gdal import SpatialReference
 
 from catalogue.models import *
 from catalogue.dims_lib import dimsReader
-
 
 class Command(BaseCommand):
   help = "Import into the catalogue all DIMS packages in a given folder, SPOT-5 OpticalProduct only"
@@ -49,6 +49,14 @@ class Command(BaseCommand):
   @transaction.commit_manually
   def handle(self, *args, **options):
     """ command execution """
+
+    try:
+      lockfile = lock.lock("/tmp/dims_ingest.lock", timeout=60)
+    except error.LockHeld:
+      # couldn't take the lock
+      raise CommandError, 'Could not acquire lock.'
+
+
     folder        = options.get('folder')
     globparm      = options.get('glob')
     test_only     = options.get('test_only')
@@ -208,7 +216,7 @@ class Command(BaseCommand):
           # Check if it's already in catalogue:
           try:
             op = OpticalProduct.objects.get(product_id=data.get('product_id')).getConcreteInstance()
-            verblog('Alredy in catalogue: updating', 2)
+            verblog('Already in catalogue: updating', 2)
             is_new = False
             op.__dict__.update(data)
           except ObjectDoesNotExist:
@@ -281,5 +289,7 @@ class Command(BaseCommand):
     except Exception, e:
       transaction.rollback()
       raise CommandError('Uncaught exception: %s' % e)
+    finally:
+      lockfile.release()
 
 

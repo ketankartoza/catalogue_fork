@@ -10,7 +10,7 @@ attempt to import any data into the catalogue.
 ""Note2:"" This document //must// be kept up to date when you make changes to
 import scripts etc.
 
-== Importing the packages from a the remote catalogue ==
+== Importing the packages from the remote catalogue ==
 
 The import process is done by a Django management command that can be called
 by a cron job.
@@ -75,7 +75,16 @@ Running the command:
 $ python manage.py rapideye_harvest -v 2 -a 'POLYGON(( 22 3, 23 3, 23 2, 22 2, 22 3))' -d 12 -y 2011 -m 03
 ```
 
+== Global settings ==
 
+The following parameters in settings.py control the process:
+
+```
+# RapidEye catalogue ingesting settings
+CATALOGUE_RAPIDEYE_BASE_URL = 'https://delivery.rapideye.de/catalogue/'
+CATALOGUE_RAPIDEYE_USERNAME = '*********'
+CATALOGUE_RAPIDEYE_PASSWORD = '*********'
+```
 
 == Implementation details ==
 
