@@ -124,4 +124,17 @@ True
 False
 
 
+Tests getXML static method
+
+>>> from lxml import etree
+>>> from django.conf import settings
+>>> products['PRODUCT_00001']['metadata']['product_date'] = '2001-space-odissey'
+>>> xml = dimsWriter.getXML(products['PRODUCT_00001']['metadata'], os.path.join(settings.ROOT_PROJECT_FOLDER, 'resources/PackageTemplate/Metadata/ISOMetadata/ISOMetadata_template.xml'))
+>>> len(xml) > 0
+True
+>>> tree = etree.fromstring(xml)
+>>> tree.getroottree().find(dimsWriter.METADATA['product_date'].format(**dimsWriter.NS)).text == products['PRODUCT_00001']['metadata']['product_date']
+True
+
+
 """

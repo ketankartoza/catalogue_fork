@@ -30,3 +30,11 @@ init_*.sql
 nbproject/
 imagery_mastercopies/
 .directory
+catalogue/tests/sample_files/misr/
+docs/t2t/SANSA-Catalogue-Manual.aux
+docs/t2t/SANSA-Catalogue-Manual.log
+docs/t2t/SANSA-Catalogue-Manual.out
+docs/t2t/SANSA-Catalogue-Manual.tex
+docs/t2t/SANSA-Catalogue-Manual.toc
+modis_harvest.rc
+

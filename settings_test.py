@@ -20,9 +20,7 @@ DATABASES = {
          }
         }
 
-
-ROOT_PROJECT_FOLDER = os.path.join(os.path.dirname(__file__), 'catalogue', 'tests')
 # Added by Tim - url that holds directories of thumbnails...
-THUMBS_ROOT = os.path.join(ROOT_PROJECT_FOLDER,'thumbs_out')
+THUMBS_ROOT = os.path.join(ROOT_PROJECT_FOLDER, 'catalogue', 'tests' ,'thumbs_out')
 # And this is the dir that holds imagery
-IMAGERY_ROOT = os.path.join(ROOT_PROJECT_FOLDER,'imagery_mastercopies')
+IMAGERY_ROOT = os.path.join(ROOT_PROJECT_FOLDER, 'catalogue', 'tests' ,'imagery_mastercopies')
