@@ -46,6 +46,8 @@ urlpatterns = patterns('',
     (r'^myclips/$', clipHistory),
     (r'^mysearches/$', searchHistory),
     (r'^recentsearches/$', recentSearches),
+    (r'^searchmonthlyreport/(?P<theyear>\d{4})/(?P<themonth>\d{1,2})/$', searchMonthlyReport),
+    (r'^searchmonthlyreportaoi/(?P<theyear>\d{4})/(?P<themonth>\d{1,2})/$', searchMonthlyReportAOI),
     (r'^search/$', 'catalogue.views.search.search'), # clashes with module name catalogue.views.search
     (r'^productIdSearchClone/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearchClone),
     (r'^productIdSearch/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearch),
