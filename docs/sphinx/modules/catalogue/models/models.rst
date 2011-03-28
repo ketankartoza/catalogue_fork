@@ -1,7 +1,7 @@
-Project Modules Documentation
+Catalogue Models Documentation
 =============================
 
-This page contains the Project Modules  documentation.
+This page contains the Catalogue Models documentation.
 
 Modules:
 --------

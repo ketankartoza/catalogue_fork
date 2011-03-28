@@ -76,6 +76,8 @@ way of backing up. This should be addressed as a priority!
 %!include: 303-search-schema.t2t
 %!include: 401-metadata-standard.t2t
 %!include: 502-searching-t2t
+
+%!include: 900-batch-processing-intro.t2t
 %!include: 901-informix-acs-sync.t2t
 %!include: 902-importing-other-products.t2t
 %!include: 903-importing-dims-products.t2t

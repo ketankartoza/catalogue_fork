@@ -16,3 +16,5 @@ pisa==3.0.33
 pygooglechart==0.3.0
 lxml
 pysqlite
+#only needed for building api docs
+sphinx
