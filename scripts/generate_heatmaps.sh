@@ -9,6 +9,9 @@ BORDERS="../resources/heatmaps/borders900913.tif"
 #clean TMP_DIR
 rm $TMP_DIR/heatmap*
 
+#update heatmap_value table (use max(search_date) as starting point)
+psql -c 'select update_heatmap((select max(search_date) from heatmap_values));' -d $DB_NAME
+
 #last week
 gdal_grid -ot Float32 -a invdist:power=2.0:smoothing=2.0:radius1=1:radius2=1 -of GTiff -txe -180 180 -tye 90 -90 -outsize 1440 720 -zfield hits -sql "select * from heatmap(date(now()-'7 days'::interval))" PG:dbname=$DB_NAME $TMP_DIR/heatmap_data_lastweek.tif
 
@@ -39,7 +42,7 @@ gdalwarp -r cubic -s_srs '+init=epsg:4326' -t_srs '+proj=merc +a=6378137 +b=6378
 convert $TMP_DIR/heatmap-last3month-900913.tif -fill white -opaque black $TMP_DIR/heatmap-last3month-900913.png
 convert $TMP_DIR/heatmap-last3month-900913.png $BORDERS -composite $OUTPUT_DIR/heatmap-last3month.png
 
-#total
+#total (runs for 22min on intel i5 @ 2.4 Ghz
 gdal_grid -ot Float32 -a invdist:power=2.0:smoothing=2.0:radius1=1:radius2=1 -of GTiff -txe -180 180 -tye 90 -90 -outsize 1440 720 -zfield hits -sql "select * from heatmap()" PG:dbname=$DB_NAME $TMP_DIR/heatmap_data_total.tif
 
 gdaldem color-relief $TMP_DIR/heatmap_data_total.tif $HEATMAP_COLORS $TMP_DIR/heatmap-total.tif
