@@ -1,0 +1,356 @@
+
+
+% Leave spaces above please
+
+= Webmapping =
+
+A key part of the system is the provision of web mapping services. These form
+the backdrops for search and visualisation maps and play various other roles
+within the system. Although it is not advertised to clients, the web maps can
+be consumed with any OGC-WMS compatible client via a number of public wms urls.
+
+== Adding a new backdrop layer ==
+
+In this section we will use the new 2010 ZA SPOT5 Mosaic as an example of how
+to deploy a new backdrop layer into the WMS environment.
+
+=== Synchronising the data to the catalogue server ===
+
+The first task it to place the data onto the catalogue server (in our case
+LION). The data could be copied over by various means. In the SAC context it
+will typically come from the CXFS file store:
+
+on cheetah:
+
+```
+cd /cxfs/archive/production/Spot5_Mosaic_Packaging_2010/Imagery/Latlong/TLTIF
+dmfind . -state MIG -o -state OFL | dmget
+rsync -ave ssh *.gz lion:/mnt/cataloguestorage2/gisdata/za/SPOT5_2010/tif-gz/
+```
+
+The second command above instructs to retrieve all migrated files from tape,
+which is needed before the data can be synced over to LION via rsync over ssh.
+
+=== Batch conversion to ecw ===
+
+To covert the mosaic tiles in batch we use a simple script like this (called tif2ecw):
+
+```
+#!/bin/bash
+mkdir ecw
+EXT=tif
+for FILE in tif/*.${EXT}
+do
+  BASENAME=$(basename $FILE .${EXT})
+  OUTFILE=ecw/${BASENAME}.ecw
+  LOCKFILE=${BASENAME}.lock
+  echo "Processing: ${BASENAME}.${EXT}"
+  if [ -f $LOCKFILE ] || [ -f $OUTFILE ] #skip if exists
+  then
+    echo "Skipping: $OUTFILE"
+  else
+    /usr/local/bin/gdal_translate -of ECW -co LARGE_OK=YES $FILE $OUTFILE
+    rm $LOCKFILE
+  fi
+done
+```
+
+Note the above script requires that you have an appropriate ERDAS license so
+that you can compress large files.
+
+So assuming our data exist in ''/mnt/cataloguestorage2/gisdata/za/SPOT5_2010/tif-gz/'' and
+we run the script from ''/mnt/cataloguestorage2/gisdata/za/SPOT5_2010/'', the result will 
+be a new directory: ''/mnt/cataloguestorage2/gisdata/za/SPOT5_2010/ecw'' containing the 
+mosaic tiles in ecw format.
+
+=== Creation of a virtual raster ===
+
+Gdal has a concept called \\virtual rasters\\ (roughly analagous to ESRI image
+catalogues I believe) that presents multiple images as a single file resource.
+
+We will create a virtual raster for the mosaic so that we can simply add a single 
+layer to our mapfile configuration.
+
+```
+cd ecw
+gdalbuildvrt za2010ecw.vrt *.ecw
+```
+
+=== Creation of a new mapfile ===
+
+Each new backdrop layer has a new mapfile created for it. The mapfiles are 
+stored in the GIT repository with passwords and usernames expunged.
+
+When checked out, mapfiles are placed in the webmapping directory under:
+
+```
+/opt/webmapping/
+```
+
+Which is a symlink to ''<catalogue root>/mapserver/mapfiles''
+
+The structure of this directory looks like this:
+
+```
+webmapping/
++-- config
+|   +-- 000-default
+|   +-- default
+|   \-- tilecache.cfg
++-- data -> /mnt/cataloguestorage/data/
++-- fonts
+|   +-- arialbd.ttf
+|   +-- arialbi.ttf
+|   +-- ariali.ttf
+|   +-- arial.ttf
+|   +-- ariblk.ttf
+|   +-- courbd.ttf
+|   +-- courbi.ttf
+|   +-- couri.ttf
+|   +-- cour.ttf
+|   +-- fonts.list
+|   \-- symbols.ttf
++-- mapfiles
+|   +-- cart.map
+|   +-- cart.map.templ
+|   +-- debug.include
+|   +-- jpl.include
+|   +-- landsat7-global-mosaic.map
+|   +-- landsat7-global-mosaic.map.orig
+|   +-- pg.map
+|   +-- pg.map.templ
+|   +-- searches.map
+|   +-- searches.map.templ
+|   +-- vector_layers.map.include
+|   +-- vector_layers.map.include.templ
+|   +-- visitors.map
+|   +-- visitors.map.templ
+|   +-- world.map
+|   +-- world.map.templ
+|   +-- za.map
+|   +-- za.map.templ
+|   +-- za_nbi.map
+|   +-- za_nbi.map.templ
+|   +-- za_vector.map
+|   +-- za_vector.map.templ
+|   +-- za_vector_spot2007_10m_ecw.map
+|   +-- za_vector_spot2007_2_5m_ecw.map
+|   +-- za_vector_spot2008_10m_ecw.map
+|   +-- za_vector_spot2008_2_5m_ecw.map
+|   +-- za_vector_spot2009_10m_ecw.map
+|   +-- za_vector_spot2009_2_5m_ecw.map
+|   +-- za_vector_spot2010_2_5m_tif.map
+|   +-- za_vector_test.map
+|   \-- za_vector_test.map.templ
++-- scripts
+|   \-- reseed.sh
++-- symbols
+|   +-- flaeche1_1.png
+|   +-- flaeche1.png
+|   +-- flaeche2_1.png
+|   +-- flaeche2.png
+|   +-- flaeche3.png
+|   +-- schraffur.png
+|   +-- stern.png
+|   +-- symbols.sym
+|   \-- welle.png
+\-- templates
+    +-- search_footer.html
+    +-- search_header.html
+    +-- search.html
+    \-- search.txt
+
+```
+
+So under ''/opt/webmapping/mapfiles'' we simply copy the mapfile definition
+from a previous year. Of course depending on what you are trying to achieve,
+you could create a totally new map file in this case too.
+
+```
+cp za_vector_spot2009_2_5m_ecw.map za_vector_spot2010_2_5m_ecw.map
+```
+
+For clarity it is suggested to stick to a standardised naming convention.
+
+Now the map file needs to be edited and the relevant part for the mosaic layer
+specified. 
+
+```
+#
+# Notes:
+# 
+# Tim Sutton 2009
+#
+# By using status default for all layers, mapserver will render them 
+# all based on their scale dependent ranges when open layers 
+# makes a request. This is a good thing since It will allow us 
+# to create complex maps without having to add many layer definitions to 
+# OpenLayers.
+#
+
+MAP
+  NAME "SouthAfricaSPOT5Mosaic2010_2.5m"
+  # Map image size
+  SIZE 400 400
+  UNITS dd
+
+  #EXTENT 28.156069 -25.890870 28.169983 -25.879721
+  EXTENT -180 -90 180 90
+  PROJECTION
+    "init=epsg:4326"
+  END
+
+  SYMBOLSET "../symbols/symbols.sym"
+  FONTSET "../fonts/fonts.list"
+  # Background color for the map canvas -- change as desired
+  IMAGECOLOR 192 192 192
+  IMAGEQUALITY 95
+  # Background color for the map canvas -- change as desired
+  IMAGECOLOR -1 -1 -1
+  IMAGEQUALITY 95
+  
+  INCLUDE "debug.include"
+
+  #IMAGETYPE png24
+  #OUTPUTFORMAT
+  #  # use the new rendering backend from MapServer 5
+  #  NAME 'AGGA'
+  #  DRIVER AGG/PNG
+  #  IMAGEMODE RGBA
+  #END
+
+  #OUTPUTFORMAT
+  #  NAME png 
+  #  DRIVER 'GD/PNG'
+  #  MIMETYPE 'image/png'
+  #  IMAGEMODE PC256
+  #  EXTENSION 'png'
+  #END
+
+  IMAGETYPE jpeg
+  OUTPUTFORMAT
+    # use the new rendering backend from MapServer 5
+    NAME 'AGG_JPEG'
+    DRIVER AGG/JPEG
+    IMAGEMODE RGB
+  END
+
+  # Legend
+  LEGEND
+      IMAGECOLOR 255 255 255
+    STATUS OFF
+    KEYSIZE 18 12
+    LABEL
+      TYPE BITMAP
+      SIZE MEDIUM
+      COLOR 0 0 89
+    END
+  END
+
+  # Web interface definition. Only the template parameter
+  # is required to display a map. See MapServer documentation
+  WEB
+    # Set IMAGEPATH to the path where MapServer should
+    # write its output.
+    IMAGEPATH '/tmp/'
+
+    # Set IMAGEURL to the url that points to IMAGEPATH
+    # as defined in your web server configuration
+    IMAGEURL '/tmp/'
+
+    # WMS server settings
+    METADATA
+      'wms_title'           'South Africa SPOT 5 Mosaic 2010 2.5m'
+      'wms_onlineresource'  'http://196.35.94.243/cgi-bin/mapserv?map=ZA_SPOT2010&'
+      'wms_srs'             'EPSG:4326 EPSG:900913'
+    END
+
+    #Scale range at which web interface will operate
+    # Template and header/footer settings
+    # Only the template parameter is required to display a map. See MapServer documentation
+  END
+
+  LAYER
+    NAME 'BlueMarble'
+    TYPE RASTER
+    DATA '/opt/webmapping/data/world/bluemarble/rectifywesternhemisphere.tif'
+    METADATA
+      'wms_title' 'WesternHemisphere'
+      'wms_srs'             'EPSG:4326'
+    END
+    STATUS DEFAULT
+    TRANSPARENCY 100
+    PROJECTION
+    'proj=longlat'
+    'ellps=WGS84'
+    'datum=WGS84'
+    'no_defs'
+    ''
+    END
+  END
+
+  LAYER
+    NAME 'BlueMarble'
+    TYPE RASTER
+    DATA '/opt/webmapping/data/world/bluemarble/rectifyeasternhemisphere.tif'
+    METADATA
+      'wms_title' 'EasternHemisphere'
+      'wms_srs'             'EPSG:4326'
+    END
+    STATUS DEFAULT
+    TRANSPARENCY 100
+    PROJECTION
+    'proj=longlat'
+    'ellps=WGS84'
+    'datum=WGS84'
+    'no_defs'
+    ''
+    END
+  END
+
+  LAYER
+    NAME "Jpl"
+    TYPE RASTER
+    CONNECTION "http://wms.jpl.nasa.gov/wms.cgi?"
+    CONNECTIONTYPE WMS
+    METADATA
+      "wms_srs"             "EPSG:4326"
+      "wms_name"            "global_mosaic_base" #comma separated list of layer names
+      "wms_server_version"  "1.1.1"
+      "wms_format"          "image/png"
+      #"wms_auth_username" "username"
+      #"wms_auth_password" "password"
+      "wms_bgcolor" "0xFFFFFF"
+    END
+  END
+
+  LAYER
+    NAME 'Spot5_RSA_2009_2_5m'
+    TYPE RASTER
+    DATA '/opt/webmapping/data/za/SPOT5_2010/ecw/za2010ecw.vrt'
+    METADATA
+      'wms_title' 'Spot5_RSA_2010_2_5m'
+      'wms_srs'             'EPSG:4326'
+    END
+    STATUS DEFAULT
+    TRANSPARENCY 100
+    OFFSITE 0 0 0 #transparent pixels
+    MAXSCALEDENOM 1000000
+    MINSCALEDENOM 0
+    PROJECTION
+    'proj=longlat'
+    'ellps=WGS84'
+    'datum=WGS84'
+    'no_defs'
+    ''
+    END
+  END
+
+  INCLUDE 'vector_layers.map.include'
+END
+```
+
+This file should be committed in GIT under <catalogue root>/mapserver/mapfiles.
+
+**Note:** A detailed description of the above file is beyond the scope of this
+document - please see the UMN Mapserver project for full documentation.
