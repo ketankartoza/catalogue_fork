@@ -279,7 +279,7 @@ class Command(BaseCommand):
             'product_id': product_id,
             'radiometric_resolution': radiometric_resolution,
             'band_count': band_count,
-            'cloud_cover': package.get('CCP'),
+            'cloud_cover': float(package.get('CCP')) / 100,
             'owner': owner,
             'license': license,
             'creating_software': software,
