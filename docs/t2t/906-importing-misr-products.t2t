@@ -1,0 +1,101 @@
+
+
+% Leave the blank space above here
+
+= Procedures for importing data from MISR packages into the catalogue =
+
+""Note:"" This document should be considered compulsory reading before you
+attempt to import any data into the catalogue.
+
+""Note2:"" This document //must// be kept up to date when you make changes to
+import scripts etc.
+
+== Importing the packages from a local folder ==
+
+The import process is done by a Django management command that can be called
+by a cron job.
+
+To see all available options you can call the command with `-h` or `help`
+parameter:
+
+```
+$ python manage.py misr_ingest -h
+Usage: manage.py misr_ingest [options]
+
+```
+
+Running the command:
+
+```
+
+```
+
+== Global settings ==
+
+The following parameters in settings.py control the process:
+
+```
+# MISR catalogue ingesting settings
+MISR_ROOT= '/path/to/MISR'
+```
+
+== Implementation details ==
+
+Details on the implementation, mainly regarding the source of
+the data used to populate the catalogue database.
+
+Pseudocode:
+
+  + scan the three folders:
+    +  MB2LME MISR Level 1B2 Local Mode Ellipsoid Radiance Data Ellipsoid projected TOA parameters for the single local mode scene, resampled to WGS84 ellipsoid. HDF-EOS Grid
+    +  MB2LMT MISR Level 1B2 Local Mode Terrain Radiance Data Terrain-projected TOA radiance for the single local mode scene, resampled at the surface and topographically corrected. HDF-EOS Grid
+    +  MI1B2E MISR Level 1B2 Ellipsoid Data Contains the ellipsoid projected TOA radiance, resampled to WGS84 ellipsoid corrected.
+  + sort the list of dated ascending
+  +  if the last scanned date for the folder is set, start from the next date
+  + import nadir AN
+  + create thumbnail for AN (will be used for all other images
+  + parse metadata to get the footprint
+  + get row and path from file name
+  + import all other cameras (set the same footprint)
+  +
+
+
+=== Data and metadata extraction ===
+
+
+The following metadata are hardcoded constants and can be changed at the top of the script `catalogue/management/commands/rapideye_harvest.py`:
+
+|| Parameter            | Value                |
+| band_count            | 5 |
+| radiometric_resolution | 16 |
+| geometric_resolution_x | 5 |
+| geometric_resolution_y | 5 |
+| mission_sensor | REI |
+| sensor_type | REI |
+| acquisition_mode | REI |
+| projection | ORBIT |
+| product_acquisition_start_time | 09:00 |
+
+The following metadata are passed to the script as option parameters:
+
+|| Parameter            | Default                |
+| license               | SAC Commercial License |
+| owner                 | Rapideye AG |
+| processing_level      | 1B                     |
+| creating_software     | Unknown                |
+
+
+The following metadata are read from the shapefile:
+
+|| Parameter            | From |
+| original_product_id   | PATH |
+| product_acquisition_start[1] | ACQ_DATE |
+| row/path informations | footprint centroid |
+| mission | CRAFT_ID |
+| cloud_cover | CCP |
+| sensor_viewing_angle | VW_ANGLE |
+| solar_zenith_angle | 90° - SUNELVN |
+| solar_azimuth_angle | SUNAZMT |
+| sensor_inclination_angle | IND_ANGLE |
+
+[1] time taken from constant product_acquisition_start_time

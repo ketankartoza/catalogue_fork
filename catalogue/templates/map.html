@@ -132,7 +132,13 @@
           <div><b>Note:</b>The SPOT Imagery provided in this backdrop has been degraded to 10m</div>
         </div>{% endif %}
         {% if myRecords %}
-        <a href="/searchresultshapefile/{{mySearchGuid}}/"><img src="/media/images/down_16.png" alt=""/> Download search as a shapefile.</a>
+	<img src="/media/images/down_16.png" alt=""/> Download search as a:
+        <a class="geom_download_link" href="/downloadsearchresults/{{mySearchGuid}}/?shp">SHP</a>
+        <a class="geom_download_link" href="/downloadsearchresults/{{mySearchGuid}}/?kml">KML</a>
+        <a class="geom_download_link" href="/downloadsearchresults/{{mySearchGuid}}/?kmz">KMZ</a>
+</br>
+<img src="/media/images/down_16.png" alt=""/> Download ISO 19115 (SAC Profile) 
+        <a class="geom_download_link" href="/downloadsearchmetadata/{{mySearchGuid}}/">Search metadata</a>
         {% endif %}
         <br /><a href="/modifysearch/{{mySearchGuid}}/" class="button-link" alt="Returns to the main search page (works on a copy of the current search)">Modify this search</a>
         {% if myProductIdSearch %}<br /><a href="/productIdSearchClone/{{mySearchGuid}}/" class="button-link" title="Refine this search (works on a copy of the current search)">Product ID search</a>{% endif %}

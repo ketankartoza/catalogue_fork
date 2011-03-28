@@ -10,6 +10,7 @@ import subprocess
 import ftplib
 import shutil
 from osgeo import gdal
+from mercurial import lock, error
 
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
@@ -49,7 +50,7 @@ RADIOMETRIC_RESOLUTION= 8 # it's 8, 16 and 32 ....
 MISSION_MAP           = {
     'Aqua': 'MYD',
     'Terra': 'MOD',
-    'MODIS-A-T': 'MCD',
+    'Aqua-Terra': 'MCD',
   }
 MISSION_SENSOR_MAP    = MISSION_MAP
 SENSOR_TYPE           = 'MOD'
@@ -81,7 +82,7 @@ def get_row_path_from_polygon(poly, as_int=False, no_compass=False):
   return path, path_shift, row, row_shift
 
 class Command(BaseCommand):
-  help = "Imports mdois packages into the SAC catalogue"
+  help = "Imports MODIS packages into the SAC catalogue"
   option_list = BaseCommand.option_list + (
       make_option('--store_image', '-i', dest='store_image', action='store_true',
           help='Store the original image data extracted from the package.', default=True),
@@ -101,43 +102,14 @@ class Command(BaseCommand):
           help='Processing level code (will be created if does not exists). Defaults to: 1B', default='1B'),
   )
 
-  @staticmethod
-  def fetch_geometries(index_url_base, area_of_interest):
-    """
-    Download the index and parses it, returns a generator list of features
-    """
-    try:
-      temp_base = tempfile.mktemp()
-      for ext in ('shp', 'shx', 'dbf'):
-        _url = "%s.%s" % (index_url_base, ext)
-        _index = urllib2.urlopen(_url)
-        _tmp = open("%s.%s" % (temp_base, ext), 'wb+')
-        _tmp.write(_index.read())
-        _index.close()
-        _tmp.close()
-      data_source = DataSource("%s.%s" % (temp_base, 'shp'))
-    except urllib2.HTTPError, e:
-      raise CommandError('Cannot download index (%s): %s.' % (_url, e))
-    except Exception, e:
-      raise CommandError("Loading index failed %s" % e)
-
-    for pt in data_source[0]:
-      if not area_of_interest or area_of_interest.intersects(pt.geom):
-        yield pt
-
-    del(data_source)
-
-    for ext in ('shp', 'shx', 'dbf'):
-      _f = "%s.%s" % (temp_base, ext)
-      try:
-        os.remove(_f)
-      except:
-        print 'Cannot delete temporary file %s.' % _f
-        pass
-
   @transaction.commit_manually
   def handle(self, *args, **options):
     """ command execution """
+    try:
+      lockfile = lock.lock("/tmp/modis_harvest.lock", timeout=60)
+    except error.LockHeld:
+      # couldn't take the lock
+      raise CommandError, 'Could not acquire lock.'
     store_image           = options.get('store_image')
     test_only             = options.get('test_only')
     verbose               = int(options.get('verbosity'))
@@ -331,7 +303,7 @@ class Command(BaseCommand):
             # Check if it's already in catalogue:
             try:
               op = OpticalProduct.objects.get(product_id=data.get('product_id')).getConcreteInstance()
-              verblog('Alredy in catalogue: updating.', 2)
+              verblog('Already in catalogue: updating.', 2)
               is_new = False
               op.__dict__.update(data)
             except OpticalProduct.DoesNotExist:
@@ -447,13 +419,13 @@ class Command(BaseCommand):
           verblog("Committing transaction.", 2)
       except Exception, e:
         raise CommandError('Uncaught exception: %s' % e)
-
     except Exception, e:
       verblog('Rolling back transaction due to exception.')
       if test_only:
         from django.db import connection
         verblog(connection.queries)
-
       transaction.rollback()
       raise CommandError("%s" % e)
+    finally:
+      lockfile.release()
 

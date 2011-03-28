@@ -16,15 +16,17 @@ from django_dag.models import node_factory, edge_factory
 from functools import wraps
 
 from catalogue.utmzonecalc import utmZoneFromLatLon
+from catalogue.dims_lib import dimsWriter
 
 # Read from settings
 CATALOGUE_SCENES_PATH = getattr(settings, 'CATALOGUE_SCENES_PATH', "/mnt/cataloguestorage/scenes_out_projected_sorted/")
+CATALOGUE_ISO_METADATA_XML_TEMPLATE = getattr(settings, 'CATALOGUE_ISO_METADATA_XML_TEMPLATE')
 
 def runconcrete(func):
   """
   This decorator calls the method in the concrete subclass
-  and raise an exception if the method is found only in the base
-  GenericProduct abstract class
+  and raise an exception if the method is found only in a base
+  abstract class (e.g. GenericProduct or GenericSensorProduct)
   """
   @wraps(func)
   def wrapper(self, *args, **kwargs):
@@ -75,6 +77,27 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
      if self.product_id:
         return u"%s" % self.product_id
      return u"Internal ID: %d" % self.pk
+
+
+  @runconcrete
+  def getAbstract():
+    """
+    Returns a description for this product
+    """
+    pass
+
+  @runconcrete
+  def getMetadataDict(self):
+    """
+    Returns a dictionary of metadata values to feed getXML
+    """
+    pass
+
+  def getXML(self, xml_template=CATALOGUE_ISO_METADATA_XML_TEMPLATE):
+    """
+    Returns ISOMetadata.xml XML as a string
+    """
+    return dimsWriter.getXML(self.getMetadataDict(), xml_template)
 
   @runconcrete
   def thumbnailPath( self ):
@@ -379,6 +402,43 @@ class GenericImageryProduct( GenericProduct ):
   class Meta:
     app_label= 'catalogue'
 
+  def getAbstract(self):
+    """
+    Returns the abstract for this product
+    TODO: implement
+    """
+    return ''
+
+
+  def getMetadataDict(self):
+    """
+    Returns metadata dictionary
+    """
+    metadata = dict(
+      product_date            = self.product_date.isoformat(),
+      file_identifier         = self.product_id,
+      vertical_cs             = self.projection.name,
+      processing_level_code   = self.processing_level.abbreviation,
+      md_data_identification  = unicode(self.acquisition_mode),
+      md_product_date         = self.product_date.isoformat(),
+      md_abstract             = self.getAbstract(),
+      bbox_west               = self.spatial_coverage.extent[0],
+      bbox_east               = self.spatial_coverage.extent[2],
+      bbox_north              = self.spatial_coverage.extent[3],
+      bbox_south              = self.spatial_coverage.extent[1],
+      image_quality_code      = self.quality.name,
+      spatial_coverage        = ' '.join(["%s,%s"  % _p for _p in self.spatial_coverage.tuple[0]]),
+      institution_name        = self.owner.name,
+      institution_address     = self.owner.address1,
+      institution_city        = self.owner.address2,
+      institution_region      = '',
+      institution_postcode    = self.owner.post_code,
+      institution_country     = self.owner.address3,
+    )
+    return metadata
+
+
+
 ###############################################################################
 
 class GenericSensorProduct( GenericImageryProduct ):
@@ -621,6 +681,34 @@ class OpticalProduct( GenericSensorProduct ):
 
   class Meta:
     app_label= 'catalogue'
+
+  def getMetadataDict(self):
+    """
+    Returns metadata dictionary
+    """
+    metadata = dict(
+      product_date            = self.product_date.isoformat(),
+      file_identifier         = self.product_id,
+      vertical_cs             = self.projection.name,
+      processing_level_code   = self.processing_level.abbreviation,
+      cloud_cover_percentage  = self.cloud_cover, # OpticalProduct only
+      md_data_identification  = unicode(self.acquisition_mode),
+      md_product_date         = self.product_date.isoformat(),
+      md_abstract             = self.getAbstract(),
+      bbox_west               = self.spatial_coverage.extent[0],
+      bbox_east               = self.spatial_coverage.extent[2],
+      bbox_north              = self.spatial_coverage.extent[3],
+      bbox_south              = self.spatial_coverage.extent[1],
+      image_quality_code      = self.quality.name,
+      spatial_coverage        = ' '.join(["%s,%s"  % _p for _p in self.spatial_coverage.tuple[0]]),
+      institution_name        = self.owner.name,
+      institution_address     = self.owner.address1,
+      institution_city        = self.owner.address2,
+      institution_region      = '',
+      institution_postcode    = self.owner.post_code,
+      institution_country     = self.owner.address3,
+    )
+    return metadata
 
   def imagePath( self ):
     """

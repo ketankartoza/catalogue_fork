@@ -209,6 +209,27 @@ class Search(models.Model):
   def __unicode__(self):
     return "%s Guid: %s User: %s" % (self.search_date, self.guid, self.user)
 
+  def customSQL( self, sql_string, qkeys, args=None ):
+    from django.db import connection
+    cursor = connection.cursor()
+    #args MUST be parsed in case of SQL injection attempt
+    #execute() does this automatically for us
+    if args:
+      cursor.execute(sql_string,args)
+    else:
+      cursor.execute(sql_string)
+    rows = cursor.fetchall()
+    fdicts = []
+    for row in rows:
+      i = 0
+      cur_row = {}
+      for key in qkeys:
+          cur_row[ key ] = row[ i ]
+          i = i+1
+      fdicts.append( cur_row )
+    return fdicts
+
+
   @staticmethod
   def getDictionaryMap(parm):
     """
