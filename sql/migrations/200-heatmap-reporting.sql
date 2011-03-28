@@ -71,7 +71,7 @@ BEGIN
 INSERT INTO heatmap_values (grid_id,search_date,hits) 
 SELECT heatmap_grid.id,date_trunc('day',catalogue_search.search_date) as datum, count(heatmap_grid.id) as hits 
 FROM heatmap_grid inner join catalogue_search on ST_Intersects(heatmap_grid.geometry,catalogue_search.geometry) and heatmap_grid.geometry && catalogue_search.geometry 
-WHERE date_trunc('day',catalogue_search.search_date) >= date_of_search 
+WHERE date_trunc('day',catalogue_search.search_date) > date_of_search 
 GROUP BY heatmap_grid.id,date_trunc('day',catalogue_search.search_date);
 
 END;$BODY$
