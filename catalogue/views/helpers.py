@@ -615,14 +615,52 @@ WEB_LAYERS = {
         #
         # Heatmap - all
         #
-        'Heatmap' : '''var heatmap_all = new OpenLayers.Layer.Image(
-                'Heatmap All',
+        'Heatmap-total' : '''var heatmap_total = new OpenLayers.Layer.Image(
+                'Heatmap total',
                 '/media/heatmaps/heatmap-total.png',
                 new OpenLayers.Bounds(-20037508.343,-16222639.241,20019734.329,16213801.068),
                 new OpenLayers.Size(1252,1013),
-                {isBaseLayer: false,
-                maxResolution: 156543.0339,
-                opacity:0.8
+                {isBaseLayer: true,
+                maxResolution: 156543.0339
+                }
+            );
+        ''',
+        #
+        # Heatmap - last3month
+        #
+        'Heatmap-last3month' : '''var heatmap_last3month = new OpenLayers.Layer.Image(
+                'Heatmap last 3 months',
+                '/media/heatmaps/heatmap-last3month.png',
+                new OpenLayers.Bounds(-20037508.343,-16222639.241,20019734.329,16213801.068),
+                new OpenLayers.Size(1252,1013),
+                {isBaseLayer: true,
+                maxResolution: 156543.0339
+                }
+            );
+        ''',
+        #
+        # Heatmap - last month
+        #
+        'Heatmap-lastmonth' : '''var heatmap_lastmonth = new OpenLayers.Layer.Image(
+                'Heatmap last month',
+                '/media/heatmaps/heatmap-lastmonth.png',
+                new OpenLayers.Bounds(-20037508.343,-16222639.241,20019734.329,16213801.068),
+                new OpenLayers.Size(1252,1013),
+                {isBaseLayer: true,
+                maxResolution: 156543.0339
+                }
+            );
+        ''',
+        #
+        # Heatmap - last week
+        #
+        'Heatmap-lastweek' : '''var heatmap_lastweek = new OpenLayers.Layer.Image(
+                'Heatmap last week',
+                '/media/heatmaps/heatmap-lastweek.png',
+                new OpenLayers.Bounds(-20037508.343,-16222639.241,20019734.329,16213801.068),
+                new OpenLayers.Size(1252,1013),
+                {isBaseLayer: true,
+                maxResolution: 156543.0339
                 }
             );
         ''',
