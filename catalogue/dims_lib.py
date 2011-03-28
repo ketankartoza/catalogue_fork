@@ -246,7 +246,8 @@ class dimsWriter(dimsBase):
       logging.info('searching for %s in path %s' % (md_name, md_xpath))
       try:
         try:
-          _val =  metadata[md_name]
+          #convert any value to unicode
+          _val =  unicode(metadata[md_name])
           tree.find(md_xpath.format(**dimsBase.NS)).text = _val
           logging.info("adding %s = %s" % (md_name, _val))
         except (KeyError, AttributeError):
