@@ -10,6 +10,9 @@ from catalogue.models import *
 # For shopping cart and ajax product id search
 from django.utils import simplejson
 
+# Helper classes (render_as_kml, ...)
+from helpers import *
+
 ###########################################################
 #
 # Shopping cart stuff
@@ -17,12 +20,28 @@ from django.utils import simplejson
 ###########################################################
 
 @login_required
-def cartAsShapefile(theRequest):
-  """Return the search results as a shapefile"""
+def downloadCart(theRequest):
+  """Dispaches request and returns products in cart in desired file format"""
   myRecords = SearchRecord.objects.all().filter(user=theRequest.user).filter(order__isnull=True)
-  myResponder = ShpResponder( SearchRecord )
-  myResponder.file_name = theRequest.user.username + '-cart'
-  return myResponder.write_search_records( myRecords )
+
+  myFilename = u'%s-cart' % theRequest.user.username
+  if theRequest.GET.has_key('shp'):
+    myResponder = ShpResponder( myRecords )
+    myResponder.file_name = myFilename
+    return  myResponder.write_order_products( myRecords )
+  elif theRequest.GET.has_key('kml'):
+    return render_to_kml("kml/products_in_cart.kml", {'products' : myRecords, 'external_site_url':settings.DOMAIN, 'transparentStyle':True}, myFilename)
+  elif theRequest.GET.has_key('kmz'):
+    return render_to_kmz("kml/products_in_cart.kml", {'products' : myRecords, 'external_site_url':settings.DOMAIN, 'transparentStyle':True}, myFilename)
+  else:
+    logging.info('Request cannot be proccesed, unsupported download file type')
+    raise Http404
+
+@login_required
+def downloadCartMetadata(theRequest):
+  """Returns ISO 19115 metadata for products in cart"""
+  myRecords = SearchRecord.objects.all().filter(user=theRequest.user).filter(order__isnull=True)
+  return downloadISOmetadata(myRecords,'Cart-%s' % theRequest.user.username)
 
 @login_required
 def addToCart(theRequest, theId):

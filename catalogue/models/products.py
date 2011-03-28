@@ -399,7 +399,6 @@ class GenericImageryProduct( GenericProduct ):
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   concrete              = True
 
-
   class Meta:
     app_label= 'catalogue'
 
