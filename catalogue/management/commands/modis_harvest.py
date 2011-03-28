@@ -105,13 +105,11 @@ class Command(BaseCommand):
   @transaction.commit_manually
   def handle(self, *args, **options):
     """ command execution """
-
     try:
       lockfile = lock.lock("/tmp/modis_harvest.lock", timeout=60)
     except error.LockHeld:
       # couldn't take the lock
       raise CommandError, 'Could not acquire lock.'
-
     store_image           = options.get('store_image')
     test_only             = options.get('test_only')
     verbose               = int(options.get('verbosity'))

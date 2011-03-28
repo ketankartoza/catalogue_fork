@@ -49,14 +49,11 @@ class Command(BaseCommand):
   @transaction.commit_manually
   def handle(self, *args, **options):
     """ command execution """
-
     try:
       lockfile = lock.lock("/tmp/dims_ingest.lock", timeout=60)
     except error.LockHeld:
       # couldn't take the lock
       raise CommandError, 'Could not acquire lock.'
-
-
     folder        = options.get('folder')
     globparm      = options.get('glob')
     test_only     = options.get('test_only')

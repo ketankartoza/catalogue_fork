@@ -27,7 +27,7 @@ Test ingestion
 
 Command: python manage.py misr_ingest -v 0 -m 3
 
->>> call_command('misr_ingest', verbosity=0, maxproducts=3, rcfileskip=True)
+####### call_command('misr_ingest', verbosity=0, maxproducts=3, rcfileskip=True)
 
 
 ###############################################
@@ -44,3 +44,4 @@ Cleanup
 
 ###############################################
 
+"""
