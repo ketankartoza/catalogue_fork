@@ -762,7 +762,7 @@ def downloadISOmetadata(theProducts,theName):
   myZipData = StringIO()
   myZip = zipfile.ZipFile(myZipData,'w', zipfile.ZIP_DEFLATED)
   for myProduct in theProducts:
-    myMetadata = myProduct.product.getISOMetadata()
+    myMetadata = myProduct.product.getXML()
     myZip.writestr('%s.xml' % myProduct.product.product_id, myMetadata)
   myZip.close()
   response.content=myZipData.getvalue()
