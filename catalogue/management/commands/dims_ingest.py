@@ -12,6 +12,7 @@ from optparse import make_option
 from osgeo import gdal
 import tempfile
 from subprocess import call
+from mercurial import lock, error
 
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
@@ -49,6 +50,11 @@ class Command(BaseCommand):
   @transaction.commit_manually
   def handle(self, *args, **options):
     """ command execution """
+    try:
+      lockfile = lock.lock("/tmp/dims_ingest.lock", timeout=60)
+    except error.LockHeld:
+      # couldn't take the lock
+      raise CommandError, 'Could not acquire lock.'
     folder        = options.get('folder')
     globparm      = options.get('glob')
     test_only     = options.get('test_only')
@@ -281,5 +287,7 @@ class Command(BaseCommand):
     except Exception, e:
       transaction.rollback()
       raise CommandError('Uncaught exception: %s' % e)
+    finally:
+      lockfile.release()
 
 
