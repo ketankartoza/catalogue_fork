@@ -9,11 +9,13 @@
         $('#content').load(theUrl,'', zebraTables );
       };
   </script>
-  <a href="/ordermonthlyreport/{{ myCurrentDate|date:'Y' }}/{{ myCurrentDate|date:'m' }}/?pdf">PDF</a>
-<div id="monthSelector" class="span-22 last">
-      <div class="span-3 append-2"><a href="/ordermonthlyreport/{{ myPrevDate|date:'Y' }}/{{  myPrevDate|date:'m' }}/">Previous month</a></div>
+  <div>
+  <a class="button-link" href="/ordermonthlyreport/{{ myCurrentDate|date:'Y' }}/{{ myCurrentDate|date:'m' }}/?pdf">PDF</a>
+  </div>
+<div id="monthSelector" class="span-22 last" style="margin-top:3px;">
+      <div class="span-3 append-2"><a class="button-link" href="/ordermonthlyreport/{{ myPrevDate|date:'Y' }}/{{  myPrevDate|date:'m' }}/">Previous month</a></div>
 <div class="span-4 prepend-3 append-3">{{ myCurrentDate|date:'F Y' }}</div>
-      <div class="span-3 prepend-4 last"><a href="/ordermonthlyreport/{{ myNextDate|date:'Y' }}/{{  myNextDate|date:'m' }}/">Next month</a></div>
+      <div class="span-3 prepend-4 last"><a class="button-link" href="/ordermonthlyreport/{{ myNextDate|date:'Y' }}/{{  myNextDate|date:'m' }}/">Next month</a></div>
 </div>
 {% if myRecords %}
   <h2>Orders List</h2>
@@ -51,10 +53,9 @@
 {% endif %}
   {% box_end %}
 <script>
-{# //add UI button to monthSelector links #}
   $(document).ready(function(){
-  $('#monthSelector a').button();
+  //button up links
+  $('.button-link').button();
   });
-
 </script>
 {% endblock %}

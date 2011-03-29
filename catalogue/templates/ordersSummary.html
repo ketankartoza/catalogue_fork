@@ -3,7 +3,7 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% block content %}
   {% box_start "" "" "orders-summary" %}
-<a href="/orderssummary/?pdf">PDF</a>
+<a class="button-link" href="/orderssummary/?pdf">PDF</a>
 <h2>Order status summary report</h2>
 <table>
   <thead>
@@ -41,5 +41,12 @@
 </table>
 
   {% box_end %}
+<script>
+  //button up links
+  $(document).ready(function(){
+  $('.button-link').button();
+  });
+
+</script>
 {% endblock %}
 

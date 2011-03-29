@@ -146,13 +146,13 @@
     {% if user.is_staff %}
     {% if myOrder.delivery_detail.geometry %}
     Download clip geometry:
-    <a class="geom_download_link" href="/downloadclipgeometry/{{ myOrder.id }}/?shp">SHP</a>
-    <a class="geom_download_link" href="/downloadclipgeometry/{{ myOrder.id }}/?kml">KML</a>
-    <a class="geom_download_link" href="/downloadclipgeometry/{{ myOrder.id }}/?kmz">KMZ</a>
+    <a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?shp">SHP</a>
+    <a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?kml">KML</a>
+    <a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?kmz">KMZ</a>
     {% endif %}
     {% endif %}
     Download ISO 19115 (SAC Profile)
-    <a class="geom_download_link" href="/downloadordermetadata/{{ myOrder.id }}/">XML metadata</a>
+    <a class="button-link" href="/downloadordermetadata/{{ myOrder.id }}/">XML metadata</a>
 {% box_end %}
 <br />
 <div id="items">
@@ -186,6 +186,6 @@ Order History
 
 <script>
 $(document).ready(function (){
-$('.geom_download_link').button();
+$('.button-link').button();
 });
 </script>

@@ -15,21 +15,21 @@
   {% if myDownloadOrderFlag %}
   <div id="cart-download-div" style="text-align: center;">
     <img src="/media/images/down_16.png" alt=""/> Download order as
-    <a class="geom_download_link" href="/downloadorder/{{ myOrder.id }}/?shp">SHP</a>
-    <a class="geom_download_link" href="/downloadorder/{{ myOrder.id }}/?kml">KML</a>
-    <a class="geom_download_link" href="/downloadorder/{{ myOrder.id }}/?kmz">KMZ</a>
+    <a class="button-link" href="/downloadorder/{{ myOrder.id }}/?shp">SHP</a>
+    <a class="button-link" href="/downloadorder/{{ myOrder.id }}/?kml">KML</a>
+    <a class="button-link" href="/downloadorder/{{ myOrder.id }}/?kmz">KMZ</a>
   </div>
   {% else %}
   {% if myRecords %}
   <div id="cart-download-div" style="text-align: center;">
     <img src="/media/images/down_16.png" alt=""/> Download cart as
-    <a class="geom_download_link" href="/downloadcart/?shp">SHP</a>
-    <a class="geom_download_link" href="/downloadcart/?kml">KML</a>
-    <a class="geom_download_link" href="/downloadcart/?kmz">KMZ</a>
+    <a class="button-link" href="/downloadcart/?shp">SHP</a>
+    <a class="button-link" href="/downloadcart/?kml">KML</a>
+    <a class="button-link" href="/downloadcart/?kmz">KMZ</a>
   </div>
   <div id="cart-download-div" style="text-align: center;">
     <img src="/media/images/down_16.png" alt=""/> Download ISO 19115 (SAC Profile)
-    <a class="geom_download_link" href="/downloadcartmetadata/">Cart metadata</a>
+    <a class="button-link" href="/downloadcartmetadata/">Cart metadata</a>
   </div>
   {% endif %}
   {% endif %}
@@ -39,7 +39,7 @@
 $(document).ready(function(){
 
 {% if myRecords %}
-$('.geom_download_link').button();
+$('.button-link').button();
 {% endif %}
 
 {% if myShowDeliveryDetailsFlag %}
