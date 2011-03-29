@@ -2,7 +2,7 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% box_start "" "" ""%}
   {% if myRecords %}
-<a href="/visitorlist/?page={{ myRecords.number}}&pdf">PDF</a>
+<a class="button-link" href="/visitorlist/?page={{ myRecords.number}}&pdf">PDF</a>
       <table id="gradient-style" summary="Available Sensors">
         <thead> 
         </thead>
@@ -68,4 +68,10 @@
   {% else %}
   <p>No visitors are available.</p>
   {% endif %}
+<script>
+  $(document).ready(function(){
+  //button up links
+  $('.button-link').button();
+  });
+</script>
 {% box_end %}
