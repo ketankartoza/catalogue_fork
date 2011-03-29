@@ -339,7 +339,7 @@ class DeliveryDetailForm(forms.ModelForm):
     #determine UTM zones for all products
     myProductZones = set()
     for record in theRecords:
-      myProductZones=myProductZones.union(record.product.getUTMZones())
+      myProductZones=myProductZones.union(record.product.getUTMZones(theBuffer=1))
 
     myDefaultProjections=set((('4326','EPSG 4326'),('900913','EPSG 900913')))
     self.fields['projection'] =  forms.ModelChoiceField(queryset=Projection.objects.filter(epsg_code__in=[k for k,v in  myProductZones | myDefaultProjections]).all(), empty_label=None)
@@ -364,7 +364,7 @@ class ProductDeliveryDetailForm(forms.ModelForm):
     myPK = kwargs.get('prefix')
     myProduct = SearchRecord.objects.filter(pk__exact=myPK).get().product
     myDefaultProjections=set((('4326','EPSG 4326'),('900913','EPSG 900913')))
-    self.fields['projection'] =  forms.ModelChoiceField(queryset=Projection.objects.filter(epsg_code__in=[k for k,v in myProduct.getUTMZones(1) | myDefaultProjections]).all(), empty_label=None)
+    self.fields['projection'] =  forms.ModelChoiceField(queryset=Projection.objects.filter(epsg_code__in=[k for k,v in myProduct.getUTMZones(theBuffer=0) | myDefaultProjections]).all(), empty_label=None)
 
   class Meta:
     model = DeliveryDetail
