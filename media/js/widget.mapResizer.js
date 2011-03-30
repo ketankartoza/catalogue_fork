@@ -36,7 +36,8 @@
 	    }
 	    
 	    //calculate minimal right edge for the map
-	    this.right_edge_limit = this.element.offset().left + this.element.width();
+	    this.offset_left = this.element.offset().left;
+	    this.right_edge_limit = this.offset_left + this.element.width();
 
 	    //set min_width to parent width and height
 	    this.min_width=this.element.width();
@@ -73,7 +74,19 @@
 		    else {
 			var left_offset = new_width-self.old_width;//mirror left side as much as right side == mirror
 			self._set_dim({top:offset.top,left:offset.left-left_offset},new_width+left_offset,self.element.height());
-		    }		    
+		    }
+		}
+	    });
+	    //bind browser window resize
+	    $(window).resize(function() {
+		var elem = $(this);
+		var offset=self.element.offset();
+		var windowHeight=elem.height();
+		var windowWidth=elem.width();
+		//if the browser window is smaller then map, restore map 
+		if (self.element.width()>windowWidth || self.element.height()>windowHeight) {
+		    var left_edge= self.element.parent().offset().left;//find left offset of the parent containter to align map
+		    self._set_dim({top:offset.top,left:left_edge},self.min_width,self.min_height);
 		}
 	    });
 	},
