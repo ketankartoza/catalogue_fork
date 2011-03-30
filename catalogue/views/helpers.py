@@ -799,13 +799,35 @@ def downloadISOmetadata(theProducts,theName):
   response = HttpResponse()
   myZipData = StringIO()
   myZip = zipfile.ZipFile(myZipData,'w', zipfile.ZIP_DEFLATED)
-  for myProduct in theProducts:
+  #try to get MAX_METADATA_RECORDS from settings, default to 500
+  myMaxMetadataRecords = getattr(settings, 'MAX_METADATA_RECORDS', 500 )
+  for myProduct in theProducts[:myMaxMetadataRecords]:
     myMetadata = myProduct.product.getXML()
+    logging.info("Adding product XML to ISO Metadata archive.")
     myZip.writestr('%s.xml' % myProduct.product.product_id, myMetadata)
+
+    # Try to add thumbnail + wld file, we assume that jpg and wld file have same name
+    myImageFile = os.path.join(CATALOGUE_SCENES_PATH, "%s.jpg" %  myProduct.product.product_id )
+    myWLDFile = os.path.join(CATALOGUE_SCENES_PATH, "%s.wld" %  myProduct.product.product_id )
+    if os.path.isfile(myImageFile):
+      with open(myImageFile,'rb') as myFile:
+        myZip.writestr("%s.jpg" %  myProduct.product.product_id,myFile.read())
+        logging.error("Adding thumbnail image to ISO Metadata archive.")
+    else:
+      logging.info("Thumbnail image not found: %s" % myImageFile)
+    if os.path.isfile(myWLDFile):
+      with open(myImageFile,'rb') as myFile:
+        myZip.writestr("%s.wld" %  myProduct.product.product_id,myFile.read())
+        logging.info("Adding worldfile to ISO Metadata archive.")
+    else:
+      logging.error("World file not found: %s" % myImageFile)
+
   myZip.close()
   response.content=myZipData.getvalue()
   myZipData.close()
-  filename = 'SANSA-%s-Metadata.zip' % theName
+  #get ORGANISATION_ACRONYM from settings, default to 'SANSA'
+  myOrganisationAcronym = getattr(settings, 'ORGANISATION_ACRONYM', 'SANSA' )
+  filename = '%s-%s-Metadata.zip' % (myOrganisationAcronym,theName)
   response['Content-Type']        = 'application/zip'
   response['Content-Disposition'] = 'attachment; filename=%s' % filename
   response['Content-Length']      = str(len(response.content))

@@ -217,3 +217,9 @@ DEFAULT_AVATAR = os.path.join(MEDIA_ROOT, 'generic.jpg')
 AVATAR_WEBSEARCH = False
 
 CATALOGUE_ISO_METADATA_XML_TEMPLATE = 'resources/PackageTemplate/Metadata/ISOMetadata/ISOMetadata_template.xml'
+
+#limit the number of returned metadata records
+MAX_METADATA_RECORDS=500
+
+#define organisation acronym, used in filenaming schemes
+ORGANISATION_ACRONYM="SANSA"
