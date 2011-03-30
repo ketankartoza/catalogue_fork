@@ -130,7 +130,7 @@ class AdvancedSearchForm(forms.ModelForm):
   cloud_mean = forms.CharField(widget=SliderWidget(),
                                   required=False,
                                   label="Cloud cover",
-                                  help_text = 'Select the maximum cloud cover when searching for images. \
+                                  help_text='Select the maximum cloud cover when searching for images. \
                                                Note that not all sensors support cloud cover filtering.\
                                               ')
   isAdvanced = forms.CharField(widget=forms.HiddenInput(), required=False)
@@ -141,6 +141,8 @@ class AdvancedSearchForm(forms.ModelForm):
 
   k_orbit_path = IntegersCSVIntervalsField(required=False, help_text='Insert the orbit path as a list of comma separated values or ranges (e.g. : "10,20,30" or  "20-40")')
   j_frame_row = IntegersCSVIntervalsField(required=False, help_text='Insert the frame row as a list of comma separated values or ranges (e.g. : "10,20,30" or "20-40")')
+  # exclude PRODUCT_SEARCH_GENERIC from Search.PRODUCT_SEARCH_TYPES
+  search_type = forms.ChoiceField(choices=Search.PRODUCT_SEARCH_TYPES[1:], required=False)
 
   class Meta:
     model = Search

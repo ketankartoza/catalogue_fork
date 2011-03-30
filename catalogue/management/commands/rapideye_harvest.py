@@ -279,7 +279,7 @@ class Command(BaseCommand):
             'product_id': product_id,
             'radiometric_resolution': radiometric_resolution,
             'band_count': band_count,
-            'cloud_cover': package.get('CCP'),
+            'cloud_cover': float(package.get('CCP')) / 100,
             'owner': owner,
             'license': license,
             'creating_software': software,
@@ -355,7 +355,7 @@ class Command(BaseCommand):
           transaction.commit()
           verblog("Committing transaction.", 2)
       except Exception, e:
-        raise CommandError('Uncaught exception: %s' % e)
+        raise CommandError('Uncaught exception (%s): %s' % (e.__class__.__name__, e))
     except Exception, e:
       verblog('Rolling back transaction due to exception.')
       if test_only:
