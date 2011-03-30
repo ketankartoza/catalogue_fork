@@ -22,6 +22,7 @@ import os
 from optparse import make_option
 import tempfile
 import subprocess
+from mercurial import lock, error
 
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
@@ -136,6 +137,13 @@ class Command(BaseCommand):
   @transaction.commit_manually
   def handle(self, *args, **options):
     """ command execution """
+
+    try:
+      lockfile = lock.lock("/tmp/rapideye_harvest.lock", timeout=60)
+    except error.LockHeld:
+      # couldn't take the lock
+      raise CommandError, 'Could not acquire lock.'
+
     username              = options.get('username')
     password              = options.get('password')
     base_url              = options.get('base_url')
@@ -271,7 +279,7 @@ class Command(BaseCommand):
             'product_id': product_id,
             'radiometric_resolution': radiometric_resolution,
             'band_count': band_count,
-            'cloud_cover': package.get('CCP'),
+            'cloud_cover': float(package.get('CCP')) / 100,
             'owner': owner,
             'license': license,
             'creating_software': software,
@@ -347,15 +355,14 @@ class Command(BaseCommand):
           transaction.commit()
           verblog("Committing transaction.", 2)
       except Exception, e:
-        raise CommandError('Uncaught exception: %s' % e)
-
-
+        raise CommandError('Uncaught exception (%s): %s' % (e.__class__.__name__, e))
     except Exception, e:
       verblog('Rolling back transaction due to exception.')
       if test_only:
         from django.db import connection
         verblog(connection.queries)
-
       transaction.rollback()
       raise CommandError("%s" % e)
+    finally:
+      lockfile.release()
 

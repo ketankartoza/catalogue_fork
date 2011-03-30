@@ -233,31 +233,92 @@ scp /tmp/test222 lion:/tmp/
 
 == Synchronising with a cron job ==
 
-On the client system, create a directory that will contain files to be
-synchronised, and do a test, manual rsync of that directory to the lion
-filedrop home:
+The DIMS product library extraction places products in
+''/cxfs/eods/deliveries/'' when they are ready. We can thus synchronise these
+over to the catalogue server as they are created and ingest their metadata.
+
+
 
 ```
-cd /cxfs/datapickup
-mkdir filedrop
 echo "The filedrop directory was created by Tim for " > filedrop-README.txt
 echo "synchronising files over to lion:/mnt/cataloguestorage2/filedrop" >> filedrop-README.txt
-echo "Take a look at root's crontab for details on synchronisation frequency." >> filedrop-README.txt
+echo "Take a look at filedrop user's crontab for details on synchronisation frequency." >> filedrop-README.txt
 cd filedrop
 touch test
 rsync -ave ssh . lion:/mnt/cataloguestorage2/filedrop/
 ```
 
 Assuming that works correctly, we create a simple script that we will run from cron that 
-performs a sync every 30 minutes. The script also flushes any files that are older then 
-7 days.
+performs a sync every 5 minutes (script saved as ''/usr/local/bin/sac/sync_dims_deliveries'').
+
+
+**Note:** The second part of this script is commented out. If enabled it will
+flush any files that are older then 7 days. However I do **not** recommend
+running that as root, so it is disabled.
 
 ```
 #!/bin/bash
-rsync -ave ssh /cxfs/datapickup/filedrop/. lion:/mnt/cataloguestorage2/filedrop/
-# be very very careful if you change this!
-find /cxfs/datapickup/filedrop -name "*" -mtime +8 -exec rm -f {} \;
+# This should be run in a cron job at 5 min intervals (or similar) by root to 
+# push dims deliveries over from Cheetah cxfs to LION
+# Root needs to have rssh client key for lion configured - see 
+# Catalogue documentation for details.
+#
+# You should add an entry like this to root's crontab to run this at intervals
+# you prefer. 
+# e.g.
+# Job will run each minute 
+# */1 * * * * /usr/local/bin/sac/sync_dims_deliveries
+#
+#Add a lock file to /tmp that indicates if a sync is in progress, if it is
+#exit so that we dont try to run two concurrent rsyncs.
+LOCKFILE=/tmp/dims-deliveries-sync-to-lion.lock
+if [ -f "$LOCKFILE" ] #skip if exists
+then
+  echo "Skipping (already processing): $LOCKFILE"
+else
+  touch $LOCKFILE
+  rsync -ave ssh /cxfs/eods/deliveries lion:/mnt/cataloguestorage2/filedrop/
+  rm $LOCKFILE
+fi
+# be very very careful if you change this / enable this
+# find /cxfs/datapickup/filedrop -name "*" -mtime +8 -exec rm -f {} \;
+
 ```
+
+Finally add a line to the crontab:
+
+```
+sudo crontab -e
+```
+
+And add this line:
+
+```
+# Job will run at 1 minute intervalse to sync dims deliveries to lion
+*/1 * * * * /usr/local/bin/sac/sync_dims_deliveries
+```
+
+Lastly, if you intend to make deliveries directly downloadable, you need to
+share the delivery directory on the catalogue server. The configuration
+disallows directory listings so that users cannot download products destined
+for other users. Adding the following to 000-defult apache site makes the 
+deliveries directory listable:
+
+```
+  Alias /deliveries /mnt/cataloguestorage2/filedrop/deliveries
+  <Directory /mnt/cataloguestorage2/filedrop/deliveries>
+    # for debugging only, show directory listings
+    # Options Indexes FollowSymLinks MultiViews
+    # in production, hide directory listings
+    Options -Indexes FollowSymLinks MultiViews
+
+    AllowOverride None
+    Order allow,deny
+    allow from all
+  </Directory>
+
+```
+
 
 == Lion Cron Jobs ==
 
@@ -265,6 +326,9 @@ On the lion server side, a similar cron job is run to:
 - ingest any new packages that have arrived
 - clear away any filedrop files older than 7 days
 -
+
+The cron job should not be run as root in order to avoid any potential side
+effects that may occur from broken scripts etc.
 
 
 ```

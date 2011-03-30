@@ -66,6 +66,9 @@ We can express the above diagram verbally:
 - The DeliveryDetail record associated with an Order encapsulate the
   Projection, Datum, Processing level, Resampling Method and File Format that
   **all** the products of that order should be delivered in.
+- The DeliveryDetail record associated with an Order optionally stores Order level
+  AOI / clip mask used by staff to use to clip the products before shipping ordered
+  products to the client
 - The DeliveryDetail record associated with an SearchRecord encapsulate the
   Projection, Datum, Processing level, Resampling Method and File Format that
   the **specific product**  associated with that SearchRecord should be
@@ -139,7 +142,7 @@ server.
 In cases where instant delivery is made, download links will be included in
 notification emails and in the order summary visible to operators.
 
-In the case of DUMS OS4EO extracted products, these will be flushed after a
+In the case of DIMS OS4EO extracted products, these will be flushed after a
 period of 1 week from the server file system and the user advised to this fact
 when this happens.
 
@@ -199,9 +202,9 @@ The projections list can be long and irrelevant for many images if the complete
 list is shown. Thus the following logic applies:
 
 - For single product properties, when listing utm zones for the projection
-  combo, only the zone in which the image centroid falls, and the two zones to
+  combo, only the zones in which the image bounding box falls, and the two zones to
   either side of that are shown.
-- For Order records, only utm zones that intersect with the centroids of one or
+- For Order records, only utm zones that intersect with the image bounding box of one or
   more of the products listed in the order should be listed, along with the two
   adjacent zones on either side of each image.
 - EPSG:4326 Geographic is always listed

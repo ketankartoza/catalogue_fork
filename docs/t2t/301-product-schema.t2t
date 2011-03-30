@@ -47,6 +47,58 @@ common properties applicable to **any** product regardless of type. A number of
 data dictionaries (as described in the next section) are used to ensure data
 consistency for properties relating to a product.
 
+=== Generic Product Properties ===
+
+The following properties are defined for generic products:
+
+|| Property | Type |
+|  product_date          | models.DateTimeField |
+|  processing_level      | models.ForeignKey |
+|  owner                 | models.ForeignKey |
+|  license               | models.ForeignKey |
+|  spatial_coverage      | models.PolygonField |
+|  projection            | models.ForeignKey |
+|  quality               | models.ForeignKey |
+|  creating_software     | models.ForeignKey |
+|  original_product_id   | models.CharField |
+|  product_id            | models.CharField |
+|  product_revision      | models.CharField |
+|  local_storage_path    | models.CharField |
+|  metadata              | models.TextField |
+|  remote_thumbnail_url  | models.TextField |
+|  concrete              | False |
+
+**Product Date** is the generalised date for the product. This may be
+equivalent to the product_acquisition_start of sensor based products, the
+mid-point between  product_acquisition_start and  product_acquisition_end for
+sensor based products, or an arbitrary date assigned by an operator at point of
+product ingestion. Product Date is used as the basis for any date-centric
+search activities in the catalogue.
+
+**Processing Level**. All products have a descriptor indicating to what level
+they have been processed. For sensor based products, this level may indicate
+whether the product has been georeferenced or not. For Generic Spatial
+Products, it may indicate what kind of analysis was carried out in order to
+create the product. //see:// dictionaries section below.
+
+
+**Local Storage Path**
+
+```
+sac=# select local_storage_path from catalogue_genericproduct where local_storage_path is not null limit 5;
+local_storage_path                                  
+--------------------------------------------------------------------------------------
+ZA2/1Ab/2010/5/31/ZA2_MSS_R3B_FMC4_080E_57_026N_47_100531_033947_L1Ab_ORBIT-.tif.bz2
+ZA2/1Ab/2010/3/31/ZA2_MSS_R3B_FMC4_176E_47_039S_35_100331_204030_L1Ab_ORBIT-.tif.bz2
+```
+The path is relative to the IMAGERY_ROOT defined in settings.py and is in the form:
+
+''mission/processing level/yyyy/m/d/product_id.<file extension>.bz2''
+
+or
+
+''mission/processing level/yyyy/m/d/product_id.<file extension>.tar.bz2'' (for multifile products) 
+
 === Product ID Naming Scheme ===
 
 All generic products can be identified by a 'nearly unique' product id. The

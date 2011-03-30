@@ -67,6 +67,7 @@ way of backing up. This should be addressed as a priority!
 %!include: 003-2-catalogue-server-setup.t2t
 %!include: 003-3-informix-access.t2t
 %!include: 003-4-storage_array_setup.t2t
+%!include: 003-5-backups.t2t
 %!include: 004-installation-guide.t2t
 %!include: 005-unit-tests.t2t
 %!include: 201-reporting-tools.t2t
@@ -80,4 +81,5 @@ way of backing up. This should be addressed as a priority!
 %!include: 903-importing-dims-products.t2t
 %!include: 904-importing-rapideye-products.t2t
 %!include: 905-importing-modis-products.t2t
+%!include: 906-importing-misr-products.t2t
 %!include: 910-file-drop.t2t

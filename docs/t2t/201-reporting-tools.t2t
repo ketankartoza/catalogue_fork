@@ -63,3 +63,34 @@ The orders summary report contains the following information:
 
 Format : pdf
 
+== PDF report generation ==
+
+To generate on-the-fly PDF reports we use **Pisa**
+http://www.xhtml2pdf.com which is an HTML/XHTML/CSS to PDF converter
+written in Python and based on Reportlab Toolkit, pyPDF, TechGame
+Networks CSS Library and HTML5lib. This apporach doesn't break normal
+Django application development, as we can use Django Templating engine
+to prepare HTML for PDF rendering.
+
+Graphs in PDF reports are created using Google Chart API through
+**pygooglechart** Python library.
+
+== Heatmap preparation ==
+
+Heatmap is based on a pre-calculated data which allows offline map
+generation for specific period of time, i.e. last week, last month,
+last year, etc.
+
+It's based on discovering intersections of user area of interest
+geometry for each search, with quarter degree grid for the whole
+world. These intersections are then summarized for each //grid cell//
+per day.
+
+Heatmap data and rendering is updated by a scheduled background
+process, which creates required heatmaps.
+
+**Note:** Heatmap visualization can be implemented as OpenLayers Image
+  layer, or as Mapserver WMS layer
+
+
+

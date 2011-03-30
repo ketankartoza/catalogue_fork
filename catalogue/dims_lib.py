@@ -145,7 +145,7 @@ class dimsReader(dimsBase):
       try:
         metadata[md_name] = tree.find(md_xpath.format(**self.NS)).text
       except AttributeError:
-        logging.warning('not found %s in path %s' % (md_name, md_xpath))
+        logging.debug('not found %s in path %s' % (md_name, md_xpath))
     logging.info("metadata: %s" % metadata)
     return metadata
 
@@ -202,6 +202,7 @@ class dimsWriter(dimsBase):
     self._package_name  = package_name
     self._xml_template  = os.path.join(self._path, 'Metadata', 'ISOMetadata', 'ISOMetadata_template.xml')
     self._xml           = {}
+    self.template_path  = template_path
     # makes a temporary copy of the template folder, all processing will be done on the copy
     shutil.copytree(template_path, self._path)
     logging.info("template copied to %s" % self._path)
@@ -217,7 +218,8 @@ class dimsWriter(dimsBase):
         logging.info("creating %s" % _p)
         os.makedirs(_p)
 
-  def _get_metadata(self, product_data, key, silently_fail=False):
+  @staticmethod
+  def _get_metadata(product_data, key, silently_fail=False):
     """
     Returns a metadata value for a given product_code.
     If silently_fail is not set and metadata is not found then an exception is raised
@@ -233,6 +235,26 @@ class dimsWriter(dimsBase):
         return None
       raise MetadataNotFoundException('%s not found' % key)
 
+
+  @staticmethod
+  def getXML(metadata, template_xml):
+    """
+    Returns ISOMetadata.xml content as a string
+    """
+    tree = etree.parse(template_xml)
+    for md_name, md_xpath in dimsBase.METADATA.items():
+      logging.info('searching for %s in path %s' % (md_name, md_xpath))
+      try:
+        try:
+          _val =  metadata[md_name]
+          tree.find(md_xpath.format(**dimsBase.NS)).text = _val
+          logging.info("adding %s = %s" % (md_name, _val))
+        except (KeyError, AttributeError):
+          logging.debug('not found %s in path %s' % (md_name, md_xpath))
+      except MetadataNotFoundException:
+        logging.debug('searching for %s in path %s' % (md_name, md_xpath))
+    return etree.tostring(tree)
+
   def _add_metadata(self, product_code, product_data):
     """
     Set metadata in the template
@@ -241,20 +263,11 @@ class dimsWriter(dimsBase):
     _xml = os.path.join(self._path, 'Metadata', 'ISOMetadata',
                         self._get_metadata(product_data, 'processing_level_code'),
                         product_code + '.xml')
-    tree = etree.parse(self._xml_template)
-    for md_name, md_xpath in self.METADATA.items():
-      logging.info('searching for %s in path %s' % (md_name, md_xpath))
-      try:
-        _val =  self._get_metadata(product_data, md_name, True)
-        try:
-          tree.find(md_xpath.format(**self.NS)).text = _val
-          logging.info("adding %s = %s" % (md_name, _val))
-        except AttributeError:
-          logging.warning('not found %s in path %s' % (md_name, md_xpath))
-      except MetadataNotFoundException:
-        print 'searching for %s in path %s' % (md_name, md_xpath)
+
     self._xml[product_code] = _xml
-    tree.write(_xml)
+    fh = open(_xml, 'w+')
+    fh.write(dimsWriter.getXML(product_data.get('metadata'), os.path.join(self.template_path, 'Metadata', 'ISOMetadata', 'ISOMetadata_template.xml')))
+    fh.close()
     logging.info("adding metadata to %s" % _xml)
 
 
