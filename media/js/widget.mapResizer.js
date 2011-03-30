@@ -84,7 +84,7 @@
 		var windowHeight=elem.height();
 		var windowWidth=elem.width();
 		//if the browser window is smaller then map, restore map 
-		if (self.element.width()>windowWidth || self.element.height()>windowHeight) {
+		if (self.element.width()>windowWidth || self.element.height()>windowHeight+10) {
 		    var left_edge= self.element.parent().offset().left;//find left offset of the parent containter to align map
 		    self._set_dim({top:offset.top,left:left_edge},self.min_width,self.min_height);
 		}
@@ -134,7 +134,7 @@
 		var W=$(window).width();
 		var offset=self.element.offset();
 		//hardcoded decrements, to avoid browser horizontal scroll bar
-		self._set_dim({top:offset.top,left:5},W-15,H-5);
+		self._set_dim({top:offset.top,left:5},W-15,H-10);
 		//scroll window to the top of the map
 		if (self.options.scrollTo){
 		    $(window).scrollTop(offset.top);
