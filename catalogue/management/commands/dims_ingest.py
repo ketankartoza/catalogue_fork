@@ -3,6 +3,17 @@ Dims ingestion command
 
 Ingestion of DIMS SPOT-5 OpticalProduct only
 
+From the docs (903):
+""Note3:"" The most important missing piece in this import procedure is the
+DIMS identification id (to be used in OS4EO ordering process): this id is
+still missing from the ISOMetadata.xml file and hence it is not possible
+to import DIMS packages that can be ordered via OS4EO. The DIMS id should
+be available and stored into GenericSensorProduct.online_storage_medium_id.
+This id must be the same that we can use to usbmit an order with OS4EO
+"Submit" method
+
+
+
 """
 
 import os

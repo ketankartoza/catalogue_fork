@@ -11,6 +11,7 @@ Note: uses a custom elementsoap library with enhanced debug capabilities
 
 from django.conf import settings
 
+# Uses a patched version of ElementSOAP, with enhanced debug capabilities
 from catalogue.elementsoap.ElementSOAP import *
 import catalogue.elementsoap.ElementTree as ET
 

@@ -24,6 +24,8 @@ BEGIN;
     OR "catalogue_genericproduct"."local_storage_path" = '')
     AND "catalogue_searchrecord"."product_id" = "catalogue_genericproduct"."id";
 
+  ALTER TABLE "catalogue_searchrecord" ADD "download_path" VARCHAR(512);
+
   ALTER TABLE "catalogue_searchrecord" ALTER "product_ready" SET NOT NULL;
 
 --ROLLBACK;

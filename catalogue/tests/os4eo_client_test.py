@@ -23,17 +23,27 @@ Place multiple
   '100002', \
 )
 
+>>> single_id
+'urn:EOP:SAC:EOWEB...'
+
+>>> multiple_id
+'urn:EOP:SAC:EOWEB...'
 
 >>> os4eo.GetStatus(single_id)
+'Submitted'
 
 >>> os4eo.GetStatus(multiple_id)
+'Submitted'
 
 >>> os4eo.GetStatus(single_id, True)
+'Submitted'
 
 >>> os4eo.GetStatus(multiple_id, True)
+'Submitted'
 
 >>> os4eo.DescribeResultAccess(single_id)
+'failure'
 
 >>> os4eo.DescribeResultAccess(multiple_id)
-
+'failure'
 """

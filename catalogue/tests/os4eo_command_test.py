@@ -21,4 +21,6 @@ Load an initial fixture with dictionaries
 >>> call_command('loaddata', 'fixtures/catalogue_dictionaries.json', verbosity=0)
 
 
+TODO: tests
+
 """
