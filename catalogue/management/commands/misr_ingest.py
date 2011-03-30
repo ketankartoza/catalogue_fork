@@ -56,6 +56,7 @@ SENSOR_TYPE           = 'VNI'
 ACQUISITION_MODE      = ('LM', 'GM') # vary: Cam_mode -> 0=local 1=global
 GEOMETRIC_RESOLUTION  = 275 # ... vary: http://www-misr.jpl.nasa.gov/Mission/misrInstrument/spatialResolution/
 RC_FILE               = 'misr_ingest.rc'
+MAX_BLOCK_FOR_THUMB   = 4 # Do not create thumbs for (globalmode) images with more than 4 blocks
 
 SENSOR_VIEWING_ANGLE  = { # Azimuth
   'AN': 0.0,
@@ -230,13 +231,8 @@ class Command(BaseCommand):
             for l in iter(rc):
               lf, ld = l[:-1].split('=')[1].split('/')
               last_date_list[lf] = ld
-              verblog('Last folder: %s' % lf, 2)
-              verblog('Last package: %s' % ld, 2)
+              verblog('Last package: %s/%s' % (lf, ld), 2)
             rc.close()
-            try:
-              directories = directories[directories.index(last_folder):]
-            except ValueError:
-              verblog('Cannot find last_folder %s in list' % last_folder, 2)
           except:
             verblog('Cannot read rcfile %s' % RC_FILE, 2)
         else:
@@ -295,7 +291,6 @@ class Command(BaseCommand):
               footprint = footprint.union(Polygon(GetFootPrintFromKML(path, block)))
 
             footprint.set_srid(4326)
-            footprint = footprint.buffer(0.0001)
 
             # Mission
             mission = MISSION
@@ -339,7 +334,7 @@ class Command(BaseCommand):
 
             # Do the ingestion here...
             data = {
-              'metadata': metadata,
+              'metadata': '\n'.join(metadata),
               'spatial_coverage': footprint,
               'product_id': product_id,
               'radiometric_resolution': radiometric_resolution,
@@ -384,56 +379,59 @@ class Command(BaseCommand):
                 except:
                   pass
 
-              # Creates a thumbnail on the fly mapping band 1 of the first 3 subdatasets to BGR
-              outx= 100
-              outy = 400
-              inx = 512
-              iny = 2048
-
-              drv = gdal.GetDriverByName('GTiff')
-              temp_tif = tempfile.mktemp()
               temp_tif_list = []
-              # Note that the underscore is missing in "End block"...
-              for rast_band in range(int(img.GetMetadata()['Start_block']), int(img.GetMetadata()['End block']) + 1):
-                # Invert x, y: need to transpose
-                temp_tif_list.append('%s_%s.tif' % (temp_tif, rast_band))
-                dst_ds = drv.Create('%s_%s.tif' % (temp_tif, rast_band), outy, outx, 3, gdal.GDT_UInt16)
+              if int(img.GetMetadata()['End block']) - int(img.GetMetadata()['Start_block']) + 1 <= MAX_BLOCK_FOR_THUMB:
+                # Creates a thumbnail on the fly mapping band 1 of the first 3 subdatasets to BGR
+                outx= 100
+                outy = 400
+                inx = 512
+                iny = 2048
 
-                for dataset_number in (0, 1, 2):
-                  sds = gdal.Open(img.GetSubDatasets()[dataset_number][0], GA_ReadOnly)
-                  band = sds.GetRasterBand(rast_band)
-                  a = band.ReadAsArray(0, 0, buf_xsize=outx, buf_ysize=outy)
-                  a = a.transpose()
-                  dst_ds.GetRasterBand(3 - dataset_number).WriteArray(a, 0, 0)
-                  sds = None
+                drv = gdal.GetDriverByName('GTiff')
+                temp_tif = tempfile.mktemp()
+                # Note that the underscore is missing in "End block"...
+                for rast_band in range(int(img.GetMetadata()['Start_block']), int(img.GetMetadata()['End block']) + 1):
+                  # Invert x, y: need to transpose
+                  temp_tif_list.append('%s_%s.tif' % (temp_tif, rast_band))
+                  dst_ds = drv.Create('%s_%s.tif' % (temp_tif, rast_band), outy, outx, 3, gdal.GDT_UInt16)
 
-                srs = osr.SpatialReference()
-                srs.SetWellKnownGeogCS('WGS84')
-                dst_ds.SetProjection(srs.ExportToWkt())
+                  for dataset_number in (0, 1, 2):
+                    sds = gdal.Open(img.GetSubDatasets()[dataset_number][0], GA_ReadOnly)
+                    band = sds.GetRasterBand(rast_band)
+                    a = band.ReadAsArray(0, 0, buf_xsize=outx, buf_ysize=outy)
+                    a = a.transpose()
+                    dst_ds.GetRasterBand(3 - dataset_number).WriteArray(a, 0, 0)
+                    sds = None
 
-                points = GetFootPrintFromKML(int(img.GetMetadata()['Path_number']), rast_band)
-                gcps = []
-                gcps.append(gdal.GCP(points[0][0], points[0][1], 0, 0, 0))
-                gcps.append(gdal.GCP(points[1][0], points[1][1], 0, dst_ds.RasterXSize, 0))
-                gcps.append(gdal.GCP(points[2][0], points[2][1], 0, dst_ds.RasterXSize, dst_ds.RasterYSize))
-                gcps.append(gdal.GCP(points[3][0], points[3][1], 0, 0, dst_ds.RasterYSize))
-                dst_ds.SetGeoTransform(gdal.GCPsToGeoTransform(gcps))
-                dst_ds = None
+                  srs = osr.SpatialReference()
+                  srs.SetWellKnownGeogCS('WGS84')
+                  dst_ds.SetProjection(srs.ExportToWkt())
 
-              # Merge sub images
-              tiff_thumb = os.path.join(thumbnails_folder, op.product_id + ".tiff")
-              cmd = ["gdal_merge.py", "-o", tiff_thumb, "-q"]
-              cmd.extend(temp_tif_list)
-              #import ipy; ipy.shell()
-              subprocess.check_call(cmd)
-              # Transforms the tiff thumb into a jpeg
-              jpeg_thumb = os.path.join(thumbnails_folder, op.product_id + ".jpg")
-              subprocess.check_call(["gdal_translate", "-ot", "Byte", "-scale", "-q", "-co", "worldfile=on", "-of", "JPEG", tiff_thumb, jpeg_thumb])
-              # Removes xml and temporary images
-              os.remove("%s.%s" % (jpeg_thumb, 'aux.xml'))
-              os.remove(tiff_thumb)
+                  points = GetFootPrintFromKML(int(img.GetMetadata()['Path_number']), rast_band)
+                  gcps = []
+                  gcps.append(gdal.GCP(points[0][0], points[0][1], 0, 0, 0))
+                  gcps.append(gdal.GCP(points[1][0], points[1][1], 0, dst_ds.RasterXSize, 0))
+                  gcps.append(gdal.GCP(points[2][0], points[2][1], 0, dst_ds.RasterXSize, dst_ds.RasterYSize))
+                  gcps.append(gdal.GCP(points[3][0], points[3][1], 0, 0, dst_ds.RasterYSize))
+                  dst_ds.SetGeoTransform(gdal.GCPsToGeoTransform(gcps))
+                  dst_ds = None
 
-              img = None
+                # Merge sub images
+                tiff_thumb = os.path.join(thumbnails_folder, op.product_id + ".tiff")
+                cmd = ["gdal_merge.py", "-o", tiff_thumb, "-q"]
+                cmd.extend(temp_tif_list)
+                #import ipy; ipy.shell()
+                subprocess.check_call(cmd)
+                # Transforms the tiff thumb into a jpeg
+                jpeg_thumb = os.path.join(thumbnails_folder, op.product_id + ".jpg")
+                subprocess.check_call(["gdal_translate", "-ot", "Byte", "-scale", "-q", "-co", "worldfile=on", "-of", "JPEG", tiff_thumb, jpeg_thumb])
+                # Removes xml and temporary images
+                os.remove("%s.%s" % (jpeg_thumb, 'aux.xml'))
+                os.remove(tiff_thumb)
+
+                img = None
+              else:
+                verblog('Skipping thumbnail creation: too many blocks.', 2)
 
               if store_image:
                 main_image_folder = os.path.join(settings.IMAGERY_ROOT, op.imagePath())

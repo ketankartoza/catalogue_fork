@@ -32,6 +32,12 @@ class SearchRecord(models.Model):
   order = models.ForeignKey( Order, null=True, blank=True )
   product = models.ForeignKey( GenericProduct, null=False, blank=False )
   delivery_detail = models.ForeignKey( DeliveryDetail, null=True, blank=True )
+  # DIMS ordering related fields
+  internal_order_id = models.IntegerField(null=True, blank=True)
+  download_path = models.CharField(max_length=512, null=False, blank=False, help_text="This is the location from where the product can be downloaded after a successfull OS4EO order placement.")
+  # Default to False unless there is a populated local_storage_path in the product (see overridden save() below) or download_path is filled
+  product_ready = models.BooleanField(default=False)
+
   # Required because genericproduct fkey references a table with geometry
   objects = models.GeoManager()
 
@@ -53,6 +59,17 @@ class SearchRecord(models.Model):
     myRecord.product = theProduct
 
     return myRecord
+
+  def save(self, *args, **kwargs):
+    """
+    Set product_ready according to local_storage_path and download_path
+    """
+    if not self.pk:
+      if self.product.local_storage_path or self.download_path:
+        self.product_ready = True
+      else:
+        self.product_ready = False
+    super(SearchRecord, self).save(*args, **kwargs)
 
   class Admin:
     pass

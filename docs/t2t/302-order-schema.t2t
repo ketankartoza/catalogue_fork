@@ -76,7 +76,7 @@ We can express the above diagram verbally:
 - Each order has a current order status and history of OrderStatus records.
 - Each order has a deliver method associated with it (e.g. ftp, portable disc,
   dvd etc.)
-- 
+-
 
 == Operational notes ==
 
@@ -146,6 +146,147 @@ In the case of DIMS OS4EO extracted products, these will be flushed after a
 period of 1 week from the server file system and the user advised to this fact
 when this happens.
 
+== OS4EO ==
+
+A Django management command, suitable to run from cron jobs, will take care of
+the OS4EO order placing for GenericSensorProduct.
+
+The followin fields in SearchRecord are involved:
+
+  + internal_order_id
+  + product_ready
+  + download_path
+
+One field in GenericSensorProduct tells us if the products is in DIMS and
+can be ordered with OS4EO:
+
+  + online_storage_medium_id
+
+Logic is:
+
+ + only GenericSensorProduct with online_storage_medium_id NOT NULL are DIMS products
+ + if internal_order_id is not set, OS4EO order was not yet placed
+ + if internal_order_id is set but download_path is NULL, the product
+  OS4EO order was placed but not yet completed
+
+Pseudo code:
+
+ + for each pending order (i.e. GenericSensorProduct items wich are not ready from orders with status that is not 'Cancelled', 'Awaiting info from client', 'Completed')
+  + if the product is ordered (internal_order_id is set) checks order status
+    + if the status is 'completed' check the file availability
+      + if the product is available,
+        + fill download_path and save the item (this triggers product_ready = True)
+        + if all other items from the same order are ready
+          + change order status to 'Completed'
+  + if the product is not ordered, order it:
+    + call the OS4EO service to place the order, fill
+      internal_order_id with the id supplied from OS4EO
+    +
+
+
+=== OS4EO configuration ===
+
+The WS endpoint is specified in global settings.py:
+
+```
+OS4EO_SERVICE_ENDPOINT = "http://196.35.94.243/os4eo"
+```
+
+
+=== OS4EO command ===
+
+**Note:** the command is not yet finished nor tested because of some problems that Werum should solve: http://redmine.linfiniti.com/issues/21
+
+To see all available options you can call the command with `-h` or `help`
+parameter:
+
+```
+$ python manage.py os4eo_order -h
+Usage: manage.py os4eo_order [options]
+
+Place orders
+
+Options:
+  -v VERBOSITY, --verbosity=VERBOSITY
+                        Verbosity level; 0=minimal output, 1=normal output,
+                        2=all output
+  --settings=SETTINGS   The Python path to a settings module, e.g.
+                        "myproject.settings.main". If this isn't provided, the
+                        DJANGO_SETTINGS_MODULE environment variable will be
+                        used.
+  --pythonpath=PYTHONPATH
+                        A directory to add to the Python path, e.g.
+                        "/home/djangoprojects/myproject".
+  --traceback           Print traceback on exception
+  -t, --test_only       Just test, nothing will be written into the DB.
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
+```
+
+=== OS4EO client library ===
+
+The client library is located in catalogue/os4eo_client.py, tests and
+example usage are in catalogue/tests/os4eo_client_test.py.
+
+The following methods have been implemented so far:
+
+ + GetCapabilities
+ + Submit
+ + GetStatus
+ + DescribeResultAccessResponse
+ +
+
+
+**Note:** the library development has been carried out incrementally and only the minimum
+set of parameters needed to successfully place and handle an order has been implemented so far.
+Additional parameters can be easily added in the future as needed.
+
+
+Sample session:
+```
+>>> from catalogue.os4eo_client import OS4EOClient
+>>> os4eo = OS4EOClient(debug=False)
+
+>>> os4eo.GetCapabilities()
+[<Element '{http://www.opengis.net/ows}Operation' ...
+
+Place single order
+
+>>> single_id, single_submit_status = os4eo.Submit( \
+  ['SPOT5.HRG.L1A:/eods_hb_pl_eods_XXXXB00000000253027605285/eods_hb_pl_eods_//SPOT5.HRG.L1A'], \
+  '100001', \
+)
+
+Place multiple
+
+>>> multiple_id, multiple_submit_status = os4eo.Submit( \
+  ['SPOT5.HRG.L1A:/eods_hb_pl_eods_XXXXB00000000253027605285/eods_hb_pl_eods_//SPOT5.HRG.L1A', \
+  'SPOT5.HRG.L1A:/eods_hb_pl_eods_XXXXB00000000253027605866/eods_hb_pl_eods_//SPOT5.HRG.L1A' ], \
+  '100002', \
+)
+
+
+>>> os4eo.GetStatus(single_id)
+
+>>> os4eo.GetStatus(multiple_id)
+
+>>> os4eo.GetStatus(single_id, True)
+
+>>> os4eo.GetStatus(multiple_id, True)
+
+>>> os4eo.DescribeResultAccess(single_id)
+
+>>> os4eo.DescribeResultAccess(multiple_id)
+
+```
+
+----------------------------
+**Note:** elementsoap library was used to develop the webservice os4eo_client library (added in REQUIREMENTS.txt)
+buta patched version was used instead of the official one , the patched version has enhanced debug
+capabilities. When debug is not needed anymore, the standard library can be used, just delete the "debug"
+parameter from the function calls in the main script.
+
+
 == Filtering of CRS's ==
 
 The projections list can be long and irrelevant for many images if the complete
@@ -156,7 +297,7 @@ list is shown. Thus the following logic applies:
   either side of that are shown.
 - For Order records, only utm zones that intersect with the image bounding box of one or
   more of the products listed in the order should be listed, along with the two
-  adjacent zones on either side of each image. 
+  adjacent zones on either side of each image.
 - EPSG:4326 Geographic is always listed
 - EPSG:900913 Google Mercator is always listed
 -
@@ -165,7 +306,7 @@ list is shown. Thus the following logic applies:
 
 Currently only one datum is supported for order requests - WGS84:
 
- || id | name | 
+ || id | name |
  |  1 | WGS84 |
 
 Until additional datum options are available, the datum is not shown to end
@@ -222,7 +363,7 @@ delimited lists of rows and paths too e.g.
 Row: 80
 Path 80
 
-or 
+or
 Row: 80-83
 Path: 80-83
 

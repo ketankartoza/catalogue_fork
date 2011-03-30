@@ -128,7 +128,6 @@ class Command(BaseCommand):
     acquisition_mode      = ACQUISITION_MODE
     geometric_resolution  = GEOMETRIC_RESOLUTION
 
-
     def verblog(msg, level=1):
       if verbose >= level:
         print msg
