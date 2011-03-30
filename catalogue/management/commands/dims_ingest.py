@@ -285,7 +285,7 @@ class Command(BaseCommand):
         verblog("Committing transaction.", 2)
     except Exception, e:
       transaction.rollback()
-      raise CommandError('Uncaught exception: %s' % e)
+      raise CommandError('Uncaught exception (%s): %s' % (e.__class__.__name__, e))
     finally:
       lockfile.release()
 

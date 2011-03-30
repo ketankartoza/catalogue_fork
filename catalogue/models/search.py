@@ -127,7 +127,7 @@ class Search(models.Model):
   PRODUCT_SEARCH_IMAGERY        = 4
 
   PRODUCT_SEARCH_TYPES = (
-    #(PRODUCT_SEARCH_GENERIC,    'Generic product search'),
+    (PRODUCT_SEARCH_GENERIC,    'Generic product search'),
     (PRODUCT_SEARCH_OPTICAL,    'Optical product search'),
     (PRODUCT_SEARCH_RADAR,      'Radar product search'),
     (PRODUCT_SEARCH_GEOSPATIAL, 'Geospatial product search'),
@@ -174,7 +174,6 @@ class Search(models.Model):
       default = False,
       help_text='If you want to limit searches to optical products with a certain cloud cover, enable this.')
   cloud_mean = models.IntegerField(null=True, blank=True, default=5, verbose_name="Max Clouds", help_text="Select the maximum permissible cloud cover.", max_length=1)
-  # ABP: new additions
   acquisition_mode  = models.ForeignKey(AcquisitionMode, blank=True, null=True, help_text='Choose the acquisition mode.') #e.g. M X T J etc
   license_type = models.IntegerField(choices=License.LICENSE_TYPE_CHOICES, blank=True, null=True, help_text='Choose a license type.')
   band_count = models.IntegerField(choices=BAND_COUNT_CHOICES, blank=True, null=True, help_text='Select the spectral resolution.')
@@ -182,14 +181,10 @@ class Search(models.Model):
   # sensor_inclination_angle: range
   sensor_inclination_angle_start = models.FloatField(null=True, blank=True, help_text='Select sensor inclination angle start.')
   sensor_inclination_angle_end = models.FloatField(null=True, blank=True, help_text='Select sensor inclination angle end.')
-  # ABP: 2 new FKs
   mission = models.ForeignKey( Mission, null=True, blank=True, help_text='Select satellite mission.') # e.g. S5
   sensor_type = models.ForeignKey( SensorType, null=True, blank=True, related_name = 'search_sensor_type') #e.g. CAM1
-  # ABP: one more FK
   processing_level = models.ManyToManyField( ProcessingLevel, null=True, blank=True, help_text='Select one or more processing level.')
-  # ABP: new additions 2
   polarising_mode = models.CharField(max_length=1, choices=RadarProduct.POLARISING_MODE_CHOICES, null=True, blank=True )
-  # ABP: added record_count
   record_count = models.IntegerField(blank=True, null=True, editable=False)
   # Use the geo manager to handle geometry
   objects = models.GeoManager()

@@ -60,7 +60,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
   remote_thumbnail_url  = models.TextField( max_length=255,null=True, blank=True, help_text="Location on a remote server where this product's thumbnail resides. The value in this field will be nulled when a local copy is made of the thumbnail.")
 
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
-  # this flas is also used in admin back-end to get the list of classes for OrderNotificationRecipients
+  # this flag is also used in admin back-end to get the list of classes for OrderNotificationRecipients
   concrete              = False
 
   objects               = models.GeoManager()
