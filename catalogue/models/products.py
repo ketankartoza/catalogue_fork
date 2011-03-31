@@ -496,13 +496,13 @@ class GenericSensorProduct( GenericImageryProduct ):
     """
       #A sac product id adheres to the following format:
 
-      #SAT_SEN_TYP_MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL
+      #SAT_SEN_TYP_MODE_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL
 
       Where:
       SAT    Satellite or mission          mandatory
       SEN    Sensor                        mandatory
-      MOD    Acquisition mode              mandatory
       TYP    Type                          mandatory
+      MODE   Acquisition mode              mandatory
       KKKK   Orbit path reference          optional?
       KS     Path shift                    optional?
       JJJJ   Orbit row reference           optional?
@@ -523,10 +523,12 @@ class GenericSensorProduct( GenericImageryProduct ):
       """
     myPreviousId = self.product_id #store for thumb renaming just now
     myList = []
+    # TODO: deprecate the pad function and use string.ljust(3, '-')
     myList.append( self.pad( self.acquisition_mode.sensor_type.mission_sensor.mission.abbreviation, 3 ) )
     myList.append( self.pad( self.acquisition_mode.sensor_type.mission_sensor.abbreviation, 3 ) )
-    myList.append( self.pad( self.acquisition_mode.abbreviation, 3 ) )
+    myList.append( self.pad( self.acquisition_mode.abbreviation, 4 ) )
     myList.append( self.pad( self.acquisition_mode.sensor_type.abbreviation, 3 ) )
+    # TODO: deprecate the zeropad function and use string.ljust(3, '0')
     myList.append( self.zeroPad( str( self.path ),4 ) )
     myList.append( self.zeroPad( str( self.path_offset ),2 ) )
     myList.append( self.zeroPad( str( self.row ),4 ) )
@@ -603,13 +605,13 @@ class GenericSensorProduct( GenericImageryProduct ):
 
 
     S5-_HRG_J--_CAM2_0172_+1_0388_00_110124_070818_L1A-_ORBIT--Vers.0.01
-    #SAT_SEN_TYP_MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
+    #SAT_SEN_TYP_MODE_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
 
     Where:
     SAT    Satellite or mission          mandatory
     SEN    Sensor                        mandatory
-    MOD    Acquisition mode              mandatory
     TYP    Type                          mandatory
+    MODE    Acquisition mode              mandatory
     KKKK   Orbit path reference          optional?
     KS     Path shift                    optional?
     JJJJ   Orbit row reference           optional?
