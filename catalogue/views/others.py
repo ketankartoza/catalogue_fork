@@ -532,7 +532,7 @@ def metadata(theRequest, theId):
 def searchKml(theRequest, theGuid):
   """Show a kml of a single search"""
   mySearch = get_object_or_404(Search, guid=theGuid)
-  return render_to_kml("kml/search.kml", {'search' : mySearch})
+  return render_to_kml("kml/search.kml", {'search' : mySearch}, 'search')
 
 def cartKml(theRequest):
   """Show a kml of a single search"""
@@ -573,7 +573,7 @@ def searchesMap(theRequest):
 #
 def visitorsKml(theRequest):
   myVisits = VisitorReport.objects.kml()
-  return render_to_kml("kml/visitorreport.kml", {'Visits' : myVisits})
+  return render_to_kml("kml/visitorreport.kml", {'Visits' : myVisits}, 'visitors')
 
 @login_required
 #renderWithContext is explained in renderWith.py
