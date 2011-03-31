@@ -7,10 +7,10 @@
 
 {% if myTopCountries and myScores %}
 
-<div class="h2">Visits by country excluding SA for {{ myCurrentDate|date:'F Y' }}</div>
+<div class="h2">Visits by country for {{ myCurrentDate|date:'F Y' }}</div>
 
 <center>
-<img src="{% gPieChart myScores myGraphLabel %}" />
+<img src="{% gPieChart myScores myGraphLabel 0 %}" />
 </center>
 
 <pdf:spacer height='1cm'/>
