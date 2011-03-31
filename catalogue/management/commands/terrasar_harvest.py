@@ -1,19 +1,39 @@
 """
-Rapideye harvesting
+Terrasar harvesting
 
-Ingestion of rapideye catalogue
+Ingestion of terrasar catalogue
 
-(AOI Southern Africa)
-RapidEye has provided SAC access to their archive records and given permission
-to add these to SAC's own catalogue. All records for Southern Africa (South of
-the Equator) need to be added to the catalogue and preferably updated at daily
-intervals. The following particulars have been provided by RapidEye to make this
-possible.
-Your username is: c_0010027
-Your password is: 8u3j8csPpI
-our Download Catalog as well as to our Online Discovery Tool EyeFind. You may access
-here: https://eyefind.rapideye.de Download Catalog can be found here:
-https://delivery.rapideye.de/catalogue/
+img_mod: String (254.0)
+pol_mod: String (254.0)
+pol_chan: String (254.0)
+beam_id: String (254.0)
+start_time: String (254.0)
+path_dir: String (254.0)
+rel_orbit: Real (33.31)
+inc_min: Real (33.31)
+inc_max: Real (33.31)
+resolution: String (254.0)
+
+
+Sensor types
+78	HSS	HighResSpotLightSingle	High Resolution Spot Light Single Polarisation	1	1	39	SAR	SAR-TSX1
+79	HSD	HighResSpotLightDual	High Resolution Spot Light Dual Polarisation	2	2	39	SAR	SAR-TSX1
+80	HS3	HS300	High Resolution Spot Light 300 MHz	0,6	1	39	SAR	SAR-TSX1
+81	SLS	SpotLightSingle	Spot Light Single Polarisation	1,5	1	39	SAR	SAR-TSX1
+82	SLD	SpotLightDual	Spot Light Dual Polarisation	2,5	2	39	SAR	SAR-TSX1
+83	SMS	StripMapSingle	Strip Map Single Polarisation	3	1	39	SAR	SAR-TSX1
+84	SMD	StripMapDual	Strip Map Dual Polarisation	6	2	39	SAR	SAR-TSX1
+85	SMQ	StripMapQuad	Strip Map Quad Polarisation	6	4	39	SAR	SAR-TSX1
+86	SCS	ScanSAR	Scan SAR	16	1	39	SAR	SAR-TSX1
+
+Acquisition mode
+60	VV	VV	Vertical Vertical Polarisation	39	SAR	SAR-TSX1
+61	HH	HH	Horizontal Horizontal Polarisation	39	SAR	SAR-TSX1
+62	VVVH	VVVH	Vertical Vertical Vertical Horizontal Polarisation	39	SAR	SAR-TSX1
+63	HHHV	HHHV	Horizontal Horizontal Horizontal Vertical Polarisation	39	SAR	SAR-TSX1
+64	HHVV	HHVV	Horizontal Horizontal Vertical Vertical Polarisation	39	SAR	SAR-TSX1
+65	HHHV	HHHV	Horizontal Horizontal Horizontal Vertical Polarisation	39	SAR	SAR-TSX1
+66	QUAD	HH-VV-HV-VH	Horizontal Horizontal Vertical Vertical Horizontal Vertical Vertical Horizontal Quad Polarisation	39	SAR	SAR-TSX1
 
 
 """
@@ -21,30 +41,29 @@ https://delivery.rapideye.de/catalogue/
 import os
 from optparse import make_option
 import tempfile
+import urllib2
+import zipfile
+import shutil
 import subprocess
+import re
 from mercurial import lock, error
 
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.contrib.gis.gdal import DataSource
 from django.contrib.gis.gdal.geometries import Polygon
 
 from catalogue.models import *
-from catalogue.dims_lib import dimsWriter
 
 
 # Hardcoded constants
 PROJECTION            = 'ORBIT'
 BAND_COUNT            = 5
-RADIOMETRIC_RESOLUTION= 16
-MISSION_SENSOR        = 'REI'
-SENSOR_TYPE           = 'REI'
-ACQUISITION_MODE      = 'REI'
-GEOMETRIC_RESOLUTION  = 5
-PRODUCT_ACQUISITION_START_TIME = '0900'
+RADIOMETRIC_RESOLUTION= 16 #TODO: check this
+MISSION               = 'TSX'
+MISSION_SENSOR        = 'SAR'
 
 
 def get_row_path_from_polygon(poly, as_int=False, no_compass=False):
@@ -70,26 +89,16 @@ def get_row_path_from_polygon(poly, as_int=False, no_compass=False):
   return path, path_shift, row, row_shift
 
 class Command(BaseCommand):
-  help = "Imports RapidEye packages into the SAC catalogue"
+  help = "Imports Terrasar packages into the SAC catalogue"
   option_list = BaseCommand.option_list + (
-      make_option('--username', '-u', dest='username', action='store',
-          help='Username for HTTP Authentication. Defaults is read from settings.py.', default=getattr(settings, 'CATALOGUE_RAPIDEYE_USERNAME', None)),
-      make_option('--password', '-p', dest='password', action='store',
-          help='Password for HTTP Authentication. Defaults is read from settings.py.', default=getattr(settings, 'CATALOGUE_RAPIDEYE_PASSWORD', None)),
-      make_option('--base_url', '-b', dest='base_url', action='store',
-          help='Base catalogue URL. Defaults is read from settings.py.', default=getattr(settings, 'CATALOGUE_RAPIDEYE_BASE_URL', None)),
+      make_option('--index_url', '-b', dest='index_url', action='store',
+          help='Base catalogue URL. Defaults is read from settings.py.', default=getattr(settings, 'CATALOGUE_TERRASAR_SHP_ZIP_URL', None)),
       make_option('--test_only', '-t', dest='test_only', action='store_true',
           help='Just test, nothing will be written into the DB.', default=False),
       make_option('--owner', '-o', dest='owner', action='store',
-          help='Name of the Institution package owner. Defaults to: Rapideye AG.', default='Rapideye AG'),
+          help='Name of the Institution package owner. Defaults to: Infoterra.', default='Infoterra'),
       make_option('--creating_software', '-s', dest='creating_software', action='store',
           help='Name of the creating software. Defaults to: Unknown.', default='Unknown'),
-      make_option('--year', '-y', dest='year', action='store',
-          help='Year to ingest (4 digits). Defaults to: current year', default=datetime.datetime.strftime(datetime.datetime.now(), '%Y')),
-      make_option('--day', '-d', dest='day', action='store',
-          help='Day to ingest (2 digits). Defaults to None', default=None),
-      make_option('--month', '-m', dest='month', action='store',
-          help='Month to ingest (2 digits). Defaults to: current month', default=datetime.datetime.strftime(datetime.datetime.now(),'%m')),
       make_option('--license', '-l', dest='license', action='store', default='SAC Commercial License',
           help='Name of the license. Defaults to: SAC Commercial License'),
       make_option('--area', '-a', dest='area', action='store',
@@ -98,25 +107,40 @@ class Command(BaseCommand):
           help='Quality code (will be created if does not exists). Defaults to: Unknown', default='Unknown'),
       make_option('--processing_level', '-r', dest='processing_level', action='store',
           help='Processing level code (will be created if does not exists). Defaults to: 1B', default='1B'),
+      make_option('--maxproducts', '-m', dest='maxproducts', action='store',
+          help='Import at most n products.', default=0),
+      make_option('--force_update', '-f', dest='force_update', action='store_true',
+          help='Force an update for exists products, default behavior is to skip exists products.', default=False),
   )
 
   @staticmethod
-  def fetch_geometries(index_url_base, area_of_interest):
+  def fetch_geometries(index_url, area_of_interest):
     """
     Download the index and parses it, returns a generator list of features
     """
     try:
-      temp_base = tempfile.mktemp()
-      for ext in ('shp', 'shx', 'dbf'):
-        _url = "%s.%s" % (index_url_base, ext)
-        _index = urllib2.urlopen(_url)
-        _tmp = open("%s.%s" % (temp_base, ext), 'wb+')
-        _tmp.write(_index.read())
-        _index.close()
-        _tmp.close()
-      data_source = DataSource("%s.%s" % (temp_base, 'shp'))
+      index = urllib2.urlopen(index_url)
+      temp_zip_dir = tempfile.mkdtemp()
+      tmp_zip_name = os.path.join(temp_zip_dir, 'archive.zip')
+      tmp_zip = open(tmp_zip_name, 'wb+')
+      tmp_zip.write(index.read())
+      tmp_zip.close()
+      # Unzip
+      archive = zipfile.ZipFile(tmp_zip_name, 'r')
+      bad_file = archive.testzip()
+      if bad_file:
+        archive.close()
+        del archive
+        raise CommandError, 'Bad zip index file.'
+      # Extract
+      for zname in archive.namelist():
+        outfile = file(os.path.join(temp_zip_dir, zname), 'wb')
+        outfile.write(archive.read(zname))
+        outfile.close()
+      archive.close()
+      data_source = DataSource(os.path.join(temp_zip_dir, 'archive.shp'))
     except urllib2.HTTPError, e:
-      raise CommandError('Cannot download index (%s): %s.' % (_url, e))
+      raise CommandError('Cannot download index (%s): %s.' % (index_url, e))
     except Exception, e:
       raise CommandError("Loading index failed %s" % e)
 
@@ -126,30 +150,22 @@ class Command(BaseCommand):
 
     del(data_source)
 
-    for ext in ('shp', 'shx', 'dbf'):
-      _f = "%s.%s" % (temp_base, ext)
-      try:
-        os.remove(_f)
-      except:
-        print 'Cannot delete temporary file %s.' % _f
-        pass
+    try:
+      shutil.rmtree(temp_zip_dir)
+    except:
+      raise CommandError, 'Cannot delete temporary folder %s.' % temp_zip_dir
 
   @transaction.commit_manually
   def handle(self, *args, **options):
     """ command execution """
 
     try:
-      lockfile = lock.lock("/tmp/rapideye_harvest.lock", timeout=60)
+      lockfile = lock.lock("/tmp/terrasar_harvest.lock", timeout=60)
     except error.LockHeld:
       # couldn't take the lock
       raise CommandError, 'Could not acquire lock.'
 
-    username              = options.get('username')
-    password              = options.get('password')
-    base_url              = options.get('base_url')
-    year                  = options.get('year')
-    day                   = options.get('day')
-    month                 = options.get('month')
+    index_url             = options.get('index_url')
     test_only             = options.get('test_only')
     verbose               = int(options.get('verbosity'))
     license               = options.get('license')
@@ -157,16 +173,16 @@ class Command(BaseCommand):
     software              = options.get('creating_software')
     area                  = options.get('area')
     quality               = options.get('quality')
+    maxproducts           = int(options.get('maxproducts'))
     processing_level      = options.get('processing_level')
+    force_update          = options.get('force_update')
 
     # Hardcoded
     projection            = PROJECTION
     band_count            = BAND_COUNT
     radiometric_resolution= RADIOMETRIC_RESOLUTION
     mission_sensor        = MISSION_SENSOR
-    sensor_type           = SENSOR_TYPE
-    acquisition_mode      = ACQUISITION_MODE
-    geometric_resolution  = GEOMETRIC_RESOLUTION
+    mission               = MISSION
 
 
     area_of_interest  = None
@@ -180,19 +196,6 @@ class Command(BaseCommand):
         verblog('Testing mode activated.', 2)
 
     try:
-      # Try connection
-      try:
-        verblog('Opening connection...', 2)
-        password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-        password_mgr.add_password(None, base_url, username, password)
-        handler = urllib2.HTTPBasicAuthHandler(password_mgr)
-        opener = urllib2.build_opener(handler)
-        opener.open(base_url)
-        urllib2.install_opener(opener)
-        verblog('Connection open.', 2)
-      except urllib2.HTTPError, e:
-        raise CommandError('Unable to establish a connection: %s.' % e)
-
       # Validate area_of_interest
       if area:
         try:
@@ -227,33 +230,36 @@ class Command(BaseCommand):
         verblog('Quality %s does not exists and cannot be creates, it will be read from metadata.' % quality, 2)
         raise CommandError, 'Quality %s does not exists and cannot be created: aborting' % quality
 
-      # Builds the path:  https://delivery.rapideye.de/catalogue/shapes/2011/03/accum_itt_shape_2011-03.shp
-      if day:
-        base_index_url = os.path.join(base_url, 'shapes', year, month, day, 'itt_shape_%s-%s' % (year, month))
-        verblog('Day filtering activated.', 2)
-        base_index_url = "%s-%s" % (base_index_url,day)
-      else:
-        base_index_url = os.path.join(base_url, 'shapes', year, month, 'accum_itt_shape_%s-%s' % (year, month))
-
-      verblog('Index base url: %s. (+ extension)' % base_index_url, 2)
-
       try:
         imported = 0
         verblog('Starting index dowload...', 2)
-        for package in Command.fetch_geometries(base_index_url, area_of_interest):
+        for package in Command.fetch_geometries(index_url, area_of_interest):
+          if maxproducts and imported >= maxproducts:
+            verblog("Maxproducts %s exceeded: exiting" % maxproducts, 2)
+            break
+
           verblog("Ingesting %s" % package, 2)
 
           path, path_shift, row, row_shift = get_row_path_from_polygon(package.geom, no_compass=True)
-          # Gets the mission
-          mission_id = package.get('CRAFT_ID')[-1]
-          if not int(mission_id) in (1,2,3,4,5):
-            raise CommandError('Unknown RapidEye mission number (should be 1-5) %s.' % mission_id)
 
-          # Defaults
-          mission = "RE%s" % mission_id
-
+          # Estract metadata
+          sensor_type = str(package['img_mod'])[-3:-1] + str(package['pol_mod'])[0]
+          acquisition_mode = str(package['pol_chan']).replace('/', '')
+          try:
+            resolution = str(package['resolution'])
+            res_range = map(lambda x: not x or float(x.replace(',', '.')), re.search('(\d+,\d+)[^\d]+(\d+,\d+)?', resolution).groups())
+            if type(res_range[0]) == float and type(res_range[1]) == float:
+              geometric_resolution = (res_range[1] + res_range[0]) / 2
+            elif type(res_range[0]) == float:
+              geometric_resolution = res_range[0]
+            verblog('Resolution set to %s' % geometric_resolution)
+          except:
+            verblog('Cannot calculate resolution from %s' % resolution)
+            geometric_resolution = None
+          orbit_number = int(float(str(package['rel_orbit'])))
+          start_time = datetime.datetime.strptime(str(package['start_time'])[:-4], '%Y-%m-%dT%H:%M:%S')
           # Fills the the product_id
-          #SAT_SEN_TYP_MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
+          #SAT_SEN_TYP_MODD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
           product_id = "%(SAT)s_%(SEN)s_%(TYP)s_%(MOD)s_%(KKKK)s_%(KS)s_%(JJJJ)s_%(JS)s_%(YYMMDD)s_%(HHMMSS)s_%(LEVL)s_%(PROJTN)s" % \
           {
             'SAT': mission.ljust(3, '-'),
@@ -264,87 +270,58 @@ class Command(BaseCommand):
             'KS': path_shift.rjust(2, '0'),
             'JJJJ': row.rjust(4, '0'),
             'JS': row_shift.rjust(2, '0'),
-            'YYMMDD': package.get('ACQ_DATE').strftime('%y%m%d'),
-            'HHMMSS': "%s00" % PRODUCT_ACQUISITION_START_TIME,
+            'YYMMDD': start_time.strftime('%y%m%d'),
+            'HHMMSS': start_time.strftime('%H%M%S'),
             'LEVL' : processing_level.ljust(4, '-'),
             'PROJTN': projection.ljust(6, '-')
           }
-          assert len(product_id) == 58, 'Wrong len in product_id'
 
+          assert len(product_id) == 58, 'Wrong len in product_id'
           verblog("Product ID %s" % product_id, 2)
 
           # Do the ingestion here...
           data = {
-            'metadata': '',
+            'metadata': '\n'.join(["%s=%s" % (f,package.get(f)) for f in package.fields]),
             'spatial_coverage': package.geom.geos,
             'product_id': product_id,
             'radiometric_resolution': radiometric_resolution,
             'band_count': band_count,
-            'cloud_cover': float(package.get('CCP')) / 100,
             'owner': owner,
             'license': license,
             'creating_software': software,
             'quality': quality,
-            'sensor_inclination_angle': package.get('IND_ANGLE'),
-            'sensor_viewing_angle': package.get('VW_ANGLE'),
-            'original_product_id': package.get('PATH'),
-            'solar_zenith_angle': 90 - package.get('SUNELVN'),
-            'solar_azimuth_angle': package.get('SUNAZMT'),
+            'incidence_angle': (package.get('inc_min') + package.get('inc_max')) / 2,
             'geometric_resolution_x': geometric_resolution,
             'geometric_resolution_y': geometric_resolution,
+            'orbit_number': orbit_number,
+            'polarising_mode': str(package['pol_mod'])[0],
+            'orbit_direction': str(package['path_dir'])[0].upper(),
+            'imaging_mode': str(package['img_mod']),
           }
           verblog(data, 2)
 
           # Check if it's already in catalogue:
           try:
-            op = OpticalProduct.objects.get(product_id=data.get('product_id')).getConcreteInstance()
-            verblog('Alredy in catalogue: updating.', 2)
+            op = RadarProduct.objects.get(product_id=product_id).getConcreteInstance()
             is_new = False
-            op.__dict__.update(data)
+            #No need to update...
+            if force_update:
+              verblog('Alredy in catalogue: updating.', 2)
+              op.__dict__.update(data)
+            else:
+              verblog('Alredy in catalogue: skipping.', 2)
           except ObjectDoesNotExist:
-            op = OpticalProduct(**data)
+            op = RadarProduct(**data)
             verblog('Not in catalogue: creating.', 2)
             is_new = True
             try:
               op.productIdReverse(True)
             except Exception, e:
               raise CommandError('Cannot get all mandatory data from product id %s (%s).' % (product_id, e))
-
           try:
             op.save()
-            if test_only:
-              verblog('Testing: image not saved.', 2)
-            else:
-              # Store thumbnail
-              thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailPath())
-              try:
-                os.makedirs(thumbnails_folder)
-              except:
-                pass
-              # Download original geotiff thumbnail and creates a thumbnail
-              tiff_thumb = os.path.join(thumbnails_folder, op.product_id + ".tiff")
-              handle = open(tiff_thumb, 'wb+')
-              thumbnail = urllib2.urlopen(package.get('PATH'))
-              handle.write(thumbnail.read())
-              thumbnail.close()
-              handle.close()
-              # Transform and store .wld file
-              jpeg_thumb = os.path.join(thumbnails_folder, op.product_id + ".jpg")
-              # gdal_translate' -co worldfile=on -of JPEG 3259709_2011-03-08_5719804_5719908_browse.tiff 3259709_2011-03-08_5719804_5719908_browse.jpg
-              subprocess.check_call(["gdal_translate", "-q", "-co", "worldfile=on", "-of", "JPEG", tiff_thumb, jpeg_thumb])
-              # Removes xml
-              os.remove("%s.%s" % (jpeg_thumb, 'aux.xml'))
-              os.remove(tiff_thumb)
-            if is_new:
-              verblog('Product %s imported.' % product_id)
-            else:
-              verblog('Product %s updated.' % product_id)
             imported = imported + 1
           except Exception, e:
-            try:
-              os.remove(tiff_thumb)
-            except:
-              pass
             raise CommandError('Cannot import: %s' % e)
 
         verblog("%s packages imported" % imported)

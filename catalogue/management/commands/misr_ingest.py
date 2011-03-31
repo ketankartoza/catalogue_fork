@@ -319,7 +319,7 @@ class Command(BaseCommand):
               'SAT': mission.ljust(3, '-'),
               'SEN': mission_sensor.ljust(3, '-'),
               'TYP': sensor_type.ljust(3, '-'),
-              'MOD': acquisition_mode.ljust(3, '-'),
+              'MOD': acquisition_mode.ljust(4, '-'),
               'KKKK': str(path).rjust(4, '0'),
               'KS': path_shift.rjust(2, '0'),
               'JJJJ': str(row).rjust(4, '0'),
@@ -329,6 +329,7 @@ class Command(BaseCommand):
               'LEVL' : processing_level.ljust(4, '-'),
               'PROJTN': projection.ljust(6, '-')
             }
+            assert len(product_id) == 58, 'Wrong len in product_id'
 
             verblog("Product ID %s" % product_id, 2)
 

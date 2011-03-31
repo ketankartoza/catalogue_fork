@@ -1,4 +1,11 @@
-import dims_lib_test, dims_command_test, rapideye_command_test, modis_command_test, os4eo_client_test, os4eo_command_test, misr_command_test
+import dims_lib_test
+import dims_command_test
+import rapideye_command_test
+import modis_command_test
+import os4eo_client_test
+import os4eo_command_test
+import misr_command_test
+import terrasar_command_test
 
 __test__ = {
   'dims_lib_test' : dims_lib_test,
@@ -8,4 +15,5 @@ __test__ = {
   'os4eo_client_test': os4eo_client_test,
   'os4eo_command_test': os4eo_command_test,
   'misr_command_test': misr_command_test,
+  'terrasar_command_test': terrasar_command_test,
   }

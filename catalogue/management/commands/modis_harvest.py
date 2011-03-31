@@ -110,6 +110,7 @@ class Command(BaseCommand):
     except error.LockHeld:
       # couldn't take the lock
       raise CommandError, 'Could not acquire lock.'
+
     store_image           = options.get('store_image')
     test_only             = options.get('test_only')
     verbose               = int(options.get('verbosity'))
@@ -264,7 +265,7 @@ class Command(BaseCommand):
               'SAT': mission.ljust(3, '-'),
               'SEN': mission_sensor.ljust(3, '-'),
               'TYP': sensor_type.ljust(3, '-'),
-              'MOD': acquisition_mode.ljust(3, '-'),
+              'MOD': acquisition_mode.ljust(4, '-'),
               'KKKK': path.rjust(4, '0'),
               'KS': path_shift.rjust(2, '0'),
               'JJJJ': row.rjust(4, '0'),
@@ -274,6 +275,7 @@ class Command(BaseCommand):
               'LEVL' : processing_level.ljust(4, '-'),
               'PROJTN': projection.ljust(6, '-')
             }
+            assert len(product_id) == 58, 'Wrong len in product_id'
 
             verblog("Product ID %s" % product_id, 2)
 
