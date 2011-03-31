@@ -1,7 +1,7 @@
-Project Modules Documentation
+Catalogue Views Documentation
 =============================
 
-This page contains the Project Modules  documentation.
+This page contains the Catalogue Views documentation.
 
 Modules:
 --------
@@ -9,7 +9,6 @@ Modules:
 .. toctree::
    :maxdepth: 4
 
-   __init__
    geoiputils
    helpers
    orders

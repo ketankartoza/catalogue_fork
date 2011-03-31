@@ -35,8 +35,8 @@
 {% endblock %}
 {% block content %}
 {% box_start "" "" "" %}
-      <a href="?pdf">PDF</a>
-      <a href="/visitormonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{  myCurrentMonth|date:'m' }}/">Monthly reports</a>
+      <a class="button-link" href="?pdf">PDF</a>
+      <a class="button-link" href="/visitormonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{  myCurrentMonth|date:'m' }}/">Monthly reports</a>
     {% if myTopCountries and myScores %}
       <!--Load the AJAX API-->
       <h2 class="chartTitle">Visits by country excluding SA</h2>
@@ -62,4 +62,10 @@
       <p>No reports to generate.</p>
     {% endif %}
 {% box_end %}
+<script>
+  $(document).ready(function(){
+  //button up links
+  $('.button-link').button();
+  });
+</script>
 {% endblock %}

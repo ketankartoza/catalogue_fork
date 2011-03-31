@@ -8,9 +8,12 @@ scenes_out_projected/
 settings.py
 thumbs_out/
 *.*~
+*~
 catalogue.log
 media/avatars/
 *.swp
+
+# TS - docs related ignores
 catalogue.log
 index.aux
 index.log
@@ -18,6 +21,12 @@ index.out
 index.tex
 index.toc
 doc-src
+SANSA-Catalogue-Manual.aux
+SANSA-Catalogue-Manual.log
+SANSA-Catalogue-Manual.out
+SANSA-Catalogue-Manual.tex
+SANSA-Catalogue-Manual.toc
+_build
 
 
 # ABP:

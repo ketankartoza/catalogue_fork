@@ -128,7 +128,6 @@ class Command(BaseCommand):
     acquisition_mode      = ACQUISITION_MODE
     geometric_resolution  = GEOMETRIC_RESOLUTION
 
-
     def verblog(msg, level=1):
       if verbose >= level:
         print msg
@@ -418,7 +417,7 @@ class Command(BaseCommand):
           transaction.commit()
           verblog("Committing transaction.", 2)
       except Exception, e:
-        raise CommandError('Uncaught exception: %s' % e)
+        raise CommandError('Uncaught exception (%s): %s' % (e.__class__.__name__, e))
     except Exception, e:
       verblog('Rolling back transaction due to exception.')
       if test_only:

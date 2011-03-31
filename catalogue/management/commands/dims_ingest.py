@@ -3,6 +3,17 @@ Dims ingestion command
 
 Ingestion of DIMS SPOT-5 OpticalProduct only
 
+From the docs (903):
+""Note3:"" The most important missing piece in this import procedure is the
+DIMS identification id (to be used in OS4EO ordering process): this id is
+still missing from the ISOMetadata.xml file and hence it is not possible
+to import DIMS packages that can be ordered via OS4EO. The DIMS id should
+be available and stored into GenericSensorProduct.online_storage_medium_id.
+This id must be the same that we can use to usbmit an order with OS4EO
+"Submit" method
+
+
+
 """
 
 import os
@@ -180,6 +191,7 @@ class Command(BaseCommand):
           else:
             record_owner = owner
 
+          # TODO: original_product_id
           data = {
             'metadata': product_data['xml'].read(),
             'spatial_coverage': product_data.get('spatial_coverage'),
@@ -191,6 +203,7 @@ class Command(BaseCommand):
             'license': license,
             'creating_software': software,
             'quality': Quality.objects.get_or_create(name=product_data['metadata'].get('image_quality_code'))[0],
+            #'original_product_id' : product_data['metadata'].get('to be defined')
           }
 
           # Read spatial_coverage from gdal if none
@@ -285,7 +298,7 @@ class Command(BaseCommand):
         verblog("Committing transaction.", 2)
     except Exception, e:
       transaction.rollback()
-      raise CommandError('Uncaught exception: %s' % e)
+      raise CommandError('Uncaught exception (%s): %s' % (e.__class__.__name__, e))
     finally:
       lockfile.release()
 

@@ -1,12 +1,16 @@
 """
 Ingest MISR HDF packages from a local folder
 
+http://196.35.94.243/misr/
+
+Main page
+http://eosweb.larc.nasa.gov/PRODOCS/misr/table_misr.html
 
 Strategy:
   * scan the three folders:
-      MB2LME MISR Level 1B2 Local Mode Ellipsoid Radiance Data Ellipsoid projected TOA parameters for the single local mode scene, resampled to WGS84 ellipsoid. HDF-EOS Grid
-      MB2LMT MISR Level 1B2 Local Mode Terrain Radiance Data Terrain-projected TOA radiance for the single local mode scene, resampled at the surface and topographically corrected. HDF-EOS Grid
-      MI1B2E MISR Level 1B2 Ellipsoid Data Contains the ellipsoid projected TOA radiance, resampled to WGS84 ellipsoid corrected.
+      MB2LME MISR Level 1B2 Local Mode Ellipsoid Radiance Data Ellipsoid projected TOA parameters for the single local mode scene, resampled to WGS84 ellipsoid. HDF-EOS Grid (Local mode)
+      MB2LMT MISR Level 1B2 Local Mode Terrain Radiance Data Terrain-projected TOA radiance for the single local mode scene, resampled at the surface and topographically corrected. HDF-EOS Grid (Local mode)
+      MI1B2E MISR Level 1B2 Ellipsoid Data Contains the ellipsoid projected TOA radiance, resampled to WGS84 ellipsoid corrected. (Global Mode)
   * sort the list of dated ascending
   * if the last scanned date for the folder is set, start from the next date
   * import nadir AN
@@ -19,12 +23,16 @@ Strategy:
 
 
 import os
-from optparse import make_option
 import tempfile
 import subprocess
-from mercurial import lock, error
 import shutil
-from osgeo import gdal
+import re
+
+from optparse import make_option
+from mercurial import lock, error
+
+from osgeo import gdal, osr
+from osgeo.gdalconst import *
 
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
@@ -32,7 +40,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.contrib.gis.gdal import DataSource
-from django.contrib.gis.gdal.geometries import Polygon
+from django.contrib.gis.geos import Polygon
 
 from catalogue.models import *
 from catalogue.dims_lib import dimsWriter
@@ -45,10 +53,11 @@ RADIOMETRIC_RESOLUTION= 16
 MISSION               = 'TER' # Terra
 MISSION_SENSOR        = 'MIS'
 SENSOR_TYPE           = 'VNI'
-ACQUISITION_MODE      = 'LM' # vary:
+ACQUISITION_MODE      = ('LM', 'GM') # vary: Cam_mode -> 0=local 1=global
 GEOMETRIC_RESOLUTION  = 275 # ... vary: http://www-misr.jpl.nasa.gov/Mission/misrInstrument/spatialResolution/
-PRODUCT_ACQUISITION_START_TIME = '0900'
 RC_FILE               = 'misr_ingest.rc'
+MAX_BLOCK_FOR_THUMB   = 4 # Do not create thumbs for (globalmode) images with more than 4 blocks
+
 SENSOR_VIEWING_ANGLE  = { # Azimuth
   'AN': 0.0,
   'AA': 26.1,
@@ -60,7 +69,43 @@ SENSOR_VIEWING_ANGLE  = { # Azimuth
   'DA': 70.5,
   'DF': 70.5,
 }
+FOLDERS               = ('MB2LME.002', 'MB2LMT.002', 'MI1B2E.003')
 
+def GDALInfoReportCorner( dataset, x, y ):
+  # From: http://svn.osgeo.org/gdal/trunk/gdal/swig/python/samples/gdalinfo.py
+  adfGeoTransform = dataset.GetGeoTransform()
+  if adfGeoTransform is not None:
+    dfGeoX = adfGeoTransform[0] + adfGeoTransform[1] * x + adfGeoTransform[2] * y
+    dfGeoY = adfGeoTransform[3] + adfGeoTransform[4] * x + adfGeoTransform[5] * y
+    return dfGeoX, dfGeoY
+  else:
+    return x, y
+
+def GetMetadataFromCore(metadata, name):
+  """
+  Scan the core metadata for values
+  """
+  found = False
+  for l in metadata.get('coremetadata').split('\n'):
+    if found and l.find(' VALUE ') != -1:
+      try:
+        return re.search(r'\s=\s["\(]?([^"\)]+)', l).groups()[0]
+      except:
+        raise CommandError, 'Cannot find core metadata value for %s' % name
+    if l.find(name) != -1:
+      found = True
+  return ''
+
+def GetFootPrintFromKML(path, block):
+  """
+  Reads the KML and returns the polygon points
+  """
+  kml = open(os.path.join(settings.ROOT_PROJECT_FOLDER, 'resources', 'misr_paths.kml'))
+  lines = kml.readlines()
+  for l in range(0, len(lines)):
+    if lines[l].find('MISR Path %s Block %s' % (path, block)) != -1:
+      return [map(float, line[:-5].split(',')) for line in lines[l+5:l+10]]
+  return None
 
 def get_row_path_from_polygon(poly, as_int=False, no_compass=False):
   """
@@ -129,6 +174,7 @@ class Command(BaseCommand):
     quality               = options.get('quality')
     rcfileskip            = options.get('rcfileskip')
     processing_level      = options.get('processing_level')
+    creating_software     = options.get('creating_software')
     maxproducts           = int(options.get('maxproducts'))
 
     # Hardcoded
@@ -136,7 +182,6 @@ class Command(BaseCommand):
     band_count            = BAND_COUNT
     radiometric_resolution= RADIOMETRIC_RESOLUTION
     sensor_type           = SENSOR_TYPE
-    acquisition_mode      = ACQUISITION_MODE
     geometric_resolution  = GEOMETRIC_RESOLUTION
 
 
@@ -159,7 +204,7 @@ class Command(BaseCommand):
     try:
       # Get the params
       try:
-        software = CreatingSoftware.objects.get_or_create(name=software, defaults={'version': 0})[0]
+        creating_software = CreatingSoftware.objects.get_or_create(name=creating_software, defaults={'version': 0})[0]
       except CreatingSoftware.DoesNotExist:
         raise CommandError, 'Creating Software %s does not exists and cannot create: aborting' % software
       try:
@@ -178,215 +223,254 @@ class Command(BaseCommand):
         raise CommandError, 'Quality %s does not exists and cannot be created: aborting' % quality
 
       try:
+        # Reads ini file
+        last_date_list = {}
+        if not rcfileskip:
+          try:
+            rc = open(RC_FILE, 'r')
+            for l in iter(rc):
+              lf, ld = l[:-1].split('=')[1].split('/')
+              last_date_list[lf] = ld
+              verblog('Last package: %s/%s' % (lf, ld), 2)
+            rc.close()
+          except:
+            verblog('Cannot read rcfile %s' % RC_FILE, 2)
+        else:
+          verblog('Skipping rc file.', 2)
+
         # Stores last scanned date and file for each main folder
         last_processed = {}
         imported = 0
         # Get first level dir
-        for l0_folder in os.listdir(base_path):
-          verblog('Found main folder : %s' % l0_folder, 2)
-          #
-          # Get second level dir (date)
-          for l1_folder in os.listdir(os.path.join(base_path, l0_folder)):
-            l1_folder = os.path.split(l1_folder)[-1]
-            #
-            level_1_folder = l1_folder
+        for main_folder in FOLDERS:
+          verblog('Processing main folder : %s' % main_folder, 2)
+          # Get second level dir (dates)
+          date_list = os.listdir(os.path.join(base_path, main_folder))
+          if not date_list:
+            verblog('No dates in %s' % os.path.join(base_path, main_folder))
+          date_list.sort()
+          # Seek to saved date
+          try:
+            date_list = date_list[date_list.index(last_date_list[main_folder]) + 1:]
+          except (KeyError, ValueError):
+            verblog('Cannot find last_date in date list for folder %s' % main_folder, 2)
 
-            verblog('Scanning folder: %s' % l1_folder, 2)
-            package_list = os.listdir(os.path.join(base_path, l0_folder, l1_folder))
-            #verblog('package_list: %s' % package_list, 2)
-            package_list.sort()
-            # Seek to last_package position
+          for date_folder in date_list:
+            #verblog('Maxproducts %s, imported %s' % (maxproducts, imported), 2)
+            if maxproducts and imported >= maxproducts:
+              verblog("Maxproducts %s exceeded: exiting" % maxproducts, 2)
+              break
+            date_folder = os.path.split(date_folder)[-1]
+            last_processed[main_folder] = date_folder
+            verblog('Scanning folder: %s' % date_folder, 2)
+            # Main package
+            packages = [d for d in os.listdir(os.path.join(base_path, main_folder, date_folder)) if d[-3:] == 'hdf']
+            if not packages:
+              verblog('No packages in %s' % os.path.join(base_path, main_folder, date_folder))
+              continue
+            package = packages[0]
+            # Select main camera nadir
+            package = [p for p in packages if p.find('_AN_') != -1][0]
+
+            verblog("Ingesting %s" % package, 2)
+            # Open
+            img = gdal.Open(os.path.join(base_path, main_folder, date_folder, package), GA_ReadOnly)
+            assert img is not None, 'gdal cannot open temporary image'
+            # Points to first subdataset:
+            sds = gdal.Open(img.GetSubDatasets()[0][0], GA_ReadOnly)
+            metadata = sds.GetMetadata()
+            # Polygon
+            path = int(img.GetMetadata()['Path_number'])
+            row = int(GetMetadataFromCore(metadata, 'ORBITNUMBER'))
+            start_block = int(img.GetMetadata()['Start_block'])
+            end_block = int(img.GetMetadata()['End block']) + 1
+            verblog("Reading polygon from KML path %s, block %s" % (path, start_block), 2)
+            footprint = Polygon(GetFootPrintFromKML(path, start_block))
+            for block in range(start_block + 1, end_block):
+              verblog("Reading polygon from KML path %s, block %s" % (path, block), 2)
+              footprint = footprint.union(Polygon(GetFootPrintFromKML(path, block)))
+
+            footprint.set_srid(4326)
+
+            # Mission
+            mission = MISSION
+            mission_sensor = MISSION_SENSOR
+            # Extract from metadata
+            verblog("Extracting metadata...", 2)
+            acquisition_mode = ACQUISITION_MODE[int(metadata.get('Cam_mode'))]
+            geometric_resolution_x = int(metadata.get('Block_size.resolution_x')[:metadata.get('Block_size.resolution_x').find(',')])
+            geometric_resolution_y = int(metadata.get('Block_size.resolution_y')[:metadata.get('Block_size.resolution_y').find(',')])
+            product_acquisition_end = datetime.datetime.strptime(GetMetadataFromCore(metadata, 'RANGEENDINGDATE') + \
+                                      GetMetadataFromCore(metadata, 'RANGEENDINGTIME'),'%Y-%m-%d%H:%M:%S.%fZ')
+            product_acquisition_start = datetime.datetime.strptime(GetMetadataFromCore(metadata, 'RANGEBEGINNINGDATE') + \
+                                      GetMetadataFromCore(metadata, 'RANGEBEGINNINGTIME'),'%Y-%m-%d%H:%M:%S.%fZ')
+
+            # Row/Path
+            #path, path_shift, row, row_shift = get_row_path_from_polygon(footprint, no_compass=True)
+            # Assigned from file name (see above)
+            path_shift = '0'
+            row_shift = '0'
+
+            # Fills the the product_id
+            verblog("Filling product_id...", 2)
+            #SAT_SEN_TYP_MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
+            product_id = "%(SAT)s_%(SEN)s_%(TYP)s_%(MOD)s_%(KKKK)s_%(KS)s_%(JJJJ)s_%(JS)s_%(YYMMDD)s_%(HHMMSS)s_%(LEVL)s_%(PROJTN)s" % \
+            {
+              'SAT': mission.ljust(3, '-'),
+              'SEN': mission_sensor.ljust(3, '-'),
+              'TYP': sensor_type.ljust(3, '-'),
+              'MOD': acquisition_mode.ljust(3, '-'),
+              'KKKK': str(path).rjust(4, '0'),
+              'KS': path_shift.rjust(2, '0'),
+              'JJJJ': str(row).rjust(4, '0'),
+              'JS': row_shift.rjust(2, '0'),
+              'YYMMDD': product_acquisition_start.strftime('%y%m%d'),
+              'HHMMSS': product_acquisition_start.strftime('%H%M%S'),
+              'LEVL' : processing_level.ljust(4, '-'),
+              'PROJTN': projection.ljust(6, '-')
+            }
+
+            verblog("Product ID %s" % product_id, 2)
+
+            # Do the ingestion here...
+            data = {
+              'metadata': '\n'.join(metadata),
+              'spatial_coverage': footprint,
+              'product_id': product_id,
+              'radiometric_resolution': radiometric_resolution,
+              'band_count': band_count,
+              'owner': owner,
+              'license': license,
+              'creating_software': creating_software,
+              'quality': quality,
+              'original_product_id': package,
+              'geometric_resolution_x': geometric_resolution_x,
+              'geometric_resolution_y': geometric_resolution_y,
+              'product_acquisition_end': datetime.datetime.strptime(GetMetadataFromCore(metadata, 'RANGEENDINGDATE') + ' ' + GetMetadataFromCore(metadata, 'RANGEENDINGTIME'), '%Y-%m-%d %H:%M:%S.%fZ'),
+              'product_acquisition_end' : product_acquisition_end
+            }
+            #verblog(data, 2)
+
+            # Check if it's already in catalogue:
             try:
-              package_list = package_list[package_list.index(last_package) + 1:]
-            except:
-              verblog('Cannot find last_package in list', 2)
-
-
-            for package in package_list:
-              #import ipy; ipy.shell()
-              #verblog('Maxproducts %s, imported %s' % (maxproducts, imported), 2)
-              if maxproducts and imported >= maxproducts:
-                verblog("Maxproducts %s exceeded: exiting" % maxproducts, 2)
-                break
-              verblog("Ingesting %s" % package, 2)
-              last_package = package
-              # Save to tmp
-              tmp_image = tempfile.mktemp('.hdf')
-              verblog("Copying to temporary %s, %s" % (tmp_image, package), 2)
-              shutil.copy(os.path.join(base_path, l0_folder, l1_folder, package), tmp_image)
-
-              # Parse metadata with GDAL
-              img = gdal.Open(tmp_image)
-              metadata = img.GetMetadata_Dict()
-              import ipy; ipy.shell()
-              # Mission
-              mission = MISSION
-              mission_sensor = MISSION_SENSOR
-
-              # Polygon
-              lon = metadata['GRINGPOINTLONGITUDE']
-              lon = [float(l) for l in lon.split(', ')]
-              lat = metadata['GRINGPOINTLATITUDE']
-              lat = [float(l) for l in lat.split(', ')]
-              points = zip(lon, lat)
-              points.append((lon[0], lat[0]))
-              footprint = Polygon(points)
-
-              # Row/Path
-              path, path_shift, row, row_shift = get_row_path_from_polygon(footprint, no_compass=True)
-
-              # Fills the the product_id
-              #SAT_SEN_TYP_MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
-              product_id = "%(SAT)s_%(SEN)s_%(TYP)s_%(MOD)s_%(KKKK)s_%(KS)s_%(JJJJ)s_%(JS)s_%(YYMMDD)s_%(HHMMSS)s_%(LEVL)s_%(PROJTN)s" % \
-              {
-                'SAT': mission.ljust(3, '-'),
-                'SEN': mission_sensor.ljust(3, '-'),
-                'TYP': sensor_type.ljust(3, '-'),
-                'MOD': acquisition_mode.ljust(3, '-'),
-                'KKKK': path.rjust(4, '0'),
-                'KS': path_shift.rjust(2, '0'),
-                'JJJJ': row.rjust(4, '0'),
-                'JS': row_shift.rjust(2, '0'),
-                'YYMMDD': datetime.datetime.strptime(metadata['RANGEBEGINNINGDATE'],'%Y-%m-%d').strftime('%y%m%d'),
-                'HHMMSS': ''.join(metadata['RANGEBEGINNINGTIME'].split(':'))[:6],
-                'LEVL' : processing_level.ljust(4, '-'),
-                'PROJTN': projection.ljust(6, '-')
-              }
-
-              verblog("Product ID %s" % product_id, 2)
-
-              # Store original metadata XML into catalogue metadata field
-              original_metadata = []
-              ftp.retrlines('RETR %s' % package + '.xml', original_metadata.append)
-
-              # Do the ingestion here...
-              data = {
-                'metadata': '\n'.join(original_metadata),
-                'spatial_coverage': footprint,
-                'product_id': product_id,
-                'radiometric_resolution': radiometric_resolution,
-                'band_count': band_count,
-                'owner': owner,
-                'license': license,
-                'creating_software': creating_software,
-                'quality': quality,
-                'original_product_id': metadata['LOCALGRANULEID'],
-                'geometric_resolution_x': geometric_resolution,
-                'geometric_resolution_y': geometric_resolution,
-                'product_acquisition_end': datetime.datetime.strptime(metadata['RANGEENDINGDATE'] + ' ' + metadata['RANGEENDINGTIME'], '%Y-%m-%d %H:%M:%S.%f'),
-                'sensor_viewing_angle': SENSOR_VIEWING_ANGLE[package[39:41], # Get it from the image name
-              }
-              verblog(data, 2)
-
-              # Check if it's already in catalogue:
+              op = OpticalProduct.objects.get(product_id=data.get('product_id')).getConcreteInstance()
+              verblog('Already in catalogue: updating.', 2)
+              is_new = False
+              op.__dict__.update(data)
+            except OpticalProduct.DoesNotExist:
+              op = OpticalProduct(**data)
+              verblog('Not in catalogue: creating.', 2)
+              is_new = True
               try:
-                op = OpticalProduct.objects.get(product_id=data.get('product_id')).getConcreteInstance()
-                verblog('Already in catalogue: updating.', 2)
-                is_new = False
-                op.__dict__.update(data)
-              except OpticalProduct.DoesNotExist:
-                op = OpticalProduct(**data)
-                verblog('Not in catalogue: creating.', 2)
-                is_new = True
-                try:
-                  op.productIdReverse(True)
-                except Exception, e:
-                  raise CommandError('Cannot get all mandatory data from product id %s (%s).' % (product_id, e))
-
-              try:
-                op.save()
-                if test_only:
-                  verblog('Testing: image not saved.', 2)
-                else:
-                  # Store thumbnail
-                  # Get thumbnail from nadir (AN), copy if exists
-                  thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailPath())
-                  try:
-                    os.makedirs(thumbnails_folder)
-                  except:
-                    pass
-                  # Extract sub images
-                  # gdal_translate -sds -of GTiff MCD43A2.A2011057.h00v08.005.2011077192640.hdf MCD43A2.A2011057.h00v08.005.2011077192640.tif
-                  tiff_thumb = tmp_image.replace('hdf', 'tif')
-                  assert band_count == 4
-                  tiff_1 = tiff_thumb + '1'
-                  tiff_2 = tiff_thumb + '2'
-                  tiff_3 = tiff_thumb + '3'
-                  tiff_4 = tiff_thumb + '4'
-                  #import ipy; ipy.shell()
-                  try:
-                    boundary = footprint[0]
-                    subprocess.check_call(["gdal_translate", "-q", "-of", "GTiff", "-sds", "-a_srs", 'EPSG:4326', "-gcp", "0", "2400", "%s" % boundary[0][0], "%s" % boundary[0][1], "-gcp", "0", "0", "%s" % boundary[1][0], "%s" % boundary[1][1], "-gcp", "2400", "0", "%s" % boundary[2][0], "%s" % boundary[2][1],  "-gcp", "2400", "2400", "%s" % boundary[3][0], "%s" % boundary[3][1], tmp_image, tiff_thumb])
-                  except subprocess.CalledProcessError:
-                    # Check if the files are there
-                    if not (os.path.isfile(tiff_1) and os.path.isfile(tiff_2) and os.path.isfile(tiff_3) and os.path.isfile(tiff_4)):
-                      raise CommandError('gdal_translate -sds error.')
-                  # Compose thumbnail
-                  subprocess.check_call(["gdal_merge.py", "-q", "-separate",  tiff_1, tiff_4, tiff_3, "-o", tiff_thumb])
-                  # Transform and store .wld file
-                  # gdal_translate -co worldfile=on -outsize 400 400 -of JPEG composite.tif composite.jpg
-                  jpeg_thumb = os.path.join(thumbnails_folder, op.product_id + ".jpg")
-                  subprocess.check_call(["gdal_translate", "-outsize", '400', '400', "-q", "-of", "JPEG", tiff_thumb, jpeg_thumb])
-
-                  dataset = gdal.Open(tiff_1)
-                  gcps = dataset.GetGCPs()
-                  if gcps is None or len(gcps) == 0:
-                      raise CommandError('No GCPs found on file ' + tiff_1)
-                  geotransform = gdal.GCPsToGeoTransform(gcps)
-                  if geotransform is None:
-                      raise CommandError('Unable to extract a geotransform.')
-
-                  # Make the world file
-                  wld = "%s\n%s\n%s\n%s\n%s\n%s\n" % (
-                      geotransform[1],
-                      geotransform[4],
-                      geotransform[2],
-                      geotransform[5],
-                      geotransform[0] + 0.5 * geotransform[1] + 0.5 * geotransform[2],
-                      geotransform[3] + 0.5 * geotransform[4] + 0.5 * geotransform[5],
-                    )
-                  # Store .wld file
-                  jpeg_wld   =  os.path.join(thumbnails_folder, op.product_id + ".wld")
-                  handle = open(jpeg_wld, 'w+')
-                  handle.write(wld)
-                  handle.close()
-
-                  if store_image:
-                    main_image_folder = os.path.join(settings.IMAGERY_ROOT, op.imagePath())
-                    try:
-                      os.makedirs(main_image_folder)
-                    except:
-                      pass
-                    main_image = os.path.join(main_image_folder, op.product_id + ".hdf")
-                    shutil.copy(tmp_image, main_image)
-                    subprocess.check_call(["bzip2", "-f", main_image])
-                    verblog("Storing main image for product %s: %s" % (product_id, main_image), 2)
-                    # Save in local_storage_path
-                    op.local_storage_path = os.path.join(op.imagePath(), op.product_id + ".hdf" + '.bz2')
-                    op.save()
-                if is_new:
-                  verblog('Product %s imported.' % product_id)
-                else:
-                  verblog('Product %s updated.' % product_id)
-                imported = imported + 1
-                # Updates .ini file
-                if not rcfileskip:
-                  rc = open(RC_FILE, 'w+')
-                  for md, lp in last_processed.items():
-                    rc.write('last_package=%s/%s/%s\n' % (md, lp[0], lp[1]))
-                  rc.close()
-                  verblog('Wrote rcfile %s.' % RC_FILE, 2)
-                else:
-                  verblog('Skipping rcfile write.', 2)
+                op.productIdReverse(True)
               except Exception, e:
-                raise CommandError('Cannot import: %s' % e)
-              finally:
-                assert band_count == 4
-                for i in (tmp_image, tiff_thumb, tiff_1, tiff_2, tiff_3, tiff_4):
-                  try:
-                    os.remove(i)
-                  except:
-                    pass
+                raise CommandError('Cannot get all mandatory data from product id %s (%s).' % (product_id, e))
+
+            try:
+              op.save()
+              if test_only:
+                verblog('Testing: image not saved.', 2)
+              else:
+                # Store thumbnail
+                # Get thumbnail from nadir (AN), copy if exists
+                thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailPath())
+                try:
+                  os.makedirs(thumbnails_folder)
+                except:
+                  pass
+
+              temp_tif_list = []
+              if int(img.GetMetadata()['End block']) - int(img.GetMetadata()['Start_block']) + 1 <= MAX_BLOCK_FOR_THUMB:
+                # Creates a thumbnail on the fly mapping band 1 of the first 3 subdatasets to BGR
+                outx= 100
+                outy = 400
+                inx = 512
+                iny = 2048
+
+                drv = gdal.GetDriverByName('GTiff')
+                temp_tif = tempfile.mktemp()
+                # Note that the underscore is missing in "End block"...
+                for rast_band in range(int(img.GetMetadata()['Start_block']), int(img.GetMetadata()['End block']) + 1):
+                  # Invert x, y: need to transpose
+                  temp_tif_list.append('%s_%s.tif' % (temp_tif, rast_band))
+                  dst_ds = drv.Create('%s_%s.tif' % (temp_tif, rast_band), outy, outx, 3, gdal.GDT_UInt16)
+
+                  for dataset_number in (0, 1, 2):
+                    sds = gdal.Open(img.GetSubDatasets()[dataset_number][0], GA_ReadOnly)
+                    band = sds.GetRasterBand(rast_band)
+                    a = band.ReadAsArray(0, 0, buf_xsize=outx, buf_ysize=outy)
+                    a = a.transpose()
+                    dst_ds.GetRasterBand(3 - dataset_number).WriteArray(a, 0, 0)
+                    sds = None
+
+                  srs = osr.SpatialReference()
+                  srs.SetWellKnownGeogCS('WGS84')
+                  dst_ds.SetProjection(srs.ExportToWkt())
+
+                  points = GetFootPrintFromKML(int(img.GetMetadata()['Path_number']), rast_band)
+                  gcps = []
+                  gcps.append(gdal.GCP(points[0][0], points[0][1], 0, 0, 0))
+                  gcps.append(gdal.GCP(points[1][0], points[1][1], 0, dst_ds.RasterXSize, 0))
+                  gcps.append(gdal.GCP(points[2][0], points[2][1], 0, dst_ds.RasterXSize, dst_ds.RasterYSize))
+                  gcps.append(gdal.GCP(points[3][0], points[3][1], 0, 0, dst_ds.RasterYSize))
+                  dst_ds.SetGeoTransform(gdal.GCPsToGeoTransform(gcps))
+                  dst_ds = None
+
+                # Merge sub images
+                tiff_thumb = os.path.join(thumbnails_folder, op.product_id + ".tiff")
+                cmd = ["gdal_merge.py", "-o", tiff_thumb, "-q"]
+                cmd.extend(temp_tif_list)
+                #import ipy; ipy.shell()
+                subprocess.check_call(cmd)
+                # Transforms the tiff thumb into a jpeg
+                jpeg_thumb = os.path.join(thumbnails_folder, op.product_id + ".jpg")
+                subprocess.check_call(["gdal_translate", "-ot", "Byte", "-scale", "-q", "-co", "worldfile=on", "-of", "JPEG", tiff_thumb, jpeg_thumb])
+                # Removes xml and temporary images
+                os.remove("%s.%s" % (jpeg_thumb, 'aux.xml'))
+                os.remove(tiff_thumb)
+
+                img = None
+              else:
+                verblog('Skipping thumbnail creation: too many blocks.', 2)
+
+              if store_image:
+                main_image_folder = os.path.join(settings.IMAGERY_ROOT, op.imagePath())
+                try:
+                  os.makedirs(main_image_folder)
+                except:
+                  pass
+                verblog("Storing main image for product %s: %s" % (product_id, main_image_folder), 2)
+                # Save in local_storage_path
+                cmd = ["tar", "cjf", os.path.join(main_image_folder, "%s.tar.bz2" % product_id), "-C" , os.path.join(base_path, main_folder, date_folder)] + packages
+                subprocess.check_call(cmd)
+                op.local_storage_path = os.path.join(op.imagePath(), "%s.tar.bz2" % product_id)
+                verblog('Package saved as %s' % os.path.join(op.imagePath(), "%s.tar.bz2" % product_id))
+                op.save()
+              if is_new:
+                verblog('Product %s imported.' % product_id)
+              else:
+                verblog('Product %s updated.' % product_id)
+              imported = imported + 1
+              # Updates .ini file
+              if not rcfileskip:
+                rc = open(RC_FILE, 'w+')
+                # main_folder date_folder
+                for mf, df in last_processed.items():
+                  rc.write('last_date=%s/%s\n' % (mf, df))
+                rc.close()
+                verblog('Wrote rcfile %s.' % RC_FILE, 2)
+              else:
+                verblog('Skipping rcfile write.', 2)
+            except Exception, e:
+              raise CommandError('Cannot import: %s' % e)
+            finally:
+              img = None
+              # Removes temporary tif stripes
+              for i in (temp_tif_list,):
+                try:
+                  os.remove(i)
+                except:
+                  pass
 
         verblog("%s packages imported" % imported)
 
@@ -397,7 +481,7 @@ class Command(BaseCommand):
           transaction.commit()
           verblog("Committing transaction.", 2)
       except Exception, e:
-        raise CommandError('Uncaught exception: %s' % e)
+        raise CommandError('Uncaught exception (%s): %s' % (e.__class__.__name__, e))
     except Exception, e:
       verblog('Rolling back transaction due to exception.')
       if test_only:

@@ -130,7 +130,7 @@ class AdvancedSearchForm(forms.ModelForm):
   cloud_mean = forms.CharField(widget=SliderWidget(),
                                   required=False,
                                   label="Cloud cover",
-                                  help_text = 'Select the maximum cloud cover when searching for images. \
+                                  help_text='Select the maximum cloud cover when searching for images. \
                                                Note that not all sensors support cloud cover filtering.\
                                               ')
   isAdvanced = forms.CharField(widget=forms.HiddenInput(), required=False)
@@ -141,6 +141,8 @@ class AdvancedSearchForm(forms.ModelForm):
 
   k_orbit_path = IntegersCSVIntervalsField(required=False, help_text='Insert the orbit path as a list of comma separated values or ranges (e.g. : "10,20,30" or  "20-40")')
   j_frame_row = IntegersCSVIntervalsField(required=False, help_text='Insert the frame row as a list of comma separated values or ranges (e.g. : "10,20,30" or "20-40")')
+  # exclude PRODUCT_SEARCH_GENERIC from Search.PRODUCT_SEARCH_TYPES
+  search_type = forms.ChoiceField(choices=Search.PRODUCT_SEARCH_TYPES[1:], required=False)
 
   class Meta:
     model = Search
@@ -333,13 +335,13 @@ class DeliveryDetailForm(forms.ModelForm):
   geometry = forms.CharField(widget=forms.HiddenInput(),required=False)
   geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
                                   required=False,
-                                  help_text = 'Upload a zipped shapefile or KML/KMZ file of less than 1MB. If the shapefile contains more than one polygon, only the first will be used. Complex polygons will increase search time.')
+                                  help_text = 'Upload a zipped shapefile or KML/KMZ file of less than 1MB. If the shapefile contains more than one polygon, only the first will be used.')
   def __init__(self,theRecords,*args,**kwargs):
     super(DeliveryDetailForm, self).__init__(*args, **kwargs)
     #determine UTM zones for all products
     myProductZones = set()
     for record in theRecords:
-      myProductZones=myProductZones.union(record.product.getUTMZones())
+      myProductZones=myProductZones.union(record.product.getUTMZones(theBuffer=1))
 
     myDefaultProjections=set((('4326','EPSG 4326'),('900913','EPSG 900913')))
     self.fields['projection'] =  forms.ModelChoiceField(queryset=Projection.objects.filter(epsg_code__in=[k for k,v in  myProductZones | myDefaultProjections]).all(), empty_label=None)
@@ -364,7 +366,7 @@ class ProductDeliveryDetailForm(forms.ModelForm):
     myPK = kwargs.get('prefix')
     myProduct = SearchRecord.objects.filter(pk__exact=myPK).get().product
     myDefaultProjections=set((('4326','EPSG 4326'),('900913','EPSG 900913')))
-    self.fields['projection'] =  forms.ModelChoiceField(queryset=Projection.objects.filter(epsg_code__in=[k for k,v in myProduct.getUTMZones(1) | myDefaultProjections]).all(), empty_label=None)
+    self.fields['projection'] =  forms.ModelChoiceField(queryset=Projection.objects.filter(epsg_code__in=[k for k,v in myProduct.getUTMZones(theBuffer=0) | myDefaultProjections]).all(), empty_label=None)
 
   class Meta:
     model = DeliveryDetail

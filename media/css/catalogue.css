@@ -230,6 +230,7 @@ div.formSpacer {
 .button-link {
     text-align: center;
     text-decoration: none;
+    padding:1px;
   }
 
 
@@ -527,8 +528,4 @@ div.required label {
 
 #productIdForm select {
   width: 50px;
-}
-
-.geom_download_link {
-  text-decoration:none;
 }

@@ -1,0 +1,36 @@
+{% autoescape off %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<style type="text/css" media="screen">
+body {
+color:white;
+background:#111E31;
+font-family: Sans-Serif;
+}
+h1{
+font-size:2em;
+}
+h2{
+font-size:1.5em;
+}
+#header {
+height: 107px;
+}
+#link {
+font-weight:bold;
+color:white;
+}
+</style>
+</head>
+<body>
+<div id="header">
+<img src="sac_header.jpg" />
+</div>
+{% block content %}
+Default content
+{% endblock %}
+</body>
+</html>
+{% endautoescape %}

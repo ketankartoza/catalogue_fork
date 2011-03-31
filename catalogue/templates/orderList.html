@@ -8,9 +8,9 @@
         $('#content').load(theUrl,'', zebraTables );
       };
   </script>
-  <a href="/listorders/?page={{ myRecords.number}}&pdf">PDF</a>
-  <a href="/ordermonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/">Monthly reports</a>
-  <a href="/orderssummary/">Orders summary</a>
+  <a class="button-link" href="/listorders/?page={{ myRecords.number}}&pdf">PDF</a>
+  <a class="button-link" href="/ordermonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/">Monthly reports</a>
+  <a class="button-link" href="/orderssummary/">Orders summary</a>
   <h2>Orders List</h2>
   <table>
     <thead>
@@ -90,4 +90,10 @@
     </tbody>
   </table>
   {% box_end %}
+<script>
+  $(document).ready(function(){
+  //button up links
+  $('.button-link').button();
+  });
+</script>
 {% endblock %}

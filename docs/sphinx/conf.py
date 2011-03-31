@@ -18,6 +18,14 @@ import sys, os
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.append(os.path.abspath('.'))
 
+sys.path.append('../../')
+sys.path.append('../../catalogue')
+sys.path.append('../../catalogue/models')
+#setup django
+import settings
+from django.core.management import setup_environ
+setup_environ(settings)
+
 # -- General configuration -----------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
@@ -172,7 +180,7 @@ htmlhelp_basename = 'SANSAOnlineCataloguedoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'SANSAOnlineCatalogue.tex', u'SANSA Online Catalogue Documentation',
+  ('index', 'SANSAOnlineCatalogue-API-Docs.tex', u'SANSA Online Catalogue Documentation',
    u'Tim Sutton', 'manual'),
 ]
 

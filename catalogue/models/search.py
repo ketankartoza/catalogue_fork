@@ -32,6 +32,12 @@ class SearchRecord(models.Model):
   order = models.ForeignKey( Order, null=True, blank=True )
   product = models.ForeignKey( GenericProduct, null=False, blank=False )
   delivery_detail = models.ForeignKey( DeliveryDetail, null=True, blank=True )
+  # DIMS ordering related fields
+  internal_order_id = models.IntegerField(null=True, blank=True)
+  download_path = models.CharField(max_length=512, null=False, blank=False, help_text="This is the location from where the product can be downloaded after a successfull OS4EO order placement.")
+  # Default to False unless there is a populated local_storage_path in the product (see overridden save() below) or download_path is filled
+  product_ready = models.BooleanField(default=False)
+
   # Required because genericproduct fkey references a table with geometry
   objects = models.GeoManager()
 
@@ -53,6 +59,17 @@ class SearchRecord(models.Model):
     myRecord.product = theProduct
 
     return myRecord
+
+  def save(self, *args, **kwargs):
+    """
+    Set product_ready according to local_storage_path and download_path
+    """
+    if not self.pk:
+      if self.product.local_storage_path or self.download_path:
+        self.product_ready = True
+      else:
+        self.product_ready = False
+    super(SearchRecord, self).save(*args, **kwargs)
 
   class Admin:
     pass
@@ -127,7 +144,7 @@ class Search(models.Model):
   PRODUCT_SEARCH_IMAGERY        = 4
 
   PRODUCT_SEARCH_TYPES = (
-    #(PRODUCT_SEARCH_GENERIC,    'Generic product search'),
+    (PRODUCT_SEARCH_GENERIC,    'Generic product search'),
     (PRODUCT_SEARCH_OPTICAL,    'Optical product search'),
     (PRODUCT_SEARCH_RADAR,      'Radar product search'),
     (PRODUCT_SEARCH_GEOSPATIAL, 'Geospatial product search'),
@@ -174,7 +191,6 @@ class Search(models.Model):
       default = False,
       help_text='If you want to limit searches to optical products with a certain cloud cover, enable this.')
   cloud_mean = models.IntegerField(null=True, blank=True, default=5, verbose_name="Max Clouds", help_text="Select the maximum permissible cloud cover.", max_length=1)
-  # ABP: new additions
   acquisition_mode  = models.ForeignKey(AcquisitionMode, blank=True, null=True, help_text='Choose the acquisition mode.') #e.g. M X T J etc
   license_type = models.IntegerField(choices=License.LICENSE_TYPE_CHOICES, blank=True, null=True, help_text='Choose a license type.')
   band_count = models.IntegerField(choices=BAND_COUNT_CHOICES, blank=True, null=True, help_text='Select the spectral resolution.')
@@ -182,14 +198,10 @@ class Search(models.Model):
   # sensor_inclination_angle: range
   sensor_inclination_angle_start = models.FloatField(null=True, blank=True, help_text='Select sensor inclination angle start.')
   sensor_inclination_angle_end = models.FloatField(null=True, blank=True, help_text='Select sensor inclination angle end.')
-  # ABP: 2 new FKs
   mission = models.ForeignKey( Mission, null=True, blank=True, help_text='Select satellite mission.') # e.g. S5
   sensor_type = models.ForeignKey( SensorType, null=True, blank=True, related_name = 'search_sensor_type') #e.g. CAM1
-  # ABP: one more FK
   processing_level = models.ManyToManyField( ProcessingLevel, null=True, blank=True, help_text='Select one or more processing level.')
-  # ABP: new additions 2
   polarising_mode = models.CharField(max_length=1, choices=RadarProduct.POLARISING_MODE_CHOICES, null=True, blank=True )
-  # ABP: added record_count
   record_count = models.IntegerField(blank=True, null=True, editable=False)
   # Use the geo manager to handle geometry
   objects = models.GeoManager()
@@ -208,6 +220,27 @@ class Search(models.Model):
 
   def __unicode__(self):
     return "%s Guid: %s User: %s" % (self.search_date, self.guid, self.user)
+
+  def customSQL( self, sql_string, qkeys, args=None ):
+    from django.db import connection
+    cursor = connection.cursor()
+    #args MUST be parsed in case of SQL injection attempt
+    #execute() does this automatically for us
+    if args:
+      cursor.execute(sql_string,args)
+    else:
+      cursor.execute(sql_string)
+    rows = cursor.fetchall()
+    fdicts = []
+    for row in rows:
+      i = 0
+      cur_row = {}
+      for key in qkeys:
+          cur_row[ key ] = row[ i ]
+          i = i+1
+      fdicts.append( cur_row )
+    return fdicts
+
 
   @staticmethod
   def getDictionaryMap(parm):
