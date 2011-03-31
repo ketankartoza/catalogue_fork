@@ -22,7 +22,7 @@
     {% endif %}
     var myLayersList = {{myLayersList|safe}}
     // Here we use a predefined layer that will be kept up to date with URL changes
-    layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Open Street Map");
+    var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Open Street Map");
     //myLayersList.unshift(layerMapnik); // add to start of array
     myLayersList.push(layerMapnik); // add to end of array
 
@@ -64,6 +64,10 @@
     // Set select options for sensor related dictionaries
     function set_form_options(options){
       $('#search_form select option').show();
+      $('#search_form select option').each(function(_e, e){
+        $(e).attr('disabled', false);
+      });
+
       for (id in options) {
         try {
           //console.log('Checking ' + id);
@@ -72,10 +76,11 @@
           // To avoid filtering when the select has a value: "!$(e).parent().val() && "
           // To avoid filtering on multiple: "!$(e).parent().attr('multiple')"
           // Current logic: hide the options if the select has no value(s)
-          $('#id_' + id + ' option').each(function(e,e){
+          $('#id_' + id + ' option').each(function(_e, e){
             if (e.value && $.inArray(parseInt(e.value), options[id]) == -1) {
               $(e).hide();
               $(e).attr('selected', false);
+              $(e).attr('disabled', true);
               //console.log('hiding ' + id + ' val:' + e.value);
             } else {
               //console.log('no match ' + id + ' val:' + e.value);

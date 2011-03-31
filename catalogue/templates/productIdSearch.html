@@ -5,17 +5,26 @@
   {% if theGuid %}
   <script type="text/javascript">
 
-    // Set select options
+    // ABP: new Ajax filtering
+    // Set select options for sensor related dictionaries
     function set_form_options(options){
       $('#productIdForm select option').show();
+      $('#productIdForm select option').each(function(_e, e){
+        $(e).attr('disabled', false);
+      });
+
       for (id in options) {
         try {
           //console.log('Checking ' + id);
           //console.log(options[id]);
           // To avoid hiding selected: " :not(:selected)"
-          $('#id_' + id + ' option').each(function(e,e){
+          // To avoid filtering when the select has a value: "!$(e).parent().val() && "
+          // To avoid filtering on multiple: "!$(e).parent().attr('multiple')"
+          // Current logic: hide the options if the select has no value(s)
+          $('#id_' + id + ' option').each(function(_e, e){
             if (e.value && $.inArray(parseInt(e.value), options[id]) == -1) {
               $(e).hide();
+              $(e).attr('disabled', true);
               //console.log('hiding ' + id + ' val:' + e.value);
             } else {
               //console.log('no match ' + id + ' val:' + e.value);
@@ -33,6 +42,9 @@
       });
       $('#product-clear-button').click(function(){
         $('#productIdForm select option').show();
+        $('#productIdForm select option').each(function(_e, e){
+          $(e).attr('disabled', false);
+        });
       });
 
       // Form ajax handling
@@ -45,7 +57,7 @@
           data: $('#productIdForm').serialize(),
           success: function(data) {
             // Just in case...
-            $('#productIdForm select').css({border: 'none'});
+            $('#productIdForm select').css({border: 'solid 1px gray'});
             $('#messages').hide();
             $('#search-messages').html('<b>' + data.count + '</b> record found for ' + data.messages.join(', ') + '.');
             set_form_options(data.values);
