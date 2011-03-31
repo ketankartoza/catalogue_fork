@@ -445,7 +445,7 @@ class GenericSensorProduct( GenericImageryProduct ):
   """
   Multitable inheritance class to hold common fields for satellite imagery
   """
-  acquisition_mode                    = models.ForeignKey(AcquisitionMode ) #e.g. M X T J etc
+  acquisition_mode                    = models.ForeignKey(AcquisitionMode ) #e.g. CAM1, BUMP etc.
   product_acquisition_start           = models.DateTimeField(db_index=True)
   product_acquisition_end             = models.DateTimeField(null=True, blank=True, db_index=True)
   geometric_accuracy_mean             = models.FloatField(null=True, blank=True, db_index=True )
