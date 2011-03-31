@@ -8,7 +8,8 @@
    $( function () {
        {#% if myAdvancedFlag %#}
        {# restyle the file choose using jquery stylefile plugin #}
-       $("input[type=file]").filestyle({ image: "/media/images/choose-file.gif", imageheight : 22, imagewidth : 160, width : 0 });
+       //$("input[type=file]").filestyle({ image: "/media/images/choose-file.gif", imageheight : 22, imagewidth : 160, width : 0 });
+
        {#% endif %#}
 
       {% for myField in myForm %}
@@ -493,7 +494,7 @@
         </div>
 
         <div class="span-10 adv_search_all adv_fld ">
-          <div class="span-5">
+          <div class="span-4">
               <img id="{{myForm.geometry_file.html_name}}Button"
                   src="/media/images/info_16.png"
                   style="cursor: pointer;"
