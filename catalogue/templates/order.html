@@ -3,7 +3,6 @@
     // <![CDATA[
     $(function() 
     {
-      $("#statusFormLink").button({});
       {# submit button not used when we are using ajax #}
       $("#submitButton").hide();
       $("#statusForm").dialog(
@@ -13,6 +12,7 @@
         height: 'auto',
         width: 450,
         modal: true,
+        title: 'Update Order status',
         buttons: 
         {
           'Update': function() 
@@ -23,7 +23,7 @@
           Cancel: function() 
           {
             $(this).dialog('close');
-          },
+          }
         }
       });
     });
@@ -164,7 +164,7 @@
 Order History
 </h2>
 {% if myForm %}
-  <a id="statusFormLink" onclick="$('#statusForm').dialog('open'); return false;">Update status</a>
+  <a href="#" id="statusFormLink" class='button-link' onclick="$('#statusForm').dialog('open'); return false;">Update status</a>
 {% endif %}
 <div id="orderHistory">
   {% if myHistory %}
@@ -174,7 +174,7 @@ Order History
 {% box_end %}
 <br />
 {% if myForm %}
-  <div id="statusForm">
+  <div id="statusForm" style="display:none;">
       <h3 id="formHeading">Update Status</h3>
       <form enctype="multipart/form-data" action="/updateorderhistory/" method="post" id="order_form">
         <center>{{ myForm.as_p }}</center>
