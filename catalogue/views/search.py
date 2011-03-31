@@ -42,7 +42,6 @@ def dataSummaryTable(theRequest):
     '''Non staff users cannot see this'''
     return
 
-  import ipy; ipy.shell()
   #myResultSet = GenericProduct.objects.values("mission_sensor").annotate(Count("id")).order_by().aggregate(Min('product_acquisition_start'),Max('product_acquisition_end'))
   #ABP: changed to GenericSensorProduct
   #ABP: changed to MissionSensor
