@@ -35,7 +35,7 @@
 {% endblock %}
 {% block content %}
 {% box_start "" "" "" %}
-      <a class="button-link" href="?pdf">PDF</a>
+      <a class="button-link" href="?pdf"><img src="/media/images/application-pdf.png" />PDF</a>
       <a class="button-link" href="/visitormonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{  myCurrentMonth|date:'m' }}/">Monthly reports</a>
     {% if myTopCountries and myScores %}
       <!--Load the AJAX API-->

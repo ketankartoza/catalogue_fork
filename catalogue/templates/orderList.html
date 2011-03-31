@@ -8,7 +8,7 @@
         $('#content').load(theUrl,'', zebraTables );
       };
   </script>
-  <a class="button-link" href="/{{ myUrl }}/?page={{ myRecords.number}}&pdf">PDF</a>
+  <a class="button-link" href="/{{ myUrl }}/?page={{ myRecords.number}}&pdf"><img src="/media/images/application-pdf.png" />PDF</a>
   {% if myUrl = 'listorders' %}
   <a class="button-link" href="/ordermonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/">Monthly reports</a>
   <a class="button-link" href="/orderssummary/">Orders summary</a>
