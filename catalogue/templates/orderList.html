@@ -8,9 +8,11 @@
         $('#content').load(theUrl,'', zebraTables );
       };
   </script>
-  <a class="button-link" href="/listorders/?page={{ myRecords.number}}&pdf">PDF</a>
+  <a class="button-link" href="/{{ myUrl }}/?page={{ myRecords.number}}&pdf">PDF</a>
+  {% if myUrl = 'listorders' %}
   <a class="button-link" href="/ordermonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/">Monthly reports</a>
   <a class="button-link" href="/orderssummary/">Orders summary</a>
+  {% endif %}
   <h2>Orders List</h2>
   <table>
     <thead>
@@ -20,7 +22,7 @@
           <label>Go to Order:</label>
           <input name="order_id_text" type="text" size="6" maxlength="5" />
           <input type="button" value="Go!" 
-                onclick="showOrder(forms['frmShowOrder'].order_id_text.value); return false;"
+                onclick="showOrder(forms['frmShowOrder'].order_id_text.value); return false;" />
         </form>
         </td>              
       </tr>                
