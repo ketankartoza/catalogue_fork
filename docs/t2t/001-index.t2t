@@ -68,6 +68,9 @@ way of backing up. This should be addressed as a priority!
 %!include: 003-3-informix-access.t2t
 %!include: 003-4-storage_array_setup.t2t
 %!include: 003-5-backups.t2t
+%!include: 003-6-gitosis.t2t
+%%!include: 003-7-git-mirroring.t2t
+%!include: 003-8-redmine.t2t
 %!include: 004-installation-guide.t2t
 %!include: 005-unit-tests.t2t
 %!include: 201-reporting-tools.t2t
@@ -76,12 +79,8 @@ way of backing up. This should be addressed as a priority!
 %!include: 303-search-schema.t2t
 %!include: 401-metadata-standard.t2t
 %!include: 502-searching-t2t
-<<<<<<< HEAD
-
 %!include: 900-batch-processing-intro.t2t
-=======
 %!include: 600-webmapping.t2t
->>>>>>> 758d99524669b0989b6a51d346c42bbe4fe417b0
 %!include: 901-informix-acs-sync.t2t
 %!include: 902-importing-other-products.t2t
 %!include: 903-importing-dims-products.t2t
