@@ -3,9 +3,9 @@
 % Leave the above two blank lines please
 
 
-=  Configuring the database server =
+==  Configuring the database server ==
 
-== Initial Install ==
+=== Initial Install ===
 
 Software Raid Partitioning scheme on p5
 
@@ -78,7 +78,7 @@ Save partition layout and continue:
 + Reboot...
 +
 
-== Install openssh ==
+=== Install openssh ===
 
 ```
 sudo apt-get install openssh-server 
@@ -132,7 +132,7 @@ Now restart ssh:
 sudo /etc/init.d/ssh restart
 ```
 
-== Setup system locales ==
+=== Setup system locales ===
 
 ```
 sudo dpkg-reconfigure locales
@@ -143,7 +143,7 @@ sudo dpkg-reconfigure locales
 - Choose OK and wait while the locales are generated
 - 
 
-== Upgrade to lenny ==
+=== Upgrade to lenny ===
 
 The initial installation above was carried out using Debian 4.0 Stable 'Etch'.
 Subsequently, Debian 5.0 'Lenny' was released and soo I upgraded using the
@@ -181,7 +181,7 @@ Note this can take some time depending on bandwidth availability.
 After the upgrade is completed you should reboot the system so that you 
 are using the newly installed kernel.
 
-== Setup Postgres/Postgis ==
+=== Setup Postgres/Postgis ===
 
 This system is running software RAID 0 (mirror) and is well suited as a
 database server running postgres and PostGIS (the Spatial data extension for
@@ -316,7 +316,7 @@ on port 5432.
 
 Now go on to test with QGIS to see if you can connect ok.
 
-== Creating readonly user for mapserver access ==
+=== Creating readonly user for mapserver access ===
 
 You must do this to allow the mapserver client to connect to the database
 securely (ie. ensuring that no sql injection attacks can take place):
@@ -340,7 +340,7 @@ done
 psql -h 196.35.94.197 -U timlinux gis < /tmp/script.sql
 ```
 
-== Nightly clone of the sac catalogue to test ==
+=== Nightly clone of the sac catalogue to test ===
 
 For testing we maintain a clone of the sac catalogue. The clone is replaced
 nightly. The script to replace the clone is in svn and should be checked out:

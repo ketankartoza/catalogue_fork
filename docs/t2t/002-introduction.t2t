@@ -2,16 +2,16 @@
 
 % Leave the blank space above here
 
-= Introduction =
+== Introduction ==
 
-== The CSIR ==
+=== The CSIR ===
 This project has been carried out for the CSIR Satellite Applications Center,
 near Johannesburg, South Africa. The CSIR is the 'Council for Science and
 Industrial Research' - it is the main national science foundation of the
 country. They are a big organisation with many divisions of which SAC
 (Satellite Applications Center) is one.
 
-== SAC ==
+=== SAC ===
 SAC is a satellite ground station. This means they have a big campus with many
 antennas and collect information from satellites as they pass over our sky
 window they also do satellite tasking (telling satellites where to go and what
@@ -26,7 +26,7 @@ SAC has two divisions:
 
 SAC-EO is the client for this project.
 
-== SANSA Takover ==
+=== SANSA Takover ===
 
 South Africa is busy creating its own space agency - SANSA (South AfricAN
 National Space Agency). SANSA will aggregate space technology from various gov,
@@ -34,7 +34,7 @@ parastatal, non-gov organisations to form a new organisation funded by the
 state.  SAC-EO is scheduled to become part of SANSA as of 1 April 2011 and wil
 become SANSA-EO.
 
-== The project ==
+=== The project ===
 
 SAC-EO has been building for the last 3 or 4 years an integrated system before
 this project (of which we form a small part), the processing of imagery was
@@ -148,7 +148,7 @@ on it"
 Thats the goal of the system - end to end automation with minimal operator
 intervention.
 
-== The Online Catalogue ==
+=== The Online Catalogue ===
 
 Along side of these other packages, Linfiniti has been building a new web
 catalogue for SAC-EO.  The catalogue is django + postgresql + all the other

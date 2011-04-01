@@ -22,7 +22,7 @@
     {% endif %}
     var myLayersList = {{myLayersList|safe}}
     // Here we use a predefined layer that will be kept up to date with URL changes
-    layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Open Street Map");
+    var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Open Street Map");
     //myLayersList.unshift(layerMapnik); // add to start of array
     myLayersList.push(layerMapnik); // add to end of array
 

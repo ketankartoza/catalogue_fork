@@ -34,15 +34,15 @@ Tim Sutton 2009
 % End of comments
 % -------------------
 
-= Installation Guide =
+== Installation Guide ==
 
-== Prepare your system ==
+=== Prepare your system ===
 
 You need to be running Django  >= 1.2.1 for the catalogue to work. Ubuntu Lucid
 and Debian Lenny ship with older versions so do a manual build. We walk through this
 setup using the python virtual environment system.
 
-=== Create working dir ===
+==== Create working dir ====
 
 ```
 cd /opt
@@ -50,7 +50,7 @@ mkdir sac
 cd sac
 ```
 
-=== Setup python virtual environment ===
+==== Setup python virtual environment ====
 
 
 
@@ -73,7 +73,7 @@ source python/bin/activate
 ```
 
 
-=== Install some development dependencies ===
+==== Install some development dependencies ====
 
 ```
 sudo apt-get install libpq-dev libpq4 libpqxx-dev libxslt1-dev
@@ -85,7 +85,7 @@ Install easy_install so that we can use pip thereafter:
 easy_install pip
 ```
 
-=== Informix DB Support ===
+==== Informix DB Support ====
 
 This is only needed on machines that will be doing updates from the legacy acs system.
 
@@ -107,7 +107,7 @@ python setup.py build_ext
 python setup.py install
 ```
 
-=== GDAL Python Bindings ===
+==== GDAL Python Bindings ====
 
 The gdal python bindings (which are installed using the REQUIREMENTS file in
 the section that follows) will not compile without swq.h header. On my
@@ -119,7 +119,7 @@ here:
 http://svn.osgeo.org/gdal/branches/1.7/gdal/ogr/swq.h
 ```
 
-=== Install django and required django apps ===
+==== Install django and required django apps ====
 
 To install django, django authentication etc into our virtual environment do:
 
@@ -136,7 +136,7 @@ The full list of packages installed using the REQUIREMENTS file is:
 %!include: ``../../REQUIREMENTS.txt``
 
 
-=== Further info on django registration ===
+==== Further info on django registration ====
 
 You may also want to read this:
 
@@ -152,7 +152,7 @@ url.
 
 
 
-== Source code Check out ==
+=== Source code Check out ===
 
 Check out this folder using 
 
@@ -165,7 +165,7 @@ Copy settings.py.template to settings.py and then
 modify settings.py as needed (probably you just need to set 
 the eth adapter and db connection settings).
 
-== Database setup ==
+=== Database setup ===
 
 Create the database using:
 
@@ -177,7 +177,7 @@ createdb sac
 createdb acs
 ```
 
-=== For an empty database: ===
+==== For an empty database: ====
 
 Sync the model to the db (dont do this is you plan to restore an existing db as
 explained in the next section):
@@ -195,7 +195,7 @@ python manage.py syncdb --database=acs
 The django fixtures included with this project should populate the 
 initial database when you run the above command.
 
-=== Restoring an existing database ===
+==== Restoring an existing database ====
 
 Nightly backups are made on lion at:
 
@@ -211,7 +211,7 @@ pg_restore acs_postgis_30August2010.dmp | psql acs
 
 ```
 
-== Setup apache (mod  python way) ==
+=== Setup apache (mod  python way) ===
 
 **Note:** This will be deprecated in favour of mod_wsgi (see next section)
 
@@ -246,7 +246,7 @@ sudo a2ensite catalogue-modpy
 sudo /etc/init.d/apache reload
 ```
 
-== Setup apache (mod_wsgi way) ==
+=== Setup apache (mod_wsgi way) ===
 
 The assumption is that you are using name based virtual hosts and that the 
 catalogue will run at the root of such a virtual host. Add to you apache site config:
@@ -279,7 +279,7 @@ sudo /etc/init.d/apache reload
 ```
 
 
-== Copy over the ribbon ==
+=== Copy over the ribbon ===
 
 There is a ribbon image that displays in the top left corner of the site that
 is used to convey version numbers etc. Since this may vary from deployment to
@@ -289,7 +289,7 @@ deployment, you should copy over an appropriate ribbon e.g.:
 cp media/images/ribbon_template.png media/images/ribbon.png
 ```
 
-== Install GEOIP data ==
+=== Install GEOIP data ===
 
 GeoIP is used to resolve IP addresses to Lon/Lat. This directory needs the
 GeoIP lite dataset in it:
@@ -300,12 +300,12 @@ wget http://www.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
 gunzip GeoLiteCity.dat.gz`
 ```
 
-== Check settings.py! ==
+=== Check settings.py! ===
 
 Go through settings.py (after first copying it from settings.py.templ if
 needed) and check all the details are consistent in that file.
 
-== Install proxy.cgi - note this will be deprecated ==
+=== Install proxy.cgi - note this will be deprecated ===
 
 Some parts of this site use cross site XHttpRequests. This is not allowed in
 the spec (to prevent cross site scripting attacks) so to get around this you
@@ -339,7 +339,7 @@ so that the default proxy url is our wms server.
 See http://faq.openlayers.org/proxyhost/all/ for more info...
 
 
-== Creating branches ==
+=== Creating branches ===
 
 **Note:** This section uses svn commands and should be updated to use git
 equivalents.
@@ -358,7 +358,7 @@ Where:
 **v1** = version 1
 **beta3** = the current status of that major version
 
-== Backup of the web server ==
+=== Backup of the web server ===
 
 ```
 sudo dd if=/dev/sdb | ssh definiens4 "dd of=/cxfs/dd_backups/orasac1/orasac1_sdb_`date +%a%d%b%Y`.dd"
@@ -366,7 +366,7 @@ sudo dd if=/dev/sda | ssh definiens4 "dd of=/cxfs/dd_backups/orasac1/orasac1_sda
 ```
 
 
-== Creation of the ReadOnly db user ==
+=== Creation of the ReadOnly db user ===
 
 This should be done on the database server i.e. elephant
 
@@ -384,7 +384,7 @@ grant select on sensor to readonly;
 ```
 
 
-== Optimal database configuration ==
+=== Optimal database configuration ===
 
 To support the large number of recs tweak
 /etc/postgresql/8.3/main/postgresql.conf
@@ -400,7 +400,7 @@ Then restart the db
 sudo /etc/init.d/postgresql restart
 ```
 
-== set some file permissions ==
+=== set some file permissions ===
 
 Apache user needs write access in avatars:
 
@@ -409,7 +409,7 @@ sudo chgrp www-data media/avatars
 sudo chmod g+w media/avatars
 ```
 
-== ER Diagram ==
+=== ER Diagram ===
 
 You can generate an ER diagram for the application using the django command
 extensions:
@@ -423,7 +423,7 @@ cat docs/catalogue_diagram.dot | dot -Tpng -o docs/catalogue_diagram.png ; \
   display docs/catalogue_diagram.png
 ```
 
-== SVN Ignoring files ==
+=== SVN Ignoring files ===
 
 Please read this:
 
@@ -431,9 +431,9 @@ http://stackoverflow.com/questions/116074/how-to-ignore-a-directory-with-svn
 
 so that files that do not belong in svn are not shown in the status list.
 
-== Troubleshooting ==
+=== Troubleshooting ===
 
-=== settings.py not found ===
+==== settings.py not found ====
 
 This is usually a symptom that one of the imports withing settings.py failed.
 Test by doing:

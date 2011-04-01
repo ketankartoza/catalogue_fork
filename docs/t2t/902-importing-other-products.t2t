@@ -2,7 +2,7 @@
 
 % Leave the blank space above here
 
-= Procedures for importing data from various sources into the catalogue =
+== Procedures for importing data from various sources into the catalogue ==
 
 ""Note:"" This document should be considered compulsory reading before you
 attempt to import any data into the catalogue.
@@ -16,11 +16,11 @@ lodged in the database in one way or another. Different sensors have different
 entry points into the system - and this document tries to cover the various
 permutations and procedures for lodging data into the database.
 
-== Legacy ACS System ==
+=== Legacy ACS System ===
 
-== SPOT Image Data ==
+=== SPOT Image Data ===
 
-== Sumbandilasat ==
+=== Sumbandilasat ===
 
 For sumbandilasat the procedure for import at the moment boils down to this:
 
@@ -60,7 +60,7 @@ imagery_mastercopies
 After this process the new data should be searchable in the catalogue,
 thumbnails should be available, and the raw products should be downloadable.
 
-=== Copying the product folder over to LION ===
+==== Copying the product folder over to LION ====
 
 Currently we ""pull"" the data over from the storage array to LION. This is
 carried out using rsync. Here is an example of copying a DIMS project folder
@@ -88,7 +88,7 @@ L1Ab products.  The data in Thnl will be imported as prodct thumbnails or
 'quicklooks'.  The folders under raw will be archved using a filename that
 matches their sac product ID and made available as downloads.
 
-=== Importing the report file ===
+==== Importing the report file ====
 
 Once the project folder has been carried over to LION, you need to import the
 report file into the database. To do this the report file needs to be copied
@@ -171,7 +171,7 @@ Which should output something like this:
 
 Now log out of elephant and we will continue with the import on LION.
 
-=== Unified product migration ===
+==== Unified product migration ====
 
 Our goal here is to convert the Sumbandilasat data into the SAC Unified Product
 Model (UPM). The purpose of the UPM is to use a common product table for all
@@ -213,10 +213,10 @@ python manage.py runscript sumb_importer
 
 To achieve this we will run a python script that will do the work for us.
 
-=== Downloadable Products ===
+==== Downloadable Products ====
 
-== CBERS ==
+=== CBERS ===
 
-== SACC ==
+=== SACC ===
 
 

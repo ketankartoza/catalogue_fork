@@ -2,9 +2,9 @@
 
 % Do not remove the above two blank lines
 
-= Setup Procedure for Fibrecat SX60 Storage arrays =
+== Setup Procedure for Fibrecat SX60 Storage arrays ==
 
-== Hardware preparation ==
+=== Hardware preparation ===
 
 As root / sudo edit the /etc/fstab and disable the storage array at boot. To do
 this change this line:
@@ -39,7 +39,7 @@ up again and the system restarted.
 
 We checked that all drives came up properly and no warning lights were displayed.
 
-== Configure the storage array in the web admin interface ==
+=== Configure the storage array in the web admin interface ===
 
 The array is configured using a web control panel at 
 
@@ -188,7 +188,7 @@ There are two ways two resolve this - using a raw xfs partition (as we have
 done on SARMES), or using the GPT partition table scheme as we have done on
 LION).
 
-== Partitioning option 1:  Raw xfs filesystem ==
+=== Partitioning option 1:  Raw xfs filesystem ===
 
 
 Lets first look at / check the partition table on this device:
@@ -322,7 +322,7 @@ retured the drive it replaced by commenting it out. We plan to remove /dev/dm-0 
 the upgrade is done.
 
 
-== Partitioning option 2:  Creating a large filesystem using GPT ==
+=== Partitioning option 2:  Creating a large filesystem using GPT ===
 
 For newer systems we want to use ext4 on a large (non raw) filesystem The
 kernel must have been compiled with GPT support (it is by default under UBUNTU

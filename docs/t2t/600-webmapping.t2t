@@ -2,19 +2,19 @@
 
 % Leave spaces above please
 
-= Webmapping =
+== Webmapping ==
 
 A key part of the system is the provision of web mapping services. These form
 the backdrops for search and visualisation maps and play various other roles
 within the system. Although it is not advertised to clients, the web maps can
 be consumed with any OGC-WMS compatible client via a number of public wms urls.
 
-== Adding a new backdrop layer ==
+=== Adding a new backdrop layer ===
 
 In this section we will use the new 2010 ZA SPOT5 Mosaic as an example of how
 to deploy a new backdrop layer into the WMS environment.
 
-=== Synchronising the data to the catalogue server ===
+==== Synchronising the data to the catalogue server ====
 
 The first task it to place the data onto the catalogue server (in our case
 LION). The data could be copied over by various means. In the SAC context it
@@ -31,7 +31,7 @@ rsync -ave ssh *.gz lion:/mnt/cataloguestorage2/gisdata/za/SPOT5_2010/tif-gz/
 The second command above instructs to retrieve all migrated files from tape,
 which is needed before the data can be synced over to LION via rsync over ssh.
 
-=== Batch conversion to ecw ===
+==== Batch conversion to ecw ====
 
 To covert the mosaic tiles in batch we use a simple script like this (called tif2ecw):
 
@@ -63,7 +63,7 @@ we run the script from ''/mnt/cataloguestorage2/gisdata/za/SPOT5_2010/'', the re
 be a new directory: ''/mnt/cataloguestorage2/gisdata/za/SPOT5_2010/ecw'' containing the 
 mosaic tiles in ecw format.
 
-=== Creation of a virtual raster ===
+==== Creation of a virtual raster ====
 
 Gdal has a concept called \\virtual rasters\\ (roughly analagous to ESRI image
 catalogues I believe) that presents multiple images as a single file resource.
@@ -76,7 +76,7 @@ cd ecw
 gdalbuildvrt za2010ecw.vrt *.ecw
 ```
 
-=== Creation of a new mapfile ===
+==== Creation of a new mapfile ====
 
 Each new backdrop layer has a new mapfile created for it. The mapfiles are 
 stored in the GIT repository with passwords and usernames expunged.
