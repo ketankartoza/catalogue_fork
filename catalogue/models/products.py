@@ -637,8 +637,8 @@ class GenericSensorProduct( GenericImageryProduct ):
       # Create missing pieces of the chain
       mission = Mission.objects.get_or_create(abbreviation=parts[0], defaults={'name': parts[0], 'mission_group':MissionGroup.objects.all()[0]})[0]
       mission_sensor = MissionSensor.objects.get_or_create(abbreviation=parts[1], mission=mission)[0]
-      sensor_type = SensorType.objects.get_or_create(abbreviation=parts[3], mission_sensor=mission_sensor)[0]
-      self.acquisition_mode = AcquisitionMode.objects.get_or_create(abbreviation=parts[2], sensor_type=sensor_type, defaults={'geometric_resolution':0, 'band_count':1})[0]
+      sensor_type = SensorType.objects.get_or_create(abbreviation=parts[2], mission_sensor=mission_sensor)[0]
+      self.acquisition_mode = AcquisitionMode.objects.get_or_create(abbreviation=parts[3], sensor_type=sensor_type, defaults={'geometric_resolution':0, 'band_count':1})[0]
 
     try:
       self.projection = Projection.objects.get(name=parts[11][:6])

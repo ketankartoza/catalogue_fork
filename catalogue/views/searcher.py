@@ -150,7 +150,7 @@ class Searcher:
       self.mMessages.append('search type <b>%s</b>' % dict(self.mSearch.PRODUCT_SEARCH_TYPES)[self.mSearch.search_type])
       # ABP: advanced search parameters, not sensor-specific
       if self.mSearch.license_type:
-        self.mMessages.append('license type %s' % License.LICENSE_TYPE_CHOICES.get(self.mSearch.license_type))
+        self.mMessages.append('license type %s' % dict(License.LICENSE_TYPE_CHOICES).get(self.mSearch.license_type))
         # ABP: m2m
         self.mLicenseQuery = Q(license__in = self.mSearch.license.all())
         self.mQuerySet = self.mQuerySet.filter( self.mLicenseQuery )
@@ -199,7 +199,6 @@ class Searcher:
         if self.mSearch.k_orbit_path or self.mSearch.j_frame_row:
           logging.info('path row filtering is enabled')
           # used for scene searches only (landsat only)
-          #import ipy; ipy.shell()
           if self.mSearch.k_orbit_path:
             self.mKOrbitPathQuery = Q()
             self.mMessages.append('Path: <b>%s</b>' % self.mSearch.k_orbit_path)

@@ -100,6 +100,7 @@ NEWPAGE
 
 = Search =
 %!include: 502-searching-t2t
+=======
 
 = Ingestors =
 %!include: 900-batch-processing-intro.t2t
@@ -110,4 +111,5 @@ NEWPAGE
 %!include: 904-importing-rapideye-products.t2t
 %!include: 905-importing-modis-products.t2t
 %!include: 906-importing-misr-products.t2t
+%!include: 907-importing-terrasar-products.t2t
 %!include: 910-file-drop.t2t

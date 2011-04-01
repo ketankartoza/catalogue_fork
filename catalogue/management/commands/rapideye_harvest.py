@@ -259,7 +259,7 @@ class Command(BaseCommand):
             'SAT': mission.ljust(3, '-'),
             'SEN': mission_sensor.ljust(3, '-'),
             'TYP': sensor_type.ljust(3, '-'),
-            'MOD': acquisition_mode.ljust(3, '-'),
+            'MOD': acquisition_mode.ljust(4, '-'),
             'KKKK': path.rjust(4, '0'),
             'KS': path_shift.rjust(2, '0'),
             'JJJJ': row.rjust(4, '0'),
@@ -269,17 +269,18 @@ class Command(BaseCommand):
             'LEVL' : processing_level.ljust(4, '-'),
             'PROJTN': projection.ljust(6, '-')
           }
+          assert len(product_id) == 58, 'Wrong len in product_id'
 
           verblog("Product ID %s" % product_id, 2)
 
           # Do the ingestion here...
           data = {
-            'metadata': '',
+            'metadata': '\n'.join(["%s=%s" % (f,package.get(f)) for f in package.fields]),
             'spatial_coverage': package.geom.geos,
             'product_id': product_id,
             'radiometric_resolution': radiometric_resolution,
             'band_count': band_count,
-            'cloud_cover': float(package.get('CCP')) / 100,
+            'cloud_cover': int(package.get('CCP')), # integer percent
             'owner': owner,
             'license': license,
             'creating_software': software,

@@ -34,9 +34,6 @@ Command: python manage.py rapideye_harvest -v 0 -a 'POLYGON(( 22 3, 23 3, 23 2, 
 
 Test that everything was imported correctly
 
-Product ID RE2_REI_REI_REI_0022_83_0002_28_110312_000000_1B--_ORBIT-
-{'radiometric_resolution': 16, 'solar_azimuth_angle': 117.85521, 'band_count': 5, 'solar_zenith_angle': 12.066190000000006, 'owner': <Institution: Rapideye AG>, 'quality': <Quality: Unknown>, 'spatial_coverage': <Polygon object at 0x3da0be0>, 'product_id': 'RE2_REI_REI_REI_0022_83_0002_28_110312_000000_1B--_ORBIT-', 'license': <License: SAC Commercial License>, 'cloud_cover': 14.0, 'creating_software': <CreatingSoftware: Unknown>, 'sensor_viewing_angle': -6.3792200000000001, 'sensor_inclination_angle': 3.54, 'original_product_id': 'https://delivery.rapideye.de/catalogue/browse_images/2011/03/12/5746735/3440123_2011-03-12_5746735_5746759_browse.tiff', 'metadata': ''}
-
 ###############################################
 
 Tests import was complete
@@ -46,7 +43,7 @@ Tests import was complete
 
 Test a product in the middle of the import
 
->>> p=OpticalProduct.objects.get(product_id='RE2_REI_REI_REI_0022_83_0002_28_110312_090000_1B--_ORBIT-')
+>>> p=OpticalProduct.objects.get(product_id='RE2_REI_REI_REI-_0022_83_0002_28_110312_090000_1B--_ORBIT-')
 >>> p.radiometric_resolution
 16
 >>> p.geometric_resolution
@@ -70,7 +67,7 @@ datetime.datetime(2011, 3, 12, 9, 0)
 >>> p.license
 <License: CC-BY-SA>
 >>> p.cloud_cover
-14.0
+14
 >>> p.creating_software
 <CreatingSoftware: QGIS>
 >>> int(p.sensor_viewing_angle)
