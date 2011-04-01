@@ -23,8 +23,20 @@ sudo mkdir web
 sudo chown -R <username>.<username> web
 cd web
 mkdir sac
+```
+
+Now you can check out either from linfiniti's repo:
+
+```
 git clone git@linfiniti2:sac_catalogue.git sac_catalogue
 ```
+
+or from SANSA's repo:
+
+```
+git clone git@orasac1:sac_catalogue.git sac_catalogue
+```
+
 
 Then follow the instructions in README, skipping sections on informix, building
 gdal from source and source code checkout (you already checked it out if you
@@ -144,8 +156,8 @@ Host linfiniti2
 The lion live and test instances are cloned from the orasac1 repo like this:
 
 ```
-git clone timlinux@orasac1:/opt/git/sac_catalogue sac_live
-git clone timlinux@orasac1:/opt/git/sac_catalogue sac_test
+git clone git@orasac1:sac_catalogue.git sac_live
+git clone git@orasac1:sac_catalogue.git sac_test
 ```
 
 The instance on linfiniti2 gitosis was cloned in the same way into
@@ -227,7 +239,7 @@ That gives us a local repo whose remote master is on linfiniti. Now we add a
 new remote (you can have multiple remote repos and sync between them):
 
 ```
-git remote add orasac1 timlinux@orasac1:/opt/git/sac_catalogue
+git remote add orasac1 git@orasac1:sac_catalogue
 git pull
 ```
 
