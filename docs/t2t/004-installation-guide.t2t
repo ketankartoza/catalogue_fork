@@ -45,7 +45,7 @@ source python/bin/activate
 ==== Install some development dependencies ====
 
 ```
-sudo apt-get install libpq-dev libpq4 libpqxx-dev libxslt1-dev libxml2-dev libxml2
+sudo apt-get install libpq-dev libpq4 libpqxx-dev libxslt1-dev
 ```
 
 Install easy_install so that we can use pip thereafter:
