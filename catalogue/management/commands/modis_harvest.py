@@ -110,6 +110,7 @@ class Command(BaseCommand):
     except error.LockHeld:
       # couldn't take the lock
       raise CommandError, 'Could not acquire lock.'
+
     store_image           = options.get('store_image')
     test_only             = options.get('test_only')
     verbose               = int(options.get('verbosity'))
@@ -219,7 +220,6 @@ class Command(BaseCommand):
             verblog('Cannot find last_package %s in list' % last_package, 2)
 
           for package in package_list:
-            #import ipy; ipy.shell()
             #verblog('Maxproducts %s, imported %s' % (maxproducts, imported), 2)
             if maxproducts and imported >= maxproducts:
               verblog("Maxproducts %s exceeded: exiting" % maxproducts, 2)
@@ -264,7 +264,7 @@ class Command(BaseCommand):
               'SAT': mission.ljust(3, '-'),
               'SEN': mission_sensor.ljust(3, '-'),
               'TYP': sensor_type.ljust(3, '-'),
-              'MOD': acquisition_mode.ljust(3, '-'),
+              'MOD': acquisition_mode.ljust(4, '-'),
               'KKKK': path.rjust(4, '0'),
               'KS': path_shift.rjust(2, '0'),
               'JJJJ': row.rjust(4, '0'),
@@ -274,6 +274,7 @@ class Command(BaseCommand):
               'LEVL' : processing_level.ljust(4, '-'),
               'PROJTN': projection.ljust(6, '-')
             }
+            assert len(product_id) == 58, 'Wrong len in product_id'
 
             verblog("Product ID %s" % product_id, 2)
 
@@ -333,7 +334,6 @@ class Command(BaseCommand):
                 tiff_2 = tiff_thumb + '2'
                 tiff_3 = tiff_thumb + '3'
                 tiff_4 = tiff_thumb + '4'
-                #import ipy; ipy.shell()
                 try:
                   boundary = footprint[0]
                   subprocess.check_call(["gdal_translate", "-q", "-of", "GTiff", "-sds", "-a_srs", 'EPSG:4326', "-gcp", "0", "2400", "%s" % boundary[0][0], "%s" % boundary[0][1], "-gcp", "0", "0", "%s" % boundary[1][0], "%s" % boundary[1][1], "-gcp", "2400", "0", "%s" % boundary[2][0], "%s" % boundary[2][1],  "-gcp", "2400", "2400", "%s" % boundary[3][0], "%s" % boundary[3][1], tmp_image, tiff_thumb])
