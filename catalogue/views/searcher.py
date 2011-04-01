@@ -150,9 +150,9 @@ class Searcher:
       self.mMessages.append('search type <b>%s</b>' % dict(self.mSearch.PRODUCT_SEARCH_TYPES)[self.mSearch.search_type])
       # ABP: advanced search parameters, not sensor-specific
       if self.mSearch.license_type:
-        self.mMessages.append('license type %s' % dict(License.LICENSE_TYPE_CHOICES).get(self.mSearch.license_type))
-        # ABP: m2m
-        self.mLicenseQuery = Q(license__in = self.mSearch.license.all())
+        self.mMessages.append('license type <b>%s</b>' % dict(License.LICENSE_TYPE_CHOICES).get(self.mSearch.license_type))
+        # ABP: int dictionary
+        self.mLicenseQuery = Q(license__type = self.mSearch.license_type)
         self.mQuerySet = self.mQuerySet.filter( self.mLicenseQuery )
 
 
