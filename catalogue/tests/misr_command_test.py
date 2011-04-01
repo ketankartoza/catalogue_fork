@@ -39,11 +39,11 @@ Test that everything was imported correctly
 >>> OpticalProduct.objects.filter(product_id__startswith='TER_MIS').count()
 1
 >>> OpticalProduct.objects.filter(product_id__startswith='TER_MIS')
-[<OpticalProduct: TER_MIS_VNI_LM-_0176_00_1063_00_000229_090802_1B2-_ORBIT->]
+[<OpticalProduct: TER_MIS_VNI_LM--_0176_00_1063_00_000229_090802_1B2-_ORBIT->]
 
 Test a product (just one by now)
 
->>> p=OpticalProduct.objects.get(product_id='TER_MIS_VNI_LM-_0176_00_1063_00_000229_090802_1B2-_ORBIT-')
+>>> p=OpticalProduct.objects.get(product_id='TER_MIS_VNI_LM--_0176_00_1063_00_000229_090802_1B2-_ORBIT-')
 >>> p.radiometric_resolution
 16
 >>> p.geometric_resolution
@@ -69,10 +69,10 @@ datetime.datetime(2000, 2, 29, 9, 8, 2)
 >>> p.original_product_id
 u'MISR_AM1_GRP_ELLIPSOID_LM_P176_O001063_AN_SITE_MONGU_F03_0024.hdf'
 >>> p.local_storage_path
-u'TER/1B2/2000/2/29/TER_MIS_VNI_LM-_0176_00_1063_00_000229_090802_1B2-_ORBIT-.tar.bz2'
+u'TER/1B2/2000/2/29/TER_MIS_VNI_LM--_0176_00_1063_00_000229_090802_1B2-_ORBIT-.tar.bz2'
 
 >>> p.product_id + '.tar.bz2'
-u'TER_MIS_VNI_LM-_0176_00_1063_00_000229_090802_1B2-_ORBIT-.tar.bz2'
+u'TER_MIS_VNI_LM--_0176_00_1063_00_000229_090802_1B2-_ORBIT-.tar.bz2'
 
 Test world file
 

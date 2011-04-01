@@ -41,11 +41,11 @@ Tests import was complete
 >>> OpticalProduct.objects.filter(product_id__startswith='MYD').count()
 3
 >>> OpticalProduct.objects.filter(product_id__startswith='MYD')
-[<OpticalProduct: MYD_MYD_MOD_MOD_0015_10_00-5_01_000218_000000_1B--_ORBIT->, <OpticalProduct: MYD_MYD_MOD_MOD_0015_58_0-15_02_000218_000000_1B--_ORBIT->, <OpticalProduct: MYD_MYD_MOD_MOD_0016_63_0-25_03_000218_000000_1B--_ORBIT->]
+[<OpticalProduct: MYD_MYD_MOD_MOD-_0015_10_00-5_01_000218_000000_1B--_ORBIT->, <OpticalProduct: MYD_MYD_MOD_MOD-_0015_58_0-15_02_000218_000000_1B--_ORBIT->, <OpticalProduct: MYD_MYD_MOD_MOD-_0016_63_0-25_03_000218_000000_1B--_ORBIT->]
 
 Test a product in the middle of the import
 
->>> p=OpticalProduct.objects.get(product_id='MYD_MYD_MOD_MOD_0015_58_0-15_02_000218_000000_1B--_ORBIT-')
+>>> p=OpticalProduct.objects.get(product_id='MYD_MYD_MOD_MOD-_0015_58_0-15_02_000218_000000_1B--_ORBIT-')
 >>> p.radiometric_resolution
 8
 >>> p.geometric_resolution
@@ -67,10 +67,10 @@ datetime.datetime(2000, 2, 18, 0, 0)
 >>> p.original_product_id
 u'MCD43A2.A2000049.h19v10.005.2006269121249.hdf'
 >>> p.local_storage_path
-u'MYD/1B/2000/2/18/MYD_MYD_MOD_MOD_0015_58_0-15_02_000218_000000_1B--_ORBIT-.hdf.bz2'
+u'MYD/1B/2000/2/18/MYD_MYD_MOD_MOD-_0015_58_0-15_02_000218_000000_1B--_ORBIT-.hdf.bz2'
 
 >>> p.product_id + '.hdf.bz2'
-u'MYD_MYD_MOD_MOD_0015_58_0-15_02_000218_000000_1B--_ORBIT-.hdf.bz2'
+u'MYD_MYD_MOD_MOD-_0015_58_0-15_02_000218_000000_1B--_ORBIT-.hdf.bz2'
 
 Test world file
 
