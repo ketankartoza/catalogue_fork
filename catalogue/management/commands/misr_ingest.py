@@ -421,7 +421,6 @@ class Command(BaseCommand):
                 tiff_thumb = os.path.join(thumbnails_folder, op.product_id + ".tiff")
                 cmd = ["gdal_merge.py", "-o", tiff_thumb, "-q"]
                 cmd.extend(temp_tif_list)
-                #import ipy; ipy.shell()
                 subprocess.check_call(cmd)
                 # Transforms the tiff thumb into a jpeg
                 jpeg_thumb = os.path.join(thumbnails_folder, op.product_id + ".jpg")
