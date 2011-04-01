@@ -221,7 +221,6 @@ def modifySearch(theRequest, theGuid):
   logging.info('initial search form being rendered')
   mySearch = get_object_or_404( Search, guid=theGuid )
   myForm = AdvancedSearchForm( instance=mySearch )
-  #import ipy; ipy.shell()
   myFormset = DateRangeInlineFormSet(instance=mySearch)
   return render_to_response ( 'search.html' ,{
     'myAdvancedFlag' :  mySearch.isAdvanced,
@@ -279,7 +278,6 @@ def productIdSearch(theRequest, theGuid):
         mySearch.searchdaterange_set.all().delete()
         mySearch.searchdaterange_set.add(SearchDateRange(**myForm.cleaned_data.get('date_range')))
       # Save new sensors
-      #import ipy; ipy.shell()
       if myForm.cleaned_data.get('sensors'):
         for sensor in myForm.cleaned_data.get('sensors'):
           mySearch.sensors.add(sensor)
