@@ -19,6 +19,8 @@ Tim Sutton, 2008
 % Make verbatim text a little smaller
 %! PostProc(tex): '\\begin{verbatim}' '{\\tiny\n\\begin{verbatim}'
 %! PostProc(tex): '\\end{verbatim}' '\\end{verbatim}\n}'
+%! PostProc(tex): '\\section' '\\newpage\\section'
+%! PostProc(tex) : NEWPAGE  '\\newpage'
 
 % Give alternating table rows different colours and use a smaller font in tables (\tiny)
 %! PostProc(tex): '\\begin{tabular}' '\\rowcolors{2}{tableShade}{white} \n\\tiny\\begin{tabular}'
@@ -61,7 +63,18 @@ Tim Sutton, 2008
 system (Lion) includes around 26TB of online storage that we have no effective
 way of backing up. This should be addressed as a priority!
 
+
+|| Document last update | Document last change |
+| %%date | %%mtime |
+
+
+NEWPAGE
+
+%%toc
+
+= Introduction =
 %!include: 002-introduction.t2t
+= Developer Guide =
 %!include: 003-developer-guide.t2t
 %!include: 003-1-database-server-setup.t2t
 %!include: 003-2-catalogue-server-setup.t2t
@@ -71,14 +84,24 @@ way of backing up. This should be addressed as a priority!
 %!include: 003-6-gitosis.t2t
 %%!include: 003-7-git-mirroring.t2t
 %!include: 003-8-redmine.t2t
+= Installation Guide =
 %!include: 004-installation-guide.t2t
+= Unit Testing =
 %!include: 005-unit-tests.t2t
+= Reporting Tools =
 %!include: 201-reporting-tools.t2t
+= Schema =
 %!include: 301-product-schema.t2t
 %!include: 302-order-schema.t2t
 %!include: 303-search-schema.t2t
-%!include: 401-metadata-standard.t2t
+
+%= Metadata =
+%%!include: 401-metadata-standard.t2t
+
+= Search =
 %!include: 502-searching-t2t
+
+= Ingestors =
 %!include: 900-batch-processing-intro.t2t
 %!include: 600-webmapping.t2t
 %!include: 901-informix-acs-sync.t2t

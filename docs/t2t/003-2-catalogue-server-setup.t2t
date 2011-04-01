@@ -2,7 +2,7 @@
 
 % keep the above two blank lines
 
-=  Configuring the Lion Catalogue server =
+==  Configuring the Lion Catalogue server ==
 
 The 'Lion' server provides web mapping services for the SAC Catalogue.
 
@@ -20,7 +20,7 @@ In addition the lion server is connected to two 14TB Fujitsu Siemens storage arr
 
 The Server is an IA 64 processor machine installed with ubuntu server 10.04 LTS.
 
-== Package installations ==
+=== Package installations ===
 
 ```
 sudo apt-get install bc xterm build-essential lxde rpm mc sun-java6-jre \
@@ -28,7 +28,7 @@ firefox vim ntpdate lxde xinit rpl django python-django subversion \
 utidy python-utidylib python-psycopg2 python-geoip python-django-registration
 ```
 
-== Informix Client Setup ==
+=== Informix Client Setup ===
 
 When following the Informix install procedure, do it as root locally on
 the server since I had problems trying to run the sdk setup tool remotely over
@@ -36,7 +36,7 @@ an ssh -X connection.
 
 For specific notes on how to set up the client see 003-3-informix_access.t2t
 
-== Nightly database sync ==
+=== Nightly database sync ===
 
 We should sync the ACS data to our own catalogue database nightly. When all 
 the prerequisites are installed on the Lion server, the updateInformix.sh script 
@@ -96,10 +96,10 @@ pg_restore sac_[filename].dmp | psql sac
 pg_restore gis_[filename].dmp | psql gis
 ```
 
-== Compile and install GDAL ==
+=== Compile and install GDAL ===
 
 
-=== Building with ECW Support ===
+==== Building with ECW Support ====
 
 **Note:** you can only compress images up to 500mb (though as far as I know
 there is no limit to decompression size)
@@ -168,7 +168,7 @@ We configure gdal to build with its own internal copy of libtiff otherwise we
 encounter problems with assertion errors if the system tiff lib is not compatible.
 (see http://trac.osgeo.org/gdal/ticket/3139 for more details).
 
-== Gdal MrSid Support ==
+=== Gdal MrSid Support ===
 
 To add mr sid support, you need the MrSid geosdk and then to reconfigure and build gdal like this:
 
@@ -181,7 +181,7 @@ To add mr sid support, you need the MrSid geosdk and then to reconfigure and bui
             --without-jp2mrs
 ```
 
-== Hdf4 and Hdf5 support ==
+=== Hdf4 and Hdf5 support ===
 
 ```
 sudo apt-get install libhdf5-serial-dev libhdf5-serial-1.6.6-0 libhdf4g-dev libhdf4g libhdf4g-doc
@@ -196,7 +196,7 @@ make -j8
 sudo make install
 ```
 
-== Set up the web mapping dir ==
+=== Set up the web mapping dir ===
 
 **TODO:** Update these notes to use git rather.
 
@@ -223,7 +223,7 @@ for FILE in *.templ; do NEWFILE=$(echo "$FILE" | sed 's/\.templ//g'); \
 ```
 
 
-== Mapserver with fastcgi ==
+=== Mapserver with fastcgi ===
 
 First of all you need to compile mapserver from source since we need 
 ecw and MrSid support. See mapserver_notes.t2t for detailed runthrough.
@@ -359,7 +359,7 @@ NameVirtualHost *
 ```
 
 
-== Proxying Ordering Service Requests ==
+=== Proxying Ordering Service Requests ===
 
 The ordering service on jackal is not a publicly accessible server so we
 proxy access to it via lion.
@@ -385,11 +385,11 @@ Now add proxy config to 000-default
 ```
 
 
-== Fibrecat storage arrays config ==
+=== Fibrecat storage arrays config ===
 
 
 
-=== Catalogue Storage 1 ===
+==== Catalogue Storage 1 ====
 
 IP Address: 192.168.1.142
 
@@ -411,7 +411,7 @@ Up      1500.30GB       ATA             ST31500341AS    WWN:5000c5001120e443    
 ```
 
 
-=== Catalogue Storage 2 (old Sarmes Storage) ===
+==== Catalogue Storage 2 (old Sarmes Storage) ====
 
 IP Address: 192.168.1.141
 
@@ -422,7 +422,7 @@ Rack Position: **Lower** device as you look at the rack
 
 
 
-=== Lion configuration as fibrecat client ===
+==== Lion configuration as fibrecat client ====
 
 ```
 timlinux@lion:~$ dmesg | grep scsi
@@ -449,11 +449,11 @@ timlinux@lion:~$ dmesg | grep scsi
 
 
 
-== File System Layout on the catalogue server ==
+=== File System Layout on the catalogue server ===
 
 The following are the key areas of the file system you should be aware of:
 
-=== Opt ===
+==== Opt ====
 
 ```
 /opt
@@ -471,13 +471,13 @@ The following are the key areas of the file system you should be aware of:
     +-- templates
 ```
 
-=== /usr/local ===
+==== /usr/local ====
 
 This is the recommended place in which user compile applications should be
 installed to. Our installations of gdal, mapserver etc have been placed in this
 part of the filesystem when installed.
 
-=== /mnt/cataloguestorage ===
+==== /mnt/cataloguestorage ====
 
 This is the first of two ~13TB storage arrays connected to the server. In this 
 storage system, all of the thumbnailas, online remote sensing dataset, backups

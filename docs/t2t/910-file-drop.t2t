@@ -1,7 +1,7 @@
 
 
 %---------above lines left blank intentionally
-= Lion File Drop =
+== Lion File Drop ==
 
 Lion (the catalogue server) should be isolated in the network from other SANSA
 servers and infrastructure (with the exception of the elephant database
@@ -25,13 +25,13 @@ The following diagram illustrates the logic flow for the filedrop.
 
 [img/filedrop.png]
 
-== Setup rssh ==
+=== Setup rssh ===
 
 ```
 sudo apt-get install rssh
 ```
 
-== Creating a filedrop user ==
+=== Creating a filedrop user ===
 
 Next we make a user with a rssh (restricted shell) that can only use scp and rsync.
 
@@ -57,7 +57,7 @@ Now exit the filedrop user's shell:
 exit
 ```
 
-== Ssh configuration ==
+=== Ssh configuration ===
 
 Next sshd has to be configured to allow connections for the filedrop user. To
 do this, edit ''/etc/ssh/sshd_config'' and add the filedrop user to the
@@ -73,7 +73,7 @@ And then restart sshd:
 sudo /etc/init.d/ssh restart
 ```
 
-== Authorized Keys for filedrop ==
+=== Authorized Keys for filedrop ===
 
 Next we configure the filedrop user's authorised keys file so that key based
 connections from a specific host can be made.
@@ -114,7 +114,7 @@ Now exit the filedrop shell again:
 exit
 ```
 
-== Configuring rssh ==
+=== Configuring rssh ===
 
 The final thing to do on the server side is to configure rssh.
 
@@ -137,7 +137,7 @@ allowrsync
 There is no need to restart ssh, the changes should take effect immediately on
 saving the file.
 
-== Testing from a client ==
+=== Testing from a client ===
 
 To test from the client (cheetah in this case), you need to copy the
 **private** key over to that server
@@ -200,7 +200,7 @@ However this was not implemented in this work package and will remain an
 activity for a future work package.
 
 
-== Streamlining ssh parameters on client ==
+=== Streamlining ssh parameters on client ===
 
 As you can see from above, there are a number of options that need to be passed
 when making the connection:
@@ -231,7 +231,7 @@ With the above config file, the syntax for copying a file over is much more stre
 scp /tmp/test222 lion:/tmp/
 ```
 
-== Synchronising with a cron job ==
+=== Synchronising with a cron job ===
 
 The DIMS product library extraction places products in
 ''/cxfs/eods/deliveries/'' when they are ready. We can thus synchronise these
@@ -320,7 +320,7 @@ deliveries directory listable:
 ```
 
 
-== Lion Cron Jobs ==
+=== Lion Cron Jobs ===
 
 On the lion server side, a similar cron job is run to:
 - ingest any new packages that have arrived

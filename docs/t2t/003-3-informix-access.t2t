@@ -2,9 +2,9 @@
 
 % Do not remove the above two lines
 
-= Informix SPOT Catalogue Notes =
+== Informix SPOT Catalogue Notes ==
 
-== Accessing the server ==
+=== Accessing the server ===
 
 ```
 ssh 196.35.94.210 -l informix
@@ -16,7 +16,7 @@ Interactive database access:
 dbaccess
 ```
 
-== Command line batch processing ==
+=== Command line batch processing ===
 
 Add some sql commands to a text file:
 
@@ -36,7 +36,7 @@ Save and run, redirecting output to another text file:
 dbaccess catalogue < /tmp/tim.sql >> /tmp/tim.out
 ```
 
-== Command line processing using echo ==
+=== Command line processing using echo ===
 
 Handy for quickly running once off commands of from bash 
 scripts.
@@ -45,7 +45,7 @@ scripts.
 echo "select * from t_file_types" | dbaccess catalogue
 ```
 
-== Changing geotype to wkt ==
+=== Changing geotype to wkt ===
 
 For batch export to the django catalogue the geometries 
 need to be exported as wkt (well known text) which is not 
@@ -55,7 +55,7 @@ the type used internally for the spot catalogue.
 echo "update GeoParam set value = 0 where id =3;" | dbaccess catalogue
 ```
 
-== Reverting geotype to informix format ==
+=== Reverting geotype to informix format ===
 
 To set geometry output back informix representation and restoring 
 normal catalogue functioning do:
@@ -64,7 +64,7 @@ normal catalogue functioning do:
 echo "update GeoParam set value = 4 where id =3;" | dbaccess catalogue
 ```
 
-== Connecting to the database using python ==
+=== Connecting to the database using python ===
 
 
 Download the InformixDB driver for python from:
@@ -76,7 +76,7 @@ http://sourceforge.net/project/showfiles.php?group_id=136134
 And the Informix client sdk from:
 
 ```
-http://www14.software.ibm.com/webapp/download/preconfig.jsp?id=2007-04-19+14%3A08%3A41.173257R&S_TACT=104CBW71&S_CMP=
+http://www14.software.ibm.com/webapp/download/preconfig.jsp?id=2007-04-19+14%3A08%3A41.173257R&S_TACT=104CBW71&S_CMP==
 ```
 
 If the above link doesnt work for you (it seems to contain a session id), go to the 
@@ -377,7 +377,7 @@ Then do
 sudo ldconfig
 ```
 
-== Making a simple python test ==
+=== Making a simple python test ===
 
 First you need to add a line to informix's sqlhosts file:
 
@@ -452,7 +452,7 @@ And the documentation for the Informix SQL implementation is here:
 http://publib.boulder.ibm.com/infocenter/idshelp/v10
 ```
 
-== WKT representation of GeoObjects ==
+=== WKT representation of GeoObjects ===
 
 Informix uses its own representation of geometry objects. There are two extensions 
 for informix that deal with spatial data : Geodetic and Spatial. It seems we have 
@@ -525,9 +525,9 @@ remarks  This parameter controls the external text & binary format of GeoObject
 
 ```
 
-== When things go wrong on the informix server ==
+=== When things go wrong on the informix server ===
 
-=== Record Lock Issues ===
+==== Record Lock Issues ====
 If the client does not cleanly disconnect it can leave records locked. You may
 see a message like this from dbaccess when trying to do an interactive query:
 
@@ -564,7 +564,7 @@ oninit
 The record locks should have been cleared at this point.
 
 
-=== DBAccess Unresponsive ===
+==== DBAccess Unresponsive ====
 
 
 Collect diagnostics:
@@ -649,7 +649,7 @@ Now add this:
 5 0 * * * /home/informix/nightly_cron.sh 
 ```
 
-== File System ==
+=== File System ===
 
 ```
 root@informix's password: 
@@ -669,7 +669,7 @@ none on /dev/pts type devpts (rw,gid=5,mode=620)
 automount(pid458) on /misc type autofs (rw,fd=5,pgrp=458,minproto=2,maxproto=3)
 ```
 
-== Schema dump of informix databases ==
+=== Schema dump of informix databases ===
 
 Its useful to be able to see the schema of databases so you can understand how
 it was put together. The following command will dump the catalogue2 (SAC
@@ -680,7 +680,7 @@ process.
 dbschema -t all -d catalogue catalogue_schema.sql
 ```
 
-== Listing system and user functions ==
+=== Listing system and user functions ===
 
 To see what functions are installed in the database do:
 
@@ -694,7 +694,7 @@ To see full details of a function:
 select * from sysprocedures where procname="lotofile";
 ```
 
-== Problems running functions ==
+=== Problems running functions ===
 
 If you try to run a function that you know exists, but you get an error message
 like this:

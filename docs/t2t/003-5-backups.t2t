@@ -2,7 +2,7 @@
 
 % Leave the above two lines blank please
 
-= Backup systems =
+== Backup systems ==
 
 A number of backups are in place but it should be noted that there is cohesive
 distaster recovery plan and system in place. In particular, there are no full
@@ -13,11 +13,11 @@ systems that are in place and that should be checked etc.
 **We strongly recommend a complete disaster recovery solution be implemented.**
 
 
-== Nightly database dumps ==
+=== Nightly database dumps ===
 
-== Nightly Clone of sac live to sac-test ==
+=== Nightly Clone of sac live to sac-test ===
 
-== Nightly thumbs rsync ==
+=== Nightly thumbs rsync ===
 
 A duplicate tree of the catalogue thumbnails is stored on cheetah / cxfs at:
 
@@ -63,7 +63,7 @@ been followed (described elsewhere in this document)
 implemented. SAC/SANSA are responsible to ensure that the cxfs is backed up
 including this directory if proper long term offsite backups are to be had.
 
-== Nightly products rsync ==
+=== Nightly products rsync ===
 
 Currently the online products **are not backed up**. Ultimately there should be
 no online products store as everything should be in the DIMS product library,
@@ -72,25 +72,25 @@ and retrieved via the OGC Ordering Services for EO interface to DIMS.
 Until such time, we **highly recommend** making a tape facility available so
 that occasional snapshots can be made.
 
-== Nightly Mapping directory rsync ==
+=== Nightly Mapping directory rsync ===
 
 Currently the mapping data in /mnt/cataloguestorage/data is **not backed up**.
 This data does not change very often. However it is quite voluminous. We
 **highly recommend** that SAC should provide access to a tape drive so that
 occasionally snapshots can be made.
 
-== System backups for Elephant ==
+=== System backups for Elephant ===
 
-== System backups for Lion ==
+=== System backups for Lion ===
 
 
-== Backups pulled to cheetah / cxfs ==
+=== Backups pulled to cheetah / cxfs ===
 
 **Note:** Please see the filedrop chapter which describes how rssh/ssh/filedrop
 user is set up to allow passwordless scp and rsync operations to be carried
 out.
 
-=== Setup NTP ===
+==== Setup NTP ====
 
 Firstly, you should ensure that the system time on cheetah is kept properly synchronised via ntp:
 
@@ -104,7 +104,7 @@ Now configure ntp according to the following two screenshots
 
 [img/sac05.png]
 
-=== Install the backup script ===
+==== Install the backup script ====
 
 On cheetah the script is available at:
 
@@ -135,7 +135,7 @@ sudo scp lion:/mnt/cataloguestorage/backups/${YEAR}/${MONTH}/gis_postgis_`date +
 
 ```
 
-=== Add crontab entry ===
+==== Add crontab entry ====
 
 As directed abovem you should add a crontab entry e.g.:
 

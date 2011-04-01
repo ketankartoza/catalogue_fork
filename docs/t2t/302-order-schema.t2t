@@ -7,7 +7,7 @@
 %--------------- Ordering --------------------
 %---------------------------------------------
 %---------------------------------------------
-= Catalogue Schema : Orders =
+== Catalogue Schema : Orders ==
 
 **Note:** Before reading this section please read & understand the products schema notes.
 
@@ -47,7 +47,7 @@ the processing of orders is not yet automated. When an order is placed for a
 product, the notifications to operators are automatic, but the process of
 fulfilling the orders remains operator controlled.
 
-== Schema ==
+=== Schema ===
 
 The schema relating to product orders can be summarised as follows:
 
@@ -78,11 +78,11 @@ We can express the above diagram verbally:
   dvd etc.)
 -
 
-== Operational notes ==
+=== Operational notes ===
 
 The following operation notes should be understood for the order system:
 
-=== General Users ===
+==== General Users ====
 
 - In order for a user to initiate an order, they must have completed the
   details of their personal profile. If this is not the case, they will first
@@ -115,7 +115,7 @@ The following operation notes should be understood for the order system:
   available for immediate download (see below).
 -
 
-=== SAC Staff ===
+==== SAC Staff ====
 
 - SAC Staff can view a master list of all orders and filter / sort those orders
   by status, owner etc.
@@ -129,7 +129,7 @@ The following operation notes should be understood for the order system:
   the client, as it will provide a thorough audit trail.
 -
 
-== Instant product delivery ==
+=== Instant product delivery ===
 
 In some cases products are available for instant download. The indicator for
 this is a populated GenericProduct::local_storage_path field which points to a
@@ -146,7 +146,7 @@ In the case of DIMS OS4EO extracted products, these will be flushed after a
 period of 1 week from the server file system and the user advised to this fact
 when this happens.
 
-== OS4EO ==
+=== OS4EO ===
 
 A Django management command, suitable to run from cron jobs, will take care of
 the OS4EO order placing for GenericSensorProduct.
@@ -184,7 +184,7 @@ Pseudo code:
     +
 
 
-=== OS4EO configuration ===
+==== OS4EO configuration ====
 
 The WS endpoint is specified in global settings.py:
 
@@ -193,7 +193,7 @@ OS4EO_SERVICE_ENDPOINT = "http://196.35.94.243/os4eo"
 ```
 
 
-=== OS4EO command ===
+==== OS4EO command ====
 
 **Note:** the command is not yet finished nor tested because of some problems that Werum should solve: http://redmine.linfiniti.com/issues/21
 
@@ -223,7 +223,7 @@ Options:
   -h, --help            show this help message and exit
 ```
 
-=== OS4EO client library ===
+==== OS4EO client library ====
 
 The client library is located in catalogue/os4eo_client.py, tests and
 example usage are in catalogue/tests/os4eo_client_test.py.
@@ -287,7 +287,7 @@ capabilities. When debug is not needed anymore, the standard library can be used
 parameter from the function calls in the main script.
 
 
-== Filtering of CRS's ==
+=== Filtering of CRS's ===
 
 The projections list can be long and irrelevant for many images if the complete
 list is shown. Thus the following logic applies:
@@ -302,7 +302,7 @@ list is shown. Thus the following logic applies:
 - EPSG:900913 Google Mercator is always listed
 -
 
-== Datum ==
+=== Datum ===
 
 Currently only one datum is supported for order requests - WGS84:
 
@@ -313,7 +313,7 @@ Until additional datum options are available, the datum is not shown to end
 users since providing a datum choice selection with only a single entry is
 superfluous.
 
-== Processing Levels ==
+=== Processing Levels ===
 
 A user can request that a product be delivered at a different processing level
 to the one recorded for the project. For example a user can request that an
@@ -326,7 +326,7 @@ section of the product schema discussion.
 **Note:** Wolfgang to supply list of rules on how processing levels may be
 assigned.
 
-== File Format ==
+=== File Format ===
 
 The user making the order can request from one of a number of different
 delivery file formats. Currently these formats are defined as:
@@ -337,14 +337,14 @@ delivery file formats. Currently these formats are defined as:
  | 3 | JP2 - JPEG 2000                           |
  | 4 | ESRI -ShapeFile (Vector products only)    |
 
-== Packaging ==
+=== Packaging ===
 
 
 By default products should be delivered inside of standard SAC packages. The
 packages will be placed in an ephemeral place in the file system (one where
 files older than 7 days are flushed daily).
 
-== Staff Order Notifications ==
+=== Staff Order Notifications ===
 
 The system can send notifications emails to staff based on product class or
 sensor ordered. If you look in the admin ui there is already a way to allocated
@@ -376,7 +376,7 @@ Path: 90, 101
 %---------------Tasking ----------------------
 %---------------------------------------------
 %---------------------------------------------
-= Tasking Requests =
+== Tasking Requests ==
 
 The TaskingRequest model is a subclass of the Order model. Tasking requests
 differ from orders in that they have no products associated with them. Instead
@@ -384,7 +384,7 @@ a tasking request has a sensor associated with it and other information
 germaine to tasking a satellite to capture and image (or other remotely sensed
 data) of a specific location.
 
-== Taskable Sensors ==
+=== Taskable Sensors ===
 
 The SensorType model includes an is_taskable member which is used to
 determine which sensors a user may select from when making a tasking request.

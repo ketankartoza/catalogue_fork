@@ -2,7 +2,7 @@
 
 % Leave the blank space above here
 
-= Procedures for importing data from RapidEye packages into the catalogue =
+== Procedures for importing data from RapidEye packages into the catalogue ==
 
 ""Note:"" This document should be considered compulsory reading before you
 attempt to import any data into the catalogue.
@@ -10,7 +10,7 @@ attempt to import any data into the catalogue.
 ""Note2:"" This document //must// be kept up to date when you make changes to
 import scripts etc.
 
-== Importing the packages from the remote catalogue ==
+=== Importing the packages from the remote catalogue ===
 
 The import process is done by a Django management command that can be called
 by a cron job.
@@ -75,7 +75,7 @@ Running the command:
 $ python manage.py rapideye_harvest -v 2 -a 'POLYGON(( 22 3, 23 3, 23 2, 22 2, 22 3))' -d 12 -y 2011 -m 03
 ```
 
-== Global settings ==
+=== Global settings ===
 
 The following parameters in settings.py control the process:
 
@@ -86,7 +86,7 @@ CATALOGUE_RAPIDEYE_USERNAME = '*********'
 CATALOGUE_RAPIDEYE_PASSWORD = '*********'
 ```
 
-== Implementation details ==
+=== Implementation details ===
 
 Details on the implementation, mainly regarding the source of
 the data used to populate the catalogue database.
@@ -104,7 +104,7 @@ Pseudocode:
   + ingest in catalogue
 
 
-=== Data and metadata extraction ===
+==== Data and metadata extraction ====
 
 
 The following metadata are hardcoded constants and can be changed at the top of the script `catalogue/management/commands/rapideye_harvest.py`:

@@ -1,14 +1,14 @@
 
 
 % Leave above lines blank
-= Hosting GIT Repos using gitosis =
+== Hosting GIT Repos using gitosis ==
 
 See also [http://blog.agdunn.net/?p=277 this page]. The idea is that we set up
 a single user account ('git') which proxies commit into the repo and has not
 shell access. We then add each ssh key for each user that wants access to the
 repo, assign the user to one or more groups and they can get busy.
 
-== Set up the server side ==
+=== Set up the server side ===
 
 **Note:** The gitosis repos are hosted on 'orasac1'.
 
@@ -22,7 +22,7 @@ sudo -H -u git gitosis-init < /home/timlinux/.ssh/authorized_keys2
 
 ```
 
-== Allow ssh access to git user ==
+=== Allow ssh access to git user ===
 
 Edit /etc/ssh/sshd_config and add git to AllowUsers list then restart ssh:
 
@@ -30,7 +30,7 @@ Edit /etc/ssh/sshd_config and add git to AllowUsers list then restart ssh:
 sudo /etc/init.d/ssh restart
 ```
 
-== Check out gitosis admin on the client ==
+=== Check out gitosis admin on the client ===
 
 ```
 mkdir -p ~/dev/gitosis
@@ -38,7 +38,7 @@ cd ~/dev/gitosis
 git clone git@orasac1:gitosis-admin.git sansa-gitosis-admin
 ```
 
-== Adding a user, group and project ==
+=== Adding a user, group and project ===
 
 ```
 cd sansa-gitosis-admin
@@ -125,7 +125,7 @@ git push
 
 
 
-== Create a new empty gitosis hosted repo ==
+=== Create a new empty gitosis hosted repo ===
 
 The last step is to actually create the repo we defined above (in this case
 sac_catalogue) and push it up to the server.
@@ -177,7 +177,7 @@ git-daemon. See the article mentioned at the start of this section for more
 info.
 
 
-== Hosting a clone of an upstream repo in gitosis ==
+=== Hosting a clone of an upstream repo in gitosis ===
 
 Here we want to host a copy of a git repository from upstream and make it available to internal SANSA developers. We will check out the linfiniti git repo in this case:
 
@@ -212,7 +212,7 @@ git@orasac01:~/repositories$ git clone --bare git@linfiniti2:qgis.git
 
 On your local machine, you can now clone QGIS, work on it, commit your changes to orasac1. When you would like your changes to be merged into QGIS, you email a pull request to linfiniti, we then pull your changes and commit them to svn. To keep the orasac1 copy 'fresh' (synchronised with upstream) a cron job should be configure to pull changes regularly to it.
 
-== Check out an existing repo ==
+=== Check out an existing repo ===
 
 
 You should not need to do the above for the QGIS and SANSA Catalogue projects since they already exist and are populated. Above process is for when you want to create a new, empty repo.

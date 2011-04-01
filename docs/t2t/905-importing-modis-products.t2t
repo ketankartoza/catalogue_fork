@@ -2,7 +2,7 @@
 
 % Leave the blank space above here
 
-= Procedures for importing data from MODIS packages into the catalogue =
+== Procedures for importing data from MODIS packages into the catalogue ==
 
 ""Note:"" This document should be considered compulsory reading before you
 attempt to import any data into the catalogue.
@@ -10,7 +10,7 @@ attempt to import any data into the catalogue.
 ""Note2:"" This document //must// be kept up to date when you make changes to
 import scripts etc.
 
-== Importing the packages from a the remote catalogue ==
+=== Importing the packages from a the remote catalogue ===
 
 The import process is done by a Django management command that can be called
 by a cron job.
@@ -65,7 +65,7 @@ $ python manage.py modis_harvest
 ```
 
 
-== Run control ==
+=== Run control ===
 
 An rc file is created or updated after every single successful import.
 
@@ -84,7 +84,7 @@ last_folder=2000.02.18
 last_package=2000.02.18/MCD43A2.A2000049.h19v12.005.2006269115820.hdf
 ```
 
-== Implementation details ==
+=== Implementation details ===
 
 Details on the implementation, mainly regarding the source of
 the data used to populate the catalogue database.
@@ -110,7 +110,7 @@ Pseudocode:
     +
 
 
-== Data and metadata extraction ==
+=== Data and metadata extraction ===
 
 
 The following metadata are hardcoded constants and can be changed at the top of the script `catalogue/management/commands/rapideye_harvest.py`:
@@ -145,7 +145,7 @@ The following metadata are read from the metadata in the HDF image:
 | creating_software | HDFEOSVersion |
 
 
-== Thumbnail image generation ==
+=== Thumbnail image generation ===
 
 The thumbnail is built using external gdal calls in three steps:
 
@@ -154,7 +154,7 @@ The thumbnail is built using external gdal calls in three steps:
 + gdal_translate creates a JPEG 400x400 px thumbnail with a world file
 +
 
-== External programs required ==
+=== External programs required ===
 
 
 + gdal_translate

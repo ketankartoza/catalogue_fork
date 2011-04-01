@@ -2,7 +2,7 @@
 
 % Leave the blank space above here
 
-= Procedures for importing data from MISR packages into the catalogue =
+== Procedures for importing data from MISR packages into the catalogue ==
 
 ""Note:"" This document should be considered compulsory reading before you
 attempt to import any data into the catalogue.
@@ -10,7 +10,7 @@ attempt to import any data into the catalogue.
 ""Note2:"" This document //must// be kept up to date when you make changes to
 import scripts etc.
 
-== Importing the packages from a local folder ==
+=== Importing the packages from a local folder ===
 
 The import process is done by a Django management command that can be called
 by a cron job.
@@ -79,7 +79,7 @@ The packages are searched in three folders :
 **Note:** MI1B2E.003 import is untested
 
 
-== Global settings ==
+=== Global settings ===
 
 The following parameters in settings.py control the process:
 
@@ -91,7 +91,7 @@ MISR_ROOT= '/path/to/MISR'
 The KML file containing the blocks footprints for the different paths is
 located in the 'resources' folder immediately under the project folder.
 
-== Implementation details ==
+=== Implementation details ===
 
 Details on the implementation, mainly regarding the source of
 the data used to populate the catalogue database.
@@ -123,7 +123,7 @@ Main folders are fixed:
 
 
 
-=== Data and metadata extraction ===
+==== Data and metadata extraction ====
 
 
 The following metadata are hardcoded constants and can be changed at the top of the script `catalogue/management/commands/rapideye_harvest.py`:
@@ -164,7 +164,7 @@ The following metadata are read from imagery core metadata of the nadir image:
 | row                     | ORBITNUMBER |
 
 
-=== Thumbnail creation ===
+==== Thumbnail creation ====
 
 The thumbnail is created extracting the blocks containing valid
 informations when in local mode. Those block number are stored in metadata

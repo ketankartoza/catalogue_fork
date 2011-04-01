@@ -2,7 +2,7 @@
 
 % Leave the blank space above here
 
-= Procedures for importing data from DIMS packages into the catalogue =
+== Procedures for importing data from DIMS packages into the catalogue ==
 
 ""Note:"" This document should be considered compulsory reading before you
 attempt to import any data into the catalogue.
@@ -18,7 +18,7 @@ be available and stored into GenericSensorProduct.online_storage_medium_id.
 This id must be the same that we can use to usbmit an order with OS4EO
 "Submit" method
 
-== Importing the packages from a pickup folder ==
+=== Importing the packages from a pickup folder ===
 
 The import process is done by a Django management command that can be called
 by a cron job.
@@ -68,7 +68,7 @@ Options:
 ```
 
 
-=== Options in detail ===
+==== Options in detail ====
 
 : -f FOLDER, --folder=FOLDER
 This is the folder in which the packages to ingest are searched, defaults to the
@@ -106,12 +106,12 @@ Note: will be created if it does not exists. License type
 will be automatically set to //LICENSE_TYPE_ANY// (4)
 
 
-== Implementation details ==
+=== Implementation details ===
 
 Details on the implementation, mainly regarding the source of
 the data used to populate the catalogue database.
 
-=== Data and metadata extraction ===
+==== Data and metadata extraction ====
 
 The ingestion process uses the ``dims_lib`` package to extract
 informations from the packages, the following data are extracted
