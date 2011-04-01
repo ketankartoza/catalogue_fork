@@ -58,22 +58,22 @@ if (!Array.prototype.indexOf)
 	    this.element.bind('click',function (evt){
 		var order_product = $(this);
 		var ref_id = $(this).attr('ref_id');
-		$.ajax({
-		    url:"/deliverydetailform/"+ref_id+"/",
-		    success: function (result){
-			//append form
-			var current_refs=self._check_ref();
-			var index=current_refs.indexOf(ref_id);
-			if (index>-1){
-			    // if ref already exists
-			    order_product.text('Delivery details');
-			    //use jQuery to remove all sibling elements
-			    // CAUTION: if we change templating we must update this
-			    order_product.nextAll().remove();
-			    //remove ref_id and update form element
-			    current_refs.splice(index,1);
-			    self.main_refs_id.val(current_refs.join(','));
-			} else {
+		var current_refs=self._check_ref();
+		var index=current_refs.indexOf(ref_id);
+		//append form
+		if (index>-1){
+		    // if ref already exists
+		    order_product.text('Delivery details');
+		    //use jQuery to remove all sibling elements
+		    // CAUTION: if we change templating we must update this
+		    order_product.nextAll().remove();
+		    //remove ref_id and update form element
+		    current_refs.splice(index,1);
+		    self.main_refs_id.val(current_refs.join(','));
+		} else {
+		    $.ajax({
+			url:"/deliverydetailform/"+ref_id+"/",
+			success: function (result){
 			    self.form=$(result);
 			    self.form.insertAfter(order_product);
 			    //add 'toggle visibility' button
@@ -86,8 +86,8 @@ if (!Array.prototype.indexOf)
 			    self.main_refs_id.val(current_refs.join(','));
 			    order_product.text('Remove delivery details');
 			}
-		    }
-		});
+		    });   
+		}
 		evt.preventDefault();
 	    });
 
