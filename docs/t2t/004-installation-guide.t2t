@@ -1,35 +1,4 @@
-Setup notes for SAC catalogue:
 
-Tim Sutton 2009
-
-%!target       : html
-%!style(html)  : style.css
-%!Options      : --toc --toc-level 3 --enum-title --css-sugar --css-inside
-%!preproc      : TUT_URL   https://qgis.org
-%!PostProc(html): '(?i)(<pre>)' '<div class="code">\1'
-%!PostProc(html): '(?i)(</pre>)' '\1</div>'
-%!encoding: iso-8859-1
-% These are comments and will not be generated in any output
-% -------------------
-
-%This document is in text2tags format. You can generate html, plain text and
-%moinmoin formatted documentation by running txt2tags on this document. See the
-%txt2tags home page for more details.  Please insert manual line breaks in this
-%document as it makes diffing for changes much easier. To do this in vim 
-%automatically, select a section then issue (gq) command. Please dont
-%apply vim formatting to the whol document as it screws up some formatting
-%rather apply it selectively to paragraphs where needed.
-
-% To generate the text version of this document:
-% txt2tags -t txt -o README docs/README.t2t
-% To generate the moinmoin version of this document
-% txt2tags -t moin -o README.moin  docs/README.t2t
-% To generate the html version of this document
-% txt2tags -t html -o README.html docs/README.t2t
-% To generate the pdf version of this document
-% txt2tags -t latex -o README.tex docs/README.t2t
-% then pdflatex docs/README.tex
-% do a second time to generate the contents table:  pdflatex README.tex
 
 % End of comments
 % -------------------
@@ -76,7 +45,7 @@ source python/bin/activate
 ==== Install some development dependencies ====
 
 ```
-sudo apt-get install libpq-dev libpq4 libpqxx-dev libxslt1-dev
+sudo apt-get install libpq-dev libpq4 libpqxx-dev libxslt1-dev libxml2-dev libxml2
 ```
 
 Install easy_install so that we can use pip thereafter:
@@ -157,7 +126,7 @@ url.
 Check out this folder using 
 
 ```
-svn co https://196.35.94.196/svn/trunk/sac_catalogue
+git clone orasac1:sac_catalogue.git sac_catalogue
 cd sac_catalogue
 ```
 
