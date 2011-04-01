@@ -275,12 +275,12 @@ class Command(BaseCommand):
 
           # Do the ingestion here...
           data = {
-            'metadata': '',
+            'metadata': '\n'.join(["%s=%s" % (f,package.get(f)) for f in package.fields]),
             'spatial_coverage': package.geom.geos,
             'product_id': product_id,
             'radiometric_resolution': radiometric_resolution,
             'band_count': band_count,
-            'cloud_cover': float(package.get('CCP')) / 100,
+            'cloud_cover': int(package.get('CCP')), # integer percent
             'owner': owner,
             'license': license,
             'creating_software': software,
