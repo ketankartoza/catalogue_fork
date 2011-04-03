@@ -100,7 +100,6 @@ NEWPAGE
 
 = Search =
 %!include: 502-searching-t2t
-=======
 
 = Ingestors =
 %!include: 900-batch-processing-intro.t2t
@@ -113,3 +112,6 @@ NEWPAGE
 %!include: 906-importing-misr-products.t2t
 %!include: 907-importing-terrasar-products.t2t
 %!include: 910-file-drop.t2t
+
+= Future workplan suggestions =
+%!include: future-workpackage-items.t2t
