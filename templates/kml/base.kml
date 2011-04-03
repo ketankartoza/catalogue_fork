@@ -5,6 +5,9 @@
     {% endblock %}
     {% if transparentStyle %}
   <Style id="transparentPolyStyle">
+    <LineStyle>
+      <width>2</width>
+    </LineStyle>
     <PolyStyle>
       <color>550000ff</color>
     </PolyStyle>
