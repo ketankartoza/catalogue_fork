@@ -124,8 +124,8 @@
             $(this).hide();
           };
         });
-        // redundant
-        //$('#id_isAdvanced').val('true');
+        // Updates sensors selects
+        get_dictionary_options();
     };
 
     function cloneMore(type, sd, ed, iso_sd, iso_ed){
@@ -178,7 +178,7 @@
           <div class="span-5">
             {{ myForm.search_type.label_tag }}
           </div>
-          <div class="span-5 last">
+          <div class="span-5 last filter">
             {{ myForm.search_type }}
           </div>
         </div>

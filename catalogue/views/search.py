@@ -183,6 +183,10 @@ def getSensorDictionaries(theRequest):
   if theRequest.is_ajax():
     # ABP: Returns a json object with the dictionary possible values
     qs = AcquisitionMode.objects.order_by()
+    if int(theRequest.POST.get('search_type')) in (Search.PRODUCT_SEARCH_RADAR, Search.PRODUCT_SEARCH_OPTICAL):
+      is_radar=(int(theRequest.POST.get('search_type')) == Search.PRODUCT_SEARCH_RADAR)
+      qs = qs.filter(sensor_type__mission_sensor__is_radar=is_radar)
+      #import ipy; ipy.shell()
     values['mission'] = list(qs.distinct().values_list('sensor_type__mission_sensor__mission', flat = True))
     if theRequest.POST.get('mission'):
       try:
