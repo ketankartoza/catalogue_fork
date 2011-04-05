@@ -10,7 +10,7 @@
     {% for myRecord in myResultSet %}
     <tr>
       <td>
-        <a onclick="loadSummaryTable({{myRecord.id}});">
+        <a href="#" onclick="loadSummaryTable({{myRecord.id}});">
           {{myRecord.name}}</a>
       </td>
       <td>{{myRecord.id__count}}</td>
