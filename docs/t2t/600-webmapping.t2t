@@ -112,27 +112,17 @@ webmapping/
 |   \-- symbols.ttf
 +-- mapfiles
 |   +-- cart.map
-|   +-- cart.map.templ
 |   +-- debug.include
 |   +-- jpl.include
 |   +-- landsat7-global-mosaic.map
-|   +-- landsat7-global-mosaic.map.orig
 |   +-- pg.map
-|   +-- pg.map.templ
 |   +-- searches.map
-|   +-- searches.map.templ
 |   +-- vector_layers.map.include
-|   +-- vector_layers.map.include.templ
 |   +-- visitors.map
-|   +-- visitors.map.templ
 |   +-- world.map
-|   +-- world.map.templ
 |   +-- za.map
-|   +-- za.map.templ
 |   +-- za_nbi.map
-|   +-- za_nbi.map.templ
 |   +-- za_vector.map
-|   +-- za_vector.map.templ
 |   +-- za_vector_spot2007_10m_ecw.map
 |   +-- za_vector_spot2007_2_5m_ecw.map
 |   +-- za_vector_spot2008_10m_ecw.map
@@ -140,8 +130,7 @@ webmapping/
 |   +-- za_vector_spot2009_10m_ecw.map
 |   +-- za_vector_spot2009_2_5m_ecw.map
 |   +-- za_vector_spot2010_2_5m_tif.map
-|   +-- za_vector_test.map
-|   \-- za_vector_test.map.templ
+|   \-- za_vector_test.map
 +-- scripts
 |   \-- reseed.sh
 +-- symbols
@@ -354,3 +343,37 @@ This file should be committed in GIT under <catalogue root>/mapserver/mapfiles.
 
 **Note:** A detailed description of the above file is beyond the scope of this
 document - please see the UMN Mapserver project for full documentation.
+
+
+=== Mapserver database connection details encrytion ===
+
+To allow storing mapfiles with database connection details in git, they should
+be hashed using the [documented msencrypt utility
+http://mapserver.org/utilities/msencrypt.html].
+
+```
+/home/timlinux/mapserver-5.4.2/msencrypt -keygen mapserver-key.txt
+/home/timlinux/mapserver-5.4.2/msencrypt -key mapserver-key.txt "fooo"
+```
+
+Foo being the username and password for the databse connection. This produces
+output like this.
+
+```688477225F5ABDFA```
+
+Then in the mapfile replace all usernames and passwords with hashes and freely
+commit the mapfiles to git.
+
+At the top of each mapfile just after the MAP clause add a line like this:
+
+```
+CONFIG "MS_ENCRYPTION_KEY" "/opt/webmapping/mapfiles/mapserver-key.txt"
+```
+
+And for the connection string to the database use this format:
+
+```
+CONNECTION "user={688477225F5ABDFA} password={688477225F5ABDFA} dbname=sac host=localhost"
+```
+
+
