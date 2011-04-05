@@ -1,68 +1,37 @@
-
-#
-# Notes:
-# 
-# Tim Sutton 2009
-#
-# By using status default for all layers, mapserver will render them 
-# all based on their scale dependent ranges when open layers 
-# makes a request. This is a good thing since It will allow us 
-# to create complex maps without having to add many layer definitions to 
-# OpenLayers.
-#
-
+# Map file created from QGIS project file /home/{688477225F5ABDFA}/gisdata/QGISProjects/local_blue_marble.qgs
+# Edit this file to customize for your map interface
+# (Created with PyQgis MapServer Export plugin)
 MAP
   CONFIG "MS_ENCRYPTION_KEY" "/opt/webmapping/mapfiles/mapserver-key.txt"
-  NAME "SouthAfricaSPOT5Mosaic2008_10m"
+  NAME BlueMarble
   # Map image size
-  SIZE 400 400
+  SIZE 200 200 
   UNITS dd
 
-  #EXTENT 28.156069 -25.890870 28.169983 -25.879721
-  EXTENT -180 -90 180 90
+  EXTENT -189.017776 -147.268250 189.015782 147.246266
   PROJECTION
-    "init=epsg:4326"
+    'proj=longlat'
+    'ellps=WGS84'
+    'datum=WGS84'
+    'no_defs'
+    ''
   END
 
-  INCLUDE "debug.include"
-
-  SYMBOLSET "../symbols/symbols.sym"
-  FONTSET "../fonts/fonts.list"
-  # Background color for the map canvas -- change as desired
-  IMAGECOLOR 192 192 192
-  IMAGEQUALITY 95
   # Background color for the map canvas -- change as desired
   IMAGECOLOR -1 -1 -1
   IMAGEQUALITY 95
-
-  #IMAGETYPE png24
-  #OUTPUTFORMAT
-  #  # use the new rendering backend from MapServer 5
-  #  NAME 'AGGA'
-  #  DRIVER AGG/PNG
-  #  IMAGEMODE RGBA
-  #END
-
-  #OUTPUTFORMAT
-  #  NAME png 
-  #  DRIVER 'GD/PNG'
-  #  MIMETYPE 'image/png'
-  #  IMAGEMODE PC256
-  #  EXTENSION 'png'
-  #END
-
   IMAGETYPE jpeg
   OUTPUTFORMAT
-    # use the new rendering backend from MapServer 5
-    NAME 'AGG_JPEG'
-    DRIVER AGG/JPEG
-    IMAGEMODE RGB
+    NAME jpeg
+    DRIVER 'GD/JPEG'
+    MIMETYPE 'image/jpeg'
+    #IMAGEMODE PC256
+    EXTENSION 'jpeg'
   END
-
   # Legend
   LEGEND
       IMAGECOLOR 255 255 255
-    STATUS OFF
+    STATUS ON
     KEYSIZE 18 12
     LABEL
       TYPE BITMAP
@@ -80,12 +49,12 @@ MAP
 
     # Set IMAGEURL to the url that points to IMAGEPATH
     # as defined in your web server configuration
-    IMAGEURL '/tmp/'
+    IMAGEURL '/tmp/ms_tmp'
 
     # WMS server settings
     METADATA
-      'wms_title'           'South Africa SPOT 5 Mosaic 2008 10m'
-      'wms_onlineresource'  'http://196.35.94.243/cgi-bin/mapserv?map=ZA_SPOT10m2008&'
+      'wms_title'           'SAC'
+      'wms_onlineresource'  'http://196.35.94.196/cgi-bin/mapserv?map=WORLD&'
       'wms_srs'             'EPSG:4326 EPSG:900913'
     END
 
@@ -100,7 +69,6 @@ MAP
     DATA '/opt/webmapping/data/world/bluemarble/rectifywesternhemisphere.tif'
     METADATA
       'wms_title' 'WesternHemisphere'
-      'wms_srs'             'EPSG:4326'
     END
     STATUS DEFAULT
     TRANSPARENCY 100
@@ -119,7 +87,6 @@ MAP
     DATA '/opt/webmapping/data/world/bluemarble/rectifyeasternhemisphere.tif'
     METADATA
       'wms_title' 'EasternHemisphere'
-      'wms_srs'             'EPSG:4326'
     END
     STATUS DEFAULT
     TRANSPARENCY 100
@@ -133,18 +100,17 @@ MAP
   END
 
   LAYER
-    NAME 'Spot5_RSA_2008_10m'
+    NAME 'Spot5_RSA_2008_100m'
     TYPE RASTER
-    DATA '/opt/webmapping/data/za/SPOT5_2008/tif10m/za10m2008tif.vrt'
+    DATA '/opt/webmapping/data/za/Spot5_RSA_2008_100m/Spot5_RSA_2008_100m.vrt'
     METADATA
-      'wms_title' 'Spot5_RSA_2008_10m'
-      'wms_srs'             'EPSG:4326'
+      'wms_title' 'Spot5_RSA_2008_100m'
     END
     STATUS DEFAULT
     TRANSPARENCY 100
     OFFSITE 0 0 0 #transparent pixels
     MAXSCALEDENOM 1000000
-    MINSCALEDENOM 0
+    MINSCALEDENOM 155001
     PROJECTION
     'proj=longlat'
     'ellps=WGS84'
@@ -154,6 +120,25 @@ MAP
     END
   END
 
-  INCLUDE 'vector_layers.map.include'
+  LAYER
+    NAME 'Spot5_RSA_2008_10m'
+    TYPE RASTER
+    DATA '/opt/webmapping/data/za/Spot5_RSA_2008_10m/Spot5_RSA_2008_10m.vrt'
+    METADATA
+      'wms_title' 'Spot5_RSA_2008_10m'
+    END
+    STATUS DEFAULT
+    TRANSPARENCY 100
+    OFFSITE 0 0 0 #transparent pixels
+    MAXSCALEDENOM 155000
+    MINSCALEDENOM 0
+    PROJECTION
+    'proj=longlat'
+    'ellps=WGS84'
+    'datum=WGS84'
+    'no_defs'
+    ''
+    END
+  END
 
 END

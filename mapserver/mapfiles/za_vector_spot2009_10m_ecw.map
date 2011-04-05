@@ -11,6 +11,7 @@
 #
 
 MAP
+  CONFIG "MS_ENCRYPTION_KEY" "/opt/webmapping/mapfiles/mapserver-key.txt"
   NAME "SouthAfricaSPOT5Mosaic2009_10m"
   # Map image size
   SIZE 400 400

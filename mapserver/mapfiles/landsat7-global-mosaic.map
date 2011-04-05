@@ -1,4 +1,5 @@
 MAP
+  CONFIG "MS_ENCRYPTION_KEY" "/opt/webmapping/mapfiles/mapserver-key.txt"
   DEBUG 5 #debugging level between 1 and 5, 5 is the most detailed
   CONFIG "MS_ERRORFILE" "/tmp/ms.log"
   NAME "MOSAIC-MAP"
