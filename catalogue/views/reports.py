@@ -227,43 +227,29 @@ def searchMonthlyReportAOI( theRequest, theyear, themonth):
     })
 
 @staff_member_required
+#renderWithContext is explained in renderWith.py
+@renderWithContext('dataSummaryTable.html')
 def dataSummaryTable(theRequest):
   """
   Summary of available records
-  ABP: TODO: better use a template here
   """
-  if not theRequest.user.is_staff:
-    '''Non staff users cannot see this'''
-    return
-
   #myResultSet = GenericProduct.objects.values("mission_sensor").annotate(Count("id")).order_by().aggregate(Min('product_acquisition_start'),Max('product_acquisition_end'))
   #ABP: changed to GenericSensorProduct
   #ABP: changed to MissionSensor
   myResultSet = MissionSensor.objects.annotate(id__count=Count('sensortype__acquisitionmode__genericsensorproduct'))
     #[{'mission_sensor': 6, 'id__count': 288307}, {'mission_sensor': 9, 'id__count': 289028}, {'mission_sensor': 3, 'id__count': 120943}, {'mission_sensor': 7, 'id__count': 222429}, {'mission_sensor': 5, 'id__count': 16624}, {'mission_sensor': 1, 'id__count': 3162}, {'mission_sensor': 2, 'id__count': 20896}, {'mission_sensor': 4, 'id__count': 17143}, {'mission_sensor': 8, 'id__count': 186269}]
-
-  myResults = "<table><thead>"
-  myResults += "</thead>"
-  myResults += "<tbody>"
-  myResults += "<tr><th>Sensor</th><th>Count</th></tr>"
-  myCount = 0
-  for myRecord in myResultSet:
-    myResults += "<tr><td><a href=\"/sensorSummaryTable/%s/\">%s</a></td><td>%s</td></tr>" % ( myRecord.id, myRecord, myRecord.id__count)
-    myCount += myRecord.id__count
-  myResults += "</tbody>"
-  myResults += "<tr><th>All</th><th>%s</th></tr>" % ( myCount )
-  myResults += "</table>"
-  return HttpResponse(myResults)
+  myTotal = 0
+  for myResult in myResultSet:
+    myTotal += myResult.id__count
+  return ({"myResultSet": myResultSet, "myTotal" : myTotal})
 
 @staff_member_required
+#renderWithContext is explained in renderWith.py
+@renderWithContext('sensorSummaryTable.html')
 def sensorSummaryTable(theRequest, theSensorId):
   """
   Summary of tasking requests,orders etc for a given sensor
-  ABP: TODO: better use a template here
   """
-  if not theRequest.user.is_staff:
-    '''Non staff users cannot see this'''
-    return
   #
   # Note: don't use len() to count recs - its very inefficient
   #       use count() rather
@@ -291,21 +277,14 @@ def sensorSummaryTable(theRequest, theSensorId):
     except:
       pass
 
-
-  myResults = "<h1>%s</h1>" % ( mySensor.name )
-  myResults += "<table><thead>"
-  myResults += "</thead>"
-  myResults += "<tbody>"
-  myResults += "<tr><th>Metric</th><th>Value</th></tr>"
-  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Tasking requests for this sensor", myTaskingSensorCount )
-  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Tasking requests all sensors", myTaskingTotalCount )
-  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Searches for this sensor", mySearchForSensorCount )
-  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Searches for all sensors", mySearchCount )
-  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Total ordered products for this sensor", myProductOrdersForSensorCount )
-  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Total ordered products for all sensors", myProductOrdersTotalCount )
-  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Total products for this sensor", myProductForSensorCount )
-  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Total products for all sensors", myProductTotalCount )
-  myResults += "</tbody>"
-  myResults += "</table>"
-  return HttpResponse(myResults)
+  myResults = {}
+  myResults["Tasking requests for this sensor"] = myTaskingSensorCount 
+  myResults["Tasking requests all sensors"] = myTaskingTotalCount 
+  myResults["Searches for this sensor"] = mySearchForSensorCount 
+  myResults["Searches for all sensors"] = mySearchCount 
+  myResults["Total ordered products for this sensor"] = myProductOrdersForSensorCount 
+  myResults["Total ordered products for all sensors"] = myProductOrdersTotalCount 
+  myResults["Total products for this sensor"] = myProductForSensorCount 
+  myResults["Total products for all sensors"] = myProductTotalCount 
+  return ({ "myResults": myResults, "mySensor" : mySensor})
 

@@ -938,6 +938,12 @@ function addOrderClicked()
   return false;
 }
 
+function loadSummaryTable(theId)
+{
+  block();
+  $("#content").load("/sensorSummaryTable/" + theId + "/","",unblock);
+}
+
 /* Transform an openlayers bounds object such that
  * it matches the CRS of the map
  * @param a bounds object (assumed to be in EPSG:4326)
