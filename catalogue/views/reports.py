@@ -248,7 +248,7 @@ def dataSummaryTable(theRequest):
   myResults += "<tr><th>Sensor</th><th>Count</th></tr>"
   myCount = 0
   for myRecord in myResultSet:
-    myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( myRecord, myRecord.id__count)
+    myResults += "<tr><td><a href=\"/sensorSummaryTable/%s/\">%s</a></td><td>%s</td></tr>" % ( myRecord.id, myRecord, myRecord.id__count)
     myCount += myRecord.id__count
   myResults += "</tbody>"
   myResults += "<tr><th>All</th><th>%s</th></tr>" % ( myCount )
@@ -256,7 +256,7 @@ def dataSummaryTable(theRequest):
   return HttpResponse(myResults)
 
 @staff_member_required
-def sensorSummaryTable(theRequest):
+def sensorSummaryTable(theRequest, theSensorId):
   """
   Summary of tasking requests,orders etc for a given sensor
   ABP: TODO: better use a template here
@@ -264,15 +264,47 @@ def sensorSummaryTable(theRequest):
   if not theRequest.user.is_staff:
     '''Non staff users cannot see this'''
     return
-  mySensor = MissionSensor.objects.get(id=13) # hard coded while testing
-  myTaskingCount = len(TaskingRequest.objects.filter(mission_sensor=mySensor))
-  
+  #
+  # Note: don't use len() to count recs - its very inefficient
+  #       use count() rather
+  #
+  mySensor = get_object_or_404(MissionSensor,id=theSensorId)
+  myTaskingSensorCount = TaskingRequest.objects.filter(mission_sensor=mySensor).count()
+  myTaskingTotalCount = TaskingRequest.objects.count()
+  mySearchCount = Search.objects.all().count()
+  mySearchForSensorCount = Search.objects.filter(sensors=mySensor).count()
+  myProductForSensorCount = None
+  if ( mySensor.is_radar ):
+    myProductForSensorCount = RadarProduct.objects.filter(acquisition_mode__sensor_type__mission_sensor=mySensor).count()
+  else:
+    myProductForSensorCount = OpticalProduct.objects.filter(acquisition_mode__sensor_type__mission_sensor=mySensor).count()
+  myProductTotalCount = GenericSensorProduct.objects.count()
+
+  myRecords = SearchRecord.objects.filter(user__isnull=False).filter(order__isnull=False)
+  myProductOrdersTotalCount = myRecords.count()
+  myProductOrdersForSensorCount = 0
+  for myRecord in myRecords:
+    try:
+      myProduct = myRecord.product
+      if (myProduct.genericimageryproduct.genericsensorproduct.acquisition_mode.sensor_type.mission_sensor == mySensor):
+        myProductOrdersForSensorCount += 1
+    except:
+      pass
+
+
   myResults = "<h1>%s</h1>" % ( mySensor.name )
   myResults += "<table><thead>"
   myResults += "</thead>"
   myResults += "<tbody>"
   myResults += "<tr><th>Metric</th><th>Value</th></tr>"
-  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Tasking Requests", myTaskingCount )
+  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Tasking requests for this sensor", myTaskingSensorCount )
+  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Tasking requests all sensors", myTaskingTotalCount )
+  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Searches for this sensor", mySearchForSensorCount )
+  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Searches for all sensors", mySearchCount )
+  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Total ordered products for this sensor", myProductOrdersForSensorCount )
+  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Total ordered products for all sensors", myProductOrdersTotalCount )
+  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Total products for this sensor", myProductForSensorCount )
+  myResults += "<tr><td>%s</td><td>%s</td></tr>" % ( "Total products for all sensors", myProductTotalCount )
   myResults += "</tbody>"
   myResults += "</table>"
   return HttpResponse(myResults)

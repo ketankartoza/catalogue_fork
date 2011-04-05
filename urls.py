@@ -116,6 +116,6 @@ urlpatterns = patterns('',
     (r'^getFeatureInfo/(?P<theLon>[-]*\d+.\d+)/(?P<theLat>[-]*\d+.\d+)/(?P<theBoundingBox>[0-9\-,.]*)/(?P<thePixelX>\d+)/(?P<thePixelY>\d+)/(?P<theMapWidth>\d+)/(?P<theMapHeight>\d+)/$', getFeatureInfo),
 
     ( r'^dataSummaryTable/$', dataSummaryTable),
-    ( r'^sensorSummaryTable/$', sensorSummaryTable),
+    ( r'^sensorSummaryTable/(?P<theSensorId>[0-9]+)/$', sensorSummaryTable),
 )
 
