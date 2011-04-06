@@ -2,8 +2,6 @@
 
 % Leave the blank space above here
 
-== Procedures for importing data from various sources into the catalogue ==
-
 ""Note:"" This document should be considered compulsory reading before you
 attempt to import any data into the catalogue.
 
@@ -15,8 +13,6 @@ that have taken place from a variety of sensors. This metadata needs to be
 lodged in the database in one way or another. Different sensors have different
 entry points into the system - and this document tries to cover the various
 permutations and procedures for lodging data into the database.
-
-=== Legacy ACS System ===
 
 === SPOT Image Data ===
 
@@ -212,11 +208,5 @@ python manage.py runscript sumb_importer
 ```
 
 To achieve this we will run a python script that will do the work for us.
-
-==== Downloadable Products ====
-
-=== CBERS ===
-
-=== SACC ===
 
 

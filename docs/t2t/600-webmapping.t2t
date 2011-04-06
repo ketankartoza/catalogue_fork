@@ -215,6 +215,25 @@ Ensure that after doing the above, your mapserver install supports fastcgi:
 SUPPORTS=FASTCGI
 ```
 
+=== Set up the web mapping dir ===
+
+The web mapping dir contains mapserver configuration files and resources. It
+should be checked out of GIT first. You should make sure you have needed 
+permissions for checking the repo out into /opt.
+
+```
+cd /opt
+git clone git@orasac1:sansa_webmapping.git webmapping
+```
+
+After checkout of the webmapping GIT project, you should create a symlink to 
+the data directory:
+
+```
+cd webmapping
+ln -s /mnt/cataloguestorage2/gisdata/ data
+```
+
 === Apache configuration ===
 
 ```
@@ -227,19 +246,36 @@ Add these map file paths to your /etc/apache2/sites-enabled/default file:
 Include /opt/webmapping/apache-include/mapserver.conf
 ```
 
+=== Mapserver database connection details encrytion ===
 
-=== Set up the web mapping dir ===
-
-The web mapping dir contains mapserver configuration files and resources. It
-should be checked out of GIT first. You should make sure you have needed 
-permissions for checking the repo out into /opt.
+To allow storing mapfiles with database connection details in git, they should
+be hashed using the [documented msencrypt utility
+http://mapserver.org/utilities/msencrypt.html].
 
 ```
-cd /opt
-git clone git@orasac1:sansa_webmapping.git webmapping
+/home/timlinux/mapserver-5.4.2/msencrypt -keygen mapserver-key.txt
+/home/timlinux/mapserver-5.4.2/msencrypt -key mapserver-key.txt "fooo"
 ```
 
+Foo being the username and password for the databse connection. This produces
+output like this.
 
+```688477225F5ABDFA```
+
+Then in the mapfile replace all usernames and passwords with hashes and freely
+commit the mapfiles to git.
+
+At the top of each mapfile just after the MAP clause add a line like this:
+
+```
+CONFIG "MS_ENCRYPTION_KEY" "/opt/webmapping/mapfiles/mapserver-key.txt"
+```
+
+And for the connection string to the database use this format:
+
+```
+CONNECTION "user={688477225F5ABDFA} password={688477225F5ABDFA} dbname=sac host=localhost"
+```
 
 === Adding a new backdrop layer ===
 
@@ -288,7 +324,7 @@ done
 ```
 
 Note the above script requires that you have an appropriate ERDAS license so
-that you can compress large files.
+that you can compress large files (although it is not enforced anywhere).
 
 So assuming our data exist in ''/mnt/cataloguestorage2/gisdata/za/SPOT5_2010/tif-gz/'' and
 we run the script from ''/mnt/cataloguestorage2/gisdata/za/SPOT5_2010/'', the result will 
@@ -311,20 +347,21 @@ gdalbuildvrt za2010ecw.vrt *.ecw
 ==== Creation of a new mapfile ====
 
 Each new backdrop layer has a new mapfile created for it. The mapfiles are 
-stored in the GIT repository with passwords and usernames expunged.
-
+stored in the GIT repository with passwords and usernames tokenised.
 When checked out, mapfiles are placed in the webmapping directory under:
 
 ```
-/opt/webmapping/
+/opt/webmapping/mapfiles
 ```
 
-Which is a symlink to ''<catalogue root>/mapserver/mapfiles''
 
 The structure of this directory looks like this:
 
 ```
 webmapping/
++-- apache-include
+|   +-- README
+|   \-- mapserver.conf
 +-- config
 |   +-- 000-default
 |   +-- default
@@ -343,6 +380,7 @@ webmapping/
 |   +-- fonts.list
 |   \-- symbols.ttf
 +-- mapfiles
+|   +-- geonames.map
 |   +-- cart.map
 |   +-- debug.include
 |   +-- jpl.include
@@ -571,41 +609,48 @@ MAP
 END
 ```
 
-This file should be committed in GIT under <catalogue root>/mapserver/mapfiles.
+This file should be committed in GIT under '''webmapping/mapfiles''' in the GIT repo.
 
 **Note:** A detailed description of the above file is beyond the scope of this
 document - please see the UMN Mapserver project for full documentation.
 
+==== Deploy under apache ====
 
-=== Mapserver database connection details encrytion ===
+To deploy your web mapping project, you need to do two things:
 
-To allow storing mapfiles with database connection details in git, they should
-be hashed using the [documented msencrypt utility
-http://mapserver.org/utilities/msencrypt.html].
++ Add an entry to mapserver.conf
++ Reload apache
++
 
-```
-/home/timlinux/mapserver-5.4.2/msencrypt -keygen mapserver-key.txt
-/home/timlinux/mapserver-5.4.2/msencrypt -key mapserver-key.txt "fooo"
-```
-
-Foo being the username and password for the databse connection. This produces
-output like this.
-
-```688477225F5ABDFA```
-
-Then in the mapfile replace all usernames and passwords with hashes and freely
-commit the mapfiles to git.
-
-At the top of each mapfile just after the MAP clause add a line like this:
+To add a new entry to mapserver.conf, edit ''apache-include/mapserver.conf'' and add a
+new line e.g.
 
 ```
-CONFIG "MS_ENCRYPTION_KEY" "/opt/webmapping/mapfiles/mapserver-key.txt"
+SetEnv ZA_SPOT2010 "/opt/webmapping/mapfiles/za_vector_spot2010_2_5m_ecw.map"
 ```
 
-And for the connection string to the database use this format:
+Then test the configuration and reload:
 
 ```
-CONNECTION "user={688477225F5ABDFA} password={688477225F5ABDFA} dbname=sac host=localhost"
+sudo apache2ctl -t
 ```
+
+If it reports ok then reload:
+
+```
+sudo /etc/init.d/apache2 reload
+```
+
+==== Testing ====
+
+You can test using a WMS client (QGIS!) by adding a new connection to the url e.g.:
+
+
+```
+http://196.35.94.243/cgi-bin/mapserv?map=ZA_SPOT2010
+```
+
+
+
 
 
