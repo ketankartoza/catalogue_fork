@@ -74,18 +74,15 @@ NEWPAGE
 
 = Introduction =
 %!include: 002-introduction.t2t
-= Developer Guide =
-%!include: 003-developer-guide.t2t
+= Installation Guide =
 %!include: 003-1-database-server-setup.t2t
 %!include: 003-2-catalogue-server-setup.t2t
 %!include: 003-3-informix-access.t2t
-%!include: 003-4-storage_array_setup.t2t
 %!include: 003-5-backups.t2t
-%!include: 003-6-gitosis.t2t
-%%!include: 003-7-git-mirroring.t2t
 %!include: 003-8-redmine.t2t
-= Installation Guide =
-%!include: 004-installation-guide.t2t
+= Developer Guide =
+%!include: 004-using-git.t2t
+%!include: 004-catalogue-installation.t2t
 = Unit Testing =
 %!include: 005-unit-tests.t2t
 = Reporting Tools =

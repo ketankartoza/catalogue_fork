@@ -16,9 +16,10 @@ It contains the following key components:
 - the python informix DB adapter
 - 
 
-In addition the lion server is connected to two 14TB Fujitsu Siemens storage arrays.
+In addition the lion server is connected to two 13TB (effective) Fujitsu Siemens storage arrays.
 
-The Server is an IA 64 processor machine installed with ubuntu server 10.04 LTS.
+The Server is an IA 64 processor machine installed with ubuntu server 10.04 LTS. This document 
+assumes a basic Ubuntu Server LTS install has already been carried out.
 
 === Package installations ===
 
@@ -28,13 +29,278 @@ firefox vim ntpdate lxde xinit rpl django python-django subversion \
 utidy python-utidylib python-psycopg2 python-geoip python-django-registration
 ```
 
+=== Setup Fibrecat SX60 Storage arrays ===
+
+==== Hardware preparation ====
+
+As root / sudo edit the /etc/fstab and disable the storage array at boot. To do
+this change this line:
+
+```
+UUID=3bdda6ae-3195-47b0-955e-278b5ed51da5 /data    ext3       auto,nouser,noexec,nosuid,rw        1 2
+```
+
+to look like this:
+
+```
+#UUID=3bdda6ae-3195-47b0-955e-278b5ed51da5 /data    ext3       auto,nouser,noexec,nosuid,rw        1 2
+```
+
+The host system was powered off:
+
+```
+sudo /sbin/halt
+```
+
+The fibrecat system was powered off (note that it has redundant power supplies
+and both must be powered off).
+
+All drives were then removed and their relative positions and serial numbers
+were recorded.
+
+The drives were then removed from their caddies and replacement 1.5TB drives
+were inserted in their place.
+
+After all the replacement drives were inserted, the storage array was powered
+up again and the system restarted.
+
+We checked that all drives came up properly and no warning lights were displayed.
+
+==== Configure the storage array in the web admin interface ====
+
+The array is configured using a web control panel at 
+
+```
+http://196.35.94.141
+```
+
+To login use _____________ for username and _________________ for password.
+
+
+
+Next we had to create a virtual disk - removing the old drives destroys any pre-existing vdisks.
+
+- Click on the **manage** link  on the left and then choose **create a vdisk**
+- Next choose **Manual Virtual Disk Creation**
+- Enter 'sarmesstorage' in the **Enter Virtual Disk Name** box
+- For **Select Virtual Disk RAID Level** choose 'Raid 5 - Parity RAID, Parity Distributed'
+- Click next to proceed onto disk creation
+- Tick all the drives in the enclosure diagram except for the last
+- Calculate Formatted Virtual Disk Size of Selected Drives - click this button and verify 
+  output is something like that shown below here ```For a RAID Level 5, your selected drives 
+  will approximately yield a 15.00 TByte final virtual disk capacity.```
+- For the tickbox **Would you like to add dedicated spare drives for this virtual disk?**, choose Yes
+- Click continue
+- All the drive bays save the last should now be shown in blue.
+- Tick the remaining green bay and then click 'continue' next to the **Add Selected Dedicated Spare 
+  Drives to "sarmesstorage" and Continue Creating Virtual Disk:** prompt.
+- 
+
+At this stage you will be shown a report that should look something like this:
+
+
+```
+Virtual Disk Name:  sarmesstorage
+RAID Level:     5
+Virtual Disk Size:  201644.88 GBytes
+Drives Chosen:  
+Serial Number   WWN     Size (GBytes)   Encl.Slot
+9VS1J496    5000C50011343DE3    1500.30     0.0
+9VS1E8SL    5000C50011229530    1500.30     0.1
+9VS1BWB5    5000C5001115F067    1500.30     0.2
+9VS1BM5F    5000C5001111301C    1500.30     0.3
+9VS1E0WR    5000C500111FC913    1500.30     0.4
+9VS1HZ5M    5000C500113537B4    1500.30     0.5
+9VS1FWXT    5000C500112BCEA2    1500.30     0.6
+9VS1GH9V    5000C500113036EE    1500.30     0.7
+9VS1GZMH    5000C5001130D35D    1500.30     0.8
+9VS1H6A0    5000C50011353891    1500.30     0.9
+9VS1FY6B    5000C500112C210C    1500.30     0.10
+Dedicated Spare Drives Chosen:  
+Serial Number   WWN     Size (GBytes)
+9VS1H76L    5000C50011353C6C    1500.30
+Virtual Disk Initialization:    Online
+```
+
+Now we can proceed to set up partitions ('Volumes') on the virtual disk.
+
+```
+Configure Volumes for Virtual Disk sarmesstorage
+How Many Volumes    : 1
+Create Volumes of Equal Size?   
+Yes  
+Expose Volumes to All Hosts?    
+No
+Automatically Assign LUNs?  
+Disabled
+Would You Like to Name Your Volumes?    
+No
+Advanced Virtual Disk Creation Options  Advanced Options - not used
+```
+
+Click 'Create virtual disk' A progress page will appear. Note that the process
+will take a loooooong time!
+
+**Note:** It took 3 or 4 days to build the virtual device with 1.5TB disks.
+
+After the virtual disk is built, you need to create a volume mapping.
+
+The volume mapping associates a fibre channel LUN connector to the volume.
+
+In the managment web UI, click: Manage -> volume mapping -> map hosts to volumre.
+
+For the sarmes machine we used the following configuration:
+
+
+```
+Current Host-Volume Relationships
+
+
+WWN                 Host Name       LUN     Port 0 Access   Port 1 Access
+10000000C96DABE6    Sarmes1_Port0    0       rw               rw
+10000000C961BB34    Sarmes1_Port1    1       rw               rw
+All Other Hosts                      None    none             none 
+
+```
+
+**Note** You probably only need to map one WWN / Host / Lun - we think you only need 
+to map Sarmes1_port1 to 10000000C961BB34 but you will need to test experimentally to 
+be sure.
+
+After making these config changes, reboot the sarmes server.
+
+Watch the boot messages or check 
+
+```
+dmesg
+```
+
+You should see a new device listed like this:
+
+```
+sd 1:0:0:0: [sdc] Very big device. Trying to use READ CAPACITY(16).
+sd 1:0:0:0: [sdc] 29302441984 512-byte hardware sectors (15002850 MB)
+sd 1:0:0:0: [sdc] Write Protect is off
+sd 1:0:0:0: [sdc] Mode Sense: 93 00 00 08
+sd 1:0:0:0: [sdc] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+sd 1:0:0:0: [sdc] Very big device. Trying to use READ CAPACITY(16).
+sd 1:0:0:0: [sdc] 29302441984 512-byte hardware sectors (15002850 MB)
+sd 1:0:0:0: [sdc] Write Protect is off
+sd 1:0:0:0: [sdc] Mode Sense: 93 00 00 08
+sd 1:0:0:0: [sdc] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+sdc: unknown partition table
+sd 1:0:0:0: [sdc] Attached SCSI disk
+```
+
+You can see the drive came up as sdc. It pushes the previous sdc drive down to 
+sdd. This is not a problem though since the /etc/fstab uses UUIDs to reference partitions.
+
+
+Next you can verify this using fdisk:
+
+```
+sudo /sbin/fdisk -l /dev/sdc 
+
+Disk /dev/sdc: 15002.8 GB, 15002850295808 bytes
+255 heads, 63 sectors/track, 1823992 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Disk identifier: 0x00000000
+
+Disk /dev/sdc doesn't contain a valid partition table
+```
+
+
+By default a DOS partition table is used on new devices and by fdisk. One major
+limitation of this is that it does not support partition sizes greater than
+2TB, meaning that most of your large disk device will be inaccessible!
+
+There are two ways two resolve this - using a raw xfs partition (as we have
+done on SARMES), or using the GPT partition table scheme as we have done on
+LION).
+
+==== Creating a large filesystem using GPT ====
+
+For newer systems we want to use ext4 on a large (non raw) filesystem The
+kernel must have been compiled with GPT support (it is by default under UBUNTU
+Jaunty Server Edition >= 9.04). In addition, we need to use **parted** (the
+command line version of gparted) to format the disk and create the GPT
+partition table.
+
+In Linux parlance, determining the partition table type is called 'setting the
+disk label'. In the console transcripts that follow we will set the disk label
+to GPT, create a large single partition and then format and mount the drive.
+Once this has been completed, we will use a similar procedure as described
+above to add an fstab entry so that the volume is mounted at boot time.
+
+
+This is the procedure I used to create a large ext4 partition using parted:
+
+```
+(parted) unit s
+(parted) print
+Model: FSC FibreCAT_SX1 (scsi)
+Disk /dev/sdc: 29302441984s
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+
+Number  Start  End  Size  File system  Name  Flags
+
+(parted) mkpart
+Partition name?  []? cataloguestorage2
+File system type?  [ext2]? ext4
+Start? 34
+End? 29302441950
+Warning: The resulting partition is not properly aligned for best performance.
+Ignore/Cancel? cancel
+(parted) mkpart cataloguestorage2 ext4 1 -1
+Warning: You requested a partition from 1s to 29302441983s.
+The closest location we can manage is 34s to 29302441950s.
+Is this still acceptable to you?
+Yes/No? yes
+Warning: The resulting partition is not properly aligned for best performance.
+Ignore/Cancel? Ignore
+(parted) p
+Model: FSC FibreCAT_SX1 (scsi)
+Disk /dev/sdc: 29302441984s
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+
+Number  Start  End           Size          File system  Name               Flags
+ 1      34s    29302441950s  29302441917s               cataloguestorage2
+```
+
+The process sets the drive units to sectors, then creates a new partition
+leaving 34sectors at the start of the drive.
+
+Now exit parted and create the filesystem:
+
+```
+sudo mkfs.ext4 /dev/sdc1
+```
+
+Note it will take a little while to process. Finally add a new mount point for
+the partition and mount it.
+
+```
+mkdir /mnt/cataloguestorage2
+```
+
+Add an entry to /etc/fstab:
+
+```
+/dev/sdc1 /mnt/cataloguestorage2            ext4    relatime,errors=remount-ro        0       2
+```
+
+
+
 === Informix Client Setup ===
 
 When following the Informix install procedure, do it as root locally on
 the server since I had problems trying to run the sdk setup tool remotely over
 an ssh -X connection.
 
-For specific notes on how to set up the client see 003-3-informix_access.t2t
+For specific notes on how to set up the client see the informix specific notes 
+(003-3-informix_access.t2t).
 
 === Nightly database sync ===
 
@@ -68,6 +334,18 @@ Now add the following (adjusing paths if needed):
 # Run informix stats update nightly to keep responsiveness good
 # Job will run 5 min after midnight
 5 0 * * * /home/timlinux/dev/python/sac_catalogue/updateInformix.sh
+```
+
+=== Nightly database backups from elephant ===
+
+For prudence sake, a nightly dump is made of the databases on ELEPHANT onto 
+the LION server.
+
+```
+crontab -e
+```
+
+```
 # Job will run 2:05 am each day
 5 2 * * * /home/timlinux/bin/pgbackups
 ```
@@ -79,12 +357,17 @@ databases on a nightly basis. The pgbackups script looks like this:
 #/bin/bash
 
 cd /mnt/cataloguestorage/backups/
-tar cfz /mnt/cataloguestorage/backups/opt_`date +%d%B%Y`.tar.gz /opt/
-export PGPASSWORD=XXXXX
-
-pg_dump -U timlinux -h elephant -i -Fc -f gis_postgis_`date +%d%B%Y`.dmp -x -O gis
-pg_dump -U timlinux -h elephant -i -Fc -f sac_postgis_`date +%d%B%Y`.dmp -x -O sac
-
+MONTH=$(date +%B)
+YEAR=$(date +%Y)
+mkdir -p $YEAR/$MONTH
+cd $YEAR/$MONTH
+tar cfz opt_`date +%d%B%Y`.tar.gz /opt/ /etc/apache
+export PGPASSWORD=pumpkin
+pg_dump -i -U timlinux -h elephant -Fc -f gis_postgis_`date +%d%B%Y`.dmp -x -O gis 
+pg_dump -i -U timlinux -h elephant -Fc -f sac_postgis_`date +%d%B%Y`.dmp -x -O sac 
+pg_dump -i -U timlinux -h elephant -Fc -f acs_postgis_`date +%d%B%Y`.dmp -x -O acs 
+psql -h elephant -c "vacuum analyze;" sac 
+psql -h elephant -c "vacuum analyze;" sac_test
 ```
 
 To restore you do:
@@ -94,157 +377,18 @@ createdb sac
 createdb gis
 pg_restore sac_[filename].dmp | psql sac
 pg_restore gis_[filename].dmp | psql gis
+pg_restore acs_[filename].dmp | psql acs
 ```
 
-=== Compile and install GDAL ===
+=== GDAL and Mapserver Setup ===
 
+Please see the webmapping chapter (600-webmapping.t2t) for notes on the setup process for GDAL
 
-==== Building with ECW Support ====
+=== Apache setup ===
 
-**Note:** you can only compress images up to 500mb (though as far as I know
-there is no limit to decompression size)
+There are specific notes for the catalogue application in the developer guide. The apache
+configuration for default (/etc/apache2/sites-available/default) is as listed below.
 
-Install dependencies:
-
-```
-sudo apt-get install build-essential libjpeg62-dev libtiff4-dev
-```
-
-
-Go to the erdas ecw sdk web page:
-
-http://www.erdas.com/Products/ERDASProductInformation/tabid/84/CurrentID/1142/Default.aspx
-
-(or just search their site for 'ecw sdk')
-
-Get the ECW JPEG2000 Codec SDK Source Code (second item listed - first if win version)
-
-After the download you should have:
-
-```
-ecw_jpeg_2000_sdk_3_3_source.zip
-```
-
-Now unzip it:
-
-```
-cd /tmp
-unzip ecw_jpeg_2000_sdk_3_3_source.zip
-unzip ImageCompressionSDKSourceCode3.3Setup_20070509.zip
-sudo mv libecwj2-3.3 /usr/local/src/
-cd /usr/local/src/
-sudo chown -R timlinux libecwj2-3.3/
-cd libecwj2-3.3
-```
-
-Make user you have a gnu build toolchain installed:
-
-```
-sudo apt-get install build-essential
-```
-
-Now build the ecw lib:
-
-```
-./configure
-make
-sudo make install
-```
-
-Next gdal must be (re)built with the ecw flag:
-
-```
-cd <gdal src>
-make clean
-./configure --with-libtiff=internal --with-geotiff=internal \
-  --with-ecw=/usr/local --with-python
-make -j8
-sudo make install
-```
-
-See also http://trac.osgeo.org/gdal/wiki/ECW
-
-We configure gdal to build with its own internal copy of libtiff otherwise we 
-encounter problems with assertion errors if the system tiff lib is not compatible.
-(see http://trac.osgeo.org/gdal/ticket/3139 for more details).
-
-=== Gdal MrSid Support ===
-
-To add mr sid support, you need the MrSid geosdk and then to reconfigure and build gdal like this:
-
-```
-./configure --with-libtiff=internal \
-            --with-geotiff=internal \
-            --with-ecw=/usr/local \
-            --with-python \
-            --with-mrsid=/usr/local/Geo_DSDK-7.0.0.2167/ \
-            --without-jp2mrs
-```
-
-=== Hdf4 and Hdf5 support ===
-
-```
-sudo apt-get install libhdf5-serial-dev libhdf5-serial-1.6.6-0 libhdf4g-dev libhdf4g libhdf4g-doc
-```
-
-
-```
-cd <gdal src>
-make clean
-./configure --with-ecw=/usr/local
-make -j8
-sudo make install
-```
-
-=== Set up the web mapping dir ===
-
-**TODO:** Update these notes to use git rather.
-
-The web mapping dir contains mapserver configuration files and resources. It
-should be checked out of SVN and then the map.templ files copied over to map
-files. The .templ files are stored as templates because they contain sensitive
-info such as passwords for database connections.
-
-```
-cd /opt
-svn co https://196.35.94.196/svn/sac/python/sac_catalogue/mapserver webmapping
-```
-
-(You may need to adjust permissions of /opt in order to be allowed to do a
-check out into it)
-
-Now copy each of the mapfile templates listed below and then update them to 
-have appropriate credentials for database access.
-
-```
-cd mapfiles
-for FILE in *.templ; do NEWFILE=$(echo "$FILE" | sed 's/\.templ//g'); \
-  cp $FILE $NEWFILE; done
-```
-
-
-=== Mapserver with fastcgi ===
-
-First of all you need to compile mapserver from source since we need 
-ecw and MrSid support. See mapserver_notes.t2t for detailed runthrough.
-
-Ensure that after doing the above, your mapserver install supports fastcgi:
-
-```
-/usr/lib/cgi-bin/mapserv -v MapServer version 5.0.3 
-OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG OUTPUT=WBMP OUTPUT=SVG SUPPORTS=PROJ
-SUPPORTS=AGG SUPPORTS=FREETYPE SUPPORTS=WMS_SERVER SUPPORTS=WMS_CLIENT
-SUPPORTS=WFS_SERVER SUPPORTS=WFS_CLIENT SUPPORTS=WCS_SERVER SUPPORTS=FASTCGI
-SUPPORTS=THREADS SUPPORTS=GEOS INPUT=EPPL7 INPUT=POSTGIS INPUT=OGR INPUT=GDAL
-INPUT=SHAPEFILE
-```
-
-
-```
-sudo apt-get install libapache2-mod-fcgid
-```
-
-Add these map file paths to your /etc/apache2/sites-enabled/default file:
 
 ```
 NameVirtualHost *
@@ -252,24 +396,6 @@ NameVirtualHost *
   ServerAdmin tim@linfiniti.com 
   ServerName 196.35.94.243
   DocumentRoot /var/www/
-  #set to anything to ensure only explicitly named mapfiles are used
-  SetEnv MS_MAP_NO_PATH "foo"
-  #set the ZA_VECTOR e.g. http://localhost/cgi-bin/mapserv?map=ZA_VECTOR&mode=...
-  SetEnv ZA_VECTOR "/opt/webmapping/mapfiles/za_vector.map"
-  SetEnv ZA_VECTOR_TEST "/opt/webmapping/mapfiles/za_vector_test.map"
-  SetEnv ZA_SPOT2007 "/opt/webmapping/mapfiles/za_vector_spot2007_2_5m_ecw.map"
-  SetEnv ZA_SPOT2008 "/opt/webmapping/mapfiles/za_vector_spot2008_2_5m_ecw.map"
-  SetEnv ZA_SPOT2009 "/opt/webmapping/mapfiles/za_vector_spot2009_2_5m_ecw.map"
-  SetEnv ZA_SPOT2010 "/opt/webmapping/mapfiles/za_vector_spot2010_2_5m_tif.map"
-  SetEnv ZA_SPOT10m2007 "/opt/webmapping/mapfiles/za_vector_spot2007_10m_ecw.map"
-  SetEnv ZA_SPOT10m2008 "/opt/webmapping/mapfiles/za_vector_spot2008_10m_ecw.map"
-  SetEnv ZA_SPOT10m2009 "/opt/webmapping/mapfiles/za_vector_spot2009_10m_ecw.map"
-  SetEnv L7_MOSAIC "/opt/webmapping/mapfiles/landsat7-global-mosaic.map"
-  SetEnv ZA_NBI "/opt/webmapping/mapfiles/za_nbi.map"
-  SetEnv WORLD "/opt/webmapping/mapfiles/world.map"
-  SetEnv SEARCHES "/opt/webmapping/mapfiles/searches.map"
-  SetEnv CART "/opt/webmapping/mapfiles/cart.map"
-  SetEnv VISITORS "/opt/webmapping/mapfiles/visitors.map"
   <Directory /var/www/>
     Options Indexes FollowSymLinks MultiViews
     AllowOverride None
@@ -334,8 +460,6 @@ NameVirtualHost *
   CustomLog /var/log/apache2/access.log combined
   ServerSignature On
 
-  # For webmapping
-  Alias /tmp/ "/tmp/ms_tmp/"
   # For munin server monitoring
   Alias /munin/ "/var/www/munin/"
 
@@ -354,9 +478,11 @@ NameVirtualHost *
 
 
 </VirtualHost>
-
-
 ```
+
+This creates various share points through the file system. You should 
+evaluate the file and check that each of the share points listed is 
+indeed present and with the appropriate permissions in the file system.
 
 
 === Proxying Ordering Service Requests ===
@@ -369,7 +495,7 @@ sudo apt-get install libapache2-mod-proxy-html
 sudo a2enmod proxy_http proxy_html headers
 ```
 
-Now add proxy config to 000-default
+Now add proxy config to 000-default (as listed in the apache section above).
 
 ```
   # Reverse proxy to the ordering service on dims

@@ -4,12 +4,16 @@
 
 == Introduction ==
 
+**Note:** This section is intended to provide context for the impetus for 
+the development of the catalogue system to third party developers.
+
 === The CSIR ===
-This project has been carried out for the CSIR Satellite Applications Center,
+This project has been carried out for the erstwhile CSIR Satellite Applications Center,
 near Johannesburg, South Africa. The CSIR is the 'Council for Science and
 Industrial Research' - it is the main national science foundation of the
-country. They are a big organisation with many divisions of which SAC
-(Satellite Applications Center) is one.
+country. The CSIR is a large organisation with many divisions of which SAC
+(Satellite Applications Center) was one. SAC has since been incoporated into 
+the South African National Space Agency (as described below).
 
 === SAC ===
 SAC is a satellite ground station. This means they have a big campus with many
@@ -31,8 +35,7 @@ SAC-EO is the client for this project.
 South Africa is busy creating its own space agency - SANSA (South AfricAN
 National Space Agency). SANSA will aggregate space technology from various gov,
 parastatal, non-gov organisations to form a new organisation funded by the
-state.  SAC-EO is scheduled to become part of SANSA as of 1 April 2011 and wil
-become SANSA-EO.
+state.  SAC-EO became part of SANSA as of 1 April 2011 and will and is now SANSA-EO.
 
 === The project ===
 
@@ -154,40 +157,10 @@ Along side of these other packages, Linfiniti has been building a new web
 catalogue for SAC-EO.  The catalogue is django + postgresql + all the other
 great FOSS tools we can use together to make a rich, interactive site.
 
-[img/system-overview.png]
-
-Work on this
-started before any dims software was installed on site and the first major task
-was to migrate data and thumbnailss from a legacy, proprietary informix
-catalogue and get it into postgresql.
-
-We also went through a few refactorings since the first version was almost a
-direct clone of the data model from the legacy informix system. Our current
-version uses the concept of a 'generic product' for the data model.
-
-XXXXXXXXX Insert image here XXXXXXXXXXXXXXX
-
-On the left / center part of the diagram you will see an entity name 'Generic product'.
-This is a generic representation of any product (e.g. optical, radar,
-atmospheric, derived (like landcover map) and in the future we want to tune
-this to cater for vector data too. 
-
-
-There are five inherited models: 
-
-XXXXXXXXXXX Todo explain inherited models XXXXXXXXXXXXXXXXx
-
-
-There are a bunch of small tables that provide foreign key dictionaries for the
-terms described in the models including:
- - tables relating to ordering and tasking
- - search and search record models are used to store user searches
- - temporary tables used during product imports
- -
-
 The Online catalogue has the capability to deliver some products directly if
 they are held on local storage and also some basic capabilities for visitors to
 submit tasking requests.
 
-Every time a search is made, its remembered, and the records the user is shown
-may be added to a cart and then assigned to an order
+The purpose of this document is to provide technical detail covering the setup and 
+deployment of the catalogue, as well as an architectural overview. API documentation 
+is provided as a separate, complementary document to this one.

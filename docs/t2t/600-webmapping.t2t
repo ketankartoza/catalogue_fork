@@ -9,6 +9,238 @@ the backdrops for search and visualisation maps and play various other roles
 within the system. Although it is not advertised to clients, the web maps can
 be consumed with any OGC-WMS compatible client via a number of public wms urls.
 
+=== GDAL Setup ===
+
+GDAL provides read and write capabilities for numerous GIS formats. We are going 
+to had build GDAL so that we have MrSid and ECW support, as well as support for 
+various other data formats.
+
+==== Checkout the source ====
+
+We need to make sure subversion is installed first.
+
+```
+sudo apt-get install subversion
+```
+
+Make a work directory for building gdal in:
+
+```
+cd
+mkdir -p dev/cpp
+cd dev/cpp
+svn co https://svn.osgeo.org/gdal/trunk/gdal gdal-svn
+cd gdal-svn
+```
+
+=== Hdf4 and Hdf5 support ===
+
+```
+sudo apt-get install libhdf5-serial-dev libhdf5-serial-1.6.6-0 libhdf4g-dev libhdf4g libhdf4g-doc
+```
+
+==== Building with ECW Support ====
+
+**Note:** you can only compress images up to 500mb unless you have an erdas licesne
+(though as far as I know there is no limit to decompression size).
+
+Install dependencies:
+
+```
+sudo apt-get install build-essential libjpeg62-dev libtiff4-dev
+```
+
+
+Go to the erdas ecw sdk web page:
+
+http://www.erdas.com/Products/ERDASProductInformation/tabid/84/CurrentID/1142/Default.aspx
+
+(or just search their site for 'ecw sdk')
+
+Get the ECW JPEG2000 Codec SDK Source Code (second item listed - first if win version)
+
+After the download you should have:
+
+```
+ecw_jpeg_2000_sdk_3_3_source.zip
+```
+
+Now unzip it:
+
+```
+cd /tmp
+unzip ecw_jpeg_2000_sdk_3_3_source.zip
+unzip ImageCompressionSDKSourceCode3.3Setup_20070509.zip
+sudo mv libecwj2-3.3 /usr/local/src/
+cd /usr/local/src/
+sudo chown -R timlinux libecwj2-3.3/
+cd libecwj2-3.3
+```
+
+Now build the ecw lib:
+
+```
+./configure
+make
+sudo make install
+```
+
+Next gdal must be (re)built with the ecw flag:
+
+**Note:** You can skip this step if you are going on to add MrSid support below too.
+
+```
+cd <gdal src>
+make clean
+./configure --with-libtiff=internal \
+            --with-geotiff=internal \
+            --with-ecw=/usr/local \
+            --with-python
+make -j8
+sudo make install
+```
+
+See also http://trac.osgeo.org/gdal/wiki/ECW
+
+We configure gdal to build with its own internal copy of libtiff otherwise we 
+encounter problems with assertion errors if the system tiff lib is not compatible.
+(see http://trac.osgeo.org/gdal/ticket/3139 for more details).
+
+==== Gdal MrSid Support ====
+
+You need to first create a user account on the LizardTech website and then get this download 
+(don't worry about the Redhat Enterprise mentioned on the download page, it will work on Ubuntu server too).
+
+http://www.lizardtech.com/developer/members/download.php?dl=Unified_DSDK_8.0_linux.x86-64.gcc41.tgz
+
+Extract the downloaded SDK to /usr/local
+
+To add mr sid support, you need the MrSid geosdk and then to reconfigure and build gdal like this 
+(adjust the Geo_DSDK directory name as needed to match where you extracted it to).
+
+```
+cd <gdal src>
+make clean
+./configure --with-libtiff=internal \
+            --with-geotiff=internal \
+            --with-ecw=/usr/local \
+            --with-python \
+            --with-mrsid=/usr/local/Geo_DSDK-7.0.0.2167/ \
+            --without-jp2mrs
+make -j8
+sudo make install            
+```
+
+
+=== Mapserver Setup ===
+
+First of all you need to compile mapserver from source since we need 
+ecw and MrSid support. We will link it to our hand built GDAL.
+
+```
+sudo apt-get build-dep cgi-mapserver libxslt1-dev libpam-dev libreadline-dev
+```
+
+Now fetch and install mapserver
+
+```
+cd dev/cpp/
+wget http://download.osgeo.org/mapserver/mapserver-5.6.5.tar.gz
+tar xfz mapserver-5.6.5.tar.gz
+cd mapserver-5.6.5/
+export LD_LIBRARY_PATH=/usr/local/lib/
+```
+
+Now build agg:
+
+```
+cd agg-2.4/
+./configure
+make -j8
+sudo make install
+```
+
+Now compile mapserver:
+
+```
+cd ..
+./configure \
+    --prefix=/usr \
+    --enable-debug \
+    --without-tiff \
+    --without-pdf \
+    --with-gd=/usr \
+    --with-freetype=/usr \
+    --with-zlib=/usr \
+    --with-png=/usr \
+    --with-xpm=/usr \
+    --with-jpeg=/usr \
+    --with-gdal=/usr/local/bin/gdal-config \
+    --with-ogr \
+    --with-proj \
+    --with-eppl \
+    --with-postgis \
+    --with-wcs \
+    --with-wms \
+    --with-wmsclient \
+    --with-wfs \
+    --with-wfsclient \
+    --with-threads \
+    --with-geos \
+    --with-fastcgi \
+    --with-agg=/usr/local
+apt-get remove cgi-mapserver
+make -j8
+sudo cp mapserv /usr/lib/cgi-bin/
+```
+Once it is built you can check if everything is ok by doing:
+
+```
+/usr/lib/cgi-bin/mapserv -v
+```
+
+Which should give out something like:
+
+```
+MapServer version 5.0.3 OUTPUT=GIF OUTPUT=PNG OUTPUT=JPEG OUTPUT=WBMP
+OUTPUT=SVG SUPPORTS=PROJ SUPPORTS=AGG SUPPORTS=FREETYPE SUPPORTS=WMS_SERVER
+SUPPORTS=WMS_CLIENT SUPPORTS=WFS_SERVER SUPPORTS=WFS_CLIENT SUPPORTS=WCS_SERVER
+SUPPORTS=FASTCGI SUPPORTS=THREADS SUPPORTS=GEOS INPUT=EPPL7 INPUT=POSTGIS
+INPUT=OGR INPUT=GDAL INPUT=SHAPEFILE
+```
+
+Ensure that after doing the above, your mapserver install supports fastcgi:
+
+```
+SUPPORTS=FASTCGI
+```
+
+=== Apache configuration ===
+
+```
+sudo apt-get install libapache2-mod-fcgid
+```
+
+Add these map file paths to your /etc/apache2/sites-enabled/default file:
+
+```
+Include /opt/webmapping/apache-include/mapserver.conf
+```
+
+
+=== Set up the web mapping dir ===
+
+The web mapping dir contains mapserver configuration files and resources. It
+should be checked out of GIT first. You should make sure you have needed 
+permissions for checking the repo out into /opt.
+
+```
+cd /opt
+git clone git@orasac1:sansa_webmapping.git webmapping
+```
+
+
+
 === Adding a new backdrop layer ===
 
 In this section we will use the new 2010 ZA SPOT5 Mosaic as an example of how

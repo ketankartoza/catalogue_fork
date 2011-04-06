@@ -3,7 +3,7 @@
 % End of comments
 % -------------------
 
-== Installation Guide ==
+== Catalogue Software Installation ==
 
 === Prepare your system ===
 
@@ -41,6 +41,48 @@ virtualenv --no-site-packages python
 source python/bin/activate
 ```
 
+=== Set your ssh config up ===
+
+To get started, first add an entry like this to your ssh config file in ~/.ssh/config:
+
+```
+Host linfiniti2
+  Port 8697
+  HostName 188.40.123.80
+  FallBackToRsh no
+  
+Host orasac1
+  Port 8697
+  HostName 196.35.94.196
+  FallBackToRsh no  
+```
+
+=== Checkout Sources ===
+
+Then setup a working dir and check out the sources (you can adapt dirs / paths
+as needed, using these paths will keep you consistent with all setup notes but
+its not required).
+
+```
+cd /home
+sudo mkdir web
+sudo chown -R <username>.<username> web
+cd web
+mkdir sac
+```
+
+Now you can check out either from linfiniti's repo:
+
+```
+git clone git@linfiniti2:sac_catalogue.git sac_catalogue
+```
+
+or from SANSA's repo:
+
+```
+git clone git@orasac1:sac_catalogue.git sac_catalogue
+```
+
 
 ==== Install some development dependencies ====
 
@@ -75,6 +117,8 @@ cd InformixDB-2.5/
 python setup.py build_ext
 python setup.py install
 ```
+
+**Note:** See 
 
 ==== GDAL Python Bindings ====
 
@@ -391,14 +435,6 @@ python manage.py graph_models catalogue > docs/catalogue_diagram.dot
 cat docs/catalogue_diagram.dot | dot -Tpng -o docs/catalogue_diagram.png ; \
   display docs/catalogue_diagram.png
 ```
-
-=== SVN Ignoring files ===
-
-Please read this:
-
-http://stackoverflow.com/questions/116074/how-to-ignore-a-directory-with-svn
-
-so that files that do not belong in svn are not shown in the status list.
 
 === Troubleshooting ===
 
