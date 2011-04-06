@@ -210,11 +210,11 @@ def clip(theRequest):
   except:
     logging.debug('Profile does not exist')
   if myProfile and myProfile.strategic_partner:
-    myLayerDefinitions = [ WEB_LAYERS['ZaSpot2mMosaic2009TC'], WEB_LAYERS['ZaSpot2mMosaic2008TC'], WEB_LAYERS['ZaSpot2mMosaic2007TC'], WEB_LAYERS['ZaRoadsBoundaries'] ]
-    myLayersList = "[ zaSpot2mMosaic2009TC,zaSpot2mMosaic2008TC,zaSpot2mMosaic2007TC,zaRoadsBoundaries ]"
+    myLayerDefinitions = [ WEB_LAYERS['ZaSpot2mMosaic2010TC'], WEB_LAYERS['ZaSpot2mMosaic2009TC'], WEB_LAYERS['ZaSpot2mMosaic2008TC'], WEB_LAYERS['ZaSpot2mMosaic2007TC'], WEB_LAYERS['ZaRoadsBoundaries'] ]
+    myLayersList = "[ zaSpot2mMosaic2010TC,zaSpot2mMosaic2009TC,zaSpot2mMosaic2008TC,zaSpot2mMosaic2007TC,zaRoadsBoundaries ]"
   else:
-    myLayerDefinitions = [ WEB_LAYERS['ZaSpot10mMosaic2009'],WEB_LAYERS['ZaSpot10mMosaic2008'],WEB_LAYERS['ZaSpot10mMosaic2007'],WEB_LAYERS['ZaRoadsBoundaries'] ]
-    myLayersList = "[zaSpot10mMosaic2009,zaSpot10mMosaic2008,zaSpot10mMosaic2007,zaRoadsBoundaries]"
+    myLayerDefinitions = [ WEB_LAYERS['ZaSpot10mMosaic2010'],WEB_LAYERS['ZaSpot10mMosaic2009'],WEB_LAYERS['ZaSpot10mMosaic2008'],WEB_LAYERS['ZaSpot10mMosaic2007'],WEB_LAYERS['ZaRoadsBoundaries'] ]
+    myLayersList = "[zaSpot10mMosaic2010,zaSpot10mMosaic2009,zaSpot10mMosaic2008,zaSpot10mMosaic2007,zaRoadsBoundaries]"
 
   if theRequest.method == 'POST':
     myForm = ClipForm(theRequest.POST, theRequest.FILES)
@@ -348,8 +348,8 @@ def showProduct(theRequest, theProductId):
     myMessages.append("Product found")
   else:
     myMessages.append("No matching product found")
-  myExtraLayers = [ WEB_LAYERS['ZaSpot10mMosaic2008'],WEB_LAYERS['ZaRoadsBoundaries'] ]
-  myLayersList = "[zaSpot10mMosaic2008,zaRoadsBoundaries]"
+  myExtraLayers = [ WEB_LAYERS['ZaSpot10mMosaic2010'],WEB_LAYERS['ZaRoadsBoundaries'] ]
+  myLayersList = "[zaSpot10mMosaic2010,zaRoadsBoundaries]"
   return ({
         'myMessages' : myMessages,
         'myLayerDefinitions' : myExtraLayers,
