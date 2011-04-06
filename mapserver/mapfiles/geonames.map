@@ -53,7 +53,7 @@ MAP
     # WMS server settings
     METADATA
       'ows_title'           'QGIS-MAP'
-      'ows_onlineresource'  'http://127.0.0.1/cgi-bin/mapserv.exe?map=C:/ms4w/Apache/htdocs/mapfiles/geonames.map'
+      'wms_onlineresource'  'http://196.35.94.243/cgi-bin/mapserv?map=GEONAMES&'
       'ows_srs'             'EPSG:4326 EPSG:900913'
     END
 
@@ -72,7 +72,7 @@ MAP
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'AGRF' )
     METADATA
@@ -112,7 +112,7 @@ MAP
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'AIRF' )
     METADATA
@@ -152,7 +152,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'ADM3' )
     METADATA
@@ -192,7 +192,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'AIRS' )
     METADATA
@@ -232,7 +232,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'AREA' )
     METADATA
@@ -272,7 +272,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'AIRQ' )
     METADATA
@@ -309,7 +309,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'AIRP' )
     METADATA
@@ -346,7 +346,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'BDG' )
     METADATA
@@ -386,7 +386,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'BAR' )
     METADATA
@@ -426,7 +426,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'BAY' )
     METADATA
@@ -466,7 +466,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'BTL' )
     METADATA
@@ -503,7 +503,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'BUSH' )
     METADATA
@@ -540,7 +540,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'BCH' )
     METADATA
@@ -577,7 +577,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'BUSTN' )
     METADATA
@@ -614,7 +614,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CAPE' )
     METADATA
@@ -654,7 +654,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CH' )
     METADATA
@@ -691,7 +691,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CAVE' )
     METADATA
@@ -728,7 +728,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CLF' )
     METADATA
@@ -768,7 +768,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CHNN' )
     METADATA
@@ -808,7 +808,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CHNM' )
     METADATA
@@ -848,7 +848,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 17.373614 -34.736722 31.404494 -27.464171
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CMP' )
     METADATA
@@ -885,7 +885,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 17.373614 -34.736722 31.404494 -27.464171
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CMPMN' )
     METADATA
@@ -922,7 +922,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 17.373614 -34.736722 31.404494 -27.464171
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CMTY' )
     METADATA
@@ -959,7 +959,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 17.373614 -34.736722 31.404494 -27.464171
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CNL' )
     METADATA
@@ -999,7 +999,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 17.373614 -34.736722 31.404494 -27.464171
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CNLA' )
     METADATA
@@ -1039,7 +1039,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 17.373614 -34.736722 31.404494 -27.464171
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CNYN' )
     METADATA
@@ -1080,7 +1080,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 17.373614 -34.736722 31.404494 -27.464171
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'COVE' )
     METADATA
@@ -1121,7 +1121,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 17.373614 -34.736722 31.404494 -27.464171
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CRRL' )
     METADATA
@@ -1161,7 +1161,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 17.373614 -34.736722 31.404494 -27.464171
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CSNO' )
     METADATA
@@ -1198,7 +1198,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 17.373614 -34.736722 31.404494 -27.464171
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CST' )
     METADATA
@@ -1239,7 +1239,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 17.373614 -34.736722 31.404494 -27.464171
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CTRB' )
     METADATA
@@ -1276,7 +1276,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 17.373614 -34.736722 31.404494 -27.464171
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'CVNT' )
     METADATA
@@ -1314,7 +1314,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'DPR' )
     METADATA
@@ -1354,7 +1354,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'DUNE' )
     METADATA
@@ -1394,7 +1394,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'EST' )
     METADATA
@@ -1434,7 +1434,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'ESTY' )
     METADATA
@@ -1474,7 +1474,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'FCL' )
     METADATA
@@ -1514,7 +1514,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'FISH' )
     METADATA
@@ -1554,7 +1554,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'FLLS' )
     METADATA
@@ -1594,7 +1594,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'FORD' )
     METADATA
@@ -1634,7 +1634,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'FRM' )
     METADATA
@@ -1671,7 +1671,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'FRMT' )
     METADATA
@@ -1708,7 +1708,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'FRST' )
     METADATA
@@ -1745,7 +1745,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'FT' )
     METADATA
@@ -1785,7 +1785,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'GAP' )
     METADATA
@@ -1825,7 +1825,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'GDN' )
     METADATA
@@ -1865,7 +1865,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'GHSE' )
     METADATA
@@ -1902,7 +1902,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'GRGE' )
     METADATA
@@ -1942,7 +1942,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'HBR' )
     METADATA
@@ -1982,7 +1982,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'HDLD' )
     METADATA
@@ -2022,7 +2022,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'HLL' )
     METADATA
@@ -2062,7 +2062,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'HLLS' )
     METADATA
@@ -2099,7 +2099,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'HSE' )
     METADATA
@@ -2139,7 +2139,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'HSP' )
     METADATA
@@ -2176,7 +2176,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'HSPC' )
     METADATA
@@ -2213,7 +2213,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'HTL' )
     METADATA
@@ -2250,7 +2250,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'HSTS' )
     METADATA
@@ -2290,7 +2290,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'HUT' )
     METADATA
@@ -2330,7 +2330,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'INDS' )
     METADATA
@@ -2371,7 +2371,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'ISL' )
     METADATA
@@ -2412,7 +2412,7 @@ LAYER
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
 
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'ISLS' )
     METADATA
@@ -2452,7 +2452,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'ISLT' )
     METADATA
@@ -2492,7 +2492,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'ISTH' )
     METADATA
@@ -2532,7 +2532,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'ITTR' )
     METADATA
@@ -2572,7 +2572,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'LCTY' )
     METADATA
@@ -2612,7 +2612,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'LGN' )
     METADATA
@@ -2652,7 +2652,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'LIBR' )
     METADATA
@@ -2689,7 +2689,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'LK' OR "fcode" = 'LKS' OR "fcode" = 'LKX' )
     METADATA
@@ -2729,7 +2729,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'LKI' )
     METADATA
@@ -2769,7 +2769,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'LTHSE' )
     METADATA
@@ -2809,7 +2809,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MALL' )
     METADATA
@@ -2846,7 +2846,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MFG' )
     METADATA
@@ -2886,7 +2886,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MFGB' )
     METADATA
@@ -2926,7 +2926,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MFGLM' )
     METADATA
@@ -2966,7 +2966,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MKT' )
     METADATA
@@ -3003,7 +3003,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'ML' OR "fcode" = 'MLSW'   )
     METADATA
@@ -3043,7 +3043,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MN' )
     METADATA
@@ -3080,7 +3080,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MNAU' )
     METADATA
@@ -3117,7 +3117,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MNC' )
     METADATA
@@ -3154,7 +3154,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MNCR' )
     METADATA
@@ -3191,7 +3191,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MND' )
     METADATA
@@ -3231,7 +3231,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MNFE' )
     METADATA
@@ -3268,7 +3268,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MNMT' )
     METADATA
@@ -3305,7 +3305,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MNQ' )
     METADATA
@@ -3342,7 +3342,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MRSH' )
     METADATA
@@ -3379,7 +3379,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MSSN' )
     METADATA
@@ -3419,7 +3419,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MT' OR "fcode" = 'MTS' )
     METADATA
@@ -3459,7 +3459,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'MUS' )
     METADATA
@@ -3496,7 +3496,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'OBPT' )
     METADATA
@@ -3536,7 +3536,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'OBS' )
     METADATA
@@ -3576,7 +3576,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'OCH' )
     METADATA
@@ -3617,7 +3617,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PAN' OR "fcode" = 'PANS' )
     METADATA
@@ -3657,7 +3657,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PASS' )
     METADATA
@@ -3694,7 +3694,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PCLI' )
     METADATA
@@ -3734,7 +3734,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PEN' )
     METADATA
@@ -3774,7 +3774,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PK' OR "fcode" = 'PKS' )
     METADATA
@@ -3811,7 +3811,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PLAT' )
     METADATA
@@ -3851,7 +3851,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PLN' )
     METADATA
@@ -3891,7 +3891,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PMPW' )
     METADATA
@@ -3928,7 +3928,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PND' OR "fcode" = 'PNDI' )
     METADATA
@@ -3968,7 +3968,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PO' )
     METADATA
@@ -4005,7 +4005,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'POOL' )
     METADATA
@@ -4045,7 +4045,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PP' )
     METADATA
@@ -4082,7 +4082,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PPLC' )
     METADATA
@@ -4121,7 +4121,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PPLA' )
     METADATA
@@ -4162,7 +4162,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
 
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PPLL' )
@@ -4203,7 +4203,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PT' )
     METADATA
@@ -4243,7 +4243,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'UPLD' )
     METADATA
@@ -4283,7 +4283,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PRT' )
     METADATA
@@ -4323,7 +4323,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'VINS' )
     METADATA
@@ -4363,7 +4363,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PRN' )
     METADATA
@@ -4400,7 +4400,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'WRCK' )
     METADATA
@@ -4437,7 +4437,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PRKGT' )
     METADATA
@@ -4477,7 +4477,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'TRL' )
     METADATA
@@ -4517,7 +4517,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'WTRH' )
     METADATA
@@ -4557,7 +4557,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PROM' )
     METADATA
@@ -4597,7 +4597,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'WLL' )
     METADATA
@@ -4637,7 +4637,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'UNIV' )
     METADATA
@@ -4674,7 +4674,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'VAL' )
     METADATA
@@ -4714,7 +4714,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PPLX' )
     METADATA
@@ -4754,7 +4754,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PRK' )
     METADATA
@@ -4794,7 +4794,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PPL' AND "population"  >= '300000' )
     METADATA
@@ -4835,7 +4835,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PPL' AND "population"    >=  '70000' )
     METADATA
@@ -4876,7 +4876,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PPL'  AND "population" >=  '10000' )
     METADATA
@@ -4917,7 +4917,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PPL' AND "population" >= '5000' )
     METADATA
@@ -4958,7 +4958,7 @@ LAYER
     TEMPLATE fooOnlyForWMSGetFeatureInfo
   EXTENT 15.015323 -35.184534 36.855498 -23.648950
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='geonames' host=localhost port=5432 user='ms_readonly' password='ms_readonly' sslmode=disable"
+    CONNECTION "dbname='geonames' host=localhost port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     DATA 'the_geom FROM "world"."geoname" USING UNIQUE id USING srid=4326'
     FILTER ( "fcode" = 'PPL'  )
     METADATA
