@@ -83,10 +83,8 @@ NEWPAGE
 = Developer Guide =
 %!include: 004-using-git.t2t
 %!include: 004-catalogue-installation.t2t
-= Unit Testing =
 %!include: 005-unit-tests.t2t
-= Reporting Tools =
-%!include: 201-reporting-tools.t2t
+%!include: 600-webmapping.t2t
 = Schema =
 %!include: 301-product-schema.t2t
 %!include: 302-order-schema.t2t
@@ -98,9 +96,11 @@ NEWPAGE
 = Search =
 %!include: 502-searching-t2t
 
+= Reporting Tools =
+%!include: 201-reporting-tools.t2t
+
 = Ingestors =
 %!include: 900-batch-processing-intro.t2t
-%!include: 600-webmapping.t2t
 %!include: 901-informix-acs-sync.t2t
 %!include: 902-importing-other-products.t2t
 %!include: 903-importing-dims-products.t2t
