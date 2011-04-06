@@ -315,6 +315,27 @@ def notifySalesStaffOfTaskRequest(theUser, theId):
 
 """Layer definitions for use in conjunction with open layers"""
 WEB_LAYERS = {
+            # Streets and boundaries for SA base map with an underlay of spot 2010 2m mosaic
+            #
+            # Uses the degraded 2.5m product in a tile cache
+            #
+            # and under that blue marble. Its rendered as a single layer for best quality.
+          'ZaSpot2mMosaic2010TC' : '''var zaSpot2mMosaic2010TC = new OpenLayers.Layer.WMS(
+          "ZaSpot2mMosaic2010TC", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
+          {
+             VERSION: '1.1.1',
+             EXCEPTIONS: "application/vnd.ogc.se_inimage",
+             width: '800',
+             //layers: 'Roads',
+             layers: 'spot5mosaic2m2010',
+             maxResolution: '156543.0339',
+             srs: 'EPSG:900913',
+             height: '525',
+             format: 'image/jpeg',
+             transparent: 'false',
+             antialiasing: 'true'
+           },
+           {isBaseLayer: true});
             # Streets and boundaries for SA base map with an underlay of spot 2009 2m mosaic
             #
             # Uses the degraded 2.5m product in a tile cache
@@ -381,6 +402,24 @@ WEB_LAYERS = {
            },
            {isBaseLayer: true});
            ''',
+            # Streets and boundaries for SA base map with an underlay of spot 2010 mosaic
+            # and under that blue marble. Its rendered as a single layer for best quality.
+            'ZaSpot2mMosaic2010' : '''var zaSpot2mMosaic2010 = new OpenLayers.Layer.WMS(
+          "ZaSpot2mMosaic2010", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_SPOT2010",
+          {
+             VERSION: '1.1.1',
+             EXCEPTIONS: "application/vnd.ogc.se_inimage",
+             width: '800',
+             layers: 'Roads',
+             srs: 'EPSG:900913',
+             maxResolution: '156543.0339',
+             height: '525',
+             format: 'image/jpeg',
+             transparent: 'false',
+             antialiasing: 'true'
+           },
+           {isBaseLayer: true});
+           ''',
             # Streets and boundaries for SA base map with an underlay of spot 2009 mosaic
             # and under that blue marble. Its rendered as a single layer for best quality.
             'ZaSpot2mMosaic2009' : '''var zaSpot2mMosaic2009 = new OpenLayers.Layer.WMS(
@@ -435,6 +474,28 @@ WEB_LAYERS = {
            },
            {isBaseLayer: true});
            ''',
+            # Streets and boundaries for SA base map with an underlay of spot 2010 mosaic
+            #
+            # Uses the degraded 10m product in a tile cache
+            #
+            # and under that blue marble. Its rendered as a single layer for best quality.
+            # "ZaRoadsBoundaries", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_VECTOR",
+          'ZaSpot10mMosaic2010' : '''var zaSpot10mMosaic2010 = new OpenLayers.Layer.WMS(
+          "ZaSpot10mMosaic2010", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
+          {
+             VERSION: '1.1.1',
+             EXCEPTIONS: "application/vnd.ogc.se_inimage",
+             width: '800',
+             //layers: 'Roads',
+             layers: 'spot5mosaic10m2010',
+             maxResolution: '156543.0339',
+             srs: 'EPSG:900913',
+             height: '525',
+             format: 'image/jpeg',
+             transparent: 'false',
+             antialiasing: 'true'
+           },
+           {isBaseLayer: true});
             # Streets and boundaries for SA base map with an underlay of spot 2009 mosaic
             #
             # Uses the degraded 10m product in a tile cache
