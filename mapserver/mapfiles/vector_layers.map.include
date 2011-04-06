@@ -4,7 +4,7 @@
     NAME 'country'
     TYPE POLYGON
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='gis' host=elephant port=5432 user='readonly' password='readonly' sslmode=disable"
+    CONNECTION "dbname='gis' host=elephant port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     # For gcgid connection pooling
     PROCESSING "CLOSE_CONNECTION=DEFER"
     DATA 'the_geom FROM country using unique gid using SRID=4326'
@@ -40,7 +40,7 @@
     NAME 'RuralCadastrals'
     TYPE POLYGON
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='gis' host=elephant port=5432 user='readonly' password='readonly' sslmode=disable"
+    CONNECTION "dbname='gis' host=elephant port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     # For gcgid connection pooling
     PROCESSING "CLOSE_CONNECTION=DEFER"
     DATA 'the_geom FROM za_cadastral_national using unique gid using SRID=4326'
@@ -90,7 +90,7 @@
     NAME 'UrbanCadastrals'
     TYPE POLYGON
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='gis' host=elephant port=5432 user='readonly' password='readonly' sslmode=disable"
+    CONNECTION "dbname='gis' host=elephant port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     # For gcgid connection pooling
     PROCESSING "CLOSE_CONNECTION=DEFER"
     DATA 'the_geom FROM za_cadastral using unique gid using SRID=4326'
@@ -139,7 +139,7 @@
     NAME 'Highways'
     TYPE LINE
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='gis' host=elephant port=5432 user='readonly' password='readonly' sslmode=disable"
+    CONNECTION "dbname='gis' host=elephant port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     # For gcgid connection pooling
     PROCESSING "CLOSE_CONNECTION=DEFER"
     DATA 'the_geom FROM za_highways using unique gid using SRID=4326'
@@ -183,7 +183,7 @@
     NAME 'Highways'
     TYPE LINE
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='gis' host=elephant port=5432 user='readonly' password='readonly' sslmode=disable"
+    CONNECTION "dbname='gis' host=elephant port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     # For gcgid connection pooling
     PROCESSING "CLOSE_CONNECTION=DEFER"
     DATA 'the_geom FROM za_highways USING unique gid using SRID=4326'
@@ -259,7 +259,7 @@
     NAME 'Highways'
     TYPE LINE
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='gis' host=elephant port=5432 user='readonly' password='readonly' sslmode=disable"
+    CONNECTION "dbname='gis' host=elephant port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     # For gcgid connection pooling
     PROCESSING "CLOSE_CONNECTION=DEFER"
     DATA 'the_geom FROM za_highways USING unique gid using SRID=4326'
@@ -362,7 +362,7 @@
     NAME 'Roads'
     TYPE LINE
     CONNECTIONTYPE postgis
-    CONNECTION "dbname='gis' host=elephant port=5432 user='readonly' password='readonly' sslmode=disable"
+    CONNECTION "dbname='gis' host=elephant port=5432 user='{688477225F5ABDFA}' password='{688477225F5ABDFA}' sslmode=disable"
     # For gcgid connection pooling
     PROCESSING "CLOSE_CONNECTION=DEFER"
     DATA 'the_geom FROM za_roads USING unique gid using SRID=4326'
