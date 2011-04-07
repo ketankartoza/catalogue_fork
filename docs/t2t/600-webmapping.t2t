@@ -294,10 +294,14 @@ on cheetah:
 cd /cxfs/archive/production/Spot5_Mosaic_Packaging_2010/Imagery/Latlong/TLTIF
 dmfind . -state MIG -o -state OFL | dmget
 rsync -ave ssh *.gz lion:/mnt/cataloguestorage2/gisdata/za/SPOT5_2010/tif-gz/
+dmput *
 ```
 
 The second command above instructs to retrieve all migrated files from tape,
 which is needed before the data can be synced over to LION via rsync over ssh.
+
+The last command instructs dmf to push the files back down to tape again when 
+we are done.
 
 ==== Batch conversion to ecw ====
 
