@@ -95,10 +95,14 @@ make clean
 ./configure --with-libtiff=internal \
             --with-geotiff=internal \
             --with-ecw=/usr/local \
-            --with-python
+            --with-python \
+            --with-jpeg=internal \
+            --with-jpeg12
 make -j8
-sudo make install
+sudo make install            
 ```
+
+Jpeg internal and jpeg 12 needed for jpeg12 tif compression support
 
 See also http://trac.osgeo.org/gdal/wiki/ECW
 
@@ -126,11 +130,14 @@ make clean
             --with-ecw=/usr/local \
             --with-python \
             --with-mrsid=/usr/local/Geo_DSDK-7.0.0.2167/ \
-            --without-jp2mrs
+            --without-jp2mrs \
+            --with-jpeg=internal \
+            --with-jpeg12
 make -j8
 sudo make install            
 ```
 
+Jpeg internal and jpeg 12 needed for jpeg12 tif compression support
 
 === Mapserver Setup ===
 
