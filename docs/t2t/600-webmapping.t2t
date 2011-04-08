@@ -301,10 +301,14 @@ on cheetah:
 cd /cxfs/archive/production/Spot5_Mosaic_Packaging_2010/Imagery/Latlong/TLTIF
 dmfind . -state MIG -o -state OFL | dmget
 rsync -ave ssh *.gz lion:/mnt/cataloguestorage2/gisdata/za/SPOT5_2010/tif-gz/
+dmput *
 ```
 
 The second command above instructs to retrieve all migrated files from tape,
 which is needed before the data can be synced over to LION via rsync over ssh.
+
+The last command instructs dmf to push the files back down to tape again when 
+we are done.
 
 ==== Batch conversion to ecw ====
 
@@ -658,6 +662,42 @@ http://196.35.94.243/cgi-bin/mapserv?map=ZA_SPOT2010
 ```
 
 
+=== Available end points ===
+
+You can connect to the various end points / map services using the following urls:
+
+```
+http://196.35.94.243/cgi-bin/mapserv?map=ZA_VECTOR
+http://196.35.94.243/cgi-bin/mapserv?map=GEONAMES
+http://196.35.94.243/cgi-bin/mapserv?map=ZA_VECTOR_TEST
+http://196.35.94.243/cgi-bin/mapserv?map=ZA_SPOT2007
+http://196.35.94.243/cgi-bin/mapserv?map=ZA_SPOT2008
+http://196.35.94.243/cgi-bin/mapserv?map=ZA_SPOT2009
+http://196.35.94.243/cgi-bin/mapserv?map=ZA_SPOT2010
+http://196.35.94.243/cgi-bin/mapserv?map=ZA_SPOT10m2007
+http://196.35.94.243/cgi-bin/mapserv?map=ZA_SPOT10m2008
+http://196.35.94.243/cgi-bin/mapserv?map=ZA_SPOT10m2009
+http://196.35.94.243/cgi-bin/mapserv?map=ZA_SPOT10m2010
+http://196.35.94.243/cgi-bin/mapserv?map=L7_MOSAIC
+http://196.35.94.243/cgi-bin/mapserv?map=ZA_NBI
+http://196.35.94.243/cgi-bin/mapserv?map=WORLD
+http://196.35.94.243/cgi-bin/mapserv?map=SEARCHES
+http://196.35.94.243/cgi-bin/mapserv?map=CART
+http://196.35.94.243/cgi-bin/mapserv?map=VISITORS
+```
+
+Please exercise discretion as to which of these you make publicly available -
+there is currently no access control and not all of these datasets may be made
+available to the general public.
+
+Please note these end points will change when the server is moved into the DMZ.
 
 
+=== Issue Tracking ===
+
+There is an issue tracker for web mapping related issues here:
+
+```
+http://196.35.94.196/projects/sansa-webmapping
+```
 
