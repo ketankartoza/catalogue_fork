@@ -294,7 +294,7 @@ def notifySalesStaffOfTaskRequest(theUser, theId):
                                                     'myHistory' : myHistory
                                                   })
   myMessagesList = [] # we will use mass_mail to prevent users seeing who other recipients are
-  myRecipients = OrderNotificationRecipients.objects.filter(sensors=t.mission_sensor)
+  myRecipients = OrderNotificationRecipients.objects.filter(sensors=myTaskingRequest.mission_sensor)
   for myRecipient in myRecipients:
     myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN,
           [myRecipient.user.email]))

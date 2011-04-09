@@ -3,7 +3,7 @@ from catalogue.profileRequiredDecorator import requireProfile
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.forms.util import ErrorList
-
+from django.forms.forms import NON_FIELD_ERRORS
 #Dane Springmeyer's django-shapes app for exporting results as a shpfile
 from shapes.views import ShpResponder
 
@@ -86,7 +86,7 @@ def myTaskingRequests(theRequest):
 
 @requireProfile('addtaskingrequest')
 @login_required
-def    addTaskingRequest( theRequest ):
+def addTaskingRequest( theRequest ):
   """Used to create a new tasking request"""
   logging.debug(("Post vars:" + str(theRequest.POST)))
   logging.debug(("Post files:" + str(theRequest.FILES)))
@@ -105,39 +105,52 @@ def    addTaskingRequest( theRequest ):
 
   if theRequest.method == 'POST':
     logging.debug("Tasking request posted")
-    myForm = TaskingRequestForm( theRequest.POST,theRequest.FILES )
+    #myForm = TaskingRequestForm( theRequest.POST )
+    myTaskingForm = TaskingRequestForm( theRequest.POST)
+    myTaskingDeliveryDetailsForm = TaskingRequestDeliveryDetailForm(theRequest.POST, theRequest.FILES)
     myOptions =  {
-            'myForm': myForm,
+            'myTaskingForm': myTaskingForm,
+            'myTaskingDeliveryDetailsForm': myTaskingDeliveryDetailsForm,
             'myTitle': myTitle,
             'mySubmitLabel' : "Submit Tasking Request",
             'myTaskingRequestFlag' : True,
             'myLayerDefinitions' : myLayerDefinitions,
             'myLayersList' : myLayersList,
           }
-    if myForm.is_valid():
+    if myTaskingForm.is_valid() and myTaskingDeliveryDetailsForm.is_valid():
       logging.debug("Tasking Request valid")
-      myObject = myForm.save(commit=False)
-      myObject.user = theRequest.user
+      myDeliveryDetailObject = myTaskingDeliveryDetailsForm.save(commit=False)
+      myDeliveryDetailObject.user = theRequest.user
+
       myGeometry = None
       try:
-        myGeometry = getGeometryFromUploadedFile( theRequest, myForm, 'geometry_file' )
+        myGeometry = getGeometryFromUploadedFile( theRequest, myTaskingDeliveryDetailsForm, 'geometry_file' )
         if myGeometry:
-          myObject.geometry = myGeometry
+          myDeliveryDetailObject.geometry = myGeometry
         else:
           logging.info("Failed to set tasking request from uploaded geometry file")
           logging.info("Or no shapefile uploaded")
       except:
         logging.info("An error occurred try to set tasking area from uploaded geometry file")
         logging.info(traceback.format_exc() )
-      if not myObject.geometry:
-        myErrors = myForm._errors.setdefault("geometry", ErrorList())
+      if not myDeliveryDetailObject.geometry:
+        #myErrors = myTaskingDeliveryDetailsForm._errors.setdefault("geometry", ErrorList())
+
+        myErrors = myTaskingDeliveryDetailsForm._errors.setdefault(NON_FIELD_ERRORS, ErrorList())
         myErrors.append(u"No valid geometry provided")
         logging.info('Form is NOT valid - at least a file or digitised geom is needed')
         return render_to_response("addPage.html",
             myOptions,
             context_instance=RequestContext(theRequest))
 
+      #save deliverydetailsform
+      myDeliveryDetailObject.save()
+      #save tasking form
+      myObject = myTaskingForm.save(commit=False)
+      myObject.user = theRequest.user
+      myObject.delivery_detail = myDeliveryDetailObject
       myObject.save()
+      
       logging.debug("Tasking Request saved")
       logging.info('Tasking request : data is valid')
       # Now add the cart contents to the order
@@ -149,9 +162,11 @@ def    addTaskingRequest( theRequest ):
           myOptions,
           context_instance=RequestContext(theRequest))
   else: # new order
-    myForm = TaskingRequestForm( )
+    myTaskingForm = TaskingRequestForm( )
+    myTaskingDeliveryDetailsForm = TaskingRequestDeliveryDetailForm()
     myOptions =  {
-          'myForm': myForm,
+          'myTaskingForm': myTaskingForm,
+          'myTaskingDeliveryDetailsForm': myTaskingDeliveryDetailsForm,
           'myTitle': myTitle,
           'mySubmitLabel' : "Submit Tasking Request",
           'myTaskingRequestFlag' : True,
