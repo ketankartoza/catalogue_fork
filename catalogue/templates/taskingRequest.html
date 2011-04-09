@@ -70,8 +70,8 @@
     <tr>
       <td>{{myTaskingRequest.order_date}}</td>
       <td>{{myTaskingRequest.user}}</td>
-      <td>{{myTaskingRequest.processing_level}}</td>
-      <td>{{myTaskingRequest.resampling_method}}</td>
+      <td>{{myTaskingRequest.delivery_detail.processing_level}}</td>
+      <td>{{myTaskingRequest.delivery_detail.resampling_method}}</td>
     </tr>
     <tr>
       <th>Projection</th>
@@ -79,9 +79,9 @@
       <th>File Format</th>
     </tr>
     <tr>
-      <td>{{myTaskingRequest.projection}}</td>
-      <td colspan="2">{{myTaskingRequest.datum}}</td>
-      <td>{{myTaskingRequest.file_format}}</td>
+      <td>{{myTaskingRequest.delivery_detail.projection}}</td>
+      <td colspan="2">{{myTaskingRequest.delivery_detail.datum}}</td>
+      <td>{{myTaskingRequest.delivery_detail.file_format}}</td>
     </tr>
     <tr>
       <th colspan="2">Full Name</th>

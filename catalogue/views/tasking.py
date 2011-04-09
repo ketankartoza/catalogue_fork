@@ -4,6 +4,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.forms.util import ErrorList
 from django.forms.forms import NON_FIELD_ERRORS
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 #Dane Springmeyer's django-shapes app for exporting results as a shpfile
 from shapes.views import ShpResponder
 
