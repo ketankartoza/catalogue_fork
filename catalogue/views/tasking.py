@@ -180,13 +180,21 @@ def addTaskingRequest( theRequest ):
         context_instance=RequestContext(theRequest))
 
 @login_required
-def taskingRequestAsShapefile(theRequest, theTaskingRequestId):
-  """Return the a tasking request results as a shapefile"""
-  myRecords = TaskingRequest.objects.filter(id=theTaskingRequestId)
-  if myRecords[0].user != theRequest.user and not theRequest.user.is_staff:
+def downloadTaskingRequest(theRequest,theId):
+  """Dispaches request and returns geometry of ordered products in desired file format"""
+  myRecord = get_object_or_404(TaskingRequest,id=theId)
+  if myRecord.user != theRequest.user and not theRequest.user.is_staff:
     myJscript= """<script>alert('Error: You do not own this request, so you cannot download its geometry.</script>"""
     return HttpResponse( myJscript, mimetype='application/javascript' )
-  myResponder = ShpResponder( SearchRecord )
-  myResponder.file_name = 'taskingarea%s' % theTaskingRequestId
-  return myResponder.write_request_records( myRecords )
 
+  if theRequest.GET.has_key('shp'):
+    myResponder = ShpResponder( myRecord )
+    myResponder.file_name = u'geometry_for_taskingrequest_%s' % myRecord.id
+    return  myResponder.write_request_records( [myRecord] )
+  elif theRequest.GET.has_key('kml'):
+    return render_to_kml("kml/tasking_request.kml", {'tasking_request' : myRecord,'external_site_url':settings.DOMAIN, 'transparentStyle':True},u'geometry_for_taskingrequest_%s' % myRecord.id)
+  elif theRequest.GET.has_key('kmz'):
+    return render_to_kmz("kml/tasking_request.kml", {'tasking_request' : myRecord,'external_site_url':settings.DOMAIN, 'transparentStyle':True},u'geometry_for_taskingrequest_%s' % myRecord.id)
+  else:
+    logging.info('Request cannot be proccesed, unsupported download file type')
+    raise Http404

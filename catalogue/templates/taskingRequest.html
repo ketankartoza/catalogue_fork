@@ -149,13 +149,15 @@
       <td colspan="2">{{ myTaskingRequest.mission_sensor.name}}</td>
       <td colspan="2">{{ myTaskingRequest.target_date|date:"Y-m-d"  }}</td>
     </tr>
-    <tr>
-      <td colspan="4">
-       <a href="/taskingrequestasshapefile/{{myTaskingRequest.id}}/"><img src="/media/images/down_16.png" alt=""/> Download task polygon as shapefile.</a>
-      </td>
-    </tr>
   </tbody>
 </table>
+    {% if myTaskingRequest.delivery_detail.geometry %}
+    Download tasking geometry:
+    <a class="button-link" href="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?shp">SHP</a>
+    <a class="button-link" href="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?kml">KML</a>
+    <a class="button-link" href="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?kmz">KMZ</a>
+    {% endif %}
+
 {% box_end %}
 <br />
 {% box_start "" "" "" %}
@@ -182,3 +184,9 @@ Order History
       </form>
   </div>
 {% endif %}
+
+<script>
+$(document).ready(function (){
+$('.button-link').button();
+});
+</script>
