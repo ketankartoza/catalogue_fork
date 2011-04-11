@@ -272,13 +272,13 @@ def updateOrderHistory(theRequest):
 
 @renderWithContext("deliveryDetailForm.html")
 @login_required
-def createDeilveryDetailForm( theRequest, theref_id):
+def createDeliveryDetailForm( theRequest, theref_id):
   myDeliveryDetailForm = ProductDeliveryDetailForm(initial={'ref_id':theref_id},prefix='%i' % int(theref_id))
   return dict(myDeliveryDetailForm=myDeliveryDetailForm)
 
 @renderWithContext("deliveryDetail.html")
 @login_required
-def showDeilveryDetail( theRequest, theref_id):
+def showDeliveryDetail( theRequest, theref_id):
   myDeliveryDetail = DeliveryDetail.objects.filter(pk__exact=theref_id).get()
   return dict(myDeliveryDetail=myDeliveryDetail)
 
