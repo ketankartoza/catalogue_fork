@@ -3,15 +3,14 @@
     // <![CDATA[
     $(function() 
     {
-      $("#statusFormLink").button({});
       {# submit button not used when we are using ajax #}
       $("#submitButton").hide();
       $("#statusForm").dialog(
       {
         bgiframe: true,
         autoOpen: false,
-        height: 400,
-        width: 400,
+        height: 'auto',
+        width: 450,
         modal: true,
         buttons: 
         {
@@ -23,7 +22,7 @@
           Cancel: function() 
           {
             $(this).dialog('close');
-          },
+          }
         }
       });
     });
@@ -165,7 +164,7 @@
 Order History
 </h2>
 {% if myForm %}
-  <a id="statusFormLink" onclick="$('#statusForm').dialog('open'); return false;">Update status</a>
+  <a id="statusFormLink" class='button-link' onclick="$('#statusForm').dialog('open'); return false;">Update status</a>
 {% endif %}
 <div id="orderHistory">
   {% if myHistory %}
