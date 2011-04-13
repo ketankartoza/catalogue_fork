@@ -355,6 +355,7 @@ WEB_LAYERS = {
              antialiasing: 'true'
            },
            {isBaseLayer: true});
+           ''',
             # Streets and boundaries for SA base map with an underlay of spot 2009 2m mosaic
             #
             # Uses the degraded 2.5m product in a tile cache
@@ -515,6 +516,7 @@ WEB_LAYERS = {
              antialiasing: 'true'
            },
            {isBaseLayer: true});
+           ''',
             # Streets and boundaries for SA base map with an underlay of spot 2009 mosaic
             #
             # Uses the degraded 10m product in a tile cache
