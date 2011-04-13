@@ -466,7 +466,7 @@ class ShpResponder(object):
                     string_value = ''
                 feat.SetField(str(field),string_value)
 
-            geom = getattr(item,"geometry")
+            geom = getattr(item.delivery_detail,"geometry")
 
             if geom:
                 ogr_geom = ogr.CreateGeometryFromWkt(geom.wkt)

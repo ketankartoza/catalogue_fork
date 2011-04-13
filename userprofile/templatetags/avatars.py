@@ -37,9 +37,9 @@ class ResizedThumbnailNode(Node):
 
         if not self.size in AVATAR_SIZES:
             return ''
-
         try:
             user = self.user.resolve(context)
+            logging.info("Rendering avatar for user: %s" % user)
             avatar = Avatar.objects.get(user=user, valid=True).image
             avatar_path = avatar.path
             base, filename = os.path.split(avatar_path)
@@ -77,5 +77,4 @@ def Thumbnail(parser, token):
         username = bits[2]
     elif len(bits) < 2:
         bits.append("96")
-    logging.info("Rendering avatar for user: %s" % username)
     return ResizedThumbnailNode(bits[1], username)

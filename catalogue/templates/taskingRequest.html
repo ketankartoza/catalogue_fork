@@ -3,15 +3,14 @@
     // <![CDATA[
     $(function() 
     {
-      $("#statusFormLink").button({});
       {# submit button not used when we are using ajax #}
       $("#submitButton").hide();
       $("#statusForm").dialog(
       {
         bgiframe: true,
         autoOpen: false,
-        height: 400,
-        width: 400,
+        height: 'auto',
+        width: 450,
         modal: true,
         buttons: 
         {
@@ -23,7 +22,7 @@
           Cancel: function() 
           {
             $(this).dialog('close');
-          },
+          }
         }
       });
     });
@@ -68,10 +67,10 @@
       <th>Resampling</th>
     </tr>
     <tr>
-      <td>{{myTaskingRequest.order_date}}</td>
+      <td>{{myTaskingRequest.order_date|date:"Y-m-d H:i" }}</td>
       <td>{{myTaskingRequest.user}}</td>
-      <td>{{myTaskingRequest.processing_level}}</td>
-      <td>{{myTaskingRequest.resampling_method}}</td>
+      <td>{{myTaskingRequest.delivery_detail.processing_level}}</td>
+      <td>{{myTaskingRequest.delivery_detail.resampling_method}}</td>
     </tr>
     <tr>
       <th>Projection</th>
@@ -79,9 +78,9 @@
       <th>File Format</th>
     </tr>
     <tr>
-      <td>{{myTaskingRequest.projection}}</td>
-      <td colspan="2">{{myTaskingRequest.datum}}</td>
-      <td>{{myTaskingRequest.file_format}}</td>
+      <td>{{myTaskingRequest.delivery_detail.projection}}</td>
+      <td colspan="2">{{myTaskingRequest.delivery_detail.datum}}</td>
+      <td>{{myTaskingRequest.delivery_detail.file_format}}</td>
     </tr>
     <tr>
       <th colspan="2">Full Name</th>
@@ -147,15 +146,17 @@
     </tr>
     <tr>
       <td colspan="2">{{ myTaskingRequest.mission_sensor.name}}</td>
-      <td colspan="2">{{ myTaskingRequest.target_date }}</td>
-    </tr>
-    <tr>
-      <td colspan="4">
-       <a href="/taskingrequestasshapefile/{{myTaskingRequest.id}}/"><img src="/media/images/down_16.png" alt=""/> Download task polygon as shapefile.</a>
-      </td>
+      <td colspan="2">{{ myTaskingRequest.target_date|date:"Y-m-d"  }}</td>
     </tr>
   </tbody>
 </table>
+    {% if myTaskingRequest.delivery_detail.geometry %}
+    Download tasking geometry:
+    <a class="button-link" href="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?shp">SHP</a>
+    <a class="button-link" href="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?kml">KML</a>
+    <a class="button-link" href="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?kmz">KMZ</a>
+    {% endif %}
+
 {% box_end %}
 <br />
 {% box_start "" "" "" %}
@@ -163,7 +164,9 @@
 Order History
 </h2>
 {% if myForm %}
-  <a id="statusFormLink" onclick="$('#statusForm').dialog('open'); return false;">Update status</a>
+<div style="margin:5px">
+  <a id="statusFormLink" class='button-link' onclick="$('#statusForm').dialog('open'); return false;">Update status</a>
+</div>
 {% endif %}
 <div id="orderHistory">
   {% if myHistory %}
@@ -182,3 +185,9 @@ Order History
       </form>
   </div>
 {% endif %}
+
+<script>
+$(document).ready(function (){
+$('.button-link').button();
+});
+</script>

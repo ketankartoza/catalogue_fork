@@ -7,12 +7,12 @@
 <h2>Order status summary report</h2>
 <table>
   <thead>
+  </thead>
+  <tbody>
     <tr>
       <th>Status</th>
       <th>Count</th>
     </tr>
-  </thead>
-  <tbody>
     {% for record in myOrderStatus %}
     <tr>
       <td>{{ record.name }}</td>
@@ -25,12 +25,12 @@
 <h2>Order product type summary report</h2>
 <table>
   <thead>
+  </thead>
+  <tbody>
     <tr>
       <th>Product type</th>
       <th>Count</th>
     </tr>
-  </thead>
-  <tbody>
     {% for record in myOrderProductType %}
     <tr>
       <td>{{ record.name }}</td>

@@ -284,34 +284,53 @@ def notifySalesStaffOfTaskRequest(theUser, theId):
   if not settings.EMAIL_NOTIFICATIONS_ENABLED:
     logging.info("Email sending disabled, set EMAIL_NOTIFICATIONS_ENABLED in settings")
     return
+
   myTaskingRequest = get_object_or_404(TaskingRequest,id=theId)
   myHistory = OrderStatusHistory.objects.all().filter(order=myTaskingRequest)
-  myEmailSubject = 'SAC Tasking Request ' + str(myTaskingRequest.id) + ' status update (' + myTaskingRequest.order_status.name + ')'
-  myEmailMessage = 'The status for tasking order #' +  str(myTaskingRequest.id) + ' has changed. Please visit the tasking request page:\n'
-  myEmailMessage = myEmailMessage + 'http://' + settings.DOMAIN + '/viewtaskingrequest/' + str(myTaskingRequest.id) + '/\n\n\n'
-  myTemplate = "taskingEmail.txt"
-  myEmailMessage += render_to_string( myTemplate, { 'myOrder': myTaskingRequest,
-                                                    'myHistory' : myHistory
-                                                  })
-  myMessagesList = [] # we will use mass_mail to prevent users seeing who other recipients are
-  myRecipients = OrderNotificationRecipients.objects.filter(sensors=t.mission_sensor)
-  for myRecipient in myRecipients:
-    myMessagesList.append((myEmailSubject, myEmailMessage, 'dontreply@' + settings.DOMAIN,
-          [myRecipient.user.email]))
-    logging.info("Sending notices to : %s" % myRecipient.user.email)
 
-  # Add default
+  myEmailSubject = 'SAC Tasking Request ' + str(myTaskingRequest.id) + ' status update (' + myTaskingRequest.order_status.name + ')'
+
+  myMessagesList = []
+  # get the list of recipients
+  myTaskingRecipients = OrderNotificationRecipients.objects.filter(sensors=myTaskingRequest.mission_sensor)
+  myRecipients = set()
+  for recepient in myTaskingRecipients:
+    myRecipients.add(recepient.user)
+
+  # Add default recipients if no recipients 
   if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
     logging.info("Sending notice to default recipients : %s" % CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
-    myMessagesList.append((myEmailSubject, myEmailMessage, settings.DEFAULT_FROM_EMAIL, list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)))
+    myRecipients.update(list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS))
 
-  #also send an email to the originator of the order
-  #We do this separately to avoid them seeing the staff cc list
-  myMessagesList.append((myEmailSubject, myEmailMessage, settings.DEFAULT_FROM_EMAIL,
-          [ theUser.email ]))
-  mail.send_mass_mail(tuple(myMessagesList), fail_silently=False)
+  for myRecipient in myRecipients:
+    #txt email template
+    myEmailMessage_txt = render_to_string( 'mail/task.txt', { 'myTask': myTaskingRequest,
+                                                    'myHistory' : myHistory,
+                                                    'myRecipient': myRecipient,
+                                                    'domain':settings.DOMAIN
+                                                  })
+    #html email template
+    myEmailMessage_html = render_to_string( 'mail/task.html', { 'myTask': myTaskingRequest,
+                                                      'myHistory' : myHistory,
+                                                      'myRecipient': myRecipient,
+                                                      'domain':settings.DOMAIN
+                                                  })
+    myAddress = myRecipient.email
+    myMsg = EmailMultiRelated(myEmailSubject, myEmailMessage_txt, 'dontreply@' + settings.DOMAIN, [myAddress])
+    logging.info("Sending notice to : %s" % myAddress)
+
+    #attach alternative payload - html
+    myMsg.attach_alternative(myEmailMessage_html,'text/html')
+    #add required images, as inline attachments, accesed by 'name' in templates
+    myMsg.attach_related_file(os.path.join(settings.MEDIA_ROOT,'images','sac_header.jpg'))
+    #add message
+    myMessagesList.append(myMsg)
+
+  logging.info("Sending messages: \n%s" % myMessagesList)
+  # initiate email connection, and send messages in bulk
+  myEmailConnection = mail.get_connection()
+  myEmailConnection.send_messages(myMessagesList)
   return
-
 
 """Layer definitions for use in conjunction with open layers"""
 WEB_LAYERS = {
