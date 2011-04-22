@@ -239,7 +239,7 @@ That gives us a local repo whose remote master is on linfiniti. Now we add a
 new remote (you can have multiple remote repos and sync between them):
 
 ```
-git remote add orasac1 git@orasac1:sac_catalogue
+git remote add orasac1 git@orasac1:sac_catalogue.git
 git pull
 ```
 
@@ -260,6 +260,12 @@ git push
 
 Since the branch is tracking orasac1/master they will automatically get pushed there.
 
+Alternatively, changes can be pushed over to orasac1 directly from in your local master branch:
+
+```
+git checkout master
+git push orasac1 master
+```
 
 == System logic and rules ==
 
