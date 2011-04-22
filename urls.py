@@ -92,8 +92,8 @@ urlpatterns = patterns('',
     # Order management and related lookup tables
     #
     (r'^addorder/', addOrder),
-    (r'^deliverydetailform/(?P<theref_id>\d*)/$', createDeilveryDetailForm),
-    (r'^showdeliverydetail/(?P<theref_id>\d*)/$', showDeilveryDetail),
+    (r'^deliverydetailform/(?P<theref_id>\d*)/$', createDeliveryDetailForm),
+    (r'^showdeliverydetail/(?P<theref_id>\d*)/$', showDeliveryDetail),
     (r'^downloadclipgeometry/(?P<theId>\d*)/$', downloadClipGeometry),
     (r'^downloadordermetadata/(?P<theId>\d*)/$', downloadOrderMetadata),
     (r'^downloadorder/(?P<theId>\d*)/$', downloadOrder),
@@ -108,7 +108,7 @@ urlpatterns = patterns('',
     (r'^addtaskingrequest/', addTaskingRequest),
     (r'^mytaskingrequests/$', myTaskingRequests),
     (r'^viewtaskingrequest/(?P<theId>[0-9]+)/$', viewTaskingRequest),
-    (r'^taskingrequestasshapefile/(?P<theTaskingRequestId>[0-9]+)/$', taskingRequestAsShapefile),
+    (r'^downloadtaskingrequest/(?P<theId>\d*)/$', downloadTaskingRequest),
 
     # upload polygon from zipped shapefile for search/clip
     #( r'^uploadFeature/$', uploadFeature),
@@ -116,5 +116,6 @@ urlpatterns = patterns('',
     (r'^getFeatureInfo/(?P<theLon>[-]*\d+.\d+)/(?P<theLat>[-]*\d+.\d+)/(?P<theBoundingBox>[0-9\-,.]*)/(?P<thePixelX>\d+)/(?P<thePixelY>\d+)/(?P<theMapWidth>\d+)/(?P<theMapHeight>\d+)/$', getFeatureInfo),
 
     ( r'^dataSummaryTable/$', dataSummaryTable),
+    ( r'^sensorSummaryTable/(?P<theSensorId>[0-9]+)/$', sensorSummaryTable),
 )
 

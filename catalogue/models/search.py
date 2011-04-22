@@ -25,7 +25,7 @@ class SearchRecord(models.Model):
   Order items on the other hand will have both a user id and a order id.
 
   When the user creates a new order, all current search records that do not have
-  an order id should be added to it.
+  an order id should be added to it .
 
   """
   user = models.ForeignKey(User)

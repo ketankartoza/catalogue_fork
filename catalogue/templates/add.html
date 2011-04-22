@@ -16,9 +16,12 @@
       {% endif %}
       {% if myLayersList %}
         setupBaseMap();
+      {% endif %}
+      {% if myTaskingRequestFlag %}
+        setupTaskingMap({{ myLayersList|safe }} );
+      {% else %}
         mMap.addControl(new OpenLayers.Control.LayerSwitcher());
         mMap.addLayers( {{ myLayersList|safe }} );
-
         mVectorLayer = new OpenLayers.Layer.Vector("search_geometry");
         mMap.addLayer(mVectorLayer);
         // Add geometry specific panel of toolbar controls
@@ -31,10 +34,6 @@
         var bounds = new OpenLayers.Bounds(16.3477, -35.2411, 33.3984, -21.9727);
         bounds.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
         mMap.zoomToExtent(bounds);
-
-      {% endif %}
-      {% if myTaskingRequestFlag %}
-        setupTaskingMap({{ myLayersList|safe }} );
       {% endif %}
 /*
       {% for myField in myForm %}
@@ -75,9 +74,20 @@
     </div>
     {{  myMessage|safe }}
         <table>
-          {{myDeliveryDetailForm}}
+	  {# render forms based on context #}
+	  {% if myDeliveryDetailForm and myOrderForm %}
+            {{myDeliveryDetailForm}}
 
-          {{myOrderForm}}
+            {{myOrderForm}}
+	  {% else %}
+	    {% if myTaskingDeliveryDetailsForm and myTaskingForm %}
+              {{ myTaskingDeliveryDetailsForm }}
+
+              {{ myTaskingForm }}
+	    {% else %}
+	      {{ myForm }}
+	    {% endif %}
+	  {% endif %}
         </table>  
         {% if mySubmitLabel %}
         <button type="submit" id="submitButton">{{ mySubmitLabel }}</button>

@@ -133,14 +133,14 @@
         </div>{% endif %}
         {% if myRecords %}
     <div>
-      <img src="/media/images/down_16.png" alt=""/> Download search:<br/>
+      <img src="/media/images/down_16.png" alt=""/> Download search<br/>
         <a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?shp">SHP</a>
         <a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?kml">KML</a>
         <a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?kmz">KMZ</a>
-    <br/>
-    <img src="/media/images/down_16.png" alt=""/> Download metadata<br/> 
+      <br/>
+      <img src="/media/images/down_16.png" alt=""/> Download metadata<br/> 
         <a class="button-link" href="/downloadsearchmetadata/{{mySearchGuid}}/">Search metadata</a>
-  </div>
+    </div>
         {% endif %}
         <br />
   <div>
@@ -158,7 +158,7 @@
   {% if myLegendFlag %}
     <h3 id="legend-accordion-h3"><a href="#"><img src="/media/images/search_16.png" alt="" />&nbsp;Legend</a></h3>
     <div id="legend-accordion-div">
-      <ul id="base-layer-legend"><li style="display:none;"></li></ul>
+      <ul id="base-layer-legend" style="list-style-type:none"><li style="display:none;"></li></ul>
     </div>
   {% endif %}
 {% endblock %}

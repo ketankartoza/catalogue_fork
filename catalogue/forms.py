@@ -344,7 +344,7 @@ class DeliveryDetailForm(forms.ModelForm):
       myProductZones=myProductZones.union(record.product.getUTMZones(theBuffer=1))
 
     myDefaultProjections=set((('4326','EPSG 4326'),('900913','EPSG 900913')))
-    self.fields['projection'] =  forms.ModelChoiceField(queryset=Projection.objects.filter(epsg_code__in=[k for k,v in  myProductZones | myDefaultProjections]).all(), empty_label=None)
+    self.fields['projection'] =  forms.ModelChoiceField(queryset=Projection.objects.filter(epsg_code__in=[k for k,v in myProductZones | myDefaultProjections]).all(), empty_label=None)
 
   class Meta:
     model = DeliveryDetail
@@ -372,21 +372,27 @@ class ProductDeliveryDetailForm(forms.ModelForm):
     model = DeliveryDetail
     exclude = ('user','geometry',)
 
-class TaskingRequestForm(forms.ModelForm):
-  geometry = forms.CharField(widget=GeometryWidget,required=False)
+class TaskingRequestDeliveryDetailForm(forms.ModelForm):
+  ref_id = forms.CharField(widget=forms.HiddenInput(),required=False)
+  geometry = forms.CharField(widget=forms.HiddenInput(),required=False)
   geometry_file = forms.FileField(widget = forms.FileInput(attrs={'class' : 'file'}),
                                   required=False,
-                                  help_text = 'Upload a zipped shapefile of less than 1MB. If the shapefile contains\
-                                              more than one polygon, only the first will be used. \
-                                              The computation time is related to polygon complexity.')
+                                  help_text = 'Upload a zipped shapefile or KML/KMZ file of less than 1MB. If the shapefile contains more than one polygon, only the first will be used.')
+  def __init__(self,*args,**kwargs):
+    super(TaskingRequestDeliveryDetailForm, self).__init__(*args, **kwargs)
+
+  class Meta:
+    model = DeliveryDetail
+    exclude = ('user','processing_level','datum','file_format')
+
+class TaskingRequestForm(forms.ModelForm):
   target_date = forms.DateField(widget=DateTimeWidget,required=True,input_formats=DATE_FORMATS,
       error_messages={'required': '''Entering a target date for your tasking request is required.'''},
       help_text='Tasking target date is required. DD-MM-YYYY.'
       )
   class Meta:
     model = TaskingRequest
-    #exclude = ('user','order_status')
-    exclude = ('user','order_status',"processing_level","datum","file_format","delivery_method")
+    exclude = ('user','delivery_detail','order_status')
 
 
 class OrderStatusHistoryForm(forms.ModelForm):

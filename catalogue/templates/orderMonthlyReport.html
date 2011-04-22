@@ -21,6 +21,8 @@
   <h2>Orders List</h2>
   <table>
     <thead>
+    </thead>
+    <tbody>
       <tr>
         <th>Id</th>
         <th>Date</th>
@@ -28,8 +30,6 @@
         <th>Placed by</th>
         <th>View</th>
       </tr>
-    </thead>               
-    <tbody>
     {% for myOrder in myRecords %}
       <tr>
         <td>{{myOrder.id }}</td>

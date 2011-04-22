@@ -2,7 +2,7 @@
 
 % Leave the blank space above here
 
-= Procedures for importing data from Terrasar-x packages into the catalogue =
+== Procedures for importing data from Terrasar-x packages into the catalogue ==
 
 ""Note:"" This document should be considered compulsory reading before you
 attempt to import any data into the catalogue.
@@ -10,7 +10,7 @@ attempt to import any data into the catalogue.
 ""Note2:"" This document //must// be kept up to date when you make changes to
 import scripts etc.
 
-== Importing the packages from a local folder ==
+=== Importing the packages from a local folder ===
 
 The import process is done by a Django management command that can be called
 by a cron job.
@@ -70,7 +70,7 @@ python manage.py terrasar_harvest -m 16 -v 2 -b 'http://localhost/terrasar.zip' 
 
 
 
-== Global settings ==
+=== Global settings ===
 
 The following parameters in settings.py control the process:
 
@@ -78,13 +78,14 @@ The following parameters in settings.py control the process:
 CATALOGUE_TERRASAR_SHP_ZIP_URL = 'http://terrasar-x-archive.infoterra.de/archive/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=archive:archive&outputFormat=SHAPE-ZIP'
 ```
 
-== Implementation details ==
+=== Implementation details ===
 
 
-=== Data and metadata extraction ===
+==== Data and metadata extraction ====
 
 
-The following metadata are hardcoded constants and can be changed at the top of the script `catalogue/management/commands/terrasar_harvest.py`:
+The following metadata are hardcoded constants and can be changed at the top of
+the script `catalogue/management/commands/terrasar_harvest.py`:
 
 
 || Parameter            | Value |
@@ -119,5 +120,6 @@ The following metadata are read from the metadata or the footprint:
 | incidence_angle         | avg(inc_min, inc_max) |
 | metadata                | metadata (the whole) |
 
-[1] the resolution field is a string field like: "Approximated Resolution Range: 3,5 - 3,3 m", the values are extracted and an average calculated.
+[1] the resolution field is a string field like: "Approximated Resolution
+    Range: 3,5 - 3,3 m", the values are extracted and an average calculated.
 [2] Slashes are stripped.
