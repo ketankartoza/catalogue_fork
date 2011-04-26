@@ -91,8 +91,7 @@ def addTaskingRequest( theRequest ):
   """Used to create a new tasking request"""
   logging.debug(("Post vars:" + str(theRequest.POST)))
   logging.debug(("Post files:" + str(theRequest.FILES)))
-  myLayerDefinitions = [ WEB_LAYERS['ZaSpot10mMosaic2009'],WEB_LAYERS['ZaRoadsBoundaries'] ]
-  myLayersList = "[zaSpot10mMosaic2009,zaRoadsBoundaries]"
+  myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
   logging.debug("Add tasking request called")
   myTitle = 'Create a new tasking request'
   myRedirectPath = '/viewtaskingrequest/'
