@@ -85,6 +85,17 @@ th a:link, th a:hover, th a:active {
   }
 
 /* tool tips definition: record, map */
+#formtooltip{
+    display:none;
+    background:transparent url(/media/images/tooltips/black_arrow_big.png);
+    height:163px;
+    padding:40px 30px 10px 30px;
+    width:310px;
+    font-size:11px;
+    color:#fff;
+    z-index: 999;
+  }
+
 
 #recordtooltip {
     display:none;

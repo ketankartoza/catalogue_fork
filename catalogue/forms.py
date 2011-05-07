@@ -25,6 +25,7 @@ DATE_FORMATS = (
         '%d %B %Y', '%d %B, %Y',            # '25 October 2006', '25 October, 2006'
         )
 
+
 class DateRangeFormSet(BaseInlineFormSet):
   """
   Date range search formsets with validation
@@ -108,10 +109,11 @@ class AdvancedSearchForm(forms.ModelForm):
   # Note2: Only custom fields are added here. Fields that need no tweaking are
   #        pulled by the form generator directly from the model
 
+
   POLARISING_MODE_CHOICES = { '': 'All'}
   POLARISING_MODE_CHOICES.update(dict(RadarProduct.POLARISING_MODE_CHOICES))
   # ABP: the common part: will be searched on GenericProducts class only
-  start_datepicker = forms.DateField(widget=DateTimeWidget,required=False, label="Start date", input_formats=DATE_FORMATS,
+  start_datepicker = forms.DateField(widget=DateTimeWidget(attrs={'title':"Choose the start date for this date range."}),required=False, label="Start date", input_formats=DATE_FORMATS,
       error_messages={'required': 'Entering a start date for your search is required.'},
       help_text='Start date is required. DD-MM-YYYY.')
   end_datepicker = forms.DateField(widget=DateTimeWidget,required=False, label="End date", input_formats=DATE_FORMATS,
@@ -137,7 +139,7 @@ class AdvancedSearchForm(forms.ModelForm):
   polarising_mode = forms.ChoiceField(choices=POLARISING_MODE_CHOICES, required=False)
   geometry = forms.CharField(widget=forms.HiddenInput(), required=False,
       help_text='Digitising an area of interest is not required but is recommended. You can use the help tab in the map area for more information on how to use the map. Draw an area of interest on the map to refine the set of search results to a specific area.')
-  aoi_geometry = AOIGeometryField(required=False)
+  aoi_geometry = AOIGeometryField(widget=forms.TextInput(attrs={'title':"Enter bounding box coordinates separated by comma for West, South, East and North edges i.e. (20,-34,22,-32), or enter single coordinate which defines circle center and radius in kilometers (20,-32,100)"}),required=False)
 
   k_orbit_path = IntegersCSVIntervalsField(required=False, help_text='Insert the orbit path as a list of comma separated values or ranges (e.g. : "10,20,30" or  "20-40")')
   j_frame_row = IntegersCSVIntervalsField(required=False, help_text='Insert the frame row as a list of comma separated values or ranges (e.g. : "10,20,30" or "20-40")')
@@ -148,12 +150,18 @@ class AdvancedSearchForm(forms.ModelForm):
     model = Search
     exclude = ('ip_position' ,'guid' ,'keywords' ,'geometry_file' ,'user' ,'deleted' )
 
-  # Simple way to assign css class to every field
   def __init__(self, *args, **kwargs):
+    """We are using jquery tooltip to show a nice tooltip for each field. To 
+       ensure that each field has a title set (which is used for the tooltip text),
+       this function iterates the fields of a form and sets their title text 
+       to the help text for that field. If the title is already set, its left as is."""
 
     super(AdvancedSearchForm, self).__init__(*args, **kwargs)
-    for myField in self.fields:
-      self.fields[myField].widget.attrs['class'] = 'ui-corner-all'
+    for myFieldName, myField in self.fields.items():
+      # Simple way to assign css class to every field
+      myField.widget.attrs['class'] = 'ui-corner-all'
+      if not myField.widget.attrs.has_key('title') or myField.widget.attrs['title'] == '':
+        myField.widget.attrs['title'] = myField.help_text
 
   def clean_guid(self):
     """Custom validator for guid"""

@@ -35,6 +35,7 @@ from catalogue.featureReaders import *
 
 DateRangeInlineFormSet = inlineformset_factory(Search, SearchDateRange, extra=0, max_num=0, formset=DateRangeFormSet)
 
+
 @login_required
 #theRequest context decorator not used here since we have different return paths
 def search(theRequest):
