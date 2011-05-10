@@ -29,7 +29,11 @@ install Django 1.2 separate from the "System Python" and avoid conflicts.
 If you do not have the Python virtualenv software, get it with:
 
 ```
-sudo apt-get install python-virtualenv
+sudo apt-get install python-virtualenv \
+build-essential \
+python-dev \
+python-all-dev \
+python-profiler
 ```
 
 Now, start the Python virtual environment setup. We install Python in the

@@ -94,9 +94,9 @@ files over. We will use cheetah for the purposes of this document.
 
 ```
 #
-# Restrict access to cheetah. Lines wrapped here for convenience in this document
+# Restrict access to cheetah and orasac1. Lines wrapped here for convenience in this document
 #
-from="cheetah",no-port-forwarding,no-pty ssh-rsa
+from="cheetah,orasac1",no-port-forwarding,no-pty ssh-rsa
 AAAAB3NzaC1yc2EAAAABIwAAAQEA0iDxnisywfqqzNN2CUN2xJBIOhyvoAA9uqHDagN620UFH4A4Egdg
 5am0CsDT8jm1VO/Y2ZCuyKNCmkRCnhPv4IeblsHFc2ekfZsZpSPYYAupUo43POhfwcAPUvdoec1fuBJd
 o+Y/zNBz8T0mAr3Mbc0zf5pLgdA3VE44TauCEt6KJ0OAzqzlYEI1tmKFZ4VacgeDhEv9246HbmpEiAoW
