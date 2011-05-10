@@ -8,6 +8,8 @@ django-extensions
 psycopg2
 pil
 gdata
+#numpy needed for gdal array support which is used by ingesters
+numpy 
 GDAL
 django-dag
 html5lib==0.90

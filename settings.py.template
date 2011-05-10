@@ -223,3 +223,6 @@ MAX_METADATA_RECORDS=500
 
 #define organisation acronym, used in filenaming schemes
 ORGANISATION_ACRONYM="SANSA"
+
+#For MISR import - see manual
+MISR_ROOT="/mnt/cataloguestorage2/filedrop/MISR"

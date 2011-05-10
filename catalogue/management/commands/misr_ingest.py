@@ -27,6 +27,7 @@ import tempfile
 import subprocess
 import shutil
 import re
+import traceback
 
 from optparse import make_option
 from mercurial import lock, error
@@ -484,6 +485,7 @@ class Command(BaseCommand):
         raise CommandError('Uncaught exception (%s): %s' % (e.__class__.__name__, e))
     except Exception, e:
       verblog('Rolling back transaction due to exception.')
+      traceback.print_exc(file=sys.stdout)
       if test_only:
         from django.db import connection
         verblog(connection.queries)
