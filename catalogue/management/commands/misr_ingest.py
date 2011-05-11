@@ -369,12 +369,12 @@ class Command(BaseCommand):
 
             try:
               op.save()
+              thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailPath())
               if test_only:
                 verblog('Testing: image not saved.', 2)
               else:
                 # Store thumbnail
                 # Get thumbnail from nadir (AN), copy if exists
-                thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailPath())
                 try:
                   os.makedirs(thumbnails_folder)
                 except:
