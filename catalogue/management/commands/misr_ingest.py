@@ -160,7 +160,7 @@ class Command(BaseCommand):
     """ command execution """
 
     try:
-      lockfile = lock.lock("/tmp/modis_harvest.lock", timeout=60)
+      lockfile = lock.lock("/tmp/misr_harvest.lock", timeout=60)
     except error.LockHeld:
       # couldn't take the lock
       raise CommandError, 'Could not acquire lock.'
