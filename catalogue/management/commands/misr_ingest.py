@@ -27,6 +27,7 @@ import tempfile
 import subprocess
 import shutil
 import re
+import sys
 import traceback
 
 from optparse import make_option
@@ -161,7 +162,7 @@ class Command(BaseCommand):
     """ command execution """
 
     try:
-      lockfile = lock.lock("/tmp/modis_harvest.lock", timeout=60)
+      lockfile = lock.lock("/tmp/misr_harvest.lock", timeout=60)
     except error.LockHeld:
       # couldn't take the lock
       raise CommandError, 'Could not acquire lock.'
@@ -370,12 +371,12 @@ class Command(BaseCommand):
 
             try:
               op.save()
+              thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailPath())
               if test_only:
                 verblog('Testing: image not saved.', 2)
               else:
                 # Store thumbnail
                 # Get thumbnail from nadir (AN), copy if exists
-                thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailPath())
                 try:
                   os.makedirs(thumbnails_folder)
                 except:
@@ -482,7 +483,8 @@ class Command(BaseCommand):
           transaction.commit()
           verblog("Committing transaction.", 2)
       except Exception, e:
-        raise CommandError('Uncaught exception (%s): %s' % (e.__class__.__name__, e))
+        tb = traceback.format_tb(sys.exc_info()[2])[0]
+        raise CommandError('Uncaught exception (%s): %s \n %s' % (e.__class__.__name__, e, tb))
     except Exception, e:
       verblog('Rolling back transaction due to exception.')
       traceback.print_exc(file=sys.stdout)
