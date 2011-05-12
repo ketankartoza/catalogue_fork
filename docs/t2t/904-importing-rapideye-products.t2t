@@ -38,12 +38,13 @@ Options:
   --traceback           Print traceback on exception
   -u USERNAME, --username=USERNAME
                         Username for HTTP Authentication. Defaults is read
-                        from settings.py.
+                        from settings.py (CATALOGUE_RAPIDEYE_USERNAME='')
   -p PASSWORD, --password=PASSWORD
                         Password for HTTP Authentication. Defaults is read
-                        from settings.py.
+                        from settings.py. (CATALOGUE_RAPIDEYE_PASSWORD='')
   -b BASE_URL, --base_url=BASE_URL
                         Base catalogue URL. Defaults is read from settings.py.
+                        (CATALOGUE_RAPIDEYE_BASE_URL='https://delivery.rapideye.de/catalogue/')
   -t, --test_only       Just test, nothing will be written into the DB.
   -o OWNER, --owner=OWNER
                         Name of the Institution package owner. Defaults to:
@@ -69,10 +70,13 @@ Options:
   -h, --help            show this help message and exit
 ```
 
-Running the command:
+Running the command (e.g. using africa as the extents):
 
 ```
-$ python manage.py rapideye_harvest -v 2 -a 'POLYGON(( 22 3, 23 3, 23 2, 22 2, 22 3))' -d 12 -y 2011 -m 03
+$ python manage.py rapideye_harvest -v 2 -a \
+ 'POLYGON((-22.235294 44.666018,61.630435 44.666018,61.630435 \
+ -41.616591,-22.476982 -41.616591,-22.235294 44.666018))' \
+ -d 12 -y 2011 -m 03
 ```
 
 === Global settings ===
