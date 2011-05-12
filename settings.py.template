@@ -226,3 +226,8 @@ ORGANISATION_ACRONYM="SANSA"
 
 #For MISR import - see manual
 MISR_ROOT="/mnt/cataloguestorage2/filedrop/MISR"
+
+# For RapidEye import
+CATALOGUE_RAPIDEYE_USERNAME=''
+CATALOGUE_RAPIDEYE_PASSWORD=''
+CATALOGUE_RAPIDEYE_BASE_URL='https://delivery.rapideye.de/catalogue/'
