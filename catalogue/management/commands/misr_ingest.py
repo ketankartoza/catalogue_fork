@@ -272,7 +272,11 @@ class Command(BaseCommand):
               continue
             package = packages[0]
             # Select main camera nadir
-            package = [p for p in packages if p.find('_AN_') != -1][0]
+            an_images = [p for p in packages if p.find('_AN_') != -1]
+            if not len(an_images):
+              verblog('No nadir image (_AN_) in %s' % os.path.join(base_path, main_folder, date_folder))
+              continue
+            package = an_images[0]
 
             verblog("Ingesting %s" % package, 2)
             # Open
