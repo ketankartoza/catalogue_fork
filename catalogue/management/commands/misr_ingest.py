@@ -335,7 +335,7 @@ class Command(BaseCommand):
               'LEVL' : processing_level.ljust(4, '-'),
               'PROJTN': projection.ljust(6, '-')
             }
-            assert len(product_id) == 58, 'Wrong len in product_id'
+            assert len(product_id) == 58, 'Wrong len in product_id %s' % product_id
 
             verblog("Product ID %s" % product_id, 2)
 
