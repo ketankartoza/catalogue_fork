@@ -272,7 +272,11 @@ class Command(BaseCommand):
               continue
             package = packages[0]
             # Select main camera nadir
-            package = [p for p in packages if p.find('_AN_') != -1][0]
+            an_images = [p for p in packages if p.find('_AN_') != -1]
+            if not len(an_images):
+              verblog('No nadir image (_AN_) in %s' % os.path.join(base_path, main_folder, date_folder))
+              continue
+            package = an_images[0]
 
             verblog("Ingesting %s" % package, 2)
             # Open
@@ -331,7 +335,7 @@ class Command(BaseCommand):
               'LEVL' : processing_level.ljust(4, '-'),
               'PROJTN': projection.ljust(6, '-')
             }
-            assert len(product_id) == 58, 'Wrong len in product_id'
+            assert len(product_id) == 58, 'Wrong len in product_id %s' % product_id
 
             verblog("Product ID %s" % product_id, 2)
 
