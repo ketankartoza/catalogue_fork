@@ -51,9 +51,9 @@ class MissionSensor( models.Model ):
     unique_together = ('mission', 'abbreviation')
   def __unicode__(self):
     if self.name:
-        return "%s" % (self.name)
+        return "%s:%s" % (self.mission.operator_abbreviation, self.name)
     else:
-        return "%s" % self.abbreviation
+        return "%s:%s" % (self.mission.operator_abbreviation,self.abbreviation)
 
 
 ###############################################################################

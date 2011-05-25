@@ -270,7 +270,6 @@ class Search(models.Model):
     advanced parameter is set
     """
     return  self.processing_level.count() \
-            or self.sensors.count() \
             or self.keywords \
             or self.k_orbit_path \
             or self.j_frame_row \
