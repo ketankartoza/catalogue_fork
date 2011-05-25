@@ -114,7 +114,6 @@
 113	"F"	"Fine"	"Fine Beam"	8	2	47	"SAR"	"SAR-RS2"
 114	"WF"	"Wide-Fine"	"Wide Swath Fine Beam"	8	2	47	"SAR"	"SAR-RS2"
 115	"S "	"Standard"	"Standard Beam and Swath"	25	2	47	"SAR"	"SAR-RS2"
-116	"WF"	"Wide "	"Wide Swath"	30	2	47	"SAR"	"SAR-RS2"
 117	"SSN"	"ScanSAR-Narrow"	"ScanSAR Narrow Swath"	50	2	47	"SAR"	"SAR-RS2"
 118	"SSW"	"ScanSAR-Wide"	"ScanSAR Wide Swath"	100	2	47	"SAR"	"SAR-RS2"
 119	"EH"	"Extended-High"	"Extended High Incidence Angle"	25	1	47	"SAR"	"SAR-RS2"

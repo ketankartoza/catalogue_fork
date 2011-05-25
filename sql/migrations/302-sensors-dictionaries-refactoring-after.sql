@@ -12,6 +12,11 @@
 
 BEGIN;
 
+    -- fix null values for Extras (i.e. dictionary entries which did not match with v5)
+    UPDATE "catalogue_missionsensor" SET "operator_abbreviation"="abbreviation" WHERE "operator_abbreviation" IS NULL;
+    UPDATE "catalogue_sensortype" SET "operator_abbreviation"="abbreviation" WHERE "operator_abbreviation" IS NULL;
+    UPDATE "catalogue_acquisitionmode" SET "operator_abbreviation"="abbreviation" WHERE "operator_abbreviation" IS NULL;
+
     -- set not null
     ALTER TABLE "catalogue_mission" ALTER "owner" SET NOT NULL;
     ALTER TABLE "catalogue_mission" ALTER "operator_abbreviation" SET NOT NULL;
@@ -21,9 +26,11 @@ BEGIN;
 
     -- set unique
     ALTER TABLE "catalogue_mission"
-    ADD CONSTRAINT "catalogue_mission_opertor_abbreviation_key" UNIQUE("operator_abbreviation");
+    ADD CONSTRAINT "catalogue_mission_operator_abbreviation_key" UNIQUE("operator_abbreviation");
     ALTER TABLE "catalogue_missionsensor"
-    ADD CONSTRAINT "catalogue_missionsensor_opertor_abbreviation_key" UNIQUE("operator_abbreviation");
+    ADD CONSTRAINT "catalogue_missionsensor_operator_abbreviation_key" UNIQUE("operator_abbreviation");
 
+    -- fix SAR is_radar
+    UPDATE "catalogue_missionsensor" SET "is_radar=True" WHERE "abbreviation" = 'SAR';
 
 COMMIT;

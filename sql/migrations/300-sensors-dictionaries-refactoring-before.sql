@@ -21,23 +21,13 @@ BEGIN;
     -- FIX ZA2
     UPDATE  "catalogue_missionsensor" SET "abbreviation" = 'MSI' WHERE "abbreviation" = 'SMS' AND "name" = 'Sumbandilasat MSS';
 
-    -- Fix CBERS CCD
+    -- Fix CBERS CCD and SACC MRS
     UPDATE  "catalogue_missionsensor" SET "abbreviation" = 'HRC' WHERE "abbreviation" = 'CCD' AND "name" = 'CBERS CCD';
     UPDATE  "catalogue_missionsensor" SET "abbreviation" = 'MMR' WHERE "abbreviation" = 'MRS' AND "name" = 'SACC MRS';
 
-    -- Fix MODIS imported data
---     UPDATE "catalogue_mission" SET "abbreviation" = 'AQA' WHERE "abbreviation" = 'MYD';
---     UPDATE "catalogue_mission" SET "abbreviation" = 'TER' WHERE "abbreviation" = 'MOD';
---     UPDATE "catalogue_mission" SET "abbreviation" = 'A-T' WHERE "abbreviation" = 'MCD';
---
---
---     UPDATE "catalogue_missionsensor" SET "abbreviation" = 'VNS' WHERE "abbreviation" = 'MOD' AND "catalogue_missionsensor"."mission" = (SELECT "id" FROM "catalogue_mission" WHERE "abbreviation" IN ( 'AQA', 'TER', 'A-T' );
---
---     UPDATE "catalogue_sensortype" SET "abbreviation" = 'VNS' WHERE "abbreviation" = 'MOD' AND "catalogue_sensortype"."mission_sensor_id" IN (SELECT "id" FROM "catalogue_missionsensor" WHERE "catalogue_missionsensor"."mission_id" IN (SELECT "id" FROM "catalogue_mission" WHERE "abbreviation" IN ( 'AQA', 'TER', 'A-T' )));
---
---     UPDATE "catalogue_acquisitionmode" SET "abbreviation" = 'VIT' WHERE "abbreviation" = 'MOD' AND "catalogue_acquisitionmode"."sensor_type_id" IN (SELECT "id" FROM "catalogue_sensortype" WHERE "abbreviation" = 'VNS' AND "catalogue_sensortype"."mission_sensor_id" IN (SELECT "id" FROM "catalogue_missionsensor" WHERE "catalogue_missionsensor"."mission_id" IN (SELECT "id" FROM "catalogue_mission" WHERE "abbreviation" IN ( 'AQA', 'TER', 'A-T' ))));
 
-
+    -- drop uniq on catalogue_processinglevel name (legacy?)
+    ALTER TABLE "catalogue_processinglevel" DROP CONSTRAINT "catalogue_processinglevel_name_key";
 
 
 COMMIT;
