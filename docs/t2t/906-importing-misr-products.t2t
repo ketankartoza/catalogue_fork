@@ -131,8 +131,9 @@ The following metadata are hardcoded constants and can be changed at the top of 
 || Parameter            | Value                |
 | band_count            | 4 |
 | radiometric_resolution | 16 |
-| mission_sensor | REI |
-| sensor_type | REI |
+| mission | TER |
+| mission_sensor | MIS |
+| sensor_type | VNI |
 | projection | ORBIT |
 
 **Note:** Real projection is SOM (Space Oblique Mercator: http://en.wikipedia.org/wiki/Space-oblique_Mercator_projection)
@@ -152,7 +153,7 @@ The following metadata are read from the imagery metadata of the nadir image:
 | geometric_resolution_x  | Block_size.resolution_x |
 | geometric_resolution_y  | Block_size.resolution_y |
 | path                    | Path_number             |
-| acquisition_mode        | Cam_mode                |
+| acquisition_mode        | Cam_mode  (LM or GM)    |
 | metadata                | metadata (the whole)    |
 
 The following metadata are read from imagery core metadata of the nadir image:
