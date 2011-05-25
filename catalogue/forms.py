@@ -151,9 +151,9 @@ class AdvancedSearchForm(forms.ModelForm):
     exclude = ('ip_position' ,'guid' ,'keywords' ,'geometry_file' ,'user' ,'deleted' )
 
   def __init__(self, *args, **kwargs):
-    """We are using jquery tooltip to show a nice tooltip for each field. To 
+    """We are using jquery tooltip to show a nice tooltip for each field. To
        ensure that each field has a title set (which is used for the tooltip text),
-       this function iterates the fields of a form and sets their title text 
+       this function iterates the fields of a form and sets their title text
        to the help text for that field. If the title is already set, its left as is."""
 
     super(AdvancedSearchForm, self).__init__(*args, **kwargs)
@@ -162,6 +162,12 @@ class AdvancedSearchForm(forms.ModelForm):
       myField.widget.attrs['class'] = 'ui-corner-all'
       if not myField.widget.attrs.has_key('title') or myField.widget.attrs['title'] == '':
         myField.widget.attrs['title'] = myField.help_text
+
+    # Do not list empty dictionary items (avoid null searches)
+    qs = AcquisitionMode.objects.order_by()
+    self.fields['sensors'].queryset = MissionSensor.objects.filter(pk__in=qs.distinct().values_list('sensor_type__mission_sensor', flat=True))
+    self.fields['mission'].queryset = Mission.objects.filter(pk__in=qs.distinct().values_list('sensor_type__mission_sensor__mission', flat=True))
+
 
   def clean_guid(self):
     """Custom validator for guid"""
