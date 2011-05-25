@@ -52,7 +52,7 @@ MISSION_MAP           = {
     'Terra': 'TER',
     'Aqua-Terra': 'A-T',
   }
-MISSION_SENSOR_MAP    = = {
+MISSION_SENSOR_MAP    = {
     'Aqua': 'MYD',
     'Terra': 'MOD',
     'Aqua-Terra': 'MCD',
