@@ -1,7 +1,7 @@
 """
 
 Can be run from project dir with
-$ python manage.py runscript -s -v 2 --pythonpath=./sql/migrations 201-sensors-dictionaries-refactoring-import.py
+$ python manage.py runscript -s -v 2 --pythonpath=./sql/migrations 301-sensors-dictionaries-refactoring-import.py
 
 CSV files are in "sql/migrations/dictionaries_v5" folder
 
