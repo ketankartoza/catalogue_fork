@@ -31,7 +31,7 @@ ALTER TABLE "heatmap_values" ADD CONSTRAINT "heatmap_values__heatmap_gridr_id_fk
 
 
 -- Function: heatmap_grid_gen()
-CREATE OR REPLACE FUNCTION heatmap_grid_gen(cell_size real DEFAULT 1)
+CREATE OR REPLACE FUNCTION heatmap_grid_gen(cell_size real)
   RETURNS void AS
 $BODY$DECLARE
   lat_min real := -180;
@@ -41,6 +41,7 @@ $BODY$DECLARE
   x integer := 0;
   y integer := 0;
   bla text := '';
+-- cell_size :=1;
 BEGIN
 
 WHILE lon_min>lon_max LOOP
@@ -60,13 +61,14 @@ END;$BODY$
   LANGUAGE plpgsql VOLATILE;
 
 -- Function: update_heatmap(date)
-CREATE OR REPLACE FUNCTION update_heatmap(date_of_search date DEFAULT '1900-01-01'::date)
+CREATE OR REPLACE FUNCTION update_heatmap(date_of_search date)
   RETURNS void AS
 $BODY$DECLARE
   rec_date record;
   rec_search record;
   geom_inter record;-- geometry intersection
   heatmap_value record;
+-- date_of_search DEFAULT '1900-01-01'::date
 BEGIN
 INSERT INTO heatmap_values (grid_id,search_date,hits) 
 SELECT heatmap_grid.id,date_trunc('day',catalogue_search.search_date) as datum, count(heatmap_grid.id) as hits 
@@ -78,7 +80,9 @@ END;$BODY$
   LANGUAGE plpgsql VOLATILE;
 
 -- Function: heatmap(date, date)
-CREATE OR REPLACE FUNCTION heatmap(from_date date DEFAULT '1900-01-01'::date, to_date date DEFAULT now(),OUT geometry geometry,OUT hits bigint)
+CREATE OR REPLACE FUNCTION heatmap(from_date date, to_date date,OUT geometry geometry,OUT hits bigint)
+-- DEFAULT '1900-01-01'::date
+-- DEFAULT now()
   RETURNS setof record AS
 $BODY$
 select st_centroid(geometry),sum(hits) as hits 
