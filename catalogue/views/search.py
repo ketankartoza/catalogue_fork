@@ -158,7 +158,6 @@ def getSensorDictionaries(theRequest):
     if int(theRequest.POST.get('search_type')) in (Search.PRODUCT_SEARCH_RADAR, Search.PRODUCT_SEARCH_OPTICAL):
       is_radar=(int(theRequest.POST.get('search_type')) == Search.PRODUCT_SEARCH_RADAR)
       qs = qs.filter(sensor_type__mission_sensor__is_radar=is_radar)
-      #import ipy; ipy.shell()
     values['mission'] = list(qs.distinct().values_list('sensor_type__mission_sensor__mission', flat = True))
     if theRequest.POST.get('mission'):
       try:
@@ -286,69 +285,6 @@ def productIdSearch(theRequest, theGuid):
     myTemplateData['theGuid'] = theGuid
     myTemplateData['filterValues'] = simplejson.dumps(mySearcher.describeQuery()['values'])
     return render_to_response ( 'productIdSearch.html' , myTemplateData, context_instance=RequestContext(theRequest))
-
-
-@login_required
-#theRequest context decorator not used here since we have different return paths
-def _productIdSearch(theRequest, theGuid):
-  """
-  Display the product id builder, based on initial existing Search values,
-  the following interaction is ajax based.
-  This kind of search is only available when search_type is PRODUCT_SEARCH_OPTICAL
-  """
-  myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
-  mySearch = get_object_or_404( Search, guid=theGuid)
-
-  if mySearch.search_type != Search.PRODUCT_SEARCH_OPTICAL:
-    raise Http500('productIdSearch is only available for products of type PRODUCT_SEARCH_OPTICAL')
-
-  logging.info('productIdSearch initializing values from existing search %s' % theGuid)
-  mySearcher = Searcher(theRequest, theGuid)
-  mySearcher.search()
-  myTemplateData = mySearcher.templateData()
-
-  if theRequest.method == 'POST':
-    myForm = ProductIdSearchForm(theRequest.POST, theRequest.FILES, instance=mySearch)
-    if myForm.is_valid():
-      logging.info('productIdSearch form is VALID after editing')
-      logging.info('productIdSearch cleaned_data: %s' % myForm.cleaned_data)
-      # Bind data
-      for f in [f.name for f in mySearch._meta.fields]:
-        if myForm.cleaned_data.has_key(f):
-          setattr(mySearch, f, myForm.cleaned_data.get(f))
-        mySearch.save()
-      # Save m2m,
-      # ABP: sensors is not required anymore for pivot to work
-      # ... should be required, but check anyway
-      mySearch.sensors.clear()
-      if myForm.cleaned_data.get('sensors'):
-        for s in myForm.cleaned_data.get('sensors'):
-          mySearch.sensors.add(s)
-      if theRequest.is_ajax():
-        # ABP: Returns a json object with query description.
-        # We need to instanciate the Searcher since search logic
-        # is not in the Search class :(
-        # mySearcher = Searcher(theRequest,theGuid)
-        return HttpResponse(simplejson.dumps(mySearcher.describeQuery()), mimetype='application/json')
-      else:
-        myForm.save()
-    else:
-      logging.info('form is INVALID after editing')
-      if theRequest.is_ajax():
-        # Sends a 500
-        return HttpResponseServerError(simplejson.dumps(myForm.errors), mimetype='application/json')
-      return render_to_response ( 'productIdSearch.html' ,{
-        'myForm': myForm,
-        'theGuid' : theGuid,
-      }, context_instance=RequestContext(theRequest))
-
-  myForm = ProductIdSearchForm(instance=mySearch)
-  logging.info('initial search form being rendered')
-  myTemplateData['myForm'] = myForm
-  myTemplateData['theGuid'] = theGuid
-  myTemplateData['filterValues'] = simplejson.dumps(mySearcher.describeQuery()['values'])
-  return render_to_response ( 'productIdSearch.html' , myTemplateData, context_instance=RequestContext(theRequest))
-
 
 @login_required
 #renderWithContext is explained in renderWith.py

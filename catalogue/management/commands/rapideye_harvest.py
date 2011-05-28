@@ -40,9 +40,9 @@ from catalogue.dims_lib import dimsWriter
 PROJECTION            = 'ORBIT'
 BAND_COUNT            = 5
 RADIOMETRIC_RESOLUTION= 16
+SENSOR_TYPE           = 'VRN'
+ACQUISITION_MODE      = 'PB'
 MISSION_SENSOR        = 'REI'
-SENSOR_TYPE           = 'REI'
-ACQUISITION_MODE      = 'REI'
 GEOMETRIC_RESOLUTION  = 5
 PRODUCT_ACQUISITION_START_TIME = '0900'
 

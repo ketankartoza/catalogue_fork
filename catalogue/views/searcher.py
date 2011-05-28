@@ -111,7 +111,9 @@ class Searcher:
       self.mSearch.search_type == Search.PRODUCT_SEARCH_GENERIC:
       logging.info('Search type is PRODUCT_SEARCH_GENERIC')
       self.mSearch.search_type = Search.PRODUCT_SEARCH_GENERIC
-      self.mQuerySet = GenericProduct.objects.all()
+      # ABP: changed simple search to GenericSensorProduct
+      #      because sensors are now mandatory
+      self.mQuerySet = GenericSensorProduct.objects.all()
     elif self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL:
       logging.info('Search type is PRODUCT_SEARCH_OPTICAL')
       self.mQuerySet = OpticalProduct.objects.all()
@@ -143,6 +145,15 @@ class Searcher:
       self.mGeometryQuery = Q(spatial_coverage__intersects=self.mSearch.geometry)
       self.mQuerySet = self.mQuerySet.filter( self.mGeometryQuery )
 
+    # ABP: sensors is mandatory ? Better if not enforced here: too bad in product_id search!
+    #assert self.mSearch.sensors.count() > 0, "Search contains no sensors informations"
+    if self.mSearch.sensors.count() > 0:
+      self.mSensorQuery = Q( acquisition_mode__sensor_type__mission_sensor__in=self.mSearch.sensors.all()) #__in = match to one or more sensors
+      self.mQuerySet = self.mQuerySet.filter( self.mSensorQuery )
+      self.mMessages.append("sensors <b>%s</b>" % self.mSearch.sensorsAsString())
+      logging.info('Sensor in use is:' + str( self.mSearch.sensors.values_list( 'name',flat=True ) ) )
+
+
     # ABP: paramters for "advanced search" only
     if self.mAdvancedFlag:
       logging.info('Search is advanced')
@@ -165,13 +176,6 @@ class Searcher:
       #
       if self.mSearch.search_type in (Search.PRODUCT_SEARCH_OPTICAL, Search.PRODUCT_SEARCH_RADAR):
         logging.info('GenericSensorProduct advanced search activated')
-        # ABP: sensors is mandatory ? Better if not: too bad in product_id search!
-        #assert self.mSearch.sensors.count() > 0, "Search contains no sensors informations"
-        if self.mSearch.sensors.count() > 0:
-          self.mSensorQuery = Q( acquisition_mode__sensor_type__mission_sensor__in=self.mSearch.sensors.all()) #__in = match to one or more sensors
-          self.mQuerySet = self.mQuerySet.filter( self.mSensorQuery )
-          self.mMessages.append("sensors <b>%s</b>" % self.mSearch.sensorsAsString())
-          logging.info('Sensor in use is:' + str( self.mSearch.sensors.values_list( 'name',flat=True ) ) )
         if self.mSearch.acquisition_mode:
           self.mMessages.append('acquisition mode <b>%s</b>' % self.mSearch.acquisition_mode)
           self.mAcquisitionModeQuery = Q(acquisition_mode = self.mSearch.acquisition_mode)

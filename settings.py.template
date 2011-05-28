@@ -231,3 +231,6 @@ MISR_ROOT="/mnt/cataloguestorage2/filedrop/MISR"
 CATALOGUE_RAPIDEYE_USERNAME=''
 CATALOGUE_RAPIDEYE_PASSWORD=''
 CATALOGUE_RAPIDEYE_BASE_URL='https://delivery.rapideye.de/catalogue/'
+
+#for terrasar-x import
+CATALOGUE_TERRASAR_SHP_ZIP_URL = 'http://terrasar-x-archive.infoterra.de/archive/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=archive:archive&outputFormat=SHAPE-ZIP'

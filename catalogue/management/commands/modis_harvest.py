@@ -48,13 +48,17 @@ PROJECTION            = 'ORBIT'
 BAND_COUNT            = 4 # Note: do not change this value without a code revision (search for assert below)
 RADIOMETRIC_RESOLUTION= 8 # it's 8, 16 and 32 ....
 MISSION_MAP           = {
+    'Aqua': 'AQA',
+    'Terra': 'TER',
+    'Aqua-Terra': 'A-T',
+  }
+MISSION_SENSOR_MAP    = {
     'Aqua': 'MYD',
     'Terra': 'MOD',
     'Aqua-Terra': 'MCD',
   }
-MISSION_SENSOR_MAP    = MISSION_MAP
-SENSOR_TYPE           = 'MOD'
-ACQUISITION_MODE      = 'MOD'
+SENSOR_TYPE           = 'VNS' # Ex MOD
+ACQUISITION_MODE      = 'VIT' # Ex MOD
 GEOMETRIC_RESOLUTION  = 500
 RC_FILE               = 'modis_harvest.rc'
 

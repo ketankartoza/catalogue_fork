@@ -86,7 +86,7 @@ create the product. //see:// dictionaries section below.
 
 ```
 sac=# select local_storage_path from catalogue_genericproduct where local_storage_path is not null limit 5;
-local_storage_path                                  
+local_storage_path
 --------------------------------------------------------------------------------------
 ZA2/1Ab/2010/5/31/ZA2_MSS_R3B_FMC4_080E_57_026N_47_100531_033947_L1Ab_ORBIT-.tif.bz2
 ZA2/1Ab/2010/3/31/ZA2_MSS_R3B_FMC4_176E_47_039S_35_100331_204030_L1Ab_ORBIT-.tif.bz2
@@ -97,7 +97,7 @@ The path is relative to the IMAGERY_ROOT defined in settings.py and is in the fo
 
 or
 
-''mission/processing level/yyyy/m/d/product_id.<file extension>.tar.bz2'' (for multifile products) 
+''mission/processing level/yyyy/m/d/product_id.<file extension>.tar.bz2'' (for multifile products)
 
 ==== Product ID Naming Scheme ====
 
@@ -225,7 +225,7 @@ The following processing levels are listed in the database.
  |  17 | 3Bb         | Level 3Bb |
  |  18 | 4           | Level 4   |
 
-**Constraints:** Name and abbreviation must both be unique.
+**Constraints:** Abbreviation must be unique (name can be duplicated).
 
 ---------------------------
 **Note:** These should be updated to include a proper description with each in
@@ -549,31 +549,31 @@ or more sensors are deployed. The catalogue hosts metadata entry for a number
 of different sensors - at time of writing this list looked like the table
 below.
 
- || ID   | Abbreviation |     Name      |
- |  1  | N14          | Noaa 14         |
- |  2  | N16          | Noaa 16         |
- |  3  | N11          | Noaa 11         |
- |  4  | N9           | Noaa 9          |
- |  5  | N17          | Noaa 17         |
- |  6  | N12          | Noaa 12         |
- |  7  | N15          | Noaa 15         |
- |  8  | E2           | E-Ers 2         |
- |  9  | E1           | E-Ers 1         |
- |  10 | L5           | Landsat 5       |
- |  11 | L7           | Landsat 7       |
- |  12 | L2           | Landsat 2       |
- |  13 | L3           | Landsat 3       |
- |  14 | L4           | Landsat 4       |
- |  15 | S2           | Spot 2          |
- |  16 | S4           | Spot 4          |
- |  17 | S1           | Spot 1          |
- |  18 | S5           | Spot 5          |
- |  19 | ZA2          | Sumbandilasat   |
- |  20 | C2B          | CBERS           |
- |  21 | S-C          | SAC-C           |
+ || ID   | Abbreviation | Operator Abbreviation |    Name      |
+ |  1   | S1           | SPOT-1                | Système Pour l'Observation de la Terre 1                        |
+ |  2   | S5           | SPOT-5                | Système Pour l'Observation de la Terre 5                        |
+ |  3   | ZA2          | ZASat-002             | Sumbandilasat                                                   |
+ |  4   | C2B          | CBERS-2-B             | China-Brazil Earth Resources Satellite 2 B                      |
+ |  5   | S-C          | SAC-C                 | Satélite de Aplicaciones Científicas-C                          |
+ |  6   | S3           | SPOT-3                | Système Pour l'Observation de la Terre 3                        |
+ |  7   | N14          | NOAA-14               | National Oceanic and Atmospheric Administration Satellite 14    |
+ |  8   | N16          | NOAA-16               | National Oceanic and Atmospheric Administration Satellite 16    |
+ |  9   | N11          | NOAA-11               | National Oceanic and Atmospheric Administration Satellite 11    |
+ |  10  | N9           | NOAA-9                | National Oceanic and Atmospheric Administration Satellite 9     |
+ |  11  | N17          | NOAA-17               | National Oceanic and Atmospheric Administration Satellite 17    |
+ |  12  | N12          | NOAA-12               | National Oceanic and Atmospheric Administration Satellite 12    |
+ |  13  | N15          | NOAA-15               | National Oceanic and Atmospheric Administration Satellite 15    |
+ |  14  | E2           | ERS-2                 | European Remote-Sensing Satellite-2                             |
+ |  15  | E1           | ERS-1                 | European Remote-Sensing Satellite-1                             |
+ |  16  | L5           | LS-5                  | Landsat 5                                                       |
+ |  17  | L7           | LS-7                  | Landsat 7                                                       |
+ |  18  | L2           | LS-2                  | Landsat 2                                                       |
+ |  19  | L3           | LS-3                  | Landsat 3                                                       |
+ |  20  | L4           | LS-4                  | Landsat 4                                                       |
+ |  21  | S2           | SPOT-2                | Système Pour l'Observation de la Terre 2                        |
 
 
-The mission abbreviation and name must be unique.
+The mission abbreviation, operator_abbreviation and name must be unique.
 
 **Note:** Wolfgang we are using ZA2 instead of SS here.
 
@@ -590,29 +590,28 @@ missions, and even between identical sensors on the same mission.
 A sensor is basically a camera or other equipment capable of performing
 distance observation of the earth.
 
- || ID | Abbreviation |         Name          | Description | Has Data | Mission |
- | 1 | AVH          | NOAA AVHRR            |             | t |    NOAA             |
- | 2 | AMI          | ERS AMI SAR           |             | t |    ERS             |
- | 3 | TM          | Landsat 4 TM        |             | t |       L4           |
- | 4 | TM          | Landsat 5 TM        |             | t |       L5           |
- | 5 | MSS          | Landsat 1 MSS |             | t |            L1           |
- | 6 | MSS          | Landsat 2 MSS |             | t |            L2           |
- | 7 | MSS          | Landsat 3 MSS |             | t |            L3           |
- | 8 | MSS          | Landsat 4 MSS |             | t |            L4           |
- | 9 | MSS          | Landsat 5 MSS |             | t |            L5           |
- | 10 | ETM          | Landsat 7 ETM+        |             | t |     L7         |
- | 11 | Xs1           | Spot 1 HRV Xs     |             | t |        S1         |
- | 12 | Xs2           | Spot 2 HRV Xs     |             | t |        S2         |
- | 13 | Xs3           | Spot 3 HRV Xs     |             | t |        S3         |
- | 14 | Xi           | Spot 4 G,R,NIR,SWIR   |             | t |     S4         |
- | 15 | M            | Spot 4 Pan            |             | t |     S4         |
- | 16 | Pan          | Spot 1 HRV Pan    |             | t |         S1         |
- | 17 | Pan          | Spot 2 HRV Pan    |             | t |         S2         |
- | 18 | Pan          | Spot 3 HRV Pan    |             | t |         S3         |
- | 19 | HRG          | Spot 5 HRG            | Spot 5 HRG  | t |     S5         |
- | 20 | CCD          | CBERS CCD             |             | t |     C2B        |
- | 21 | MRS          | SACC MRS              |             | t |     S-C        |
- | 22 | SMS          | Sumbandilasat MSS     |             | t |     ZA2        |
+
+
+ || ID | Abbreviation | Operator Abbreviation |       Name          |
+ | 1  | AVH          | AVHRR-3               | Advanced Very High Resolution Radiometer NOAA          |
+ | 2  | AMI          | AMI-1                 | Active Microwave Instrument ERS-1                      |
+ | 3  | TM           | TM-4                  | Thematic Mapper Landsat 4                              |
+ | 4  | TM           | TM-5                  | Thematic Mapper Landsat 5                              |
+ | 5  | MSS          | MSS-1                 | Multi-Spectral-Scanner Landsat 1                       |
+ | 6  | MSS          | MSS-2                 | Multi-Spectral-Scanner Landsat 2                       |
+ | 7  | MSS          | MSS-3                 | Multi-Spectral-Scanner Landsat 3                       |
+ | 8  | MSS          | MSS-4                 | Multi-Spectral-Scanner Landsat 4                       |
+ | 9  | MSS          | MSS-5                 | Multi-Spectral-Scanner Landsat 5                       |
+ | 10 | ETM          | ETM+                  | Enhanced Thematic Mapper Plus Landsat 7                |
+ | 11 | HRV          | HRV-1                 | Haute Resolution Visible Spot 1                        |
+ | 12 | HRV          | HRV-2                 | Haute Resolution Visible Spot 2                        |
+ | 13 | HRV          | HRV-3                 | Haute Resolution Visible Spot 3                        |
+ | 14 | HIR          | HRVIR-4               | High-Resolution Visible and Infrared sensor Spot 4     |
+ | 15 | VMI          | Vegetation-4          | Vegetation Monitoring Instrument / Vegetation Spot 4   |
+ | 16 | HRG          | HRG-5                 | High Resolution Geometric Spot 5                       |
+ | 17 | HRS          | HRS-5                 | High Resolution Stereoscopic Spot 5                    |
+ | 18 | VMI          | Vegetation-5          | Vegetation Monitoring Instrument / Vegetation Spot 5   |
+ | 19 | AMI          | AMI-2                 | Active Microwave Instrument ERS-1                      |
 
 
 The abbreviation field and the foreign key to Mission must be unique together.
@@ -622,13 +621,14 @@ The abbreviation field and the foreign key to Mission must be unique together.
 used to restrict the display of sensors to users to only those with data
 associated to them. Is there a cleaner way to do it? At mininimum we need to
 automate updating this field as data is added to and removed from the system.
+UPDATE: the sensors list in the UI is now filtered and shows only sensors with data.
 
 Sensors
 TM - Thematic Mapper
 ETM - Enhanced thematic mapper
 MSS Multi-spectral
 
-**Constraints:** Name and abbreviation must be unique_together. Name must be unique.
+**Constraints:** Name and abbreviation must be unique_together. operator_abbreviation must be unique.
 
 
 **Note:** A one-to-many relationship will be created between mission sensor
@@ -667,24 +667,21 @@ custom sensor type with its own specific properties. 'Cheaper' satellites may
 use simple CCD (charge coupled device) style sensors.
 
 
- || ID | Abbreviation |                   Name                   | Mission Sensor |
- |  1 | AVHR         | Advanced Very High Resolution Radiometer  |                |
- |  2 | AMI          | AMI                                       |                |
- |  3 | MST          | Multispectral + Thermal                   |                |
- |  4 | CAM2         | Spot Camera 2                             |                |
- |  5 | CAM1         | Spot Camera 1                             |                |
- |  6 | R3B          | R3B                                       |                |
- |  7 | MSS          | Multispectral                             |                |
- |  8 | RT           | RT                                        |                |
+ || ID | Abbreviation |  Operator Abbreviation | Name  |
+ |  1  | VIT          | VisNirSwirTh           | Visual, Near Infrared, Short Wave Infrared and Thermal             |
+ |  2  | STM          | STM-C                  | Strip Map C Band                                                   |
+ |  3  | HRF          | HRF                    | Multispectral                                                      |
+ |  4  | HTM          | HTM                    | Thermal                                                            |
+ |  5  | HRF          | HRF                    | Multispectral                                                      |
+ |  6  | HTM          | HTM                    | Thermal                                                            |
+ |  7  | VNI          | VisNir                 | Visual, Near Infrared                                              |
+ |  8  | VNI          | VisNir                 | Visual, Near Infrared                                              |
 
 
 
 The abbreviation field and the foreign key to MissionSensor must be unique together.
 
-
-**Note:** Wolfgang please populate the related mission sensor(s) per id above.
-
-Each mission sensor should have at least one sensor  type associated with it.
+ach mission sensor should have at least one sensor  type associated with it.
 When a mission sensor exists with no associated sensor type, a default sensor
 type matching the mission sensor abbreviation should be created e.g.
 
@@ -721,22 +718,24 @@ acquisition modes should include at least one entry per sensor type. Where such
 an entry does not exist, a default one (named after the sensor type) shall be
 created. Acquisition modes table example:
 
- || ID   | Abbreviation |               Name               | Geom Resolution | Band Count | Sensor Type |
- |  1  | MS           | Multispectral                    |   0 |    0   |                              |
- |  2  | VV           | Vertical / Vertical Polarisation |   0 |    0   |                              |
- |  3  | HRT          | Multispectral and Thermal        |   0 |    0   |                              |
- |  4  | X            | X                                |   0 |    0   |                              |
- |  5  | I            | I                                |   0 |    0   |                              |
- |  6  | M            | M                                |   0 |    0   |                              |
- |  7  | P            | P                                |   0 |    0   |                              |
- |  8  | J            | Multispectral                    |   0 |    0   |                              |
- |  9  | B            | Panchromatic                     |   0 |    0   |                              |
- |  10 | A            | Panchromatic                     |   0 |    0   |                              |
- |  11 | FMC4         | FMC4                             |   0 |    0   |                              |
- |  12 | 3BG          | 3BG                              |   0 |    0   |                              |
- |  13 | 5BF          | 5BF                              |   0 |    0   |                              |
- |  14 | 3BP          | 3BP                              |   0 |    0   |                              |
- |  15 | HR           | HR                               |   0 |    0   |                              |
+ || ID   | Abbreviation | Operator Abbreviation |  Name               | Geom Resolution | Band Count |
+ |  1 | MS           | MS                    | Multispectral                        |   0 |    0   |                              |
+ |  2 | VV           | VV                    | Vertical Vertical Polarisation       |   0 |    0   |                              |
+ |  3 | HRT          | HRT                   | Multispectral and Thermal            |   0 |    0   |                              |
+ |  4 | X            | X                     | X                                    |   0 |    0   |                              |
+ |  5 | I            | I                     | I                                    |   0 |    0   |                              |
+ |  6 | M            | M                     | M                                    |   0 |    0   |                              |
+ |  7 | P            | P                     | P                                    |   0 |    0   |                              |
+ |  8 | J            | J                     | Multispectral                        |   0 |    0   |                              |
+ |  9 | B            | B                     | Panchromatic                         |   0 |    0   |                              |
+ | 10 | A            | A                     | Panchromatic                         |   0 |    0   |                              |
+ | 11 | FMC4         | FMC4                  | Forward Motion Compensation 4        |   0 |    0   |                              |
+ | 12 | 3BG          | 3BG                   | 3BG                                  |   0 |    0   |                              |
+ | 13 | 5BF          | 5BF                   | 5BF                                  |   0 |    0   |                              |
+ | 14 | 3BP          | 3BP                   | 3BP                                  |   0 |    0   |                              |
+ | 15 | HR           | HR                    | HR                                   |   0 |    0   |                              |
+ | 28 | VV           | VV                    | Vertical Vertical Polarisation       |   0 |    0   |                              |
+ | 29 | HH           | HH                    | Horizontal Horizontal Polarisation   |   0 |    0   |                              |
 
 
 The abbreviation field and the foreign key to SensorType must be unique together.
@@ -843,20 +842,6 @@ based product, assigning these entities to derived products will not be
 meaningful. Because of this composite products (e.g. a pan sharpened SPOT
 image) will not be modelled under generic sensor products but rather belong to
 a sub class GenericImageryProduct.
-
-
-====== Dictionaries naming rules ======
-
-Given the relationships above mentioned for sensors dictionaries, the
-following rules are applied in cascade mode in order to build a unique
-dictionary item in the tree:
-
-|| Dictionary         | Naming scheme               | Constraints (unique together if in brackets)      | Example       |
-| Mission             | abbreviation                | abbreviation, name                                | L5            |
-| MissionSensor       | abbreviation:Mission        | [abbreviation, Mission]                           | TM:L5         |
-| SensorType          | abbreviation:MissionSensor  | [abbreviation, MissionSensor]                     | MST:TM:L5     |
-| AcquisitionMode     | abbreviation:SensorType     | [abbreviation, SensorType]                        | HRT:MST:TM:L5 |
-
 
 
 ==== Resolving the metadata to explicit records ====

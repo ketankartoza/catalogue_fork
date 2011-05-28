@@ -287,7 +287,6 @@ class Command(BaseCommand):
             metadata = sds.GetMetadata()
             # Polygon
             path = int(img.GetMetadata()['Path_number'])
-            row = int(GetMetadataFromCore(metadata, 'ORBITNUMBER'))
             start_block = int(img.GetMetadata()['Start_block'])
             end_block = int(img.GetMetadata()['End block']) + 1
             verblog("Reading polygon from KML path %s, block %s" % (path, start_block), 2)
@@ -312,10 +311,16 @@ class Command(BaseCommand):
                                       GetMetadataFromCore(metadata, 'RANGEBEGINNINGTIME'),'%Y-%m-%d%H:%M:%S.%fZ')
 
             # Row/Path
-            #path, path_shift, row, row_shift = get_row_path_from_polygon(footprint, no_compass=True)
+            # Based on Discussion with Wolfgang, MISR orbit are consecutive (they
+            # increment for each orbit of the planet the satellite makes). So the 
+            # path can be a large number e.g. 11232 which exceeds the 4 char limit
+            # of the product id spec. 
+            # For this reason the orbit will always be calculated from polygon
+            # centroid until such time that the granules are subsetted in the
+            # future and we have a suitable numbering scheme to apply.
+            path_temp, path_shift_temp, row, row_shift = get_row_path_from_polygon(footprint, no_compass=True)
             # Assigned from file name (see above)
             path_shift = '0'
-            row_shift = '0'
 
             # Fills the the product_id
             verblog("Filling product_id...", 2)

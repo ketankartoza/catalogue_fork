@@ -523,7 +523,9 @@ div.button-bar ul li {
   }
 
 
-#search_form input[type="text"],#search_form .adv_search_ui select,#search_form .adv_search_ui select option {
+#search_form input[type="text"],
+#search_form .adv_search_ui select,
+#search_form .adv_search_ui select option {
     margin:0;
     max-width: 170px;
     min-width: 170px;
@@ -539,4 +541,10 @@ div.required label {
 
 #productIdForm select {
   width: 50px;
+}
+
+#search_form .long_select select,
+#search_form .long_select select option {
+    max-width: 335px;
+    min-width: 335px;
 }
