@@ -1,3 +1,5 @@
+georeferenced_thumbnails
+imagery_mastercopies
 *.pyc
 .DS_Store
 Thumb.db
