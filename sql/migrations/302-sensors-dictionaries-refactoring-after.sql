@@ -31,6 +31,6 @@ BEGIN;
     ADD CONSTRAINT "catalogue_missionsensor_operator_abbreviation_key" UNIQUE("operator_abbreviation");
 
     -- fix SAR is_radar
-    UPDATE "catalogue_missionsensor" SET "is_radar=True" WHERE "abbreviation" = 'SAR';
+    UPDATE "catalogue_missionsensor" SET "is_radar"=True WHERE "abbreviation" = 'SAR';
 
 COMMIT;
