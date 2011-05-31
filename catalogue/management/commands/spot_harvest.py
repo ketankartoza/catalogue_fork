@@ -222,8 +222,33 @@ class Command(BaseCommand):
             raise CommandError('Unknown Spot mission number (should be 1-5) %s.' % mission_id)
 
           # Defaults
+          
+          spot_missions = Mission.objects.filter( operator_abbreviation__startswith = "SPOT" )
+          print "Allowed missions:"
+          print "===================="
+          for myMission in spot_missions:
+            print myMission.operator_abbreviation
+          
+          mission_sensors = MissionSensor.objects.filter( mission__in=spot_missions )
+          print "Allowed sensors:"
+          print "===================="
+          for mySensor in mission_sensors:
+            print mySensor.operator_abbreviation
+
+          sensor_types = SensorType.objects.filter( mission_sensor__in=mission_sensors )
+          print "Allowed sensor types:"
+          print "===================="
+          for mySensorType in sensor_types:
+            print mySensorType.operator_abbreviation
+
+          acquisition_modes = AcquisitionMode.objects.filter( sensor_type__in=sensor_types )
+          print "Allowed acquisition modes:"
+          print "===================="
+          for myMode in acquisition_modes:
+            print myMode.operator_abbreviation
+          sensor_type = ""
+          sensor_type = ""
           mission = Mission.objects.get( abbreviation="S%s" % mission_id)
-          sensor_type = SensorType.objects( 
           band_count            = 0;
           date_parts = package.get('DATE_ACQ').split('/') # e.g. 20/01/2011
           time_parts = package.get('TIME_ACQ').split(':') # e.g. 08:29:01
