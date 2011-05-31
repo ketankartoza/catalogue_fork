@@ -94,7 +94,21 @@ git clone git@orasac1:sac_catalogue.git sac_catalogue
 sudo apt-get install libpq-dev libpq4 libpqxx-dev libxslt1-dev
 ```
 
+or under Ubuntu natty or newer:
+
+```
+sudo apt-get install libpq-dev libpq5 libpqxx-dev libxslt1-dev
+```
+
+Then make sure the virtual environment is active:
+
+```
+source ../python/bin/activate
+```
+
+
 Install easy_install so that we can use pip thereafter:
+
 
 ```
 easy_install pip

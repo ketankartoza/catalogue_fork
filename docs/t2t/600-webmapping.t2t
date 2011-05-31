@@ -89,6 +89,16 @@ Next gdal must be (re)built with the ecw flag:
 
 **Note:** You can skip this step if you are going on to add MrSid support below too.
 
+
+**Note:** If you want the gdal python bindings installed into your django python virtual env, first do
+
+```
+source /opt/sac_catalogue/python
+```
+
+or similar before running the build procedure below. The bindings will then go into your python env 
+rather than into the global python dir.
+
 ```
 cd <gdal src>
 make clean
@@ -143,6 +153,14 @@ sudo make install
 
 Jpeg internal and jpeg 12 needed for jpeg12 tif compression support
 
+**Note:** If you want the gdal python bindings installed into your django python virtual env, first do
+
+```
+source /opt/sac_catalogue/python
+```
+
+or similar before running the build procedure above. The bindings will then go into your python env 
+rather than into the global python dir.
 === Mapserver Setup ===
 
 First of all you need to compile mapserver from source since we need 
