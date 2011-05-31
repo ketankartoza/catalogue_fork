@@ -1,6 +1,8 @@
 #!/bin/bash
+export PGHOST=elephant
+export PGPORT=5432
 
-DB_NAME="sac"
+DB_NAME="sac-test"
 TMP_DIR="/tmp"
 OUTPUT_DIR="../media/heatmaps"
 HEATMAP_COLORS="heatmap.txt"

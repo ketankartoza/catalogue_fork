@@ -31,7 +31,7 @@ class Searcher:
     self.mExtent = '(-180.0,-90.0, 180.0, 90.0)'
     self.mPageNo = 1
     self.mSqlString = ""
-    self.mExtraLayers = ""
+    self.mLayerDefinitions = []
     self.mLayersList = ""
     self.mRecordCount = 0
 
@@ -41,7 +41,7 @@ class Searcher:
     return ({
         'mySearchGuid' : self.mSearch.guid,
         'myMessages' : self.mMessages,
-        'myLayerDefinitions' : self.mExtraLayers,
+        'myLayerDefinitions' : self.mLayerDefinitions,
         'myThumbnails' : self.mThumbnails,
         'myLayersList' : self.mLayersList,
         'mySensor' : self.mSearch.sensorsAsString(),
@@ -91,7 +91,7 @@ class Searcher:
     self.mExtent = '(-180.0,-90.0, 180.0, 90.0)'
     if self.mSearch.geometry:
       # Add the geometry of the search to the layers list for openlayers to render
-      self.mExtraLayers.append('''
+      self.mLayerDefinitions.append('''
         var mySearchAreaLayer = new OpenLayers.Layer.Vector("Search Area");
         var myGeojsonFormat = new OpenLayers.Format.GeoJSON();
         var mySearchFeature = myGeojsonFormat.read(''' + self.mSearch.geometry.geojson + ''')[0];
@@ -102,7 +102,6 @@ class Searcher:
       # This will get overwritten by the extents of the page further down here
       # but its a good fallback in case there were no records
       self.mExtent =  str( self.mSearch.geometry.envelope.extent )
-    self.mLayersList = "[zaSpot10mMosaic2008,zaRoadsBoundaries,myCartLayer]"
 
     # ABP: Create the query set based on the type of class we're going to search in
     assert self.mSearch.search_type in dict(Search.PRODUCT_SEARCH_TYPES).keys()
@@ -283,23 +282,8 @@ class Searcher:
     # ABP: is advanced ?
     self.mAdvancedFlag = self.mSearch.isAdvanced
 
-    # Map of all search footprints that have been added to the users cart
-    # Transparent: true will make a wms layer into an overlay
-    self.mCartLayer = '''myCartLayer = new OpenLayers.Layer.WMS("Cart", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=CART&user=''' + str(theRequest.user.username) + '''",
-          {
-             version: '1.1.1',
-             width: '800',
-             layers: 'Cart',
-             srs: 'EPSG:4326',
-             height: '525',
-             format: 'image/png',
-             transparent: 'true'
-           },
-           {isBaseLayer: false});
-           '''
     self.mSqlString = ""
-    self.mExtraLayers = [ WEB_LAYERS['ZaSpot10mMosaic2008'],WEB_LAYERS['ZaRoadsBoundaries'],self.mCartLayer ]
-    self.mLayersList = "[zaSpot10mMosaic2008,zaRoadsBoundaries,myCartLayer]"
+    self.mLayersList, self.mLayerDefinitions, myActiveBaseMap = standardLayersWithCart( theRequest )
     self.mSearchPage = None
     self.mPaginator = None
     self.initQuery()
