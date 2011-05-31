@@ -340,7 +340,7 @@ WEB_LAYERS = {
             #
             # and under that blue marble. Its rendered as a single layer for best quality.
           'ZaSpot2mMosaic2010TC' : '''var zaSpot2mMosaic2010TC = new OpenLayers.Layer.WMS(
-          "ZaSpot2mMosaic2010TC", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
+          "2m Mosaic 2010 TC", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
           {
              VERSION: '1.1.1',
              EXCEPTIONS: "application/vnd.ogc.se_inimage",
@@ -362,7 +362,7 @@ WEB_LAYERS = {
             #
             # and under that blue marble. Its rendered as a single layer for best quality.
           'ZaSpot2mMosaic2009TC' : '''var zaSpot2mMosaic2009TC = new OpenLayers.Layer.WMS(
-          "ZaSpot2mMosaic2009TC", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
+          "2m Mosaic 2009 TC", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
           {
              VERSION: '1.1.1',
              EXCEPTIONS: "application/vnd.ogc.se_inimage",
@@ -384,7 +384,7 @@ WEB_LAYERS = {
             #
             # and under that blue marble. Its rendered as a single layer for best quality.
           'ZaSpot2mMosaic2008TC' : '''var zaSpot2mMosaic2008TC = new OpenLayers.Layer.WMS(
-          "ZaSpot2mMosaic2008TC", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
+          "2m Mosaic 2008 TC", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
           {
              VERSION: '1.1.1',
              EXCEPTIONS: "application/vnd.ogc.se_inimage",
@@ -406,7 +406,7 @@ WEB_LAYERS = {
             #
             # and under that blue marble. Its rendered as a single layer for best quality.
           'ZaSpot2mMosaic2007TC' : '''var zaSpot2mMosaic2007TC = new OpenLayers.Layer.WMS(
-          "ZaSpot2mMosaic2007TC", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
+          "2m Mosaic 2007 TC", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
           {
              VERSION: '1.1.1',
              EXCEPTIONS: "application/vnd.ogc.se_inimage",
@@ -425,7 +425,7 @@ WEB_LAYERS = {
             # Streets and boundaries for SA base map with an underlay of spot 2010 mosaic
             # and under that blue marble. Its rendered as a single layer for best quality.
             'ZaSpot2mMosaic2010' : '''var zaSpot2mMosaic2010 = new OpenLayers.Layer.WMS(
-          "ZaSpot2mMosaic2010", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_SPOT2010",
+          "2m Mosaic 2010", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_SPOT2010",
           {
              VERSION: '1.1.1',
              EXCEPTIONS: "application/vnd.ogc.se_inimage",
@@ -443,7 +443,7 @@ WEB_LAYERS = {
             # Streets and boundaries for SA base map with an underlay of spot 2009 mosaic
             # and under that blue marble. Its rendered as a single layer for best quality.
             'ZaSpot2mMosaic2009' : '''var zaSpot2mMosaic2009 = new OpenLayers.Layer.WMS(
-          "ZaSpot2mMosaic2009", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_SPOT2009",
+          "2m Mosaic 2009", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_SPOT2009",
           {
              VERSION: '1.1.1',
              EXCEPTIONS: "application/vnd.ogc.se_inimage",
@@ -461,7 +461,7 @@ WEB_LAYERS = {
            # Streets and boundaries for SA base map with an underlay of spot 2008 mosaic
            # and under that blue marble. Its rendered as a single layer for best quality.
            'ZaSpot2mMosaic2008' : '''var zaSpot2mMosaic2008 = new OpenLayers.Layer.WMS(
-           "ZaSpot2mMosaic2008", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_SPOT2008",
+           "2m Mosaic 2008", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_SPOT2008",
            {
               width: '800',
               layers: 'Roads',
@@ -479,7 +479,7 @@ WEB_LAYERS = {
            # Streets and boundaries for SA base map with an underlay of spot 2007 mosaic
            # and under that blue marble. Its rendered as a single layer for best quality.
            'ZaSpot2mMosaic2007' : '''var zaSpot2mMosaic2007 = new OpenLayers.Layer.WMS(
-          "ZaSpot2mMosaic2007", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_SPOT2007",
+          "2m Mosaic 2007", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_SPOT2007",
           {
              VERSION: '1.1.1',
              EXCEPTIONS: "application/vnd.ogc.se_inimage",
@@ -501,7 +501,7 @@ WEB_LAYERS = {
             # and under that blue marble. Its rendered as a single layer for best quality.
             # "ZaRoadsBoundaries", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_VECTOR",
           'ZaSpot10mMosaic2010' : '''var zaSpot10mMosaic2010 = new OpenLayers.Layer.WMS(
-          "ZaSpot10mMosaic2010", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
+          "10m Mosaic 2010 TC", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
           {
              VERSION: '1.1.1',
              EXCEPTIONS: "application/vnd.ogc.se_inimage",
@@ -524,7 +524,7 @@ WEB_LAYERS = {
             # and under that blue marble. Its rendered as a single layer for best quality.
             # "ZaRoadsBoundaries", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_VECTOR",
           'ZaSpot10mMosaic2009' : '''var zaSpot10mMosaic2009 = new OpenLayers.Layer.WMS(
-          "ZaSpot10mMosaic2009", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
+          "10m Mosaic 2009 TC", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
           {
              VERSION: '1.1.1',
              EXCEPTIONS: "application/vnd.ogc.se_inimage",
@@ -547,7 +547,7 @@ WEB_LAYERS = {
             # and under that blue marble. Its rendered as a single layer for best quality.
             # "ZaRoadsBoundaries", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_VECTOR",
           'ZaSpot10mMosaic2008' : '''var zaSpot10mMosaic2008 = new OpenLayers.Layer.WMS(
-          "ZaSpot10mMosaic2008", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
+          "10m Mosaic 2008 TC", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
           {
              VERSION: '1.1.1',
              EXCEPTIONS: "application/vnd.ogc.se_inimage",
@@ -570,7 +570,7 @@ WEB_LAYERS = {
             # and under that blue marble. Its rendered as a single layer for best quality.
             # "ZaRoadsBoundaries", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_VECTOR",
           'ZaSpot10mMosaic2007' : '''var zaSpot10mMosaic2007 = new OpenLayers.Layer.WMS(
-          "ZaSpot10mMosaic2007", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
+          "10m Mosaic 2007 TC", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
           {
              VERSION: '1.1.1',
              EXCEPTIONS: "application/vnd.ogc.se_inimage",
@@ -586,10 +586,21 @@ WEB_LAYERS = {
            },
            {isBaseLayer: true});
            ''',
+           # Spot5 ZA 2008 10m Mosaic directly from mapserver
+            'ZaSpot5Mosaic2008' : '''var zaSpot5Mosaic2008 = new OpenLayers.Layer.WMS( "SPOT5 10m Mosaic 2008, ZA",
+            "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_SPOT",
+            {
+              VERSION: '1.1.1',
+              EXCEPTIONS: "application/vnd.ogc.se_inimage",
+              layers: "Spot5_RSA_2008_10m",
+              maxResolution: '156543.0339',
+            });
+            zaSpot5Mosaic2008.setVisibility(false);
+            ''',
            #a Vector only version of the above
            # "ZaRoadsBoundaries", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_VECTOR",
           'ZaRoadsBoundaries' : '''var zaRoadsBoundaries = new OpenLayers.Layer.WMS(
-          "ZaRoadsBoundaries", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
+          "SA Vector", "http://''' + settings.WMS_SERVER + '''/cgi-bin/tilecache.cgi?",
           {
              VERSION: '1.1.1',
              EXCEPTIONS: "application/vnd.ogc.se_inimage",
@@ -641,17 +652,6 @@ WEB_LAYERS = {
            {isBaseLayer: false}
         );
         ''',
-        # Spot5 ZA 2008 10m Mosaic directly from mapserver
-            'ZaSpot5Mosaic2008' : '''var zaSpot5Mosaic2008 = new OpenLayers.Layer.WMS( "SPOT5 10m Mosaic 2008, ZA",
-            "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=ZA_SPOT",
-            {
-              VERSION: '1.1.1',
-              EXCEPTIONS: "application/vnd.ogc.se_inimage",
-              layers: "Spot5_RSA_2008_10m",
-              maxResolution: '156543.0339',
-            });
-            zaSpot5Mosaic2008.setVisibility(false);
-            ''',
         # Nasa Blue marble directly from mapserver
             'BlueMarble' : '''var BlueMarble = new OpenLayers.Layer.WMS( "BlueMarble",
             "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=WORLD",
@@ -746,6 +746,20 @@ WEB_LAYERS = {
                 }
             );
         ''',
+        # Note for this layer to be used you need to regex replace
+        # USERNAME with theRequest.user.username
+        'CartLayer' : '''var cartLayer = new OpenLayers.Layer.WMS("Cart", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=CART&user=USERNAME",
+          {
+             version: '1.1.1',
+             width: '800',
+             layers: 'Cart',
+             srs: 'EPSG:4326',
+             height: '525',
+             format: 'image/png',
+             transparent: 'true'
+           },
+           {isBaseLayer: false});
+           ''',
         }
 
 mLayerJs = {'VirtualEarth' : '''<script src='http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1'></script>
@@ -835,7 +849,12 @@ def standardLayers(theRequest):
   """Helper methods used to return standard layer defs for the openlayers control
      Note intended to be published as a view in urls.py
     e.g. usage:
-    myLayersList, myLayerDefinitions, myActiveLayer = standardLayers( theRequest )"""
+    myLayersList, myLayerDefinitions, myActiveLayer = standardLayers( theRequest )
+    where:
+      myLayersList will be a string representing a javascript array of layers
+      myLayerDefinitions will be an array of strings each representing javascript / openlayers layer defs
+      myActiveLayer will be the name of the active base map
+    """
 
   myProfile = None
   myLayersList = None
@@ -846,15 +865,42 @@ def standardLayers(theRequest):
   except:
     logging.debug('Profile does not exist')
   if myProfile and myProfile.strategic_partner:
-    myLayerDefinitions = [ WEB_LAYERS['ZaSpot2mMosaic2010TC'], WEB_LAYERS['ZaSpot2mMosaic2009TC'], WEB_LAYERS['ZaSpot2mMosaic2008TC'], WEB_LAYERS['ZaSpot2mMosaic2007TC'], WEB_LAYERS['ZaRoadsBoundaries'] ]
-    myLayersList = "[ zaSpot2mMosaic2010TC,zaSpot2mMosaic2009TC,zaSpot2mMosaic2008TC,zaSpot2mMosaic2007TC,zaRoadsBoundaries ]"
+    myLayerDefinitions = [ WEB_LAYERS['ZaSpot2mMosaic2010TC'], 
+                           WEB_LAYERS['ZaSpot2mMosaic2009TC'], 
+                           WEB_LAYERS['ZaSpot2mMosaic2008TC'], 
+                           WEB_LAYERS['ZaSpot2mMosaic2007TC'], 
+                           WEB_LAYERS['ZaSpot10mMosaic2010'],
+                           WEB_LAYERS['ZaSpot10mMosaic2009'],
+                           WEB_LAYERS['ZaSpot10mMosaic2008'],
+                           WEB_LAYERS['ZaSpot10mMosaic2007'], 
+                           WEB_LAYERS['ZaRoadsBoundaries'] ]
+    myLayersList = "[ zaSpot2mMosaic2010TC,zaSpot2mMosaic2009TC,zaSpot2mMosaic2008TC,zaSpot2mMosaic2007TC,zaSpot10mMosaic2010,zaSpot10mMosaic2009,zaSpot10mMosaic2008,zaSpot10mMosaic2007,zaRoadsBoundaries ]"
     myActiveBaseMap =  "zaSpot2mMosaic2010TC"
   else:
-    myLayerDefinitions = [ WEB_LAYERS['ZaSpot10mMosaic2010'],WEB_LAYERS['ZaSpot10mMosaic2009'],WEB_LAYERS['ZaSpot10mMosaic2008'],WEB_LAYERS['ZaSpot10mMosaic2007'],WEB_LAYERS['ZaRoadsBoundaries'] ]
+    myLayerDefinitions = [ WEB_LAYERS['ZaSpot10mMosaic2010'],
+        WEB_LAYERS['ZaSpot10mMosaic2009'],
+        WEB_LAYERS['ZaSpot10mMosaic2008'],
+        WEB_LAYERS['ZaSpot10mMosaic2007'],
+        WEB_LAYERS['ZaRoadsBoundaries'] ]
     myLayersList = "[zaSpot10mMosaic2010,zaSpot10mMosaic2009,zaSpot10mMosaic2008,zaSpot10mMosaic2007,zaRoadsBoundaries]"
     myActiveBaseMap =  "zaSpot10mMosaic2010"
   return myLayersList, myLayerDefinitions, myActiveBaseMap
 
+def standardLayersWithCart(theRequest):
+  """Helper methods used to return standard layer defs for the openlayers control
+     Note intended to be published as a view in urls.py
+     Note. Appends the cart layer to the list of layers otherwise much the same as standardLayers method
+    e.g. usage:
+    myLayersList, myLayerDefinitions, myActiveLayer = standardLayers( theRequest )
+    where:
+      myLayersList will be a string representing a javascript array of layers
+      myLayerDefinitions will be an array of strings each representing javascript / openlayers layer defs
+      myActiveLayer will be the name of the active base map
+    """
+  myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
+  myLayersList = myLayersList.replace("]",",cartLayer]");
+  myLayerDefinitions.append( WEB_LAYERS['CartLayer'].replace("USERNAME", theRequest.user.username ) );
+  return myLayersList, myLayerDefinitions, myActiveBaseMap
 
 #render_to_kml helpers
 def render_to_kml(theTemplate,theContext,filename):
