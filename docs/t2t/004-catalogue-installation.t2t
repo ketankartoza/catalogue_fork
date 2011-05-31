@@ -94,7 +94,7 @@ git clone git@orasac1:sac_catalogue.git sac_catalogue
 sudo apt-get install libpq-dev libpq4 libpqxx-dev libxslt1-dev
 ```
 
-or under Ubuntu natty or newer:
+On newer editions of ubuntu you may need to use libpq5 rather:
 
 ```
 sudo apt-get install libpq-dev libpq5 libpqxx-dev libxslt1-dev
