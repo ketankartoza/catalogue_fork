@@ -272,7 +272,11 @@ class Command(BaseCommand):
               continue
             package = packages[0]
             # Select main camera nadir
-            package = [p for p in packages if p.find('_AN_') != -1][0]
+            an_images = [p for p in packages if p.find('_AN_') != -1]
+            if not len(an_images):
+              verblog('No nadir image (_AN_) in %s' % os.path.join(base_path, main_folder, date_folder))
+              continue
+            package = an_images[0]
 
             verblog("Ingesting %s" % package, 2)
             # Open
@@ -283,7 +287,6 @@ class Command(BaseCommand):
             metadata = sds.GetMetadata()
             # Polygon
             path = int(img.GetMetadata()['Path_number'])
-            row = int(GetMetadataFromCore(metadata, 'ORBITNUMBER'))
             start_block = int(img.GetMetadata()['Start_block'])
             end_block = int(img.GetMetadata()['End block']) + 1
             verblog("Reading polygon from KML path %s, block %s" % (path, start_block), 2)
@@ -308,10 +311,16 @@ class Command(BaseCommand):
                                       GetMetadataFromCore(metadata, 'RANGEBEGINNINGTIME'),'%Y-%m-%d%H:%M:%S.%fZ')
 
             # Row/Path
-            #path, path_shift, row, row_shift = get_row_path_from_polygon(footprint, no_compass=True)
+            # Based on Discussion with Wolfgang, MISR orbit are consecutive (they
+            # increment for each orbit of the planet the satellite makes). So the 
+            # path can be a large number e.g. 11232 which exceeds the 4 char limit
+            # of the product id spec. 
+            # For this reason the orbit will always be calculated from polygon
+            # centroid until such time that the granules are subsetted in the
+            # future and we have a suitable numbering scheme to apply.
+            path_temp, path_shift_temp, row, row_shift = get_row_path_from_polygon(footprint, no_compass=True)
             # Assigned from file name (see above)
             path_shift = '0'
-            row_shift = '0'
 
             # Fills the the product_id
             verblog("Filling product_id...", 2)
@@ -331,7 +340,7 @@ class Command(BaseCommand):
               'LEVL' : processing_level.ljust(4, '-'),
               'PROJTN': projection.ljust(6, '-')
             }
-            assert len(product_id) == 58, 'Wrong len in product_id'
+            assert len(product_id) == 58, 'Wrong len in product_id %s' % product_id
 
             verblog("Product ID %s" % product_id, 2)
 

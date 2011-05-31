@@ -18,13 +18,18 @@ class MissionGroup( models.Model ):
 
 class Mission( models.Model ):
   """Satellite or Mission"""
-  abbreviation = models.CharField( max_length="3", unique=True )
-  name = models.CharField( max_length="255", unique=True )
+  abbreviation = models.CharField( max_length=3, unique=True ) # SAC abbreviation
+  operator_abbreviation = models.CharField( max_length=255, unique=True ) # UI abbreviation
+  name = models.CharField( max_length=255, unique=True )
   mission_group = models.ForeignKey(MissionGroup) # e.g. S5
+  owner = models.CharField( max_length=255 )
   class Meta:
     app_label= 'catalogue'
   def __unicode__(self):
-     return self.abbreviation
+    if self.operator_abbreviation:
+        return "%s" % self.operator_abbreviation
+    else:
+       return "%s" % self.abbreviation
 
 
 ###############################################################################
@@ -40,11 +45,16 @@ class MissionSensor( models.Model ):
   has_data = models.BooleanField(help_text='Mark false if there is no data for this sensor')
   mission = models.ForeignKey(Mission) # e.g. S5
   is_radar = models.BooleanField(help_text='Mark true if this sensor is a radar sensor', default=False)
+  operator_abbreviation = models.CharField( max_length=255, unique=True ) # UI abbreviation
   class Meta:
     app_label= 'catalogue'
     unique_together = ('mission', 'abbreviation')
   def __unicode__(self):
-     return "%s:%s" % (self.abbreviation, self.mission)
+    if self.name:
+        return "%s:%s" % (self.mission.operator_abbreviation, self.name)
+    else:
+        return "%s:%s" % (self.mission.operator_abbreviation,self.abbreviation)
+
 
 ###############################################################################
 
@@ -54,11 +64,12 @@ class SensorType( models.Model ):
   name = models.CharField( max_length="255" )
   mission_sensor = models.ForeignKey(MissionSensor ) # e.g. HRV
   is_taskable = models.BooleanField(default=True)
+  operator_abbreviation = models.CharField( max_length=255 ) # UI abbreviation
   class Meta:
     app_label= 'catalogue'
     unique_together = ('mission_sensor', 'abbreviation')
   def __unicode__(self):
-    return "%s:%s" % (self.abbreviation, self.mission_sensor)
+    return "%s:%s" % (self.mission_sensor.operator_abbreviation, self.name)
 
 ###############################################################################
 
@@ -77,11 +88,12 @@ class AcquisitionMode( models.Model ):
   geometric_resolution = models.IntegerField(help_text="Geometric resolution in m")
   band_count = models.IntegerField()
   is_grayscale = models.BooleanField(default=False)
+  operator_abbreviation = models.CharField( max_length=255 ) # UI abbreviation
   class Meta:
     app_label= 'catalogue'
     unique_together = ('sensor_type', 'abbreviation')
   def __unicode__(self):
-    return "%s:%s" % (self.abbreviation, self.sensor_type)
+    return "%s:%s" % (self.sensor_type.mission_sensor.operator_abbreviation, self.name)
 
 
 ###############################################################################

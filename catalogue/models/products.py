@@ -398,6 +398,7 @@ class GenericImageryProduct( GenericProduct ):
 
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   concrete              = True
+  objects               = models.GeoManager()
 
   class Meta:
     app_label= 'catalogue'
@@ -464,6 +465,7 @@ class GenericSensorProduct( GenericImageryProduct ):
 
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   concrete              = False
+  objects               = models.GeoManager()
 
   class Meta:
     """This is not an abstract base class although you should avoid dealing directly with it
@@ -680,6 +682,7 @@ class OpticalProduct( GenericSensorProduct ):
   objects = models.GeoManager()
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   concrete              = True
+  objects               = models.GeoManager()
 
   class Meta:
     app_label= 'catalogue'
@@ -756,6 +759,7 @@ class RadarProduct( GenericSensorProduct ):
   objects = models.GeoManager()
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   concrete              = True
+  objects               = models.GeoManager()
 
   class Meta:
     app_label= 'catalogue'

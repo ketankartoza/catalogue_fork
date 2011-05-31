@@ -92,6 +92,8 @@
               $('#advancedSearch').val('Toggle Advanced Search');
               $('#id_isAdvanced').val('false');
             });
+            // Release filters on sensors
+            $('#id_sensors option').show().attr('disabled', false)
           } else {
             advSearchActivate($('#id_search_type').val());
             $('#advancedSearch').val('Toggle Simple Search');
@@ -116,11 +118,12 @@
             search_type = 0;
         }
         //console.log('advSearchActivate:' + search_type);
-        $('.adv_search_ui .adv_search_all').show('slow').closest('fieldset').show('slow');
-        $('.adv_search_ui .adv_search_' + search_type).show('slow').closest('fieldset').show('slow');
-        $('.adv_search_ui .adv_fld').not('.adv_search_all, .adv_search_' + search_type).hide();
-        $('fieldset.adv_search_ui').each(function(){
-          if(!$(this).find('.adv_fld:visible').length){
+        $('.adv_search_all').show('slow').closest('fieldset').show('slow');
+        $('.adv_search_' + search_type).show('slow').closest('fieldset').show('slow');
+        //debugger;
+        $('.adv_fld').not('.adv_search_all, .adv_search_' + search_type).hide();
+        $('fieldset').each(function(){
+          if(!this.classList.contains('simple_search') && !$(this).find('.adv_fld:visible').length) {
             $(this).hide();
           };
         });
@@ -204,7 +207,7 @@
         </div>
       </fieldset>
 
-      <fieldset class="adv_search_ui">
+      <fieldset class="simple_search">
         <legend>Sensor details:</legend>
 
         <div class="span-10 adv_search_1 adv_search_2 adv_fld">
@@ -216,7 +219,7 @@
                 />
             {{ myForm.mission.label_tag }}
           </div>
-          <div class="span-5 last filter">
+          <div class="span-10 last filter long_select">
             {{ myForm.mission }}
           </div>
           {% if myForm.mission.errors %}
@@ -227,7 +230,7 @@
           {% endif %}
         </div>
 
-        <div class="span-10 adv_search_1 adv_search_2 adv_fld">
+        <div class="span-10">
           <div class="span-5 required">
             <img id="{{myForm.sensors.html_name}}Button"
                   src="/media/images/info_16.png"
@@ -236,7 +239,7 @@
                   />
             {{ myForm.sensors.label_tag }}
           </div>
-          <div class="span-5 last filter">
+          <div class="span-10 last filter long_select">
             {{ myForm.sensors }}
           </div>
           {% if myForm.sensors.errors %}
@@ -258,7 +261,7 @@
               />
             {{ myForm.sensor_type.label_tag }}
           </div>
-          <div class="span-5 last filter">
+          <div class="span-10 last filter long_select">
             {{ myForm.sensor_type }}
           </div>
           {% if myForm.sensor_type.errors %}
@@ -278,7 +281,7 @@
               />
             {{ myForm.acquisition_mode.label_tag }}
           </div>
-          <div class="span-5 last filter">
+          <div class="span-10 last filter long_select">
             {{ myForm.acquisition_mode }}
           </div>
           {% if myForm.acquisition_mode.errors %}

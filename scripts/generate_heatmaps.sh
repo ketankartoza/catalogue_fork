@@ -1,6 +1,8 @@
 #!/bin/bash
+export PGHOST=elephant
+export PGPORT=5432
 
-DB_NAME="sac"
+DB_NAME="sac-test"
 TMP_DIR="/tmp"
 OUTPUT_DIR="../media/heatmaps"
 HEATMAP_COLORS="heatmap.txt"
@@ -13,7 +15,7 @@ rm $TMP_DIR/heatmap*
 psql -c 'select update_heatmap((select max(search_date) from heatmap_values));' -d $DB_NAME
 
 #last week
-gdal_grid -ot Float32 -a invdist:power=2.0:smoothing=2.0:radius1=1:radius2=1 -of GTiff -txe -180 180 -tye 90 -90 -outsize 1440 720 -zfield hits -sql "select * from heatmap(date(now()-'7 days'::interval))" PG:dbname=$DB_NAME $TMP_DIR/heatmap_data_lastweek.tif
+gdal_grid -ot Float32 -a invdist:power=2.0:smoothing=2.0:radius1=1:radius2=1 -of GTiff -txe -180 180 -tye 90 -90 -outsize 1440 720 -zfield hits -sql "select * from heatmap(date(now()-'7 days'::interval),date(now()))" PG:dbname=$DB_NAME $TMP_DIR/heatmap_data_lastweek.tif
 
 gdaldem color-relief $TMP_DIR/heatmap_data_lastweek.tif $HEATMAP_COLORS $TMP_DIR/heatmap-lastweek.tif
 
@@ -23,7 +25,7 @@ convert $TMP_DIR/heatmap-lastweek-900913.tif -fill white -opaque black $TMP_DIR/
 convert $TMP_DIR/heatmap-lastweek-900913.png $BORDERS -composite $OUTPUT_DIR/heatmap-lastweek.png
 
 #last month
-gdal_grid -ot Float32 -a invdist:power=2.0:smoothing=2.0:radius1=1:radius2=1 -of GTiff -txe -180 180 -tye 90 -90 -outsize 1440 720 -zfield hits -sql "select * from heatmap(date(now()-'1 month'::interval))" PG:dbname=$DB_NAME $TMP_DIR/heatmap_data_lastmonth.tif
+gdal_grid -ot Float32 -a invdist:power=2.0:smoothing=2.0:radius1=1:radius2=1 -of GTiff -txe -180 180 -tye 90 -90 -outsize 1440 720 -zfield hits -sql "select * from heatmap(date(now()-'1 month'::interval),date(now()))" PG:dbname=$DB_NAME $TMP_DIR/heatmap_data_lastmonth.tif
 
 gdaldem color-relief $TMP_DIR/heatmap_data_lastmonth.tif $HEATMAP_COLORS $TMP_DIR/heatmap-lastmonth.tif
 
@@ -33,7 +35,7 @@ convert $TMP_DIR/heatmap-lastmonth-900913.tif -fill white -opaque black $TMP_DIR
 convert $TMP_DIR/heatmap-lastmonth-900913.png $BORDERS -composite $OUTPUT_DIR/heatmap-lastmonth.png
 
 #last 3 months
-gdal_grid -ot Float32 -a invdist:power=2.0:smoothing=2.0:radius1=1:radius2=1 -of GTiff -txe -180 180 -tye 90 -90 -outsize 1440 720 -zfield hits -sql "select * from heatmap(date(now()-'3 month'::interval))" PG:dbname=$DB_NAME $TMP_DIR/heatmap_data_last3month.tif
+gdal_grid -ot Float32 -a invdist:power=2.0:smoothing=2.0:radius1=1:radius2=1 -of GTiff -txe -180 180 -tye 90 -90 -outsize 1440 720 -zfield hits -sql "select * from heatmap(date(now()-'3 month'::interval),date(now()))" PG:dbname=$DB_NAME $TMP_DIR/heatmap_data_last3month.tif
 
 gdaldem color-relief $TMP_DIR/heatmap_data_last3month.tif $HEATMAP_COLORS $TMP_DIR/heatmap-last3month.tif
 
@@ -43,7 +45,7 @@ convert $TMP_DIR/heatmap-last3month-900913.tif -fill white -opaque black $TMP_DI
 convert $TMP_DIR/heatmap-last3month-900913.png $BORDERS -composite $OUTPUT_DIR/heatmap-last3month.png
 
 #total (runs for 22min on intel i5 @ 2.4 Ghz
-gdal_grid -ot Float32 -a invdist:power=2.0:smoothing=2.0:radius1=1:radius2=1 -of GTiff -txe -180 180 -tye 90 -90 -outsize 1440 720 -zfield hits -sql "select * from heatmap()" PG:dbname=$DB_NAME $TMP_DIR/heatmap_data_total.tif
+gdal_grid -ot Float32 -a invdist:power=2.0:smoothing=2.0:radius1=1:radius2=1 -of GTiff -txe -180 180 -tye 90 -90 -outsize 1440 720 -zfield hits -sql "select * from heatmap('1900-1-1'::DATE, date(now()))" PG:dbname=$DB_NAME $TMP_DIR/heatmap_data_total.tif
 
 gdaldem color-relief $TMP_DIR/heatmap_data_total.tif $HEATMAP_COLORS $TMP_DIR/heatmap-total.tif
 
