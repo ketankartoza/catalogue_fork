@@ -90,7 +90,7 @@ Next gdal must be (re)built with the ecw flag:
 **Note:** You can skip this step if you are going on to add MrSid support below too.
 
 
-**Note:** If you want the gdal python bindings installed into your django python virtual env, first do
+**Note:** If you want the gdal python bindings installed into your django python virtual env, first do and ensure you have python setup tools on your venv.
 
 ```
 source /opt/sac_catalogue/python
