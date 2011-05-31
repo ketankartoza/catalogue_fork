@@ -92,12 +92,14 @@ Next gdal must be (re)built with the ecw flag:
 ```
 cd <gdal src>
 make clean
+export CXXFLAGS=-fPIC
 ./configure --with-libtiff=internal \
             --with-geotiff=internal \
             --with-ecw=/usr/local \
             --with-python \
             --with-jpeg=internal \
-            --with-jpeg12
+            --with-jpeg12 \
+            --without-libtool
 make -j8
 sudo make install            
 ```
@@ -125,6 +127,7 @@ To add mr sid support, you need the MrSid geosdk and then to reconfigure and bui
 ```
 cd <gdal src>
 make clean
+export CXXFLAGS=-fPIC
 ./configure --with-libtiff=internal \
             --with-geotiff=internal \
             --with-ecw=/usr/local \
@@ -132,7 +135,8 @@ make clean
             --with-mrsid=/usr/local/Geo_DSDK-7.0.0.2167/ \
             --without-jp2mrs \
             --with-jpeg=internal \
-            --with-jpeg12
+            --with-jpeg12 \
+            --without-libtool
 make -j8
 sudo make install            
 ```
