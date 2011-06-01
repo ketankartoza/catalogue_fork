@@ -4,7 +4,7 @@
 {% if user.is_authenticated %}
   <li><a href="/search/"><img src="/media/images/search_16.png" alt=""/>&nbsp;Search</a></li>
   <li>
-    <a href="/showcartcontents" onclick='$("#content").load("/showcartcontents/"); return false;'>
+    <a href="/showcartcontents" onclick='loadContent("/showcartcontents/"); return false;'>
       <img src="/media/images/buy_16.png" alt=""/>&nbsp;My Cart</a>
   </li>
   <li>
@@ -15,15 +15,15 @@
     <span class="dir"><img src="/media/images/bookmark_16.png" alt="" />&nbsp;Popular Links</span>
     <ul>
       <li>
-        <a href="/mapHelp/" onclick='$("#content").load("/mapHelp/","",zebraTables); return false;'>
+        <a href="/mapHelp/" onclick='loadContent("/mapHelp/"); return false;'>
           <img src="/media/images/help_16.png" alt=""/>&nbsp;Using the map</a>
       </li>
       <li>
-        <a href="/mysearches" onclick='$("#content").load("/mysearches/","",zebraTables); return false;'>
+        <a href="/mysearches" onclick='loadContent("/mysearches/"); return false;'>
           <img src="/media/images/search_16.png" alt=""/>&nbsp;My Search History</a>
       </li>
       <li>
-        <a href="/myorders" onclick='$("#content").load("/myorders/","",zebraTables); return false;'>
+        <a href="/myorders" onclick='loadContent("/myorders/"); return false;'>
           <img src="/media/images/briefcase_16.png" alt=""/>&nbsp;My Orders</a>
       </li>
       <li>
@@ -31,7 +31,7 @@
           <img src="/media/images/tasking_16.png" alt=""/>&nbsp;New Tasking Request</a>
       </li>
       <li>
-        <a href="/mytaskingrequests" onclick='$("#content").load("/mytaskingrequests/","",zebraTables); return false;'>
+        <a href="/mytaskingrequests" onclick='loadContent("/mytaskingrequests/"); return false;'>
           <img src="/media/images/tasking_16.png" alt=""/>&nbsp;My Tasking Requests</a>
       </li>
       <li><a href="/whereami"><img src="/media/images/wherami_16.png" />&nbsp;Where am I?</a></li>
@@ -54,21 +54,21 @@
       <li><a href="/visitormap/"><img src="/media/images/users_16.png">&nbsp;Vistor Map</a></li>
       <li><a href="/kml/"><img src="/media/images/darkearth_16.png">&nbsp;Visitor KML</a></li>
       <li>
-        <a href="/visitorlist/" onclick='$("#content").load("/visitorlist/","",zebraTables); return false;'>
+        <a href="/visitorlist/" onclick='loadContent("/visitorlist/"); return false;'>
           <img src="/media/images/notebook_16.png" alt=""/>&nbsp;Visitor List</a>
       </li>
       <li><a href="/visitorreport/"><img src="/media/images/statistics_16.png">&nbsp;Visitor Stats</a></li>
       <li><a href="/searchesmap/"><img src="/media/images/search_16.png">&nbsp;Searches Map</a></li>
       <li>
-        <a href="/recentsearches/" onclick='$("#content").load("/recentsearches/","",zebraTables); return false;'>
+        <a href="/recentsearches/" onclick='loadContent("/recentsearches/"); return false;'>
           <img src="/media/images/notebook_16.png" alt=""/>&nbsp;Searches Table</a>
       </li>
       <li>
-        <a href="/listorders/" onclick='$("#content").load("/listorders/","",zebraTables); return false;'>
+        <a href="/listorders/" onclick='loadContent("/listorders/"); return false;'>
           <img src="/media/images/briefcase_16.png" alt=""/>&nbsp;Orders List</a>
       </li>
       <li>
-        <a href="/dataSummaryTable/" onclick='$("#content").load("/dataSummaryTable/","",zebraTables); return false;'>
+        <a href="/dataSummaryTable/" onclick='loadContent("/dataSummaryTable/"); return false;'>
           <img src="/media/images/diagram_16.png" alt=""/>&nbsp;Data Summary</a>
       </li>
       <li><a href="/admin/"><img src="/media/images/shield_16.png" alt=""/>&nbsp;Admin</a></li>

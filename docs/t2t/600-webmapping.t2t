@@ -160,7 +160,17 @@ source /opt/sac_catalogue/python
 ```
 
 or similar before running the build procedure above. The bindings will then go into your python env 
-rather than into the global python dir.
+rather than into the global python dir. With the above you should see something like this in 
+the output from configure for gdal:
+
+```
+checking for python bindings... checking for python... python
+checking for location of Python Makefiles... found
+checking where to install Python modules... /opt/sac_catalogue/python/lib64/python2.7/site-packages
+enabled
+checking for python setuptools... found
+```
+
 === Mapserver Setup ===
 
 First of all you need to compile mapserver from source since we need 
