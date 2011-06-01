@@ -1,8 +1,7 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% box_start "" "" "" %}
 <h2>Summary of sensor dictionaries</h2>
-<p>This report is for debugging currently</p>
-<p>This report is for mission - sensor - type</p>
+<h3>This report is for mission - sensor - type</h3>
 <table>
   <thead>
   </thead>
@@ -15,10 +14,9 @@
     {% endfor %}
     </tr>
     {% endfor %}
-    <tr><th>Total</th><th>{{myTotal}}</th></tr>
   </tbody>
 </table>
-<p>This report is for mission - sensor - type - mode</p>
+<h3>This report is for mission - sensor - type - mode</h3>
 <table>
   <thead>
   </thead>
@@ -31,7 +29,6 @@
     {% endfor %}
     </tr>
     {% endfor %}
-    <tr><th>Total</th><th>{{myTotal}}</th></tr>
   </tbody>
 </table>
 {% box_end %}
