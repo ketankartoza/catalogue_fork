@@ -208,13 +208,15 @@ Define the allowable percentage cloud cover. (optional)
 **TEST  3100 5.7 Can a user select the maximum allowable percentage cloud
 cover?**
 
-**Response:**
+**Response:** Yes the user can select the cloud cover percentage for their
+searches. Note that not all products have cloud cover data associated with
+them.
 
 Define the allowable acquisition angle range. (optional)
 
 **TEST  3100 5.8 Can a user define the allowable acquisition angle range?**
 
-**Response:**
+**Response:** Yes the acquisition angle range can be optianlly selected.
 
 A refinement of search criteria for SAR imagery based on resolution
 wavelength and polarisation will not be implemented at this stage. (Refinement
@@ -223,9 +225,10 @@ is possible by the definition of the SAC ID elements).
 **TEST  3100 5.9 Can a user refine his search for SAR imagery based on the SAC
 ID elements?**
 
-**Response:**
+**Response:** All searches can be refined following the initial search using
+the 'Modify search' button provided on the search results page.
 
-}}Users then need to be able to refine the search criteria further by selecting
+Users then need to be able to refine the search criteria further by selecting
 elements that make up a SAC scene ID. Any elements can also be left blank
 interpreted as wild card (all fields optional). Only elements appropiate for
 criteria defined previously should be shown in drop down menu's allowing
@@ -234,80 +237,89 @@ multiple selections. Selections should be first made on the:
 **TEST  3100 5.10 Are only SAC ID elements appropriate for products fulfilling
 previously set requirements available for selection as SAC ID elements?**
 
-**Response:**
-
+**Response:** All searches can be refined following the initial search using
+the 'Modify search' button provided on the search results page.
  
  Satellite Mission 
 
 **TEST  3100 5.10 Can Users select multiple Satellite Missions ?**
 
-**Response:**
+**Response:** We have implemented drop down menus (as specified above). Note
+that drop down menus only support /  only allow single selections. 
 
 Sensor (Only relevant to Satellite Missions selected previously)
 
 **TEST  3100 5.11 Can Users select multiple Sensors ?**
 
-**Response:**
+**Response:** Yes. Only sensors relevant to the selected mission (if any) can
+be selected.
 
 Acquisition Mode
 
 **TEST  3100 5.12 Can Users select multiple Acquisition Modes ?**
 
-**Response:**
+**Response:** We have implemented drop down menus (as specified above). Note
+that drop down menus only support /  only allow single selections. 
 
 Acquisition Type
 
 **TEST  3100 5.13 Can Users select multiple Acquisition Types?**
 
-**Response:**
+**Response:** We have implemented drop down menus (as specified above). Note
+that drop down menus only support /  only allow single selections. 
 
 Path, Path range or Path Array
 
 **TEST  3100 5.14 Can Users select a Path?**
 
-**Response:**
+**Response:** Yes.
 
 **TEST  3100 5.15 Can Users select Path Ranges?**
 
-**Response:**
+**Response:** Yes.
 
 **TEST  3100 5.16 Can Users select Path Arrays?**
 
-**Response:**
+**Response:** Yes.
 
 Row, Row Range or Row Array
 
 **TEST  3100 5.17 Can Users select a Row?**
 
-**Response:**
+**Response:** Yes.
 
 **TEST  3100 5.18 Can Users select Row Ranges?**
 
-**Response:**
+**Response:** Yes.
 
 **TEST  3100 5.19 Can Users select Row Arrays?**
 
-**Response:**
+**Response:** Yes.
 
 acquisition Date Range, or multiple date ranges (summer scenes of several
 years).
 
 **TEST  3100 5.20 Can Users select a date range?**
 
-**Response:**
+**Response:** Yes. Selecting at least one date range is required.
 
 **TEST  3100 5.21 Can Users select multiple date ranges?**
 
-**Response:**
+**Response:** Yes the user can select one or more date ranges. Selecting at
+least one date range is required.
+
 
 Available processing levels.
 
 **TEST  3100 5.22 Can Users select multiple processing levels appropriate for a
 certain SAC_ID configuration or product type ?**
 
-**Response:**
+**Response:** The test above adds requirements that were not in the original
+specification. As per the original specification, the user can specify
+processing levels. Adding constraints to the processing levels list will need
+to be implemented in a future work package.
 
-}}6. After Executing a Query, users need to be able to see the found records in
+6. After Executing a Query, users need to be able to see the found records in
 a table containing the following fields: SAC Scene ID, Cloud Cover Percentage,
 Metadata, Add record to shopping basket and the thumbnail. When viewing the
 metadata per record an option should be provided in the single scene metadata
@@ -318,13 +330,11 @@ ISO file.
 user for found records after a search:  SAC Scene ID, Cloud Cover Percentage,
 Metadata, Add record to shopping basket and the thumbnail?**
 
-**Response:**
+**Response:** Yes.
 
 **TEST  3100 6.2 Can the metadata for each record be viewed individually?**
 
-**Response:**
-
-**Response:**
+**Response:** Yes.
 
 **TEST  3100 6.3 Can this metadata be saved as HTML file?**
 
@@ -336,7 +346,7 @@ Metadata, Add record to shopping basket and the thumbnail?**
 
 
 
-}}7. After executing a query, the user should be able to select records for
+7. After executing a query, the user should be able to select records for
 further interrogation before adding them to his shopping basket to refine the
 search allowing him to eliminate for instance all cloudy scenes. From this
 refined search users should be able to download all metadata for records in a
@@ -348,12 +358,12 @@ shopping basket.
 **TEST  3100 7.1 Can users further refine the search after a query or
 interrogate records further before adding them to a shopping basket?**
 
-**Response:**
+**Response:** Yes.
 
 **TEST  3100 7.2 Can users download metadata of products selected in a boundle
 as KML file  including the thumbnails with world files?**
 
-**Response:**
+**Response:** 
 
 **TEST  3100 7.3 Can users download metadata of products selected in a boundle
 as ESRI Shape file file  including the thumbnails with world files?**
