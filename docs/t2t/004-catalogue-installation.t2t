@@ -142,6 +142,12 @@ here:
 http://svn.osgeo.org/gdal/branches/1.7/gdal/ogr/swq.h
 ```
 
+Please see the webmapping chapter (600-webmapping.t2t) for notes on the setup process for GDAL
+
+**Note:** When installing gdal from source and you want the python bindings installed into your 
+python virtual env, make sure to activate the virtual environment begore building gdal so that
+its bindings are placed in the v.env site packages dir.
+
 ==== Install django and required django apps ====
 
 To install django, django authentication etc into our virtual environment do:
