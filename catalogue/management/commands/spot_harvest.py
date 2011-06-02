@@ -222,7 +222,7 @@ class Command(BaseCommand):
           sensor_types = SensorType.objects.filter( mission_sensor__in=mission_sensors )
           acquisition_modes = AcquisitionMode.objects.filter( sensor_type__in=sensor_types )
           #
-          # Following for debuggin info only
+          # Following for debugging info only
           #
           verblog("Allowed missions:",2)
           for myMission in spot_missions:

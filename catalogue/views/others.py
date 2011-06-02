@@ -342,11 +342,10 @@ def showProduct(theRequest, theProductId):
     myMessages.append("Product found")
   else:
     myMessages.append("No matching product found")
-  myExtraLayers = [ WEB_LAYERS['ZaSpot10mMosaic2010'],WEB_LAYERS['ZaRoadsBoundaries'] ]
-  myLayersList = "[zaSpot10mMosaic2010,zaRoadsBoundaries]"
+  myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
   return ({
         'myMessages' : myMessages,
-        'myLayerDefinitions' : myExtraLayers,
+        'myLayerDefinitions' : myLayerDefinitions,
         'myLayersList' : myLayersList,
         'myRecords' : [mySearchRecord],
         'myExtent' : myExtent,

@@ -214,3 +214,17 @@ logic of the application domain:
 
 In addition we suggest that there is an update to the ordering and acquisition
 programming forms so that they have similar look to advanced search forms.
+
+
+=== Data integrity ===
+
+Batch processes need to be implemented that can be run across the entire
+database or sections of the database in order to clean anomolies in the
+database. 
+
+Items for targetting include:
+
+- checking acquisition start date is consistent with product date (e.g. some landsat
+  records are marked with acquisition start in 2093 instead of 1993).
+- checking sensor / mode / type are consistent with product ids throughout.
+-

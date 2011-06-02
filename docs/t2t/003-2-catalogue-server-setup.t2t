@@ -384,6 +384,10 @@ pg_restore acs_[filename].dmp | psql acs
 
 Please see the webmapping chapter (600-webmapping.t2t) for notes on the setup process for GDAL
 
+**Note:** When installing gdal from source and you want the python bindings installed into your 
+python virtual env, make sure to activate the virtual environment begore building gdal so that
+its bindings are placed in the v.env site packages dir.
+
 === Apache setup ===
 
 There are specific notes for the catalogue application in the developer guide. The apache
