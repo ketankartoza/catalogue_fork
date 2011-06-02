@@ -89,15 +89,27 @@ Next gdal must be (re)built with the ecw flag:
 
 **Note:** You can skip this step if you are going on to add MrSid support below too.
 
+
+**Note:** If you want the gdal python bindings installed into your django python virtual env, first do and ensure you have python setup tools on your venv.
+
+```
+source /opt/sac_catalogue/python
+```
+
+or similar before running the build procedure below. The bindings will then go into your python env 
+rather than into the global python dir.
+
 ```
 cd <gdal src>
 make clean
+export CXXFLAGS=-fPIC
 ./configure --with-libtiff=internal \
             --with-geotiff=internal \
             --with-ecw=/usr/local \
             --with-python \
             --with-jpeg=internal \
-            --with-jpeg12
+            --with-jpeg12 \
+            --without-libtool
 make -j8
 sudo make install            
 ```
@@ -125,6 +137,7 @@ To add mr sid support, you need the MrSid geosdk and then to reconfigure and bui
 ```
 cd <gdal src>
 make clean
+export CXXFLAGS=-fPIC
 ./configure --with-libtiff=internal \
             --with-geotiff=internal \
             --with-ecw=/usr/local \
@@ -132,12 +145,31 @@ make clean
             --with-mrsid=/usr/local/Geo_DSDK-7.0.0.2167/ \
             --without-jp2mrs \
             --with-jpeg=internal \
-            --with-jpeg12
+            --with-jpeg12 \
+            --without-libtool
 make -j8
 sudo make install            
 ```
 
 Jpeg internal and jpeg 12 needed for jpeg12 tif compression support
+
+**Note:** If you want the gdal python bindings installed into your django python virtual env, first do
+
+```
+source /opt/sac_catalogue/python
+```
+
+or similar before running the build procedure above. The bindings will then go into your python env 
+rather than into the global python dir. With the above you should see something like this in 
+the output from configure for gdal:
+
+```
+checking for python bindings... checking for python... python
+checking for location of Python Makefiles... found
+checking where to install Python modules... /opt/sac_catalogue/python/lib64/python2.7/site-packages
+enabled
+checking for python setuptools... found
+```
 
 === Mapserver Setup ===
 

@@ -38,7 +38,8 @@ of nested products, each with a thumb, metadata link, add to basket icon etc.
 -Location based on their ip address
 -Named place (using GNIS / GEONAMES gazetteer dataset)
 -Saved place (a collection of sptial bookmarks)
--
+-Remember AOI between searches (s a new search defaults to the AOI of the last)
+Suggested by Adriaan Van Niekerk
                              
 === Geospatial Products ===
 

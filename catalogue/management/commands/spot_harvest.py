@@ -208,22 +208,62 @@ class Command(BaseCommand):
         verblog('Quality %s does not exists and cannot be creates, it will be read from metadata.' % quality, 2)
         raise CommandError, 'Quality %s does not exists and cannot be created: aborting' % quality
 
-
       try:
         imported = 0
         verblog('Starting index dowload...', 2)
         for package in Command.fetch_geometries(shapefile, area_of_interest):
           verblog("Ingesting %s" % package, 2)
 
-          path, path_shift, row, row_shift = get_row_path_from_polygon(package.geom, no_compass=True)
+
+          # Defaults
+          
+          spot_missions = Mission.objects.filter( operator_abbreviation__startswith = "SPOT" )
+          mission_sensors = MissionSensor.objects.filter( mission__in=spot_missions )
+          sensor_types = SensorType.objects.filter( mission_sensor__in=mission_sensors )
+          acquisition_modes = AcquisitionMode.objects.filter( sensor_type__in=sensor_types )
+          #
+          # Following for debuggin info only
+          #
+          verblog("Allowed missions:",2)
+          for myMission in spot_missions:
+            verblog(myMission,2) #.operator_abbreviation
+          verblog("Allowed sensors:",2)
+          for mySensor in mission_sensors:
+            verblog(mySensor,2) #.operator_abbreviation
+          verblog("Allowed sensor types:")
+          for mySensorType in sensor_types:
+            verblog(mySensorType,2) #.operator_abbreviation
+          verblog("Allowed acquisition modes:",2)
+          for myMode in acquisition_modes:
+            verblog(myMode,2) #.operator_abbreviation
+          #
+          # End of debugging section
+          #
+          # Understanding SPOT a21 scene id:
+          # Concerning the SPOT SCENE products, the name will be the string 'SCENE ' followed by 'formated A21 code'. 
+          # e.g. 41573401101010649501M
+          # e.g. 4 157 340 11/01/01 06:49:50 1 M
+          # Formated A21 code is defined as : N KKK-JJJ YY/MM/DD HH:MM:SS I C
+          # (with N: Satellite number, KKK-JJJ : 
+          #  GRS coordinates, YY/MM/DD : 
+          #  Center scene date, HH:MM:SS : 
+          #  Center scene time, I : 
+          #  Instrument number (1,2), C : 
+          #  Sensor Code (P, M, X, I, J, A, B, S, T, M+X, M+I). 
+          #  For shift along the track products, SAT value is added after KKK-JJJ info : '/SAT' (in tenth of scene (0 to 9))
+          # http://www.spotimage.com/dimap/spec/dictionary/Spot_Scene/DATASET_NAME.htm
+          # Some of these data are explicitly defined in fields in the catalogue shp dumps so 
+          # we dont try to parse everthing from the a21 id
+
+          original_id = package.get('A21')
           # Gets the mission
           mission_id = package.get('SATEL')
           if not int(mission_id) in (1,2,3,4,5):
             raise CommandError('Unknown Spot mission number (should be 1-5) %s.' % mission_id)
 
-          # Defaults
+          sensor_type = ""
+          acquisition_mode = 
           mission = Mission.objects.get( abbreviation="S%s" % mission_id)
-          sensor_type = SensorType.objects( 
           band_count            = 0;
           date_parts = package.get('DATE_ACQ').split('/') # e.g. 20/01/2011
           time_parts = package.get('TIME_ACQ').split(':') # e.g. 08:29:01

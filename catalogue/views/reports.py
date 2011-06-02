@@ -236,7 +236,7 @@ def dataSummaryTable(theRequest):
   #myResultSet = GenericProduct.objects.values("mission_sensor").annotate(Count("id")).order_by().aggregate(Min('product_acquisition_start'),Max('product_acquisition_end'))
   #ABP: changed to GenericSensorProduct
   #ABP: changed to MissionSensor
-  myResultSet = MissionSensor.objects.annotate(id__count=Count('sensortype__acquisitionmode__genericsensorproduct'))
+  myResultSet = MissionSensor.objects.annotate(id__count=Count('sensortype__acquisitionmode__genericsensorproduct')).order_by('name')
     #[{'mission_sensor': 6, 'id__count': 288307}, {'mission_sensor': 9, 'id__count': 289028}, {'mission_sensor': 3, 'id__count': 120943}, {'mission_sensor': 7, 'id__count': 222429}, {'mission_sensor': 5, 'id__count': 16624}, {'mission_sensor': 1, 'id__count': 3162}, {'mission_sensor': 2, 'id__count': 20896}, {'mission_sensor': 4, 'id__count': 17143}, {'mission_sensor': 8, 'id__count': 186269}]
   myTotal = 0
   for myResult in myResultSet:
@@ -288,3 +288,26 @@ def sensorSummaryTable(theRequest, theSensorId):
   myResults["Total products for all sensors"] = myProductTotalCount 
   return ({ "myResults": myResults, "mySensor" : mySensor})
 
+@staff_member_required
+#renderWithContext is explained in renderWith.py
+@renderWithContext('dictionaryReport.html')
+def dictionaryReport(theRequest):
+  """
+  Summary of mission, sensor, type and mode dictionaries. Later we could add proc level too
+  """
+
+  myReport=[]
+  myTypeReport=[]
+  myMissions = Mission.objects.all().order_by('name')
+  for myMission in myMissions:
+    mySensors = MissionSensor.objects.filter(mission=myMission).order_by('name')
+    for mySensor in mySensors:
+      myTypes = SensorType.objects.filter(mission_sensor=mySensor).order_by('name')
+      for myType in myTypes:
+        myModes = AcquisitionMode.objects.filter(sensor_type=myType).order_by('name')
+        myTypeRow = [myMission,mySensor,myType]
+        myTypeReport.append(myTypeRow)
+        for myMode in myModes:
+          myRow = [myMission,mySensor,myType,myMode]
+          myReport.append(myRow)
+  return({"myTypeResults" : myTypeReport, "myResults" : myReport})

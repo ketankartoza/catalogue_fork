@@ -100,7 +100,15 @@ On newer editions of ubuntu you may need to use libpq5 rather:
 sudo apt-get install libpq-dev libpq5 libpqxx-dev libxslt1-dev
 ```
 
+Then make sure the virtual environment is active:
+
+```
+source ../python/bin/activate
+```
+
+
 Install easy_install so that we can use pip thereafter:
+
 
 ```
 easy_install pip

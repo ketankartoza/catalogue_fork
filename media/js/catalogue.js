@@ -938,11 +938,20 @@ function addOrderClicked()
   return false;
 }
 
+/** Load some content into the #content div.
+ * Uses ajax to load it and blocks the ui while loading
+ */
+function loadContent( theUrl )
+{
+  block();
+  $("#content").load( theUrl ,"",unblock);
+}
 function loadSummaryTable(theId)
 {
   block();
   $("#content").load("/sensorSummaryTable/" + theId + "/","",unblock);
 }
+
 
 /* Transform an openlayers bounds object such that
  * it matches the CRS of the map
