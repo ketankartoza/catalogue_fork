@@ -208,6 +208,18 @@ class Command(BaseCommand):
         verblog('Quality %s does not exists and cannot be creates, it will be read from metadata.' % quality, 2)
         raise CommandError, 'Quality %s does not exists and cannot be created: aborting' % quality
 
+      # Understanding SPOT a21 scene id:
+      # Concerning the SPOT SCENE products, the name will be the string 'SCENE ' followed by 'formated A21 code'. 
+      # e.g. 41573401101010649501M
+      # Formated A21 code is defined as : N KKK-JJJ YY/MM/DD HH:MM:SS I C
+      # (with N: Satellite number, KKK-JJJ : 
+      #  GRS coordinates, YY/MM/DD : 
+      #  Center scene date, HH:MM:SS : 
+      #  Center scene time, I : 
+      #  Instrument number (1,2), C : 
+      #  Sensor Code (P, M, X, I, J, A, B, S, T, M+X, M+I). 
+      #  For shift along the track products, SAT value is added after KKK-JJJ info : '/SAT' (in tenth of scene (0 to 9))
+      # http://www.spotimage.com/dimap/spec/dictionary/Spot_Scene/DATASET_NAME.htm
 
       try:
         imported = 0
@@ -227,25 +239,44 @@ class Command(BaseCommand):
           print "Allowed missions:"
           print "===================="
           for myMission in spot_missions:
-            print myMission.operator_abbreviation
+            print myMission #.operator_abbreviation
           
           mission_sensors = MissionSensor.objects.filter( mission__in=spot_missions )
           print "Allowed sensors:"
           print "===================="
           for mySensor in mission_sensors:
-            print mySensor.operator_abbreviation
+            print mySensor #.operator_abbreviation
 
           sensor_types = SensorType.objects.filter( mission_sensor__in=mission_sensors )
           print "Allowed sensor types:"
           print "===================="
           for mySensorType in sensor_types:
-            print mySensorType.operator_abbreviation
+            print mySensorType #.operator_abbreviation
+            myMode = AcquisitionMode()
+            myMode.sensor_type = mySensorType
+            myMode.abbreviation = "S" + str(mission_id) + "C1"
+            myMode.name = "Camera 1"
+            myMode.geometric_resolution = 0
+            myMode.band_count = 0
+            myMode.is_grayscale = 0
+            myMode.operator_abbreviation = "S" + str(mission_id) + "C1"
+            myMode.save()
+            myMode2 = AcquisitionMode()
+            myMode2.sensor_type = mySensorType
+            myMode2.abbreviation = "S" + str(mission_id) + "C2"
+            myMode2.name = "Camera 2"
+            myMode2.geometric_resolution = 0
+            myMode2.band_count = 0
+            myMode2.is_grayscale = 0
+            myMode2.operator_abbreviation = "S" + str(mission_id) + "C2"
+            myMode2.save()
 
           acquisition_modes = AcquisitionMode.objects.filter( sensor_type__in=sensor_types )
           print "Allowed acquisition modes:"
           print "===================="
           for myMode in acquisition_modes:
-            print myMode.operator_abbreviation
+            print myMode #.operator_abbreviation
+          return
           sensor_type = ""
           sensor_type = ""
           mission = Mission.objects.get( abbreviation="S%s" % mission_id)

@@ -59,7 +59,16 @@ class MissionSensor( models.Model ):
 ###############################################################################
 
 class SensorType( models.Model ):
-  """Sensor type / camera number e.g. CAM1"""
+  """Sensor type 
+     @note: Moved notes below and above from AcuisitionMode class to here on 2 June 2010
+            as they were mixed up
+     @note: mode examples:
+           J = Multispectral 10m
+           P/M = Panchromatic 10m
+           A/B = Panchromatic 5m
+           T = Panchromatic 2.5m
+           X = Multispectral 20m
+           JT = Pansharpened 2.5m Multispectral"""
   abbreviation = models.CharField( max_length="4")
   name = models.CharField( max_length="255" )
   mission_sensor = models.ForeignKey(MissionSensor ) # e.g. HRV
@@ -74,15 +83,12 @@ class SensorType( models.Model ):
 ###############################################################################
 
 class AcquisitionMode( models.Model ):
-  """Acquisition mode.
-     @note: mode examples:
-           J = Multispectral 10m
-           P/M = Panchromatic 10m
-           A/B = Panchromatic 5m
-           T = Panchromatic 2.5m
-           X = Multispectral 20m
-           JT = Pansharpened 2.5m Multispectral"""
-  sensor_type = models.ForeignKey(SensorType ) #e.g. CAM1
+  """Acquisition mode / camera number e.g. CAM1
+     @note: Moved notes below and above from SensorType class to here on 2 June 2010
+            as they were mixed up
+     @todo refactor resoltion, band count is grayscale up to type
+  """
+  sensor_type = models.ForeignKey(SensorType ) #e.g. M
   abbreviation = models.CharField( max_length="4")
   name = models.CharField( max_length="255" )
   geometric_resolution = models.IntegerField(help_text="Geometric resolution in m")
