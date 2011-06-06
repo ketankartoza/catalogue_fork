@@ -428,28 +428,11 @@ def metadataText(theRequest, theId):
   return HttpResponse( myString )
 
 @login_required
-#renderWithContext is explained in renderWith.py
-@renderWithContext('productInfo.html')
 def metadata(theRequest, theId):
-  """Get the metadata for a product. The technique used here is
-  to iterate through the product class properties using class introspection
-  and generate a simple html document containing key/value pairs"""
+  """Get the metadata for a product."""
   myGenericProduct = get_object_or_404( GenericProduct, id=theId )
   myObject, myType = myGenericProduct.getConcreteProduct()
-  myDetails=[]
-  myDetails.append( "<tr><th>Key</th><th>Value</th></tr>")
-  if myObject:
-    myDict = myObject.__dict__
-    myDict.keys().sort()
-    for myKey, myValue in myDict.items():
-      #a couple of exceptions:
-      if myKey is "spatial_coverage": continue
-      #later we will treat the metadata field differently and parse it rather
-      #than just return it verbatim
-      myDetails.append("<tr><th>" + str(myKey).replace("_"," ").capitalize() + "</th><td> : " + str(myValue) + "</td></th>" )
-  else:
-    logging.info("Getting concrete class failed")
-  return ( { 'myDetails' : myDetails } )
+  return ( HttpResponse( myObject.toHtml() ) )
 
 def searchKml(theRequest, theGuid):
   """Show a kml of a single search"""

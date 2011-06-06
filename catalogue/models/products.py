@@ -18,6 +18,8 @@ from functools import wraps
 from catalogue.utmzonecalc import utmZoneFromLatLon
 from catalogue.dims_lib import dimsWriter
 
+from django.template.loader import render_to_string
+
 # Read from settings
 CATALOGUE_SCENES_PATH = getattr(settings, 'CATALOGUE_SCENES_PATH', "/mnt/cataloguestorage/scenes_out_projected_sorted/")
 CATALOGUE_ISO_METADATA_XML_TEMPLATE = getattr(settings, 'CATALOGUE_ISO_METADATA_XML_TEMPLATE')
@@ -728,6 +730,10 @@ class OpticalProduct( GenericSensorProduct ):
     """
     return self._thumbnailPath()
 
+  def toHtml( self ):
+    """Return an html snippet that describes the properties of this product"""
+    return render_to_string('productTypes/opticalProduct.html', { 'myObject': self })
+
 
 ###############################################################################
 
@@ -806,6 +812,9 @@ class GeospatialProduct( GenericProduct ):
   class Meta:
     app_label= 'catalogue'
 
+  def toHtml(self):
+    """Return an html snippet that describes the properties of this product"""
+    return render_to_string('productTypes/genericProduct.html', { 'myObject': self })
 ###############################################################################
 
 class OrdinalProduct( GenericProduct ):
