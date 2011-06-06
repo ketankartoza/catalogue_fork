@@ -157,9 +157,12 @@ def downloadClipGeometry(theRequest,theId):
 
 @login_required
 def downloadOrderMetadata(theRequest,theId):
-  """Returns ISO 19115 metadata for ordered products"""
+  """Returns ISO 19115 metadata for ordered products unless the request is suffixed by ?html"""
   myOrder = get_object_or_404(Order,id=theId)
-  return downloadISOmetadata(myOrder.searchrecord_set.all(),'Order-%s' % myOrder.id)
+  if theRequest.GET.has_key('html'):
+    return downloadHtmlMetadata(myOrder.searchrecord_set.all(),'Order-%s' % myOrder.id)
+  else:
+    return downloadISOMetadata(myOrder.searchrecord_set.all(),'Order-%s' % myOrder.id)
 
 @login_required
 def viewOrder (theRequest, theId):

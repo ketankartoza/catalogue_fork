@@ -327,9 +327,11 @@ def downloadSearchResult(theRequest, theGuid):
 
 @login_required
 def downloadSearchResultMetadata(theRequest,theGuid):
-  """Returns ISO 19115 metadata for searchresults"""
+  """Returns ISO 19115 metadata for searchresults. I t defaults to xml format unless a ?html is appended to the url"""
 
   mySearcher = Searcher(theRequest,theGuid)
   mySearcher.search( False ) # dont paginate
-
-  return downloadISOmetadata(mySearcher.mSearchRecords,'Search-%s' % theGuid)
+  if theRequest.GET.has_key('html'):
+    return downloadHtmlMetadata(mySearcher.mSearchRecords,'Search-%s' % theGuid)
+  else:
+    return downloadISOMetadata(mySearcher.mSearchRecords,'Search-%s' % theGuid)

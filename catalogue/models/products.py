@@ -376,6 +376,9 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
 
     return set(utmZoneFromLatLon(*self.spatial_coverage.extent[:2],theBuffer=theBuffer)+utmZoneFromLatLon(*self.spatial_coverage.extent[2:],theBuffer=theBuffer))
 
+  def toHtml( self ):
+    """Return an html snippet that describes the properties of this product"""
+    return render_to_string('productTypes/genericProduct.html', { 'myObject': self })
 
 class ProductLink (edge_factory('catalogue.GenericProduct', concrete = False, base_model = models.Model)):
   """
@@ -440,6 +443,9 @@ class GenericImageryProduct( GenericProduct ):
     )
     return metadata
 
+  def toHtml( self ):
+    """Return an html snippet that describes the properties of this product"""
+    return render_to_string('productTypes/genericImageryProduct.html', { 'myObject': self })
 
 
 ###############################################################################
@@ -662,6 +668,9 @@ class GenericSensorProduct( GenericImageryProduct ):
     t = parts[9]
     self.product_acquisition_start = datetime.datetime(int('20'+d[:2]), int(d[2:4]), int(d[-2:]), int(t[:2]), int(t[2:4]), int(t[-2:]))
 
+  def toHtml( self ):
+    """Return an html snippet that describes the properties of this product"""
+    return render_to_string('productTypes/genericSensorProduct.html', { 'myObject': self })
 
 ###############################################################################
 
@@ -783,6 +792,9 @@ class RadarProduct( GenericSensorProduct ):
     """
     return self._thumbnailPath()
 
+  def toHtml(self):
+    """Return an html snippet that describes the properties of this product"""
+    return render_to_string('productTypes/radarProduct.html', { 'myObject': self })
 ###############################################################################
 
 
@@ -814,7 +826,7 @@ class GeospatialProduct( GenericProduct ):
 
   def toHtml(self):
     """Return an html snippet that describes the properties of this product"""
-    return render_to_string('productTypes/genericProduct.html', { 'myObject': self })
+    return render_to_string('productTypes/geospatialProduct.html', { 'myObject': self })
 ###############################################################################
 
 class OrdinalProduct( GenericProduct ):
@@ -833,6 +845,9 @@ class OrdinalProduct( GenericProduct ):
   class Meta:
     app_label= 'catalogue'
 
+  def toHtml(self):
+    """Return an html snippet that describes the properties of this product"""
+    return render_to_string('productTypes/ordinalProduct.html', { 'myObject': self })
 ###############################################################################
 
 class ContinuousProduct( GenericProduct ):
@@ -849,3 +864,6 @@ class ContinuousProduct( GenericProduct ):
   class Meta:
     app_label= 'catalogue'
 
+  def toHtml(self):
+    """Return an html snippet that describes the properties of this product"""
+    return render_to_string('productTypes/continuousProduct.html', { 'myObject': self })

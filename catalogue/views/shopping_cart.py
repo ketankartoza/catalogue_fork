@@ -39,9 +39,12 @@ def downloadCart(theRequest):
 
 @login_required
 def downloadCartMetadata(theRequest):
-  """Returns ISO 19115 metadata for products in cart"""
+  """Returns ISO 19115 metadata for products in cart, unless request is suffixed with ?html"""
   myRecords = SearchRecord.objects.all().filter(user=theRequest.user).filter(order__isnull=True)
-  return downloadISOmetadata(myRecords,'Cart-%s' % theRequest.user.username)
+  if theRequest.GET.has_key('html'):
+    return downloadHtmlMetadata(myRecords,'Cart-%s' % theRequest.user.username)
+  else:
+    return downloadISOMetadata(myRecords,'Cart-%s' % theRequest.user.username)
 
 @login_required
 def addToCart(theRequest, theId):

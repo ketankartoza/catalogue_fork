@@ -22,14 +22,12 @@
   {% else %}
   {% if myRecords %}
   <div id="cart-download-div" style="text-align: center;">
-    <img src="/media/images/down_16.png" alt=""/> Download cart as<br/>
+    <span class="loud"><img src="/media/images/down_16.png" alt=""/>Download cart as:</span></br/>
     <a class="button-link" href="/downloadcart/?shp">SHP</a>
     <a class="button-link" href="/downloadcart/?kml">KML</a>
     <a class="button-link" href="/downloadcart/?kmz">KMZ</a>
-  </div>
-  <div id="cart-download-div" style="text-align: center;">
-    <img src="/media/images/down_16.png" alt=""/> Download ISO 19115 (SAC Profile)
-    <a class="button-link" href="/downloadcartmetadata/">Cart metadata</a>
+    <a class="button-link" href="/downloadcartmetadata/">XML</a>
+    <a class="button-link" href="/downloadcartmetadata/?html">HTML</a>
   </div>
   {% endif %}
   {% endif %}

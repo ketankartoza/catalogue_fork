@@ -124,28 +124,27 @@
   {% if mySearchFlag %}
     <h3 id="search-summary-accordion-h3"><a href="#"><img src="/media/images/search_16.png" alt="" />&nbsp;Search Summary</a></h3>
     <div id="search-summary-accordion-div">
-        {% if myMessages %}<div id="search-messages">
-          <b>{{ myPaginator.count }}</b> record found for
-          {% for myValue in myMessages %}
-            {{ myValue|safe }}{% if not forloop.last %},{% else %}.{% endif %}<br/>
-          {% endfor %}
-          <div><b>Note:</b>The SPOT Imagery provided in this backdrop has been degraded to 10m</div>
-        </div>{% endif %}
-        {% if myRecords %}
-    <div>
-      <img src="/media/images/down_16.png" alt=""/> Download search<br/>
+      {% if myMessages %}<div id="search-messages">
+        <b>{{ myPaginator.count }}</b> record found for
+        {% for myValue in myMessages %}
+          {{ myValue|safe }}{% if not forloop.last %},{% else %}.{% endif %}<br/>
+        {% endfor %}
+        <div><b>Note:</b>The SPOT Imagery provided in this backdrop has been degraded to 10m</div>
+      </div>{% endif %}
+      {% if myRecords %}
+      <div id="cart-download-div" style="text-align: center;">
+        <span class="loud"><img src="/media/images/down_16.png" alt=""/>Download search as:</span></br/>
         <a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?shp">SHP</a>
         <a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?kml">KML</a>
         <a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?kmz">KMZ</a>
-      <br/>
-      <img src="/media/images/down_16.png" alt=""/> Download metadata<br/> 
-        <a class="button-link" href="/downloadsearchmetadata/{{mySearchGuid}}/">Search metadata</a>
+        <a class="button-link" href="/downloadsearchmetadata/{{mySearchGuid}}/">XML</a>
+        <a class="button-link" href="/downloadsearchmetadata/{{mySearchGuid}}/?html">HTML</a>
+      </div>
+      {% endif %}
+      <br />
+    <div style="text-align: center;">
+      <a href="/modifysearch/{{mySearchGuid}}/" class="button-link" alt="Returns to the main search page (works on a copy of the current search)">Modify this search</a>
     </div>
-        {% endif %}
-        <br />
-  <div>
-    <a href="/modifysearch/{{mySearchGuid}}/" class="button-link" alt="Returns to the main search page (works on a copy of the current search)">Modify this search</a>
-  </div>
   <div>
       {% if myProductIdSearch %}<br /><a href="/productIdSearchClone/{{mySearchGuid}}/" class="button-link" title="Refine this search (works on a copy of the current search)">Product ID search</a>{% endif %}
   </div>

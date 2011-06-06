@@ -272,13 +272,12 @@ function showMiniCart( )
   {
     $("#accordion").accordion("activate", 2);
   }
-  $(".working").slideUp('slow');
+  unblock();
 }
 function addToCart( theId )
 {
   // Show a wait image before we hit our ajax call
-  $(".working").html('<p>Adding, please wait...<img src="/media/images/ajax-loader.gif"></p>');
-  $(".working").slideDown('slow');
+  block();
   $.get("/addtocart/" + theId + "/?xhr","", showMiniCart);
   // prevent page jumping around on empty hyperlink clicks
   return false;

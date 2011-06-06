@@ -143,16 +143,16 @@
     </tr>
   </tbody>
 </table>
-    {% if user.is_staff %}
     {% if myOrder.delivery_detail.geometry %}
     Download clip geometry:
     <a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?shp">SHP</a>
     <a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?kml">KML</a>
     <a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?kmz">KMZ</a>
     {% endif %}
-    {% endif %}
     Download ISO 19115 (SAC Profile)
     <a class="button-link" href="/downloadordermetadata/{{ myOrder.id }}/">XML metadata</a>
+    Download HTML Metadata
+    <a class="button-link" href="/downloadordermetadata/{{ myOrder.id }}/?html">HTML metadata</a>
 {% box_end %}
 <br />
 <div id="items">
