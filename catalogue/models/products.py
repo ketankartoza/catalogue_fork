@@ -20,9 +20,90 @@ from catalogue.dims_lib import dimsWriter
 
 from django.template.loader import render_to_string
 
+# for thumb georeferencer
+from django.contrib.gis.geos import Polygon
+from django.contrib.gis.geos import Point
+import osgeo.gdal
+from osgeo.gdalconst import *
+
 # Read from settings
 CATALOGUE_SCENES_PATH = getattr(settings, 'CATALOGUE_SCENES_PATH', "/mnt/cataloguestorage/scenes_out_projected_sorted/")
 CATALOGUE_ISO_METADATA_XML_TEMPLATE = getattr(settings, 'CATALOGUE_ISO_METADATA_XML_TEMPLATE')
+
+##################################################################
+# These first functions are for thumb registration
+##################################################################
+
+def coordIsOnBounds( theCoord, theExtents ):
+  """Helper function to determine if a vertex touches the bounding box"""
+  if theCoord[0] == theExtents[0] or theCoord[0] == theExtents[2]: return True #xmin,xmax
+  if theCoord[1] == theExtents[1] or theCoord[1] == theExtents[3]: return True #ymin,ymax
+  return False
+
+#######################################################
+
+def sortCandidates( theCandidates, theExtents, theCentroid ):
+  """Return the members of the array in order TL, TR, BR, BL"""
+  #for myCoord in theCandidates:
+  #  print myCoord
+  mySortedCandidates = []
+  myTopLeft = None
+  #print "Defalt Candidate: %s" %  str( myTopLeft )
+  for myCoord in theCandidates:
+    #print "Evaluating: %s" % str( myCoord )
+    if myCoord[1] < theCentroid[1]:
+      continue # its in the bottom half so ignore
+    if not myTopLeft:
+      myTopLeft = myCoord
+      continue
+    if myCoord[0] < myTopLeft[0]:
+      myTopLeft = myCoord
+      #print "Computed Candidate: %s" %  str( myTopLeft )
+
+  mySortedCandidates.append( myTopLeft )
+  theCandidates.remove( myTopLeft )
+
+  myTopRight = None
+  #print "Defalt Candidate: %s" %  str( myTopRight )
+  for myCoord in theCandidates:
+    #print "Evaluating: %s" % str( myCoord )
+    if myCoord[1] < theCentroid[1]:
+      continue # its in the bottom half so ignore
+    if not myTopRight:
+      myTopRight = myCoord
+      continue
+    if myCoord[0] > myTopRight[0]:
+      myTopRight = myCoord
+      #print "Computed Candidate: %s" %  str( myTopRight )
+
+  mySortedCandidates.append( myTopRight )
+  theCandidates.remove( myTopRight )
+
+  myBottomRight = None
+  #print "Defalt Candidate: %s" %  str( myBottomRight )
+  for myCoord in theCandidates:
+    #print "Evaluating: %s" % str( myCoord )
+    if myCoord[1] > theCentroid[1]:
+      continue # its in the top half so ignore
+    if not myBottomRight:
+      myBottomRight = myCoord
+      continue
+    if myCoord[0] > myBottomRight[0]:
+      myBottomRight = myCoord
+      #print "Computed Candidate: %s" %  str( myBottomRight )
+
+  mySortedCandidates.append( myBottomRight )
+  theCandidates.remove( myBottomRight )
+
+  myBottomLeft = theCandidates[0]
+  mySortedCandidates.append( myBottomLeft ) #the only one remaining
+  theCandidates.remove( myBottomLeft  )
+
+  return mySortedCandidates
+
+#####################################################3
+# End of georef helpers
+#####################################################3
 
 def runconcrete(func):
   """
@@ -244,6 +325,71 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     myBackground.paste( theImage, ( myImageLeft, myImageTop ) )
 
     return myBackground
+
+
+  def georeferenceThumbnail( self ):
+    # Get the minima, maxima - used to test if we are on the edge 
+    myExtents = self.spatial_coverage.extent
+    #print "Envelope: %s %s" % ( len( myExtents), str( myExtents ) )
+    # There should only be 4 vertices touching the edges of the 
+    # bounding box of the shape. If we assume that the top right 
+    # corner of the poly is on the right edge of the bbox, the 
+    # bottom right vertex is on the bottom edge and so on
+    # we can narrow things down to just the leftside two and rightside 
+    # two vertices. Thereafter, determining which is 'top' and which 
+    # is bottom is a simple case of comparing the Y values in each grouping.
+    #
+    # Note the above logic makes some assumptions about the oreintation of 
+    # the swath which may not hold true for every sensor.
+    #
+    myCandidates = []
+    try:
+      for myArc in self.spatial_coverage.coords: #should only be a single arc in our case!
+        for myCoord in myArc[:-1]:
+          if coordIsOnBounds( myCoord, myExtents ):
+            myCandidates.append( myCoord )
+    except:
+      raise 
+    #print "Candidates Before: %s %s " % (len(myCandidates), str( myCandidates ) )
+    myCentroid = self.spatial_coverage.centroid
+    myCandidates = None
+    try:
+      myCandidates = sortCandidates( myCandidates, myExtents, myCentroid )
+    except:
+      raise
+    #print "Candidates After: %s %s " % (len(myCandidates), str( myCandidates ) )
+    myTL = myCandidates[0]
+    myTR = myCandidates[1]
+    myBR = myCandidates[2]
+    myBL = myCandidates[3]
+
+    myInputImageFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailPath(), self.product_id + ".jpg" )
+    myTempTifFile = os.path.join( "/tmp/",self.product_id + ".tif" )
+    myTempJpgFile = os.path.join( "/tmp/",self.product_id + "-reffed.jpg" )
+    myString = "gdal_translate -a_srs 'EPSG:4326' -gcp 0 0 %s %s -gcp %s 0 %s %s -gcp %s %s %s %s -gcp 0 %s %s %s -of GTIFF -co COMPRESS=DEFLATE -co TILED=YES %s %s" % ( \
+          myTL[0], myTL[1], \
+          myImageXDim, myTR[0],myTR[1], \
+          myImageXDim, myImageYDim, myBR[0],myBR[1], \
+          myImageYDim, myBL[0],myBL[1], \
+          myInputImageFile, \
+          myTempTifFile )
+    print myString
+    # TODO : nicer way to call gdal e.g.
+    #subprocess.check_call(["gdal_translate", "-q", "-co", "worldfile=on", "-of", "JPEG", downloaded_thumb, jpeg_thumb])
+    os.system( myString )
+    # Now convert the tif to a jpg
+    myString = "gdal_translate -of JPEG -co WORLDFILE=YES %s %s" % \
+      ( myTempTifFile, myTempJpgFile )
+    os.system( myString )
+    # Clean away the tiff and copy the referenced jpg over to the thumb dir
+    #os.remove( myTiffThumbnail )
+    #print "Image X size: %s" % myImageXDim
+    #print "Image Y size: %s" % myImageYDim
+    #print "Top left X: %s, Y:%s" %(myTL[0],myTL[1])
+    #print "Top right X: %s, Y:%s" %(myTR[0],myTR[1])
+    #print "Bottom left X: %s, Y:%s" %(myBL[0],myBL[1])
+    #print "Bottom right X: %s, Y:%s" %(myBR[0],myBR[1])
+
 
   @runconcrete
   def imagePath( self ):

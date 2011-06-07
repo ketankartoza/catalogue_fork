@@ -212,14 +212,9 @@ class Command(BaseCommand):
         imported = 0
         verblog('Starting index dowload...', 2)
         for package in Command.fetch_geometries(shapefile, area_of_interest):
+          if imported > 100: continue
           verblog("Ingesting %s" % package, 2)
 
-
-          # Defaults
-          
-          #
-          # End of debugging section
-          #
           # Understanding SPOT a21 scene id:
           # Concerning the SPOT SCENE products, the name will be the string 'SCENE ' followed by 'formated A21 code'. 
           # e.g. 41573401101010649501M
@@ -241,27 +236,31 @@ class Command(BaseCommand):
           mission_id = package.get('SATEL')
           if not int(mission_id) in (1,2,3,4,5):
             raise CommandError('Unknown Spot mission number (should be 1-5) %s.' % mission_id)
-          mission_abbreviation = "SPOT-%s" % mission_id
-          spot_mission = Mission.objects.get( operator_abbreviation = mission_abbreviation )
-          mission_sensors = MissionSensor.objects.filter( mission=spot_mission )
-          # work out the sensor type
-          myType = package.get('TYPE')
-          sensor_type = SensorType.objects.filter( mission_sensor__in=mission_sensors ).filter( operator_abbreviation = myType )[0]
-          myMode = "S%sC%s" % ( mission_id, package.get('A21')[-2:-1] )
-          acquisition_mode = AcquisitionMode.objects.filter( sensor_type=sensor_type ).filter( operator_abbreviation=myMode )[0]
-          #
-          # Following for debugging info only
-          #
-          verblog("Detected mission: %s" % spot_mission ,2)
-          verblog("Allowed sensors:",2)
-          for mySensor in mission_sensors:
-            verblog(mySensor,2) #.operator_abbreviation
-          verblog("Detected sensor type: %s" % sensor_type, 2 )
-          verblog("Detected acquisition mode: %s" % acquisition_mode, 2)
-          #
-          # Debugging output ends
-          #
-
+          try:
+            mission_abbreviation = "SPOT-%s" % mission_id
+            spot_mission = Mission.objects.get( operator_abbreviation = mission_abbreviation )
+            mission_sensors = MissionSensor.objects.filter( mission=spot_mission )
+            # work out the sensor type
+            myType = package.get('TYPE')
+            # The type abbreviation should be unique for its sensor so we chain two filters to get it
+            sensor_type = SensorType.objects.filter( mission_sensor__in=mission_sensors ).filter( operator_abbreviation = myType )[0]
+            # The mode should be unique for its type so we chain two filters to get it
+            myMode = "S%sC%s" % ( mission_id, package.get('A21')[-2:-1] )
+            acquisition_mode = AcquisitionMode.objects.filter( sensor_type=sensor_type ).filter( operator_abbreviation=myMode )[0]
+            #
+            # Following for debugging info only
+            #
+            verblog("Detected mission: %s" % spot_mission ,2)
+            verblog("Allowed sensors:",2)
+            for mySensor in mission_sensors:
+              verblog(mySensor,2) #.operator_abbreviation
+            verblog("Detected sensor type: %s" % sensor_type, 2 )
+            verblog("Detected acquisition mode: %s" % acquisition_mode, 2)
+            #
+            # Debugging output ends
+            #
+          except:
+            continue
           band_count            = 0;
           date_parts = package.get('DATE_ACQ').split('/') # e.g. 20/01/2011
           time_parts = package.get('TIME_ACQ').split(':') # e.g. 08:29:01
@@ -322,7 +321,7 @@ class Command(BaseCommand):
               op.productIdReverse(True)
             except Exception, e:
               raise CommandError('Cannot get all mandatory data from product id %s (%s).' % (product_id, e))
-
+          verblog("Saving product and setting thumb", 2)
           try:
             op.save()
             if test_only:
@@ -334,30 +333,21 @@ class Command(BaseCommand):
                 os.makedirs(thumbnails_folder)
               except:
                 pass
-              # Download original geotiff thumbnail and creates a thumbnail
-              tiff_thumb = os.path.join(thumbnails_folder, op.product_id + ".tiff")
-              handle = open(tiff_thumb, 'wb+')
-              thumbnail = urllib2.urlopen(package.get('PATH'))
+              # Download original jpeg thumbnail and creates a thumbnail
+              downloaded_thumb = os.path.join(thumbnails_folder, op.product_id + ".jpg")
+              handle = open(downloaded_thumb, 'wb+')
+              thumbnail = urllib2.urlopen(package.get('URL_QL'))
               handle.write(thumbnail.read())
               thumbnail.close()
               handle.close()
               # Transform and store .wld file
-              jpeg_thumb = os.path.join(thumbnails_folder, op.product_id + ".jpg")
-              # gdal_translate' -co worldfile=on -of JPEG 3259709_2011-03-08_5719804_5719908_browse.tiff 3259709_2011-03-08_5719804_5719908_browse.jpg
-              subprocess.check_call(["gdal_translate", "-q", "-co", "worldfile=on", "-of", "JPEG", tiff_thumb, jpeg_thumb])
-              # Removes xml
-              os.remove("%s.%s" % (jpeg_thumb, 'aux.xml'))
-              os.remove(tiff_thumb)
+              op.georeferenceThumbnail()
             if is_new:
               verblog('Product %s imported.' % product_id)
             else:
               verblog('Product %s updated.' % product_id)
             imported = imported + 1
           except Exception, e:
-            try:
-              os.remove(tiff_thumb)
-            except:
-              pass
             raise CommandError('Cannot import: %s' % e)
 
         verblog("%s packages imported" % imported)
