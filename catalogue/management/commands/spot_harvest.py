@@ -217,25 +217,6 @@ class Command(BaseCommand):
 
           # Defaults
           
-          spot_missions = Mission.objects.filter( operator_abbreviation__startswith = "SPOT" )
-          mission_sensors = MissionSensor.objects.filter( mission__in=spot_missions )
-          sensor_types = SensorType.objects.filter( mission_sensor__in=mission_sensors )
-          acquisition_modes = AcquisitionMode.objects.filter( sensor_type__in=sensor_types )
-          #
-          # Following for debugging info only
-          #
-          verblog("Allowed missions:",2)
-          for myMission in spot_missions:
-            verblog(myMission,2) #.operator_abbreviation
-          verblog("Allowed sensors:",2)
-          for mySensor in mission_sensors:
-            verblog(mySensor,2) #.operator_abbreviation
-          verblog("Allowed sensor types:")
-          for mySensorType in sensor_types:
-            verblog(mySensorType,2) #.operator_abbreviation
-          verblog("Allowed acquisition modes:",2)
-          for myMode in acquisition_modes:
-            verblog(myMode,2) #.operator_abbreviation
           #
           # End of debugging section
           #
@@ -260,10 +241,27 @@ class Command(BaseCommand):
           mission_id = package.get('SATEL')
           if not int(mission_id) in (1,2,3,4,5):
             raise CommandError('Unknown Spot mission number (should be 1-5) %s.' % mission_id)
+          mission_abbreviation = "SPOT-%s" % mission_id
+          spot_mission = Mission.objects.get( operator_abbreviation = mission_abbreviation )
+          mission_sensors = MissionSensor.objects.filter( mission=spot_mission )
+          # work out the sensor type
+          myType = package.get('TYPE')
+          sensor_type = SensorType.objects.filter( mission_sensor__in=mission_sensors ).filter( operator_abbreviation = myType )[0]
+          myMode = "S%sC%s" % ( mission_id, package.get('A21')[-2:-1] )
+          acquisition_mode = AcquisitionMode.objects.filter( sensor_type=sensor_type ).filter( operator_abbreviation=myMode )[0]
+          #
+          # Following for debugging info only
+          #
+          verblog("Detected mission: %s" % spot_mission ,2)
+          verblog("Allowed sensors:",2)
+          for mySensor in mission_sensors:
+            verblog(mySensor,2) #.operator_abbreviation
+          verblog("Detected sensor type: %s" % sensor_type, 2 )
+          verblog("Detected acquisition mode: %s" % acquisition_mode, 2)
+          #
+          # Debugging output ends
+          #
 
-          sensor_type = ""
-          acquisition_mode = 
-          mission = Mission.objects.get( abbreviation="S%s" % mission_id)
           band_count            = 0;
           date_parts = package.get('DATE_ACQ').split('/') # e.g. 20/01/2011
           time_parts = package.get('TIME_ACQ').split(':') # e.g. 08:29:01
@@ -271,10 +269,10 @@ class Command(BaseCommand):
           #SAT_SEN_TYP_MOD_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
           product_id = "%(SAT)s_%(SEN)s_%(TYP)s_%(MOD)s_%(KKKK)s_%(KS)s_%(JJJJ)s_%(JS)s_%(YYMMDD)s_%(HHMMSS)s_%(LEVL)s_%(PROJTN)s" % \
           {
-            'SAT': mission.abbreviation.ljust(3, '-'),
-            'SEN': mission_sensor.ljust(3, '-'),
-            'TYP': sensor_type.ljust(3, '-'),
-            'MOD': acquisition_mode.ljust(4, '-'),
+            'SAT': spot_mission.abbreviation.ljust(3, '-'),
+            'SEN': sensor_type.mission_sensor.abbreviation.ljust(3, '-'),
+            'TYP': sensor_type.abbreviation.ljust(3, '-'),
+            'MOD': acquisition_mode.abbreviation.ljust(4, '-'),
             'KKKK': package.get('a21')[1:4].rjust(4, '0'),
             'KS': '00',
             'JJJJ': package.get('a21')[4:7].rjust(4, '0'),
