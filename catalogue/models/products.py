@@ -25,6 +25,7 @@ from django.contrib.gis.geos import Polygon
 from django.contrib.gis.geos import Point
 import osgeo.gdal
 from osgeo.gdalconst import *
+import sys 
 
 # Read from settings
 CATALOGUE_SCENES_PATH = getattr(settings, 'CATALOGUE_SCENES_PATH', "/mnt/cataloguestorage/scenes_out_projected_sorted/")
@@ -342,6 +343,17 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     # Note the above logic makes some assumptions about the oreintation of 
     # the swath which may not hold true for every sensor.
     #
+
+    myInputImageFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailPath(), self.product_id + ".jpg" )
+    try:
+      myImage = Image.open( myInputImageFile )
+      # We need to know the pixel dimensions of the segment so that we can create GCP's
+    except:
+      print "File not found %s" % myPath
+      return "False"
+
+    myImageXDim = myImage.size[0]
+    myImageYDim = myImage.size[1]
     myCandidates = []
     try:
       for myArc in self.spatial_coverage.coords: #should only be a single arc in our case!
@@ -352,7 +364,6 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
       raise 
     #print "Candidates Before: %s %s " % (len(myCandidates), str( myCandidates ) )
     myCentroid = self.spatial_coverage.centroid
-    myCandidates = None
     try:
       myCandidates = sortCandidates( myCandidates, myExtents, myCentroid )
     except:
@@ -363,7 +374,6 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     myBR = myCandidates[2]
     myBL = myCandidates[3]
 
-    myInputImageFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailPath(), self.product_id + ".jpg" )
     myTempTifFile = os.path.join( "/tmp/",self.product_id + ".tif" )
     myTempJpgFile = os.path.join( "/tmp/",self.product_id + "-reffed.jpg" )
     myString = "gdal_translate -a_srs 'EPSG:4326' -gcp 0 0 %s %s -gcp %s 0 %s %s -gcp %s %s %s %s -gcp 0 %s %s %s -of GTIFF -co COMPRESS=DEFLATE -co TILED=YES %s %s" % ( \

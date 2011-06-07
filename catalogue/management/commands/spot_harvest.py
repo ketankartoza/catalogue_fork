@@ -63,12 +63,12 @@ from django.contrib.gis.gdal.geometries import Polygon
 
 from catalogue.models import *
 from catalogue.dims_lib import dimsWriter
+import traceback
 
 
 # Hardcoded constants
 PROJECTION            = 'ORBIT'
 RADIOMETRIC_RESOLUTION= 16
-ACQUISITION_MODE      = 'PB'
 MISSION_SENSOR        = 'REI'
 GEOMETRIC_RESOLUTION  = 5
 PRODUCT_ACQUISITION_START_TIME = '0900'
@@ -158,7 +158,6 @@ class Command(BaseCommand):
     projection            = PROJECTION
     radiometric_resolution= RADIOMETRIC_RESOLUTION
     mission_sensor        = MISSION_SENSOR
-    acquisition_mode      = ACQUISITION_MODE
     solar_zenith_angle    = SOLAR_ZENITH_ANGLE
     solar_azimuth_angle   = SOLAR_AZIMUTH_ANGLE
 
@@ -341,7 +340,11 @@ class Command(BaseCommand):
               thumbnail.close()
               handle.close()
               # Transform and store .wld file
-              op.georeferenceThumbnail()
+              verblog('Referencing thumb',2)
+              try:
+                op.georeferenceThumbnail()
+              except:  
+                traceback.print_exc(file=sys.stdout)
             if is_new:
               verblog('Product %s imported.' % product_id)
             else:
