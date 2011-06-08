@@ -41,8 +41,8 @@ Notes:{{ myRecord.notes }}
 {% if myRecord.product.productUrl %}
 Download: {{myRecord.product.productUrl}}
 {% endif %}
-{% if myRecord.product.rawImageUrl %}
-Download Raw: {{myRecord.product.rawImageUrl}}
+{% if myRecord.product.rawProductUrl %}
+Download Raw: {{myRecord.product.rawProductUrl}}
 {% endif %}
 
 {% endfor %}

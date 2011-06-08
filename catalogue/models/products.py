@@ -447,7 +447,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     else:
       return None
 
-  def rawImageUrl( self ):
+  def rawProductUrl( self ):
     """Returns a path to the actual RAW imagery data as a url. So if you have a level 1Ab product and want 
     to get to its original L1Aa product this method will give it to you. You need to have
     apache set up so share this directory. If no file is encountered at the computed path,
