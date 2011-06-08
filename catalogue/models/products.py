@@ -28,7 +28,7 @@ from osgeo.gdalconst import *
 import sys 
 
 # Read from settings
-CATALOGUE_SCENES_PATH = getattr(settings, 'CATALOGUE_SCENES_PATH', "/mnt/cataloguestorage/scenes_out_projected_sorted/")
+ACS_CATALOGUE_SCENES_PATH = getattr(settings, 'ACS_CATALOGUE_SCENES_PATH', "/mnt/cataloguestorage/scenes_out_projected_sorted/")
 CATALOGUE_ISO_METADATA_XML_TEMPLATE = getattr(settings, 'CATALOGUE_ISO_METADATA_XML_TEMPLATE')
 
 ##################################################################
@@ -375,7 +375,8 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     myBL = myCandidates[3]
 
     myTempTifFile = os.path.join( "/tmp/",self.product_id + ".tif" )
-    myTempJpgFile = os.path.join( "/tmp/",self.product_id + "-reffed.jpg" )
+    myJpgFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailPath(), self.product_id + "-reffed.jpg" )
+    myLogFile = file(os.path.join( settings.THUMBS_ROOT, self.thumbnailPath(), self.product_id + "-reffed.log" ), "w")
     myString = "gdal_translate -a_srs 'EPSG:4326' -gcp 0 0 %s %s -gcp %s 0 %s %s -gcp %s %s %s %s -gcp 0 %s %s %s -of GTIFF -co COMPRESS=DEFLATE -co TILED=YES %s %s" % ( \
           myTL[0], myTL[1], \
           myImageXDim, myTR[0],myTR[1], \
@@ -383,16 +384,22 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
           myImageYDim, myBL[0],myBL[1], \
           myInputImageFile, \
           myTempTifFile )
-    print myString
+    os.system( myString )
+    myLogFile.write( myString + "\n" )
+    # now gdalwarp the file onto itself so that the gcps are used to georeference the file
+    myString = "gdal_warp %s %s" % myTempTifFile, myTempTifFile
+    os.system( myString )
+    myLogFile.write( myString + "\n" )
     # TODO : nicer way to call gdal e.g.
     #subprocess.check_call(["gdal_translate", "-q", "-co", "worldfile=on", "-of", "JPEG", downloaded_thumb, jpeg_thumb])
-    os.system( myString )
     # Now convert the tif to a jpg
     myString = "gdal_translate -of JPEG -co WORLDFILE=YES %s %s" % \
-      ( myTempTifFile, myTempJpgFile )
+      ( myTempTifFile, myJpgFile )
     os.system( myString )
+    myLogFile.write( myString + "\n" )
+    myLogFile.close()
     # Clean away the tiff and copy the referenced jpg over to the thumb dir
-    #os.remove( myTiffThumbnail )
+    os.remove( myTiffThumbnail )
     #print "Image X size: %s" % myImageXDim
     #print "Image Y size: %s" % myImageYDim
     #print "Top left X: %s, Y:%s" %(myTL[0],myTL[1])
@@ -640,7 +647,7 @@ class GenericSensorProduct( GenericImageryProduct ):
 
   def _imagePath( self ):
     """Returns the path (relative to whatever parent dir it is in) for the
-      image itself following the scheme <Sensor>/<processinglevel>/<YYYY>/<MM>/<DD>/
+      product / image itself following the scheme <Mission>/<processinglevel>/<YYYY>/<MM>/<DD>/
       The image itself will exist under this dir as <product_id>.tif.bz2"""
     return os.path.join( self.acquisition_mode.sensor_type.mission_sensor.mission.abbreviation,
                     str( self.processing_level.abbreviation),
@@ -651,15 +658,18 @@ class GenericSensorProduct( GenericImageryProduct ):
 
   def _thumbnailPath( self ):
     """Returns the path (relative to whatever parent dir it is in) for the
-      thumb for this file following the scheme <Sensor>/<YYYY>/<MM>/<DD>/
+      thumb for this file following the scheme <Mission>/<YYYY>/<MM>/<DD>/
       The thumb itself will exist under this dir as <product_id>.jpg"""
     return os.path.join( self.acquisition_mode.sensor_type.mission_sensor.mission.abbreviation,
                     str( self.product_acquisition_start.year ),
                     str( self.product_acquisition_start.month ),
                     str( self.product_acquisition_start.day ) )
 
-  def setSacProductId( self ):
+  def setSacProductId( self, theMoveDataFlag=False ):
     """
+      Set the product id, renaming / moving associated 
+      resources on the file system if theMoveDataFlag is
+      set to True. By default nothing is moved.
       #A sac product id adheres to the following format:
 
       #SAT_SEN_TYP_MODE_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL
@@ -683,11 +693,13 @@ class GenericSensorProduct( GenericImageryProduct ):
       S5-_HRG_J--_CAM2_0118-_00_0418-_00_090403_085811_L1A-_ORBIT-
       S5-_HRG_J--_CAM2_0118-_00_0418-_00_090403_085811_L3Aa_UTM34S
 
-      When this function is called it will also check if there is a
-      thumbnail for this scene and rename it from the old thumb
+      When this function is called it will also check if there is
+      data and a thumbnail for this scene and rename it from the old 
       prefix to the new one.
       """
-    myPreviousId = self.product_id #store for thumb renaming just now
+    myPreviousId = self.product_id #store for asset renaming just now
+    myPreviousImageryPath = self.imagePath()
+    myPreviousThumbPath = self.thumbnailPath()
     myList = []
     # TODO: deprecate the pad function and use string.ljust(3, '-')
     myList.append( self.pad( self.acquisition_mode.sensor_type.mission_sensor.mission.abbreviation, 3 ) )
@@ -713,23 +725,27 @@ class GenericSensorProduct( GenericImageryProduct ):
     #print "Product SAC ID %s" % "_".join(myList)
     myNewId = "_".join(myList)
     self.product_id = myNewId
+    if theMoveDataFlag: 
+      refileProductAssets( myPreviousId, myPreviousImageryPath, myPreviousThumbPath )
+    return
 
+  def refileProductAssets( self, theOldId, theOldImageryPath, theOldThumbsPath ):
+    """A helper for when a product id changes so that its assets (thumbs, product data etc)
+      can be moved to the correct place on the storage system to match the new 
+      product's designation."""
     #
     # Rename the thumb from the old name to the new name (if present):
     #
-    if myPreviousId == None or myPreviousId == "":
+    if theOldId == None or theOldId == "":
       # This is a new record
       return
-    if myPreviousId == myNewId:
+    if theOldId == self.product_id:
       #it already has the correct name
       return
 
-    # Make a copy of the thumb all filed away nicely by sensor / yy / mm / dd
-    # the thumb was saved as: myJpegThumbnail = os.path.join(mInScenesPath, str( theFrame.id ) + "-rectified-clipped.jpg")
-    myJpegThumbnail = os.path.join(CATALOGUE_SCENES_PATH, str( myPreviousId ) + ".jpg")
-    myWorldFile = os.path.join(CATALOGUE_SCENES_PATH, str( myPreviousId ) + ".wld")
-    #print "myJpegThumbnail %s" % myJpegThumbnail
-    myOutputPath = os.path.join( CATALOGUE_SCENES_PATH, self.thumbnailPath() )
+    myNewImageryPath = os.path.join( settings.IMAGERY_ROOT, self.imagePath(), self.product_id + ".tif.bz2" )
+    myOldImageryPath = os.path.join( settings.IMAGERY_ROOT, theOldImageryPath, theOldId + ".tif.bz2" )
+    myOutputPath = os.path.join( settings.IMAGERY_ROOT, self.thumbnailPath() )
     if not os.path.isdir( myOutputPath ):
       #print "Creating dir: %s" % myOutputPath
       try:
@@ -749,6 +765,13 @@ class GenericSensorProduct( GenericImageryProduct ):
       shutil.move( myWorldFile, myNewWorldFile )
     except:
       logging.debug("Failed to move the thumbnail" )
+    #
+    # End of Acs Specific part
+    #
+
+    # now follows a more generic handler for moving products and thumbs if the product
+    # is renamed
+
     return
 
   def productIdReverse(self, force=False):

@@ -216,6 +216,9 @@ I18N_URLS = False
 DEFAULT_AVATAR = os.path.join(MEDIA_ROOT, 'generic.jpg')
 AVATAR_WEBSEARCH = False
 
+# PLace where thumbs from ACS catalogue are extracted into a flat firectory tree
+ACS_CATALOGUE_SCENES_PATH = ""
+
 CATALOGUE_ISO_METADATA_XML_TEMPLATE = os.path.join(ROOT_PROJECT_FOLDER,'resources/PackageTemplate/Metadata/ISOMetadata/ISOMetadata_template.xml')
 
 #limit the number of returned metadata records
