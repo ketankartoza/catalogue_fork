@@ -132,16 +132,33 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
   processing_level      = models.ForeignKey( ProcessingLevel )
   owner                 = models.ForeignKey( Institution )
   license               = models.ForeignKey( License )
-  spatial_coverage      = models.PolygonField( srid=4326, help_text="Image footprint")
+  spatial_coverage      = models.PolygonField( srid=4326, 
+                                               help_text="Image footprint")
   projection            = models.ForeignKey( Projection )
   quality               = models.ForeignKey( Quality )
-  creating_software     = models.ForeignKey( CreatingSoftware, null=False,blank=False )
-  original_product_id   = models.CharField( max_length="255", null=True, blank=True )
-  product_id            = models.CharField( help_text="SAC Formatted product ID", max_length="255", db_index=True,unique=True )
-  product_revision      = models.CharField( max_length="255",null=True, blank=True )
-  local_storage_path    = models.CharField( max_length=255, help_text="Location on local storage if this product is offered for immediate download.", null=True, blank=True)
-  metadata              = models.TextField(help_text="An xml document describing all known metadata for this product.")
-  remote_thumbnail_url  = models.TextField( max_length=255,null=True, blank=True, help_text="Location on a remote server where this product's thumbnail resides. The value in this field will be nulled when a local copy is made of the thumbnail.")
+  creating_software     = models.ForeignKey( CreatingSoftware, 
+                                             null=False,
+                                             blank=False )
+  original_product_id   = models.CharField( help_text="Original id assigned to the product by the vendor/operator",
+                                            max_length="255", 
+                                            null=True, 
+                                            blank=True )
+  product_id            = models.CharField( help_text="SAC Formatted product ID", 
+                                            max_length="255", 
+                                            db_index=True,
+                                            unique=True )
+  product_revision      = models.CharField( max_length="255",
+                                            null=True, 
+                                            blank=True )
+  local_storage_path    = models.CharField( max_length=255, 
+                                            help_text="Location on local storage if this product is offered for immediate download.", 
+                                            null=True, 
+                                            blank=True)
+  metadata              = models.TextField( help_text="An xml document describing all known metadata for this product.")
+  remote_thumbnail_url  = models.TextField( max_length=255,
+                                            null=True, 
+                                            blank=True, 
+                                            help_text="Location on a remote server where this product's thumbnail resides. The value in this field will be nulled when a local copy is made of the thumbnail.")
 
   # We need a flag to tell if this Product class can have instances (if it is not abstract)
   # this flag is also used in admin back-end to get the list of classes for OrderNotificationRecipients
@@ -414,6 +431,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     Returns the path (relative to whatever parent dir it is in) for the
     image itself following the scheme <Sensor>/<processinglevel>/<YYYY>/<MM>/<DD>/
     The image itself will exist under this dir as <product_id>.tif.bz2
+    @note the filename itself is excluded, only the directory path is returned
     """
     # Checks method is in concrete class
     pass
@@ -430,9 +448,13 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
       return None
 
   def rawImageUrl( self ):
-    """Returns a path to the actual RAW imagery data as a url. You need to have
+    """Returns a path to the actual RAW imagery data as a url. So if you have a level 1Ab product and want 
+    to get to its original L1Aa product this method will give it to you. You need to have
     apache set up so share this directory. If no file is encountered at the computed path,
-    None will be returned"""
+    None will be returned.
+    @note this method should be deprecated in future since each derivative product should have 
+    its own record.
+    """
     myPath = os.path.join( settings.IMAGERY_ROOT, self.imagePath(), self.product_id + ".tar.bz2" )
     myLevel = self.processing_level.abbreviation
     myLevel = myLevel.replace( "L","" )
@@ -648,7 +670,8 @@ class GenericSensorProduct( GenericImageryProduct ):
   def _imagePath( self ):
     """Returns the path (relative to whatever parent dir it is in) for the
       product / image itself following the scheme <Mission>/<processinglevel>/<YYYY>/<MM>/<DD>/
-      The image itself will exist under this dir as <product_id>.tif.bz2"""
+      The image itself will exist under this dir as <product_id>.tif.bz2
+      @note the filename itself is excluded, only the directory path is returned"""
     return os.path.join( self.acquisition_mode.sensor_type.mission_sensor.mission.abbreviation,
                     str( self.processing_level.abbreviation),
                     str( self.product_acquisition_start.year ),
@@ -659,7 +682,8 @@ class GenericSensorProduct( GenericImageryProduct ):
   def _thumbnailPath( self ):
     """Returns the path (relative to whatever parent dir it is in) for the
       thumb for this file following the scheme <Mission>/<YYYY>/<MM>/<DD>/
-      The thumb itself will exist under this dir as <product_id>.jpg"""
+      The thumb itself will exist under this dir as <product_id>.jpg
+      @note the filename itself is excluded, only the directory path is returned"""
     return os.path.join( self.acquisition_mode.sensor_type.mission_sensor.mission.abbreviation,
                     str( self.product_acquisition_start.year ),
                     str( self.product_acquisition_start.month ),
@@ -667,7 +691,7 @@ class GenericSensorProduct( GenericImageryProduct ):
 
   def setSacProductId( self, theMoveDataFlag=False ):
     """
-      Set the product id, renaming / moving associated 
+      Set the product_id, renaming / moving associated 
       resources on the file system if theMoveDataFlag is
       set to True. By default nothing is moved.
       #A sac product id adheres to the following format:
@@ -732,7 +756,13 @@ class GenericSensorProduct( GenericImageryProduct ):
   def refileProductAssets( self, theOldId, theOldImageryPath, theOldThumbsPath ):
     """A helper for when a product id changes so that its assets (thumbs, product data etc)
       can be moved to the correct place on the storage system to match the new 
-      product's designation."""
+      product's designation. There are a few things we need to move:
+        - the raw imagery (which may be a bz2 or tar.bz2 archive) if it exists
+        - the processed imagery (bz2 archive) currently assumed to be a tiff
+        - the thumbnail if present
+        - the georeferenced thumb if present
+        - cached thumbnail minatures if present
+        """
     #
     # Rename the thumb from the old name to the new name (if present):
     #
@@ -745,6 +775,11 @@ class GenericSensorProduct( GenericImageryProduct ):
 
     myNewImageryPath = os.path.join( settings.IMAGERY_ROOT, self.imagePath(), self.product_id + ".tif.bz2" )
     myOldImageryPath = os.path.join( settings.IMAGERY_ROOT, theOldImageryPath, theOldId + ".tif.bz2" )
+    # In some cases the imagery may be in a tar archive (for multiple files) rather than a simple bz2
+    if not os.path.isfile( myOldImageryPath ):
+      myPath = myPath.replace( ".tar.bz2", ".bz2" )
+      myUrl = myUrl.replace( ".tar.bz2", ".bz2" )
+    # 
     myOutputPath = os.path.join( settings.IMAGERY_ROOT, self.thumbnailPath() )
     if not os.path.isdir( myOutputPath ):
       #print "Creating dir: %s" % myOutputPath
@@ -908,6 +943,7 @@ class OpticalProduct( GenericSensorProduct ):
   def imagePath( self ):
     """
     A wrapper to run concrete from GenericSensorProduct
+    @note the filename itself is excluded, only the directory path is returned
     """
     return self._imagePath()
 
@@ -961,6 +997,7 @@ class RadarProduct( GenericSensorProduct ):
   def imagePath( self ):
     """
     A wrapper to run concrete from GenericSensorProduct
+    @note the filename itself is excluded, only the directory path is returned
     """
     return self._imagePath()
 
