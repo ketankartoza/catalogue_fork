@@ -47,8 +47,8 @@ The SANSA-EO team.
 {% for myRecord in myRecords %}
 <p>
 {{ myRecord.product.product_id }} 
-{% if myRecord.product.imageUrl %}
-Download: {{myRecord.product.imageUrl}}
+{% if myRecord.product.productUrl %}
+Download: {{myRecord.product.productUrl}}
 {% endif %}
 {% if myRecord.product.rawImageUrl %}
 Download Raw: {{myRecord.product.rawImageUrl}}

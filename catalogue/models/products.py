@@ -436,7 +436,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     # Checks method is in concrete class
     pass
 
-  def imageUrl( self ):
+  def productUrl( self ):
     """Returns a path to the actual imagery data as a url. You need to have
     apache set up so share this directory. If no file is encountered at the computed path,
     None will be returned"""
