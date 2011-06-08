@@ -257,10 +257,16 @@ needs access. You can also add a subnet etc. See pg docs for
 more info on that. I will just add my desktop pc as a client.
 
 ```
-# Next line added by Tim to enable his desktop machines to connect on TCP/IP
-host    all         all         196.35.94.7/32        md5
-# Next line added by Tim to enable django server machines to connect on TCP/IP
-host    all         all         196.35.94.196/32        md5
+# Next line added by Tim to enable django server machine to connect on TCP/IP
+host    all         all         /32        md5
+```
+
+If you wish to allow connections from a broader range of hosts (e.g. SANSA EO Staff),
+you  can add a subnet e.g.
+
+```
+# For internal sac users - wired lan
+host    all         all         41.74.144.0/24        md5
 ```
 
 Also we need to allow tcp/ip connections from hosts other than 

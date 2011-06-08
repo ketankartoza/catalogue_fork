@@ -398,7 +398,7 @@ configuration for default (/etc/apache2/sites-available/default) is as listed be
 NameVirtualHost *
 <VirtualHost *>
   ServerAdmin tim@linfiniti.com 
-  ServerName 196.35.94.243
+  ServerName maps.sansa.org.za
   DocumentRoot /var/www/
   <Directory /var/www/>
     Options Indexes FollowSymLinks MultiViews
@@ -475,9 +475,10 @@ NameVirtualHost *
   Order deny,allow
   Allow from all
   </Proxy>
-
-  ProxyPass /os4eo http://196.35.94.248:8080/hma/ordering
-  ProxyPassReverse /os4eo http://196.35.94.248:8080/hma/ordering
+  # This will no longer work since entry into the vpn
+  # Was really only for testing anyway.
+  #ProxyPass /os4eo http://196.35.94.248:8080/hma/ordering
+  #ProxyPassReverse /os4eo http://196.35.94.248:8080/hma/ordering
 
 
 
@@ -500,6 +501,8 @@ sudo a2enmod proxy_http proxy_html headers
 ```
 
 Now add proxy config to 000-default (as listed in the apache section above).
+
+*Note:* No longer valid since moving into the vpn. Also was only needed for testing.
 
 ```
   # Reverse proxy to the ordering service on dims

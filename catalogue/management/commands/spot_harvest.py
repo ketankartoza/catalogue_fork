@@ -211,7 +211,7 @@ class Command(BaseCommand):
         imported = 0
         verblog('Starting index dowload...', 2)
         for package in Command.fetch_geometries(shapefile, area_of_interest):
-          if imported > 100: continue
+          if imported > 5: continue
           verblog("Ingesting %s" % package, 2)
 
           # Understanding SPOT a21 scene id:
