@@ -173,6 +173,62 @@ The full list of packages installed using the REQUIREMENTS file is:
 %!include: ``../../REQUIREMENTS.txt``
 
 
+==== PIL Issues ===
+
+If you get an error like this when trying to view jpg thumbs:
+
+```
+decoder jpeg not available
+```
+
+Your PIL is missing jpg (and probably png support). To fix it do:
+
+```
+../python/bin/activate
+pip uninstall pil
+sudo apt-get install libjpeg-dev libfreetype6 libfreetype6-dev
+wget http://effbot.org/downloads/Imaging-1.1.7.tar.gz
+tar xfz Imaging-1.1.7.tar.gz
+cd Imaging-1.1.7
+```
+
+Now edit setup.py to set these:
+
+```
+TCL_ROOT = "/usr/lib/x86_64-linux-gnu/", "/usr/include"
+JPEG_ROOT = "/usr/lib/x86_64-linux-gnu/", "/usr/include"
+ZLIB_ROOT = "/usr/lib/x86_64-linux-gnu/", "/usr/include"
+TIFF_ROOT = "/usr/lib/x86_64-linux-gnu/", "/usr/include"
+FREETYPE_ROOT = "/usr/lib/x86_64-linux-gnu/", "/usr/include"
+```
+
+**Note:** Above assumes 64bit arch
+
+Test if your configs work:
+
+```
+python setup.py build_ext -i
+```
+
+The build report should show:
+
+```
+*** TKINTER support not available (Tcl/Tk 8.5 libraries needed)
+--- JPEG support available
+--- ZLIB (PNG/ZIP) support available
+--- FREETYPE2 support available
+*** LITTLECMS support not available
+```
+
+
+Now build pil:
+
+```
+python setup.py install
+```
+
+
+
 ==== Further info on django registration ====
 
 You may also want to read this:
