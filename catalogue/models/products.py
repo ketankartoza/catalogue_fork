@@ -201,7 +201,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     return dimsWriter.getXML(self.getMetadataDict(), xml_template)
 
   @runconcrete
-  def thumbnailPath( self ):
+  def thumbnailDirectory( self ):
     """Returns the path (relative to whatever parent dir it is in) for the
       thumb for this file following the scheme <Sensor>/<YYYY>/<MM>/<DD>/
       The thumb itself will exist under this dir as <product_id>.jpg
@@ -222,11 +222,11 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
       mySize = 400
 
     logging.info("showThumb : id " + self.product_id)
-    myImageFile = os.path.join( self.thumbnailPath(), self.product_id + ".jpg" )
+    myImageFile = os.path.join( self.thumbnailDirectory(), self.product_id + ".jpg" )
     myFileName = str(settings.THUMBS_ROOT) + "/" + myImageFile
-    myThumbDir = os.path.join( settings.THUMBS_ROOT, self.thumbnailPath() )
+    myThumbDir = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory() )
     # Paths for cache of scaled down thumbs (to reduce processing load)
-    myCacheThumbDir = os.path.join( settings.THUMBS_ROOT, "cache", theSize, self.thumbnailPath() )
+    myCacheThumbDir = os.path.join( settings.THUMBS_ROOT, "cache", theSize, self.thumbnailDirectory() )
     myCacheImage = os.path.join( myCacheThumbDir, self.product_id + ".jpg" )
     #
     # Check if there is a scaled down version already cached and just return that if there is
@@ -361,7 +361,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     # the swath which may not hold true for every sensor.
     #
 
-    myInputImageFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailPath(), self.product_id + ".jpg" )
+    myInputImageFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + ".jpg" )
     try:
       myImage = Image.open( myInputImageFile )
       # We need to know the pixel dimensions of the segment so that we can create GCP's
@@ -392,8 +392,8 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     myBL = myCandidates[3]
 
     myTempTifFile = os.path.join( "/tmp/",self.product_id + ".tif" )
-    myJpgFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailPath(), self.product_id + "-reffed.jpg" )
-    myLogFile = file(os.path.join( settings.THUMBS_ROOT, self.thumbnailPath(), self.product_id + "-reffed.log" ), "w")
+    myJpgFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.jpg" )
+    myLogFile = file(os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.log" ), "w")
     myString = "gdal_translate -a_srs 'EPSG:4326' -gcp 0 0 %s %s -gcp %s 0 %s %s -gcp %s %s %s %s -gcp 0 %s %s %s -of GTIFF -co COMPRESS=DEFLATE -co TILED=YES %s %s" % ( \
           myTL[0], myTL[1], \
           myImageXDim, myTR[0],myTR[1], \
@@ -679,7 +679,7 @@ class GenericSensorProduct( GenericImageryProduct ):
                     str( self.product_acquisition_start.day ) )
 
 
-  def _thumbnailPath( self ):
+  def _thumbnailDirectory( self ):
     """Returns the path (relative to whatever parent dir it is in) for the
       thumb for this file following the scheme <Mission>/<YYYY>/<MM>/<DD>/
       The thumb itself will exist under this dir as <product_id>.jpg
@@ -723,7 +723,7 @@ class GenericSensorProduct( GenericImageryProduct ):
       """
     myPreviousId = self.product_id #store for asset renaming just now
     myPreviousImageryPath = self.productDirectory()
-    myPreviousThumbPath = self.thumbnailPath()
+    myPreviousThumbPath = self.thumbnailDirectory()
     myList = []
     # TODO: deprecate the pad function and use string.ljust(3, '-')
     myList.append( self.pad( self.acquisition_mode.sensor_type.mission_sensor.mission.abbreviation, 3 ) )
@@ -780,7 +780,7 @@ class GenericSensorProduct( GenericImageryProduct ):
       myPath = myPath.replace( ".tar.bz2", ".bz2" )
       myUrl = myUrl.replace( ".tar.bz2", ".bz2" )
     # 
-    myOutputPath = os.path.join( settings.IMAGERY_ROOT, self.thumbnailPath() )
+    myOutputPath = os.path.join( settings.IMAGERY_ROOT, self.thumbnailDirectory() )
     if not os.path.isdir( myOutputPath ):
       #print "Creating dir: %s" % myOutputPath
       try:
@@ -948,11 +948,11 @@ class OpticalProduct( GenericSensorProduct ):
     return self._productDirectory()
 
 
-  def thumbnailPath( self ):
+  def thumbnailDirectory( self ):
     """
     A wrapper to run concrete from GenericSensorProduct
     """
-    return self._thumbnailPath()
+    return self._thumbnailDirectory()
 
   def toHtml( self ):
     """Return an html snippet that describes the properties of this product"""
@@ -1002,11 +1002,11 @@ class RadarProduct( GenericSensorProduct ):
     return self._productDirectory()
 
 
-  def thumbnailPath( self ):
+  def thumbnailDirectory( self ):
     """
     A wrapper to run concrete from GenericSensorProduct
     """
-    return self._thumbnailPath()
+    return self._thumbnailDirectory()
 
   def toHtml(self):
     """Return an html snippet that describes the properties of this product"""

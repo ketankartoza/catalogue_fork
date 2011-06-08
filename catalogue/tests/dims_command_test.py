@@ -58,9 +58,9 @@ Test that everything was imported correctly
 >>> p.local_storage_path == os.path.join(p.productDirectory(), p.product_id + '.tif.bz2')
 True
 
->>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.jpg'))
+>>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.jpg'))
 True
->>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.wld'))
+>>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.wld'))
 True
 >>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.productDirectory(), p.product_id + '.tif.bz2'))
 True
@@ -151,8 +151,8 @@ Cleanup
 ###############################################
 
 
->>> os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.jpg'))
->>> os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.wld'))
+>>> os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.jpg'))
+>>> os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.wld'))
 
 
 

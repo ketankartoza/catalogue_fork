@@ -163,7 +163,7 @@ def importMetadata( theProjectDir ):
     # Make a copy of the thumb all filed away nicely by sensor / yy / mm / dd
     myWorldFile = os.path.join(myInputThumbnailsPath, str( myProduct.product_id ) + ".wld")
     print "myJpegThumbnail %s" % myJpegThumbnail
-    myOutputPath = os.path.join( settings.THUMBS_ROOT, myProduct.thumbnailPath() )
+    myOutputPath = os.path.join( settings.THUMBS_ROOT, myProduct.thumbnailDirectory() )
     if not os.path.isdir( myOutputPath ):
       #print "Creating dir: %s" % myOutputPath
       try:

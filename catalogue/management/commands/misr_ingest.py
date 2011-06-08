@@ -380,7 +380,7 @@ class Command(BaseCommand):
 
             try:
               op.save()
-              thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailPath())
+              thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailDirectory())
               if test_only:
                 verblog('Testing: image not saved.', 2)
               else:

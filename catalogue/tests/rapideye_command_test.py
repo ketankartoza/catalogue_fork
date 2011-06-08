@@ -79,9 +79,9 @@ u'https://delivery.rapideye.de/catalogue/browse_images/2011/03/12/5746735/344022
 
 Check that thumbnail and world file are there...
 
->>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.jpg'))
+>>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.jpg'))
 True
->>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.wld'))
+>>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.wld'))
 True
 
 
@@ -93,8 +93,8 @@ Cleanup
 
 
 >>> for p in OpticalProduct.objects.filter(product_id__icontains='RE2'):
-...    os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.jpg'))
-...    os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.wld'))
+...    os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.jpg'))
+...    os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.wld'))
 
 
 """

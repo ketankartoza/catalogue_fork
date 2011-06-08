@@ -392,7 +392,7 @@ def loadFrames( theRectifiedScenesPath, theAuxFile ):
     myJpegThumbnail = os.path.join(theRectifiedScenesPath, str( myFrame.id ) + "-rectified-clipped.jpg")
     myWorldFile = os.path.join(theRectifiedScenesPath, str( myFrame.id ) + "-rectified-clipped.wld")
     #print "myJpegThumbnail %s" % myJpegThumbnail
-    myOutputPath = os.path.join( mProductionThumbsDirPath, myProduct.thumbnailPath() )
+    myOutputPath = os.path.join( mProductionThumbsDirPath, myProduct.thumbnailDirectory() )
     if not os.path.isdir( myOutputPath ):
       #print "Creating dir: %s" % myOutputPath
       try:

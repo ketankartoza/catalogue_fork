@@ -166,7 +166,7 @@ def migrateSacc():
       myJpegThumbnail = os.path.join(mInScenesPath, str( myProduct.original_product_id ) + ".jpg")
       myWorldFile = os.path.join(mInScenesPath, str( myProduct.original_product_id ) + ".jgw")
       print "myJpegThumbnail %s" % myJpegThumbnail
-      myOutputPath = os.path.join( mOutScenesPath, myProduct.thumbnailPath() )
+      myOutputPath = os.path.join( mOutScenesPath, myProduct.thumbnailDirectory() )
       if not os.path.isdir( myOutputPath ):
         #print "Creating dir: %s" % myOutputPath
         try:
@@ -323,7 +323,7 @@ def migrateCBERS():
       myJpegThumbnail = os.path.join(mInScenesPath, str( myProduct.original_product_id ) + ".jpg")
       myWorldFile = os.path.join(mInScenesPath, str( myProduct.original_product_id ) + ".jgw")
       print "myJpegThumbnail %s" % myJpegThumbnail
-      myOutputPath = os.path.join( mOutScenesPath, myProduct.thumbnailPath() )
+      myOutputPath = os.path.join( mOutScenesPath, myProduct.thumbnailDirectory() )
       if not os.path.isdir( myOutputPath ):
         #print "Creating dir: %s" % myOutputPath
         try:
@@ -476,7 +476,7 @@ def migrateSumbandilasat():
       myJpegThumbnail = os.path.join(mInScenesPath, str( myProduct.product_id ) + ".jpg")
       myWorldFile = os.path.join(mInScenesPath, str( myProduct.product_id ) + ".wld")
       print "myJpegThumbnail %s" % myJpegThumbnail
-      myOutputPath = os.path.join( mOutScenesPath, myProduct.thumbnailPath() )
+      myOutputPath = os.path.join( mOutScenesPath, myProduct.thumbnailDirectory() )
       if not os.path.isdir( myOutputPath ):
         #print "Creating dir: %s" % myOutputPath
         try:

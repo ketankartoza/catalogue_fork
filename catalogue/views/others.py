@@ -401,7 +401,7 @@ def showThumbPage(theRequest, theId):
     myDetails.append("<tr><th>Sensor: " + myProduct.mission_sensor.name + "</th></tr>")
   except AttributeError:
     pass
-  myImageFile = os.path.join( myProduct.thumbnailPath(), myProduct.product_id + ".jpg" )
+  myImageFile = os.path.join( myProduct.thumbnailDirectory(), myProduct.product_id + ".jpg" )
   myDetails.append("<tr><td><center><img src=\"/thumbnails/" + myImageFile + "\"></center></td></tr>")
   #render_to_response is done by the renderWithContext decorator
   logging.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))

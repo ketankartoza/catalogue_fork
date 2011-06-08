@@ -74,15 +74,15 @@ u'MYD_MYD_MOD_MOD-_0015_58_0-15_02_000218_000000_1B--_ORBIT-.hdf.bz2'
 
 Test world file
 
->>> open(os.path.join(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.wld'))).readlines()
+>>> open(os.path.join(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.wld'))).readlines()
 ['0.00435290965402\n', '1.95301945208e-06\n', '0.000303136078562\n', '-0.0041837482381\n', '9.99619224734\n', '-9.96559224097\n']
 
 
 Check that thumbnail, original imagery and world file are there...
 
->>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.jpg'))
+>>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.jpg'))
 True
->>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.wld'))
+>>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.wld'))
 True
 >>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.productDirectory(), p.product_id + '.hdf.bz2'))
 True
@@ -96,8 +96,8 @@ Cleanup
 
 
 >>> for p in OpticalProduct.objects.filter(product_id__icontains='RE2'):
-...    os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.jpg'))
-...    os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.wld'))
+...    os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.jpg'))
+...    os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.wld'))
 ...    os.remove(os.path.join(settings.IMAGERY_ROOT, p.productDirectory(), p.product_id + '.hdf.bz2'))
 
 

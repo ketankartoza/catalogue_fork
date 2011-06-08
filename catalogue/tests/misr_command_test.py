@@ -76,15 +76,15 @@ u'TER_MIS_VNI_LM--_0176_00_1063_00_000229_090802_1B2-_ORBIT-.tar.bz2'
 
 Test world file
 
->>> open(os.path.join(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.wld'))).readlines()
+>>> open(os.path.join(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.wld'))).readlines()
 ['0.0129427500\n', '0.0000000000\n', '0.0000000000\n', '-0.0126720000\n', '18.8377963750\n', '-12.3537360000\n']
 
 
 Check that thumbnail, original imagery and world file are there...
 
->>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.jpg'))
+>>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.jpg'))
 True
->>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.wld'))
+>>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.wld'))
 True
 >>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.local_storage_path))
 True
@@ -99,8 +99,8 @@ Cleanup
 
 
 >>> for p in OpticalProduct.objects.filter(product_id__startswith='TER_MIS'):
-...    os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.jpg'))
-...    os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.wld'))
+...    os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.jpg'))
+...    os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailDirectory(), p.product_id + '.wld'))
 ...    os.remove(os.path.join(settings.IMAGERY_ROOT, p.local_storage_path))
 
 

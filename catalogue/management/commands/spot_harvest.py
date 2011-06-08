@@ -327,7 +327,7 @@ class Command(BaseCommand):
               verblog('Testing: image not saved.', 2)
             else:
               # Store thumbnail
-              thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailPath())
+              thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailDirectory())
               try:
                 os.makedirs(thumbnails_folder)
               except:
