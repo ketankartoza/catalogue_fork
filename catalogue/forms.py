@@ -59,7 +59,8 @@ class DateRangeFormSet(BaseInlineFormSet):
     self.management_form.cleaned_data['TOTAL_FORMS']=len(self.forms)
     if not len(self.forms):
       raise forms.ValidationError, "At least one date range is required."
-    logging.debug('Date range forms:', self.forms)
+    #Next line disabled as it causes a crash
+    #logging.debug('Date range forms:', self.forms)
 
   def is_valid(self):
       """
