@@ -55,14 +55,14 @@ Test that everything was imported correctly
 <Institution: LINFINITI>
 >>> p.creating_software
 <CreatingSoftware: QGIS>
->>> p.local_storage_path == os.path.join(p.imagePath(), p.product_id + '.tif.bz2')
+>>> p.local_storage_path == os.path.join(p.productDirectory(), p.product_id + '.tif.bz2')
 True
 
 >>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.jpg'))
 True
 >>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.wld'))
 True
->>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.imagePath(), p.product_id + '.tif.bz2'))
+>>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.productDirectory(), p.product_id + '.tif.bz2'))
 True
 
 Test that the package was not deleted
@@ -81,8 +81,8 @@ Test update reading owner from metadata
 
 Delete the image so that we can test store_image=False
 
->>> os.remove(os.path.join(settings.IMAGERY_ROOT, p.imagePath(), p.product_id + '.tif.bz2'))
->>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.imagePath(), p.product_id + '.tif.bz2'))
+>>> os.remove(os.path.join(settings.IMAGERY_ROOT, p.productDirectory(), p.product_id + '.tif.bz2'))
+>>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.productDirectory(), p.product_id + '.tif.bz2'))
 False
 
 Delete product
@@ -109,8 +109,8 @@ Test update
 
 Delete the image so that we can test store_image=False
 
->>> os.remove(os.path.join(settings.IMAGERY_ROOT, p.imagePath(), p.product_id + '.tif.bz2'))
->>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.imagePath(), p.product_id + '.tif.bz2'))
+>>> os.remove(os.path.join(settings.IMAGERY_ROOT, p.productDirectory(), p.product_id + '.tif.bz2'))
+>>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.productDirectory(), p.product_id + '.tif.bz2'))
 False
 
 >>> p.row = 1
@@ -131,7 +131,7 @@ Product S5-_HRG_B--_CAM2_0094_00_0367_00_110122_092557_L1A-_ORBIT- updated.
 <ProcessingLevel: Level 1A>
 >>> p.license == new_license
 True
->>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.imagePath(), p.product_id + '.tif.bz2'))
+>>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.productDirectory(), p.product_id + '.tif.bz2'))
 False
 
 
@@ -139,7 +139,7 @@ Update again, test that image is imported and package deleted
 
 >>> call_command('dims_ingest', folder='catalogue/tests/sample_files/', glob='*_copy.tar.gz', license='CC-BY-SA', institution='LINFINITI', creating_software='QGIS')
 Product S5-_HRG_B--_CAM2_0094_00_0367_00_110122_092557_L1A-_ORBIT- updated.
->>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.imagePath(), p.product_id + '.tif.bz2'))
+>>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.productDirectory(), p.product_id + '.tif.bz2'))
 True
 >>> os.path.isfile(package)
 False

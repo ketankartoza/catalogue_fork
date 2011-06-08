@@ -84,7 +84,7 @@ Check that thumbnail, original imagery and world file are there...
 True
 >>> os.path.isfile(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.wld'))
 True
->>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.imagePath(), p.product_id + '.hdf.bz2'))
+>>> os.path.isfile(os.path.join(settings.IMAGERY_ROOT, p.productDirectory(), p.product_id + '.hdf.bz2'))
 True
 
 
@@ -98,7 +98,7 @@ Cleanup
 >>> for p in OpticalProduct.objects.filter(product_id__icontains='RE2'):
 ...    os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.jpg'))
 ...    os.remove(os.path.join(settings.THUMBS_ROOT, p.thumbnailPath(), p.product_id + '.wld'))
-...    os.remove(os.path.join(settings.IMAGERY_ROOT, p.imagePath(), p.product_id + '.hdf.bz2'))
+...    os.remove(os.path.join(settings.IMAGERY_ROOT, p.productDirectory(), p.product_id + '.hdf.bz2'))
 
 
 """

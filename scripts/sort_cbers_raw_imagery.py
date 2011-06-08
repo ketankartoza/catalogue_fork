@@ -23,7 +23,7 @@ def run( ):
   myProducts = GenericProduct.objects.filter( mission = myMission )
   for myProduct in myProducts:
     print myProduct.product_id
-    myOutputPath = os.path.join( settings.IMAGERY_ROOT, myProduct.imagePath().replace("1Ab","1Aa") )
+    myOutputPath = os.path.join( settings.IMAGERY_ROOT, myProduct.productDirectory().replace("1Ab","1Aa") )
     myOutputFile = os.path.join( myOutputPath, myProduct.product_id.replace("L1Ab","L1Aa") + ".bz2" )
     myImportRecord = None
     try:

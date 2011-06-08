@@ -23,7 +23,7 @@ def run( ):
   myProducts = GenericProduct.objects.filter( mission = myMission )
   for myProduct in myProducts:
     print myProduct.product_id
-    myOutputPath = os.path.join( settings.IMAGERY_ROOT, myProduct.imagePath() )
+    myOutputPath = os.path.join( settings.IMAGERY_ROOT, myProduct.productDirectory() )
     myOutputFile = os.path.join( myOutputPath, myProduct.product_id + ".tif.bz2" )
     myOriginalPixFile = os.path.join( mSourcePath, myProduct.original_product_id + ".pix" )
     mySourceFile = os.path.join( mSourcePath, myProduct.product_id + ".tif" )
@@ -46,7 +46,7 @@ def run( ):
     print "Copy: %s to %s" % (mySourceFile, myOutputFile)
     try:
       shutil.move( myBzipSourceFile  , myOutputFile )
-      myRelativePath = os.path.join( myProduct.imagePath(), myProduct.product_id + ".tif.bz2" )
+      myRelativePath = os.path.join( myProduct.productDirectory(), myProduct.product_id + ".tif.bz2" )
       print "Local storage path: %s" % myRelativePath
       myProduct.local_storage_path = myRelativePath
       myProduct.save()

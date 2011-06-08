@@ -426,7 +426,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
 
 
   @runconcrete
-  def imagePath( self ):
+  def productDirectory( self ):
     """
     Returns the path (relative to whatever parent dir it is in) for the
     image itself following the scheme <Sensor>/<processinglevel>/<YYYY>/<MM>/<DD>/
@@ -440,8 +440,8 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     """Returns a path to the actual imagery data as a url. You need to have
     apache set up so share this directory. If no file is encountered at the computed path,
     None will be returned"""
-    myUrl = settings.IMAGERY_URL_ROOT + self.imagePath() + "/" + self.product_id + ".tif.bz2"
-    myPath = os.path.join( settings.IMAGERY_ROOT, self.imagePath(), self.product_id + ".tif.bz2" )
+    myUrl = settings.IMAGERY_URL_ROOT + self.productDirectory() + "/" + self.product_id + ".tif.bz2"
+    myPath = os.path.join( settings.IMAGERY_ROOT, self.productDirectory(), self.product_id + ".tif.bz2" )
     if os.path.isfile( myPath ):
       return myUrl
     else:
@@ -455,12 +455,12 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     @note this method should be deprecated in future since each derivative product should have 
     its own record.
     """
-    myPath = os.path.join( settings.IMAGERY_ROOT, self.imagePath(), self.product_id + ".tar.bz2" )
+    myPath = os.path.join( settings.IMAGERY_ROOT, self.productDirectory(), self.product_id + ".tar.bz2" )
     myLevel = self.processing_level.abbreviation
     myLevel = myLevel.replace( "L","" )
     # since we want *RAW* image in this method set processing level to 1Aa
     myPath = myPath.replace( myLevel, "1Aa" )
-    myUrl = settings.IMAGERY_URL_ROOT + self.imagePath() + "/" + self.product_id + ".tar.bz2"
+    myUrl = settings.IMAGERY_URL_ROOT + self.productDirectory() + "/" + self.product_id + ".tar.bz2"
     myUrl = myUrl.replace( myLevel, "1Aa" )
     # In some cases products may not be in bzipped tarballs so check if that is
     # present if the bz2 on its own isn't present
@@ -667,7 +667,7 @@ class GenericSensorProduct( GenericImageryProduct ):
     app_label= 'catalogue'
     abstract = False
 
-  def _imagePath( self ):
+  def _productDirectory( self ):
     """Returns the path (relative to whatever parent dir it is in) for the
       product / image itself following the scheme <Mission>/<processinglevel>/<YYYY>/<MM>/<DD>/
       The image itself will exist under this dir as <product_id>.tif.bz2
@@ -722,7 +722,7 @@ class GenericSensorProduct( GenericImageryProduct ):
       prefix to the new one.
       """
     myPreviousId = self.product_id #store for asset renaming just now
-    myPreviousImageryPath = self.imagePath()
+    myPreviousImageryPath = self.productDirectory()
     myPreviousThumbPath = self.thumbnailPath()
     myList = []
     # TODO: deprecate the pad function and use string.ljust(3, '-')
@@ -773,7 +773,7 @@ class GenericSensorProduct( GenericImageryProduct ):
       #it already has the correct name
       return
 
-    myNewImageryPath = os.path.join( settings.IMAGERY_ROOT, self.imagePath(), self.product_id + ".tif.bz2" )
+    myNewImageryPath = os.path.join( settings.IMAGERY_ROOT, self.productDirectory(), self.product_id + ".tif.bz2" )
     myOldImageryPath = os.path.join( settings.IMAGERY_ROOT, theOldImageryPath, theOldId + ".tif.bz2" )
     # In some cases the imagery may be in a tar archive (for multiple files) rather than a simple bz2
     if not os.path.isfile( myOldImageryPath ):
@@ -940,12 +940,12 @@ class OpticalProduct( GenericSensorProduct ):
     )
     return metadata
 
-  def imagePath( self ):
+  def productDirectory( self ):
     """
     A wrapper to run concrete from GenericSensorProduct
     @note the filename itself is excluded, only the directory path is returned
     """
-    return self._imagePath()
+    return self._productDirectory()
 
 
   def thumbnailPath( self ):
@@ -994,12 +994,12 @@ class RadarProduct( GenericSensorProduct ):
   class Meta:
     app_label= 'catalogue'
 
-  def imagePath( self ):
+  def productDirectory( self ):
     """
     A wrapper to run concrete from GenericSensorProduct
     @note the filename itself is excluded, only the directory path is returned
     """
-    return self._imagePath()
+    return self._productDirectory()
 
 
   def thumbnailPath( self ):

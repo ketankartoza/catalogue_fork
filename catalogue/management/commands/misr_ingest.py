@@ -445,7 +445,7 @@ class Command(BaseCommand):
                 verblog('Skipping thumbnail creation: too many blocks.', 2)
 
               if store_image:
-                main_image_folder = os.path.join(settings.IMAGERY_ROOT, op.imagePath())
+                main_image_folder = os.path.join(settings.IMAGERY_ROOT, op.productDirectory())
                 try:
                   os.makedirs(main_image_folder)
                 except:
@@ -454,8 +454,8 @@ class Command(BaseCommand):
                 # Save in local_storage_path
                 cmd = ["tar", "cjf", os.path.join(main_image_folder, "%s.tar.bz2" % product_id), "-C" , os.path.join(base_path, main_folder, date_folder)] + packages
                 subprocess.check_call(cmd)
-                op.local_storage_path = os.path.join(op.imagePath(), "%s.tar.bz2" % product_id)
-                verblog('Package saved as %s' % os.path.join(op.imagePath(), "%s.tar.bz2" % product_id))
+                op.local_storage_path = os.path.join(op.productDirectory(), "%s.tar.bz2" % product_id)
+                verblog('Package saved as %s' % os.path.join(op.productDirectory(), "%s.tar.bz2" % product_id))
                 op.save()
               if is_new:
                 verblog('Product %s imported.' % product_id)

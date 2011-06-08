@@ -79,7 +79,7 @@ Store the original image data extracted from the package.
 This flag indicates to the program that the original image
 must be stored locally. The destination folder is calculated
 by chaining ``settings.IMAGERY_ROOT`` and the result from
-the function call ``GenericSensorProduct.imagePath()``, the image
+the function call ``GenericSensorProduct.productDirectory()``, the image
 is compressed with ``bzip2`` and added a ".bz2" suffix.
 : -g GLOB, --glob=GLOB
 A shell glob pattern for files to ingest. Defaults to "*.tar.gz".

@@ -376,7 +376,7 @@ class Command(BaseCommand):
                 handle.close()
 
                 if store_image:
-                  main_image_folder = os.path.join(settings.IMAGERY_ROOT, op.imagePath())
+                  main_image_folder = os.path.join(settings.IMAGERY_ROOT, op.productDirectory())
                   try:
                     os.makedirs(main_image_folder)
                   except:
@@ -386,7 +386,7 @@ class Command(BaseCommand):
                   subprocess.check_call(["bzip2", "-f", main_image])
                   verblog("Storing main image for product %s: %s" % (product_id, main_image), 2)
                   # Save in local_storage_path
-                  op.local_storage_path = os.path.join(op.imagePath(), op.product_id + ".hdf" + '.bz2')
+                  op.local_storage_path = os.path.join(op.productDirectory(), op.product_id + ".hdf" + '.bz2')
                   op.save()
               if is_new:
                 verblog('Product %s imported.' % product_id)

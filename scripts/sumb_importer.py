@@ -202,7 +202,7 @@ def importMetadata( theProjectDir ):
 
 def importL1Ab( theProjectDir, theProduct ):
   print "L1Ab import for %s" % theProduct.product_id
-  myOutputPath = os.path.join( settings.IMAGERY_ROOT, theProduct.imagePath() )
+  myOutputPath = os.path.join( settings.IMAGERY_ROOT, theProduct.productDirectory() )
   myOutputFile = os.path.join( myOutputPath, theProduct.product_id + ".tif.bz2" )
   myPixSourceFile = os.path.join( mSourcePath, theProjectDir, "imp", theProduct.product_id + ".pix" )
   myTiffSourceFile = os.path.join( mSourcePath, theProjectDir, "imp", theProduct.product_id + ".tif" )
@@ -234,7 +234,7 @@ def importL1Ab( theProjectDir, theProduct ):
   print "Move: %s to %s" % (myBzipSourceFile, myOutputFile)
   try:
     shutil.move( myBzipSourceFile  , myOutputFile )
-    myRelativePath = os.path.join( theProduct.imagePath(), theProduct.product_id + ".tif.bz2" )
+    myRelativePath = os.path.join( theProduct.productDirectory(), theProduct.product_id + ".tif.bz2" )
     print "Local storage path: %s" % myRelativePath
     theProduct.local_storage_path = myRelativePath
     theProduct.save()
@@ -251,7 +251,7 @@ def importL1Aa( theProjectDir, theProduct ):
   myRawSourceDirParent = os.path.join( mSourcePath, theProjectDir, "raw" )
   os.chdir(myRawSourceDirParent)
   print "L1Aa import for %s" % theProduct.product_id
-  myOutputPath = os.path.join( settings.IMAGERY_ROOT, theProduct.imagePath().replace("1Ab","1Aa") )
+  myOutputPath = os.path.join( settings.IMAGERY_ROOT, theProduct.productDirectory().replace("1Ab","1Aa") )
   myOutputFile = os.path.join( myOutputPath, theProduct.product_id.replace("L1Ab","L1Aa") + ".tar.bz2" )
   mySourceDir = theProduct.original_product_id
   if not os.path.isdir( myOutputPath ):
