@@ -202,6 +202,60 @@ Note this can take some time depending on bandwidth availability.
 After the upgrade is completed you should reboot the system so that you 
 are using the newly installed kernel.
 
+== Upgrade to squeeze ==
+
+The Lenny installation above has since been superceded by debian 6 'squeeze'.
+I upgraded using the following procedure:
+
+Edit /etc/apt/sources.list as root and replace all 'etch' instances with 'lenny
+so that it looks like this:
+
+```
+# 
+# deb cdrom:[Debian GNU/Linux 4.0 r4a _squeeze_ - Official powerpc NETINST Binary-1 20080804-15:15]/ squeeze contrib main
+
+#deb cdrom:[Debian GNU/Linux 4.0 r4a _squeeze_ - Official powerpc NETINST Binary-1 20080804-15:15]/ squeeze contrib main
+
+deb http://debian.mirror.ac.za/debian/ squeeze main
+deb-src http://debian.mirror.ac.za/debian/ squeeze main
+
+deb http://security.debian.org/ squeeze/updates main contrib
+deb-src http://security.debian.org/ squeeze/updates main contrib
+```
+
+Note as well that we have commented out the CD rom sources so that only online
+apt repositories are used.
+
+Next I ran the following commands to perform the operating system upgrade:
+
+```
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get dist-upgrade
+```
+
+Note this can take some time depending on bandwidth availability.
+
+After the upgrade is completed you should reboot the system so that you 
+are using the newly installed kernel.
+
+=== Firewall setup ===
+
+Note: This procedure is update to reflect availability of ufw packages for Squeeze.
+
+Note: updated for debian squeeze which now provides uncomplicated firewall
+(ufw) packages.
+
+```
+sudo apt-get install ufw 
+sudo ufw allow 8697
+sudo ufw allow 5432
+sudo ufw default allow outgoing
+sudo ufw default deny incoming
+sudo ufw status
+```
+
+
 === Setup Postgres/Postgis ===
 
 This system is running software RAID 0 (mirror) and is well suited as a
@@ -281,6 +335,25 @@ And add this line:
 ```
 # Next line added by Tim to enable remote machines to connect on TCP/IP
 listen_addresses='*'
+```
+
+Also for performance tuning, set the following settings in the above file:
+
+```
+#Changed by Tim for tuning
+# Changed again from 16mb to 6GB based on http://wiki.postgresql.org/wiki/Tuning_Your_PostgreSQL_Server
+# I.e. 1/4 ram (this server has 24GB)
+#I set it to 3GB as I get an error with anything over 3GB
+shared_buffers = 3GB #16MB # min 128kB or max_connections*16kB
+
+# Tweaked by Tim for performance
+# (see http://www.westnet.com/~gsmith/content/postgresql/pg-5minute.htm)
+effective_cache_size = 12GB
+
+# Tweaked by tim based on http://wiki.postgresql.org/wiki/Tuning_Your_PostgreSQL_Server
+work_mem = 256MB                                # min 64kB
+
+
 ```
 
 Next shutdown postgres:
