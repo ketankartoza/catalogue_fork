@@ -212,8 +212,15 @@ class Command(BaseCommand):
 
       try:
         imported = 0
+        updated = 0
+        created = 0
         verblog('Starting index dowload...', 2)
         for package in Command.fetch_geometries(shapefile, area_of_interest):
+          if imported % 10000 == 0: 
+            print "Products processed : %s " % imported
+            print "Products updated : %s " % updated
+            print "Products imported : %s " % created
+            transaction.commit()
           verblog("Ingesting %s" % package, 2)
 
           # Understanding SPOT a21 scene id:
@@ -313,11 +320,13 @@ class Command(BaseCommand):
             op = OpticalProduct.objects.get(product_id=data.get('product_id')).getConcreteInstance()
             verblog('Already in catalogue: updating.', 2)
             is_new = False
+            updated += 1
             op.__dict__.update(data)
           except ObjectDoesNotExist:
             op = OpticalProduct(**data)
             verblog('Not in catalogue: creating.', 2)
             is_new = True
+            created += 1
             try:
               op.productIdReverse(True)
             except Exception, e:
@@ -349,7 +358,12 @@ class Command(BaseCommand):
                 except:  
                   traceback.print_exc(file=sys.stdout)
               else:
-                pass #user opted not to ingest thumbs
+                # user opted not to ingest thumbs immediately
+                # only set the thumb url if it is a new product
+                # as existing products may already have cached a copy
+                if is_new:
+                  op.remote_thumbnail_url = package.get('URL_QL')
+                  op.save()
             if is_new:
               verblog('Product %s imported.' % product_id, 1)
             else:
