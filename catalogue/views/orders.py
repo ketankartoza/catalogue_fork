@@ -134,7 +134,11 @@ def downloadOrder(theRequest,theId):
   elif theRequest.GET.has_key('kml'):
     return render_to_kml("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.DOMAIN, 'transparentStyle':True},u'products_for_order_%s' % myOrder.id)
   elif theRequest.GET.has_key('kmz'):
-    return render_to_kmz("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.DOMAIN, 'transparentStyle':True},u'products_for_order_%s' % myOrder.id)
+    return render_to_kmz("kml/ordered_products.kml", {
+      'order' : myOrder,
+      'external_site_url':settings.DOMAIN, 
+      'transparentStyle':True,
+      'myThumbsFlag': True },u'products_for_order_%s' % myOrder.id)
   else:
     logging.info('Request cannot be proccesed, unsupported download file type')
     raise Http404
@@ -151,7 +155,10 @@ def downloadClipGeometry(theRequest,theId):
   elif theRequest.GET.has_key('kml'):
     return render_to_kml("kml/clipGeometry.kml", {'order' : myOrder,'external_site_url':settings.DOMAIN, 'transparentStyle':True},u'clip_geometry_order_%s' % myOrder.id)
   elif theRequest.GET.has_key('kmz'):
-    return render_to_kmz("kml/clipGeometry.kml", {'order' : myOrder,'external_site_url':settings.DOMAIN,'transparentStyle':True},u'clip_geometry_order_%s' % myOrder.id)
+    return render_to_kmz("kml/clipGeometry.kml", {'order' : myOrder,
+    'external_site_url':settings.DOMAIN,
+    'transparentStyle': True, 
+    'myThumbsFlag': True },u'clip_geometry_order_%s' % myOrder.id)
   else:
     logging.info('Request cannot be proccesed, unsupported download file type')
     raise Http404
