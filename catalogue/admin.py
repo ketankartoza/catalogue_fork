@@ -61,8 +61,6 @@ class OrderNotificationRecipientsAdmin(admin.GeoModelAdmin):
 # Admin models for new generic product model
 #################################################
 
-class MissionAdmin( admin.GeoModelAdmin ):
-  pass
 class ProcessingLevelAdmin( admin.GeoModelAdmin ):
   pass
 class DatumAdmin( admin.GeoModelAdmin ):
@@ -91,17 +89,22 @@ class DeliveryMethodAdmin( admin.GeoModelAdmin ):
   pass
 class OrderStatusAdmin( admin.GeoModelAdmin ):
   pass
+class MissionAdmin( admin.GeoModelAdmin ):
+  pass
 class MissionSensorAdmin( admin.GeoModelAdmin ):
   pass
 class TaskingRequestAdmin( admin.GeoModelAdmin ):
   pass
-class SumbAdmin( admin.GeoModelAdmin ):
+class SensorTypeAdmin( admin.GeoModelAdmin ):
+  pass
+class AcquisitionModeAdmin( admin.GeoModelAdmin ):
   pass
 
-admin.site.register(Sumb, SumbAdmin)
-admin.site.register(TaskingRequest, TaskingRequestAdmin)
 admin.site.register(Mission, MissionAdmin)
 admin.site.register(MissionSensor, MissionSensorAdmin)
+admin.site.register(SensorType, SensorTypeAdmin)
+admin.site.register(AcquisitionMode, AcquisitionModeAdmin)
+admin.site.register(TaskingRequest, TaskingRequestAdmin)
 admin.site.register(DeliveryMethod, DeliveryMethodAdmin)
 admin.site.register(OrderStatus, OrderStatusAdmin)
 admin.site.register(FileFormat, FileFormatAdmin)
