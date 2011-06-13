@@ -21,6 +21,22 @@ In addition the lion server is connected to two 13TB (effective) Fujitsu Siemens
 The Server is an IA 64 processor machine installed with ubuntu server 10.04 LTS. This document 
 assumes a basic Ubuntu Server LTS install has already been carried out.
 
+== Firewall ==
+
+
+```
+sudo apt-get install ufw 
+sudo ufw allow 8697
+sudo ufw allow 5432
+sudo ufw allow from 127.0.0.1/32 to 0.0.0.0/0 port 25
+sudo ufw allow from 127.0.0.1/32 to 41.74.158.7/32 port 5432
+sudo ufw default allow outgoing
+sudo ufw default deny incoming
+sudo ufw status
+```
+
+8697 - ssh, 80 apache, 5432 postgres , 25 outbound mail
+
 === Package installations ===
 
 ```

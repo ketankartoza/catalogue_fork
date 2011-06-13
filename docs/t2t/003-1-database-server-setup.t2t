@@ -250,11 +250,13 @@ Note: updated for debian squeeze which now provides uncomplicated firewall
 sudo apt-get install ufw 
 sudo ufw allow 8697
 sudo ufw allow 5432
+sudo ufw allow from 127.0.0.1/32 to 0.0.0.0/0 port 25
 sudo ufw default allow outgoing
 sudo ufw default deny incoming
 sudo ufw status
 ```
 
+8697 - ssh, 5432 postgresql, 25 outbound mail
 
 === Setup Postgres/Postgis ===
 
