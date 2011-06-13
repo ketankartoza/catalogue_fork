@@ -47,7 +47,7 @@ HOST = get_ip_address('eth0')
 #HOST = get_ip_address('eth1')
 #HOST = '146.64.55.220'
 #HOST = '192.168.1.1'
-DOMAIN = "XXXX.sac.co.za"
+DOMAIN = "XXXX.sansa.org.za"
 
 # See: http://www.djangobook.com/en/1.0/chapter12/#cn222
 AUTH_PROFILE_MODULE = 'catalogue.SacUserProfile'
@@ -55,7 +55,7 @@ AUTH_PROFILE_MODULE = 'catalogue.SacUserProfile'
 # Standard page size for pagination
 PAGE_SIZE=20
 
-WMS_SERVER="196.35.94.243"
+WMS_SERVER="maps.sansa.org.za"
 
 # This is for shapefile uploading using dane springmeyer's django-shapes lib
 SHP_UPLOAD_DIR = '/tmp/'
