@@ -392,6 +392,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     myBL = myCandidates[3]
 
     myTempTifFile = os.path.join( "/tmp/",self.product_id + ".tif" )
+    myTempReffedTifFile = os.path.join( "/tmp/",self.product_id + "reffed.tif" )
     myJpgFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.jpg" )
     myLogFile = file(os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.log" ), "w")
     myString = "gdal_translate -a_srs 'EPSG:4326' -gcp 0 0 %s %s -gcp %s 0 %s %s -gcp %s %s %s %s -gcp 0 %s %s %s -of GTIFF -co COMPRESS=DEFLATE -co TILED=YES %s %s" % ( \
@@ -404,19 +405,20 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     os.system( myString )
     myLogFile.write( myString + "\n" )
     # now gdalwarp the file onto itself so that the gcps are used to georeference the file
-    myString = "gdal_warp %s %s" % myTempTifFile, myTempTifFile
-    os.system( myString )
+    myString = "gdalwarp %s %s" % ( myTempTifFile, myTempReffedTifFile )
     myLogFile.write( myString + "\n" )
+    os.system( myString )
     # TODO : nicer way to call gdal e.g.
     #subprocess.check_call(["gdal_translate", "-q", "-co", "worldfile=on", "-of", "JPEG", downloaded_thumb, jpeg_thumb])
     # Now convert the tif to a jpg
     myString = "gdal_translate -of JPEG -co WORLDFILE=YES %s %s" % \
-      ( myTempTifFile, myJpgFile )
-    os.system( myString )
+      ( myTempReffedTifFile, myJpgFile )
     myLogFile.write( myString + "\n" )
+    os.system( myString )
     myLogFile.close()
     # Clean away the tiff and copy the referenced jpg over to the thumb dir
-    os.remove( myTiffThumbnail )
+    os.remove( myTempTifFile )
+    os.remove( myTempReffedTifFile )
     #print "Image X size: %s" % myImageXDim
     #print "Image Y size: %s" % myImageYDim
     #print "Top left X: %s, Y:%s" %(myTL[0],myTL[1])

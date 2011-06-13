@@ -127,6 +127,7 @@ class Command(BaseCommand):
     Download the index and parses it, returns a generator list of features
     """
     try:
+      print( "Opening %s" % shapefile )
       data_source = DataSource( shapefile )
     except Exception, e:
       raise CommandError("Loading index failed %s" % e)
@@ -139,6 +140,9 @@ class Command(BaseCommand):
   @transaction.commit_manually
   def handle(self, *args, **options):
     """ command execution """
+    def verblog(msg, level=1):
+      if verbose >= level:
+        print msg
 
     try:
       lockfile = lock.lock("/tmp/spot_harvest.lock", timeout=60)
@@ -167,9 +171,6 @@ class Command(BaseCommand):
 
     area_of_interest  = None
 
-    def verblog(msg, level=1):
-      if verbose >= level:
-        print msg
 
     verblog('Getting verbose (level=%s)... ' % verbose, 2)
     if test_only:
@@ -216,6 +217,7 @@ class Command(BaseCommand):
         created = 0
         verblog('Starting index dowload...', 2)
         for package in Command.fetch_geometries(shapefile, area_of_interest):
+          #if imported > 5: continue
           if imported % 10000 == 0: 
             print "Products processed : %s " % imported
             print "Products updated : %s " % updated
@@ -370,6 +372,7 @@ class Command(BaseCommand):
               verblog('Product %s updated.' % product_id, 1)
             imported = imported + 1
           except Exception, e:
+            traceback.print_exc(file=sys.stdout)
             raise CommandError('Cannot import: %s' % e)
 
         verblog("%s packages imported" % imported)
@@ -381,6 +384,7 @@ class Command(BaseCommand):
           transaction.commit()
           verblog("Committing transaction.", 2)
       except Exception, e:
+        traceback.print_exc(file=sys.stdout)
         raise CommandError('Uncaught exception (%s): %s' % (e.__class__.__name__, e))
     except Exception, e:
       verblog('Rolling back transaction due to exception.')
