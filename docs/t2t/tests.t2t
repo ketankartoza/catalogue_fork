@@ -440,11 +440,12 @@ to be discussed with Linfiniti)
 **TEST  3100 8.7 Is the user provided with the option to get imagery clipped to
 his AOI only?**
 
-**Response:**
+**Response:** Yes. During the order process, the use can specify an AOI which 
+is made available to operators to use for the clip operation.
 
 **TEST  3100 8.8 Is the area for the AOI calculated for billing purposes.**
 
-**Response:**
+**Response:** 
 
 **TEST  3100 8.9 Has the client got the ability to select the elements that
 need to enter a mosaic in the case where several mosaics should be generated
@@ -470,11 +471,12 @@ the respective place of the catalogue User Interface mentioned in WP3100.
 packages and populate its database with these from a predefined pick up
 point?**
 
-**Response:**
+**Response:** Yes. Support has been implemented for ingestion of DIMS packages.
 
 **TEST  3200 1.2 Is this ingestion triggered daily via a cron job?**
 
-**Response:**
+**Response:** XXX to check XXX. Yes cron jobs collect any supplied dims package
+on a nightly basis.
 
 The catalogue should generate the following email notification and reports:
 1. Send delivery notification for free products after order has been placed
@@ -483,7 +485,8 @@ to client. The current email needs to be reformatted for more clarity.
 **TEST  3200 2.1  Are delivery notifications for free products sent to SAC
 personell and the client after the order has been placed?**
 
-**Response:**
+**Response:** Yes. All orders generate an automatic email sent to the client and 
+nominated personnel.
 
 
 2. Send order notification for for non-free or products that need to be
@@ -775,9 +778,7 @@ the ingestion of log files for the automatic population of fields.
 **TEST  3400 1. Does the metadata preparation tool work with raster and vector
 data?**
 
-**Response:** The metadata tool works with Raster data only. The SAC OGC
-ISO19115 profile needs to be extended to cover vectorial data before the tool
-can be updated to support vector data.
+**Response:** Yes, the metadata tool works with file based raster and vector data.
 
 **TEST  3400 2. Does the metadata preparation tool generate metadata XML files
 according to ISO standards?**
