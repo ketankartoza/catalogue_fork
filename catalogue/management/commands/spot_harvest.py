@@ -103,6 +103,8 @@ class Command(BaseCommand):
   option_list = BaseCommand.option_list + (
       make_option('--file', '-f', dest='shapefile', action='store',
           help='Shapefile containing spot coverage data.', default=False),
+      make_option('--download-thumbs', '-d', dest='download_thumbs', action='store',
+          help='Whether thumbnails should be fetched to. If not fetched now they will be fetched on demand as needed.', default=False),
       make_option('--test_only', '-t', dest='test_only', action='store_true',
           help='Just test, nothing will be written into the DB.', default=False),
       make_option('--owner', '-o', dest='owner', action='store',
@@ -145,6 +147,7 @@ class Command(BaseCommand):
       raise CommandError, 'Could not acquire lock.'
 
     shapefile             = options.get('shapefile')
+    download_thumbs       = options.get('download_thumbs')
     test_only             = options.get('test_only')
     verbose               = int(options.get('verbosity'))
     license               = options.get('license')
@@ -211,7 +214,6 @@ class Command(BaseCommand):
         imported = 0
         verblog('Starting index dowload...', 2)
         for package in Command.fetch_geometries(shapefile, area_of_interest):
-          if imported > 5: continue
           verblog("Ingesting %s" % package, 2)
 
           # Understanding SPOT a21 scene id:
@@ -326,29 +328,32 @@ class Command(BaseCommand):
             if test_only:
               verblog('Testing: image not saved.', 2)
             else:
-              # Store thumbnail
-              thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailDirectory())
-              try:
-                os.makedirs(thumbnails_folder)
-              except:
-                pass
-              # Download original jpeg thumbnail and creates a thumbnail
-              downloaded_thumb = os.path.join(thumbnails_folder, op.product_id + ".jpg")
-              handle = open(downloaded_thumb, 'wb+')
-              thumbnail = urllib2.urlopen(package.get('URL_QL'))
-              handle.write(thumbnail.read())
-              thumbnail.close()
-              handle.close()
-              # Transform and store .wld file
-              verblog('Referencing thumb',2)
-              try:
-                op.georeferenceThumbnail()
-              except:  
-                traceback.print_exc(file=sys.stdout)
+              if download_thumbs:
+                # Store thumbnail
+                thumbnails_folder = os.path.join(settings.THUMBS_ROOT, op.thumbnailDirectory())
+                try:
+                  os.makedirs(thumbnails_folder)
+                except:
+                  pass
+                # Download original jpeg thumbnail and creates a thumbnail
+                downloaded_thumb = os.path.join(thumbnails_folder, op.product_id + ".jpg")
+                handle = open(downloaded_thumb, 'wb+')
+                thumbnail = urllib2.urlopen(package.get('URL_QL'))
+                handle.write(thumbnail.read())
+                thumbnail.close()
+                handle.close()
+                # Transform and store .wld file
+                verblog('Referencing thumb',2)
+                try:
+                  op.georeferenceThumbnail()
+                except:  
+                  traceback.print_exc(file=sys.stdout)
+              else:
+                pass #user opted not to ingest thumbs
             if is_new:
-              verblog('Product %s imported.' % product_id)
+              verblog('Product %s imported.' % product_id, 1)
             else:
-              verblog('Product %s updated.' % product_id)
+              verblog('Product %s updated.' % product_id, 1)
             imported = imported + 1
           except Exception, e:
             raise CommandError('Cannot import: %s' % e)
