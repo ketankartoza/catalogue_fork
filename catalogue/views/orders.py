@@ -31,6 +31,7 @@ import traceback
 # SHP and KML readers
 from catalogue.featureReaders import *
 
+from catalogue.utmzonecalc import *
 
 ###########################################################
 #
@@ -179,6 +180,7 @@ def viewOrder (theRequest, theId):
     logging.debug("Request is ajax enabled")
   myOrder = get_object_or_404(Order,id=theId)
   myRecords = SearchRecord.objects.all().filter(order=myOrder)
+  myCoverage = coverageForOrder(myOrder, myRecords)
   if not ((myOrder.user == theRequest.user) or (theRequest.user.is_staff)):
     raise Http404
   myHistory = OrderStatusHistory.objects.all().filter(order=myOrder)
@@ -213,8 +215,63 @@ def viewOrder (theRequest, theId):
          'myForm' : myForm,
          'myHistory' : myHistory,
          'myCartTitle' : 'Product List',
+         'myCoverage' : myCoverage,
       },
       context_instance=RequestContext(theRequest))
+
+def coverageForOrder(theOrder, theSearchRecords):
+  """A small helper function to compute the coverage area. Logic is:
+     - if AOI specified, the union of the products is clipped by the AOI
+     - if no AOI is specified the area of the union of the products is returned.
+     returns a dict with keys containing area properties for the order:
+      ProductArea - total area of the union of all ordered products
+      CentroidZone - UTM zone at cenroid of union of all ordered products
+      IntersectedArea - area of union of all products intersected with AOI
+     """
+  myCoverage = {}
+  myUnion = None
+  for myRecord in theSearchRecords:
+    myGeometry = myRecord.product.spatial_coverage
+    if not myUnion:
+      myUnion = myGeometry
+    else:
+      # This can be done faster using cascaded union but needs geos 3.1
+      myUnion = myUnion.union( myGeometry )
+  myCentroid = myUnion.centroid
+  myZones = utmZoneFromLatLon( myCentroid.x , myCentroid.y)
+  if len(myZones) > 0:
+    myZone = myZones[0] #use the first match
+    logging.debug("Utm zones: %s" % myZones)
+    logging.debug("Before geom xform to %s: %s" % ( myZone[0], myUnion ) )
+    myTransform = CoordTransform(SpatialReference(4326),SpatialReference(myZone[0]))
+    myUnion.transform(myTransform) 
+    logging.debug("After geom xform: %s" % myUnion)
+    myCoverage[ "ProductArea" ] = myUnion.area 
+    myCoverage[ "CentroidZone" ] = "%s (EPSG:%s)" % (myZone[1],myZone[0]) 
+  else:
+    myCoverage[ "ProductArea" ] = "Error calculating area of products"
+    myCoverage[ "CentroidZone" ] = "Error calculating centroid of products"
+  if theOrder.delivery_detail.geometry:
+    myClip = myUnion.intersection( theOrder.delivery_detail.geometry )
+    myCoverage[ "IntersectedArea" ] = myClip.area 
+    myCentroid = myClip.centroid
+    # Calculate the zone independently as centroid may differ from product union
+    myZones = utmZoneFromLatLon( myCentroid.x , myCentroid.y)
+    if len(myZones) > 0:
+      myZone = myZones[0]
+      myTransform = CoordTransform(SpatialReference(4326),SpatialReference(myZone[0]))
+      myClip.transform(myTransform) 
+      logging.debug("Utm zones: %s" % myZone)
+      myCoverage[ "IntersectedArea" ] = myClip.area 
+      myCoverage[ "ClipZone" ] = "%s (EPSG:%s)" % (myZone[1],myZone[0]) 
+    else:
+      myCoverage[ "IntersectedArea" ] = "Error calculating clip area"
+      myCoverage[ "ClipZone" ] = "Error calculating zone"
+
+  else:
+    myCoverage[ "IntersectedArea" ] = "Not applicable"
+    myCoverage[ "ClipZone" ] = "Not applicable"
+  return myCoverage
 
 @login_required
 def updateOrderHistory(theRequest):
