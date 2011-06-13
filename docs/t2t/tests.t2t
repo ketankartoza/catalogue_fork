@@ -379,7 +379,7 @@ thumbnails with world files?**
 **TEST  3100 7.5 Can users download metadata of products selected in a boundle
 as ISO XML files the thumbnails with world files?**
 
-**Response:**
+**Response:** 
 
 
 8. The order form should provide fields that are applicable and relevant for
@@ -388,7 +388,8 @@ the products to be ordered only.
 **TEST  3100 8.1 Are only fields applicable to ordered products provided on the
 order form?**
 
-**Response:**
+**Response:** We have implemented global order options and per-product detailed
+options. The user this has fine-grained control over the order specification.
 
 A "notes" section should be provided allowing users to enter special
 requests.
@@ -396,14 +397,15 @@ requests.
 **TEST  3100 8.2 Is a notes section provided to users to enter special requests
 in the order form?**
 
-**Response:**
+**Response:** Yes. A notes area is provided for this purpose.
 
 Selection on the required file format should be provided.
 
 **TEST  3100 8.3 Is a selection of the required file format provided in the
 order form per product?**
 
-**Response:**
+**Response:** Yes. File format can be specified on a per-product basis or for
+the order as a whole.
 
 Selection on the required Processing level should be provided (product
 specific)
@@ -411,7 +413,8 @@ specific)
 **TEST  3100 8.4 Is a product specific and relevant selection of the processing
 level provided to the user in the order form?**
 
-**Response:**
+**Response:** Yes. Processing levels can be assigned per product or specified
+at the order level (for the order as a whole).
 
 Selection on the required Projection should be provided (Only projections
 that make sense for the relevant product should be made available for
@@ -420,14 +423,19 @@ selection)
 **TEST  3100 8.5 Can a user select a relevant and applicable Projection for the
 product being limited to those that are sensible for the product?**
 
-**Response:**
+**Response:** Yes. The projection list is constrained to the UTM zones covered
+by the product centers, plus one zone each to the left and right. Additionally
+EPSG:4326 and EPSG:900913 CRS's are provided as standard.
 
 Provision should be made to select a appropriate resampling algorithm. 
 
 **TEST  3100 8.6 Can a user select only the appropriate resampling algorithm
 for the product in the order menu?**
 
-**Response:**
+**Response:** Yes. Note that the user needs to select the appropriate
+resampling algorithm from the list of resampling algs (the wording in the test
+above implies different functionality to the original specification - the
+original specification was used).
 
 }}The user should have the option to select that he wants imagery for the AOI
 only. In that case imagery will be clipped to the AOI and the area of imagery
