@@ -69,7 +69,7 @@
   </head>
   <body {% block body_load %}{% endblock %}>
     <div id="header" class=""><div id="logo"></div></div>
-    <div class="container showgrid"> {# for blueprint css #}
+    <div class="container"> {# for blueprint css #}
       <div class="menu-container">
         {% include "menu.html" %}
       </div>
@@ -82,7 +82,7 @@
         </ul>
       </div>
       {% endif %}
-      <div id="content" class="span-22 append-1 prepend-1 prepend-top append-bottom">
+      <div id="content showgrid" class="span-22 append-1 prepend-1 prepend-top append-bottom">
         {% block content%}
         {% endblock %}
       </div>

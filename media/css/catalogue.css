@@ -548,3 +548,5 @@ div.required label {
     max-width: 335px;
     min-width: 335px;
 }
+
+.centered { text-align: center; }
