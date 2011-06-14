@@ -324,44 +324,23 @@ def visitorMap(theRequest):
 
 @login_required
 #renderWithContext is explained in renderWith.py
-@renderWithContext('map.html')
+@renderWithContext('productView.html')
 def showProduct(theRequest, theProductId):
   """Renders a search results page including the map
   and all attendant html content - for a single product only
   identified by its sac product ID"""
-  mySearchRecord = None
-  myExtent = None
+  myProduct = None
   myMessages = []
-  myProducts = GenericProduct.objects.filter(product_id__icontains=theProductId)
+  myProducts = GenericProduct.objects.filter(product_id=theProductId)
   if len( myProducts ) > 0:
     myProduct = myProducts[0]
-    mySearchRecord = SearchRecord()
-    mySearchRecord.user = theRequest.user
-    mySearchRecord.product = myProduct
-    myExtent = myProduct.spatial_coverage.envelope
+    myObject, myType = myProduct.getConcreteProduct()
     myMessages.append("Product found")
   else:
     myMessages.append("No matching product found")
-  myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
   return ({
-        'myMessages' : myMessages,
-        'myLayerDefinitions' : myLayerDefinitions,
-        'myLayersList' : myLayersList,
-        'myRecords' : [mySearchRecord],
-        'myExtent' : myExtent,
-        'myShowDetailFlag' : True,
-        'myShowSceneIdFlag' : True,
-        'myShowDateFlag': False,
-        'myShowRemoveIconFlag': False, #used in cart contents listing context only
-        'myShowHighlightFlag': True,
-        'myShowRowFlag' : False,
-        'myShowPathFlag' : False,
-        'myShowCloudCoverFlag' : True,
-        'myShowMetadataFlag' : True,
-        'myShowCartFlag' : True,
-        'myShowPreviewFlag' : True,
-        'myLegendFlag' : True, #used to show the legend in the accordion
-        'mySearchFlag' : True,
+        'messages' : myMessages,
+        'myProduct' : myObject,
         })
 
 

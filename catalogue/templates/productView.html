@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{# Original code from Tim's SABIO project and copyright is retained by the original author #}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+
+{% block content %}
+{% box_start product-view "span-21" %}
+{{myProduct.toHtml}}
+{% box_end %}
+{% endblock %}
