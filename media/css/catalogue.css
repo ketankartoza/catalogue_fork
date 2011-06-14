@@ -38,6 +38,8 @@ body {
     padding-bottom: 2em;
   }
 
+/* Override bg of ui */
+.ui-widget-content { background: none #CAD8EE; }
 
 .ui-datepicker {
     z-index: 9999;
