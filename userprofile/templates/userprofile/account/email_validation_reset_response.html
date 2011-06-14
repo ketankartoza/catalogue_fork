@@ -6,7 +6,7 @@
 
 {% block content %}
 <div id="content">
-{% box_start "" "" "" %}
+{% box_start "box-" %}
   <p class="{% ifequal params.action "done" %}success{% else %}notice{% endifequal %} large">
   {% ifequal params.action "done" %}
     {% trans "We've e-mailed you the e-mail validation link" %}.

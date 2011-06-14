@@ -1,6 +1,6 @@
 {# Original code from Tim's SABIO project and copyright is retained by the original author #}
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
-{% box_start "" "" ""%}
+{% box_start "box-visitors"%}
   {% if myRecords %}
 <a class="button-link" href="/visitorlist/?page={{ myRecords.number}}&pdf"><img src="/media/images/application-pdf.png" />PDF</a>
       <table id="gradient-style" summary="Available Sensors">

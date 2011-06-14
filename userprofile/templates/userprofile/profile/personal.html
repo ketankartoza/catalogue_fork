@@ -14,7 +14,7 @@
 
 {% block content %}
 <div id="content">
-{% box_start "" "" "" %}
+{% box_start "box-" %}
   <form class="personal" action="{{ request.path_info }}" method="post" enctype="multipart/form-data">
   <fieldset>
     <legend>{% trans "Edit your personal information" %}</legend>

@@ -16,7 +16,7 @@
 
 {% block content %}
 <div id="content">
-{% box_start "" "" "" %}
+{% box_start "box-" %}
   <form action="" method="post" accept-charset="utf-8">
   <fieldset>
     <legend>{% trans "User registration" %}</legend>
@@ -133,7 +133,7 @@
   <p><input type="submit" value="{% trans 'Register' %}" /></p>
   </form>
 {% box_end %}
-{% box_start "" "" "" %}
+{% box_start "box-" %}
   <div class="box">
     <h3>{% trans "Register a new account" %}</h3>
     <p>{% trans "In order to be able to do searches and place orders you need to have an account." %}.</p>

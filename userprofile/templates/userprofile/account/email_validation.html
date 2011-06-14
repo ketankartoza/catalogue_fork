@@ -16,7 +16,7 @@
 
 {% block content %}
 <div id="content">
-{% box_start "" "" "" %}
+{% box_start "box-" %}
   <form action="" method="post" accept-charset="utf-8">
   <fieldset>
     <legend>{% if user.email %}{% trans "E-mail change" %}{% else %}{% trans "Add e-mail" %}{% endif %}</legend>

@@ -1,7 +1,7 @@
 {# Original code from Tim's SABIO project and copyright is retained by the original author #}
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% block content %}
-  {% box_start "" "" "tasking-request-list" %}
+  {% box_start "box-tasking-request-list" %}
   <script type="text/javascript">
       function showTask(theId) {
         theUrl = '/viewtaskingrequest/' + theId + '/';

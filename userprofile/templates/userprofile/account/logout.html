@@ -6,7 +6,7 @@
 
 {% block content %}
 <div id="content">
-{% box_start "" "" "" %}
+{% box_start "box-" %}
   <h3>{% trans "Logged out" %}</h3>
   <p class="large">{% trans "You've been logged out" %}. (<a href="{% url profile_overview %}">{% trans 'Log in again' %}</a>)</p>
 {% box_end %}

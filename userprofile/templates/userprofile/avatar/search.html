@@ -22,7 +22,7 @@
 
 {% block content %}
 <div id="content">
-{% box_start "" "" "" %}
+{% box_start "box-" %}
   <form action="" method="post" accept-charset="utf-8">
   <fieldset>
     <legend>{% trans "Search for an image on Picasa Web" %}</legend>
@@ -44,7 +44,7 @@
     <input type="hidden" name="url" value="" />
   </form>
 {% box_end %}
-{% box_start "" "" "" %}
+{% box_start "box-" %}
   <div class="box">
     <h3>{% trans "Avatar selection page" %}</h3>
     <p>{% trans "You have several options to select the image you want as avatar on your profile" %}.</p>

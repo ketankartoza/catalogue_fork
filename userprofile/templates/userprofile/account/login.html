@@ -16,7 +16,7 @@
 
 {% block content %}
 <div id="content">
-{% box_start "" "" "" %}
+{% box_start "box-" %}
   <form action="{% if next %}?next={{ next }}{% endif %}" method="post" accept-charset="utf-8">
   <fieldset>
     <legend>{% trans "User login" %}</legend>
@@ -39,7 +39,7 @@
   <p><input type="submit" value="{% trans 'Login' %}" /></p>
   </form>
 {% box_end %}
-{% box_start "" "" "" %}
+{% box_start "box-" %}
     {# http://code.djangoproject.com/ticket/7239 #}
     <a href="{% url password_reset %}">{% trans "Lost your password?" %}</a>
     <br />

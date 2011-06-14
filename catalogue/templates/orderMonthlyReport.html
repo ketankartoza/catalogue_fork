@@ -2,7 +2,7 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {# page wrapped version of add.html for non ajax graceful degradation #}
 {% block content %}
-  {% box_start "" "" "orders-list" %}
+  {% box_start "box-orders-list" %}
   <script type="text/javascript">
       function showOrder(theId) {
         theUrl = '/vieworder/' + theId + '/';

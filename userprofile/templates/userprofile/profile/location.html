@@ -15,7 +15,7 @@
 
 {% block content %}
 <div id="content">
-{% box_start "" "" "" %}
+{% box_start "box-" %}
   <form action="{{ request.path_info }}" method="post" enctype="multipart/form-data">
   {{ form.errors }}
   <fieldset>
@@ -36,7 +36,7 @@
   <input type="submit" value="{% trans 'Save' %}" />
   </form>
 {% box_end %}
-{% box_start "" "" "" %}
+{% box_start "box-" %}
   <h3>{% trans "Location information" %}</h3>
     <p>{% trans "Define your location information" %}.</p>
 {% box_end %}

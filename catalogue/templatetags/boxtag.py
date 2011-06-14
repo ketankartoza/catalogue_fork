@@ -3,7 +3,7 @@ from django import template
      
 register = template.Library()     
 @register.simple_tag
-def box_start( heading, icon, id ):
+def box_start( id ):
   myString = '''
     <div class="ui-widget append-bottom">
       <div class="ui-helper-reset ui-widget-content ui-state-highlight ui-corner-all"  style="padding: 10px; min-height: 100px;" id="%s" >''' % id

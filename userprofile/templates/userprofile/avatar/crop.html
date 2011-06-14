@@ -26,7 +26,7 @@
 
 {% block content %}
 <div id="content">
-{% box_start "" "" "" %}
+{% box_start "box-" %}
   <form action="{{ request.path_info }}" method="post" accept-charset="utf-8">
   <fieldset>
     <legend>{% trans "Crop &amp; resize the area you want" %}</legend>
@@ -48,7 +48,7 @@
   <input type="submit" class="done" value="{% trans 'Done' %}" />
   </form>
 {% box_end %}
-{% box_start "" "" "" %}
+{% box_start "box-" %}
   <div class="box">
     <h3>{% trans "Avatar selection page" %}</h3>
     <p>{% trans "You have several options to select the image you want as avatar on your profile" %}.</p>

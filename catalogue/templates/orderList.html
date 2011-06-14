@@ -1,7 +1,7 @@
 {# Original code from Tim's SABIO project and copyright is retained by the original author #}
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% block content %}
-  {% box_start "" "" "orders-list" %}
+  {% box_start "box-orders-list" %}
   <script type="text/javascript">
       function showOrder(theId) {
         theUrl = '/vieworder/' + theId + '/';

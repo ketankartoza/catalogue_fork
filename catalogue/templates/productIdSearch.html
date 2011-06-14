@@ -100,7 +100,7 @@
 {% endblock %}
 
 {% block content %}
-{% box_start "" "" "" %}
+{% box_start "box-product-id-search" %}
   <div id="messages" style="display:none;background:white"></div>
   <form id="productIdForm" action="/productIdSearch/{{ theGuid }}/">
   {% csrf_token %}
