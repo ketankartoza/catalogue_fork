@@ -47,6 +47,7 @@ HOST = get_ip_address('eth0')
 #HOST = get_ip_address('eth1')
 #HOST = '146.64.55.220'
 #HOST = '192.168.1.1'
+# used in various places including kml generator
 DOMAIN = "XXXX.sansa.org.za"
 
 # See: http://www.djangobook.com/en/1.0/chapter12/#cn222
