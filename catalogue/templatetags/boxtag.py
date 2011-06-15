@@ -17,7 +17,7 @@ class BoxStartNode(template.Node):
       myClasses = "%s %s" % ( myClasses, self.div_classes )
     myString = '''
       <div class="ui-widget append-bottom">
-        <div class="%s"  style="padding: 10px; min-height: 100px;" id="%s" >''' % ( myClasses, self.div_id )
+        <div class="%s"  style="min-height: 100px;" id="%s" >''' % ( myClasses, self.div_id )
     return myString
 
 @register.tag     

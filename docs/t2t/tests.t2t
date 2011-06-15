@@ -725,7 +725,8 @@ product.
 page clearly marked for new users and probably also highlighted in bold to
 users during registration?**
 
-**Response:**
+**Response:** Yes. Additional to the original spec, a link to the orientation
+video has been added to the post registration page too.
 
 3. QGIS customised SANSA EOC build based on QGIS 1.7 including GRASS, JP2000,
 MrSid and ECW support. Including the AutoGCP and other relevant remote sensing
