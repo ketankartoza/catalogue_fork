@@ -274,12 +274,11 @@ def clip(theRequest):
 
 @staff_member_required
 #renderWithContext is explained in renderWith.py
-@renderWithContext('map.html')
+@renderWithContext('simpleMap.html')
 def visitorMap(theRequest):
   """Show a map of all visitors"""
   myGeoIpUtils = GeoIpUtils()
   myCount = Visit.objects.count()
-  myExtent = '(-180.0,-90.0, 180.0, 90.0)'
   myMessages = []
   myLayerDefinitions = None
   myExtent = None
@@ -290,7 +289,7 @@ def visitorMap(theRequest):
   # 28.08329963684082, 'country_code3': 'ZAF', 'latitude': -26.200000762939453,
   # 'postal_code': None, 'dma_code': 0, 'country_code': 'ZA', 'country_name':
   # 'South Africa'}
-  myMessages.append('<h3>Your details</h3>')
+  myMessages.append('<h3 class="centered">Your details</h3><br/>')
   if not myLatLong:
     myMessages.append("Could not calculate your location")
   else:
@@ -305,16 +304,17 @@ def visitorMap(theRequest):
     myMessages.append('IP Address: ' + myIp)
     myMessages.append('<h3>All visitors</h3>')
     myMessages.append('Total Site Visits: ' + str(myCount))
-  myLayerDefinitions = [ WEB_LAYERS['BlueMarble'],WEB_LAYERS['Visitors'] ]
-  myLayersList = "[BlueMarble,visitors]"
+  myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
+  myLayerDefinitions.append(WEB_LAYERS['Visitors'])
+  myLayersList = myLayersList.replace("]",",visitors]")
 
   #render_to_response is done by the renderWithContext decorator
   return ( {
     'myMessages' : myMessages,
-    'myExtent' : myExtent,
+    'myExtents' : "-90, -70, 90, 70",
     'myLayerDefinitions' : myLayerDefinitions,
     'myLayersList' : myLayersList,
-    'myPartnerFlag' : isStrategicPartner(theRequest)
+    'myActiveBaseMap' : myActiveBaseMap,
     })
 
 

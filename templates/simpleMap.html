@@ -22,9 +22,9 @@
     {% endif %}
     var myLayersList = {{myLayersList|safe}}
     // Here we use a predefined layer that will be kept up to date with URL changes
-    //var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Open Street Map");
+    var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Open Street Map");
     //myLayersList.unshift(layerMapnik); // add to start of array
-    //myLayersList.push(layerMapnik); // add to end of array
+    myLayersList.push(layerMapnik); // add to end of array
 
     setupBaseMap();
     mMap.addLayers( myLayersList );
@@ -56,7 +56,6 @@
 {# div for map tooltips - not shown until a map tool is hovered over #}
 <div id="maptooltip">&nbsp;</div>
 {# div for form tooltips (bigger than map tips)- not shown until a map tool is hovered over #}
-<div id="formtooltip">&nbsp;</div>
   {# layout done with blueprint.css we inherit 22 cols of space from base.html #}
   {% box_start "box-simple-map" "span-22 last" %}
     <div id="map" class="span-22 last"></div>
@@ -66,6 +65,11 @@
       <div class="olControlScalebar span-6 append-1" id="map-scale"></div>
     </div>
   {% box_end %}
+  {% if myMessages %}
+  {% box_start "box-messages" "span-22 prepend-top last" %}
+    {{ myMessages|safe }}
+  {% box_end %}
+  {% endif %}
 {% endblock%}
 
 
