@@ -67,7 +67,9 @@
   {% box_end %}
   {% if myMessages %}
   {% box_start "box-messages" "span-22 prepend-top last" %}
-    {{ myMessages|safe }}
+  {% for myMessage in myMessages %}
+    {{ myMessage|safe }}
+  {% endfor %}
   {% box_end %}
   {% endif %}
 {% endblock%}
