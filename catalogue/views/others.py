@@ -566,6 +566,12 @@ def index(theRequest):
     )
 
 #renderWithContext is explained in renderWith.py
+@renderWithContext('video.html')
+def video(theRequest):
+  #render_to_response is done by the renderWithContext decorator
+  return ()
+
+#renderWithContext is explained in renderWith.py
 @renderWithContext('about.html')
 def about(theRequest):
   #render_to_response is done by the renderWithContext decorator

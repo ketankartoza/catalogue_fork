@@ -86,6 +86,8 @@ th a:link, th a:hover, th a:active {
     text-decoration: none;
   }
 
+h1,h2,h3,h4 { font-weight: bold; }
+
 /* tool tips definition: record, map */
 #formtooltip{
     display:none;
@@ -149,6 +151,12 @@ div.formRow span.formWidth {
 div.formSpacer {
     clear: both;
   }
+
+img.paragraph-icon {
+  float: left;
+  padding-right: 6px;
+  padding-bottom: 3px;
+}
 
 /* for thumbnails */
 

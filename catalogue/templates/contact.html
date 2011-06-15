@@ -1,27 +1,30 @@
 {% extends "base.html" %}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% block content%}
-<div class="ui-widget">
-  <div class="ui-state-highlight ui-corner-all"  style="padding: 10px">
-    <h2>Contact Us</h2>
+{% box_start "box-contact-us" "span-22" %}
+  <h2 class="centered">Contact Us</h2>
+  <div class="span-10 prepend-1">
     <p><b>Earth Observation</b><br>
 
     Corn&eacute; Eloff<br>
-    Email: <a href="mailto:CEloff@csir.co.za">CEloff@csir.co.za</a><br> 
+    Email: <a href="mailto:CEloff@sansa.org.za">CEloff@sansa.org.za</a><br> 
     Tel: +27 12 334 5058<br>
     Fax: +27 12 334 5001
 
     <p><b>Data enquiries, quotes and sales</b><br>
 
-    Email: <a href="mailto:customersac@csir.co.za">customersac@csir.co.za </a><br>
+    Email: <a href="mailto:customersac@sansa.org.za">customersac@sansa.org.za </a><br>
     Fax:  +27 12 334 5001
+  </div>
 
 
+  <div class="span-9 prepend-1 append-1 last">
     <p><b>Telemetry, Tracking &amp; Command</b><br>
     Eugene Avenant<br>
-    Email: <a href="mailto:eavenant@csir.co.za">eavenant@csir.co.za</a><br> 
+    Email: <a href="mailto:eavenant@sansa.org.za">eavenant@sansa.org.za</a><br> 
     Tel: +27 12 334 5130<br>
     Fax: +27 12 334 5001
   </div>
-</div>
+{% box_end %}
 {% endblock %}
 

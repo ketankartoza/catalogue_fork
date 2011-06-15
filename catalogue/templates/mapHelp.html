@@ -2,9 +2,9 @@
 
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% block content %}
-{% box_start "box-Map Help" %}
-<div class="ui-corner-all helpParagraph">
-  <h2>Using the map</h2>
+{% box_start "box-map-help" "span-22"%}
+<div class="span-10 prepend-1">
+  <h2 class="centered">Using the map</h2>
   <p><img src="/media/images/zoom_out_18.png">
   <img src="/media/images/zoom_in_18.png">
   Use the <b>zoom out and zoom in icons</b> to zoom in and out on the
@@ -21,8 +21,8 @@
   preview in the preview area.</p>
 
 </div>
-<div class="ui-corner-all helpParagraph">
-  <h2>When searching</h2>
+<div class="span-10 prepend-1 last">
+  <h2 class="centered">When searching</h2>
   <p>Digitising an area of interest is not required but is recommended. 
   Draw an area of interest on the map to refine the set of search results to a
   specific area.</p>
@@ -32,11 +32,13 @@
   Use the <b>edit</b> icon on the map to your left to adjust your area of interest for your search.</p>
   <br/>
 </div>
-<div class="ui-corner-all helpParagraph" style="margin-bottom: 0px;">
-  <h2>Keyboard shortcuts</h2>
+<div class="span-10 prepend-1">
+  <h2 class="centered">Keyboard shortcuts</h2>
   <p>Use the <b>'d' or 'delete'</b> key (while holding the mouse cursor over
   it) to delete a vertex when editing the area of interest.</p>
   <p>Use <b>shift</b> while dragging a rectangle on the map to zoom in to that rectangle.</p>
+</div>
+<div class="span-10 prepend-1 last">
 </div>
 {% box_end %}
 {% endblock %}
