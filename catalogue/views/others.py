@@ -174,18 +174,15 @@ def whereAmI(theRequest):
 
 def worldMap(theRequest):
   """Show a world"""
-  myExtent = '(-180,-90,180,90)'
   myMessages = []
-  myMessages.append('<h3>Nasa Blue Marble</h3>')
-  myMessages.append('This is a generic mosaic of the world.')
-  myLayerDefinitions = [ WEB_LAYERS['BlueMarble'] ]
-  myLayersList = "[BlueMarble];"
+  myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
 
-  return render_to_response('map.html', {
+  return render_to_response('simpleMap.html', {
     'myMessages' : myMessages,
-    'myExtent' : myExtent,
     'myLayerDefinitions' : myLayerDefinitions,
-    'myLayersList' : myLayersList
+    'myLayersList' : myLayersList,
+    'myActiveBaseMap' : myActiveBaseMap,
+    'myExtents' : "-90, -70, 90, 70"
     })
 
 @login_required

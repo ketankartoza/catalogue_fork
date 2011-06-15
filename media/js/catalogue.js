@@ -528,7 +528,7 @@ function setupBaseMap()
       });
   mMap.addControl(myZoomOutControl);
     var myNavigationControl = new OpenLayers.Control.Navigation({
-	title : "<b>Pan map</b> click and drag map to move the map in the direction of the mouse."
+    title : "<b>Pan map</b> click and drag map to move the map in the direction of the mouse."
     }
   );
 
@@ -608,7 +608,7 @@ function setupSearchMap( theLayers )
   }*/
 
   //activate Navigation/DragPan by default for searchMap
-  enableNavigation()
+  enableNavigation();
 
   createLegend();
 }
