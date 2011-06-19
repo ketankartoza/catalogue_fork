@@ -19,4 +19,5 @@ echo "2010"
 python manage.py spot_harvest -v 0 -f '/mnt/cataloguestorage2/gisdata/africa/SPOT_Coverage/Africa_2010.shp'
 echo "2011"
 python manage.py spot_harvest -v 0 -f '/mnt/cataloguestorage2/gisdata/africa/SPOT_Coverage/Africa_2011.shp'
+#python manage.py spot_harvest -v 0 -f '/home/timlinux/gisdata/Africa/SPOT_Coverage/SPOT_Shape_Africa_2011/Africa_2011.shp'
 deactivate
