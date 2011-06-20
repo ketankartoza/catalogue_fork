@@ -345,7 +345,29 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     return myBackground
 
 
-  def georeferenceThumbnail( self ):
+  def georeferencedThumbnail( self, theForceFlag = False ):
+    """Return the full path to the georeferenced thumb. Will actually do 
+    the georeferencing of the thumb if needed.
+    return thumb full path
+    e.g.
+    myJpg = product.georeferencing()
+    To get the world file, simply add a .wld extention to the return var
+    We dont return it explicitly as we can only return a single param
+    if we want to use this method in template.
+    """
+    myInputImageFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + ".jpg" )
+    try:
+      myImage = Image.open( myInputImageFile )
+      # We need to know the pixel dimensions of the segment so that we can create GCP's
+    except:
+      print "File not found %s" % myInputImageFile
+      return "no file"
+    myTempTifFile = os.path.join( "/tmp/",self.product_id + ".tif" )
+    myTempReffedTifFile = os.path.join( "/tmp/",self.product_id + "reffed.tif" )
+    myJpgFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.jpg" )
+    myLogFile = file(os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.log" ), "w")
+    if os.path.exists( myJpgFile ) and not theForceFlag:
+      return myJpgFile
     # Get the minima, maxima - used to test if we are on the edge 
     myExtents = self.spatial_coverage.extent
     #print "Envelope: %s %s" % ( len( myExtents), str( myExtents ) )
@@ -361,13 +383,6 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     # the swath which may not hold true for every sensor.
     #
 
-    myInputImageFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + ".jpg" )
-    try:
-      myImage = Image.open( myInputImageFile )
-      # We need to know the pixel dimensions of the segment so that we can create GCP's
-    except:
-      print "File not found %s" % myPath
-      return "False"
 
     myImageXDim = myImage.size[0]
     myImageYDim = myImage.size[1]
@@ -391,10 +406,6 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     myBR = myCandidates[2]
     myBL = myCandidates[3]
 
-    myTempTifFile = os.path.join( "/tmp/",self.product_id + ".tif" )
-    myTempReffedTifFile = os.path.join( "/tmp/",self.product_id + "reffed.tif" )
-    myJpgFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.jpg" )
-    myLogFile = file(os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.log" ), "w")
     myString = "gdal_translate -a_srs 'EPSG:4326' -gcp 0 0 %s %s -gcp %s 0 %s %s -gcp %s %s %s %s -gcp 0 %s %s %s -of GTIFF -co COMPRESS=DEFLATE -co TILED=YES %s %s" % ( \
           myTL[0], myTL[1], \
           myImageXDim, myTR[0],myTR[1], \
@@ -425,6 +436,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     #print "Top right X: %s, Y:%s" %(myTR[0],myTR[1])
     #print "Bottom left X: %s, Y:%s" %(myBL[0],myBL[1])
     #print "Bottom right X: %s, Y:%s" %(myBR[0],myBR[1])
+    return myJpgFile
 
 
   @runconcrete

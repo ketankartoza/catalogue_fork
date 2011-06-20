@@ -1,7 +1,10 @@
 {% extends "kml/base.kml" %}
 {% block records %}
+<Folder>
+  <name>Footprints</name>
+  <open>0</open>
 {% for item in searchresults %}
-<Placemark>
+  <Placemark>
     <name>Geometry for product {{ item.product.product_id }} </name>
     {% if transparentStyle %}
     <styleUrl>#transparentPolyStyle</styleUrl>
@@ -10,13 +13,18 @@
     
     {{ item.product.spatial_coverage.kml|safe }}
 </Placemark>
+{% endfor %}
+</Folder>
 {% if myThumbsFlag %}
+<Folder>
+  <name>Thumbnails</name>
+  <open>1</open>
+{% for item in searchresults %}
 <GroundOverlay>
   <name>{{ item.product.product_id }}</name>
-  <color>ffffff00</color>
   <drawOrder>1</drawOrder>
   <Icon>
-    <href>/tmp/thumbs/tim.jpg</href>
+    <href>{{item.product.georeferencedThumbnail}}</href>
     <refreshMode>onInterval</refreshMode>
     <refreshInterval>86400</refreshInterval>
     <viewBoundScale>0.75</viewBoundScale>
@@ -26,6 +34,7 @@
     <rotation>0</rotation>
   </LatLonBox>
 </GroundOverlay>
-{% endif %}
 {% endfor %}
+</Folder>
+{% endif %}
 {% endblock %}
