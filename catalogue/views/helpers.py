@@ -902,6 +902,28 @@ def standardLayersWithCart(theRequest):
   myLayerDefinitions.append( WEB_LAYERS['CartLayer'].replace("USERNAME", theRequest.user.username ) );
   return myLayersList, myLayerDefinitions, myActiveBaseMap
 
+
+def writeThumbToZip( myRecord, myZip ):
+  """A helper function to write a thumbnail into a zip file.
+  @parameter myRecord - a searchrecord instance
+  @parameter myZip - a zip file handle ready to write stuff to
+  """
+  # Try to add thumbnail + wld file, we assume that jpg and wld file have same name
+  myImageFile = myRecord.product.georeferencedThumbnail()
+  myWLDFile = "%s.wld" %  myImageFile
+  if os.path.isfile(myImageFile):
+    with open(myImageFile,'rb') as myFile:
+      myZip.writestr("%s.jpg" %  myRecord.product.product_id,myFile.read())
+      logging.error("Adding thumbnail image to archive.")
+  else:
+    logging.info("Thumbnail image not found: %s" % myImageFile)
+  if os.path.isfile(myWLDFile):
+    with open(myWLDFile,'rb') as myFile:
+      myZip.writestr("%s.wld" %  myRecord.product.product_id,myFile.read())
+      logging.info("Adding worldfile to archive.")
+  else:
+    logging.error("World file not found: %s" % myImageFile)
+
 #render_to_kml helpers
 def render_to_kml(theTemplate,theContext,filename):
   response = HttpResponse(render_to_string(theTemplate,theContext))
@@ -916,27 +938,12 @@ def render_to_kmz(theTemplate,theContext,filename):
   myMaxMetadataRecords = getattr(settings, 'MAX_METADATA_RECORDS', 500 )
   myKml = render_to_string(theTemplate,theContext)
   myZipData = StringIO()
-  f = zipfile.ZipFile(myZipData, 'w', zipfile.ZIP_DEFLATED)
-  f.writestr('%s.kml' % filename, myKml)
+  myZip = zipfile.ZipFile(myZipData, 'w', zipfile.ZIP_DEFLATED)
+  myZip.writestr('%s.kml' % filename, myKml)
   if theContext["searchresults"]:
     for myRecord in theContext["searchresults"][:myMaxMetadataRecords]:
-      # Try to add thumbnail + wld file, we assume that jpg and wld file have same name
-      myImageFile = myRecord.product.georeferencedThumbnail()
-      myWLDFile = "%s.wld" %  myImageFile
-      if os.path.isfile(myImageFile):
-        with open(myImageFile,'rb') as myFile:
-          f.writestr("%s.jpg" %  myRecord.product.product_id,myFile.read())
-          logging.error("Adding thumbnail image to ISO Metadata archive.")
-      else:
-        logging.info("Thumbnail image not found: %s" % myImageFile)
-      if os.path.isfile(myWLDFile):
-        with open(myImageFile,'rb') as myFile:
-          f.writestr("%s.wld" %  myRecord.product.product_id,myFile.read())
-          logging.info("Adding worldfile to ISO Metadata archive.")
-      else:
-        logging.error("World file not found: %s" % myImageFile)
-
-  f.close()
+      writeThumbToZip( myRecord, myZip )
+  myZip.close()
   response = HttpResponse()
   response.content = myZipData.getvalue()
   response['Content-Type']        = 'application/vnd.google-earth.kmz'
@@ -955,22 +962,7 @@ def downloadISOMetadata(theProducts,theName):
     myMetadata = myProduct.product.getXML()
     logging.info("Adding product XML to ISO Metadata archive.")
     myZip.writestr('%s.xml' % myProduct.product.product_id, myMetadata)
-
-    # Try to add thumbnail + wld file, we assume that jpg and wld file have same name
-    myImageFile = os.path.join(CATALOGUE_SCENES_PATH, "%s.jpg" %  myProduct.product.product_id )
-    myWLDFile = os.path.join(CATALOGUE_SCENES_PATH, "%s.wld" %  myProduct.product.product_id )
-    if os.path.isfile(myImageFile):
-      with open(myImageFile,'rb') as myFile:
-        myZip.writestr("%s.jpg" %  myProduct.product.product_id,myFile.read())
-        logging.error("Adding thumbnail image to ISO Metadata archive.")
-    else:
-      logging.info("Thumbnail image not found: %s" % myImageFile)
-    if os.path.isfile(myWLDFile):
-      with open(myImageFile,'rb') as myFile:
-        myZip.writestr("%s.wld" %  myProduct.product.product_id,myFile.read())
-        logging.info("Adding worldfile to ISO Metadata archive.")
-    else:
-      logging.error("World file not found: %s" % myImageFile)
+    writeThumbToZip( myProduct, myZip )
 
   myZip.close()
   response.content=myZipData.getvalue()
