@@ -9,6 +9,23 @@
     <description>http://{{ external_site_url }}/showProduct/{{ item.product.product_id }}/</description>
     
     {{ item.product.spatial_coverage.kml|safe }}
-    </Placemark>
+</Placemark>
+{% if myThumbsFlag %}
+<GroundOverlay>
+  <name>{{ item.product.product_id }}</name>
+  <color>ffffff00</color>
+  <drawOrder>1</drawOrder>
+  <Icon>
+    <href>/tmp/thumbs/tim.jpg</href>
+    <refreshMode>onInterval</refreshMode>
+    <refreshInterval>86400</refreshInterval>
+    <viewBoundScale>0.75</viewBoundScale>
+  </Icon>
+  <LatLonBox>
+    {{ item.kmlExtents|safe }}
+    <rotation>0</rotation>
+  </LatLonBox>
+</GroundOverlay>
+{% endif %}
 {% endfor %}
 {% endblock %}

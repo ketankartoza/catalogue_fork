@@ -71,6 +71,20 @@ class SearchRecord(models.Model):
         self.product_ready = False
     super(SearchRecord, self).save(*args, **kwargs)
 
+ 
+  def kmlExtents(self):
+    """Return the extents of this product in kml xml notation"""
+    myExtent = self.product.spatial_coverage.extent
+    myString = """<north>%s</north>
+      <south>%s</south>
+      <east>%s</east>
+      <west>%s</west>""" % (myExtent[3], #ymax
+                            myExtent[1], #ymin
+                            myExtent[2], #xmax
+                            myExtent[0] ) #xmin
+    return myString
+
+
   class Admin:
     pass
 

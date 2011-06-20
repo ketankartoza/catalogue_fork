@@ -217,8 +217,8 @@ class Command(BaseCommand):
         created = 0
         verblog('Starting index dowload...', 2)
         for package in Command.fetch_geometries(shapefile, area_of_interest):
-          #if imported > 5: continue
-          if imported % 10000 == 0: 
+          if imported > 5: return
+          if imported % 10000 == 0 and imported > 0: 
             print "Products processed : %s " % imported
             print "Products updated : %s " % updated
             print "Products imported : %s " % created
@@ -270,6 +270,7 @@ class Command(BaseCommand):
             # Debugging output ends
             #
           except:
+            traceback.print_exc(file=sys.stdout)
             continue
           band_count            = 0;
           date_parts = package.get('DATE_ACQ').split('/') # e.g. 20/01/2011

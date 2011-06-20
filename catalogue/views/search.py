@@ -320,7 +320,12 @@ def downloadSearchResult(theRequest, theGuid):
   elif theRequest.GET.has_key('kml'):
     return render_to_kml("kml/searchresults.kml", {'searchresults' : mySearcher.mSearchRecords,'external_site_url':settings.DOMAIN, 'transparentStyle':True},myFilename)
   elif theRequest.GET.has_key('kmz'):
-    return render_to_kmz("kml/searchresults.kml", {'searchresults' : mySearcher.mSearchRecords,'external_site_url':settings.DOMAIN,'transparentStyle':True},myFilename)
+    mySearcher.mSearchRecords[0].kmlExtents()
+    return render_to_kmz("kml/searchresults.kml", 
+        {'searchresults' : mySearcher.mSearchRecords,
+          'external_site_url':settings.DOMAIN,
+          'transparentStyle':True, 
+          'myThumbsFlag': True},myFilename)
   else:
     logging.info('Request cannot be proccesed, unsupported download file type')
     raise Http404
