@@ -24,7 +24,7 @@
   <name>{{ item.product.product_id }}</name>
   <drawOrder>1</drawOrder>
   <Icon>
-    <href>{{item.product.georeferencedThumbnail}}</href>
+    <href>{{ item.product.product_id }}.jpg</href>
     <refreshMode>onInterval</refreshMode>
     <refreshInterval>86400</refreshInterval>
     <viewBoundScale>0.75</viewBoundScale>

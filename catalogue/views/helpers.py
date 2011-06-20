@@ -910,13 +910,35 @@ def render_to_kml(theTemplate,theContext,filename):
   return response
 
 def render_to_kmz(theTemplate,theContext,filename):
-  response = HttpResponse(render_to_string(theTemplate,theContext))
-  kmz = StringIO()
-  f = zipfile.ZipFile(kmz, 'w', zipfile.ZIP_DEFLATED)
-  f.writestr('%s.kml' % filename, response.content)
+  """Render a kmz file. If search records are supplied, their georeferenced thumbnails will
+  be bundled into the kmz archive."""
+  #try to get MAX_METADATA_RECORDS from settings, default to 500
+  myMaxMetadataRecords = getattr(settings, 'MAX_METADATA_RECORDS', 500 )
+  myKml = render_to_string(theTemplate,theContext)
+  myZipData = StringIO()
+  f = zipfile.ZipFile(myZipData, 'w', zipfile.ZIP_DEFLATED)
+  f.writestr('%s.kml' % filename, myKml)
+  if theContext["searchresults"]:
+    for myRecord in theContext["searchresults"][:myMaxMetadataRecords]:
+      # Try to add thumbnail + wld file, we assume that jpg and wld file have same name
+      myImageFile = myRecord.product.georeferencedThumbnail()
+      myWLDFile = "%s.wld" %  myImageFile
+      if os.path.isfile(myImageFile):
+        with open(myImageFile,'rb') as myFile:
+          f.writestr("%s.jpg" %  myRecord.product.product_id,myFile.read())
+          logging.error("Adding thumbnail image to ISO Metadata archive.")
+      else:
+        logging.info("Thumbnail image not found: %s" % myImageFile)
+      if os.path.isfile(myWLDFile):
+        with open(myImageFile,'rb') as myFile:
+          f.writestr("%s.wld" %  myRecord.product.product_id,myFile.read())
+          logging.info("Adding worldfile to ISO Metadata archive.")
+      else:
+        logging.error("World file not found: %s" % myImageFile)
+
   f.close()
-  response.content = kmz.getvalue()
-  kmz.close()
+  response = HttpResponse()
+  response.content = myZipData.getvalue()
   response['Content-Type']        = 'application/vnd.google-earth.kmz'
   response['Content-Disposition'] = 'attachment; filename=%s.kmz' % filename
   response['Content-Length']      = str(len(response.content))

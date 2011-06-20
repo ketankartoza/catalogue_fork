@@ -322,8 +322,8 @@ def downloadSearchResult(theRequest, theGuid):
   elif theRequest.GET.has_key('kmz'):
     #next two lines for debugging only since we 
     #cant catch exceptions when these methods are called in templates
-    mySearcher.mSearchRecords[0].kmlExtents()
-    mySearcher.mSearchRecords[0].product.georeferencedThumbnail()
+    #mySearcher.mSearchRecords[0].kmlExtents()
+    #mySearcher.mSearchRecords[0].product.georeferencedThumbnail()
     return render_to_kmz("kml/searchresults.kml", 
         {'searchresults' : mySearcher.mSearchRecords,
           'external_site_url':settings.DOMAIN,
