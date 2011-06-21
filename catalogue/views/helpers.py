@@ -982,8 +982,9 @@ def downloadHtmlMetadata(theSearchRecords,theName):
   myZip = zipfile.ZipFile(myZipData,'w', zipfile.ZIP_DEFLATED)
   #try to get MAX_METADATA_RECORDS from settings, default to 500
   myMaxMetadataRecords = getattr(settings, 'MAX_METADATA_RECORDS', 500 )
+  myThumbIsLocalFlag = True # used to tell html renderer not to prepend server path
   for mySearchRecord in theSearchRecords[:myMaxMetadataRecords]:
-    myMetadata = mySearchRecord.product.getConcreteInstance().toHtml()
+    myMetadata = mySearchRecord.product.getConcreteInstance().toHtml( myThumbIsLocalFlag )
     logging.info("Adding product HTML to HTML Metadata archive.")
     myZip.writestr('%s.html' % mySearchRecord.product.product_id, myMetadata)
     writeThumbToZip( mySearchRecord, myZip )

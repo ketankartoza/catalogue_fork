@@ -575,9 +575,11 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
 
     return set(utmZoneFromLatLon(*self.spatial_coverage.extent[:2],theBuffer=theBuffer)+utmZoneFromLatLon(*self.spatial_coverage.extent[2:],theBuffer=theBuffer))
 
-  def toHtml( self ):
-    """Return an html snippet that describes the properties of this product"""
-    return render_to_string('productTypes/genericProduct.html', { 'myObject': self })
+  def toHtml( self, theImageIsLocal=False ):
+    """Return an html snippet that describes the properties of this product. If
+    theImageIsLocal flag is true, not url path will be used (i.e. it will be
+    rendered as <img src="foo.jpg">"""
+    return render_to_string('productTypes/genericProduct.html', { 'myObject': self, 'myImageIsLocalFlag' : theImageIsLocal })
 
 class ProductLink (edge_factory('catalogue.GenericProduct', concrete = False, base_model = models.Model)):
   """
@@ -642,9 +644,11 @@ class GenericImageryProduct( GenericProduct ):
     )
     return metadata
 
-  def toHtml( self ):
-    """Return an html snippet that describes the properties of this product"""
-    return render_to_string('productTypes/genericImageryProduct.html', { 'myObject': self })
+  def toHtml( self, theImageIsLocal=False ):
+    """Return an html snippet that describes the properties of this product. If
+    theImageIsLocal flag is true, not url path will be used (i.e. it will be
+    rendered as <img src="foo.jpg">"""
+    return render_to_string('productTypes/genericImageryProduct.html', { 'myObject': self, 'myImageIsLocalFlag' : theImageIsLocal })
 
 
 ###############################################################################
@@ -896,9 +900,11 @@ class GenericSensorProduct( GenericImageryProduct ):
     t = parts[9]
     self.product_acquisition_start = datetime.datetime(int('20'+d[:2]), int(d[2:4]), int(d[-2:]), int(t[:2]), int(t[2:4]), int(t[-2:]))
 
-  def toHtml( self ):
-    """Return an html snippet that describes the properties of this product"""
-    return render_to_string('productTypes/genericSensorProduct.html', { 'myObject': self })
+  def toHtml( self, theImageIsLocal=False ):
+    """Return an html snippet that describes the properties of this product. If
+    theImageIsLocal flag is true, not url path will be used (i.e. it will be
+    rendered as <img src="foo.jpg">"""
+    return render_to_string('productTypes/genericSensorProduct.html', { 'myObject': self, 'myImageIsLocalFlag' : theImageIsLocal })
 
 ###############################################################################
 
@@ -968,9 +974,11 @@ class OpticalProduct( GenericSensorProduct ):
     """
     return self._thumbnailDirectory()
 
-  def toHtml( self ):
-    """Return an html snippet that describes the properties of this product"""
-    return render_to_string('productTypes/opticalProduct.html', { 'myObject': self })
+  def toHtml( self, theImageIsLocal=False ):
+    """Return an html snippet that describes the properties of this product. If
+    theImageIsLocal flag is true, not url path will be used (i.e. it will be
+    rendered as <img src="foo.jpg">"""
+    return render_to_string('productTypes/opticalProduct.html', { 'myObject': self, 'myImageIsLocalFlag' : theImageIsLocal })
 
 
 ###############################################################################
@@ -1022,9 +1030,11 @@ class RadarProduct( GenericSensorProduct ):
     """
     return self._thumbnailDirectory()
 
-  def toHtml(self):
-    """Return an html snippet that describes the properties of this product"""
-    return render_to_string('productTypes/radarProduct.html', { 'myObject': self })
+  def toHtml( self, theImageIsLocal=False ):
+    """Return an html snippet that describes the properties of this product. If
+    theImageIsLocal flag is true, not url path will be used (i.e. it will be
+    rendered as <img src="foo.jpg">"""
+    return render_to_string('productTypes/radarProduct.html', { 'myObject': self, 'myImageIsLocalFlag' : theImageIsLocal })
 ###############################################################################
 
 
@@ -1054,9 +1064,11 @@ class GeospatialProduct( GenericProduct ):
   class Meta:
     app_label= 'catalogue'
 
-  def toHtml(self):
-    """Return an html snippet that describes the properties of this product"""
-    return render_to_string('productTypes/geospatialProduct.html', { 'myObject': self })
+  def toHtml( self, theImageIsLocal=False ):
+    """Return an html snippet that describes the properties of this product. If
+    theImageIsLocal flag is true, not url path will be used (i.e. it will be
+    rendered as <img src="foo.jpg">"""
+    return render_to_string('productTypes/geospatialProduct.html', { 'myObject': self, 'myImageIsLocalFlag' : theImageIsLocal })
 ###############################################################################
 
 class OrdinalProduct( GenericProduct ):
@@ -1075,9 +1087,11 @@ class OrdinalProduct( GenericProduct ):
   class Meta:
     app_label= 'catalogue'
 
-  def toHtml(self):
-    """Return an html snippet that describes the properties of this product"""
-    return render_to_string('productTypes/ordinalProduct.html', { 'myObject': self })
+  def toHtml( self, theImageIsLocal=False ):
+    """Return an html snippet that describes the properties of this product. If
+    theImageIsLocal flag is true, not url path will be used (i.e. it will be
+    rendered as <img src="foo.jpg">"""
+    return render_to_string('productTypes/ordinalProduct.html', { 'myObject': self, 'myImageIsLocalFlag' : theImageIsLocal })
 ###############################################################################
 
 class ContinuousProduct( GenericProduct ):
@@ -1094,6 +1108,8 @@ class ContinuousProduct( GenericProduct ):
   class Meta:
     app_label= 'catalogue'
 
-  def toHtml(self):
-    """Return an html snippet that describes the properties of this product"""
-    return render_to_string('productTypes/continuousProduct.html', { 'myObject': self })
+  def toHtml( self, theImageIsLocal=False ):
+    """Return an html snippet that describes the properties of this product. If
+    theImageIsLocal flag is true, not url path will be used (i.e. it will be
+    rendered as <img src="foo.jpg">"""
+    return render_to_string('productTypes/continuousProduct.html', { 'myObject': self, 'myImageIsLocalFlag' : theImageIsLocal })
