@@ -38,9 +38,10 @@ def downloadCart(theRequest):
       myFilename)
   elif theRequest.GET.has_key('kmz'):
     return render_to_kmz("kml/searchRecords.kml", {
-        'products' : myRecords, 
+        'mySearchRecords' : myRecords, 
         'external_site_url':settings.DOMAIN, 
-        'transparentStyle':True
+        'transparentStyle':True,
+        'myThumbsFlag': True
       }, myFilename)
   else:
     logging.info('Request cannot be proccesed, unsupported download file type')
