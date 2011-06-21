@@ -951,18 +951,18 @@ def render_to_kmz(theTemplate,theContext,filename):
   response['Content-Length']      = str(len(response.content))
   return response
 
-def downloadISOMetadata(theProducts,theName):
+def downloadISOMetadata(theSearchRecords,theName):
   """ returns ZIPed XML metadata files for each product """
   response = HttpResponse()
   myZipData = StringIO()
   myZip = zipfile.ZipFile(myZipData,'w', zipfile.ZIP_DEFLATED)
   #try to get MAX_METADATA_RECORDS from settings, default to 500
   myMaxMetadataRecords = getattr(settings, 'MAX_METADATA_RECORDS', 500 )
-  for myProduct in theProducts[:myMaxMetadataRecords]:
-    myMetadata = myProduct.product.getXML()
+  for mySearchRecord in theSearchRecords[:myMaxMetadataRecords]:
+    myMetadata = mySearchRecord.product.getXML()
     logging.info("Adding product XML to ISO Metadata archive.")
-    myZip.writestr('%s.xml' % myProduct.product.product_id, myMetadata)
-    writeThumbToZip( myProduct, myZip )
+    myZip.writestr('%s.xml' % mySearchRecord.product.product_id, myMetadata)
+    writeThumbToZip( mySearchRecord, myZip )
 
   myZip.close()
   response.content=myZipData.getvalue()
@@ -975,30 +975,30 @@ def downloadISOMetadata(theProducts,theName):
   response['Content-Length']      = str(len(response.content))
   return response
 
-def downloadHtmlMetadata(theProducts,theName):
+def downloadHtmlMetadata(theSearchRecords,theName):
   """ returns ZIPed html metadata files for each product """
   response = HttpResponse()
   myZipData = StringIO()
   myZip = zipfile.ZipFile(myZipData,'w', zipfile.ZIP_DEFLATED)
   #try to get MAX_METADATA_RECORDS from settings, default to 500
   myMaxMetadataRecords = getattr(settings, 'MAX_METADATA_RECORDS', 500 )
-  for myProduct in theProducts[:myMaxMetadataRecords]:
-    myMetadata = myProduct.product.getConcreteInstance().toHtml()
+  for mySearchRecord in theSearchRecords[:myMaxMetadataRecords]:
+    myMetadata = mySearchRecord.product.getConcreteInstance().toHtml()
     logging.info("Adding product HTML to HTML Metadata archive.")
-    myZip.writestr('%s.html' % myProduct.product.product_id, myMetadata)
+    myZip.writestr('%s.html' % mySearchRecord.product.product_id, myMetadata)
 
     # Try to add thumbnail + wld file, we assume that jpg and wld file have same name
-    myImageFile = os.path.join(CATALOGUE_SCENES_PATH, "%s.jpg" %  myProduct.product.product_id )
-    myWLDFile = os.path.join(CATALOGUE_SCENES_PATH, "%s.wld" %  myProduct.product.product_id )
+    myImageFile = os.path.join( mySearchRecord.product.thumbnailDirectory() , "%s.jpg" %  mySearchRecord.product.product_id )
+    myWLDFile = os.path.join( mySearchRecord.product.thumbnailDirectory(), "%s.wld" %  mySearchRecord.product.product_id )
     if os.path.isfile(myImageFile):
       with open(myImageFile,'rb') as myFile:
-        myZip.writestr("%s.jpg" %  myProduct.product.product_id,myFile.read())
+        myZip.writestr("%s.jpg" %  mySearchRecord.product.product_id,myFile.read())
         logging.error("Adding thumbnail image to ISO Metadata archive.")
     else:
       logging.info("Thumbnail image not found: %s" % myImageFile)
     if os.path.isfile(myWLDFile):
       with open(myImageFile,'rb') as myFile:
-        myZip.writestr("%s.wld" %  myProduct.product.product_id,myFile.read())
+        myZip.writestr("%s.wld" %  mySearchRecord.product.product_id,myFile.read())
         logging.info("Adding worldfile to ISO Metadata archive.")
     else:
       logging.error("World file not found: %s" % myImageFile)
