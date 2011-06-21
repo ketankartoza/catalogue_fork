@@ -903,23 +903,23 @@ def standardLayersWithCart(theRequest):
   return myLayersList, myLayerDefinitions, myActiveBaseMap
 
 
-def writeThumbToZip( myRecord, myZip ):
+def writeThumbToZip( mySearchRecord, myZip ):
   """A helper function to write a thumbnail into a zip file.
   @parameter myRecord - a searchrecord instance
   @parameter myZip - a zip file handle ready to write stuff to
   """
   # Try to add thumbnail + wld file, we assume that jpg and wld file have same name
-  myImageFile = myRecord.product.georeferencedThumbnail()
+  myImageFile = mySearchRecord.product.georeferencedThumbnail()
   myWLDFile = "%s.wld" %  myImageFile
   if os.path.isfile(myImageFile):
     with open(myImageFile,'rb') as myFile:
-      myZip.writestr("%s.jpg" %  myRecord.product.product_id,myFile.read())
+      myZip.writestr("%s.jpg" %  mySearchRecord.product.product_id,myFile.read())
       logging.error("Adding thumbnail image to archive.")
   else:
     logging.info("Thumbnail image not found: %s" % myImageFile)
   if os.path.isfile(myWLDFile):
     with open(myWLDFile,'rb') as myFile:
-      myZip.writestr("%s.wld" %  myRecord.product.product_id,myFile.read())
+      myZip.writestr("%s.wld" %  mySearchRecord.product.product_id,myFile.read())
       logging.info("Adding worldfile to archive.")
   else:
     logging.error("World file not found: %s" % myImageFile)
@@ -986,22 +986,7 @@ def downloadHtmlMetadata(theSearchRecords,theName):
     myMetadata = mySearchRecord.product.getConcreteInstance().toHtml()
     logging.info("Adding product HTML to HTML Metadata archive.")
     myZip.writestr('%s.html' % mySearchRecord.product.product_id, myMetadata)
-
-    # Try to add thumbnail + wld file, we assume that jpg and wld file have same name
-    myImageFile = os.path.join( mySearchRecord.product.thumbnailDirectory() , "%s.jpg" %  mySearchRecord.product.product_id )
-    myWLDFile = os.path.join( mySearchRecord.product.thumbnailDirectory(), "%s.wld" %  mySearchRecord.product.product_id )
-    if os.path.isfile(myImageFile):
-      with open(myImageFile,'rb') as myFile:
-        myZip.writestr("%s.jpg" %  mySearchRecord.product.product_id,myFile.read())
-        logging.error("Adding thumbnail image to ISO Metadata archive.")
-    else:
-      logging.info("Thumbnail image not found: %s" % myImageFile)
-    if os.path.isfile(myWLDFile):
-      with open(myImageFile,'rb') as myFile:
-        myZip.writestr("%s.wld" %  mySearchRecord.product.product_id,myFile.read())
-        logging.info("Adding worldfile to ISO Metadata archive.")
-    else:
-      logging.error("World file not found: %s" % myImageFile)
+    writeThumbToZip( mySearchRecord, myZip )
 
   myZip.close()
   response.content=myZipData.getvalue()
