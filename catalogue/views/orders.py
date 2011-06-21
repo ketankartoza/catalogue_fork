@@ -132,13 +132,20 @@ def downloadOrder(theRequest,theId):
     myResponder.file_name = u'products_for_order_%s' % myOrder.id
     return  myResponder.write_order_products( myOrder.searchrecord_set.all() )
   elif theRequest.GET.has_key('kml'):
-    return render_to_kml("kml/ordered_products.kml", {'order' : myOrder,'external_site_url':settings.DOMAIN, 'transparentStyle':True},u'products_for_order_%s' % myOrder.id)
+    return render_to_kml("kml/searchRecords.kml", {
+          'mySearchRecords' : myOrder.searchrecord_set.all(),
+          'external_site_url':settings.DOMAIN, 
+          'transparentStyle':True
+        },
+        u'products_for_order_%s' % myOrder.id)
   elif theRequest.GET.has_key('kmz'):
-    return render_to_kmz("kml/ordered_products.kml", {
-      'order' : myOrder,
-      'external_site_url':settings.DOMAIN, 
-      'transparentStyle':True,
-      'myThumbsFlag': True },u'products_for_order_%s' % myOrder.id)
+    return render_to_kmz("kml/searchRecords.kml", {
+        'mySearchRecords' : myOrder.searchrecord_set.all(),
+        'external_site_url':settings.DOMAIN, 
+        'transparentStyle':True,
+        'myThumbsFlag': True 
+      },
+      u'products_for_order_%s' % myOrder.id)
   else:
     logging.info('Request cannot be proccesed, unsupported download file type')
     raise Http404

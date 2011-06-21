@@ -940,8 +940,8 @@ def render_to_kmz(theTemplate,theContext,filename):
   myZipData = StringIO()
   myZip = zipfile.ZipFile(myZipData, 'w', zipfile.ZIP_DEFLATED)
   myZip.writestr('%s.kml' % filename, myKml)
-  if theContext["searchresults"]:
-    for myRecord in theContext["searchresults"][:myMaxMetadataRecords]:
+  if theContext["mySearchRecords"]:
+    for myRecord in theContext["mySearchRecords"][:myMaxMetadataRecords]:
       writeThumbToZip( myRecord, myZip )
   myZip.close()
   response = HttpResponse()
