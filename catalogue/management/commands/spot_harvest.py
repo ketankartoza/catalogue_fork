@@ -217,7 +217,9 @@ class Command(BaseCommand):
         created = 0
         verblog('Starting index dowload...', 2)
         for package in Command.fetch_geometries(shapefile, area_of_interest):
-          if imported > 5: return
+          #if imported > 5:
+          #  transaction.commit()
+          #  return
           if imported % 10000 == 0 and imported > 0: 
             print "Products processed : %s " % imported
             print "Products updated : %s " % updated
@@ -253,7 +255,37 @@ class Command(BaseCommand):
             # work out the sensor type
             myType = package.get('TYPE')
             # The type abbreviation should be unique for its sensor so we chain two filters to get it
-            sensor_type = SensorType.objects.filter( mission_sensor__in=mission_sensors ).filter( operator_abbreviation = myType )[0]
+            myTypes = SensorType.objects.filter( mission_sensor__in=mission_sensors ).filter( operator_abbreviation = myType )
+            sensor_type = None
+            if myTypes.count() < 1:
+              verblog("Autoadding unmatched sensor type: %s" % myType,0)
+              sensor_type = SensorType()
+              sensor_type.abbreviation = myType
+              sensor_type.name = myType
+              sensor_type.operator_abbreviation = myType
+              #  Assume the first sensor for the mission - mayneed manual correction afterwards
+              sensor_type.mission_sensor = mission_sensors[0]
+              sensor_type.save()
+              myMode = AcquisitionMode()
+              myMode.sensor_type = sensor_type
+              myMode.abbreviation = str(spot_mission.abbreviation) + "C1"
+              myMode.name = "Camera 1"
+              myMode.geometric_resolution = 0
+              myMode.band_count = 0
+              myMode.is_grayscale = 0
+              myMode.operator_abbreviation = str(spot_mission.abbreviation) + "C1"
+              myMode.save()
+              myMode2 = AcquisitionMode()
+              myMode2.sensor_type = sensor_type 
+              myMode2.abbreviation =  str(spot_mission.abbreviation) + "C2"
+              myMode2.name = "Camera 2"
+              myMode2.geometric_resolution = 0
+              myMode2.band_count = 0
+              myMode2.is_grayscale = 0
+              myMode2.operator_abbreviation = str(spot_mission.abbreviation) + "C2"
+              myMode2.save()
+            else:
+              sensor_type = myTypes[0]
             # The mode should be unique for its type so we chain two filters to get it
             myMode = "S%sC%s" % ( mission_id, package.get('A21')[-2:-1] )
             acquisition_mode = AcquisitionMode.objects.filter( sensor_type=sensor_type ).filter( operator_abbreviation=myMode )[0]
