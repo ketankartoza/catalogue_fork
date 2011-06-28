@@ -5,12 +5,23 @@
 
 <p>
  <center>
+   {% if myImageIsLocalFlag %}
+   <img src="{{ myObject.product_id }}.jpg"
+                 class='mini-icon'
+                 alt="Thumbnail"
+                 id="miniPreview{{ myObject.id }}"
+                 longdesc="{{ myObject.id }}"
+                 />
+   <br/>
+   Note: This thumbnail is georeferenced, you can open it in your GIS application.
+   {% else %}
    <img src="/thumbnail/{{ myObject.id }}/medium/"
                  class='mini-icon'
                  alt="Thumbnail"
                  id="miniPreview{{ myObject.id }}"
                  longdesc="{{ myObject.id }}"
                  />
+   {% endif %}
   </center>
 </p>
 <table>

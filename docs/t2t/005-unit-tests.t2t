@@ -2,6 +2,105 @@
 
 %---------------------------------
 
+== Testing overview ==
+
+Two kinds of tests are provided:
+
+- DocTests ([see http://ericholscher.com/blog/2008/nov/2/introduction-pythondjango-testing-doctests/])
+- UnitTests ([see http://ericholscher.com/blog/2008/nov/4/introduction-pythondjango-testing-basic-unit-tests/ ])
+-
+
+For simple tests, you can edit catalogue/tests/simple_tests.py and add additional tests, or add additional files 
+containing doctests. Each test file you create must be registered in catalogue/tests/__init__.py.
+
+To power the tests, various fixtures have been created in catalogue/fixtures which will be loaded in the 
+test database each time you run the tests. For more info on generating fixtures, [see http://ericholscher.com/blog/2008/nov/5/introduction-pythondjango-testing-fixtures/].
+
+== Creating Fixtures ==
+
+Here is the procedure followed to create fixtures for testing:
+
+**Note:** This is a once off exercise and is probably not needed as the
+fixtures generated now reside in git. The procedure is noted here in case it
+ever needs to be repeated.
+
+```
+pg_dump -Fc -f sac-test-20June2011.dmp sac
+createdb sac-test
+pg_restore sac-test-20June2011.dmp | psql sac-test
+psql sac-test
+```
+
+Now run the following sequence of commands to flush all the data from the db
+and keep only dictionaries etc.
+
+**Note:** Be very careful not to run this on any live database!
+
+```
+delete from catalogue_radarproduct;
+delete from catalogue_searchrecord;
+delete from catalogue_orderstatushistory;
+delete from catalogue_orderstatus;
+delete from catalogue_taskingrequest;
+delete from catalogue_order cascade;
+delete from catalogue_orderstatus;
+delete from catalogue_opticalproduct;
+delete from catalogue_genericproduct;
+delete from catalogue_taskingrequest;
+delete from catalogue_searchrecord;
+delete from catalogue_visit;
+delete from catalogue_clip;
+delete from catalogue_genericimageryproduct;
+delete from catalogue_search_processing_level;
+delete from catalogue_search_sensors;
+delete from catalogue_searchdaterange;
+delete from catalogue_search;
+drop table heatmap_grid;
+drop table heatmap_grid cascade;
+delete from catalogue_sacuserprofile;
+delete from userprofile_emailvalidation;
+delete from catalogue_deliverydetail;
+delete from catalogue_ordernotificationrecipients_sensors;
+delete from catalogue_ordernotificationrecipients;
+delete from userprofile_avatar;
+delete from catalogue_ordernotificationrecipients;
+delete from django_admin_log;
+delete from auth_user where username != 'timlinux';
+delete from catalogue_genericsensorproduct;
+delete from catalogue_genericproduct;
+drop table catalogue_clip;
+drop table import.sumb;
+drop table import.spot5;
+drop table import.sacc;
+drop table import.cbers;
+
+vacuum analyze;
+
+```
+
+Next you should tweak your settings.py to point to sac-test and then do:
+
+```
+python manage.py syncdb
+
+```
+
+
+Now generate the fixtures like this:
+
+```
+mkdir catalogue/fixtures
+python manage.py dumpdata catalogue --format=json --indent=4 > \
+catalogue/fixtures/catalogue.json
+```
+
+Finally throw away your temporary database and reinstate your settings.py to use the 
+normal production database.
+
+```
+dropdb sac-test
+```
+
 == Running unit tests ==
 
 A settings file for tests is available as `settings_test.py` this settings

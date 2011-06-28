@@ -30,9 +30,19 @@ def downloadCart(theRequest):
     myResponder.file_name = myFilename
     return  myResponder.write_order_products( myRecords )
   elif theRequest.GET.has_key('kml'):
-    return render_to_kml("kml/products_in_cart.kml", {'products' : myRecords, 'external_site_url':settings.DOMAIN, 'transparentStyle':True}, myFilename)
+    return render_to_kml("kml/searchRecords.kml", {
+        'mySearchRecords' : myRecords, 
+        'external_site_url':settings.DOMAIN, 
+        'transparentStyle':True
+      }, 
+      myFilename)
   elif theRequest.GET.has_key('kmz'):
-    return render_to_kmz("kml/products_in_cart.kml", {'products' : myRecords, 'external_site_url':settings.DOMAIN, 'transparentStyle':True}, myFilename)
+    return render_to_kmz("kml/searchRecords.kml", {
+        'mySearchRecords' : myRecords, 
+        'external_site_url':settings.DOMAIN, 
+        'transparentStyle':True,
+        'myThumbsFlag': True
+      }, myFilename)
   else:
     logging.info('Request cannot be proccesed, unsupported download file type')
     raise Http404

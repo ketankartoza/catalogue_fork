@@ -191,9 +191,9 @@ def downloadTaskingRequest(theRequest,theId):
     myResponder.file_name = u'geometry_for_taskingrequest_%s' % myRecord.id
     return  myResponder.write_request_records( [myRecord] )
   elif theRequest.GET.has_key('kml'):
-    return render_to_kml("kml/tasking_request.kml", {'tasking_request' : myRecord,'external_site_url':settings.DOMAIN, 'transparentStyle':True},u'geometry_for_taskingrequest_%s' % myRecord.id)
+    return render_to_kml("kml/taskingRequest.kml", {'tasking_request' : myRecord,'external_site_url':settings.DOMAIN, 'transparentStyle':True},u'geometry_for_taskingrequest_%s' % myRecord.id)
   elif theRequest.GET.has_key('kmz'):
-    return render_to_kmz("kml/tasking_request.kml", {'tasking_request' : myRecord,'external_site_url':settings.DOMAIN, 'transparentStyle':True},u'geometry_for_taskingrequest_%s' % myRecord.id)
+    return render_to_kmz("kml/taskingRequest.kml", {'tasking_request' : myRecord,'external_site_url':settings.DOMAIN, 'transparentStyle':True},u'geometry_for_taskingrequest_%s' % myRecord.id)
   else:
     logging.info('Request cannot be proccesed, unsupported download file type')
     raise Http404
