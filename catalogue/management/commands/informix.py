@@ -18,6 +18,8 @@ class Informix:
       sys.exit(0);
     self.mConnection = informixdb.connect('catalogue@catalog2', user='informix', password='')
     self.mCursor = self.mConnection.cursor(rowformat = informixdb.ROW_AS_DICT)
+    # this line is needed for blob retrieval to work!
+    informixdb.Connection.Sblob(self.mConnection)
     self.mHaltOnError = True
     # set informix output format to 4 (WKT)
     myWktSql="update GeoParam set value = 4 where id=3;"

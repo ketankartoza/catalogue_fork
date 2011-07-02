@@ -122,7 +122,20 @@ class Command(BaseCommand):
 
   def auxfileForSegment( self, theSegmentId ):
     """ Return an auxfile for a segment. An auxfile is the thing that 
-    actually contains the quicklook blob in it."""
+    actually contains the quicklook blob in it.
+    {'visible': False, 
+    'file_type': 8, 
+    'file_name': 'TM5_T174_S19_20100322_Jpeg', 
+    'insertion_date': 22005.361816469907, 
+    'file_description': 'Quick look', 
+    'file': <_informixdb.Sblob object at 0x23716c0>, 
+    'object_supertype': 1, 
+    'common_id': 163777, 
+    'id': 191795}
+ 
+    The blob will contain the actual segment quicklook.
+    
+    """
     myAuxFileQuery = "select * from t_aux_files where common_id=%i;" % theSegmentId
     myAuxFileRows = self.informix.runQuery( myAuxFileQuery )
     # There should only be one record
@@ -131,7 +144,37 @@ class Command(BaseCommand):
     if len( myAuxFileRows ) < 1:
       raise Exception("AuxFileRows","Too few auxfile rows returned for segment (received 0, expected 1)" )
     myAuxFileRow = myAuxFileRows[0]
+    myBlob = myAuxFileRow['file']
+    #try:
+    #  myBlob.open()
+    #  myStats = myBlob.stat()
+    #  #print "Blob stats: size = %s" % str(myStats['size'])
+    #except Exception, myException:
+    #  print "Sblob open failed (%s)" % str(myException)
+    #try:
+    #  # First write the whole blob out to a file
+    #  myData = myBlob.read(myBlob.stat()['size'])
+    #  myFile.write(myData)
+    #  #print "Wrote " + myFileName
+
+    #except Exception, myException:
+    #  print "Sblob read failed (%s)" % str(myException)
+    #  sys.exit(0);
     return myAuxFileRow
+
+  def fileTypeForAuxFile(self, theFileTypeId):
+    """Return the file type for a given auxfile
+    e.g. {'file_type_name': 'SHOWJPEG', 'id': 8}
+    """
+    myFileTypeQuery = "select * from t_file_types where id=%i;" % theFileTypeId
+    myFileTypeRows = self.informix.runQuery( myFileTypeQuery )
+    # There should only be one record
+    if len( myFileTypeRows ) > 1:
+      raise Exception("FileTypeRows","Too many filetype rows returned for auxfile (received %s, expected 1)" % len(myFileTypeRows) )
+    if len( myFileTypeRows ) < 1:
+      raise Exception("FileTypeRows","Too few filetype rows returned for auxfile (received 0, expected 1)" )
+    myFileTypeRow = myFileTypeRows[0]
+    return myFileTypeRow
 
 
 
@@ -219,11 +262,14 @@ class Command(BaseCommand):
           # 'POLYGON((21.6 -32.76, 22.04 -31.04, 20.05 -30.75, 19.57 -32.46, 21.6 -32.76))'} 
           myFrameRow = self.frameForLocalization( myRow['id'] )  
           mySegmentRow = self.segmentForFrame( myFrameRow['segment_id'] )
-          myAuxfileRow = self.auxfileForSegment( myFrameRow['segment_id'] )
+          myAuxFileRow = self.auxfileForSegment( myFrameRow['segment_id'] )
+          myFileTypeRow = self.fileTypeForAuxFile( myAuxFileRow['file_type'] )
 
           print myFrameRow
           print mySegmentRow
-          print myAuxfileRow
+          print myAuxFileRow
+          print myFileTypeRow
+
 
 
         verblog("%s packages imported" % imported)
