@@ -1,3 +1,4 @@
+import os
 import sys
 import informixdb  # import the InformixDB module
 import traceback
@@ -21,7 +22,7 @@ class Informix:
     # set informix output format to 4 (WKT)
     myWktSql="update GeoParam set value = 4 where id=3;"
     self.mCursor.execute(myWktSql)
-    logging.info("Constructor called")
+    print("Constructor called")
     return
 
   def __del__(self):
