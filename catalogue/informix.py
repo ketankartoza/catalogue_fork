@@ -2,6 +2,8 @@ import os
 import sys
 import informixdb  # import the InformixDB module
 import traceback
+import glob
+import Image
 
 class Informix:
   """This class is a helper class to allow you to easily connect
@@ -202,5 +204,182 @@ class Informix:
       raise Exception("FileTypeRows","Too few filetype rows returned for auxfile (received 0, expected 1)" )
     myFileTypeRow = myFileTypeRows[0]
     return myFileTypeRow
+
+
+  def thumbForLocalization(self, theLocalizationId):
+    """Given a localization id, return its georeferenced thumbnail as a jpg"""
+    myLocalizationRow = self.informix.localization( theLocalizationId )
+    myFrameRow = self.informix.frameForLocalization( theLocalizationRow )  
+    mySegmentRow = self.informix.segmentForFrame( myFrameRow['segment_id'] )
+    myAuxFileRow = self.informix.auxfileForSegment( myFrameRow['segment_id'] )
+    myFileTypeRow = self.informix.fileTypeForAuxFile( myAuxFileRow['file_type'] )
+    try:
+      return referencedThumb( myLocalizationRow, myFrameRow, mySegmentRow, myAuxFileRow, myFileTypeRow )
+    except:
+      raise
+
+  def referencedThumb(self, theLocalizationRow, theFrameRow, theSegmentRow, theAuxFileRow, theFileTypeRow ):
+    """Given complete rows of loc, frame, segment, auxfile and file type, return a
+    jpg thumbnail which is georeferenced."""
+    mySegmentId = theFrameRow['segment_id']
+    myBlob = theAuxFileRow['file']
+    try:
+      mySegmentJpg = self.extractBlobToJpeg( mySegmentId, myBlob )
+    except:
+      raise
+
+  ########################################################
+  # Helper functions for blob extraction to jpgs
+  ########################################################
+
+  def getBlockPositionsForBlob(self, theBlob ):
+    """In each blob is a series of embedded jpg images. This
+       function computes the offset of the start of each
+       jpg image by looking for the initial JFIF tag. It
+       returns a list of these block offsets"""
+    myLength = len( theBlob )
+    #print "File Length: %s" % myLength
+    myPosition = 0
+    myLastPosition = 0
+    theFileNo = 0
+    myList = []
+    while not myPosition < 0:
+      theFileNo = theFileNo + 1
+      myLastPosition = myPosition
+      #print "Searching from : %s" % ( myPosition + 10 )
+      myPosition = theBlob.find( "JFIF", myPosition + 10 ) - 6
+      #print "JFIF at %s" % (myPosition )
+      if myLastPosition > 0 and myPosition > 0:
+        myList.append( myPosition )
+      elif len( myList ) == 0:
+        myList.append( myPosition )
+      else:
+        myList.append( myLength )
+      #print "myPosition: %s " % myPosition
+      #print "myLastPosition: %s " % myLastPosition
+
+    return myList
+
+  def blockToData(self, theStart, theEnd, theBlob ):
+    """Extracts a block of binary date from a blob"""
+    theBlob.seek( theStart )
+    myBlockValue = theBlob.read( theEnd - theStart )
+    return myBlockValue
+
+  def dataToImage(self, theData, theFile ):
+    """Saves a block of binary data as file"""
+    #print "Saving %s" % theFile
+    myJpg = open( theFile, mode='wb' )
+    myJpg.write( theData )
+    myJpg.close()
+
+  def createGroupFile(self, theFileList, theOutputFile ):
+    """This function will merge 1 or more images into a single file.
+       The images will be pasted into incremental positions down the file."""
+    if len( theFileList ) < 1:
+      return
+    # Open the first image to get its dims
+    myImage = Image.open( theFileList[0] )
+    # Get the image metrics nicely so we can paste it into the quad image
+    mySize = myImage.size
+    myX = mySize[0]
+    myY = mySize[1]
+    #print str(myX) + "," + str(myY)
+    mySize = ( myX, myY*len( theFileList, ) )
+    myOutImage = Image.new( "RGB", mySize )
+
+    myFileNumber = 0
+    for myFile in theFileList:
+      myImage = Image.open( theFileList[ myFileNumber ] )
+      myFileNumber += 1
+      #determine the position to paste the block into
+      myBox = ( 0, myY * ( myFileNumber-1 ) )
+      # now paste the blocks in
+      try:
+        myOutImage.paste( myImage, myBox )
+      except IOError as e:
+        traceback.print_exc(file=sys.stdout)
+        raise e
+    # save up
+    print "Saving %s" % theOutputFile
+    myOutImage.save( theOutputFile )
+
+  def removeBlocks(self, theArray ):
+    """This function removes temporary files containing blocks
+       (individual jpg sub images)."""
+    for myBlockFile in theArray:
+      try:
+        os.remove( myBlockFile )
+      except:
+        pass
+  def cleanupJpgs(self ):
+    """This function removes temporary jpg images"""
+    for myFile in glob.glob(os.path.join("/tmp/", '*.jpg')):
+      os.remove( myFile )
+      pass
+
+
+
+  def extractBlobToJpeg(self, theSegmentId, theBlob ):
+    self.cleanupJpgs()
+    myBlobFileName = os.path.join( "/tmp/", str( theSegmentId ) + ".blob" )
+    myFile = file( myBlobFileName, "wb")
+    try:
+      theBlob.open()
+      myStats = theBlob.stat()
+      #print "Blob stats: size = %s" % str(myStats['size'])
+    except Exception, myException:
+      print "Sblob open failed (%s)" % str(myException)
+      raise
+    try:
+      # First write the whole blob out to a file
+      myData = theBlob.read(theBlob.stat()['size'])
+      myFile.write(myData)
+      myFile.close()
+      #print "Wrote " + myFileName
+
+    except Exception, myException:
+      print "Sblob read failed (%s)" % str(myException)
+      raise
+
+
+    myBlob = open(myBlobFileName, mode='rb')
+    myValue = myBlob.read()
+    myArray = self.getBlockPositionsForBlob( myValue )
+    #print myArray
+    # used to hold filenames that will be combined into a single file
+    myGroupFileArray = []
+    myBlockTally = 0
+    myErrorTally = 0
+    #print "%s block(s) in this file" % ( len( myArray ) - 1 )
+    for myPosition in range ( 0,len( myArray ) ):
+      myBlockTally += 1
+      if myPosition == 0:
+        continue # skip the first position marker
+      myStart = myArray[ myPosition -1 ]
+      myEnd = myArray[ myPosition ]
+      myData = self.blockToData( myStart, myEnd, myBlob )
+      myJpgFile = "/tmp/block%s.jpg" % ( myBlockTally )
+      self.dataToImage( myData, myJpgFile )
+      myGroupFileArray.append( myJpgFile )
+    # We are accummulating files in blocks of myBlocksInGroup
+    # or any remaining at the end of the segment
+    # write this group of myBlocksInGroup files into a single file
+    # print "Block Tally: %s" % myBlockTally
+    myJpegFileName = os.path.join( "/tmp/", str( theSegmentId ) + ".jpg" )
+    #print 'Writing %s' % myJpegFileName
+    try:
+      self.createGroupFile( myGroupFileArray, myJpegFileName )
+      #self.removeBlocks( myGroupFileArray )
+    except IOError as e:
+      if e.errno == 28: #out of space exception
+        print "Fatal Error - out of disk space!"
+        print "Last file processed was: %s" % myFile
+        print e
+        traceback.print_exc(file=sys.stdout)
+        raise
+    except Exception as e:
+      self.removeBlocks( myGroupFileArray )
+      raise
 
 

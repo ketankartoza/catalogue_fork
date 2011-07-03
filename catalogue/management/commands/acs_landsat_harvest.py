@@ -131,6 +131,7 @@ class Command(BaseCommand):
         verblog('Starting index dowload...', 2)
         try:
           if not start_record:
+            #find the id of the last imported landsat record
             myMissions = Mission.objects.filter(abbreviation__in=['L2','L3','L4','L5','L7'])
             mySensors = MissionSensor.objects.filter(mission__in=myMissions)
             myTypes = SensorType.objects.filter(mission_sensor__in=mySensors)
@@ -154,6 +155,7 @@ class Command(BaseCommand):
             mySegmentRow = self.informix.segmentForFrame( myFrameRow['segment_id'] )
             myAuxFileRow = self.informix.auxfileForSegment( myFrameRow['segment_id'] )
             myFileTypeRow = self.informix.fileTypeForAuxFile( myAuxFileRow['file_type'] )
+            myImage = self.informix.referencedThumb( myLocalizationRow, myFrameRow, mySegmentRow, myAuxFileRow, myFileTypeRow )
 
             verblog("Landsat Frame Properties",2)
             for myKey,myValue in dict.items(myLandsatRow):
