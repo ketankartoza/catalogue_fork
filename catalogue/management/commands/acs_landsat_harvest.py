@@ -47,6 +47,8 @@ class Command(BaseCommand):
           help='Quality code (will be created if does not exists). Defaults to: Unknown', default='Unknown'),
       make_option('--processing_level', '-r', dest='processing_level', action='store',
           help='Processing level code (will be created if does not exists). Defaults to: 1B', default='1B'),
+      make_option('--halt-on-error', '-e', dest='halt_on_error', action='store',
+          help='Halt on first error that occurs and print a stacktrace', default=False),
   )
   informix = Informix()
 
@@ -75,6 +77,7 @@ class Command(BaseCommand):
     area                  = options.get('area')
     quality               = options.get('quality')
     processing_level      = options.get('processing_level')
+    halt_on_error         = options.get('halt_on_error')
 
     area_of_interest  = None
 
@@ -83,6 +86,7 @@ class Command(BaseCommand):
     if test_only:
         verblog('Testing mode activated.', 2)
     verblog( "Max records: %s" % str(max_records), 2 )
+    verblog( "Halt on error: %s" % str(halt_on_error), 2 )
 
     try:
       # Validate area_of_interest
@@ -137,6 +141,8 @@ class Command(BaseCommand):
 
         for myLandsatRow in myRows:
           try:
+            verblog("-----------------------------",2)
+            verblog("-----------------------------",2)
             # landsat row e.g.
             #{'hd_shift': 589505315, 'sun_elev': 41.93, 'centre_lat': -33.169998168945312, 'b_gain': '###############', 'centre_time': 21995.347222777778, 'segment_common_id': 163777, 'centre_lon': 20.430000305175781, 'localization_id': 1219164, 'fop_scene': '#', 'bg_change': '###############', 'sun_az': 52.740000000000002, 's_quality': 8995, 'sb_present': '###############', 'bslgainchange': '232323232323232323232323232323'}
             myLocalizationRow = self.informix.localization( myLandsatRow['localization_id'] )
@@ -145,14 +151,26 @@ class Command(BaseCommand):
             myAuxFileRow = self.informix.auxfileForSegment( myFrameRow['segment_id'] )
             myFileTypeRow = self.informix.fileTypeForAuxFile( myAuxFileRow['file_type'] )
 
-            #print myLandsatRow
-            #print myLocalizationRow
-            #print myFrameRow
-            #print mySegmentRow
-            #print myAuxFileRow
-            #print myFileTypeRow
+            verblog("Landsat Frame Properties",2)
+            for myKey,myValue in dict.items(myLandsatRow):
+              verblog( "%s : %s" % (myKey,myValue),2)
+            verblog("Localization Properties",2)
+            for myKey,myValue in dict.items(myLocalizationRow):
+              verblog( "%s : %s" % (myKey,myValue),2)
+            verblog("Frame Properties",2)
+            for myKey,myValue in dict.items(myFrameRow):
+              verblog( "%s : %s" % (myKey,myValue),2)
+            verblog("Segment Properties",2)
+            for myKey,myValue in dict.items(mySegmentRow):
+              verblog( "%s : %s" % (myKey,myValue),2)
+            verblog("File Type Properties",2)
+            for myKey,myValue in dict.items(myFileTypeRow):
+              verblog( "%s : %s" % (myKey,myValue),2)
+
             imported += 1
           except:
+            if halt_on_error: 
+              raise
             errors += 1
             if errors > 10:
               verblog('Failure rate too high - more than 10 rows failed to import - aborting!',0)
@@ -162,6 +180,7 @@ class Command(BaseCommand):
 
 
         verblog("%s packages imported" % imported)
+        verblog("%s errors" % errors)
 
         if test_only:
           transaction.rollback()
