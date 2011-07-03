@@ -29,6 +29,10 @@ class Command(BaseCommand):
   option_list = BaseCommand.option_list + (
       make_option('--download-thumbs', '-d', dest='download_thumbs', action='store',
           help='Whether thumbnails should be fetched too. If not fetched now they will be fetched on demand as needed.', default=False),
+      make_option('--start-record', '-b', dest='start_record', action='store',
+          help='Start record id to use for import. If none is specified, the last record in the catalogue will be used.', default=None),
+      make_option('--max-records', '-m', dest='max_records', action='store',
+          help='Maximum number of records to import. If none is specified, a default of 1000 will be used.', default=1000),
       make_option('--test_only', '-t', dest='test_only', action='store_true',
           help='Just test, nothing will be written into the DB.', default=False),
       make_option('--owner', '-o', dest='owner', action='store',
@@ -61,6 +65,8 @@ class Command(BaseCommand):
       raise CommandError, 'Could not acquire lock.'
 
     download_thumbs       = options.get('download_thumbs')
+    start_record          = options.get('start_record')
+    max_records           = options.get('max_records')
     test_only             = options.get('test_only')
     verbose               = int(options.get('verbosity'))
     license               = options.get('license')
@@ -76,6 +82,7 @@ class Command(BaseCommand):
     verblog('Getting verbose (level=%s)... ' % verbose, 2)
     if test_only:
         verblog('Testing mode activated.', 2)
+    verblog( "Max records: %s" % str(max_records), 2 )
 
     try:
       # Validate area_of_interest
@@ -113,20 +120,44 @@ class Command(BaseCommand):
         raise CommandError, 'Quality %s does not exists and cannot be created: aborting' % quality
 
       try:
+        errors = 0
         imported = 0
         updated = 0
         created = 0
         verblog('Starting index dowload...', 2)
-        myLocalizationRow = self.informix.localization( 1219163 )
-        myFrameRow = self.informix.frameForLocalization( myLocalizationRow['id'] )  
-        mySegmentRow = self.informix.segmentForFrame( myFrameRow['segment_id'] )
-        myAuxFileRow = self.informix.auxfileForSegment( myFrameRow['segment_id'] )
-        myFileTypeRow = self.informix.fileTypeForAuxFile( myAuxFileRow['file_type'] )
+        try:
+          if not start_record:
+            # change hard coded line below to get actual record counts from catalogue
+            start_record = 1219163 
+          myQuery = 'select FIRST %i * from t_landsat_frame where localization_id > %s' % ( int(max_records), int(start_record) )
+          myRows = self.informix.runQuery( myQuery )
+        except:
+          verblog('Initial query to get latest 20 rows failed - aborting!',0)
+          raise
 
-        print myFrameRow
-        print mySegmentRow
-        print myAuxFileRow
-        print myFileTypeRow
+        for myLandsatRow in myRows:
+          try:
+            # landsat row e.g.
+            #{'hd_shift': 589505315, 'sun_elev': 41.93, 'centre_lat': -33.169998168945312, 'b_gain': '###############', 'centre_time': 21995.347222777778, 'segment_common_id': 163777, 'centre_lon': 20.430000305175781, 'localization_id': 1219164, 'fop_scene': '#', 'bg_change': '###############', 'sun_az': 52.740000000000002, 's_quality': 8995, 'sb_present': '###############', 'bslgainchange': '232323232323232323232323232323'}
+            myLocalizationRow = self.informix.localization( myLandsatRow['localization_id'] )
+            myFrameRow = self.informix.frameForLocalization( myLocalizationRow['id'] )  
+            mySegmentRow = self.informix.segmentForFrame( myFrameRow['segment_id'] )
+            myAuxFileRow = self.informix.auxfileForSegment( myFrameRow['segment_id'] )
+            myFileTypeRow = self.informix.fileTypeForAuxFile( myAuxFileRow['file_type'] )
+
+            #print myLandsatRow
+            #print myLocalizationRow
+            #print myFrameRow
+            #print mySegmentRow
+            #print myAuxFileRow
+            #print myFileTypeRow
+            imported += 1
+          except:
+            errors += 1
+            if errors > 10:
+              verblog('Failure rate too high - more than 10 rows failed to import - aborting!',0)
+              raise
+
 
 
 
