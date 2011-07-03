@@ -131,8 +131,12 @@ class Command(BaseCommand):
         verblog('Starting index dowload...', 2)
         try:
           if not start_record:
-            # change hard coded line below to get actual record counts from catalogue
-            start_record = 1219163 
+            myMissions = Mission.objects.filter(abbreviation__in=['L2','L3','L4','L5','L7'])
+            mySensors = MissionSensor.objects.filter(mission__in=myMissions)
+            myTypes = SensorType.objects.filter(mission_sensor__in=mySensors)
+            myModes = AcquisitionMode.objects.filter(sensor_type__in=myTypes)
+            myLastProduct = OpticalProduct.objects.filter(acquisition_mode__in=myModes).order_by('original_product_id').reverse()[0]
+            start_record = myLastProduct.original_product_id
           myQuery = 'select FIRST %i * from t_landsat_frame where localization_id > %s' % ( int(max_records), int(start_record) )
           myRows = self.informix.runQuery( myQuery )
         except:
