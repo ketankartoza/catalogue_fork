@@ -39,7 +39,10 @@ body {
   }
 
 /* Override bg of ui */
-.ui-widget-content { background: none #95b5c6; }
+.ui-widget-content { 
+  background: none #95b5c6; 
+  padding: 10px;
+}
 
 .ui-datepicker {
     z-index: 9999;
