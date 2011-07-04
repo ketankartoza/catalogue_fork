@@ -54,9 +54,9 @@ class Informix:
     self.mLastFileTypeRow = None
     
     self.mScratchDir              = "/mnt/cataloguestorage/thumbnail_processing/0_scratch_dir"
-    self.mUnreferencedSegmentPath = "/mnt/cataloguestorage/thumbnail_processing/1_segments_unreferenced"
-    self.mReferencedSegmentPath   = "/mnt/cataloguestorage/thumbnail_processing/2_segments_referenced"
-    self.mReferencedScenePath     = "/mnt/cataloguestorage/thumbnail_processing/3_scenes_referenced"
+    self.mUnreferencedSegmentDir = "/mnt/cataloguestorage/thumbnail_processing/1_segments_unreferenced"
+    self.mReferencedSegmentDir   = "/mnt/cataloguestorage/thumbnail_processing/2_segments_referenced"
+    self.mReferencedSceneDir     = "/mnt/cataloguestorage/thumbnail_processing/3_scenes_referenced"
 
     return
 
@@ -70,28 +70,68 @@ class Informix:
     return 
 
   def scratchDir(self):
-    self.mScratchDir   
+    try:
+      if not os.path.exists( self.mScratchDir ):
+        os.makedirs( self.mScratchDir )
+    except:
+      raise
+    return self.mScratchDir   
     
   def setScratchDir(self, thePath):
     self.mScratchDir = thePath
+    try:
+      if not os.path.exists( thePath ):
+        os.makedirs( thePath )
+    except:
+      raise
 
   def unreferencedSegmentDir(self):
-    self.mUnreferencedSegmentDir   
+    try:
+      if not os.path.exists( self.mUnreferencedSegmentDir ):
+        os.makedirs( self.mUnreferencedSegmentDir )
+    except:
+      raise
+    return self.mUnreferencedSegmentDir   
     
   def setUnreferencedSegmentDir(self, thePath):
     self.mUnreferencedSegmentDir = thePath
+    try:
+      if not os.path.exists( thePath ):
+        os.makedirs( thePath )
+    except:
+      raise
 
   def referencedSegmentDir(self):
-    self.mReferencedSegmentDir   
+    try:
+      if not os.path.exists( self.mReferencedSegmentDir ):
+        os.makedirs( self.mReferencedSegmentDir )
+    except:
+      raise
+    return self.mReferencedSegmentDir   
     
   def setReferencedSegmentDir(self, thePath):
     self.mReferencedSegmentDir = thePath
+    try:
+      if not os.path.exists( thePath ):
+        os.makedirs( thePath )
+    except:
+      raise
 
   def referencedSceneDir(self):
-    self.mReferencedSceneDir   
+    try:
+      if not os.path.exists( self.mReferencedSceneDir ):
+        os.makedirs( self.mReferencedSceneDir )
+    except:
+      raise
+    return self.mReferencedSceneDir   
     
   def setReferencedSceneDir(self, thePath):
     self.mReferencedSceneDir = thePath
+    try:
+      if not os.path.exists( thePath ):
+        os.makedirs( thePath )
+    except:
+      raise
 
   def runQuery(self, theQuery):
     """A helper function that allows you to run any sql statement
@@ -333,14 +373,13 @@ class Informix:
       mySegmentWkt = "SRID=4326;" + theSegmentRow['geo_shape']
       #print mySegmentWkt
       mySegmentGeometry = GEOSGeometry( mySegmentWkt )
-      myOutputPath = "/tmp"
-      mySegmentFile = self.rectifyImage( mySegmentJpeg, myOutputPath, mySegmentGeometry )
+      mySegmentFile = self.rectifyImage( mySegmentJpeg, mySegmentGeometry )
 
       myLocalizationWkt = "SRID=4326;" + theLocalizationRow['geo_time_info']
       #print myLocalizationWkt
       myLocalizationGeometry = GEOSGeometry( myLocalizationWkt )
-      myDestinationImage = os.path.join( "/tmp", str(theLocalizationRow['id']) + ".jpg" )
-      self.clipImage( mySegmentFile, myDestinationImage , mySegmentGeometry, myLocalizationGeometry )
+      myDestinationImage = str(theLocalizationRow['id']) + ".jpg"
+      myJpg, myWld = self.clipImage( mySegmentFile, myDestinationImage , mySegmentGeometry, myLocalizationGeometry )
     except:
       raise
 
@@ -451,10 +490,9 @@ class Informix:
         pass
 
   def extractBlobToJpeg(self, theSegmentId, theBlob ):
-    myBlobFileName = os.path.join( "/tmp/", str( theSegmentId ) + ".blob" )
-    
+    myBlobFileName = os.path.join( self.scratchDir(), str( theSegmentId ) + ".blob" )
     # use cached image if possible
-    myJpegFileName = os.path.join( "/tmp/", str( theSegmentId ) + ".jpg" )
+    myJpegFileName = os.path.join( self.unreferencedSegmentDir(), str( theSegmentId ) + ".jpg" )
     if os.path.exists( myJpegFileName ):
       print "Using cached segment image"
       return myJpegFileName
@@ -495,7 +533,7 @@ class Informix:
       myStart = myArray[ myPosition -1 ]
       myEnd = myArray[ myPosition ]
       myData = self.blockToData( myStart, myEnd, myBlob )
-      myJpgFile = "/tmp/%sblock%s.jpg" % ( theSegmentId, myBlockTally )
+      myJpgFile = os.path.join( self.scratchDir(), "%sblock%s.jpg" % ( theSegmentId, myBlockTally ) )
       self.dataToImage( myData, myJpgFile )
       myGroupFileArray.append( myJpgFile )
     # We are accummulating files in blocks of myBlocksInGroup
@@ -587,7 +625,7 @@ class Informix:
     return mySortedCandidates
 
 
-  def rectifyImage( self, theSegmentJpeg, theOutputPath, theGeometry ):
+  def rectifyImage( self, theSegmentJpeg, theGeometry ):
     """Given a path to an image, and a geometry, register the 
     image such that its corners correspond to the corners of the geometry.
     Note it does not use simply the bounding box but rather the 
@@ -597,7 +635,7 @@ class Informix:
     """
     myFileBase = os.path.split( theSegmentJpeg )[1]
     myFileBase = os.path.splitext( myFileBase )[0]
-    myOutputPath = os.path.join( theOutputPath, myFileBase + "-rect.tif" )
+    myOutputPath = os.path.join( self.referencedSegmentDir(), myFileBase + "-rect.tif" )
     if os.path.exists( myOutputPath ):
       print "Using cached rectified image %s " % myOutputPath
       return myOutputPath
@@ -658,9 +696,13 @@ class Informix:
     return myOutputPath
 
   def clipImage( self, theSourceImage, theDestinationImage, theSourceGeometry, theDestinationGeometry ):
+    """Clip a georeferenced image from a georeferenced source image
+    using the provided polygon. The source geometry should match the footprint 
+    of the georeferenced source image.
+    return Full path to georeferenced clip, full path to world file"""
     if not os.path.exists( theSourceImage ):
       raise ClipError("Source dataset does not exist")
-    myDirectory = os.path.split( theDestinationImage )[0]
+    myDirectory = self.referencedSceneDir()
     myFile = os.path.split( theDestinationImage )[1]
     myFileBase = os.path.splitext( myFile )[0]
     myFileExt = os.path.splitext( myFile )[1]
@@ -669,8 +711,8 @@ class Informix:
         os.makedirs( myDirectory )
       except OSError:
         raise ClipError( "Failed to make output directory...quitting" )
-    myTiffThumbnail = os.path.join( myDirectory, myFileBase + ".tif")
-    myWktFile       = os.path.join( myDirectory, myFileBase + ".wkt")
+    myTiffThumbnail = os.path.join( self.scratchDir(), myFileBase + ".tif")
+    myWktFile       = os.path.join( self.scratchDir(), myFileBase + ".wkt")
     # Note: Initially I used PIL to do this (simpler, less deps), but it cant open all tiffs it seems
     try:
       myImage = osgeo.gdal.Open( theSourceImage )
@@ -698,13 +740,15 @@ class Informix:
     os.system( myString )
     # Now convert the tiff to a jpg with world file 
     # We do this as a second step as gdal does not support direct creation of a jpg from gdalwarp
+    myOutJpg = os.path.join( self.referencedSceneDir(), theDestinationImage )
+    myOutWld = os.path.join( self.referencedSceneDir(), myFileBase + ".wld" )
     myString = "gdal_translate -of JPEG -co WORLDFILE=YES %s %s" % \
-        ( myTiffThumbnail, theDestinationImage )
+        ( myTiffThumbnail, myOutJpg )
     os.system( myString )
     # Clean away the tiff
     os.remove( myTiffThumbnail )
     os.remove( myWktFile )
-    return 
+    return myOutJpg, myOutWld
 
 
 
