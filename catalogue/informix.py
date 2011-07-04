@@ -4,6 +4,12 @@ import informixdb  # import the InformixDB module
 import traceback
 import glob
 import Image
+
+from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.geos import Polygon
+from django.contrib.gis.geos import Point
+import osgeo.gdal
+from osgeo.gdalconst import *
 #see notes below before adding any new imports!
 
 class Informix:
@@ -36,7 +42,7 @@ class Informix:
     # set informix output format to 4 (WKT)
     myWktSql="update GeoParam set value = 4 where id=3;"
     self.mCursor.execute(myWktSql)
-    print("Constructor called")
+    print("Informix constructor called: GeoParam set to wkt mode")
 
     # cache last fetched rows for efficiency
     self.mLastFrameRow = None
@@ -49,11 +55,11 @@ class Informix:
 
   def __del__(self):
     # Dont use logging.* in dtor - it truncates the log file deleting all other messages
-    print ("Destructor called")
     # set informix output format to 0 (Geodetic / Informix native)
     myWktSql="update GeoParam set value = 0 where id=3;"
     self.mCursor.execute(myWktSql)
     self.mConnection.close()
+    print("Informix destructor called: GeoParam set to geodetic mode")
     return 
 
   def haltOnError(self, theFlag):
@@ -237,12 +243,14 @@ class Informix:
     >>> if os.path.exists( '/tmp/136397.jpg' ):
     ...   os.remove('/tmp/136397.jpg')
     >>> myI = Informix()
-    Constructor called
+    Informix constructor called: GeoParam set to wkt mode
     >>> myI.thumbForLocalization( 1000000 )
     Writing segment image with dimensions x: 1004, y: 17496
+    Rectifying /tmp/136397.jpg
     >>> #second run should use cached data
     >>> myI.thumbForLocalization( 1000000 )
     Using cached segment image
+    Using cached rectified image /tmp/136397-proj.tif
     >>>
     """
 
@@ -266,7 +274,7 @@ class Informix:
     >>> if os.path.exists( '/tmp/136397.jpg' ):
     ...   os.remove('/tmp/136397.jpg')
     >>> myI = Informix()
-    Constructor called
+    Informix constructor called: GeoParam set to wkt mode
     >>> myLocalizationRow = myI.localization( 1000000 )
     >>> myFrameRow = myI.frameForLocalization( myLocalizationRow['id'] )  
     >>> mySegmentRow = myI.segmentForFrame( myFrameRow['segment_id'] )
@@ -274,11 +282,21 @@ class Informix:
     >>> myFileTypeRow = myI.fileTypeForAuxFile( myAuxFileRow['file_type'] )
     >>> myImage = myI.referencedThumb( myLocalizationRow, myFrameRow, mySegmentRow, myAuxFileRow, myFileTypeRow )
     Writing segment image with dimensions x: 1004, y: 17496
+    Rectifying /tmp/136397.jpg
     """
     mySegmentId = theFrameRow['segment_id']
     myBlob = theAuxFileRow['file']
     try:
-      mySegmentJpg = self.extractBlobToJpeg( mySegmentId, myBlob )
+      mySegmentJpeg = self.extractBlobToJpeg( mySegmentId, myBlob )
+      mySegmentWkt = "SRID=4326;" + theSegmentRow['geo_shape']
+      #print mySegmentWkt
+      mySegmentGeometry = GEOSGeometry( mySegmentWkt )
+      myOutputPath = "/tmp"
+      self.rectifyImage( mySegmentJpeg, myOutputPath, mySegmentGeometry )
+
+      #myLocalizationWkt = "SRID=4326;" + theLocalizationRow['geo_time_info']
+      #print myLocalizationWkt
+      #myLocalizationGeometry = GEOSGeometry( myLocalizationWkt )
     except:
       raise
 
@@ -458,6 +476,209 @@ class Informix:
       raise
 
     return myJpegFileName
+
+  def coordIsOnBounds( self, theCoord, theExtents ):
+    """Helper function to determine if a vertex touches the bounding box"""
+    if theCoord[0] == theExtents[0] or theCoord[0] == theExtents[2]: return True #xmin,xmax
+    if theCoord[1] == theExtents[1] or theCoord[1] == theExtents[3]: return True #ymin,ymax
+    return False
+
+  def sortCandidates( self, theCandidates, theExtents, theCentroid ):
+    """Return the members of the array in order TL, TR, BR, BL"""
+    #for myCoord in theCandidates:
+    #  print myCoord
+    mySortedCandidates = []
+    myTopLeft = None
+    #print "Defalt Candidate: %s" %  str( myTopLeft )
+    for myCoord in theCandidates:
+      #print "Evaluating: %s" % str( myCoord )
+      if myCoord[1] < theCentroid[1]:
+        continue # its in the bottom half so ignore
+      if not myTopLeft:
+        myTopLeft = myCoord
+        continue
+      if myCoord[0] < myTopLeft[0]:
+        myTopLeft = myCoord
+        #print "Computed Candidate: %s" %  str( myTopLeft )
+
+    mySortedCandidates.append( myTopLeft )
+    theCandidates.remove( myTopLeft )
+
+    myTopRight = None
+    #print "Defalt Candidate: %s" %  str( myTopRight )
+    for myCoord in theCandidates:
+      #print "Evaluating: %s" % str( myCoord )
+      if myCoord[1] < theCentroid[1]:
+        continue # its in the bottom half so ignore
+      if not myTopRight:
+        myTopRight = myCoord
+        continue
+      if myCoord[0] > myTopRight[0]:
+        myTopRight = myCoord
+        #print "Computed Candidate: %s" %  str( myTopRight )
+
+    mySortedCandidates.append( myTopRight )
+    theCandidates.remove( myTopRight )
+
+    myBottomRight = None
+    #print "Defalt Candidate: %s" %  str( myBottomRight )
+    for myCoord in theCandidates:
+      #print "Evaluating: %s" % str( myCoord )
+      if myCoord[1] > theCentroid[1]:
+        continue # its in the top half so ignore
+      if not myBottomRight:
+        myBottomRight = myCoord
+        continue
+      if myCoord[0] > myBottomRight[0]:
+        myBottomRight = myCoord
+        #print "Computed Candidate: %s" %  str( myBottomRight )
+
+    mySortedCandidates.append( myBottomRight )
+    theCandidates.remove( myBottomRight )
+
+    myBottomLeft = theCandidates[0]
+    mySortedCandidates.append( myBottomLeft ) #the only one remaining
+    theCandidates.remove( myBottomLeft  )
+
+    return mySortedCandidates
+
+
+  def rectifyImage( self, theSegmentJpeg, theOutputPath, theGeometry ):
+    """Given a path to an image, and a geometry, register the 
+    image such that its corners correspond to the corners of the geometry.
+    Note it does not use simply the bounding box but rather the 
+    TL, TR, BL and BR extremes of the supplied geometry.
+    The rectified image base name will be suffixed with '-proj.tif' and returned
+    as a string on success. Failure will raise an exception.
+    """
+    myFileBase = os.path.split( theSegmentJpeg )[1]
+    myFileBase = os.path.splitext( myFileBase )[0]
+    myOutputPath = os.path.join( theOutputPath, myFileBase + "-proj.tif" )
+    if os.path.exists( myOutputPath ):
+      print "Using cached rectified image %s " % myOutputPath
+      return myOutputPath
+    print "Rectifying %s" % theSegmentJpeg
+    myImage = None
+    try:
+      myImage = Image.open( theSegmentJpeg )
+      # We need to know the pixel dimensions of the segment so that we can create GCP's
+    except:
+      print "File not found %s" % theSegmentJpeg
+      raise
+
+    myImageXDim = myImage.size[0]
+    myImageYDim = myImage.size[1]
+    # Get the minima, maxima - used to test if we are on the edge 
+    myExtents = theGeometry.extent
+    #print "Envelope: %s %s" % ( len( myExtents), str( myExtents ) )
+    # There should only be 4 vertices touching the edges of the 
+    # bounding box of the shape. If we assume that the top right 
+    # corner of the poly is on the right edge of the bbox, the 
+    # bottom right vertex is on the bottom edge and so on
+    # we can narrow things down to just the leftside two and rightside 
+    # two vertices. Thereafter, determining which is 'top' and which 
+    # is bottom is a simple case of comparing the Y values in each grouping.
+    #
+    # Note the above logic makes some assumptions about the oreintation of 
+    # the swath which may not hold true for every sensor.
+    #
+    myCandidates = []
+    try:
+      for myArc in theGeometry.coords: #should only be a single arc in our case!
+        for myCoord in myArc[:-1]:
+          if self.coordIsOnBounds( myCoord, myExtents ):
+            myCandidates.append( myCoord )
+    except:
+      raise
+    print "Candidates Before: %s %s " % (len(myCandidates), str( myCandidates ) )
+    myCentroid = theGeometry.centroid
+    try:
+      myCandidates = self.sortCandidates( myCandidates, myExtents, myCentroid )
+    except:
+      raise
+    print "Candidates After: %s %s " % (len(myCandidates), str( myCandidates ) )
+    myTL = myCandidates[0]
+    myTR = myCandidates[1]
+    myBR = myCandidates[2]
+    myBL = myCandidates[3]
+
+    myString = "gdal_translate -a_srs 'EPSG:4326' -gcp 0 0 %s %s -gcp %s 0 %s %s -gcp %s %s %s %s -gcp 0 %s %s %s -of GTIFF -co COMPRESS=DEFLATE -co TILED=YES %s %s" % ( \
+          myTL[0], myTL[1], \
+          myImageXDim, myTR[0],myTR[1], \
+          myImageXDim, myImageYDim, myBR[0],myBR[1], \
+          myImageYDim, myBL[0],myBL[1], \
+          theSegmentJpeg, \
+          myOutputPath )
+    print myString
+    os.system( myString )
+    return myOutputPath
+
+  def clipImage( self, theScenesPath, theSegmentsPath, theAuxFile, theFrame ):
+    if not os.path.isdir( theScenesPath ):
+      try:
+        os.makedirs( theScenesPath )
+      except OSError:
+        print "Failed to make output directory...quitting" 
+        return "False"
+    myId = str( theAuxFile.original_id )
+    mySegmentFilePath = os.path.join(theSegmentsPath,myId + "segment-proj.tif")
+    myTiffThumbnail = os.path.join(theScenesPath, str( theFrame.id ) + "-rectified-clipped.tiff")
+    myJpegThumbnail = os.path.join(theScenesPath, str( theFrame.id ) + "-rectified-clipped.jpg")
+    myImage = None
+    if not os.path.isfile( mySegmentFilePath ):
+      print "ClipImage : File not found %s" % mySegmentFilePath
+      return "False"
+    # Note: Initially I used PIL to do this (simpler, less deps), but it cant open all tiffs it seems
+    try:
+      myImage = osgeo.gdal.Open( mySegmentFilePath )
+    except:
+      traceback.print_exc(file=sys.stdout)
+      print "ClipImage : File could not be opened %s" % mySegmentFilePath
+      return "False"
+
+    myImageXDim = myImage.RasterXSize
+    myImageYDim = myImage.RasterYSize
+    mySegment = theAuxFile.segmentCommon
+    mySegmentGeometry = mySegment.geometry
+    #using convex hull will reduce the number of points we need to iterate
+    mySceneGeometry = theFrame.localization.geometry
+    myIntersectedGeometry = mySceneGeometry.intersection( mySegmentGeometry )
+    # Get the minima, maxima - used to test if we are on the edge 
+    myExtents = None
+    try:
+      myExtents = myIntersectedGeometry.extent
+    except:
+      traceback.print_exc(file=sys.stdout)
+      print "Intersected geometry extents could not be obtained %s" % mySegmentFilePath
+      return "False"
+    # Write geometry of intersection between segment and scene to kml
+    # (mainly for testing)
+    myString = file("scripts/scenetemplate.kml","rt").read()
+    myKmlString = myString.replace("[POLYGON]",myIntersectedGeometry.kml)
+    myIntersectedKmlFilePath = os.path.join( theScenesPath , str( theFrame.id ) + "scene-intersection.kml" )
+    file( myIntersectedKmlFilePath, "wt" ).write( myKmlString )
+    # write actual scene footprint to kml
+    myKmlString = myString.replace("[POLYGON]",mySceneGeometry.kml)
+    myKmlFilePath = os.path.join( theScenesPath , str( theFrame.id ) + "scene.kml" )
+    file( myKmlFilePath, "wt" ).write( myKmlString )
+    # clip to bbox (for image size) and mask everything but the scene contents (using cutline)
+    myString = "gdalwarp -of GTiff -co COMPRESS=DEFLATE -co TILED=YES -cutline %s %s %s -te %s %s %s %s" % \
+             ( myIntersectedKmlFilePath, mySegmentFilePath, myTiffThumbnail, \
+               myExtents[0], myExtents[1], myExtents[2], myExtents[3] )
+             #( myIntersectedKmlFilePath, myTmpOutputPath, myTiffThumbnail )
+    print myString
+    os.system( myString )
+    # Now convert the tiff to a jpg with world file 
+    # We do this as a second step as gdal does not support direct creation of a jpg from gdalwarp
+    myString = "gdal_translate -of JPEG -co WORLDFILE=YES %s %s" % \
+        ( myTiffThumbnail, myJpegThumbnail )
+    os.system( myString )
+    # Clean away the tiff
+    os.remove( myTiffThumbnail )
+    
+    return "True"
+
+
 
 def _test():
   import doctest

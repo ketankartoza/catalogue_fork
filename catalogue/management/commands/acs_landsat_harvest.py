@@ -144,7 +144,7 @@ class Command(BaseCommand):
           verblog('Initial query to get latest 20 rows failed - aborting!',0)
           raise
 
-        verblog(sys.path, 2)
+        print sys.path
         for myLandsatRow in myRows:
           try:
             verblog("-----------------------------",3)
