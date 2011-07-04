@@ -207,14 +207,23 @@ class Informix:
 
 
   def thumbForLocalization(self, theLocalizationId):
-    """Given a localization id, return its georeferenced thumbnail as a jpg"""
-    myLocalizationRow = self.informix.localization( theLocalizationId )
-    myFrameRow = self.informix.frameForLocalization( theLocalizationRow )  
-    mySegmentRow = self.informix.segmentForFrame( myFrameRow['segment_id'] )
-    myAuxFileRow = self.informix.auxfileForSegment( myFrameRow['segment_id'] )
-    myFileTypeRow = self.informix.fileTypeForAuxFile( myAuxFileRow['file_type'] )
+    """Given a localization id, return its georeferenced thumbnail as a jpg
+    >>> from catalogue.informix import Informix
+    >>> myI = Informix()
+    Constructor called
+    >>> myI.thumbForLocalization( 1000000 )
+    Writing segment image with dimensions x: 1004, y: 17496
+    >>>
+    """
+
+    print sys.path.append
+    myLocalizationRow = self.localization( theLocalizationId )
+    myFrameRow = self.frameForLocalization( theLocalizationId )  
+    mySegmentRow = self.segmentForFrame( myFrameRow['segment_id'] )
+    myAuxFileRow = self.auxfileForSegment( myFrameRow['segment_id'] )
+    myFileTypeRow = self.fileTypeForAuxFile( myAuxFileRow['file_type'] )
     try:
-      return referencedThumb( myLocalizationRow, myFrameRow, mySegmentRow, myAuxFileRow, myFileTypeRow )
+      return self.referencedThumb( myLocalizationRow, myFrameRow, mySegmentRow, myAuxFileRow, myFileTypeRow )
     except:
       raise
 
@@ -276,33 +285,53 @@ class Informix:
   def createGroupFile(self, theFileList, theOutputFile ):
     """This function will merge 1 or more images into a single file.
        The images will be pasted into incremental positions down the file."""
+    #print theFileList
+
     if len( theFileList ) < 1:
       return
+    if os.path.exists( theOutputFile ):
+      os.remove( theOutputFile )
+
+
     # Open the first image to get its dims
-    myImage = Image.open( theFileList[0] )
-    # Get the image metrics nicely so we can paste it into the quad image
-    mySize = myImage.size
-    myX = mySize[0]
-    myY = mySize[1]
-    #print str(myX) + "," + str(myY)
-    mySize = ( myX, myY*len( theFileList, ) )
+    myWidth = 0
+    myHeight = 0
+    for myFile in theFileList:
+      myImage = Image.open( myFile )
+      # Get the image metrics nicely so we can paste it into the quad image
+      mySize = myImage.size
+      myX = mySize[0]
+      myY = mySize[1]
+      myHeight += myY
+      if myX > myWidth:
+        myWidth = myX
+
+    print "Writing segment image with dimensions x: %i, y: %i" % (int(myWidth),int(myHeight))
+    mySize = ( myWidth, myHeight )
     myOutImage = Image.new( "RGB", mySize )
 
-    myFileNumber = 0
+    myLastY = 0
     for myFile in theFileList:
-      myImage = Image.open( theFileList[ myFileNumber ] )
-      myFileNumber += 1
+      myImage = Image.open( myFile )
+      mySize = myImage.size
+      myX = mySize[0]
+      myY = mySize[1]
       #determine the position to paste the block into
-      myBox = ( 0, myY * ( myFileNumber-1 ) )
+      myBox = ( 0, myLastY, myX, myLastY + myY )
       # now paste the blocks in
       try:
         myOutImage.paste( myImage, myBox )
+        myLastY += myY
       except IOError as e:
         traceback.print_exc(file=sys.stdout)
-        raise e
+        raise
+      except ValueError:
+        print "Image %s,%s can't go into %s,%s at position 0,%s" % (myX,myY,myWidth,myHeight,myLastY-myY)
+        myLastY += myY
+        continue
     # save up
-    print "Saving %s" % theOutputFile
     myOutImage.save( theOutputFile )
+
 
   def removeBlocks(self, theArray ):
     """This function removes temporary files containing blocks
@@ -312,16 +341,8 @@ class Informix:
         os.remove( myBlockFile )
       except:
         pass
-  def cleanupJpgs(self ):
-    """This function removes temporary jpg images"""
-    for myFile in glob.glob(os.path.join("/tmp/", '*.jpg')):
-      os.remove( myFile )
-      pass
-
-
 
   def extractBlobToJpeg(self, theSegmentId, theBlob ):
-    self.cleanupJpgs()
     myBlobFileName = os.path.join( "/tmp/", str( theSegmentId ) + ".blob" )
     myFile = file( myBlobFileName, "wb")
     try:
@@ -353,13 +374,13 @@ class Informix:
     myErrorTally = 0
     #print "%s block(s) in this file" % ( len( myArray ) - 1 )
     for myPosition in range ( 0,len( myArray ) ):
-      myBlockTally += 1
       if myPosition == 0:
         continue # skip the first position marker
+      myBlockTally += 1
       myStart = myArray[ myPosition -1 ]
       myEnd = myArray[ myPosition ]
       myData = self.blockToData( myStart, myEnd, myBlob )
-      myJpgFile = "/tmp/block%s.jpg" % ( myBlockTally )
+      myJpgFile = "/tmp/%sblock%s.jpg" % ( theSegmentId, myBlockTally )
       self.dataToImage( myData, myJpgFile )
       myGroupFileArray.append( myJpgFile )
     # We are accummulating files in blocks of myBlocksInGroup
@@ -371,6 +392,7 @@ class Informix:
     try:
       self.createGroupFile( myGroupFileArray, myJpegFileName )
       #self.removeBlocks( myGroupFileArray )
+      os.remove( myBlobFileName )
     except IOError as e:
       if e.errno == 28: #out of space exception
         print "Fatal Error - out of disk space!"
@@ -380,6 +402,7 @@ class Informix:
         raise
     except Exception as e:
       self.removeBlocks( myGroupFileArray )
+      os.remove( myBlobFileName )
       raise
 
 

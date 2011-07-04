@@ -157,21 +157,21 @@ class Command(BaseCommand):
             myFileTypeRow = self.informix.fileTypeForAuxFile( myAuxFileRow['file_type'] )
             myImage = self.informix.referencedThumb( myLocalizationRow, myFrameRow, mySegmentRow, myAuxFileRow, myFileTypeRow )
 
-            verblog("Landsat Frame Properties",2)
+            verblog("Landsat Frame Properties",3)
             for myKey,myValue in dict.items(myLandsatRow):
-              verblog( "%s : %s" % (myKey,myValue),2)
-            verblog("Localization Properties",2)
+              verblog( "%s : %s" % (myKey,myValue),3)
+            verblog("Localization Properties",3)
             for myKey,myValue in dict.items(myLocalizationRow):
-              verblog( "%s : %s" % (myKey,myValue),2)
-            verblog("Frame Properties",2)
+              verblog( "%s : %s" % (myKey,myValue),3)
+            verblog("Frame Properties",3)
             for myKey,myValue in dict.items(myFrameRow):
-              verblog( "%s : %s" % (myKey,myValue),2)
-            verblog("Segment Properties",2)
+              verblog( "%s : %s" % (myKey,myValue),3)
+            verblog("Segment Properties",3)
             for myKey,myValue in dict.items(mySegmentRow):
-              verblog( "%s : %s" % (myKey,myValue),2)
-            verblog("File Type Properties",2)
+              verblog( "%s : %s" % (myKey,myValue),3)
+            verblog("File Type Properties",3)
             for myKey,myValue in dict.items(myFileTypeRow):
-              verblog( "%s : %s" % (myKey,myValue),2)
+              verblog( "%s : %s" % (myKey,myValue),3)
 
             imported += 1
           except:

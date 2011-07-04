@@ -172,14 +172,20 @@ The full list of packages installed using the REQUIREMENTS file is:
 %quotes on next line so file is included as a formated block
 %!include: ``../../REQUIREMENTS.txt``
 
+Next manually install PIL as shown below (**mandatory**).
 
 ==== PIL Issues ===
+
+You need to manually build PIL into your virtual environment and you should
+avoid installing python-imaging (the debian pil package) on your system.
 
 If you get an error like this when trying to view jpg thumbs:
 
 ```
 decoder jpeg not available
 ```
+
+or if thumbnails produced are being corrupted,
 
 Your PIL is missing jpg (and probably png support). To fix it do:
 

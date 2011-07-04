@@ -6,7 +6,7 @@ django-db-log
 django-debug-toolbar
 django-extensions
 psycopg2
-pil
+# pil must be manually installed - see install notes section 004
 gdata
 #numpy needed for gdal array support which is used by ingesters
 numpy 
