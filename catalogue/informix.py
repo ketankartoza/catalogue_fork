@@ -27,6 +27,14 @@ class Informix:
     myWktSql="update GeoParam set value = 4 where id=3;"
     self.mCursor.execute(myWktSql)
     print("Constructor called")
+
+    # cache last fetched rows for efficiency
+    self.mLastFrameRow = None
+    self.mLastLocalizationRow = None
+    self.mLastSegmentRow = None
+    self.mLastAuxFileRow = None
+    self.mLastFileTypeRow = None
+
     return
 
   def __del__(self):
@@ -54,7 +62,7 @@ class Informix:
       myRows.append(myRow)
     return myRows
 
-  def localization( self, theLocalization ):
+  def localization( self, theLocalizationId ):
     """Fetch a  localization record from the database given its id
        e.g. of what will be returned:
        {'object_supertype': 1, 'time_stamp': datetime.datetime(2010, 4, 1, 9, 35, 46), 
@@ -63,7 +71,10 @@ class Informix:
          'geo_time_info': 
          'POLYGON((21.6 -32.76, 22.04 -31.04, 20.05 -30.75, 19.57 -32.46, 21.6 -32.76))'} 
     """
-    myQuery = "select * from t_localization where id=%i;" % int( theLocalization )
+    if str( self.mLastLocalizationRow['id'] ) == str( theLocalizationId ):
+      return self.mLastLocalizationRow
+
+    myQuery = "select * from t_localization where id=%i;" % int( theLocalizationId )
     myRows = self.runQuery( myQuery )
     # There should only be one record
     if len( myRows ) > 1:
@@ -71,7 +82,10 @@ class Informix:
     if len( myRows ) < 1:
       raise Exception("Localization Rows","No rows returned for localization (received %s, expected 1)" % len(myRows) )
 
-    return myRows[0]
+    
+    self.mLastLocalizationRow = myRows[0]
+    return self.mLastLocalizationRow
+
 
   def frameForLocalization( self, theLocalizationId ):
     """Return a frame record given a localization record. Record returned will 
@@ -94,6 +108,9 @@ class Informix:
           'track_orbit': 174, 
           'end_time_cod': 21995.347094024386, 
           'cloud': '0000****'}"""
+    if str( self.mFrameLastRow['localization_id'] ) == str( theLocalizationId ):
+      return self.FrameLastRow
+
     myFrameQuery = "select * from t_frame_common where localization_id=%i;" % int( theLocalizationId )
     myFrameRows = self.runQuery( myFrameQuery )
     # There should only be one record
@@ -101,11 +118,11 @@ class Informix:
       raise Exception("FrameRows","Too many framerows returned for localization (received %s, expected 1)" % len(myFrameRows) )
     if len( myFrameRows ) < 1:
       raise Exception("FrameRows","Too few framerows returned for localization (received 0, expected 1)" )
-    myFrameRow = myFrameRows[0]
-    return myFrameRow
+    self.mFrameLastRow = myFrameRows[0]
+    return self.mFrameLastRow
 
   def segmentForFrame( self, theSegmentId ):
-    """Return a segment record given a frame id. Return should look 
+    """Return a segment record given a segment id. Return should look 
     something liks this:
     {'sensor_id': 2, 
       'mission': 5, 
@@ -136,6 +153,9 @@ class Informix:
       'displayed_track': '174', 
       'second_address': 22}"""
 
+    if str( self.mLastSegmentRow['id'] ) == str( theSegmentId ):
+      return self.mLastSegmentRow
+
 
     mySegmentQuery = "select * from t_segment_common where id=%i;" % int( theSegmentId )
     mySegmentRows = self.runQuery( mySegmentQuery )
@@ -144,8 +164,8 @@ class Informix:
       raise Exception("SegmentRows","Too many segment rows returned for frame (received %s, expected 1)" % len(mySegmentRows) )
     if len( mySegmentRows ) < 1:
       raise Exception("SegmentRows","Too few segment rows returned for frame (received 0, expected 1)" )
-    mySegmentRow = mySegmentRows[0]
-    return mySegmentRow
+    self.mLastSegmentRow = mySegmentRows[0]
+    return self.mLastSegmentRow
 
 
 
@@ -165,6 +185,8 @@ class Informix:
     The blob will contain the actual segment quicklook.
     
     """
+    if str( self.mLastAuxFileRow ['common_id'] ) == str( theSegmentId ):
+      return self.mLastAuxFileRow
     myAuxFileQuery = "select * from t_aux_files where common_id=%i;" % int( theSegmentId )
     myAuxFileRows = self.runQuery( myAuxFileQuery )
     # There should only be one record
@@ -172,29 +194,15 @@ class Informix:
       raise Exception("AuxFileRows","Too many auxfile rows returned for segment (received %s, expected 1)" % len(myAuxFileRows) )
     if len( myAuxFileRows ) < 1:
       raise Exception("AuxFileRows","Too few auxfile rows returned for segment (received 0, expected 1)" )
-    myAuxFileRow = myAuxFileRows[0]
-    myBlob = myAuxFileRow['file']
-    #try:
-    #  myBlob.open()
-    #  myStats = myBlob.stat()
-    #  #print "Blob stats: size = %s" % str(myStats['size'])
-    #except Exception, myException:
-    #  print "Sblob open failed (%s)" % str(myException)
-    #try:
-    #  # First write the whole blob out to a file
-    #  myData = myBlob.read(myBlob.stat()['size'])
-    #  myFile.write(myData)
-    #  #print "Wrote " + myFileName
-
-    #except Exception, myException:
-    #  print "Sblob read failed (%s)" % str(myException)
-    #  sys.exit(0);
-    return myAuxFileRow
+    self.mLastAuxFileRow = myAuxFileRows[0]
+    return self.mLastAuxFileRow
 
   def fileTypeForAuxFile(self, theFileTypeId):
     """Return the file type for a given auxfile
     e.g. {'file_type_name': 'SHOWJPEG', 'id': 8}
     """
+    if str( self.mLastFileTypeRow['id'] ) == str( theFileTypeId ):
+      return self.mLastAuxFileRow
     myFileTypeQuery = "select * from t_file_types where id=%i;" % theFileTypeId
     myFileTypeRows = self.runQuery( myFileTypeQuery )
     # There should only be one record
@@ -202,8 +210,8 @@ class Informix:
       raise Exception("FileTypeRows","Too many filetype rows returned for auxfile (received %s, expected 1)" % len(myFileTypeRows) )
     if len( myFileTypeRows ) < 1:
       raise Exception("FileTypeRows","Too few filetype rows returned for auxfile (received 0, expected 1)" )
-    myFileTypeRow = myFileTypeRows[0]
-    return myFileTypeRow
+    self.mLastFileTypeRow = myFileTypeRows[0]
+    return self.mLastFileTypeRow
 
 
   def thumbForLocalization(self, theLocalizationId):
