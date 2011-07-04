@@ -12,6 +12,8 @@ import osgeo.gdal
 from osgeo.gdalconst import *
 #see notes below before adding any new imports!
 
+class ClipError( Exception ): pass
+
 class Informix:
   """This class is a helper class to allow you to easily connect
   to the legacy informix database and execute queries there. It 
@@ -296,11 +298,13 @@ class Informix:
       #print mySegmentWkt
       mySegmentGeometry = GEOSGeometry( mySegmentWkt )
       myOutputPath = "/tmp"
-      self.rectifyImage( mySegmentJpeg, myOutputPath, mySegmentGeometry )
+      mySegmentFile = self.rectifyImage( mySegmentJpeg, myOutputPath, mySegmentGeometry )
 
-      #myLocalizationWkt = "SRID=4326;" + theLocalizationRow['geo_time_info']
+      myLocalizationWkt = "SRID=4326;" + theLocalizationRow['geo_time_info']
       #print myLocalizationWkt
-      #myLocalizationGeometry = GEOSGeometry( myLocalizationWkt )
+      myLocalizationGeometry = GEOSGeometry( myLocalizationWkt )
+      myDestinationImage = os.path.join( "/tmp", str(theLocalizationRow['id']) + ".jpg" )
+      self.clipImage( mySegmentFile, myDestinationImage , mySegmentGeometry, myLocalizationGeometry )
     except:
       raise
 
@@ -617,70 +621,54 @@ class Informix:
     os.system( myString )
     return myOutputPath
 
-  def clipImage( self, theScenesPath, theSegmentsPath, theAuxFile, theFrame ):
-    if not os.path.isdir( theScenesPath ):
+  def clipImage( self, theSourceImage, theDestinationImage, theSourceGeometry, theDestinationGeometry ):
+    if not os.path.exists( theSourceImage ):
+      raise ClipError("Source dataset does not exist")
+    myDirectory = os.path.split( theDestinationImage )[0]
+    myFile = os.path.split( theDestinationImage )[1]
+    myFileBase = os.path.splitext( myFile )[0]
+    myFileExt = os.path.splitext( myFile )[1]
+    if not os.path.isdir( myDirectory ):
       try:
-        os.makedirs( theScenesPath )
+        os.makedirs( myDirectory )
       except OSError:
-        print "Failed to make output directory...quitting" 
-        return "False"
-    myId = str( theAuxFile.original_id )
-    mySegmentFilePath = os.path.join(theSegmentsPath,myId + "segment-proj.tif")
-    myTiffThumbnail = os.path.join(theScenesPath, str( theFrame.id ) + "-rectified-clipped.tiff")
-    myJpegThumbnail = os.path.join(theScenesPath, str( theFrame.id ) + "-rectified-clipped.jpg")
-    myImage = None
-    if not os.path.isfile( mySegmentFilePath ):
-      print "ClipImage : File not found %s" % mySegmentFilePath
-      return "False"
+        raise ClipError( "Failed to make output directory...quitting" )
+    myTiffThumbnail = os.path.join( myDirectory, myFileBase + ".tif")
+    myWktFile       = os.path.join( myDirectory, myFileBase + ".wkt")
     # Note: Initially I used PIL to do this (simpler, less deps), but it cant open all tiffs it seems
     try:
-      myImage = osgeo.gdal.Open( mySegmentFilePath )
+      myImage = osgeo.gdal.Open( theSourceImage )
     except:
-      traceback.print_exc(file=sys.stdout)
-      print "ClipImage : File could not be opened %s" % mySegmentFilePath
-      return "False"
+      raise ClipError( "ClipImage : File could not be opened %s" % theSourceImage )
 
     myImageXDim = myImage.RasterXSize
     myImageYDim = myImage.RasterYSize
-    mySegment = theAuxFile.segmentCommon
-    mySegmentGeometry = mySegment.geometry
     #using convex hull will reduce the number of points we need to iterate
-    mySceneGeometry = theFrame.localization.geometry
-    myIntersectedGeometry = mySceneGeometry.intersection( mySegmentGeometry )
+    myIntersectedGeometry = theDestinationGeometry.intersection( theSourceGeometry )
     # Get the minima, maxima - used to test if we are on the edge 
     myExtents = None
     try:
       myExtents = myIntersectedGeometry.extent
     except:
-      traceback.print_exc(file=sys.stdout)
-      print "Intersected geometry extents could not be obtained %s" % mySegmentFilePath
-      return "False"
-    # Write geometry of intersection between segment and scene to kml
-    # (mainly for testing)
-    myString = file("scripts/scenetemplate.kml","rt").read()
-    myKmlString = myString.replace("[POLYGON]",myIntersectedGeometry.kml)
-    myIntersectedKmlFilePath = os.path.join( theScenesPath , str( theFrame.id ) + "scene-intersection.kml" )
-    file( myIntersectedKmlFilePath, "wt" ).write( myKmlString )
-    # write actual scene footprint to kml
-    myKmlString = myString.replace("[POLYGON]",mySceneGeometry.kml)
-    myKmlFilePath = os.path.join( theScenesPath , str( theFrame.id ) + "scene.kml" )
-    file( myKmlFilePath, "wt" ).write( myKmlString )
-    # clip to bbox (for image size) and mask everything but the scene contents (using cutline)
-    myString = "gdalwarp -of GTiff -co COMPRESS=DEFLATE -co TILED=YES -cutline %s %s %s -te %s %s %s %s" % \
-             ( myIntersectedKmlFilePath, mySegmentFilePath, myTiffThumbnail, \
-               myExtents[0], myExtents[1], myExtents[2], myExtents[3] )
-             #( myIntersectedKmlFilePath, myTmpOutputPath, myTiffThumbnail )
-    print myString
+      raise ClipError( "Intersected geometry extents could not be obtained" )
+    myWktString = myIntersectedGeometry.wkt
+    file( myWktFile, "wt" ).write( myWktString )
+    # clip to bbox (for image size)
+    # TODO: reinstate mask everything but the scene contents (using cutline)
+    myString = "gdalwarp -of GTiff -co COMPRESS=DEFLATE -co TILED=YES -te %s %s %s %s %s %s" % \
+             ( myExtents[0], myExtents[1], myExtents[2], myExtents[3],
+               theSourceImage, myTiffThumbnail )
+    #print myString
     os.system( myString )
     # Now convert the tiff to a jpg with world file 
     # We do this as a second step as gdal does not support direct creation of a jpg from gdalwarp
     myString = "gdal_translate -of JPEG -co WORLDFILE=YES %s %s" % \
-        ( myTiffThumbnail, myJpegThumbnail )
+        ( myTiffThumbnail, theDestinationImage )
     os.system( myString )
     # Clean away the tiff
     os.remove( myTiffThumbnail )
-    
-    return "True"
+    os.remove( myWktFile )
+    return 
 
 
 
