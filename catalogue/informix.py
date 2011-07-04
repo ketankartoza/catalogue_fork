@@ -4,12 +4,22 @@ import informixdb  # import the InformixDB module
 import traceback
 import glob
 import Image
+#see notes below before adding any new imports!
 
 class Informix:
   """This class is a helper class to allow you to easily connect
   to the legacy informix database and execute queries there. It 
   is ported from version 1 of the catalogue where this logic was 
-  contained in acscatalogue.informix.py"""
+  contained in acscatalogue.informix.py.
+  
+  This class has doctests - to run them just do:
+
+    python catlogue/informix.py
+
+  Note this class is purposely kept free of dependecies to 
+  any django apps / models etc so it can be used standalone.
+
+  """
 
   def __init__(self):
     os.environ['INFORMIXSERVER']="catalog2"
@@ -71,8 +81,9 @@ class Informix:
          'geo_time_info': 
          'POLYGON((21.6 -32.76, 22.04 -31.04, 20.05 -30.75, 19.57 -32.46, 21.6 -32.76))'} 
     """
-    if str( self.mLastLocalizationRow['id'] ) == str( theLocalizationId ):
-      return self.mLastLocalizationRow
+    if self.mLastLocalizationRow:
+      if str( self.mLastLocalizationRow['id'] ) == str( theLocalizationId ):
+        return self.mLastLocalizationRow
 
     myQuery = "select * from t_localization where id=%i;" % int( theLocalizationId )
     myRows = self.runQuery( myQuery )
@@ -108,8 +119,9 @@ class Informix:
           'track_orbit': 174, 
           'end_time_cod': 21995.347094024386, 
           'cloud': '0000****'}"""
-    if str( self.mFrameLastRow['localization_id'] ) == str( theLocalizationId ):
-      return self.FrameLastRow
+    if self.mLastFrameRow:
+      if str( self.mFrameLastRow['localization_id'] ) == str( theLocalizationId ):
+        return self.FrameLastRow
 
     myFrameQuery = "select * from t_frame_common where localization_id=%i;" % int( theLocalizationId )
     myFrameRows = self.runQuery( myFrameQuery )
@@ -153,8 +165,9 @@ class Informix:
       'displayed_track': '174', 
       'second_address': 22}"""
 
-    if str( self.mLastSegmentRow['id'] ) == str( theSegmentId ):
-      return self.mLastSegmentRow
+    if self.mLastSegmentRow:
+      if str( self.mLastSegmentRow['id'] ) == str( theSegmentId ):
+        return self.mLastSegmentRow
 
 
     mySegmentQuery = "select * from t_segment_common where id=%i;" % int( theSegmentId )
@@ -185,8 +198,9 @@ class Informix:
     The blob will contain the actual segment quicklook.
     
     """
-    if str( self.mLastAuxFileRow ['common_id'] ) == str( theSegmentId ):
-      return self.mLastAuxFileRow
+    if self.mLastAuxFileRow:
+      if str( self.mLastAuxFileRow ['common_id'] ) == str( theSegmentId ):
+        return self.mLastAuxFileRow
     myAuxFileQuery = "select * from t_aux_files where common_id=%i;" % int( theSegmentId )
     myAuxFileRows = self.runQuery( myAuxFileQuery )
     # There should only be one record
@@ -201,8 +215,9 @@ class Informix:
     """Return the file type for a given auxfile
     e.g. {'file_type_name': 'SHOWJPEG', 'id': 8}
     """
-    if str( self.mLastFileTypeRow['id'] ) == str( theFileTypeId ):
-      return self.mLastAuxFileRow
+    if self.mLastFileTypeRow:
+      if str( self.mLastFileTypeRow['id'] ) == str( theFileTypeId ):
+        return self.mLastAuxFileRow
     myFileTypeQuery = "select * from t_file_types where id=%i;" % theFileTypeId
     myFileTypeRows = self.runQuery( myFileTypeQuery )
     # There should only be one record
@@ -217,11 +232,17 @@ class Informix:
   def thumbForLocalization(self, theLocalizationId):
     """Given a localization id, return its georeferenced thumbnail as a jpg
     Note: You need to hand build PIL - see install notes for details!
-    >>> from catalogue.informix import Informix
+    >>> from informix import Informix
+    >>> import os
+    >>> if os.path.exists( '/tmp/136397.jpg' ):
+    ...   os.remove('/tmp/136397.jpg')
     >>> myI = Informix()
     Constructor called
     >>> myI.thumbForLocalization( 1000000 )
     Writing segment image with dimensions x: 1004, y: 17496
+    >>> #second run should use cached data
+    >>> myI.thumbForLocalization( 1000000 )
+    Using cached segment image
     >>>
     """
 
@@ -240,6 +261,19 @@ class Informix:
     """Given complete rows of loc, frame, segment, auxfile and file type, return a
     jpg thumbnail which is georeferenced.
     Note: You need to hand build PIL - see install notes for details!
+    >>> from informix import Informix
+    >>> import os
+    >>> if os.path.exists( '/tmp/136397.jpg' ):
+    ...   os.remove('/tmp/136397.jpg')
+    >>> myI = Informix()
+    Constructor called
+    >>> myLocalizationRow = myI.localization( 1000000 )
+    >>> myFrameRow = myI.frameForLocalization( myLocalizationRow['id'] )  
+    >>> mySegmentRow = myI.segmentForFrame( myFrameRow['segment_id'] )
+    >>> myAuxFileRow = myI.auxfileForSegment( myFrameRow['segment_id'] )
+    >>> myFileTypeRow = myI.fileTypeForAuxFile( myAuxFileRow['file_type'] )
+    >>> myImage = myI.referencedThumb( myLocalizationRow, myFrameRow, mySegmentRow, myAuxFileRow, myFileTypeRow )
+    Writing segment image with dimensions x: 1004, y: 17496
     """
     mySegmentId = theFrameRow['segment_id']
     myBlob = theAuxFileRow['file']
@@ -356,6 +390,13 @@ class Informix:
 
   def extractBlobToJpeg(self, theSegmentId, theBlob ):
     myBlobFileName = os.path.join( "/tmp/", str( theSegmentId ) + ".blob" )
+    
+    # use cached image if possible
+    myJpegFileName = os.path.join( "/tmp/", str( theSegmentId ) + ".jpg" )
+    if os.path.exists( myJpegFileName ):
+      print "Using cached segment image"
+      return myJpegFileName
+
     myFile = file( myBlobFileName, "wb")
     try:
       theBlob.open()
@@ -399,7 +440,6 @@ class Informix:
     # or any remaining at the end of the segment
     # write this group of myBlocksInGroup files into a single file
     # print "Block Tally: %s" % myBlockTally
-    myJpegFileName = os.path.join( "/tmp/", str( theSegmentId ) + ".jpg" )
     #print 'Writing %s' % myJpegFileName
     try:
       self.createGroupFile( myGroupFileArray, myJpegFileName )
@@ -417,4 +457,11 @@ class Informix:
       os.remove( myBlobFileName )
       raise
 
+    return myJpegFileName
 
+def _test():
+  import doctest
+  doctest.testmod()
+
+if __name__ == "__main__":
+  _test()

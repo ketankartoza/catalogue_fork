@@ -144,10 +144,11 @@ class Command(BaseCommand):
           verblog('Initial query to get latest 20 rows failed - aborting!',0)
           raise
 
+        verblog(sys.path, 2)
         for myLandsatRow in myRows:
           try:
-            verblog("-----------------------------",2)
-            verblog("-----------------------------",2)
+            verblog("-----------------------------",3)
+            verblog("-----------------------------",3)
             # landsat row e.g.
             #{'hd_shift': 589505315, 'sun_elev': 41.93, 'centre_lat': -33.169998168945312, 'b_gain': '###############', 'centre_time': 21995.347222777778, 'segment_common_id': 163777, 'centre_lon': 20.430000305175781, 'localization_id': 1219164, 'fop_scene': '#', 'bg_change': '###############', 'sun_az': 52.740000000000002, 's_quality': 8995, 'sb_present': '###############', 'bslgainchange': '232323232323232323232323232323'}
             myLocalizationRow = self.informix.localization( myLandsatRow['localization_id'] )
