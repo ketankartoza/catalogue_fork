@@ -52,6 +52,11 @@ class Informix:
     self.mLastSegmentRow = None
     self.mLastAuxFileRow = None
     self.mLastFileTypeRow = None
+    
+    self.mScratchDir              = "/mnt/cataloguestorage/thumbnail_processing/0_scratch_dir"
+    self.mUnreferencedSegmentPath = "/mnt/cataloguestorage/thumbnail_processing/1_segments_unreferenced"
+    self.mReferencedSegmentPath   = "/mnt/cataloguestorage/thumbnail_processing/2_segments_referenced"
+    self.mReferencedScenePath     = "/mnt/cataloguestorage/thumbnail_processing/3_scenes_referenced"
 
     return
 
@@ -64,8 +69,29 @@ class Informix:
     print("Informix destructor called: GeoParam set to geodetic mode")
     return 
 
-  def haltOnError(self, theFlag):
-    self.mHaltOnError = theFlag
+  def scratchDir(self):
+    self.mScratchDir   
+    
+  def setScratchDir(self, thePath):
+    self.mScratchDir = thePath
+
+  def unreferencedSegmentDir(self):
+    self.mUnreferencedSegmentDir   
+    
+  def setUnreferencedSegmentDir(self, thePath):
+    self.mUnreferencedSegmentDir = thePath
+
+  def referencedSegmentDir(self):
+    self.mReferencedSegmentDir   
+    
+  def setReferencedSegmentDir(self, thePath):
+    self.mReferencedSegmentDir = thePath
+
+  def referencedSceneDir(self):
+    self.mReferencedSceneDir   
+    
+  def setReferencedSceneDir(self, thePath):
+    self.mReferencedSceneDir = thePath
 
   def runQuery(self, theQuery):
     """A helper function that allows you to run any sql statement
@@ -242,20 +268,24 @@ class Informix:
     Note: You need to hand build PIL - see install notes for details!
     >>> import os
     >>> from informix import Informix
-    >>> if os.path.exists( '/tmp/136397.jpg' ):
-    ...   os.remove('/tmp/136397.jpg')
-    ... 
-    >>> if os.path.exists( '/tmp/136397-proj.tif' ):
-    ...   os.remove('/tmp/136397-proj.tif')
-    ... 
     >>> myI = Informix()
     Informix constructor called: GeoParam set to wkt mode
+    >>> myI.setScratchDir("/tmp")
+    >>> myI.setReferencedSceneDir("/tmp")
+    >>> myI.setUnreferencedSegmentDir("/tmp")
+    >>> myI.setReferencedSegmentDir("/tmp")
+    >>> if os.path.exists( os.path.join( myI.unreferencedSegmentDir(), '136397.jpg' ) ):
+    ...   os.remove( os.path.join( myI.unreferencedSegmentDir(), '136397.jpg' ) )
+    ... 
+    >>> if os.path.exists( os.path.join( myI.referencedSegmentDir(), '136397-rect.tif' ) ):
+    ...   os.remove( os.path.join( myI.referencedSegmentDir(), '136397-rect.tif' ) )
+    ... 
     >>> myI.thumbForLocalization( 1000000 )
     Writing segment image with dimensions x: 1004, y: 17496
     Rectifying /tmp/136397.jpg
     >>> myI.thumbForLocalization( 1000000 )
     Using cached segment image
-    Using cached rectified image /tmp/136397-proj.tif 
+    Using cached rectified image /tmp/136397-rect.tif 
     """
 
     #print sys.path.append
@@ -275,12 +305,18 @@ class Informix:
     Note: You need to hand build PIL - see install notes for details!
     >>> from informix import Informix
     >>> import os
-    >>> if os.path.exists( '/tmp/136397.jpg' ):
-    ...   os.remove('/tmp/136397.jpg')
-    >>> if os.path.exists( '/tmp/136397-proj.tif' ):
-    ...   os.remove('/tmp/136397-proj.tif')
     >>> myI = Informix()
     Informix constructor called: GeoParam set to wkt mode
+    >>> myI.setScratchDir("/tmp")
+    >>> myI.setReferencedSceneDir("/tmp")
+    >>> myI.setUnreferencedSegmentDir("/tmp")
+    >>> myI.setReferencedSegmentDir("/tmp")
+    >>> if os.path.exists( os.path.join( myI.unreferencedSegmentDir(), '136397.jpg' ) ):
+    ...   os.remove( os.path.join( myI.unreferencedSegmentDir(), '136397.jpg' ) )
+    ... 
+    >>> if os.path.exists( os.path.join( myI.referencedSegmentDir(), '136397-rect.tif' ) ):
+    ...   os.remove( os.path.join( myI.referencedSegmentDir(), '136397-rect.tif' ) )
+    ... 
     >>> myLocalizationRow = myI.localization( 1000000 )
     >>> myFrameRow = myI.frameForLocalization( myLocalizationRow['id'] )  
     >>> mySegmentRow = myI.segmentForFrame( myFrameRow['segment_id'] )
@@ -556,12 +592,12 @@ class Informix:
     image such that its corners correspond to the corners of the geometry.
     Note it does not use simply the bounding box but rather the 
     TL, TR, BL and BR extremes of the supplied geometry.
-    The rectified image base name will be suffixed with '-proj.tif' and returned
+    The rectified image base name will be suffixed with '-rect.tif' and returned
     as a string on success. Failure will raise an exception.
     """
     myFileBase = os.path.split( theSegmentJpeg )[1]
     myFileBase = os.path.splitext( myFileBase )[0]
-    myOutputPath = os.path.join( theOutputPath, myFileBase + "-proj.tif" )
+    myOutputPath = os.path.join( theOutputPath, myFileBase + "-rect.tif" )
     if os.path.exists( myOutputPath ):
       print "Using cached rectified image %s " % myOutputPath
       return myOutputPath
