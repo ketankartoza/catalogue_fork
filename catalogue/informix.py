@@ -208,6 +208,7 @@ class Informix:
 
   def thumbForLocalization(self, theLocalizationId):
     """Given a localization id, return its georeferenced thumbnail as a jpg
+    Note: You need to hand build PIL - see install notes for details!
     >>> from catalogue.informix import Informix
     >>> myI = Informix()
     Constructor called
@@ -216,7 +217,7 @@ class Informix:
     >>>
     """
 
-    print sys.path.append
+    #print sys.path.append
     myLocalizationRow = self.localization( theLocalizationId )
     myFrameRow = self.frameForLocalization( theLocalizationId )  
     mySegmentRow = self.segmentForFrame( myFrameRow['segment_id'] )
@@ -229,7 +230,9 @@ class Informix:
 
   def referencedThumb(self, theLocalizationRow, theFrameRow, theSegmentRow, theAuxFileRow, theFileTypeRow ):
     """Given complete rows of loc, frame, segment, auxfile and file type, return a
-    jpg thumbnail which is georeferenced."""
+    jpg thumbnail which is georeferenced.
+    Note: You need to hand build PIL - see install notes for details!
+    """
     mySegmentId = theFrameRow['segment_id']
     myBlob = theAuxFileRow['file']
     try:
@@ -284,7 +287,8 @@ class Informix:
 
   def createGroupFile(self, theFileList, theOutputFile ):
     """This function will merge 1 or more images into a single file.
-       The images will be pasted into incremental positions down the file."""
+       The images will be pasted into incremental positions down the file.
+       Note: You need to hand build PIL - see install notes for details!"""
     #print theFileList
 
     if len( theFileList ) < 1:
@@ -391,7 +395,7 @@ class Informix:
     #print 'Writing %s' % myJpegFileName
     try:
       self.createGroupFile( myGroupFileArray, myJpegFileName )
-      #self.removeBlocks( myGroupFileArray )
+      self.removeBlocks( myGroupFileArray )
       os.remove( myBlobFileName )
     except IOError as e:
       if e.errno == 28: #out of space exception
