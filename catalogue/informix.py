@@ -238,20 +238,22 @@ class Informix:
   def thumbForLocalization(self, theLocalizationId):
     """Given a localization id, return its georeferenced thumbnail as a jpg
     Note: You need to hand build PIL - see install notes for details!
-    >>> from informix import Informix
     >>> import os
+    >>> from informix import Informix
     >>> if os.path.exists( '/tmp/136397.jpg' ):
     ...   os.remove('/tmp/136397.jpg')
+    ... 
+    >>> if os.path.exists( '/tmp/136397-proj.tif' ):
+    ...   os.remove('/tmp/136397-proj.tif')
+    ... 
     >>> myI = Informix()
     Informix constructor called: GeoParam set to wkt mode
     >>> myI.thumbForLocalization( 1000000 )
     Writing segment image with dimensions x: 1004, y: 17496
     Rectifying /tmp/136397.jpg
-    >>> #second run should use cached data
     >>> myI.thumbForLocalization( 1000000 )
     Using cached segment image
-    Using cached rectified image /tmp/136397-proj.tif
-    >>>
+    Using cached rectified image /tmp/136397-proj.tif 
     """
 
     #print sys.path.append
@@ -273,6 +275,8 @@ class Informix:
     >>> import os
     >>> if os.path.exists( '/tmp/136397.jpg' ):
     ...   os.remove('/tmp/136397.jpg')
+    >>> if os.path.exists( '/tmp/136397-proj.tif' ):
+    ...   os.remove('/tmp/136397-proj.tif')
     >>> myI = Informix()
     Informix constructor called: GeoParam set to wkt mode
     >>> myLocalizationRow = myI.localization( 1000000 )
@@ -590,13 +594,13 @@ class Informix:
             myCandidates.append( myCoord )
     except:
       raise
-    print "Candidates Before: %s %s " % (len(myCandidates), str( myCandidates ) )
+    #print "Candidates Before: %s %s " % (len(myCandidates), str( myCandidates ) )
     myCentroid = theGeometry.centroid
     try:
       myCandidates = self.sortCandidates( myCandidates, myExtents, myCentroid )
     except:
       raise
-    print "Candidates After: %s %s " % (len(myCandidates), str( myCandidates ) )
+    #print "Candidates After: %s %s " % (len(myCandidates), str( myCandidates ) )
     myTL = myCandidates[0]
     myTR = myCandidates[1]
     myBR = myCandidates[2]
@@ -609,7 +613,7 @@ class Informix:
           myImageYDim, myBL[0],myBL[1], \
           theSegmentJpeg, \
           myOutputPath )
-    print myString
+    #print myString
     os.system( myString )
     return myOutputPath
 

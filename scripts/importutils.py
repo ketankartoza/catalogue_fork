@@ -458,7 +458,6 @@ def rectifyImage( theInputPath, theOutputPath, theAuxFile ):
     return "False"
   #print "Candidates Before: %s %s " % (len(myCandidates), str( myCandidates ) )
   myCentroid = myGeometry.centroid
-  myCandidates = None
   try:
     myCandidates = sortCandidates( myCandidates, myExtents, myCentroid )
   except:
