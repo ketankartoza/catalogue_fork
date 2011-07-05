@@ -1,4 +1,4 @@
-== Suggested Items for fugure development ==
+== Suggested Items for future development ==
 
 With this work package we have added a great amount of infrastructure to the
 catalogue in order to allow it to store a variety of different types of
@@ -31,6 +31,7 @@ shows that it is a composite product and that has sub products. Clicking an
 icon will expand the product into a tree view containing 1 or more heirachies
 of nested products, each with a thumb, metadata link, add to basket icon etc.
 
+Option when ordering e.g. L4 to get its derived products too.
 
 === Spatial search options ===
 
