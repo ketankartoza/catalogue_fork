@@ -133,6 +133,48 @@ class Informix:
     except:
       raise
 
+  def cleanupScratchDir( self ):
+    """This function removes temporary jpg scratch images"""
+    for myFile in glob.glob(os.path.join( self.mScratchDir, '*.jpg')):
+      try:
+        os.remove( myFile )
+      except:
+        raise ClipError("could not delete files - check permissions and retry")
+    for myFile in glob.glob(os.path.join( self.mScratchDir, '*.blob')):
+      try:
+        os.remove( myFile )
+      except:
+        raise ClipError("could not delete files - check permissions and retry")
+
+  def cleanupUnreferencedSegmentsDir( self ):
+    """This function removes temporary unreferenced segment images"""
+    for myFile in glob.glob(os.path.join( self.mUnreferencedSegmentDir, '*.jpg')):
+      try:
+        os.remove( myFile )
+      except:
+        raise ClipError("could not delete files - check permissions and retry")
+
+  def cleanupReferencedSegmentsDir( self ):
+    """This function removes temporary jpg referenced segment images"""
+    for myFile in glob.glob(os.path.join( self.mReferencedSegmentDir, '*.jpg')):
+      try:
+        os.remove( myFile )
+      except:
+        raise ClipError("could not delete files - check permissions and retry")
+
+  def cleanup( self ):
+    """Clear the scratch, unreferenced segment and referenced seqment dirs and
+       flush any cached rows. Usually you will only want to call this if 
+       something went wrong and you want to clean up the working state."""
+    self.cleanupReferencedSegmentsDir( )
+    self.cleanupUnreferencedSegmentsDir( )
+    self.cleanupScratchDir( )
+    self.mLastFrameRow = None
+    self.mLastLocalizationRow = None
+    self.mLastSegmentRow = None
+    self.mLastAuxFileRow = None
+    self.mLastFileTypeRow = None
+
   def runQuery(self, theQuery):
     """A helper function that allows you to run any sql statement
     against the informix backend.
@@ -304,7 +346,8 @@ class Informix:
 
 
   def thumbForLocalization(self, theLocalizationId):
-    """Given a localization id, return its georeferenced thumbnail as a jpg
+    """Given a localization id, return its georeferenced thumbnail as a jpg path
+    which is georeferenced, and a path to its world file.
     Note: You need to hand build PIL - see install notes for details!
     >>> import os
     >>> from informix import Informix
@@ -337,11 +380,12 @@ class Informix:
     try:
       return self.referencedThumb( myLocalizationRow, myFrameRow, mySegmentRow, myAuxFileRow, myFileTypeRow )
     except:
+      cleanup()
       raise
 
   def referencedThumb(self, theLocalizationRow, theFrameRow, theSegmentRow, theAuxFileRow, theFileTypeRow ):
-    """Given complete rows of loc, frame, segment, auxfile and file type, return a
-    jpg thumbnail which is georeferenced.
+    """Given complete rows of loc, frame, segment, auxfile and file type, return a path to a
+    jpg thumbnail which is georeferenced, and a path to its world file.
     Note: You need to hand build PIL - see install notes for details!
     >>> from informix import Informix
     >>> import os
@@ -379,8 +423,9 @@ class Informix:
       #print myLocalizationWkt
       myLocalizationGeometry = GEOSGeometry( myLocalizationWkt )
       myDestinationImage = str(theLocalizationRow['id']) + ".jpg"
-      myJpg, myWld = self.clipImage( mySegmentFile, myDestinationImage , mySegmentGeometry, myLocalizationGeometry )
+      return self.clipImage( mySegmentFile, myDestinationImage , mySegmentGeometry, myLocalizationGeometry )
     except:
+      cleanup()
       raise
 
   ########################################################

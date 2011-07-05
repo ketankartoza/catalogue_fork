@@ -321,7 +321,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     so the thumbs need to be prefetched from outside the
     django context using e.g.:
     source ../python/bin/activate
-    python acs-landsat-import.py
+    python getAcsLandsatThumbs.py
     Typically the above should run on a cron job."""
     
     logging.info("Checking if there is an acs thumb for : %s " + self.original_product_id)
