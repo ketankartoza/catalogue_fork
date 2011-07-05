@@ -352,6 +352,7 @@ def showProductByOriginalId(theRequest, theOriginalProductId):
   myProducts = GenericProduct.objects.filter(original_product_id=theOriginalProductId)
   if len( myProducts ) > 0:
     myProduct = myProducts[0]
+    myProduct.checkForAcsThumb()
     myObject, myType = myProduct.getConcreteProduct()
     myMessages.append("Product found")
   else:

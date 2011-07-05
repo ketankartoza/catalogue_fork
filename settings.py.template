@@ -12,6 +12,10 @@ MEDIA_ROOT = os.path.join(ROOT_PROJECT_FOLDER,'media')
 EXTERNAL_SITE_URL = 'http://catalogue.sac.co.za'
 # Added by Tim - url that holds directories of thumbnails...
 THUMBS_ROOT = os.path.join(ROOT_PROJECT_FOLDER,'thumbs_out')
+# Dir where image rectified thumbs from acs are placed see catalogue/informix.py
+# This var is used by catalogue/models/products.py
+# Note products in that folder are named after their original_product_id
+ACS_THUMBS_ROOT = "/mnt/cataloguestorage/thumbnail_processing/3_scenes_referenced"
 # And this is the dir that holds imagery
 IMAGERY_ROOT = os.path.join(ROOT_PROJECT_FOLDER,'imagery_mastercopies')
 # And this is the public visible url that imagery should be accessed from (include trailing /)

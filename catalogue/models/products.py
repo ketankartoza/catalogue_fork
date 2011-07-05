@@ -338,15 +338,16 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     >>> myP.checkForAcsThumb()
     """
     
-    logging.info("Checking if there is an acs thumb for : %s " + self.original_product_id)
+    logging.info("Checking if there is an acs thumb for : %s " % self.original_product_id)
     myImageFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + ".jpg" )
     #check if there is perhaps an acs catalogue imported, referenced thumb available. If there is use that.
     myAcsJpgFile = os.path.join( settings.ACS_THUMBS_ROOT, self.original_product_id + ".jpg" )
     myAcsWldFile = os.path.join( settings.ACS_THUMBS_ROOT, self.original_product_id + ".wld" )
     # we will use the same file for reffed and unreffed
     myReffedJpgFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.jpg" )
-    logging.info( myAcsJpgFile )
+    logging.info( "Looking for thumb : %s" % myImageFile )
     if os.path.exists( myAcsJpgFile ):
+      logging.info( "Found: %s" % myAcsJpgFile )
       try:
         if not os.path.exists( os.path.dirname( myImageFile ) ):
           os.makedirs( os.path.dirname( myImageFile ) )
