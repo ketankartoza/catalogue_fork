@@ -43,6 +43,7 @@ urlpatterns = patterns('',
     (r'^modifysearch/(?P<theGuid>[a-h0-9\-]{36})/$', modifySearch ),
     # match a product id - its not needed to give teh full id, just enough to be semi unique
     (r'^showProduct/(?P<theProductId>[A-Za-z0-9\_\-]{38,58})/$', showProduct ),
+    (r'^showProductByOriginalId/(?P<theOriginalProductId>[A-Za-z0-9\_\-]{0,58})/$', showProductByOriginalId ),
     (r'^clip/$', clip),
     (r'^myclips/$', clipHistory),
     (r'^mysearches/$', searchHistory),

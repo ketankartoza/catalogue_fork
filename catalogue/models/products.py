@@ -26,10 +26,20 @@ from django.contrib.gis.geos import Point
 import osgeo.gdal
 from osgeo.gdalconst import *
 import sys 
+import shutil
 
 # Read from settings
 ACS_CATALOGUE_SCENES_PATH = getattr(settings, 'ACS_CATALOGUE_SCENES_PATH', "/mnt/cataloguestorage/scenes_out_projected_sorted/")
 CATALOGUE_ISO_METADATA_XML_TEMPLATE = getattr(settings, 'CATALOGUE_ISO_METADATA_XML_TEMPLATE')
+
+def exceptionToString(e):
+  """Convert an exception object into a string,
+  complete with stack trace info, suitable for display.
+  """
+  import traceback
+  info = "".join(traceback.format_tb(sys.exc_info()[2]))
+  return  str(e) + "\n\n" + info 
+
 
 ##################################################################
 # These first functions are for thumb registration
@@ -241,7 +251,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
 
     # Hack to automatically fetch spot or other non local thumbs from their catalogue
     # and store them locally
-    if self.remote_thumbnail_url and not os.path.exists( myImageFile ):
+    if self.remote_thumbnail_url and not os.path.exists( myFileName ):
       if not os.path.isdir( myThumbDir  ):
         logging.debug("Creating dir: %s" % myThumbDir)
         try:
@@ -260,7 +270,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
       self.remote_thumbnail_url=""
       self.save()
     # spot hack ends
-    else if not os.path.exists( myImageFile ):
+    elif not os.path.exists( myFileName ):
       self.checkForAcsThumb()
       
     # Specify background colour, should be the same as div background
@@ -322,23 +332,35 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     django context using e.g.:
     source ../python/bin/activate
     python getAcsLandsatThumbs.py
-    Typically the above should run on a cron job."""
+    Typically the above should run on a cron job.
+    >>> from catalogue.models import *
+    >>> myP = GenericProduct.objects.get(original_product_id=9861)
+    >>> myP.checkForAcsThumb()
+    """
     
     logging.info("Checking if there is an acs thumb for : %s " + self.original_product_id)
-    myImageFile = os.path.join( self.thumbnailDirectory(), self.product_id + ".jpg" )
+    myImageFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + ".jpg" )
     #check if there is perhaps an acs catalogue imported, referenced thumb available. If there is use that.
     myAcsJpgFile = os.path.join( settings.ACS_THUMBS_ROOT, self.original_product_id + ".jpg" )
     myAcsWldFile = os.path.join( settings.ACS_THUMBS_ROOT, self.original_product_id + ".wld" )
     # we will use the same file for reffed and unreffed
     myReffedJpgFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.jpg" )
+    logging.info( myAcsJpgFile )
     if os.path.exists( myAcsJpgFile ):
       try:
-        os.rename( myAcsJpgFile, myImageFile )
+        if not os.path.exists( os.path.dirname( myImageFile ) ):
+          os.makedirs( os.path.dirname( myImageFile ) )
+        #os.rename fails with [Errno 18] Invalid cross-device link so using copy, remove
+        shutil.move( myAcsJpgFile, myImageFile )
         os.symlink( myImageFile, myReffedJpgFile )
-        os.rename( myAcsWldFile, myJpgFile.replace("jpg", "wld" ) )
+        shutil.move( myAcsWldFile, myJpgFile.replace("jpg", "wld" ) )
         os.remove( myAcsJpgFile + ".aux.xml" )
-      except:
+      except Exception as e:
+        logging.error( "Error in checkthumb" )
+        logging.error( exceptionToString(e) )
         pass
+    else:
+      logging.info("No acs thumb found")
 
   def dropShadow(
     theImage,
@@ -929,7 +951,13 @@ class GenericSensorProduct( GenericImageryProduct ):
     self.row_offset = int(parts[7])
     d = parts[8]
     t = parts[9]
-    self.product_acquisition_start = datetime.datetime(int('20'+d[:2]), int(d[2:4]), int(d[-2:]), int(t[:2]), int(t[2:4]), int(t[-2:]))
+    #Account for millenium split
+    myYear = 0
+    if int(d[:2]) < 70:
+      myYear = int('20' + d[:2])
+    else:
+      myYear = int('19' + d[:2])
+    self.product_acquisition_start = datetime.datetime(myYear, int(d[2:4]), int(d[-2:]), int(t[:2]), int(t[2:4]), int(t[-2:]))
 
   def toHtml( self, theImageIsLocal=False ):
     """Return an html snippet that describes the properties of this product. If

@@ -340,6 +340,27 @@ def showProduct(theRequest, theProductId):
         'myProduct' : myObject,
         })
 
+@login_required
+#renderWithContext is explained in renderWith.py
+@renderWithContext('productView.html')
+def showProductByOriginalId(theRequest, theOriginalProductId):
+  """Renders a search results page including the map
+  and all attendant html content - for a single product only
+  identified by its sac product ID"""
+  myProduct = None
+  myMessages = []
+  myProducts = GenericProduct.objects.filter(original_product_id=theOriginalProductId)
+  if len( myProducts ) > 0:
+    myProduct = myProducts[0]
+    myObject, myType = myProduct.getConcreteProduct()
+    myMessages.append("Product found")
+  else:
+    myMessages.append("No matching product found")
+  return ({
+        'messages' : myMessages,
+        'myProduct' : myObject,
+        })
+
 
 @login_required
 def showPreview(theRequest, theId, theSize):
