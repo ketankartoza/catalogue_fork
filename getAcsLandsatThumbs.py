@@ -20,6 +20,8 @@ for myRow in myRows:
     myOkCount+=1
   except:
     myErrorCount+=1
-    raise
+    if myErrorCount > 10:
+      print "Maximum number of errors encountered, aborting..."
+      raise
 myI.cleanup()
 print "Completed: %s imports ok, %s errors" % (myOkCount, myErrorCount)

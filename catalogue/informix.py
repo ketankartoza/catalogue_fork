@@ -363,10 +363,10 @@ class Informix:
     >>> if os.path.exists( os.path.join( myI.referencedSegmentDir(), '136397-rect.tif' ) ):
     ...   os.remove( os.path.join( myI.referencedSegmentDir(), '136397-rect.tif' ) )
     ... 
-    >>> myI.thumbForLocalization( 1000000 )
+    >>> myImage, myWorld = myI.thumbForLocalization( 1000000 )
     Writing segment image with dimensions x: 1004, y: 17496
     Rectifying /tmp/136397.jpg
-    >>> myI.thumbForLocalization( 1000000 )
+    >>> myImage, myWorld = myI.thumbForLocalization( 1000000 )
     Using cached segment image
     Using cached rectified image /tmp/136397-rect.tif 
     """
@@ -380,7 +380,7 @@ class Informix:
     try:
       return self.referencedThumb( myLocalizationRow, myFrameRow, mySegmentRow, myAuxFileRow, myFileTypeRow )
     except:
-      cleanup()
+      self.cleanup()
       raise
 
   def referencedThumb(self, theLocalizationRow, theFrameRow, theSegmentRow, theAuxFileRow, theFileTypeRow ):
@@ -406,7 +406,7 @@ class Informix:
     >>> mySegmentRow = myI.segmentForFrame( myFrameRow['segment_id'] )
     >>> myAuxFileRow = myI.auxfileForSegment( myFrameRow['segment_id'] )
     >>> myFileTypeRow = myI.fileTypeForAuxFile( myAuxFileRow['file_type'] )
-    >>> myImage = myI.referencedThumb( myLocalizationRow, myFrameRow, mySegmentRow, myAuxFileRow, myFileTypeRow )
+    >>> myImage, myWorld = myI.referencedThumb( myLocalizationRow, myFrameRow, mySegmentRow, myAuxFileRow, myFileTypeRow )
     Writing segment image with dimensions x: 1004, y: 17496
     Rectifying /tmp/136397.jpg
     """
@@ -425,7 +425,7 @@ class Informix:
       myDestinationImage = str(theLocalizationRow['id']) + ".jpg"
       return self.clipImage( mySegmentFile, myDestinationImage , mySegmentGeometry, myLocalizationGeometry )
     except:
-      cleanup()
+      self.cleanup()
       raise
 
   ########################################################
@@ -787,8 +787,7 @@ class Informix:
     # We do this as a second step as gdal does not support direct creation of a jpg from gdalwarp
     myOutJpg = os.path.join( self.referencedSceneDir(), theDestinationImage )
     myOutWld = os.path.join( self.referencedSceneDir(), myFileBase + ".wld" )
-    myString = "gdal_translate -of JPEG -co WORLDFILE=YES %s %s" % \
-        ( myTiffThumbnail, myOutJpg )
+    myString = "gdal_translate -of JPEG -co WORLDFILE=YES %s %s" % ( myTiffThumbnail, myOutJpg )
     os.system( myString )
     # Clean away the tiff
     os.remove( myTiffThumbnail )
