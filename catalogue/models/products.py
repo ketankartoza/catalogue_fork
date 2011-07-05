@@ -241,7 +241,7 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
 
     # Hack to automatically fetch spot or other non local thumbs from their catalogue
     # and store them locally
-    if self.remote_thumbnail_url:
+    if self.remote_thumbnail_url and not os.path.exists( myImageFile ):
       if not os.path.isdir( myThumbDir  ):
         logging.debug("Creating dir: %s" % myThumbDir)
         try:
@@ -259,8 +259,10 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
       myWriter.close()
       self.remote_thumbnail_url=""
       self.save()
-    # hack ends
-
+    # spot hack ends
+    else if not os.path.exists( myImageFile ):
+      self.checkForAcsThumb()
+      
     # Specify background colour, should be the same as div background
     myBackgroundColour = ( 255,255,255 )
     myAngle = 0
@@ -310,6 +312,33 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     logging.debug( "Caching image : %s" % myCacheImage )
     myBackground.save( myCacheImage )
     return ( myBackground )
+
+  def checkForAcsThumb(self):
+    """Hack to use ACS extracted thumb if it hasnt been filed yet
+    ideally we should be able to use the catalogue.informix class
+    to fetch it directly from acs on demand but there is a bug
+    in PIL that cuases the images extracted from acs to be corrupt
+    so the thumbs need to be prefetched from outside the
+    django context using e.g.:
+    source ../python/bin/activate
+    python acs-landsat-import.py
+    Typically the above should run on a cron job."""
+    
+    logging.info("Checking if there is an acs thumb for : %s " + self.original_product_id)
+    myImageFile = os.path.join( self.thumbnailDirectory(), self.product_id + ".jpg" )
+    #check if there is perhaps an acs catalogue imported, referenced thumb available. If there is use that.
+    myAcsJpgFile = os.path.join( settings.ACS_THUMBS_ROOT, self.original_product_id + ".jpg" )
+    myAcsWldFile = os.path.join( settings.ACS_THUMBS_ROOT, self.original_product_id + ".wld" )
+    # we will use the same file for reffed and unreffed
+    myReffedJpgFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.jpg" )
+    if os.path.exists( myAcsJpgFile ):
+      try:
+        os.rename( myAcsJpgFile, myImageFile )
+        os.symlink( myImageFile, myReffedJpgFile )
+        os.rename( myAcsWldFile, myJpgFile.replace("jpg", "wld" ) )
+        os.remove( myAcsJpgFile + ".aux.xml" )
+      except:
+        pass
 
   def dropShadow(
     theImage,
@@ -365,6 +394,8 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     myTempTifFile = os.path.join( "/tmp/",self.product_id + ".tif" )
     myTempReffedTifFile = os.path.join( "/tmp/",self.product_id + "reffed.tif" )
     myJpgFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.jpg" )
+    #check if there is perhaps an acs catalogue imported, referenced thumb available. If there is use that.
+    self.checkForAcsThumb()
     myLogFile = file(os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.log" ), "w")
     if os.path.exists( myJpgFile ) and not theForceFlag:
       return myJpgFile
@@ -698,7 +729,7 @@ class GenericSensorProduct( GenericImageryProduct ):
 
 
   def _thumbnailDirectory( self ):
-    """Returns the path (relative to whatever parent dir it is in) for the
+    """Returns the path (relative to whatever parent dir it is in defined by THUMBS_ROOT) for the
       thumb for this file following the scheme <Mission>/<YYYY>/<MM>/<DD>/
       The thumb itself will exist under this dir as <product_id>.jpg
       @note the filename itself is excluded, only the directory path is returned"""
