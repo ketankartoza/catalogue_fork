@@ -41,5 +41,6 @@ python manage.py runscript -s -v 2 --pythonpath=./sql/migrations 301-sensors-dic
 psql $DB -f sql/migrations/302-sensors-dictionaries-refactoring-after.sql
 python manage.py runscript -s -v 2 --pythonpath=./sql/migrations 303-sensors-dictionaries-add-spot-modes.py
 python manage.py runscript -v 2 --pythonpath=./sql/migrations post_migration.py
+psql $DB -f sql/migrations/304-additional-indexes.sql
 # Next adds teh catalogue.ProductLink model
 python manage.py syncdb
