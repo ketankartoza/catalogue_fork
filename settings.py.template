@@ -85,6 +85,7 @@ DATABASES = {
          'PASSWORD' : 'xxxxxx',         # Not used with sqlite2.
          'HOST' : '',             # Set to empty string for localhost. Not used with sqlite3.
          'PORT' : '5432',             # Set to empty string for default. Not used with sqlite3.
+         'TEST_NAME' : 'sac-unittest',            # Name to be used for unit testing db
          },
         'acs': {  #legacy acs port to django
          'ENGINE' : 'postgresql_psycopg2', # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.

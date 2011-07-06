@@ -177,7 +177,8 @@ Next manually install PIL as shown below (**mandatory**).
 ==== PIL Issues ===
 
 You need to manually build PIL into your virtual environment and you should
-avoid installing python-imaging (the debian pil package) on your system.
+avoid using the installed python-imaging (the debian pil package) on your
+system that is needed by tilecache.
 
 If you get an error like this when trying to view jpg thumbs:
 

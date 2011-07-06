@@ -9,8 +9,8 @@ class BoxStartNode(template.Node):
     self.div_classes=div_classes
     if self.div_classes:
       self.div_classes = self.div_classes.replace("\"","").replace("'","")
-    logging.info("BoxStartNode init - self.div_id : %s" % self.div_id)
-    logging.info("BoxStartNode init - self.div_classes : %s" % self.div_classes)
+    #logging.info("BoxStartNode init - self.div_id : %s" % self.div_id)
+    #logging.info("BoxStartNode init - self.div_classes : %s" % self.div_classes)
   def render(self, context):
     myClasses = "ui-helper-reset ui-widget-content ui-state-highlight ui-corner-all"
     if self.div_classes:
