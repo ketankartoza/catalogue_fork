@@ -27,6 +27,9 @@ body {
     background: url(/media/images/ribbon.png) no-repeat left top;
   }
 
+#avatarimg { 
+  padding-right: 5px;
+}
 
 #menu {
     background: #EEEEEE;
