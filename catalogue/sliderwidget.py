@@ -21,14 +21,7 @@ class SliderWidget(forms.TextInput):
     # Now we write our widget into a string
     myId = attrs['id']
     myName = attrs['name']
-    myResult = """<div class="slider-panel" id="%sSliderPanel">
-                    <div  class="slider-reduce-label" id="%sReduceLabel"></div>
-                    <div id="%sSliderHandle"></div>
-                    <div id="%sSlider"></div>
-                    <div class="slider-bubble" id="%sSliderBubble"></div>
-                  </div>
-                  <div class="slider-increase-label" id="%sIncreaseLabel"></div>
-                  <input name="%s" type="hidden" id="%s" value="%s"></input>""" % ( myId, myId, myId, myId, myId, myId, myName, myId, value )
+    myResult = """<div id="%sSlider"></div> <input name="%s" type="text" id="%s" value="%s"></input>""" % ( myId, myName, myId, value )
 
     # Mark the widget html as safe - e.g. by escaping any special chars etc
     # and then return it
