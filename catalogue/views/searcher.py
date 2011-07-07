@@ -12,6 +12,8 @@ from django.conf import settings
 import logging
 from helpers import *
 
+DEFAULT_EXTENT='(-61.773122863038, -74.531249997024, 128.32031249488, 70.612614236677)'
+
 class Searcher:
   """
   This is a class that manages searches in the catalogue.
@@ -28,7 +30,7 @@ class Searcher:
     self.mSearchRecords = []
     self.mQuerySet = None
     self.mSearchPage = None
-    self.mExtent = '(-180.0,-90.0, 180.0, 90.0)'
+    self.mExtent = DEFAULT_EXTENT
     self.mPageNo = 1
     self.mSqlString = ""
     self.mLayerDefinitions = []
@@ -88,7 +90,7 @@ class Searcher:
     # -----------------------------------------------------
     # First fallback extent, will be overwritten by search geom extents if
     # there is a search geom
-    self.mExtent = '(-180.0,-90.0, 180.0, 90.0)'
+    self.mExtent = DEFAULT_EXTENT
     if self.mSearch.geometry:
       # Add the geometry of the search to the layers list for openlayers to render
       self.mLayerDefinitions.append('''
@@ -275,7 +277,7 @@ class Searcher:
     self.mMessages = []
     self.mThumbnails = []
     self.mSearchRecords = []
-    self.mExtent = '(-180.0,-90.0, 180.0, 90.0)'
+    self.mExtent = DEFAULT_EXTENT
     self.mRequest = theRequest
     self.mRecordCount = 0
 
