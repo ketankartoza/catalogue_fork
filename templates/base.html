@@ -89,7 +89,7 @@
       <hr/>
       <div id="footer" class="span-24">
         <div id="dst-credits" class="span-7 append-1 prepend-1">
-          {% box_start "box-" %}
+          {% box_start "box-sponsor" %}
           {# left css class defined by blueprint css #}
           <img src="/media/images/dst_logo_small.png" class="left" />This catalogue was funded by the <a
             href="http://www.dst.gov.za/">Department of Science and
@@ -97,7 +97,7 @@
           {% box_end %}
         </div>
         <div id="user-box" class="span-6 append-1">
-          {% box_start "box-" %}
+          {% box_start "box-user" %}
           {% if user.is_authenticated %}
           {% load avatars %}
           {# left css class defined by blueprint css #}
@@ -107,11 +107,13 @@
           {% box_end %}
         </div>{# end of footer #}
         <div id="legal" class="span-7 append-1 last">
-          {% box_start "box-" %}
+          {% box_start "box-copyright" %}
           Website &copy; 2008 CSIR, Satellite Applications Centre. &copy; 2010 SANSA, Earth Observation. All Rights Reserved. This catalogue was developed by <a href="http://linfiniti.com">Linfiniti Consulting CC.</a>
           {% box_end %}
         </div>
       </div>
     </div>{# end of container #}
+    <div id="recordtooltip">&nbsp;</div> {# used to display record tooltips #}
+    <div id="maptooltip">&nbsp;</div> {# used to display map tooltips #}
   </body>
 </html>

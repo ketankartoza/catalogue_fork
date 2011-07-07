@@ -185,8 +185,8 @@ function setupEditingPanel(theLayer)
 {
   var myDrawingControl = new OpenLayers.Control.DrawFeature(theLayer,
       OpenLayers.Handler.Polygon, {
-	  'displayClass': 'olControlDrawFeaturePolygon',
-	  'title': '<b>Capture polygon</b> left click to add points, double click to finish capturing'
+    'displayClass': 'olControlDrawFeaturePolygon',
+    'title': '<b>Capture polygon</b> left click to add points, double click to finish capturing'
       });
   var myModifyFeatureControl = new OpenLayers.Control.ModifyFeature(theLayer, {
       'displayClass': 'olControlModifyFeature',
@@ -291,7 +291,6 @@ function layerRemoved()
   //See: http://openlayers.org/pipermail/users/2006-October/000064.html
   myLayer.mergeNewParams({'version':Math.random()});
   myLayer.redraw();
-  $(".working").toggle('slide');
   return false;
 }
 function removeFromCart(theId, theObject)
@@ -299,20 +298,20 @@ function removeFromCart(theId, theObject)
   //check if this product has delivery details form
   var myOrderForm_refs = $('#add_form #id_ref_id');
     if (myOrderForm_refs.length >0){
-	var current_refs=myOrderForm_refs.val();
-	//check if current_refs are empty, and convert to array
-	if (current_refs.length){
-	    current_refs=current_refs.split(',');
-	} else {
-	    current_refs=[];
-	}
-	//get removed ref_id
-	var ref_id=theObject.parent().parent().find('a.show_form').attr('ref_id')
-	var index = current_refs.indexOf(ref_id);
-	if (index>-1){
-	    current_refs.splice(index,1);
-	    myOrderForm_refs.val(current_refs.join(','));
-	}
+  var current_refs=myOrderForm_refs.val();
+  //check if current_refs are empty, and convert to array
+  if (current_refs.length){
+      current_refs=current_refs.split(',');
+  } else {
+      current_refs=[];
+  }
+  //get removed ref_id
+  var ref_id=theObject.parent().parent().find('a.show_form').attr('ref_id')
+  var index = current_refs.indexOf(ref_id);
+  if (index>-1){
+      current_refs.splice(index,1);
+      myOrderForm_refs.val(current_refs.join(','));
+  }
     }
   $.get("/removefromcart/" + theId + "/?xhr","",layerRemoved);
   theObject.parent().parent().remove();
@@ -324,19 +323,19 @@ function removeFromCart(theId, theObject)
     //second clause above to prevent this action when minicart is being interacted with
     window.location.replace("/emptyCartHelp/");
   }
+  unblock();
   return false;
 }
 function removeFromMiniCart(theId, theObject)
 {
   //theObject is the remove icon - we use it to find its parent row and remove that
-  $(".working").html('<p>Removing, please wait...<img src="/media/images/ajax-loader.gif"></p>');
-  $(".working").slideDown('slow');
+  block();
   removeFromCart( theId, theObject );
 }
 function showCart()
 {
   $("#cart").load("/showcartcontents/","", zebraTables);
-  $(".working").slideUp('slow');
+  unblock();
 }
 
 function getElement( id )
@@ -391,7 +390,7 @@ function loadPage( theNumber, theSearchGuid )
 {
   block();
   // Show a wait image before we hit our ajax call
-  $("#results").parent().parent().load("/searchpage/" + theSearchGuid + "/?page=" + theNumber,"",revealTable);
+  $("#page").parent().parent().load("/searchpage/" + theSearchGuid + "/?page=" + theNumber,"",revealTable);
 }
 
 function resizeTable()
@@ -413,8 +412,7 @@ function resizeTable()
 // see http://trac.openlayers.org/wiki/GetFeatureInfo
 function showFeatureInfo(event)
 {
-  $(".working").html('<p>Adding, please wait...<img src="/media/images/ajax-loader.gif"></p>');
-  $(".working").slideDown('slow');
+  block();
   myMousePos = mMap.getLonLatFromPixel(event.xy);
   myBoundingBox = mMap.getExtent().toBBOX();
   myPixelX = event.xy.x;
@@ -429,7 +427,7 @@ function showFeatureInfo(event)
   $("#mapquery").html("<p><input type=button id='hidemapquery' value='Hide'></p>" + data);
   });
   Event.stop(event);
-  $(".working").slideUp('slow');
+  unblock();
 }
 
 function setHTML(response)
@@ -521,13 +519,13 @@ function setupBaseMap()
 
   mMap.addControl(myNavigationControl);
     var myHistoryControl = new OpenLayers.Control.NavigationHistory({
-	previousOptions: {
-	    title : "<b>Previous view</b> quickly jump to the prevoius map view."
-	},
-	nextOptions: {
-	    title : "<b>Next view</b> quickly jump to the next map view, works only with prevoius view."
-	}
-    });
+  previousOptions: {
+      title : "<b>Previous view</b> quickly jump to the prevoius map view."
+  },
+  nextOptions: {
+      title : "<b>Next view</b> quickly jump to the next map view, works only with prevoius view."
+    }
+  });
   mMap.addControl(myHistoryControl);
   // now add these controls all to our toolbar / panel
   mNavigationPanel.addControls([myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.next, myHistoryControl.previous]);
@@ -656,9 +654,10 @@ function setupTaskingMap( theLayers )
 
 function featureSelected( theEvent )
 {
-  $(".working").html(theEvent.feature.product_id);
-  $(".working").slideDown('slow');
+  block();
+  $(".mapquery").html(theEvent.feature.product_id);
   hightlightRecord(theEvent.feature.id, false);
+  unblock();
 }
 
 function setupSceneSelector( theLayer )

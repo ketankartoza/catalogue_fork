@@ -1,4 +1,5 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% load rangetag %} {# Custom tag defined in templatetags/ #}
 {% if myRecords %}
   <script type="text/javascript">
     /* <![CDATA[ */
@@ -40,40 +41,51 @@
 
   /* ]]> */
   </script>
-{% box_start "box-results-table" %}
-  <div class="pagination">
-    <span class="step-links">
-      {% if myPage.has_previous %}
-      <a href="#" onclick='loadPage({{ myPage.previous_page_number }},"{{mySearchGuid}}"); return false;'>Previous</a>
-      {% endif %}
+  <br />
+  {% box_start page "span-22" %}
+    <div class="pagination span-23">
+      <div class="step-links span-2 left vcentered">
+        {% if myPage.has_previous %}
+        <a href="#" onclick='loadPage({{ myPage.previous_page_number }},"{{mySearchGuid}}"); return false;'><img alt="previous" src="/media/images/back_alt.png" /></a>
+        {% else %}
+        <img alt="previous" src="/media/images/back_alt_inactive.png" />
+        {% endif %}
+      </div>
       {% if myPage %}
-      <span class="current">
-        Page {{ myPage.number }} of {{ myPage.paginator.num_pages }}.
-      </span>
+      <div class="current centered span-18">
+        Page  
+        <select id="page-selector" value="{{ myPage.number }}"  name="page-selector" onchange='loadPage( $("#page-selector option:selected").val(),"{{mySearchGuid}}"); return false;'>
+          {% for i in myPage.paginator.num_pages|get_range %}<option value='{{ i }}' {% if i == myPage.number %}selected='yes'{% endif %}>{{i}}</option>{% endfor %}
+        </select> of {{ myPage.paginator.num_pages }}.
+      </div>
       {% endif %}
-      {% if myPage.has_next %}
-        <a href="#" onclick='loadPage({{ myPage.next_page_number }},"{{mySearchGuid}}"); return false;'>Next</a>
-      {% endif %}
-    </span>
-  </div>
-
-  <table id="results" cellpadding="0" cellspacing="0" width="100%">
-    {% include "recordHeader.html" %}
-    <tbody>
-      {% for myRecord in myRecords %}
-      {% include "record.html" %}
-      {% empty %}
-      <h2>No records found.</h2>
-      {% endfor %}
-    </tbody>
-  </table>
-{% box_end %}
+      <div class="step-links span-2 right vcentered">
+        {% if myPage.has_next %}
+          <a href="#" onclick='loadPage({{ myPage.next_page_number }},"{{mySearchGuid}}"); return false;'><img alt="previous" src="/media/images/forward_alt.png" /></a>
+        {% else %}
+        <img alt="previous" src="/media/images/forward_alt_inactive.png" />
+        {% endif %}
+      </div>
+    </div>
+    <div class="span-23 last">
+      <table id="results" cellpadding="0" cellspacing="0" class="span-22 last">
+        {% include "recordHeader.html" %}
+        <tbody>
+          {% for myRecord in myRecords %}
+          {% include "record.html" %}
+          {% empty %}
+          <h2>No records found.</h2>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% box_end %}
 {% else %}
-{% box_start "box-results-table" %}
-<table id="results-table" cellpadding="0" cellspacing="0" width="100%">
-  <tr><td>No records found</td></tr>
-</table>
-{% box_end %}
+  {% box_start page "span-22" %}
+    <table id="results" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td>No records found</td></tr>
+    </table>
+  {% box_end %}
 {% endif %}
 
 {% if myMessagesFlag %}

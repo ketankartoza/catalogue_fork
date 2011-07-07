@@ -14,12 +14,7 @@
         <div id="map-location" class="span-3 small"></div>{# small class from blueprint css #}
         <div class="span-4 olControlScalebar" id="map-scale"></div>
       </div>
-    </div>
-    <div class="span-15 ui-widget-content ui-state-highlight ui-corner-all"> {# thus nested jquery widget container #}
       <div id="mapquery" class="span-15 last"></div>
-      <div id="table" class="span-15 last">
-      {% block table %}{% endblock %}
-      </div>
     </div>
   </div>
   <div id="sidebar" class="span-6 last">
@@ -30,5 +25,9 @@
       {% block cart %}{% endblock %}
       {% block legend %}{% endblock %}
     </div>
+  </div>
+  <br />
+  <div id="table" class="span-22">
+    {% block table %}{% endblock %}
   </div>
 {% endblock%}
