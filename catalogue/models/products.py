@@ -350,18 +350,22 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
       logging.info( "Found: %s" % myAcsJpgFile )
       try:
         if not os.path.exists( os.path.dirname( myImageFile ) ):
+          logging.info( "Making Directory: %s" % os.path.dirname( myImageFile ) )
           os.makedirs( os.path.dirname( myImageFile ) )
         #os.rename fails with [Errno 18] Invalid cross-device link so using copy, remove
+        logging.info( "Moving %s to %s" % ( myAcsJpgFile, myImageFile ) )
         shutil.move( myAcsJpgFile, myImageFile )
+        logging.info( "Symlinking %s to %s" % ( myImageFile, myReffedJpgFile ) )
         os.symlink( myImageFile, myReffedJpgFile )
-        shutil.move( myAcsWldFile, myJpgFile.replace("jpg", "wld" ) )
+        logging.info( "Moving %s to %s" % ( myAcsWldFile, myImageFile.replace(".jpg","-reffed.wld" ) ) )
+        shutil.move( myAcsWldFile, myImageFile.replace(".jpg", "-reffed.wld" ) )
         os.remove( myAcsJpgFile + ".aux.xml" )
       except Exception as e:
         logging.error( "Error in checkthumb" )
         logging.error( exceptionToString(e) )
         pass
     else:
-      logging.info("No acs thumb found")
+      logging.info("No acs thumb found or thumb already moved into production area")
 
   def dropShadow(
     theImage,
@@ -406,6 +410,9 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     To get the world file, simply add a .wld extention to the return var
     We dont return it explicitly as we can only return a single param
     if we want to use this method in template.
+    Be careful of using the force flag - some of the thumbs (e.g. newer imports
+    from acs) are already georeferenced natively and referencing them again will give
+    them an additional rotation.
     """
     myInputImageFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + ".jpg" )
     try:
