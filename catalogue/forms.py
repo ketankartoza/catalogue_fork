@@ -149,7 +149,7 @@ class AdvancedSearchForm(forms.ModelForm):
 
   class Meta:
     model = Search
-    exclude = ('ip_position' ,'guid' ,'keywords' ,'geometry_file' ,'user' ,'deleted' )
+    exclude = ('ip_position' ,'guid' ,'keywords' ,'geometry_file' ,'user' ,'deleted', 'processing_level' )
 
   def __init__(self, *args, **kwargs):
     """We are using jquery tooltip to show a nice tooltip for each field. To

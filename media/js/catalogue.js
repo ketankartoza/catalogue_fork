@@ -384,18 +384,14 @@ function getFeatureByProductId( theProductId )
 function revealTable()
 {
   zebraTables();
-  $(".working").slideUp('slow');
-  $(".working").html('');
-  $("#table").slideDown('slow');
+  unblock();
 }
 
 function loadPage( theNumber, theSearchGuid )
 {
-  $("#table").slideUp('slow');
+  block();
   // Show a wait image before we hit our ajax call
-  $(".working").html('<p>Loading, please wait...<img src="/media/images/ajax-loader.gif"></p>');
-  $(".working").slideDown('slow');
-  $("#results-table").parent().load("/searchpage/" + theSearchGuid + "/?page=" + theNumber,"",revealTable);
+  $("#results").parent().parent().load("/searchpage/" + theSearchGuid + "/?page=" + theNumber,"",revealTable);
 }
 
 function resizeTable()
@@ -410,7 +406,7 @@ function resizeTable()
   {
     myTableHeight = 200;
   }
-  $( "#results-table" ).height( myTableHeight );
+  $( "#results" ).height( myTableHeight );
 }
 
 // Get feature info implementation for openlayer
@@ -480,21 +476,12 @@ function setupCloudSlider() {
     min: 0,
     max: 10,
     step: 1,
-    start: function(e,ui){
-      $('#id_cloud_meanSliderBubble').fadeIn('fast');
-    },
-    stop: function(e,ui){
-      $('#id_cloud_meanSliderBubble').fadeOut('fast');
-    },
     slide: function(e,ui){
       var myPosition = ($('#id_cloud_meanSlider').width() / 10) * ui.value;
-      $("#id_cloud_meanSliderHandle").css('left', myPosition);
       $("#id_cloud_mean").val(ui.value);
-      $("#id_cloud_meanSliderBubble").css('left',myPosition).text((ui.value * 10) + "%");
      }
     });
     $("#id_cloud_mean").val( $("#id_cloud_meanSlider").slider("value") );
-    $("#id_cloud_meanSliderBubble").html( ($("#id_cloud_meanSlider").slider("value") * 10) + "%" );
     unblock();
 }
 
