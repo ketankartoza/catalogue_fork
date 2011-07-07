@@ -384,18 +384,14 @@ function getFeatureByProductId( theProductId )
 function revealTable()
 {
   zebraTables();
-  $(".working").slideUp('slow');
-  $(".working").html('');
-  $("#table").slideDown('slow');
+  unblock();
 }
 
 function loadPage( theNumber, theSearchGuid )
 {
-  $("#table").slideUp('slow');
+  block();
   // Show a wait image before we hit our ajax call
-  $(".working").html('<p>Loading, please wait...<img src="/media/images/ajax-loader.gif"></p>');
-  $(".working").slideDown('slow');
-  $("#results-table").parent().load("/searchpage/" + theSearchGuid + "/?page=" + theNumber,"",revealTable);
+  $("#results").parent().parent().load("/searchpage/" + theSearchGuid + "/?page=" + theNumber,"",revealTable);
 }
 
 function resizeTable()
@@ -410,7 +406,7 @@ function resizeTable()
   {
     myTableHeight = 200;
   }
-  $( "#results-table" ).height( myTableHeight );
+  $( "#results" ).height( myTableHeight );
 }
 
 // Get feature info implementation for openlayer
