@@ -54,8 +54,8 @@
       {% if myPage %}
       <div class="current centered span-18">
         Page  
-        <select id="page-selector" value="{{ myPage.number }}"  name="page-selector" onclick='loadPage( $(self).value(),"{{mySearchGuid}}"); return false;'>
-          {% for i in myPage.paginator.num_pages|get_range %}<option value='{{ i }}'>{{i}}</option>{% endfor %}
+        <select id="page-selector" value="{{ myPage.number }}"  name="page-selector" onchange='loadPage( $("#page-selector option:selected").val(),"{{mySearchGuid}}"); return false;'>
+          {% for i in myPage.paginator.num_pages|get_range %}<option value='{{ i }}' {% if i == myPage.number %}selected='yes'{% endif %}>{{i}}</option>{% endfor %}
         </select> of {{ myPage.paginator.num_pages }}.
       </div>
       {% endif %}
