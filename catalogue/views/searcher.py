@@ -54,7 +54,7 @@ class Searcher:
          # Possible flags for the record template
          # myShowSensorFlag
          # myShowSceneIdFlag
-         # myShowDateFlag
+         'myShowDateFlag' : True,
          # myShowCartFlag
          # myRemoveFlag
          # myShowHighlightFlag

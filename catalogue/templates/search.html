@@ -95,7 +95,7 @@
 
     /* Ajax call to get options for sensor dictionaries */
     function get_dictionary_options(){
-      $(".working").slideDown('slow');
+      block();
       $.ajax({
         type: "POST",
         url: "/sensordictionaries/",
@@ -104,11 +104,11 @@
           // Just in case...
           $('#search_form select').css({border: 'none'});
           set_form_options(data);
-          $(".working").slideUp('slow');
+          unblock();
         },
         error: function(data) {
           // No errors expected :)
-          $(".working").slideUp('slow');
+          unblock();
         }
       });
     };
