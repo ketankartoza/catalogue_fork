@@ -298,7 +298,7 @@ class Search(models.Model):
             or self.sensor_type
 
   def sensorsAsString( self ):
-    myList = self.sensors.values_list('name', flat=True)
+    myList = self.sensors.values_list('operator_abbreviation', flat=True)
     myString = ", ".join(myList)
     return myString
 

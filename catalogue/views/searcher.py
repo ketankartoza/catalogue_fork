@@ -54,7 +54,7 @@ class Searcher:
          # Possible flags for the record template
          # myShowSensorFlag
          # myShowSceneIdFlag
-         'myShowDateFlag' : True,
+         # myShowDateFlag
          # myShowCartFlag
          # myRemoveFlag
          # myShowHighlightFlag
@@ -62,7 +62,7 @@ class Searcher:
          # myLegendFlag
          'myDetailFlag' : True,
          'myShowSceneIdFlag' : True,
-         'myShowDateFlag': False,
+         'myShowDateFlag': True,
          'myShowRemoveIconFlag': False, #used in cart contents listing context only
          'myShowHighlightFlag': True,
          'myShowRowFlag' : False,
