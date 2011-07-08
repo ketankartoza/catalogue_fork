@@ -3,9 +3,9 @@
 {% box_start "box-recent-search-history"%}
   <h2>Recent Search History</h2>
   <div>
-  <a class="button-link" href="/recentsearches/?pdf"><img src="/media/images/application-pdf.png" />PDF</a>
-  <a class="button-link" href="/searchmonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/">Monthly reports of user origin</a>
-  <a class="button-link" href="/searchmonthlyreportaoi/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/">Monthly reports of AOI geometry</a>
+    <button><a class="button-link" href="/recentsearches/?pdf"><img src="/media/images/application-pdf.png" />PDF</a></button>
+    <button><a class="button-link" href="/searchmonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/">Monthly reports of user origin</a></button>
+    <button><a class="button-link" href="/searchmonthlyreportaoi/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/">Monthly reports of AOI geometry</a></button>
   </div>
   <table width="100%" style="border-bottom: solid 1px; border-top: solid 1px; margin-top: 3px;">
     <tr>
@@ -67,9 +67,3 @@
   </table>
 {% box_end %}
 
-<script>
-  $(document).ready(function(){
-  //button up links
-  $('.button-link').button();
-  });
-</script>

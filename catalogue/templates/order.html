@@ -153,14 +153,14 @@
 </table>
     {% if myOrder.delivery_detail.geometry %}
     Download clip geometry:
-    <a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?shp">SHP</a>
-    <a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?kml">KML</a>
-    <a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?kmz">KMZ</a>
+    <button><a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?shp">SHP</a></button>
+    <button><a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?kml">KML</a></button>
+    <button><a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?kmz">KMZ</a></button>
     {% endif %}
     Download ISO 19115 (SAC Profile)
-    <a class="button-link" href="/downloadordermetadata/{{ myOrder.id }}/">XML metadata</a>
+    <button><a class="button-link" href="/downloadordermetadata/{{ myOrder.id }}/">XML metadata</a></button>
     Download HTML Metadata
-    <a class="button-link" href="/downloadordermetadata/{{ myOrder.id }}/?html">HTML metadata</a>
+    <button><a class="button-link" href="/downloadordermetadata/{{ myOrder.id }}/?html">HTML metadata</a></button>
 {% box_end %}
 <br />
 <div id="items">
@@ -173,7 +173,7 @@ Order History
 </h2>
 {% if myForm %}
 <div style="margin:5px">
-  <a href="#" id="statusFormLink" class='button-link' onclick="$('#statusForm').dialog('open'); return false;">Update status</a>
+  <button><a href="#" id="statusFormLink" class='button-link' onclick="$('#statusForm').dialog('open'); return false;">Update status</a></button>
 </div>
 {% endif %}
 <div id="orderHistory">
@@ -194,8 +194,3 @@ Order History
   </div>
 {% endif %}
 
-<script>
-$(document).ready(function (){
-$('.button-link').button();
-});
-</script>

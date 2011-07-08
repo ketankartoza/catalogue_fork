@@ -152,9 +152,9 @@
 </table>
     {% if myTaskingRequest.delivery_detail.geometry %}
     Download tasking geometry:
-    <a class="button-link" href="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?shp">SHP</a>
-    <a class="button-link" href="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?kml">KML</a>
-    <a class="button-link" href="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?kmz">KMZ</a>
+    <button><a class="button-link" href="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?shp">SHP</a></button>
+    <button><a class="button-link" href="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?kml">KML</a></button>
+    <button><a class="button-link" href="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?kmz">KMZ</a></button>
     {% endif %}
 
 {% box_end %}
@@ -165,7 +165,7 @@ Order History
 </h2>
 {% if myForm %}
 <div style="margin:5px">
-  <a id="statusFormLink" class='button-link' onclick="$('#statusForm').dialog('open'); return false;">Update status</a>
+  <button><a id="statusFormLink" class='button-link' onclick="$('#statusForm').dialog('open'); return false;">Update status</a></button>
 </div>
 {% endif %}
 <div id="orderHistory">
@@ -186,8 +186,4 @@ Order History
   </div>
 {% endif %}
 
-<script>
-$(document).ready(function (){
-$('.button-link').button();
-});
 </script>

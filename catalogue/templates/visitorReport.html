@@ -35,8 +35,8 @@
 {% endblock %}
 {% block content %}
 {% box_start "box-visitor-report" %}
-      <a class="button-link" href="?pdf"><img src="/media/images/application-pdf.png" />PDF</a>
-      <a class="button-link" href="/visitormonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{  myCurrentMonth|date:'m' }}/">Monthly reports</a>
+    <button><a class="button-link" href="?pdf"><img src="/media/images/application-pdf.png" />PDF</a></button>
+    <button><a class="button-link" href="/visitormonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{  myCurrentMonth|date:'m' }}/">Monthly reports</a></button>
     {% if myTopCountries and myScores %}
       <!--Load the AJAX API-->
       <h2 class="chartTitle">Visits by country excluding SA</h2>
@@ -62,10 +62,4 @@
       <p>No reports to generate.</p>
     {% endif %}
 {% box_end %}
-<script>
-  $(document).ready(function(){
-  //button up links
-  $('.button-link').button();
-  });
-</script>
 {% endblock %}

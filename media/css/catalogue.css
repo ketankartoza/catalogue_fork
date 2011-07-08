@@ -189,10 +189,8 @@ img.paragraph-icon {
 
 /* Search link formatting */
 
-.button > a:link {
-    text-align: center;
+.button-link a:link {
     text-decoration: none;
-    padding:2px;
   }
 
 

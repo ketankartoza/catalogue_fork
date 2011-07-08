@@ -15,19 +15,19 @@
   {% if myDownloadOrderFlag %}
   <div id="cart-download-div" style="text-align: center;">
     <img src="/media/images/down_16.png" alt=""/> Download order as
-    <a class="button-link" href="/downloadorder/{{ myOrder.id }}/?shp">SHP</a>
-    <a class="button-link" href="/downloadorder/{{ myOrder.id }}/?kml">KML</a>
-    <a class="button-link" href="/downloadorder/{{ myOrder.id }}/?kmz">KMZ</a>
+    <button><a class="button-link" href="/downloadorder/{{ myOrder.id }}/?shp">SHP</a></button>
+    <button><a class="button-link" href="/downloadorder/{{ myOrder.id }}/?kml">KML</a></button>
+    <button><a class="button-link" href="/downloadorder/{{ myOrder.id }}/?kmz">KMZ</a></button>
   </div>
   {% else %}
   {% if myRecords %}
   <div id="cart-download-div" style="text-align: center;">
     <span class="loud"><img src="/media/images/down_16.png" alt=""/>Download cart as:</span></br/>
-    <a class="button-link" href="/downloadcart/?shp">SHP</a>
-    <a class="button-link" href="/downloadcart/?kml">KML</a>
-    <a class="button-link" href="/downloadcart/?kmz">KMZ</a>
-    <a class="button-link" href="/downloadcartmetadata/">XML</a>
-    <a class="button-link" href="/downloadcartmetadata/?html">HTML</a>
+    <button><a class="button-link" href="/downloadcart/?shp">SHP</a></button>
+    <button><a class="button-link" href="/downloadcart/?kml">KML</a></button>
+    <button><a class="button-link" href="/downloadcart/?kmz">KMZ</a></button>
+    <button><a class="button-link" href="/downloadcartmetadata/">XML</a></button>
+    <button><a class="button-link" href="/downloadcartmetadata/?html">HTML</a></button>
   </div>
   {% endif %}
   {% endif %}
@@ -35,10 +35,6 @@
 {# script for showing deliveryDetails#}
 <script>
 $(document).ready(function(){
-
-{% if myRecords %}
-$('.button-link').button();
-{% endif %}
 
 {% if myShowDeliveryDetailsFlag %}
 var show_delivery=$('a.show_delivery');

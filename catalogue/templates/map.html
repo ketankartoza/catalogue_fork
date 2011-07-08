@@ -23,8 +23,6 @@
       setupMetadataDialog();
       {# vars initialised inside a function using var will have local scope #}
       {# vars initialised inside a function without using var will have global scope #}
-      {# jquery button function requires jquery-ui 1.8 #}
-      $(".button-link").button();
       {# tooltips setup - see http://flowplayer.org/tools/demos/tooltip/index.html #}
       $("#results img[title]").tooltip('#recordtooltip');
       {# manage table resizing #}
@@ -131,19 +129,19 @@
       {% if myRecords %}
       <div id="cart-download-div" style="text-align: center;">
         <span class="loud"><img src="/media/images/down_16.png" alt=""/>Download search as:</span></br/>
-        <a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?shp">SHP</a>
-        <a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?kml">KML</a>
-        <a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?kmz">KMZ</a>
-        <a class="button-link" href="/downloadsearchmetadata/{{mySearchGuid}}/">XML</a>
-        <a class="button-link" href="/downloadsearchmetadata/{{mySearchGuid}}/?html">HTML</a>
+        <button><a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?shp">SHP</a></button>
+        <button><a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?kml">KML</a></button>
+        <button><a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?kmz">KMZ</a></button>
+        <button><a class="button-link" href="/downloadsearchmetadata/{{mySearchGuid}}/">XML</a></button>
+        <button><a class="button-link" href="/downloadsearchmetadata/{{mySearchGuid}}/?html">HTML</a></button>
       </div>
       {% endif %}
       <br />
     <div style="text-align: center;">
-      <a href="/modifysearch/{{mySearchGuid}}/" class="button-link" alt="Returns to the main search page (works on a copy of the current search)">Modify this search</a>
+      <button><a href="/modifysearch/{{mySearchGuid}}/" class="button-link" alt="Returns to the main search page (works on a copy of the current search)">Modify this search</a></button>
     </div>
   <div>
-      {% if myProductIdSearch %}<br /><a href="/productIdSearchClone/{{mySearchGuid}}/" class="button-link" title="Refine this search (works on a copy of the current search)">Product ID search</a>{% endif %}
+    {% if myProductIdSearch %}<br /><button><a href="/productIdSearchClone/{{mySearchGuid}}/" class="button-link" title="Refine this search (works on a copy of the current search)">Product ID search</a></button>{% endif %}
   </div>
           {#% if user.is_staff %}<div id="sql" style="display: none;">{{ mySqlString }}</div><input type=button id="sql-button" value="Show SQL" />{% endif %#}
     </div>

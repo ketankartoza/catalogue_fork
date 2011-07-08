@@ -75,20 +75,20 @@
                  />
         </td>
         {% endif %}
-	{# show deliveryDetails if they exist #}
+  {# show deliveryDetails if they exist #}
         {% if myShowDeliveryDetailsFlag %}
-	<td>
-	  {% if myRecord.delivery_detail %}
-	  <a href="#" ref_id="{{ myRecord.delivery_detail.id }}" class="show_delivery button-link">Show details</a>
-	  {% endif %}
-	</td>
-	{% endif %}
-	{# show deliveryDetailsForm #}
+  <td>
+    {% if myRecord.delivery_detail %}
+    <button><a href="#" ref_id="{{ myRecord.delivery_detail.id }}" class="show_delivery button-link">Show details</a></button>
+    {% endif %}
+  </td>
+  {% endif %}
+  {# show deliveryDetailsForm #}
         {% if myShowDeliveryDetailsFormFlag %}
-	<td>
-	  <a href="#" class="show_form button-link" ref_id="{{myRecord.id}}">Delivery details</a>
-	</td>
-	{% endif %}
+  <td>
+    <button><a href="#" class="show_form button-link" ref_id="{{myRecord.id}}">Delivery details</a></button>
+  </td>
+  {% endif %}
 
       </tr>
       {% if myShowDetailFlag %}{# colspan below shamelessly hard coded for now#}
