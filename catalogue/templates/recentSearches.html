@@ -1,12 +1,13 @@
 {# Original code from Tim's SABIO project and copyright is retained by the original author #}
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% box_start "box-recent-search-history"%}
-  <h2 class="centered"><img class="icon" src="/media/images/clock_32.png"> Recent Search History</h2>
-  <div>
-    <button onclick='location="/recentsearches/?pdf"'><img src="/media/images/application-pdf.png" /> PDF</button>
+  <div class="span-22 centered">
+
     <button onclick='location="/searchmonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/"'>Monthly reports of user origin</button>
+    <button onclick='location="/recentsearches/?pdf"'><img src="/media/images/application-pdf.png" /> PDF</button>
     <button onclick='location="/searchmonthlyreportaoi/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/"'>Monthly reports of AOI geometry</button>
   </div>
+  <h2 class="centered"><img class="icon" src="/media/images/clock_32.png"> Recent Search History</h2>
   <table width="100%" style="border-bottom: solid 1px; border-top: solid 1px; margin-top: 3px;">
     <tr>
       <th>
@@ -19,10 +20,7 @@
         <b>Sensor</b>
       </th>
       <th>
-        <b>Start Date</b>
-      </th>
-      <th>
-        <b>End Date</b>
+        <b>Date range(s)</b>
       </th>
       <th>
         <b>View</b>
@@ -33,7 +31,7 @@
     {% for mySearch in mySearches %}
     <tr>
       <td>
-        {{ mySearch.user }} 
+        {{ mySearch.user.get_profile.firstname }} {{ mySearch.user.get_profile.surname }}
       </td>
       <td>
         {{ mySearch.search_date|date:"D, d M Y, H:m" }} 
@@ -42,10 +40,7 @@
         {{ mySearch.sensorsAsString }} 
       </td>
       <td>
-        {{ mySearch.start_date }} 
-      </td>
-      <td>
-        {{ mySearch.end_date }} 
+        {{ mySearch.datesAsString }}
       </td>
       <td>
         <a href="/searchresult/{{ mySearch.guid }}/"

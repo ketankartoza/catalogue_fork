@@ -1,7 +1,9 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% box_start "box-data-summary" %}
-<h2>Summary of all sensor based catalogue holdings</h2>
-<p>Click on a sensor name for a detailed summary (including search interest) for that sensor.</p>
+<h2 class="centered">Summary of all sensor based catalogue holdings</h2>
+<p class="centered">Click on a sensor name for a detailed summary (including search interest) for that sensor.
+You may also be interested in our sensor dictionary report <a href="#" onclick='loadContent("/dictionaryReport/");'>here</a>
+</p>
 <table>
   <thead>
   </thead>
@@ -22,5 +24,4 @@
   </tbody>
 </table>
 
-You may also be interested in our sensor dictionary report <a href="#" onclick='loadContent("/dictionaryReport/");'>here</a>
 {% box_end %}

@@ -35,24 +35,25 @@
 {% endblock %}
 {% block content %}
 {% box_start "box-search-history" %}
-  <button onclick='location="?pdf"'><img src="/media/images/application-pdf.png" /> PDF</button>
 <div id="monthSelector" class="span-22 last">
-  <div class="span-3 append-2">
+  <div class="span-8">
     <button onclick='location="/searchmonthlyreportaoi/{{ myPrevDate|date:'Y' }}/{{  myPrevDate|date:'m' }}/"'>Previous month</button>
   </div>
-  <div class="span-4 prepend-3 append-3">{{ myCurrentDate|date:'F Y' }}</div>
-  <div class="span-3 prepend-4 last">
+  <div class="span-6 centered">
+    <button onclick='location="?pdf"'><img src="/media/images/application-pdf.png" /> PDF</button>
+  </div>
+  <div class="span-8 last" style="text-align: right;">
     <button onclick='location="/searchmonthlyreportaoi/{{ myNextDate|date:'Y' }}/{{  myNextDate|date:'m' }}/"'>Next month</button>
   </div>
 </div>
     {% if myScores %}
       <!--Load the AJAX API-->
-      <h2 class="chartTitle">Searches by country of AOI geometry for {{ myCurrentDate|date:'M, Y' }}</h2>
+      <h2 class="centered chartTitle">Searches by country of AOI geometry for {{ myCurrentDate|date:'M, Y' }}</h2>
       <!--Div that will hold the pie chart-->
-      <div id="chart_div"></div>
+      <div id="chart_div" class="centered"></div>
 
       <div id="allCountries">
-        <h2 class="chartTitle">All Countries</h2>
+        <h3 class="centered chartTitle">All Countries</h3>
          <table id="gradient-style" summary="SAC Catalogue Searches" style="width:100%; margin:0px;">
             <thead> 
               <th>Country</th>

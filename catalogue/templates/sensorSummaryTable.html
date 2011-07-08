@@ -1,6 +1,6 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% box_start "box-sensor-summary" %}
-<h2>Summary of catalogue activity for: {{mySensor.name}}</h2>
+<h2 class="centered">Summary of catalogue activity for: {{mySensor.name}}</h2>
 <table>
   <thead>
   </thead>
@@ -20,7 +20,9 @@
 <ul>
   <li>These results are for 'all time'.</li>
   <li>Test and experimental requests by SAC staff have not been filtered out.</li>
-  <li>The report doesnt distinguish between cancelled requests or requests that were never carried out for whatever reason by SAC staff.</li>
-  <li>Searches can include more than one sensor so the search count for this is not the inverse of all other sensor searches.</li>
+  <li>The report doesn't distinguish between cancelled requests or requests
+  that were never carried out for whatever reason by SAC staff.</li>
+  <li>Searches can include more than one sensor so the search count for this is
+  not the inverse of all other sensor searches.</li>
 </ul>
 {% box_end %}

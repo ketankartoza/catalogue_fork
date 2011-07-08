@@ -15,16 +15,13 @@
         <b>Sensor</b>
       </th>
       <th>
-        <b>Start Date</b>
-      </th>
-      <th>
-        <b>End Date</b>
+        <b>Date range</b>
       </th>
     </tr>
     {% for mySearch in mySearches %}
     <tr>
       <td>
-        {{ mySearch.user }} 
+        {{ mySearch.user.get_profile.firstname}} {{mySearch.user.get_profile.surname}}
       </td>
       <td>
         {{ mySearch.search_date|date:"D, d M Y, H:m" }} 
@@ -33,7 +30,7 @@
         {{ mySearch.sensorsAsString }} 
       </td>
       <td>
-        {{ mySearch.start_date }} 
+        {{ mySearch.datesAsString }}
       </td>
       <td>
         {{ mySearch.end_date }} 

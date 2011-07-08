@@ -19,7 +19,7 @@ Visitor list
 <tbody>
           {% for myRecord in myRecords.object_list %}
           <tr>
-            <td>{{ myRecord.user}}</td>
+            <td>{{ myRecord.user.get_profile.firstname}} {{myRecord.user.get_profile.surname}}</td>
             <td>{{ myRecord.ip_address }}</td>
             <td>{{ myRecord.country}}</td>
             <td>{{ myRecord.city }}</td>
