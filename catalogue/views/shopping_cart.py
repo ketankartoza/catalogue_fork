@@ -101,13 +101,12 @@ def removeFromCart(theRequest, theId):
 
 @login_required
 #renderWithContext is explained in renderWith.py
-@renderWithContext('cartContents.html')
+@renderWithContext('cartContentsPage.html','cartContents.html')
 def showCartContents(theRequest):
-  """Just returns a table element - meant for use with ajax"""
-  myBaseTemplate = 'cartContentsPage.html'
-  myAjaxFlag = theRequest.GET.has_key('xhr')
-  if theRequest.is_ajax() or myAjaxFlag:
-    myBaseTemplate = 'emptytemplate.html' #so template can render full page if not an ajax load
+  """Returns a nice table showing cart contents. Second template in method sig. is used in ajax requests."""
+  myNotAjaxFlag = True
+  if theRequest.GET.has_key('xhr') or theRequest.is_ajax():
+    myNotAjaxFlag = False
   myRecords = SearchRecord.objects.all().filter(user=theRequest.user).filter(order__isnull=True)
   logging.info("Cart contains : " + str(myRecords.count()) + " items")
   return ({
@@ -130,7 +129,7 @@ def showCartContents(theRequest):
          'myShowCartFlag' : False, #used when you need to add an item to the cart only
          'myShowPreviewFlag' : True,
          'myCartTitle' : 'Cart Contents',
-         'myBaseTemplate' : myBaseTemplate
+         'myNotAjaxFlag' : myNotAjaxFlag,
          })
 
 @login_required

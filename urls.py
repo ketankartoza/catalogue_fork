@@ -88,7 +88,8 @@ urlpatterns = patterns('',
     # cart contents for embedding into other pages
     (r'^downloadcart/$', downloadCart),
     (r'^downloadcartmetadata/$', downloadCartMetadata),
-    (r'^showcartcontents/$', showCartContents),
+    (r'^myCart/$', showCartContents),
+    (r'^showcartcontents/$', showCartContents), #used by xhr requests
     (r'^showminicartcontents/$', showMiniCartContents),
     #
     # Order management and related lookup tables

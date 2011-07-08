@@ -45,7 +45,11 @@ def myOrders(theRequest):
   '''Non staff users can only see their own orders listed'''
   myRecords = Order.base_objects.filter(user=theRequest.user).order_by('-order_date')
   # Paginate the results
-  myPaginator = Paginator(myRecords, 100)
+  if theRequest.GET.has_key('pdf'):
+    myPageSize = myRecords.count()
+  else:
+    myPageSize = 100
+  myPaginator = Paginator(myRecords, myPageSize)
   # Make sure page request is an int. If not, deliver first page.
   try:
     myPage = int(theRequest.GET.get('page', '1'))

@@ -363,7 +363,7 @@ class DeliveryDetailForm(forms.ModelForm):
 
   class Meta:
     model = DeliveryDetail
-    exclude = ('user',)
+    exclude = ('user','processing_level',)
 
   def clean(self):
     myCleanedData = self.cleaned_data

@@ -62,8 +62,8 @@
   </script>
   <div id="maptooltip">&nbsp;</div>
   <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="horizontal" id="add_form">
-  {% box_start "box-map-container" %}
-    <h2>{{ myTitle }}</h2>
+  {% box_start "box-map-container" "span-22" %}
+    <h2 class="centered">{{ myTitle }}</h2>
     <div id="map-container" class="span-21 ui-widget-content ui-state-highlight ui-corner-all last"> {# thus nested jquery widget container #}
       <div id="map" class="span-21 last"></div>
       <div id="map-panel" class="span-21 last">
@@ -73,31 +73,34 @@
       </div>
     </div>
     {{  myMessage|safe }}
-        <table>
-	  {# render forms based on context #}
-	  {% if myDeliveryDetailForm and myOrderForm %}
+  {% box_end %}
+  <br />
+  {% box_start "form-container" "span-22 prepend-top append-bottom" %}
+    <table>
+    {# render forms based on context #}
+    {% if myDeliveryDetailForm and myOrderForm %}
             {{myDeliveryDetailForm}}
 
             {{myOrderForm}}
-	  {% else %}
-	    {% if myTaskingDeliveryDetailsForm and myTaskingForm %}
+    {% else %}
+      {% if myTaskingDeliveryDetailsForm and myTaskingForm %}
               {{ myTaskingDeliveryDetailsForm }}
 
               {{ myTaskingForm }}
-	    {% else %}
-	      {{ myForm }}
-	    {% endif %}
-	  {% endif %}
-        </table>  
-        {% if mySubmitLabel %}
-        <button type="submit" id="submitButton">{{ mySubmitLabel }}</button>
-        {% else %}
-        <button type="submit" id="submitButton">Save</button>
-        {% endif %}
+      {% else %}
+        {{ myForm }}
+      {% endif %}
+    {% endif %}
+    </table>  
+    {% if mySubmitLabel %}
+    <button type="submit" id="submitButton">{{ mySubmitLabel }}</button>
+    {% else %}
+    <button type="submit" id="submitButton">Save</button>
+    {% endif %}
   {% box_end %}
   <br />
   {% if myShowCartContentsFlag %}
-    <div id="cart">
+    <div id="cart" class="span-22">
     {% include "cartContents.html" %}
     </div>
     </form>
