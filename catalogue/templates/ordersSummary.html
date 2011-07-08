@@ -3,8 +3,8 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% block content %}
   {% box_start "box-orders-summary" %}
-  <button><a class="button-link" href="/orderssummary/?pdf"><img src="/media/images/application-pdf.png" />PDF</a></button>
-<h2>Order status summary report</h2>
+  <button onclick='location="/orderssummary/?pdf"'><img src="/media/images/application-pdf.png" /> PDF</button>
+<h2 class="centered">Order status summary report</h2>
 <table>
   <thead>
   </thead>
@@ -22,7 +22,7 @@
   </tbody>
 </table>
 
-<h2>Order product type summary report</h2>
+<h2 class="centered">Order product type summary report</h2>
 <table>
   <thead>
   </thead>

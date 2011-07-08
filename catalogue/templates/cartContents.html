@@ -26,19 +26,19 @@
   {% if myDownloadOrderFlag %}
   <div id="cart-download-div" style="text-align: center;">
     <img src="/media/images/down_16.png" alt=""/> Download order as
-    <button><a class="button-link" href="/downloadorder/{{ myOrder.id }}/?shp">SHP</a></button>
-    <button><a class="button-link" href="/downloadorder/{{ myOrder.id }}/?kml">KML</a></button>
-    <button><a class="button-link" href="/downloadorder/{{ myOrder.id }}/?kmz">KMZ</a></button>
+    <button onclick='location="/downloadorder/{{ myOrder.id }}/?shp"'>SHP</button>
+    <button onclick='location="/downloadorder/{{ myOrder.id }}/?kml"'>KML</button>
+    <button onclick='location="/downloadorder/{{ myOrder.id }}/?kmz"'>KMZ</button>
   </div>
   {% else %}
   {% if myRecords %}
   <div id="cart-download-div" style="text-align: center;">
     <span class="loud"><img src="/media/images/down_16.png" alt=""/>Download cart as:</span></br/>
-    <button><a class="button-link" href="/downloadcart/?shp">SHP</a></button>
-    <button><a class="button-link" href="/downloadcart/?kml">KML</a></button>
-    <button><a class="button-link" href="/downloadcart/?kmz">KMZ</a></button>
-    <button><a class="button-link" href="/downloadcartmetadata/">XML</a></button>
-    <button><a class="button-link" href="/downloadcartmetadata/?html">HTML</a></button>
+    <button onclick='location="/downloadcart/?shp"'>SHP</button>
+    <button onclick='location="/downloadcart/?kml"'>KML</button>
+    <button onclick='location="/downloadcart/?kmz"'>KMZ</button>
+    <button onclick='location="/downloadcartmetadata/"'>XML</button>
+    <button onclick='location="/downloadcartmetadata/?html"'>HTML</button>
   </div>
   {% endif %}
   {% endif %}

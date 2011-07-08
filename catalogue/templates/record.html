@@ -79,14 +79,14 @@
         {% if myShowDeliveryDetailsFlag %}
   <td>
     {% if myRecord.delivery_detail %}
-    <button><a href="#" ref_id="{{ myRecord.delivery_detail.id }}" class="show_delivery button-link">Show details</a></button>
+    <button onclick='location="{{ myRecord.delivery_detail.id }}" class="show_delivery button-link"'>Show details</button>
     {% endif %}
   </td>
   {% endif %}
   {# show deliveryDetailsForm #}
         {% if myShowDeliveryDetailsFormFlag %}
   <td>
-    <button><a href="#" class="show_form button-link" ref_id="{{myRecord.id}}">Delivery details</a></button>
+    <button onclick='location="show_form button-link" ref_id="{{myRecord.id}}"'>Delivery details</button>
   </td>
   {% endif %}
 

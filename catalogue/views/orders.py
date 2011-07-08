@@ -83,6 +83,10 @@ def listOrders(theRequest):
   else:
     myPageSize = 100
   # Paginate the results
+  try:
+    myPage = int(theRequest.GET.get('page', '1'))
+  except ValueError:
+    myPage = 1
   myPaginator = Paginator(myRecords, myPageSize)
   # If page request (9999) is out of range, deliver last page of results.
   try:

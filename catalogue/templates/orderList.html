@@ -9,10 +9,10 @@
       };
   </script>
   <div class="span-22">
-    <div class="span-9 centered">
+    <div class="span-7 centered">
       <h2>Orders List</h2>
     </div>
-    <div class="span-5">
+    <div class="span-6">
       <form name="frmShowOrder" method="get" action="">
         <label>Go to Order:</label>
         <input name="order_id_text" type="text" size="6" maxlength="5" />
@@ -20,11 +20,11 @@
           onclick="showOrder(forms['frmShowOrder'].order_id_text.value); return false;" />
       </form>
     </div>
-    <div class="span-8 centered last " id="order-list-buttonset">
-      <button><a class="button-link" href="/{{ myUrl }}/?page={{ myRecords.number}}&pdf"><img src="/media/images/application-pdf.png" />PDF</a></button>
+    <div class="span-9 centered last " id="order-list-buttonset">
+      <button onclick='location="/{{ myUrl }}/?page={{ myRecords.number}}&pdf"'><img src="/media/images/application-pdf.png" />PDF</button>
       {% if myUrl = 'listorders' %}
-      <button><a class="button-link" href="/ordermonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/">Monthly reports</a></button>
-      <button><a class="button-link" href="/orderssummary/">Orders summary</a></button>
+      <button onclick='location="/ordermonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/"'>Monthly reports</button>
+      <button onclick='location="/orderssummary/"'>Orders summary</button>
       {% endif %}
     </div>
   </div>
@@ -44,7 +44,7 @@
           <div class="pagination">
             <span class="step-links">
               {% if myRecords.has_previous %}
-              <button><a href="#" onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a></button>
+              <button onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</button>
               {% endif %}
 
               <span class="current">
@@ -52,7 +52,7 @@
               </span>
 
               {% if myRecords.has_next %}
-              <button><a href="#" onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</a></button>
+              <button onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</button>
               {% endif %}
             </span>
           </div>
@@ -79,7 +79,7 @@
           <div class="pagination">
             <span class="step-links">
               {% if myRecords.has_previous %}
-              <button><a href="#" onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a></button>
+              <button onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</button>
               {% endif %}
 
               <span class="current">
@@ -87,7 +87,7 @@
               </span>
 
               {% if myRecords.has_next %}
-              <button><a href="#" onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</a></button>
+              <button onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</button>
               {% endif %}
             </span>
           </div>

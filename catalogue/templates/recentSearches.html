@@ -1,11 +1,11 @@
 {# Original code from Tim's SABIO project and copyright is retained by the original author #}
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% box_start "box-recent-search-history"%}
-  <h2>Recent Search History</h2>
+  <h2 class="centered"><img class="icon" src="/media/images/clock_32.png"> Recent Search History</h2>
   <div>
-    <button><a class="button-link" href="/recentsearches/?pdf"><img src="/media/images/application-pdf.png" />PDF</a></button>
-    <button><a class="button-link" href="/searchmonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/">Monthly reports of user origin</a></button>
-    <button><a class="button-link" href="/searchmonthlyreportaoi/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/">Monthly reports of AOI geometry</a></button>
+    <button onclick='location="/recentsearches/?pdf"'><img src="/media/images/application-pdf.png" /> PDF</button>
+    <button onclick='location="/searchmonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/"'>Monthly reports of user origin</button>
+    <button onclick='location="/searchmonthlyreportaoi/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/"'>Monthly reports of AOI geometry</button>
   </div>
   <table width="100%" style="border-bottom: solid 1px; border-top: solid 1px; margin-top: 3px;">
     <tr>

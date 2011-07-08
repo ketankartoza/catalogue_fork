@@ -35,24 +35,24 @@
 {% endblock %}
 {% block content %}
 {% box_start "box-" %}
-<button><a class="button-link" href="?pdf"><img src="/media/images/application-pdf.png" />PDF</a></button>
+<button onclick='location="?pdf"'><img src="/media/images/application-pdf.png" /> PDF</button>
 <div id="monthSelector" class="span-22 last">
   <div class="span-3 append-2">
-    <button><a class="button-link" href="/visitormonthlyreport/{{ myPrevDate|date:'Y' }}/{{  myPrevDate|date:'m' }}/">Previous month</a></button>
+    <button onclick='location="/visitormonthlyreport/{{ myPrevDate|date:'Y' }}/{{  myPrevDate|date:'m' }}/"'>Previous month</button>
   </div>
   <div class="span-4 prepend-3 append-3">{{ myCurrentDate|date:'F Y' }}</div>
   <div class="span-3 prepend-4 last">
-    <button><a class="button-link" href="/visitormonthlyreport/{{ myNextDate|date:'Y' }}/{{  myNextDate|date:'m' }}/">Next month</a></button>
+    <button onclick='location="/visitormonthlyreport/{{ myNextDate|date:'Y' }}/{{  myNextDate|date:'m' }}/"'>Next month</button>
   </div>
 </div>
     {% if myTopCountries and myScores %}
       <!--Load the AJAX API-->
-      <h2 class="chartTitle">Visits by country excluding SA for {{ myCurrentDate|date:'M, Y' }}</h2>
+      <h2 class="centered chartTitle"><img class="icon" src="/media/images/diagram_32.png"> Visits by country excluding SA for {{ myCurrentDate|date:'M, Y' }}</h2>
       <!--Div that will hold the pie chart-->
-      <div id="chart_div"></div>
+      <div id="centered chart_div"></div>
 
       <div id="allCountries">
-        <h2 class="chartTitle">All Countries</h2>
+        <h2 class="centered chartTitle">All Countries</h2>
          <table id="gradient-style" summary="SAC Catalogue Visitors" style="width:100%; margin:0px;">
             <thead> 
               <th>Country</th>

@@ -129,19 +129,21 @@
       {% if myRecords %}
       <div id="cart-download-div" style="text-align: center;">
         <span class="loud"><img src="/media/images/down_16.png" alt=""/>Download search as:</span></br/>
-        <button><a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?shp">SHP</a></button>
-        <button><a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?kml">KML</a></button>
-        <button><a class="button-link" href="/downloadsearchresults/{{mySearchGuid}}/?kmz">KMZ</a></button>
-        <button><a class="button-link" href="/downloadsearchmetadata/{{mySearchGuid}}/">XML</a></button>
-        <button><a class="button-link" href="/downloadsearchmetadata/{{mySearchGuid}}/?html">HTML</a></button>
+        <button onclick='location="/downloadsearchresults/{{mySearchGuid}}/?shp"'>SHP</button>
+        <button onclick='location="/downloadsearchresults/{{mySearchGuid}}/?kml"'>KML</button>
+        <button onclick='location="/downloadsearchresults/{{mySearchGuid}}/?kmz"'>KMZ</button>
+        <button onclick='location="/downloadsearchmetadata/{{mySearchGuid}}/"'>XML</button>
+        <button onclick='location="/downloadsearchmetadata/{{mySearchGuid}}/?html"'>HTML</button>
       </div>
       {% endif %}
       <br />
     <div style="text-align: center;">
-      <button><a href="/modifysearch/{{mySearchGuid}}/" class="button-link" alt="Returns to the main search page (works on a copy of the current search)">Modify this search</a></button>
+      <button onclick='location="button-link" title="Returns to the main search page (works on a copy of the current search)"'>Modify this search</button>
     </div>
   <div>
-    {% if myProductIdSearch %}<br /><button><a href="/productIdSearchClone/{{mySearchGuid}}/" class="button-link" title="Refine this search (works on a copy of the current search)">Product ID search</a></button>{% endif %}
+    {% if myProductIdSearch %}<br />
+    <button onclick='location="button-link" title="Refine this search (works on a copy of the current search)"'>Product ID search</button>
+    {% endif %}
   </div>
           {#% if user.is_staff %}<div id="sql" style="display: none;">{{ mySqlString }}</div><input type=button id="sql-button" value="Show SQL" />{% endif %#}
     </div>

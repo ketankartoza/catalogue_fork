@@ -154,14 +154,14 @@
 <div class="centered">
     {% if myOrder.delivery_detail.geometry %}
     Download clip geometry:
-    <button><a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?shp">SHP</a></button>
-    <button><a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?kml">KML</a></button>
-    <button><a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?kmz">KMZ</a></button>
+    <button onclick='location="/downloadclipgeometry/{{ myOrder.id }}/?shp"'>SHP</button>
+    <button onclick='location="/downloadclipgeometry/{{ myOrder.id }}/?kml"'>KML</button>
+    <button onclick='location="/downloadclipgeometry/{{ myOrder.id }}/?kmz"'>KMZ</button>
     {% endif %}
     Download ISO 19115 (SAC Profile)
-    <button><a class="button-link" href="/downloadordermetadata/{{ myOrder.id }}/">XML metadata</a></button>
+    <button onclick='location="/downloadordermetadata/{{ myOrder.id }}/"'>XML metadata</button>
     Download HTML Metadata
-    <button><a class="button-link" href="/downloadordermetadata/{{ myOrder.id }}/?html">HTML metadata</a></button>
+    <button onclick='location="/downloadordermetadata/{{ myOrder.id }}/?html"'>HTML metadata</button>
 </div>
 {% box_end %}
 <br />
@@ -170,10 +170,10 @@
 </div>
 <br />
 {% box_start "box-order-history" %}
-<h2 class="centered">Order History</h2>
+<h2 class="centered"><img class="icon" src="/media/images/clock_32.png"> Order History</h2>
 {% if myForm %}
 <div style="margin:5px">
-  <button><a href="#" id="statusFormLink" class='button-link' onclick="$('#statusForm').dialog('open'); return false;">Update status</a></button>
+  <button id="statusFormLink" onclick="$('#statusForm').dialog('open'); return false;">Update status</button>
 </div>
 {% endif %}
 <div id="orderHistory">
