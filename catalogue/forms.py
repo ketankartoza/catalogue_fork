@@ -385,7 +385,7 @@ class ProductDeliveryDetailForm(forms.ModelForm):
 
   class Meta:
     model = DeliveryDetail
-    exclude = ('user','geometry',)
+    exclude = ('user','geometry', 'processing_level')
 
 class TaskingRequestDeliveryDetailForm(forms.ModelForm):
   ref_id = forms.CharField(widget=forms.HiddenInput(),required=False)

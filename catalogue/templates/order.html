@@ -55,8 +55,8 @@
   //]]>
 </script>
 {% box_start "box-order-details" %}
-<h2>Order Details</h2>
-<h2>Order No: {{myOrder.id}}, Order Status: {{myOrder.order_status}}</h2>
+<h2 class="centered"><img class="icon" src="/media/images/briefcase_32.png"> Order Details</h2>
+<h3 class="centered">Order No: {{myOrder.id}}, Order Status: {{myOrder.order_status}}</h3>
 <table>
   <thead>
   </thead>
@@ -151,6 +151,7 @@
     </tr>
   </tbody>
 </table>
+<div class="centered">
     {% if myOrder.delivery_detail.geometry %}
     Download clip geometry:
     <button><a class="button-link" href="/downloadclipgeometry/{{ myOrder.id }}/?shp">SHP</a></button>
@@ -161,6 +162,7 @@
     <button><a class="button-link" href="/downloadordermetadata/{{ myOrder.id }}/">XML metadata</a></button>
     Download HTML Metadata
     <button><a class="button-link" href="/downloadordermetadata/{{ myOrder.id }}/?html">HTML metadata</a></button>
+</div>
 {% box_end %}
 <br />
 <div id="items">
@@ -168,9 +170,7 @@
 </div>
 <br />
 {% box_start "box-order-history" %}
-<h2>
-Order History
-</h2>
+<h2 class="centered">Order History</h2>
 {% if myForm %}
 <div style="margin:5px">
   <button><a href="#" id="statusFormLink" class='button-link' onclick="$('#statusForm').dialog('open'); return false;">Update status</a></button>
