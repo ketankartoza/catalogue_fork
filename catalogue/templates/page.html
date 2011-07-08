@@ -44,7 +44,7 @@
   <br />
   {% box_start page "span-22" %}
     <div class="pagination span-23">
-      <div class="step-links span-2 left vcentered">
+      <div class="step-links span-1 left vcentered">
         {% if myPage.has_previous %}
         <a href="#" onclick='loadPage({{ myPage.previous_page_number }},"{{mySearchGuid}}"); return false;'><img alt="previous" src="/media/images/back_alt.png" /></a>
         {% else %}
@@ -52,14 +52,14 @@
         {% endif %}
       </div>
       {% if myPage %}
-      <div class="current centered span-18">
+      <div class="current centered span-20">
         Page  
         <select id="page-selector" value="{{ myPage.number }}"  name="page-selector" onchange='loadPage( $("#page-selector option:selected").val(),"{{mySearchGuid}}"); return false;'>
           {% for i in myPage.paginator.num_pages|get_range %}<option value='{{ i }}' {% if i == myPage.number %}selected='yes'{% endif %}>{{i}}</option>{% endfor %}
         </select> of {{ myPage.paginator.num_pages }}.
       </div>
       {% endif %}
-      <div class="step-links span-2 right vcentered">
+      <div class="step-links span-1 vcentered">
         {% if myPage.has_next %}
           <a href="#" onclick='loadPage({{ myPage.next_page_number }},"{{mySearchGuid}}"); return false;'><img alt="previous" src="/media/images/forward_alt.png" /></a>
         {% else %}
@@ -67,7 +67,7 @@
         {% endif %}
       </div>
     </div>
-    <div class="span-23 last">
+    <div class="span-22 last">
       <table id="results" cellpadding="0" cellspacing="0" class="span-22 last">
         {% include "recordHeader.html" %}
         <tbody>

@@ -70,7 +70,7 @@
   <body {% block body_load %}{% endblock %}>
     <div id="header" class=""><div id="logo"></div></div>
     <div class="container"> {# for blueprint css #}
-      <div class="menu-container">
+      <div class="menu-container span-24">
         {% include "menu.html" %}
       </div>
       {% if messages %}
@@ -91,9 +91,12 @@
         <div id="dst-credits" class="span-7 append-1 prepend-1">
           {% box_start "box-sponsor" %}
           {# left css class defined by blueprint css #}
-          <img src="/media/images/dst_logo_small.png" class="left" />This catalogue was funded by the <a
+          <img src="/media/images/dst_logo_small.png" class="left" />
+          <p class="padded">
+            This catalogue was funded by the <a
             href="http://www.dst.gov.za/">Department of Science and
             Technology.</a>
+          </p>
           {% box_end %}
         </div>
         <div id="user-box" class="span-6 append-1">
@@ -102,13 +105,17 @@
           {% load avatars %}
           {# left css class defined by blueprint css #}
           <img id="avatarimg" src="{% avatar 96 %}" class="left"/>
+          <p class="padded">
           You are logged in as {{user}}
+          </p>
           {% endif %}
           {% box_end %}
         </div>{# end of footer #}
         <div id="legal" class="span-7 append-1 last">
           {% box_start "box-copyright" %}
-          Website &copy; 2008 CSIR, Satellite Applications Centre. &copy; 2010 SANSA, Earth Observation. All Rights Reserved. This catalogue was developed by <a href="http://linfiniti.com">Linfiniti Consulting CC.</a>
+          <p class="padded">
+            Website &copy; 2010 SANSA, Earth Observation. &copy; 2008 CSIR, Satellite Applications Centre. All Rights Reserved. This catalogue was developed by <a href="http://linfiniti.com">Linfiniti Consulting CC.</a>
+          </p>
           {% box_end %}
         </div>
       </div>

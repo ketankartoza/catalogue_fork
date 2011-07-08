@@ -42,9 +42,12 @@ body {
   }
 
 /* Override bg of ui */
-.ui-widget-content { 
-  background: none #95b5c6; 
-  padding: 10px;
+.flat-background { 
+  background: none #d5e0f1; 
+}
+
+.padded {
+  margin: 10px;
 }
 
 .ui-datepicker {
