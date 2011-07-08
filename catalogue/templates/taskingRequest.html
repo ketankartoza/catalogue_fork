@@ -55,7 +55,7 @@
 </script>
 {% box_start "box-tasking-request" %}
 <h2 class="centered"><img class="icon" src="/media/images/tasking_32.png"> Tasking Request Details</h2>
-<h2 class="centered">Tasking Request No: {{myTaskingRequest.id}}, Order Status: {{myTaskingRequest.order_status}}</h2>
+<h3 class="centered">Tasking Request No: {{myTaskingRequest.id}}, Order Status: {{myTaskingRequest.order_status}}</h3>
 <table>
   <thead>
   </thead>
@@ -151,10 +151,12 @@
   </tbody>
 </table>
     {% if myTaskingRequest.delivery_detail.geometry %}
+  <div class="centered">
     Download tasking geometry:
     <button onclick='location="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?shp"'>SHP</button>
     <button onclick='location="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?kml"'>KML</button>
     <button onclick='location="/downloadtaskingrequest/{{ myTaskingRequest.id }}/?kmz"'>KMZ</button>
+  </div>
     {% endif %}
 
 {% box_end %}
