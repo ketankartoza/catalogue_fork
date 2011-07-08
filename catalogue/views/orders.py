@@ -45,7 +45,7 @@ def myOrders(theRequest):
   '''Non staff users can only see their own orders listed'''
   myRecords = Order.base_objects.filter(user=theRequest.user).order_by('-order_date')
   # Paginate the results
-  myPaginator = Paginator(myRecords, 10)
+  myPaginator = Paginator(myRecords, 100)
   # Make sure page request is an int. If not, deliver first page.
   try:
     myPage = int(theRequest.GET.get('page', '1'))
@@ -74,13 +74,12 @@ def listOrders(theRequest):
   else:
     '''This view is strictly for staff only'''
     myRecords = Order.base_objects.all().order_by('-order_date')
+  if theRequest.GET.has_key('pdf'):
+    myPageSize = myRecords.count()
+  else:
+    myPageSize = 100
   # Paginate the results
-  myPaginator = Paginator(myRecords, 10)
-  # Make sure page request is an int. If not, deliver first page.
-  try:
-    myPage = int(theRequest.GET.get('page', '1'))
-  except ValueError:
-    myPage = 1
+  myPaginator = Paginator(myRecords, myPageSize)
   # If page request (9999) is out of range, deliver last page of results.
   try:
     myRecords = myPaginator.page(myPage)

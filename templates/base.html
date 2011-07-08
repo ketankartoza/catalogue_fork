@@ -106,7 +106,7 @@
           {# left css class defined by blueprint css #}
           <img id="avatarimg" src="{% avatar 96 %}" class="left"/>
           <p class="padded">
-          You are logged in as {{user}}
+          You are logged in as {{user.first_name}} {{user.last_name}}({{user}})
           </p>
           {% endif %}
           {% box_end %}

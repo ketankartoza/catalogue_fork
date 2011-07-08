@@ -8,24 +8,28 @@
         $('#content').load(theUrl,'', zebraTables );
       };
   </script>
-  <a class="button-link" href="/{{ myUrl }}/?page={{ myRecords.number}}&pdf"><img src="/media/images/application-pdf.png" />PDF</a>
-  {% if myUrl = 'listorders' %}
-  <a class="button-link" href="/ordermonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/">Monthly reports</a>
-  <a class="button-link" href="/orderssummary/">Orders summary</a>
-  {% endif %}
-  <h2>Orders List</h2>
+  <div class="span-22">
+    <div class="span-9 centered">
+      <h2>Orders List</h2>
+    </div>
+    <div class="span-5">
+      <form name="frmShowOrder" method="get" action="">
+        <label>Go to Order:</label>
+        <input name="order_id_text" type="text" size="6" maxlength="5" />
+        <input type="button" value="Go!" 
+          onclick="showOrder(forms['frmShowOrder'].order_id_text.value); return false;" />
+      </form>
+    </div>
+    <div class="span-8 centered last " id="order-list-buttonset">
+      <button><a href="/{{ myUrl }}/?page={{ myRecords.number}}&pdf"><img src="/media/images/application-pdf.png" />PDF</a></button>
+      {% if myUrl = 'listorders' %}
+      <button><a href="/ordermonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/">Monthly reports</a></button>
+      <button><a href="/orderssummary/">Orders summary</a></button>
+      {% endif %}
+    </div>
+  </div>
   <table>
     <thead>
-      <tr>
-        <td colspan="5">
-        <form name="frmShowOrder" method="get" action="">
-          <label>Go to Order:</label>
-          <input name="order_id_text" type="text" size="6" maxlength="5" />
-          <input type="button" value="Go!" 
-                onclick="showOrder(forms['frmShowOrder'].order_id_text.value); return false;" />
-        </form>
-        </td>              
-      </tr>                
     </thead>               
     <tbody>
       <tr>
@@ -59,7 +63,7 @@
         <td>{{myOrder.id }}</td>
         <td>{{myOrder.order_date|date:"D, d M Y, H:m" }}</td>
         <td>{{myOrder.order_status}}</td>
-        <td>{{myOrder.user}}</td>
+        <td>{{myOrder.user.get_profile.firstname}} {{myOrder.user.get_profile.surname}}</td>
         <td>
           <img src="/media/images/search_16.png" 
                style="cursor: pointer;"

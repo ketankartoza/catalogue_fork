@@ -17,7 +17,7 @@
         <td>{{myOrder.id }}</td>
         <td>{{myOrder.order_date|date:"D, d M Y, H:m" }}</td>
         <td>{{myOrder.order_status}}</td>
-        <td>{{myOrder.user}}</td>
+        <td>{{myOrder.user.get_profile.firstname}} {{myOrder.user.get_profile.surname}}</td>
       </tr>
     {% endfor %}
     </tbody>
