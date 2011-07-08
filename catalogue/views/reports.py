@@ -1,6 +1,7 @@
 # Django helpers for forming html pages
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.contrib.gis.shortcuts import render_to_kml, render_to_kmz
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -98,14 +99,34 @@ def visitorMonthlyReport( theRequest, theyear, themonth):
     })
 
 
+@staff_member_required
+#renderWithContext is explained in renderWith.py
+@renderWithContext('visitorFrequency.html')
+def visitorFrequency(theRequest):
+  myVisitors = Visit.objects.values('user').annotate(Count('user')).order_by('-user__count')
+  """[{'user__count': 1275, 'user': 1}, {'user__count': 68, 'user': 2}, {'user__count': 33, 'user': 4}, {'user__count': 233, 'user': 5}, {'user__count': 7, 'user': 9}, {'user__count': 1, 'user': 10}, {'user__count': 23, 'user': 11}, {'user__count': 20, 'user': 13}, {'user__count': 22, 'user': 15}, {'user__count': 35, 'user': 16}, {'user__count': 201, 'user': 18}, {'user__count': 19, 'user': 20}, {'user__count': 28, 'user': 26}, {'user__count': 7, 'user': 27}, {'user__count': 41, 'user': 30}, {'user__count': 11, 'user': 31}, {'user__count': 24, 'user': 32}, {'user__count': 18, 'user': 34}, {'user__count': 2, 'user': 36}, {'user__count': 40, 'user': 37}, '...(remaining elements truncated)...']"""
+  myRecords = {}
+  for myVisitor in myVisitors:
+    #myRecords[User.objects.get(id=myVisitor['user'])] = myVisitor['user__count']
+    if myVisitor['user']:
+      myUser = User.objects.get(id=int(myVisitor['user']))
+      myCount = myVisitor['user__count']
+      myName = myUser.username
+      myRecords[ myName ] = myCount
+  #render_to_response is done by the renderWithContext decorator
+  return ({'myRecords': myRecords})
 
-@login_required
+@staff_member_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('visitors.html')
 def visitorList(theRequest):
   myRecords = Visit.objects.all().order_by('-visit_date')
   # Paginate the results
-  myPaginator = Paginator(myRecords, 10) # Show 25 contacts per page
+  if theRequest.GET.has_key('pdf'):
+    myPageSize = myRecords.count()
+  else:
+    myPageSize = 100
+  myPaginator = Paginator(myRecords, myPageSize)
   # Make sure page request is an int. If not, deliver first page.
   try:
     myPage = int(theRequest.GET.get('page', '1'))

@@ -3,7 +3,7 @@
 {% box_start "box-visitors"%}
   {% if myRecords %}
   <button onclick='location="/visitorlist/?page={{ myRecords.number}}&pdf"'><img src="/media/images/application-pdf.png" /> PDF</button>
-      <table id="gradient-style" summary="Available Sensors">
+      <table id="gradient-style" summary="Visitors List">
         <thead> 
         </thead>
         <tfoot>
@@ -37,7 +37,7 @@
           </tr>
           {% for myRecord in myRecords.object_list %}
           <tr>
-            <td>{{ myRecord.user}}</td>
+            <td>{{ myRecord.user.get_profile.firstname}} {{myRecord.user.get_profile.surname}}</td>
             <td>{{ myRecord.ip_address }}</td>
             <td>{{ myRecord.country}}</td>
             <td>{{ myRecord.city }}</td>

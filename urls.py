@@ -61,6 +61,7 @@ urlpatterns = patterns('',
     #show all searches that were made
     (r'^searchesmap/$', searchesMap),
     (r'^visitorlist/$', visitorList),
+    (r'^visitorfrequency/$', visitorFrequency),
     (r'^visitorreport/$', visitorReport),
     (r'^visitormonthlyreport/(?P<theyear>\d{4})/(?P<themonth>\d{1,2})/$', visitorMonthlyReport),
     # Profile application
