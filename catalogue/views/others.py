@@ -467,7 +467,8 @@ def searchesMap(theRequest):
     'myLayersList' : myLayersList,
     'myPartnerFlag' : isStrategicPartner(theRequest),
     'myShowSearchFeatureInfoFlag' : 'true',
-    'myLegendFlag':'true'
+    'myLegendFlag':'true',
+    'mySearchAreasToggle' : 'true',
     })
 
 #
