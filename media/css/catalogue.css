@@ -193,6 +193,7 @@ img.paragraph-icon {
     text-decoration: none;
   }
 
+h2 img.icon, h2 img { padding-top: 5px }
 
 #map-panel {
     height: 36px;
