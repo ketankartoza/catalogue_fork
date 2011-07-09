@@ -419,13 +419,14 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
       myImage = Image.open( myInputImageFile )
       # We need to know the pixel dimensions of the segment so that we can create GCP's
     except:
-      print "File not found %s" % myInputImageFile
+      logging.info( "File not found %s" % myInputImageFile )
       return "no file"
     myTempTifFile = os.path.join( "/tmp/",self.product_id + ".tif" )
     myTempReffedTifFile = os.path.join( "/tmp/",self.product_id + "reffed.tif" )
     myJpgFile = os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.jpg" )
     #check if there is perhaps an acs catalogue imported, referenced thumb available. If there is use that.
-    self.checkForAcsThumb()
+    if not os.path.exists( myJpgFile ) or theForceFlag:
+      self.checkForAcsThumb()
     myLogFile = file(os.path.join( settings.THUMBS_ROOT, self.thumbnailDirectory(), self.product_id + "-reffed.log" ), "w")
     if os.path.exists( myJpgFile ) and not theForceFlag:
       return myJpgFile
