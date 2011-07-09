@@ -91,7 +91,7 @@ ALTER TABLE "catalogue_missionsensor" ADD
     "mission_id" integer REFERENCES "catalogue_mission" ("id");
 ALTER TABLE "catalogue_sensortype" ADD
     "mission_sensor_id" integer REFERENCES "catalogue_missionsensor" ("id");
-ALTER TABLE "catalogue_sensortype" ADD
+ALTER TABLE "catalogue_missionsensor" ADD
     "is_taskable" boolean;
 ALTER TABLE "catalogue_acquisitionmode" ADD
     "sensor_type_id" integer REFERENCES "catalogue_sensortype" ("id");
@@ -116,14 +116,14 @@ UPDATE "catalogue_missionsensor" SET mission_id = ( select distinct gs.mission_i
 -- set defaults for new fields
 
 UPDATE "catalogue_mission" SET "mission_group_id" = 1 WHERE true;
-UPDATE "catalogue_sensortype" SET "is_taskable" = true WHERE true;
+UPDATE "catalogue_missionsensor" SET "is_taskable" = false WHERE false;
 UPDATE "catalogue_acquisitionmode" SET "is_grayscale" = false WHERE true;
 
 -- add constraints
 ALTER TABLE "catalogue_mission" ALTER "mission_group_id" SET NOT NULL;
 ALTER TABLE "catalogue_missionsensor" ALTER "mission_id" SET NOT NULL;
 ALTER TABLE "catalogue_sensortype" ALTER "mission_sensor_id" SET NOT NULL;
-ALTER TABLE "catalogue_sensortype" ALTER "is_taskable" SET NOT NULL;
+ALTER TABLE "catalogue_missionsensor" ALTER "is_taskable" SET NOT NULL;
 ALTER TABLE "catalogue_acquisitionmode" ALTER  "sensor_type_id" SET NOT NULL;
 -- finally, drop old columns
 ALTER TABLE "catalogue_genericsensorproduct" DROP COLUMN mission_id;

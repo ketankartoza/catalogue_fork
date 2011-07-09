@@ -45,6 +45,7 @@ class MissionSensor( models.Model ):
   has_data = models.BooleanField(help_text='Mark false if there is no data for this sensor')
   mission = models.ForeignKey(Mission) # e.g. S5
   is_radar = models.BooleanField(help_text='Mark true if this sensor is a radar sensor', default=False)
+  is_taskable = models.BooleanField(default=False, help_text="Can this sensor be tasked?")
   operator_abbreviation = models.CharField( max_length=255, unique=True ) # UI abbreviation
   class Meta:
     app_label= 'catalogue'
@@ -72,7 +73,6 @@ class SensorType( models.Model ):
   abbreviation = models.CharField( max_length="4")
   name = models.CharField( max_length="255" )
   mission_sensor = models.ForeignKey(MissionSensor ) # e.g. HRV
-  is_taskable = models.BooleanField(default=True)
   operator_abbreviation = models.CharField( max_length=255 ) # UI abbreviation
   class Meta:
     app_label= 'catalogue'

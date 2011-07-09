@@ -409,6 +409,10 @@ class TaskingRequestForm(forms.ModelForm):
     model = TaskingRequest
     exclude = ('user','delivery_detail','order_status')
 
+  def __init__(self, *args, **kwargs):
+    super(TaskingRequestForm, self).__init__(*args, **kwargs)
+    self.fields['mission_sensor'].queryset = MissionSensor.objects.filter(is_taskable=True)
+
 
 class OrderStatusHistoryForm(forms.ModelForm):
   class Meta:

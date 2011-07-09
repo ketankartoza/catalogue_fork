@@ -544,7 +544,8 @@
             "mission": 1, 
             "abbreviation": "AVH", 
             "operator_abbreviation": "AVHRR-3", 
-            "has_data": true
+            "has_data": true,
+            "is_taskable": true
         }
     }, 
     {
@@ -557,7 +558,8 @@
             "mission": 9, 
             "abbreviation": "AMI", 
             "operator_abbreviation": "AMI-1", 
-            "has_data": true
+            "has_data": true,
+            "is_taskable": true
         }
     }, 
     {
@@ -570,7 +572,8 @@
             "mission": 14, 
             "abbreviation": "TM", 
             "operator_abbreviation": "TM-4", 
-            "has_data": true
+            "has_data": true,
+            "is_taskable": true
         }
     }, 
     {
@@ -583,7 +586,8 @@
             "mission": 10, 
             "abbreviation": "TM", 
             "operator_abbreviation": "TM-5", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -596,7 +600,8 @@
             "mission": 23, 
             "abbreviation": "MSS", 
             "operator_abbreviation": "MSS-1", 
-            "has_data": true
+            "has_data": true,
+            "is_taskable": true
         }
     }, 
     {
@@ -609,7 +614,8 @@
             "mission": 12, 
             "abbreviation": "MSS", 
             "operator_abbreviation": "MSS-2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -622,7 +628,8 @@
             "mission": 13, 
             "abbreviation": "MSS", 
             "operator_abbreviation": "MSS-3", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -635,7 +642,8 @@
             "mission": 14, 
             "abbreviation": "MSS", 
             "operator_abbreviation": "MSS-4", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -648,7 +656,8 @@
             "mission": 10, 
             "abbreviation": "MSS", 
             "operator_abbreviation": "MSS-5", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -661,7 +670,8 @@
             "mission": 11, 
             "abbreviation": "ETM", 
             "operator_abbreviation": "ETM+", 
-            "has_data": true
+            "has_data": true,
+            "is_taskable": true
         }
     }, 
     {
@@ -674,7 +684,8 @@
             "mission": 17, 
             "abbreviation": "HRV", 
             "operator_abbreviation": "HRV-1", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -687,7 +698,8 @@
             "mission": 15, 
             "abbreviation": "HRV", 
             "operator_abbreviation": "HRV-2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -700,7 +712,8 @@
             "mission": 22, 
             "abbreviation": "HRV", 
             "operator_abbreviation": "HRV-3", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -713,7 +726,8 @@
             "mission": 16, 
             "abbreviation": "HIR", 
             "operator_abbreviation": "HRVIR-4", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -726,7 +740,8 @@
             "mission": 16, 
             "abbreviation": "VMI", 
             "operator_abbreviation": "Vegetation-4", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -739,7 +754,8 @@
             "mission": 18, 
             "abbreviation": "HRG", 
             "operator_abbreviation": "HRG-5", 
-            "has_data": true
+            "has_data": true,
+            "is_taskable": true
         }
     }, 
     {
@@ -752,7 +768,8 @@
             "mission": 18, 
             "abbreviation": "HRS", 
             "operator_abbreviation": "HRS-5", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -765,7 +782,8 @@
             "mission": 18, 
             "abbreviation": "VMI", 
             "operator_abbreviation": "Vegetation-5", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -778,7 +796,8 @@
             "mission": 8, 
             "abbreviation": "AMI", 
             "operator_abbreviation": "AMI-2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -791,7 +810,8 @@
             "mission": 23, 
             "abbreviation": "RBV", 
             "operator_abbreviation": "RBV-1", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -804,7 +824,8 @@
             "mission": 12, 
             "abbreviation": "RBV", 
             "operator_abbreviation": "RBV-2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -817,7 +838,8 @@
             "mission": 13, 
             "abbreviation": "RBV", 
             "operator_abbreviation": "RBV-3", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -830,7 +852,8 @@
             "mission": 20, 
             "abbreviation": "HRC", 
             "operator_abbreviation": "HRCC-2B", 
-            "has_data": true
+            "has_data": true,
+            "is_taskable": true
         }
     }, 
     {
@@ -843,7 +866,8 @@
             "mission": 20, 
             "abbreviation": "HRP", 
             "operator_abbreviation": "HRPC-2B", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -856,7 +880,8 @@
             "mission": 20, 
             "abbreviation": "WFI", 
             "operator_abbreviation": "WFI-2B", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -869,7 +894,8 @@
             "mission": 19, 
             "abbreviation": "PAL", 
             "operator_abbreviation": "PAL-2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -882,7 +908,8 @@
             "mission": 19, 
             "abbreviation": "MSI", 
             "operator_abbreviation": "MSI-2", 
-            "has_data": true
+            "has_data": true,
+            "is_taskable": true
         }
     }, 
     {
@@ -895,7 +922,8 @@
             "mission": 24, 
             "abbreviation": "MUX", 
             "operator_abbreviation": "MUX-3", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -908,7 +936,8 @@
             "mission": 24, 
             "abbreviation": "HRC", 
             "operator_abbreviation": "HRCC-3", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -921,7 +950,8 @@
             "mission": 24, 
             "abbreviation": "IRM", 
             "operator_abbreviation": "IRMSS-3", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -934,7 +964,8 @@
             "mission": 24, 
             "abbreviation": "AWF", 
             "operator_abbreviation": "AWFI-3", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -947,7 +978,8 @@
             "mission": 21, 
             "abbreviation": "MMR", 
             "operator_abbreviation": "MMRS-C", 
-            "has_data": true
+            "has_data": true,
+            "is_taskable": true
         }
     }, 
     {
@@ -960,7 +992,8 @@
             "mission": 21, 
             "abbreviation": "HRT", 
             "operator_abbreviation": "HRTC-C", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -973,7 +1006,8 @@
             "mission": 26, 
             "abbreviation": "W60", 
             "operator_abbreviation": "WV60", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -986,7 +1020,8 @@
             "mission": 27, 
             "abbreviation": "110", 
             "operator_abbreviation": "WV110", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -999,7 +1034,8 @@
             "mission": 25, 
             "abbreviation": "BGI", 
             "operator_abbreviation": "BGIS-2000", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1012,7 +1048,8 @@
             "mission": 28, 
             "abbreviation": "OSA", 
             "operator_abbreviation": "OSA-2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1025,7 +1062,8 @@
             "mission": 29, 
             "abbreviation": "GIS", 
             "operator_abbreviation": "GIS-1", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1038,7 +1076,8 @@
             "mission": 32, 
             "abbreviation": "REI", 
             "operator_abbreviation": "REIS-1", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1051,7 +1090,8 @@
             "mission": 33, 
             "abbreviation": "REI", 
             "operator_abbreviation": "REIS-2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1064,7 +1104,8 @@
             "mission": 34, 
             "abbreviation": "REI", 
             "operator_abbreviation": "REIS-3", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1077,7 +1118,8 @@
             "mission": 35, 
             "abbreviation": "REI", 
             "operator_abbreviation": "REIS-4", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1090,7 +1132,8 @@
             "mission": 36, 
             "abbreviation": "REI", 
             "operator_abbreviation": "REIS-5", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1103,7 +1146,8 @@
             "mission": 39, 
             "abbreviation": "LI3", 
             "operator_abbreviation": "LISS-3-IRS-P-6", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1116,7 +1160,8 @@
             "mission": 39, 
             "abbreviation": "LI4", 
             "operator_abbreviation": "LISS-4-IRS-P-6", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1129,7 +1174,8 @@
             "mission": 39, 
             "abbreviation": "AWF", 
             "operator_abbreviation": "AwiFS-IRS-P-6", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1142,7 +1188,8 @@
             "mission": 40, 
             "abbreviation": "LI3", 
             "operator_abbreviation": "LISS-3-R-2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1155,7 +1202,8 @@
             "mission": 40, 
             "abbreviation": "LI4", 
             "operator_abbreviation": "LISS-4-R-2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1168,7 +1216,8 @@
             "mission": 40, 
             "abbreviation": "AWF", 
             "operator_abbreviation": "AwiFS-R-2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1181,7 +1230,8 @@
             "mission": 41, 
             "abbreviation": "P-A", 
             "operator_abbreviation": "Pan-Aft-CS1", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1194,7 +1244,8 @@
             "mission": 41, 
             "abbreviation": "P-F", 
             "operator_abbreviation": "Pan-Fore-CS1", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1207,7 +1258,8 @@
             "mission": 42, 
             "abbreviation": "PIM", 
             "operator_abbreviation": "PRISM", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1220,7 +1272,8 @@
             "mission": 42, 
             "abbreviation": "AV2", 
             "operator_abbreviation": "AVNIR-2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1233,7 +1286,8 @@
             "mission": 42, 
             "abbreviation": "PSR", 
             "operator_abbreviation": "PALSAR-1", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1246,7 +1300,8 @@
             "mission": 43, 
             "abbreviation": "PSR", 
             "operator_abbreviation": "PALSAR-2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1259,7 +1314,8 @@
             "mission": 44, 
             "abbreviation": "AIS", 
             "operator_abbreviation": "AIRS", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1272,7 +1328,8 @@
             "mission": 44, 
             "abbreviation": "MYD", 
             "operator_abbreviation": "MODIS-AQA", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1285,7 +1342,8 @@
             "mission": 45, 
             "abbreviation": "AST", 
             "operator_abbreviation": "ASTER-TER", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1298,7 +1356,8 @@
             "mission": 45, 
             "abbreviation": "MIS", 
             "operator_abbreviation": "MISR-TER", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1311,7 +1370,8 @@
             "mission": 45, 
             "abbreviation": "MOD", 
             "operator_abbreviation": "MODIS-TER", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1324,7 +1384,8 @@
             "mission": 46, 
             "abbreviation": "MCD", 
             "operator_abbreviation": "MODIS-A-T", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1337,7 +1398,8 @@
             "mission": 47, 
             "abbreviation": "PIC", 
             "operator_abbreviation": "PIC-E-A", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1350,7 +1412,8 @@
             "mission": 48, 
             "abbreviation": "SWF", 
             "operator_abbreviation": "SeaWiFS-2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1363,7 +1426,8 @@
             "mission": 17, 
             "abbreviation": "Xs", 
             "operator_abbreviation": "Xs", 
-            "has_data": true
+            "has_data": true,
+            "is_taskable": true
         }
     }, 
     {
@@ -1376,7 +1440,8 @@
             "mission": 16, 
             "abbreviation": "Xi", 
             "operator_abbreviation": "Xi", 
-            "has_data": true
+            "has_data": true,
+            "is_taskable": true
         }
     }, 
     {
@@ -1389,7 +1454,8 @@
             "mission": 16, 
             "abbreviation": "M", 
             "operator_abbreviation": "M", 
-            "has_data": true
+            "has_data": true,
+            "is_taskable": true
         }
     }, 
     {
@@ -1402,7 +1468,8 @@
             "mission": 17, 
             "abbreviation": "Pan", 
             "operator_abbreviation": "Pan", 
-            "has_data": true
+            "has_data": true,
+            "is_taskable": true
         }
     }, 
     {
@@ -1415,7 +1482,8 @@
             "mission": 30, 
             "abbreviation": "SAR", 
             "operator_abbreviation": "SAR-TSX1", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1428,7 +1496,8 @@
             "mission": 31, 
             "abbreviation": "SAR", 
             "operator_abbreviation": "SAR-TDX2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1441,7 +1510,8 @@
             "mission": 37, 
             "abbreviation": "SAR", 
             "operator_abbreviation": "SAR-RS1", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1454,7 +1524,8 @@
             "mission": 38, 
             "abbreviation": "SAR", 
             "operator_abbreviation": "SAR-RS2", 
-            "has_data": false
+            "has_data": false,
+            "is_taskable": true
         }
     }, 
     {
@@ -1464,8 +1535,7 @@
             "abbreviation": "VIT", 
             "mission_sensor": 1, 
             "name": "Visual, Near Infrared, Short Wave Infrared and Thermal", 
-            "operator_abbreviation": "VisNirSwirTh", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirSwirTh"
         }
     }, 
     {
@@ -1475,8 +1545,7 @@
             "abbreviation": "STM", 
             "mission_sensor": 2, 
             "name": "Strip Map C Band", 
-            "operator_abbreviation": "STM-C", 
-            "is_taskable": true
+            "operator_abbreviation": "STM-C"
         }
     }, 
     {
@@ -1486,8 +1555,7 @@
             "abbreviation": "HRF", 
             "mission_sensor": 3, 
             "name": "Multispectral", 
-            "operator_abbreviation": "HRF", 
-            "is_taskable": true
+            "operator_abbreviation": "HRF"
         }
     }, 
     {
@@ -1497,8 +1565,7 @@
             "abbreviation": "HTM", 
             "mission_sensor": 3, 
             "name": "Thermal", 
-            "operator_abbreviation": "HTM", 
-            "is_taskable": true
+            "operator_abbreviation": "HTM"
         }
     }, 
     {
@@ -1508,8 +1575,7 @@
             "abbreviation": "HRF", 
             "mission_sensor": 16, 
             "name": "Multispectral", 
-            "operator_abbreviation": "HRF", 
-            "is_taskable": true
+            "operator_abbreviation": "HRF"
         }
     }, 
     {
@@ -1519,8 +1585,7 @@
             "abbreviation": "HTM", 
             "mission_sensor": 16, 
             "name": "Thermal", 
-            "operator_abbreviation": "HTM", 
-            "is_taskable": true
+            "operator_abbreviation": "HTM"
         }
     }, 
     {
@@ -1530,8 +1595,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 4, 
             "name": "Visual, Near Infrared", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -1541,8 +1605,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 17, 
             "name": "Visual, Near Infrared", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -1552,8 +1615,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 18, 
             "name": "Visual, Near Infrared", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -1563,8 +1625,7 @@
             "abbreviation": "VNT", 
             "mission_sensor": 18, 
             "name": "Visual, Near Infrared, Thermal", 
-            "operator_abbreviation": "VisNirTh", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirTh"
         }
     }, 
     {
@@ -1574,8 +1635,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 19, 
             "name": "Visual, Near Infrared", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -1585,8 +1645,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 20, 
             "name": "Visual, Near Infrared", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -1596,8 +1655,7 @@
             "abbreviation": "HPN", 
             "mission_sensor": 5, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "HPN", 
-            "is_taskable": true
+            "operator_abbreviation": "HPN"
         }
     }, 
     {
@@ -1607,8 +1665,7 @@
             "abbreviation": "HRF", 
             "mission_sensor": 5, 
             "name": "Multispectral", 
-            "operator_abbreviation": "HRF", 
-            "is_taskable": true
+            "operator_abbreviation": "HRF"
         }
     }, 
     {
@@ -1618,8 +1675,7 @@
             "abbreviation": "HPM", 
             "mission_sensor": 5, 
             "name": "Pansharpened Multispectral", 
-            "operator_abbreviation": "HPM", 
-            "is_taskable": true
+            "operator_abbreviation": "HPM"
         }
     }, 
     {
@@ -1629,8 +1685,7 @@
             "abbreviation": "HTM", 
             "mission_sensor": 5, 
             "name": "Thermal", 
-            "operator_abbreviation": "HTM", 
-            "is_taskable": true
+            "operator_abbreviation": "HTM"
         }
     }, 
     {
@@ -1640,8 +1695,7 @@
             "abbreviation": "XS", 
             "mission_sensor": 21, 
             "name": "Visual, NearInfrared,", 
-            "operator_abbreviation": "Xs", 
-            "is_taskable": true
+            "operator_abbreviation": "Xs"
         }
     }, 
     {
@@ -1651,8 +1705,7 @@
             "abbreviation": "P", 
             "mission_sensor": 21, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "P", 
-            "is_taskable": true
+            "operator_abbreviation": "P"
         }
     }, 
     {
@@ -1662,8 +1715,7 @@
             "abbreviation": "XSP", 
             "mission_sensor": 21, 
             "name": "Pansharpened Visual, NearInfrared,", 
-            "operator_abbreviation": "XsP", 
-            "is_taskable": true
+            "operator_abbreviation": "XsP"
         }
     }, 
     {
@@ -1673,8 +1725,7 @@
             "abbreviation": "XS", 
             "mission_sensor": 22, 
             "name": "Visual, NearInfrared,", 
-            "operator_abbreviation": "Xs", 
-            "is_taskable": true
+            "operator_abbreviation": "Xs"
         }
     }, 
     {
@@ -1684,8 +1735,7 @@
             "abbreviation": "P", 
             "mission_sensor": 22, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "P", 
-            "is_taskable": true
+            "operator_abbreviation": "P"
         }
     }, 
     {
@@ -1695,8 +1745,7 @@
             "abbreviation": "XSP", 
             "mission_sensor": 22, 
             "name": "Pansharpened Visual, NearInfrared,", 
-            "operator_abbreviation": "XsP", 
-            "is_taskable": true
+            "operator_abbreviation": "XsP"
         }
     }, 
     {
@@ -1706,8 +1755,7 @@
             "abbreviation": "XS", 
             "mission_sensor": 23, 
             "name": "Visual, NearInfrared,", 
-            "operator_abbreviation": "Xs", 
-            "is_taskable": true
+            "operator_abbreviation": "Xs"
         }
     }, 
     {
@@ -1717,8 +1765,7 @@
             "abbreviation": "P", 
             "mission_sensor": 23, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "P", 
-            "is_taskable": true
+            "operator_abbreviation": "P"
         }
     }, 
     {
@@ -1728,8 +1775,7 @@
             "abbreviation": "XSP", 
             "mission_sensor": 23, 
             "name": "Pansharpened Visual, NearInfrared,", 
-            "operator_abbreviation": "XsP", 
-            "is_taskable": true
+            "operator_abbreviation": "XsP"
         }
     }, 
     {
@@ -1739,8 +1785,7 @@
             "abbreviation": "XI", 
             "mission_sensor": 24, 
             "name": "Visual, NearInfrared, SWIR", 
-            "operator_abbreviation": "Xi", 
-            "is_taskable": true
+            "operator_abbreviation": "Xi"
         }
     }, 
     {
@@ -1750,8 +1795,7 @@
             "abbreviation": "XS", 
             "mission_sensor": 24, 
             "name": "Visual, NearInfrared", 
-            "operator_abbreviation": "Xs", 
-            "is_taskable": true
+            "operator_abbreviation": "Xs"
         }
     }, 
     {
@@ -1761,8 +1805,7 @@
             "abbreviation": "M", 
             "mission_sensor": 24, 
             "name": "Monospectral", 
-            "operator_abbreviation": "M", 
-            "is_taskable": true
+            "operator_abbreviation": "M"
         }
     }, 
     {
@@ -1772,8 +1815,7 @@
             "abbreviation": "XIM", 
             "mission_sensor": 24, 
             "name": "Pansharpened Visual, NearInfrared, SWIR", 
-            "operator_abbreviation": "XiM", 
-            "is_taskable": true
+            "operator_abbreviation": "XiM"
         }
     }, 
     {
@@ -1783,8 +1825,7 @@
             "abbreviation": "XSM", 
             "mission_sensor": 24, 
             "name": "Pansharpened Visual, NearInfrared,", 
-            "operator_abbreviation": "XsM", 
-            "is_taskable": true
+            "operator_abbreviation": "XsM"
         }
     }, 
     {
@@ -1794,8 +1835,7 @@
             "abbreviation": "XI", 
             "mission_sensor": 25, 
             "name": "Visual, NearInfrared, SWIR", 
-            "operator_abbreviation": "Xi", 
-            "is_taskable": true
+            "operator_abbreviation": "Xi"
         }
     }, 
     {
@@ -1805,8 +1845,7 @@
             "abbreviation": "A", 
             "mission_sensor": 10, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "A", 
-            "is_taskable": true
+            "operator_abbreviation": "A"
         }
     }, 
     {
@@ -1816,8 +1855,7 @@
             "abbreviation": "B", 
             "mission_sensor": 10, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "B", 
-            "is_taskable": true
+            "operator_abbreviation": "B"
         }
     }, 
     {
@@ -1827,8 +1865,7 @@
             "abbreviation": "J", 
             "mission_sensor": 10, 
             "name": "Visual, NearInfrared, SWIR", 
-            "operator_abbreviation": "J", 
-            "is_taskable": true
+            "operator_abbreviation": "J"
         }
     }, 
     {
@@ -1838,8 +1875,7 @@
             "abbreviation": "X", 
             "mission_sensor": 10, 
             "name": "Visual, NearInfrared", 
-            "operator_abbreviation": "X", 
-            "is_taskable": true
+            "operator_abbreviation": "X"
         }
     }, 
     {
@@ -1849,8 +1885,7 @@
             "abbreviation": "T", 
             "mission_sensor": 10, 
             "name": "Supersampled Panchromatic", 
-            "operator_abbreviation": "T", 
-            "is_taskable": true
+            "operator_abbreviation": "T"
         }
     }, 
     {
@@ -1860,8 +1895,7 @@
             "abbreviation": "JA", 
             "mission_sensor": 10, 
             "name": "Pansharpened Visual, NearInfrared, SWIR", 
-            "operator_abbreviation": "JA", 
-            "is_taskable": true
+            "operator_abbreviation": "JA"
         }
     }, 
     {
@@ -1871,8 +1905,7 @@
             "abbreviation": "JB", 
             "mission_sensor": 10, 
             "name": "Pansharpened Visual, NearInfrared, SWIR", 
-            "operator_abbreviation": "JB", 
-            "is_taskable": true
+            "operator_abbreviation": "JB"
         }
     }, 
     {
@@ -1882,8 +1915,7 @@
             "abbreviation": "JT", 
             "mission_sensor": 10, 
             "name": "Supersampled Pansharpened Visual NearInfrared, SWIR", 
-            "operator_abbreviation": "JT", 
-            "is_taskable": true
+            "operator_abbreviation": "JT"
         }
     }, 
     {
@@ -1893,8 +1925,7 @@
             "abbreviation": "XA", 
             "mission_sensor": 10, 
             "name": "Pansharpened Visual, NearInfrared", 
-            "operator_abbreviation": "XA", 
-            "is_taskable": true
+            "operator_abbreviation": "XA"
         }
     }, 
     {
@@ -1904,8 +1935,7 @@
             "abbreviation": "XB", 
             "mission_sensor": 10, 
             "name": "Pansharpened Visual, NearInfrared", 
-            "operator_abbreviation": "XB", 
-            "is_taskable": true
+            "operator_abbreviation": "XB"
         }
     }, 
     {
@@ -1915,8 +1945,7 @@
             "abbreviation": "XT", 
             "mission_sensor": 10, 
             "name": "Supersampled Pansharpened Visual NearInfrared", 
-            "operator_abbreviation": "XT", 
-            "is_taskable": true
+            "operator_abbreviation": "XT"
         }
     }, 
     {
@@ -1926,8 +1955,7 @@
             "abbreviation": "S", 
             "mission_sensor": 26, 
             "name": "Panchromatic Stereo", 
-            "operator_abbreviation": "S", 
-            "is_taskable": true
+            "operator_abbreviation": "S"
         }
     }, 
     {
@@ -1937,8 +1965,7 @@
             "abbreviation": "XI", 
             "mission_sensor": 27, 
             "name": "Visual, Near Infrared, SWIR", 
-            "operator_abbreviation": "Xi", 
-            "is_taskable": true
+            "operator_abbreviation": "Xi"
         }
     }, 
     {
@@ -1948,8 +1975,7 @@
             "abbreviation": "STM", 
             "mission_sensor": 28, 
             "name": "Strip Map C Band", 
-            "operator_abbreviation": "STM-C", 
-            "is_taskable": true
+            "operator_abbreviation": "STM-C"
         }
     }, 
     {
@@ -1959,8 +1985,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 29, 
             "name": "Visual, Near Infrared", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -1970,8 +1995,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 30, 
             "name": "Visual, Near Infrared", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -1981,8 +2005,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 31, 
             "name": "Visual, Near Infrared", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -1992,8 +2015,7 @@
             "abbreviation": "GRN", 
             "mission_sensor": 14, 
             "name": "Green, Red, Near Infrared", 
-            "operator_abbreviation": "GRNir", 
-            "is_taskable": true
+            "operator_abbreviation": "GRNir"
         }
     }, 
     {
@@ -2003,8 +2025,7 @@
             "abbreviation": "5BF", 
             "mission_sensor": 14, 
             "name": "Visual, Near Infrared, Pan", 
-            "operator_abbreviation": "VisNirP", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirP"
         }
     }, 
     {
@@ -2014,8 +2035,7 @@
             "abbreviation": "BRP", 
             "mission_sensor": 14, 
             "name": "Blue, Red, Panchromatic", 
-            "operator_abbreviation": "BRP", 
-            "is_taskable": true
+            "operator_abbreviation": "BRP"
         }
     }, 
     {
@@ -2025,8 +2045,7 @@
             "abbreviation": "PAN", 
             "mission_sensor": 32, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "PAN", 
-            "is_taskable": true
+            "operator_abbreviation": "PAN"
         }
     }, 
     {
@@ -2036,8 +2055,7 @@
             "abbreviation": "RNI", 
             "mission_sensor": 33, 
             "name": "Red, Near Infrared", 
-            "operator_abbreviation": "RNIR", 
-            "is_taskable": true
+            "operator_abbreviation": "RNIR"
         }
     }, 
     {
@@ -2047,8 +2065,7 @@
             "abbreviation": "RGB", 
             "mission_sensor": 34, 
             "name": "Visual True Colour", 
-            "operator_abbreviation": "RGB", 
-            "is_taskable": true
+            "operator_abbreviation": "RGB"
         }
     }, 
     {
@@ -2058,8 +2075,7 @@
             "abbreviation": "R3B", 
             "mission_sensor": 13, 
             "name": "Red, RedEdge, NIR", 
-            "operator_abbreviation": "R3B", 
-            "is_taskable": true
+            "operator_abbreviation": "R3B"
         }
     }, 
     {
@@ -2069,8 +2085,7 @@
             "abbreviation": "PAN", 
             "mission_sensor": 35, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "PAN", 
-            "is_taskable": true
+            "operator_abbreviation": "PAN"
         }
     }, 
     {
@@ -2080,8 +2095,7 @@
             "abbreviation": "GRN", 
             "mission_sensor": 35, 
             "name": "Green, Red, Near Infrared", 
-            "operator_abbreviation": "GRNir", 
-            "is_taskable": true
+            "operator_abbreviation": "GRNir"
         }
     }, 
     {
@@ -2091,8 +2105,7 @@
             "abbreviation": "GRN", 
             "mission_sensor": 36, 
             "name": "Green, Red, Near Infrared", 
-            "operator_abbreviation": "GRNir", 
-            "is_taskable": true
+            "operator_abbreviation": "GRNir"
         }
     }, 
     {
@@ -2102,8 +2115,7 @@
             "abbreviation": "5BF", 
             "mission_sensor": 36, 
             "name": "Visual, Near Infrared, Pan", 
-            "operator_abbreviation": "VisNirP", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirP"
         }
     }, 
     {
@@ -2113,8 +2125,7 @@
             "abbreviation": "BRP", 
             "mission_sensor": 36, 
             "name": "Blue, Red, Panchromatic", 
-            "operator_abbreviation": "BRP", 
-            "is_taskable": true
+            "operator_abbreviation": "BRP"
         }
     }, 
     {
@@ -2124,8 +2135,7 @@
             "abbreviation": "NST", 
             "mission_sensor": 37, 
             "name": "Near Infrared, Short Wave infrared, Thermal Infrared", 
-            "operator_abbreviation": "NirSwirTh", 
-            "is_taskable": true
+            "operator_abbreviation": "NirSwirTh"
         }
     }, 
     {
@@ -2135,8 +2145,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 38, 
             "name": "RGB, Near Infrared", 
-            "operator_abbreviation": "RGBNir", 
-            "is_taskable": true
+            "operator_abbreviation": "RGBNir"
         }
     }, 
     {
@@ -2146,8 +2155,7 @@
             "abbreviation": "VNS", 
             "mission_sensor": 15, 
             "name": "RGB, Near Infrared, Short Wave infrared", 
-            "operator_abbreviation": "VisNirSwir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirSwir"
         }
     }, 
     {
@@ -2157,8 +2165,7 @@
             "abbreviation": "PAN", 
             "mission_sensor": 39, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "PAN", 
-            "is_taskable": true
+            "operator_abbreviation": "PAN"
         }
     }, 
     {
@@ -2168,8 +2175,7 @@
             "abbreviation": "PAN", 
             "mission_sensor": 40, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "PAN", 
-            "is_taskable": true
+            "operator_abbreviation": "PAN"
         }
     }, 
     {
@@ -2179,8 +2185,7 @@
             "abbreviation": "PAN", 
             "mission_sensor": 41, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "PAN", 
-            "is_taskable": true
+            "operator_abbreviation": "PAN"
         }
     }, 
     {
@@ -2190,8 +2195,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 41, 
             "name": "RGB, Near Infrared", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -2201,8 +2205,7 @@
             "abbreviation": "M8B", 
             "mission_sensor": 41, 
             "name": "Coastal, Blue, Green, Yellow, Red, RedEdge, Near-IR1, NearIR2", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -2212,8 +2215,7 @@
             "abbreviation": "PVN", 
             "mission_sensor": 41, 
             "name": "Pansharpened RGB, Near Infrared", 
-            "operator_abbreviation": "PanVisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "PanVisNir"
         }
     }, 
     {
@@ -2223,8 +2225,7 @@
             "abbreviation": "P8B", 
             "mission_sensor": 41, 
             "name": "Pansharpened Coastal, Blue, Green, Yellow, Red, RedEdge, Near-IR1, NearIR2", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -2234,8 +2235,7 @@
             "abbreviation": "PAN", 
             "mission_sensor": 42, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "PAN", 
-            "is_taskable": true
+            "operator_abbreviation": "PAN"
         }
     }, 
     {
@@ -2245,8 +2245,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 42, 
             "name": "RGB, Near Infrared", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -2256,8 +2255,7 @@
             "abbreviation": "PVN", 
             "mission_sensor": 42, 
             "name": "Pansharpened RGB, Near Infrared", 
-            "operator_abbreviation": "PanVisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "PanVisNir"
         }
     }, 
     {
@@ -2267,8 +2265,7 @@
             "abbreviation": "PAN", 
             "mission_sensor": 43, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "Pan", 
-            "is_taskable": true
+            "operator_abbreviation": "Pan"
         }
     }, 
     {
@@ -2278,8 +2275,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 43, 
             "name": "RGB, Near Infrared", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -2289,8 +2285,7 @@
             "abbreviation": "PAN", 
             "mission_sensor": 44, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "Pan", 
-            "is_taskable": true
+            "operator_abbreviation": "Pan"
         }
     }, 
     {
@@ -2300,8 +2295,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 44, 
             "name": "RGB, Near Infrared", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -2311,8 +2305,7 @@
             "abbreviation": "HSS", 
             "mission_sensor": 45, 
             "name": "High Resolution Spot Light Single Polarisation", 
-            "operator_abbreviation": "HighResSpotLightSingle", 
-            "is_taskable": true
+            "operator_abbreviation": "HighResSpotLightSingle"
         }
     }, 
     {
@@ -2322,8 +2315,7 @@
             "abbreviation": "HSD", 
             "mission_sensor": 45, 
             "name": "High Resolution Spot Light Dual Polarisation", 
-            "operator_abbreviation": "HighResSpotLightDual", 
-            "is_taskable": true
+            "operator_abbreviation": "HighResSpotLightDual"
         }
     }, 
     {
@@ -2333,8 +2325,7 @@
             "abbreviation": "HS3", 
             "mission_sensor": 45, 
             "name": "High Resolution Spot Light 300 MHz", 
-            "operator_abbreviation": "HS300", 
-            "is_taskable": true
+            "operator_abbreviation": "HS300"
         }
     }, 
     {
@@ -2344,8 +2335,7 @@
             "abbreviation": "SLS", 
             "mission_sensor": 45, 
             "name": "Spot Light Single Polarisation", 
-            "operator_abbreviation": "SpotLightSingle", 
-            "is_taskable": true
+            "operator_abbreviation": "SpotLightSingle"
         }
     }, 
     {
@@ -2355,8 +2345,7 @@
             "abbreviation": "SLD", 
             "mission_sensor": 45, 
             "name": "Spot Light Dual Polarisation", 
-            "operator_abbreviation": "SpotLightDual", 
-            "is_taskable": true
+            "operator_abbreviation": "SpotLightDual"
         }
     }, 
     {
@@ -2366,8 +2355,7 @@
             "abbreviation": "SMS", 
             "mission_sensor": 45, 
             "name": "Strip Map Single Polarisation", 
-            "operator_abbreviation": "StripMapSingle", 
-            "is_taskable": true
+            "operator_abbreviation": "StripMapSingle"
         }
     }, 
     {
@@ -2377,8 +2365,7 @@
             "abbreviation": "SMD", 
             "mission_sensor": 45, 
             "name": "Strip Map Dual Polarisation", 
-            "operator_abbreviation": "StripMapDual", 
-            "is_taskable": true
+            "operator_abbreviation": "StripMapDual"
         }
     }, 
     {
@@ -2388,8 +2375,7 @@
             "abbreviation": "SMQ", 
             "mission_sensor": 45, 
             "name": "Strip Map Quad Polarisation", 
-            "operator_abbreviation": "StripMapQuad", 
-            "is_taskable": true
+            "operator_abbreviation": "StripMapQuad"
         }
     }, 
     {
@@ -2399,8 +2385,7 @@
             "abbreviation": "SCS", 
             "mission_sensor": 45, 
             "name": "Scan SAR", 
-            "operator_abbreviation": "ScanSAR", 
-            "is_taskable": true
+            "operator_abbreviation": "ScanSAR"
         }
     }, 
     {
@@ -2410,8 +2395,7 @@
             "abbreviation": "HSS", 
             "mission_sensor": 46, 
             "name": "High Resolution Spot Light Single Polarisation", 
-            "operator_abbreviation": "HighResSpotLightSingle", 
-            "is_taskable": true
+            "operator_abbreviation": "HighResSpotLightSingle"
         }
     }, 
     {
@@ -2421,8 +2405,7 @@
             "abbreviation": "HSD", 
             "mission_sensor": 46, 
             "name": "High Resolution Spot Light Dual Polarisation", 
-            "operator_abbreviation": "HighResSpotLightDual", 
-            "is_taskable": true
+            "operator_abbreviation": "HighResSpotLightDual"
         }
     }, 
     {
@@ -2432,8 +2415,7 @@
             "abbreviation": "HS3", 
             "mission_sensor": 46, 
             "name": "High Resolution Spot Light 300 MHz", 
-            "operator_abbreviation": "HS300", 
-            "is_taskable": true
+            "operator_abbreviation": "HS300"
         }
     }, 
     {
@@ -2443,8 +2425,7 @@
             "abbreviation": "SLS", 
             "mission_sensor": 46, 
             "name": "Spot Light Single Polarisation", 
-            "operator_abbreviation": "SpotLightSingle", 
-            "is_taskable": true
+            "operator_abbreviation": "SpotLightSingle"
         }
     }, 
     {
@@ -2454,8 +2435,7 @@
             "abbreviation": "SLD", 
             "mission_sensor": 46, 
             "name": "Spot Light Dual Polarisation", 
-            "operator_abbreviation": "SpotLightDual", 
-            "is_taskable": true
+            "operator_abbreviation": "SpotLightDual"
         }
     }, 
     {
@@ -2465,8 +2445,7 @@
             "abbreviation": "SMS", 
             "mission_sensor": 46, 
             "name": "Strip Map Single Polarisation", 
-            "operator_abbreviation": "StripMapSingle", 
-            "is_taskable": true
+            "operator_abbreviation": "StripMapSingle"
         }
     }, 
     {
@@ -2476,8 +2455,7 @@
             "abbreviation": "SMD", 
             "mission_sensor": 46, 
             "name": "Strip Map Dual Polarisation", 
-            "operator_abbreviation": "StripMapDual", 
-            "is_taskable": true
+            "operator_abbreviation": "StripMapDual"
         }
     }, 
     {
@@ -2487,8 +2465,7 @@
             "abbreviation": "SMQ", 
             "mission_sensor": 46, 
             "name": "Strip Map Quad Polarisation", 
-            "operator_abbreviation": "StripMapQuad", 
-            "is_taskable": true
+            "operator_abbreviation": "StripMapQuad"
         }
     }, 
     {
@@ -2498,8 +2475,7 @@
             "abbreviation": "SCS", 
             "mission_sensor": 46, 
             "name": "Scan SAR", 
-            "operator_abbreviation": "ScanSAR", 
-            "is_taskable": true
+            "operator_abbreviation": "ScanSAR"
         }
     }, 
     {
@@ -2509,8 +2485,7 @@
             "abbreviation": "VRN", 
             "mission_sensor": 47, 
             "name": "RGB,RedEdge, Near Infrared", 
-            "operator_abbreviation": "VisReNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisReNir"
         }
     }, 
     {
@@ -2520,8 +2495,7 @@
             "abbreviation": "VRN", 
             "mission_sensor": 48, 
             "name": "RGB,RedEdge, Near Infrared", 
-            "operator_abbreviation": "VisReNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisReNir"
         }
     }, 
     {
@@ -2531,8 +2505,7 @@
             "abbreviation": "AMI", 
             "mission_sensor": 2, 
             "name": "AMI", 
-            "operator_abbreviation": "AMI", 
-            "is_taskable": true
+            "operator_abbreviation": "AMI"
         }
     }, 
     {
@@ -2542,8 +2515,7 @@
             "abbreviation": "VRN", 
             "mission_sensor": 49, 
             "name": "RGB,RedEdge, Near Infrared", 
-            "operator_abbreviation": "VisReNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisReNir"
         }
     }, 
     {
@@ -2553,8 +2525,7 @@
             "abbreviation": "VRN", 
             "mission_sensor": 50, 
             "name": "RGB,RedEdge, Near Infrared", 
-            "operator_abbreviation": "VisReNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisReNir"
         }
     }, 
     {
@@ -2564,8 +2535,7 @@
             "abbreviation": "VRN", 
             "mission_sensor": 51, 
             "name": "RGB,RedEdge, Near Infrared", 
-            "operator_abbreviation": "VisReNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisReNir"
         }
     }, 
     {
@@ -2575,8 +2545,7 @@
             "abbreviation": "F", 
             "mission_sensor": 52, 
             "name": "Fine Beam", 
-            "operator_abbreviation": "Fine", 
-            "is_taskable": true
+            "operator_abbreviation": "Fine"
         }
     }, 
     {
@@ -2586,8 +2555,7 @@
             "abbreviation": "S", 
             "mission_sensor": 52, 
             "name": "Standard", 
-            "operator_abbreviation": "Standard", 
-            "is_taskable": true
+            "operator_abbreviation": "Standard"
         }
     }, 
     {
@@ -2597,8 +2565,7 @@
             "abbreviation": "WF", 
             "mission_sensor": 52, 
             "name": "Wide Swath", 
-            "operator_abbreviation": "Wide", 
-            "is_taskable": true
+            "operator_abbreviation": "Wide"
         }
     }, 
     {
@@ -2608,8 +2575,7 @@
             "abbreviation": "SSN", 
             "mission_sensor": 52, 
             "name": "Scan SAR Narrow Swath", 
-            "operator_abbreviation": "ScanSAR-Narrow", 
-            "is_taskable": true
+            "operator_abbreviation": "ScanSAR-Narrow"
         }
     }, 
     {
@@ -2619,8 +2585,7 @@
             "abbreviation": "SSW", 
             "mission_sensor": 52, 
             "name": "ScanSAR Wide Swath", 
-            "operator_abbreviation": "ScanSAR-Wide", 
-            "is_taskable": true
+            "operator_abbreviation": "ScanSAR-Wide"
         }
     }, 
     {
@@ -2630,8 +2595,7 @@
             "abbreviation": "EL", 
             "mission_sensor": 52, 
             "name": "Extended Low Incidence Angle", 
-            "operator_abbreviation": "Extended-Low", 
-            "is_taskable": true
+            "operator_abbreviation": "Extended-Low"
         }
     }, 
     {
@@ -2641,8 +2605,7 @@
             "abbreviation": "EH", 
             "mission_sensor": 52, 
             "name": "Extended High Incidence Angle", 
-            "operator_abbreviation": "Extended-High", 
-            "is_taskable": true
+            "operator_abbreviation": "Extended-High"
         }
     }, 
     {
@@ -2652,8 +2615,7 @@
             "abbreviation": "SLA", 
             "mission_sensor": 53, 
             "name": "Spot Light", 
-            "operator_abbreviation": "Spotlight-A", 
-            "is_taskable": true
+            "operator_abbreviation": "Spotlight-A"
         }
     }, 
     {
@@ -2663,8 +2625,7 @@
             "abbreviation": "UF", 
             "mission_sensor": 53, 
             "name": "Ultra Fine Beam", 
-            "operator_abbreviation": "Ultra-Fine", 
-            "is_taskable": true
+            "operator_abbreviation": "Ultra-Fine"
         }
     }, 
     {
@@ -2674,8 +2635,7 @@
             "abbreviation": "WUF", 
             "mission_sensor": 53, 
             "name": "Wide Ultra Fine Beam", 
-            "operator_abbreviation": "Wide-Ultra-Fine", 
-            "is_taskable": true
+            "operator_abbreviation": "Wide-Ultra-Fine"
         }
     }, 
     {
@@ -2685,8 +2645,7 @@
             "abbreviation": "MF", 
             "mission_sensor": 53, 
             "name": "Multi-Look Fine Beam", 
-            "operator_abbreviation": "Multi-Look-Fine", 
-            "is_taskable": true
+            "operator_abbreviation": "Multi-Look-Fine"
         }
     }, 
     {
@@ -2696,8 +2655,7 @@
             "abbreviation": "WMF", 
             "mission_sensor": 53, 
             "name": "Wide Swath Multi-Look Fine Beam", 
-            "operator_abbreviation": "Wide-Multi-Look-Fine", 
-            "is_taskable": true
+            "operator_abbreviation": "Wide-Multi-Look-Fine"
         }
     }, 
     {
@@ -2707,8 +2665,7 @@
             "abbreviation": "F", 
             "mission_sensor": 53, 
             "name": "Fine Beam", 
-            "operator_abbreviation": "Fine", 
-            "is_taskable": true
+            "operator_abbreviation": "Fine"
         }
     }, 
     {
@@ -2718,8 +2675,7 @@
             "abbreviation": "WF", 
             "mission_sensor": 53, 
             "name": "Wide Swath Fine Beam", 
-            "operator_abbreviation": "Wide-Fine", 
-            "is_taskable": true
+            "operator_abbreviation": "Wide-Fine"
         }
     }, 
     {
@@ -2729,8 +2685,7 @@
             "abbreviation": "S", 
             "mission_sensor": 53, 
             "name": "Standard Beam and Swath", 
-            "operator_abbreviation": "Standard", 
-            "is_taskable": true
+            "operator_abbreviation": "Standard"
         }
     }, 
     {
@@ -2740,8 +2695,7 @@
             "abbreviation": "SSN", 
             "mission_sensor": 53, 
             "name": "ScanSAR Narrow Swath", 
-            "operator_abbreviation": "ScanSAR-Narrow", 
-            "is_taskable": true
+            "operator_abbreviation": "ScanSAR-Narrow"
         }
     }, 
     {
@@ -2751,8 +2705,7 @@
             "abbreviation": "SSW", 
             "mission_sensor": 53, 
             "name": "ScanSAR Wide Swath", 
-            "operator_abbreviation": "ScanSAR-Wide", 
-            "is_taskable": true
+            "operator_abbreviation": "ScanSAR-Wide"
         }
     }, 
     {
@@ -2762,8 +2715,7 @@
             "abbreviation": "EH", 
             "mission_sensor": 53, 
             "name": "Extended High Incidence Angle", 
-            "operator_abbreviation": "Extended-High", 
-            "is_taskable": true
+            "operator_abbreviation": "Extended-High"
         }
     }, 
     {
@@ -2773,8 +2725,7 @@
             "abbreviation": "EL", 
             "mission_sensor": 53, 
             "name": "Extended Low Incidence Angle", 
-            "operator_abbreviation": "Extended-Low", 
-            "is_taskable": true
+            "operator_abbreviation": "Extended-Low"
         }
     }, 
     {
@@ -2784,8 +2735,7 @@
             "abbreviation": "FQ", 
             "mission_sensor": 53, 
             "name": "Fine Beam Quad Polarisation", 
-            "operator_abbreviation": "Fine-Quad-Pol", 
-            "is_taskable": true
+            "operator_abbreviation": "Fine-Quad-Pol"
         }
     }, 
     {
@@ -2795,8 +2745,7 @@
             "abbreviation": "WFQ", 
             "mission_sensor": 53, 
             "name": "Wide Swath Fine Beam Quad Polarisation", 
-            "operator_abbreviation": "Wide-Fine-Quad-Pol", 
-            "is_taskable": true
+            "operator_abbreviation": "Wide-Fine-Quad-Pol"
         }
     }, 
     {
@@ -2806,8 +2755,7 @@
             "abbreviation": "SQ", 
             "mission_sensor": 53, 
             "name": "Standard Beam and Swath Quad Polarisation", 
-            "operator_abbreviation": "Standard-Quad-Pol", 
-            "is_taskable": true
+            "operator_abbreviation": "Standard-Quad-Pol"
         }
     }, 
     {
@@ -2817,8 +2765,7 @@
             "abbreviation": "WSQ", 
             "mission_sensor": 53, 
             "name": "Wide Swath Standard Beam Quad Polarisation", 
-            "operator_abbreviation": "Wide-Standard-Quad-Pol", 
-            "is_taskable": true
+            "operator_abbreviation": "Wide-Standard-Quad-Pol"
         }
     }, 
     {
@@ -2828,8 +2775,7 @@
             "abbreviation": "VNS", 
             "mission_sensor": 54, 
             "name": "Visual, Near Infrared, SWIR", 
-            "operator_abbreviation": "VisNirSwir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirSwir"
         }
     }, 
     {
@@ -2839,8 +2785,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 55, 
             "name": "Visual, Near Infrared", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -2850,8 +2795,7 @@
             "abbreviation": "PAN", 
             "mission_sensor": 55, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "Pan", 
-            "is_taskable": true
+            "operator_abbreviation": "Pan"
         }
     }, 
     {
@@ -2861,8 +2805,7 @@
             "abbreviation": "VNS", 
             "mission_sensor": 56, 
             "name": "Visual, Near Infrared, SWIR", 
-            "operator_abbreviation": "VisNirSwir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirSwir"
         }
     }, 
     {
@@ -2872,8 +2815,7 @@
             "abbreviation": "VNS", 
             "mission_sensor": 57, 
             "name": "Visual, Near Infrared, SWIR", 
-            "operator_abbreviation": "VisNirSwir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirSwir"
         }
     }, 
     {
@@ -2883,8 +2825,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 58, 
             "name": "Visual, Near Infrared", 
-            "operator_abbreviation": "VisNir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNir"
         }
     }, 
     {
@@ -2894,8 +2835,7 @@
             "abbreviation": "PAN", 
             "mission_sensor": 58, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "Pan", 
-            "is_taskable": true
+            "operator_abbreviation": "Pan"
         }
     }, 
     {
@@ -2905,8 +2845,7 @@
             "abbreviation": "VNS", 
             "mission_sensor": 59, 
             "name": "Visual, Near Infrared, SWIR", 
-            "operator_abbreviation": "VisNirSwir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirSwir"
         }
     }, 
     {
@@ -2916,8 +2855,7 @@
             "abbreviation": "PAN", 
             "mission_sensor": 60, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "Pan", 
-            "is_taskable": true
+            "operator_abbreviation": "Pan"
         }
     }, 
     {
@@ -2927,8 +2865,7 @@
             "abbreviation": "PAN", 
             "mission_sensor": 61, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "Pan", 
-            "is_taskable": true
+            "operator_abbreviation": "Pan"
         }
     }, 
     {
@@ -2938,8 +2875,7 @@
             "abbreviation": "PTS", 
             "mission_sensor": 62, 
             "name": "Panchromatic Triplet Stereo observation", 
-            "operator_abbreviation": "PanTripletStereo", 
-            "is_taskable": true
+            "operator_abbreviation": "PanTripletStereo"
         }
     }, 
     {
@@ -2949,8 +2885,7 @@
             "abbreviation": "PNB", 
             "mission_sensor": 62, 
             "name": "Panchromatic Nadir and Back observation", 
-            "operator_abbreviation": "PanNadirBack", 
-            "is_taskable": true
+            "operator_abbreviation": "PanNadirBack"
         }
     }, 
     {
@@ -2960,8 +2895,7 @@
             "abbreviation": "PND", 
             "mission_sensor": 62, 
             "name": "Panchromatic Nadir observation", 
-            "operator_abbreviation": "PanNadir", 
-            "is_taskable": true
+            "operator_abbreviation": "PanNadir"
         }
     }, 
     {
@@ -2971,8 +2905,7 @@
             "abbreviation": "VN", 
             "mission_sensor": 63, 
             "name": "RGB Near-Infrared", 
-            "operator_abbreviation": "TrueColourNir", 
-            "is_taskable": true
+            "operator_abbreviation": "TrueColourNir"
         }
     }, 
     {
@@ -2982,8 +2915,7 @@
             "abbreviation": "FR", 
             "mission_sensor": 64, 
             "name": "Fine Resolution", 
-            "operator_abbreviation": "FineResolution", 
-            "is_taskable": true
+            "operator_abbreviation": "FineResolution"
         }
     }, 
     {
@@ -2993,8 +2925,7 @@
             "abbreviation": "SCS", 
             "mission_sensor": 64, 
             "name": "Scan SAR", 
-            "operator_abbreviation": "ScanSar", 
-            "is_taskable": true
+            "operator_abbreviation": "ScanSar"
         }
     }, 
     {
@@ -3004,8 +2935,7 @@
             "abbreviation": "DD", 
             "mission_sensor": 64, 
             "name": "Direkt Downlink", 
-            "operator_abbreviation": "DirectDownlink", 
-            "is_taskable": true
+            "operator_abbreviation": "DirectDownlink"
         }
     }, 
     {
@@ -3015,8 +2945,7 @@
             "abbreviation": "PM", 
             "mission_sensor": 64, 
             "name": "Polarimetric Mode", 
-            "operator_abbreviation": "PolarimetricMode", 
-            "is_taskable": true
+            "operator_abbreviation": "PolarimetricMode"
         }
     }, 
     {
@@ -3026,8 +2955,7 @@
             "abbreviation": "FR", 
             "mission_sensor": 65, 
             "name": "Fine Resolution", 
-            "operator_abbreviation": "FineResolution", 
-            "is_taskable": true
+            "operator_abbreviation": "FineResolution"
         }
     }, 
     {
@@ -3037,8 +2965,7 @@
             "abbreviation": "SCS", 
             "mission_sensor": 65, 
             "name": "Scan SAR", 
-            "operator_abbreviation": "ScanSar", 
-            "is_taskable": true
+            "operator_abbreviation": "ScanSar"
         }
     }, 
     {
@@ -3048,8 +2975,7 @@
             "abbreviation": "DD", 
             "mission_sensor": 65, 
             "name": "Direkt Downlink", 
-            "operator_abbreviation": "DirectDownlink", 
-            "is_taskable": true
+            "operator_abbreviation": "DirectDownlink"
         }
     }, 
     {
@@ -3059,8 +2985,7 @@
             "abbreviation": "PM", 
             "mission_sensor": 65, 
             "name": "Polarimetric Mode", 
-            "operator_abbreviation": "PolarimetricMode", 
-            "is_taskable": true
+            "operator_abbreviation": "PolarimetricMode"
         }
     }, 
     {
@@ -3070,8 +2995,7 @@
             "abbreviation": "HST", 
             "mission_sensor": 66, 
             "name": "Hyperspectral Thermal (Infrared) imagery", 
-            "operator_abbreviation": "HyperspectralThermal", 
-            "is_taskable": true
+            "operator_abbreviation": "HyperspectralThermal"
         }
     }, 
     {
@@ -3081,8 +3005,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 66, 
             "name": "Visible Near Infrared", 
-            "operator_abbreviation": "VNIR", 
-            "is_taskable": true
+            "operator_abbreviation": "VNIR"
         }
     }, 
     {
@@ -3092,8 +3015,7 @@
             "abbreviation": "RNI", 
             "mission_sensor": 67, 
             "name": "Red Near Infrared", 
-            "operator_abbreviation": "RedNir", 
-            "is_taskable": true
+            "operator_abbreviation": "RedNir"
         }
     }, 
     {
@@ -3103,8 +3025,7 @@
             "abbreviation": "VNS", 
             "mission_sensor": 67, 
             "name": "Visual, Near Infrared, SWIR", 
-            "operator_abbreviation": "VisNirSwir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirSwir"
         }
     }, 
     {
@@ -3114,8 +3035,7 @@
             "abbreviation": "TH", 
             "mission_sensor": 67, 
             "name": "Thermal Infrared", 
-            "operator_abbreviation": "Thermal", 
-            "is_taskable": true
+            "operator_abbreviation": "Thermal"
         }
     }, 
     {
@@ -3125,8 +3045,7 @@
             "abbreviation": "VIT", 
             "mission_sensor": 67, 
             "name": "Visual, Near Infrared, Short Wave Infrared and Thermal", 
-            "operator_abbreviation": "VisNirSwirTh", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirSwirTh"
         }
     }, 
     {
@@ -3136,8 +3055,7 @@
             "abbreviation": "VIT", 
             "mission_sensor": 68, 
             "name": "Visual, Near Infrared, Short Wave Infrared and Thermal", 
-            "operator_abbreviation": "VisNirSwirTh", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirSwirTh"
         }
     }, 
     {
@@ -3147,8 +3065,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 68, 
             "name": "Visual, Near Infrared, Near Infrared Back", 
-            "operator_abbreviation": "VisNirNirB", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirNirB"
         }
     }, 
     {
@@ -3158,8 +3075,7 @@
             "abbreviation": "SWI", 
             "mission_sensor": 68, 
             "name": "Short Wave infrared", 
-            "operator_abbreviation": "SWIR", 
-            "is_taskable": true
+            "operator_abbreviation": "SWIR"
         }
     }, 
     {
@@ -3169,8 +3085,7 @@
             "abbreviation": "TH", 
             "mission_sensor": 68, 
             "name": "Thermal Infrared", 
-            "operator_abbreviation": "Thermal", 
-            "is_taskable": true
+            "operator_abbreviation": "Thermal"
         }
     }, 
     {
@@ -3180,8 +3095,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 69, 
             "name": "Visible Near Infrared 9 Angles", 
-            "operator_abbreviation": "VNIR", 
-            "is_taskable": true
+            "operator_abbreviation": "VNIR"
         }
     }, 
     {
@@ -3191,8 +3105,7 @@
             "abbreviation": "RNI", 
             "mission_sensor": 70, 
             "name": "Red Near Infrared", 
-            "operator_abbreviation": "RedNir", 
-            "is_taskable": true
+            "operator_abbreviation": "RedNir"
         }
     }, 
     {
@@ -3202,8 +3115,7 @@
             "abbreviation": "VNS", 
             "mission_sensor": 70, 
             "name": "Visual, Near Infrared, SWIR", 
-            "operator_abbreviation": "VisNirSwir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirSwir"
         }
     }, 
     {
@@ -3213,8 +3125,7 @@
             "abbreviation": "TH", 
             "mission_sensor": 70, 
             "name": "Thermal Infrared", 
-            "operator_abbreviation": "Thermal", 
-            "is_taskable": true
+            "operator_abbreviation": "Thermal"
         }
     }, 
     {
@@ -3224,8 +3135,7 @@
             "abbreviation": "VIT", 
             "mission_sensor": 70, 
             "name": "Visual, Near Infrared, Short Wave Infrared and Thermal", 
-            "operator_abbreviation": "VisNirSwirTh", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirSwirTh"
         }
     }, 
     {
@@ -3235,8 +3145,7 @@
             "abbreviation": "RNI", 
             "mission_sensor": 71, 
             "name": "Red Near Infrared", 
-            "operator_abbreviation": "RedNir", 
-            "is_taskable": true
+            "operator_abbreviation": "RedNir"
         }
     }, 
     {
@@ -3246,8 +3155,7 @@
             "abbreviation": "VNS", 
             "mission_sensor": 71, 
             "name": "Visual, Near Infrared, SWIR", 
-            "operator_abbreviation": "VisNirSwir", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirSwir"
         }
     }, 
     {
@@ -3257,8 +3165,7 @@
             "abbreviation": "TH", 
             "mission_sensor": 71, 
             "name": "Thermal Infrared", 
-            "operator_abbreviation": "Thermal", 
-            "is_taskable": true
+            "operator_abbreviation": "Thermal"
         }
     }, 
     {
@@ -3268,8 +3175,7 @@
             "abbreviation": "VIT", 
             "mission_sensor": 71, 
             "name": "Visual, Near Infrared, Short Wave Infrared and Thermal", 
-            "operator_abbreviation": "VisNirSwirTh", 
-            "is_taskable": true
+            "operator_abbreviation": "VisNirSwirTh"
         }
     }, 
     {
@@ -3279,8 +3185,7 @@
             "abbreviation": "PAN", 
             "mission_sensor": 72, 
             "name": "Panchromatic", 
-            "operator_abbreviation": "PAN", 
-            "is_taskable": true
+            "operator_abbreviation": "PAN"
         }
     }, 
     {
@@ -3290,8 +3195,7 @@
             "abbreviation": "VNI", 
             "mission_sensor": 73, 
             "name": "Visible Near Infrared", 
-            "operator_abbreviation": "VNIR", 
-            "is_taskable": true
+            "operator_abbreviation": "VNIR"
         }
     }, 
     {
@@ -3301,8 +3205,7 @@
             "abbreviation": "AVHR", 
             "mission_sensor": 1, 
             "name": "Advanced Very High Resolution Radiometer", 
-            "operator_abbreviation": "AVHR", 
-            "is_taskable": true
+            "operator_abbreviation": "AVHR"
         }
     }, 
     {
@@ -3312,8 +3215,7 @@
             "abbreviation": "MST", 
             "mission_sensor": 5, 
             "name": "Multispectral + Thermal", 
-            "operator_abbreviation": "MST", 
-            "is_taskable": true
+            "operator_abbreviation": "MST"
         }
     }, 
     {
@@ -3323,8 +3225,7 @@
             "abbreviation": "CAM2", 
             "mission_sensor": 6, 
             "name": "Spot Camera 2", 
-            "operator_abbreviation": "CAM2", 
-            "is_taskable": true
+            "operator_abbreviation": "CAM2"
         }
     }, 
     {
@@ -3334,8 +3235,7 @@
             "abbreviation": "CAM1", 
             "mission_sensor": 6, 
             "name": "Spot Camera 1", 
-            "operator_abbreviation": "CAM1", 
-            "is_taskable": true
+            "operator_abbreviation": "CAM1"
         }
     }, 
     {
@@ -3345,8 +3245,7 @@
             "abbreviation": "MSS", 
             "mission_sensor": 14, 
             "name": "Multispectral", 
-            "operator_abbreviation": "MSS", 
-            "is_taskable": true
+            "operator_abbreviation": "MSS"
         }
     }, 
     {
@@ -3356,8 +3255,7 @@
             "abbreviation": "RT", 
             "mission_sensor": 15, 
             "name": "RT", 
-            "operator_abbreviation": "RT", 
-            "is_taskable": true
+            "operator_abbreviation": "RT"
         }
     }, 
     {
