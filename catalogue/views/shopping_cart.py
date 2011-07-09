@@ -104,9 +104,9 @@ def removeFromCart(theRequest, theId):
 @renderWithContext('cartContentsPage.html','cartContents.html')
 def showCartContents(theRequest):
   """Returns a nice table showing cart contents. Second template in method sig. is used in ajax requests."""
-  myNotAjaxFlag = True
+  myAjaxFlag = False
   if theRequest.GET.has_key('xhr') or theRequest.is_ajax():
-    myNotAjaxFlag = False
+    myAjaxFlag = True
   myRecords = SearchRecord.objects.all().filter(user=theRequest.user).filter(order__isnull=True)
   logging.info("Cart contains : " + str(myRecords.count()) + " items")
   return ({
@@ -129,7 +129,8 @@ def showCartContents(theRequest):
          'myShowCartFlag' : False, #used when you need to add an item to the cart only
          'myShowPreviewFlag' : True,
          'myCartTitle' : 'Cart Contents',
-         'myNotAjaxFlag' : myNotAjaxFlag,
+         'myAjaxFlag' : myAjaxFlag,
+         'myMiniCartFlag' : False,
          })
 
 @login_required
@@ -163,6 +164,7 @@ def showMiniCartContents(theRequest):
          'myShowMetdataFlag' : False,
          'myShowCartFlag' : False, #used when you need to add an item to the cart only
          'myShowMiniCartFlag' : True, # so the appropriate jscrip is called when entry is deleted
-         'myShowPreviewFlag' : False,
-         'myBaseTemplate' : myBaseTemplate
+         'myShowPreviewFlag' : True,
+         'myBaseTemplate' : myBaseTemplate,
+         'myMiniCartFlag' : True
          })
