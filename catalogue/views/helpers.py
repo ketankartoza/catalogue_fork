@@ -748,7 +748,7 @@ WEB_LAYERS = {
         ''',
         # Note for this layer to be used you need to regex replace
         # USERNAME with theRequest.user.username
-        'CartLayer' : '''var cartLayer = new OpenLayers.Layer.WMS("Cart", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=CART&user=USERNAME",
+        'CartLayer' : '''var cartLayer = new OpenLayers.Layer.WMS("Cart", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=''' + settings.CART_LAYER + '''&user=USERNAME",
           {
              version: '1.1.1',
              width: '800',
