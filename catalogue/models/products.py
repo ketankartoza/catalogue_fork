@@ -52,6 +52,11 @@ def coordIsOnBounds( theCoord, theExtents ):
   return False
 
 #######################################################
+class SortCandidateException( Exception ):
+  def __init__(self, value):
+    self.parameter = value
+  def __str__(self):
+    return repr(self.parameter)
 
 def sortCandidates( theCandidates, theExtents, theCentroid ):
   """Return the members of the array in order TL, TR, BR, BL"""
@@ -71,6 +76,9 @@ def sortCandidates( theCandidates, theExtents, theCentroid ):
       myTopLeft = myCoord
       #print "Computed Candidate: %s" %  str( myTopLeft )
 
+  if not myTopLeft:
+    raise SortCandidateException("Top left coordinate could not be computed in %s" % theCandidates)
+
   mySortedCandidates.append( myTopLeft )
   theCandidates.remove( myTopLeft )
 
@@ -87,6 +95,9 @@ def sortCandidates( theCandidates, theExtents, theCentroid ):
       myTopRight = myCoord
       #print "Computed Candidate: %s" %  str( myTopRight )
 
+  if not myTopRight:
+    raise SortCandidateException("Top right coordinate could not be computed in %s" % theCandidates)
+
   mySortedCandidates.append( myTopRight )
   theCandidates.remove( myTopRight )
 
@@ -102,6 +113,9 @@ def sortCandidates( theCandidates, theExtents, theCentroid ):
     if myCoord[0] > myBottomRight[0]:
       myBottomRight = myCoord
       #print "Computed Candidate: %s" %  str( myBottomRight )
+
+  if not myBottomRight:
+    raise SortCandidateException("Bottom right coordinate could not be computed in %s" % theCandidates)
 
   mySortedCandidates.append( myBottomRight )
   theCandidates.remove( myBottomRight )

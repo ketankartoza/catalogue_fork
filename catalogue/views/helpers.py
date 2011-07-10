@@ -909,20 +909,23 @@ def writeThumbToZip( mySearchRecord, myZip ):
   @parameter myZip - a zip file handle ready to write stuff to
   """
   # Try to add thumbnail + wld file, we assume that jpg and wld file have same name
-  myImageFile = mySearchRecord.product.georeferencedThumbnail()
-  myWLDFile = "%s.wld" %  myImageFile
-  if os.path.isfile(myImageFile):
-    with open(myImageFile,'rb') as myFile:
-      myZip.writestr("%s.jpg" %  mySearchRecord.product.product_id,myFile.read())
-      logging.error("Adding thumbnail image to archive.")
-  else:
-    logging.info("Thumbnail image not found: %s" % myImageFile)
-  if os.path.isfile(myWLDFile):
-    with open(myWLDFile,'rb') as myFile:
-      myZip.writestr("%s.wld" %  mySearchRecord.product.product_id,myFile.read())
-      logging.info("Adding worldfile to archive.")
-  else:
-    logging.error("World file not found: %s" % myImageFile)
+  try:
+    myImageFile = mySearchRecord.product.georeferencedThumbnail()
+    myWLDFile = "%s.wld" %  myImageFile
+    if os.path.isfile(myImageFile):
+      with open(myImageFile,'rb') as myFile:
+        myZip.writestr("%s.jpg" %  mySearchRecord.product.product_id,myFile.read())
+        logging.error("Adding thumbnail image to archive.")
+    else:
+      logging.info("Thumbnail image not found: %s" % myImageFile)
+    if os.path.isfile(myWLDFile):
+      with open(myWLDFile,'rb') as myFile:
+        myZip.writestr("%s.wld" %  mySearchRecord.product.product_id,myFile.read())
+        logging.info("Adding worldfile to archive.")
+    else:
+      logging.error("World file not found: %s" % myImageFile)
+  except:
+    pass
 
 #render_to_kml helpers
 def render_to_kml(theTemplate,theContext,filename):
