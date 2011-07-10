@@ -212,6 +212,7 @@ class dimsWriter(dimsBase):
     """
     Creates the processing levels folders
     """
+    logging.info("Processing level code %s" % processing_level_code)
     for p in (os.path.join('Metadata', 'ISOMetadata'), os.path.join('Metadata', 'Thumbnails')):
       _p = os.path.join(self._path, p, processing_level_code)
       if not os.path.isdir(_p):
