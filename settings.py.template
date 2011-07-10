@@ -61,6 +61,11 @@ AUTH_PROFILE_MODULE = 'catalogue.SacUserProfile'
 PAGE_SIZE=20
 
 WMS_SERVER="maps.sansa.org.za"
+CART_LAYER="CART"
+
+#add trailing slash to urls
+APPEND_SLASH=True
+
 
 # This is for shapefile uploading using dane springmeyer's django-shapes lib
 SHP_UPLOAD_DIR = '/tmp/'
