@@ -372,7 +372,7 @@ def addOrder( theRequest ):
   logging.info("Preparing order for user " + str(theRequest.user))
   myRecords = None
   myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
-  myCartLayer = '''var myCartLayer = new OpenLayers.Layer.WMS("Cart", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=CART&user=''' + str(theRequest.user.username) + '''",
+  myCartLayer = '''var myCartLayer = new OpenLayers.Layer.WMS("Cart", "http://''' + settings.WMS_SERVER + '''/cgi-bin/mapserv?map=''' + settings.CART_LAYER + '''&user=''' + str(theRequest.user.username) + '''",
           {
              version: '1.1.1',
              layers: 'Cart',
