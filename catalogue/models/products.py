@@ -208,7 +208,8 @@ class GenericProduct( node_factory('catalogue.ProductLink', base_model = models.
     """
     Returns ISOMetadata.xml XML as a string
     """
-    return dimsWriter.getXML(self.getMetadataDict(), xml_template)
+    myDict = self.getMetadataDict()
+    return dimsWriter.getXML( myDict, xml_template )
 
   @runconcrete
   def thumbnailDirectory( self ):
