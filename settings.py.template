@@ -7,9 +7,8 @@ from catalogue.middleware.stripwhitespace import StripWhitespaceMiddleware
 
 ROOT_PROJECT_FOLDER = os.path.dirname(__file__)
 MEDIA_ROOT = os.path.join(ROOT_PROJECT_FOLDER,'media')
-# external site URL, used in KML data generation and elsewhere
-# No terminating slash
-EXTERNAL_SITE_URL = 'http://catalogue.sac.co.za'
+# used in various places including kml generator
+DOMAIN = "XXXX.sansa.org.za"
 # Added by Tim - url that holds directories of thumbnails...
 THUMBS_ROOT = os.path.join(ROOT_PROJECT_FOLDER,'thumbs_out')
 # Dir where image rectified thumbs from acs are placed see catalogue/informix.py
@@ -19,7 +18,7 @@ ACS_THUMBS_ROOT = "/mnt/cataloguestorage/thumbnail_processing/3_scenes_reference
 # And this is the dir that holds imagery
 IMAGERY_ROOT = os.path.join(ROOT_PROJECT_FOLDER,'imagery_mastercopies')
 # And this is the public visible url that imagery should be accessed from (include trailing /)
-IMAGERY_URL_ROOT = EXTERNAL_SITE_URL + "/imagery/"
+IMAGERY_URL_ROOT = "http://" + DOMAIN + "/imagery/"
 
 GEOS_LIBRARY_PATH='/usr/lib/libgeos_c.so.1'
 GEOIP_LIBRARY_PATH='/usr/lib/libGeoIP.so.1'
@@ -28,13 +27,6 @@ GEOIP_LIBRARY_PATH='/usr/lib/libGeoIP.so.1'
 # path to this library as shown below:
 #GDAL_LIBRARY_PATH='/usr/local/lib/libgdal.so'
 GDAL_LIBRARY_PATH='/usr/lib/libgdal1.7.0.so'
-# Next added so we can use google maps as backdrop
-# for http://localhost/
-#GOOGLE_MAPS_API_KEY='ABQIAAAA8cCuOnTBhHkat_fIf7DyzRTwM0brOpm-All5BF6PoaKBxRWWERSM0FzRfFIktSzNksMgESeQviEC_Q'
-# for http://146.64.55.209/
-GOOGLE_MAPS_API_KEY='ABQIAAAA8cCuOnTBhHkat_fIf7DyzRSoLoX8ngwjqeRS0hbsGp4TNHRYhRSYcObtx3JYax-0DMXOuo9qhVWpsg'
-# for olwidget
-GOOGLE_API_KEY=GOOGLE_MAPS_API_KEY
 
 # This is the path to MaxMinds Datasets, can be relative or absolute
 GEOIP_PATH = os.path.join(ROOT_PROJECT_FOLDER, 'geoip_data')
@@ -51,8 +43,6 @@ HOST = get_ip_address('eth0')
 #HOST = get_ip_address('eth1')
 #HOST = '146.64.55.220'
 #HOST = '192.168.1.1'
-# used in various places including kml generator
-DOMAIN = "XXXX.sansa.org.za"
 
 # See: http://www.djangobook.com/en/1.0/chapter12/#cn222
 AUTH_PROFILE_MODULE = 'catalogue.SacUserProfile'

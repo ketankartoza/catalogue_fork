@@ -8,9 +8,14 @@ http://eosweb.larc.nasa.gov/PRODOCS/misr/table_misr.html
 
 Strategy:
   * scan the three folders:
-      MB2LME MISR Level 1B2 Local Mode Ellipsoid Radiance Data Ellipsoid projected TOA parameters for the single local mode scene, resampled to WGS84 ellipsoid. HDF-EOS Grid (Local mode)
-      MB2LMT MISR Level 1B2 Local Mode Terrain Radiance Data Terrain-projected TOA radiance for the single local mode scene, resampled at the surface and topographically corrected. HDF-EOS Grid (Local mode)
-      MI1B2E MISR Level 1B2 Ellipsoid Data Contains the ellipsoid projected TOA radiance, resampled to WGS84 ellipsoid corrected. (Global Mode)
+      1) MB2LME MISR Level 1B2 Local Mode Ellipsoid Radiance Data Ellipsoid
+      projected TOA parameters for the single local mode scene, resampled to
+      WGS84 ellipsoid. HDF-EOS Grid (Local mode)
+      2) MB2LMT MISR Level 1B2 Local Mode Terrain Radiance Data Terrain-projected
+      TOA radiance for the single local mode scene, resampled at the surface
+      and topographically corrected. HDF-EOS Grid (Local mode)
+      3) MI1B2E MISR Level 1B2 Ellipsoid Data Contains the ellipsoid projected TOA
+      radiance, resampled to WGS84 ellipsoid corrected. (Global Mode)
   * sort the list of dated ascending
   * if the last scanned date for the folder is set, start from the next date
   * import nadir AN
