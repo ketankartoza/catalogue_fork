@@ -370,13 +370,14 @@ class Command(BaseCommand):
               is_new = False
               op.__dict__.update(data)
             except OpticalProduct.DoesNotExist:
-              op = OpticalProduct(**data)
-              verblog('Not in catalogue: creating.', 2)
-              is_new = True
               try:
+                op = OpticalProduct(**data)
+                verblog('Not in catalogue: creating.', 2)
+                is_new = True
                 op.productIdReverse(True)
               except Exception, e:
-                raise CommandError('Cannot get all mandatory data from product id %s (%s).' % (product_id, e))
+                #raise CommandError('Cannot get all mandatory data from product id %s (%s).' % (product_id, e))
+                continue
 
             try:
               op.save()
@@ -473,7 +474,14 @@ class Command(BaseCommand):
               else:
                 verblog('Skipping rcfile write.', 2)
             except Exception, e:
-              raise CommandError('Cannot import: %s' % e)
+              # Added by Tim to vok voort
+              if not rcfileskip:
+                rc = open(RC_FILE, 'w+')
+                for mf, df in last_processed.items():
+                  rc.write('last_date=%s/%s\n' % (mf, df))
+                rc.close()
+              #raise CommandError('Cannot import: %s' % e)
+              continue
             finally:
               img = None
               # Removes temporary tif stripes
