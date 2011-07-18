@@ -1,6 +1,7 @@
 #!/bin/bash
 export PGHOST=elephant
 export PGPORT=5432
+export PGPASSWORD=pumpkin
 
 DB_NAME="sac-test"
 TMP_DIR="/tmp"
@@ -12,7 +13,7 @@ BORDERS="../resources/heatmaps/borders900913.tif"
 rm $TMP_DIR/heatmap*
 
 #update heatmap_value table (use max(search_date) as starting point)
-psql -c 'select update_heatmap((select max(search_date) from heatmap_values));' -d $DB_NAME
+psql -c 'select update_heatmap((select max(search_date) from heatmap_values));' -d $DB_NAME 
 
 #last week
 gdal_grid -ot Float32 -a invdist:power=2.0:smoothing=2.0:radius1=1:radius2=1 -of GTiff -txe -180 180 -tye 90 -90 -outsize 1440 720 -zfield hits -sql "select * from heatmap(date(now()-'7 days'::interval),date(now()))" PG:dbname=$DB_NAME $TMP_DIR/heatmap_data_lastweek.tif
@@ -45,7 +46,8 @@ convert $TMP_DIR/heatmap-last3month-900913.tif -fill white -opaque black $TMP_DI
 convert $TMP_DIR/heatmap-last3month-900913.png $BORDERS -composite $OUTPUT_DIR/heatmap-last3month.png
 
 #total (runs for 22min on intel i5 @ 2.4 Ghz
-gdal_grid -ot Float32 -a invdist:power=2.0:smoothing=2.0:radius1=1:radius2=1 -of GTiff -txe -180 180 -tye 90 -90 -outsize 1440 720 -zfield hits -sql "select * from heatmap('1900-1-1'::DATE, date(now()))" PG:dbname=$DB_NAME $TMP_DIR/heatmap_data_total.tif
+#gdal_grid -ot Float32 -a invdist:power=2.0:smoothing=2.0:radius1=1:radius2=1 -of GTiff -txe -180 180 -tye 90 -90 -outsize 1440 720 -zfield hits -sql "select * from heatmap('1900-1-1'::DATE, date(now()))" PG:dbname=$DB_NAME $TMP_DIR/heatmap_data_total.tif
+gdal_grid -ot Float32 -a invdist:power=2.0:smoothing=2.0:radius1=1:radius2=1 -of GTiff -txe -180 180 -tye 90 -90 -outsize 1440 720 -zfield hits -sql "select * from heatmap(date(now()-'12 month'::interval), date(now()))" PG:dbname=$DB_NAME $TMP_DIR/heatmap_data_total.tif
 
 gdaldem color-relief $TMP_DIR/heatmap_data_total.tif $HEATMAP_COLORS $TMP_DIR/heatmap-total.tif
 
