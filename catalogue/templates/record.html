@@ -1,4 +1,4 @@
-      <tr>
+      <tr id="row-{{ myRecord.product.id }}">
         {% if myShowDetailFlag %}
         <td class="show-record-detail-cell"><span class="small" onclick="$('#record-detail-table-{{myRecord.product.id}}').load('/metadata/{{myRecord.product.id}}/','', $('#record-detail-row-{{myRecord.product.id}}').toggle('slow'));">more</span></td>
         {% endif %}
