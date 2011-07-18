@@ -4,33 +4,28 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <style type="text/css" media="screen">
-body {
-color:white;
-background:#111E31;
-font-family: Sans-Serif;
-}
-h1{
-font-size:2em;
-}
-h2{
-font-size:1.5em;
-}
-#header {
-height: 107px;
-}
-#link {
-font-weight:bold;
-color:white;
-}
+  body { color:white; background:#111E31; font-family: Sans-Serif; }
+  h1{ font-size:2em; }
+  h2{ font-size:1.5em; }
+  #header { height: 107px; }
+  #link { font-weight:bold; color:white; }
 </style>
 </head>
 <body>
-<div id="header">
-<img src="sac_header.jpg" />
-</div>
+  <table width="799">
+    <tr>
+      <td>
+        <img src="sac_header_email.jpg" />
+      </td>
+    </tr>
+    <tr>
+      <td>
 {% block content %}
 Default content
 {% endblock %}
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
 {% endautoescape %}
