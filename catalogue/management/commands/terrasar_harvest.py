@@ -72,21 +72,24 @@ def get_row_path_from_polygon(poly, as_int=False, no_compass=False):
   informations of the centroid as a string
   As indicated in the docs (8.1.3)
   """
-  path, path_shift = ("%.2f" % poly.centroid.x).split('.')
-  row, row_shift = ("%.2f" % poly.centroid.y).split('.')
-  if as_int:
-    return int(path), int(path_shift), int(row), int(row_shift)
-  if no_compass:
+  try:
+    path, path_shift = ("%.2f" % poly.centroid.x).split('.')
+    row, row_shift = ("%.2f" % poly.centroid.y).split('.')
+    if as_int:
+      return int(path), int(path_shift), int(row), int(row_shift)
+    if no_compass:
+      return path, path_shift, row, row_shift
+    if poly.centroid.x < 0:
+      path = "%sW" % path
+    else:
+      path = "%sE" % path
+    if poly.centroid.y < 0:
+      row = "%sS" % row
+    else:
+      row = "%sN" % row
     return path, path_shift, row, row_shift
-  if poly.centroid.x < 0:
-    path = "%sW" % path
-  else:
-    path = "%sE" % path
-  if poly.centroid.y < 0:
-    row = "%sS" % row
-  else:
-    row = "%sN" % row
-  return path, path_shift, row, row_shift
+  except:
+    raise
 
 class Command(BaseCommand):
   help = "Imports Terrasar packages into the SAC catalogue"
@@ -205,7 +208,7 @@ class Command(BaseCommand):
           if not area_of_interest.geom_type.name == 'Polygon':
             raise CommandError('Unable to create the area of interest polygon: not a polygon.')
         except Exception, e:
-          raise CommandError('Unable to create the area of interest polygon: %s.' % e)
+          raise CommandError('Unable to create the area of interest polygon: %s \n %s.' % (e, area))
         verblog('Area of interest filtering activated.', 2)
 
       # Get the params
@@ -240,8 +243,10 @@ class Command(BaseCommand):
 
           verblog("Ingesting %s" % package, 2)
 
-          path, path_shift, row, row_shift = get_row_path_from_polygon(package.geom, no_compass=True)
-
+          try:
+            path, path_shift, row, row_shift = get_row_path_from_polygon(package.geom, no_compass=True)
+          except:
+            continue
           # Estract metadata
           sensor_type = str(package['img_mod'])[-3:-1] + str(package['pol_mod'])[0]
           acquisition_mode = str(package['pol_chan']).replace('/', '')
