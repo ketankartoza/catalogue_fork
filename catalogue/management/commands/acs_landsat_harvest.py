@@ -174,6 +174,10 @@ class Command(BaseCommand):
             for myKey,myValue in dict.items(myFileTypeRow):
               verblog( "%s : %s" % (myKey,myValue),3)
 
+
+
+
+
             imported += 1
           except:
             if halt_on_error: 
@@ -182,6 +186,14 @@ class Command(BaseCommand):
             if errors > 10:
               verblog('Failure rate too high - more than 10 rows failed to import - aborting!',0)
               raise
+
+          myProduct = OpticalProduct.objects.get( original_product_id = myLocalizationRow['localization_id'] )
+          if not myProduct:
+            myProduct = OpticalProduct()
+          
+
+          # This work is in progress - continue imeplementation here.. 
+          #      set product properties in informix class generically then subclass this class for landsat etc
 
 
 
