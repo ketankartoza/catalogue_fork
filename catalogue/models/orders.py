@@ -143,7 +143,7 @@ class MarketSector(models.Model):
 
 class Order(models.Model):
   user = models.ForeignKey(User)
-  notes = models.TextField(help_text="Make a note of any special requirements or processing instructions you may need. Please note that in the case of free products and priority products, they will only be supplied with default options.",null=True,blank=True)
+  notes = models.TextField(help_text="Make a note of any special requirements or processing instructions (including processing levels). Please note that in the case of free products and priority products, they will only be supplied with default options.",null=True,blank=True)
   order_status = models.ForeignKey(OrderStatus,verbose_name="Order Status",default=1)
   delivery_method = models.ForeignKey(DeliveryMethod, verbose_name="Delivery Method", default=1)
   delivery_detail = models.ForeignKey( DeliveryDetail, null=True, blank=True )
