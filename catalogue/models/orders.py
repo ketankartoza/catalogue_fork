@@ -126,12 +126,28 @@ class DeliveryDetail(models.Model):
 
 ###############################################################################
 
+class MarketSector(models.Model):
+  """A dictionary table of market sectors in which an order will be used."""
+  name = models.CharField(max_length="80",unique=True)
+
+  class Meta:
+    app_label = 'catalogue'
+
+  def __unicode__(self):
+    return str(self.name)
+
+  class Admin:
+    pass
+
+###############################################################################
+
 class Order(models.Model):
   user = models.ForeignKey(User)
   notes = models.TextField(help_text="Make a note of any special requirements or processing instructions you may need. Please note that in the case of free products and priority products, they will only be supplied with default options.",null=True,blank=True)
   order_status = models.ForeignKey(OrderStatus,verbose_name="Order Status",default=1)
   delivery_method = models.ForeignKey(DeliveryMethod, verbose_name="Delivery Method", default=1)
   delivery_detail = models.ForeignKey( DeliveryDetail, null=True, blank=True )
+  market_sector = models.ForeignKey( MarketSector, null=False, blank=False, default=1 )
   order_date = models.DateTimeField(verbose_name="Order Date", auto_now=True, auto_now_add=True,
       help_text = "When the order was placed - not shown to users")
   #default manager
@@ -154,6 +170,7 @@ class Order(models.Model):
 
   class Admin:
     pass
+
 
 
 class OrderStatusHistory(models.Model):
