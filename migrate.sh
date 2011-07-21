@@ -43,6 +43,7 @@ python manage.py runscript -s -v 2 --pythonpath=./sql/migrations 303-sensors-dic
 python manage.py runscript -v 2 --pythonpath=./sql/migrations post_migration.py
 psql $DB -f sql/migrations/304-additional-indexes.sql
 psql $DB -f sql/migrations/305-taskable-sensors.sql
+psql $DB -f sql/migrations/306-order-market-sector.sql
 # Next adds teh catalogue.ProductLink model
 python manage.py syncdb
 python manage.py reverse-engineer-product-ids -v 2

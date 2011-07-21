@@ -64,14 +64,14 @@
     <tr>
       <th>Date</th>
       <th>Owner</th>
-      <th>Level</th>
-      <th>Resampling</th>
+      <!-- <th>Level</th> -->
+      <th colspan="2">Resampling</th>
     </tr>
     <tr>
       <td>{{myOrder.order_date}}</td>
       <td>{{myOrder.user}}</td>
-      <td>{{myOrder.delivery_detail.processing_level}}</td>
-      <td>{{myOrder.delivery_detail.resampling_method}}</td>
+      <!-- <td>{{myOrder.delivery_detail.processing_level}}</td> -->
+      <td colspan="2">{{myOrder.delivery_detail.resampling_method}}</td>
     </tr>
     <tr>
       <th colspan="2">Projection</th>
@@ -154,14 +154,14 @@
 <div class="centered">
     {% if myOrder.delivery_detail.geometry %}
     Download clip geometry:
-    <button onclick='location="/downloadclipgeometry/{{ myOrder.id }}/?shp"'>SHP</button>
-    <button onclick='location="/downloadclipgeometry/{{ myOrder.id }}/?kml"'>KML</button>
-    <button onclick='location="/downloadclipgeometry/{{ myOrder.id }}/?kmz"'>KMZ</button>
+    <button onclick='location="/downloadclipgeometry/{{ myOrder.id }}/?shp";return false;'>SHP</button>
+    <button onclick='location="/downloadclipgeometry/{{ myOrder.id }}/?kml";return false;'>KML</button>
+    <button onclick='location="/downloadclipgeometry/{{ myOrder.id }}/?kmz";return false;'>KMZ</button>
     {% endif %}
     Download ISO 19115 (SAC Profile)
-    <button onclick='location="/downloadordermetadata/{{ myOrder.id }}/"'>XML metadata</button>
+    <button onclick='location="/downloadordermetadata/{{ myOrder.id }}/";return false;'>XML metadata</button>
     Download HTML Metadata
-    <button onclick='location="/downloadordermetadata/{{ myOrder.id }}/?html"'>HTML metadata</button>
+    <button onclick='location="/downloadordermetadata/{{ myOrder.id }}/?html";return false;'>HTML metadata</button>
 </div>
 {% box_end %}
 <br />

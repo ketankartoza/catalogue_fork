@@ -33,19 +33,19 @@
   {% if myDownloadOrderFlag %}
   <div id="cart-download-div" style="text-align: center;">
     <img src="/media/images/down_16.png" alt=""/> Download order as
-    <button onclick='location="/downloadorder/{{ myOrder.id }}/?shp"'>SHP</button>
-    <button onclick='location="/downloadorder/{{ myOrder.id }}/?kml"'>KML</button>
-    <button onclick='location="/downloadorder/{{ myOrder.id }}/?kmz"'>KMZ</button>
+    <button onclick='location="/downloadorder/{{ myOrder.id }}/?shp";return false;'>SHP</button>
+    <button onclick='location="/downloadorder/{{ myOrder.id }}/?kml";return false;'>KML</button>
+    <button onclick='location="/downloadorder/{{ myOrder.id }}/?kmz";return false;'>KMZ</button>
   </div>
   {% else %}
   {% if myRecords %}
   <div id="cart-download-div" style="text-align: center;">
     <span class="loud"><img src="/media/images/down_16.png" alt=""/>Download cart as:</span></br/>
-    <button onclick='location="/downloadcart/?shp"'>SHP</button>
-    <button onclick='location="/downloadcart/?kml"'>KML</button>
-    <button onclick='location="/downloadcart/?kmz"'>KMZ</button>
-    <button onclick='location="/downloadcartmetadata/"'>XML</button>
-    <button onclick='location="/downloadcartmetadata/?html"'>HTML</button>
+    <button onclick='location="/downloadcart/?shp";return false;'>SHP</button>
+    <button onclick='location="/downloadcart/?kml";return false;'>KML</button>
+    <button onclick='location="/downloadcart/?kmz";return false;'>KMZ</button>
+    <button onclick='location="/downloadcartmetadata/";return false;'>XML</button>
+    <button onclick='location="/downloadcartmetadata/?html";return false;'>HTML</button>
   </div>
   {% endif %}
   {% endif %}
