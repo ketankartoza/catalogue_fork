@@ -73,6 +73,28 @@ class DateTimeWidget(forms.DateInput):
                 maxDate: '+1Y',
                 changeMonth: true,
                 changeYear: true,
+                onChangeMonthYear: function(year, month, inst) { 
+                  try {
+                    if (changingDate) {
+                      return;
+                    }
+                  } catch(e) {
+                    //do nothing - handler for undefined reference to changingDate
+                  }
+                  changingDate = true;
+                  myId = "%s";
+                  if ( myId.substring(0,8) == "id_start")
+                  {
+                    $("#%s-widget").datepicker("setDate", "01-" + month + "-" + year);
+                  }
+                  else if ( myId.substring(0,6) == "id_end")
+                  {
+                    //calculate the last day of the month - see http://javascript.about.com/library/bllday.htm
+                    var myLastDay = new Date(year, month, 0).getDate();
+                    $("#%s-widget").datepicker("setDate", myLastDay + "-" + month + "-" + year);
+                  }
+                  changingDate = false;
+                },
                 onSelect: function( theDate, inst)
                   {
                     check_search_dates();
@@ -84,7 +106,7 @@ class DateTimeWidget(forms.DateInput):
           });
         </script>
         <div id="%s-widget"></div>
-        <input type="hidden" name="%s" id="%s" value="%s" />''' % (id, id, myDefaultDateProperty, id, myDefaultDate, id, name, id, myDefaultDate)
+        <input type="hidden" name="%s" id="%s" value="%s" />''' % (id, id, id, id, id, myDefaultDateProperty, id, myDefaultDate, id, name, id, myDefaultDate)
         return mark_safe(a)
 
 
