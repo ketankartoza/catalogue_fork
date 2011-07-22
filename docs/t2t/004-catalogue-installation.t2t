@@ -33,7 +33,8 @@ sudo apt-get install python-virtualenv \
 build-essential \
 python-dev \
 python-all-dev \
-python-profiler
+python-profiler \
+python-dateutil
 ```
 
 Now, start the Python virtual environment setup. We install Python in the
