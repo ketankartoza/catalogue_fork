@@ -18,6 +18,7 @@ from django import forms
 from django.utils.safestring import mark_safe
 import datetime, time
 import logging
+from dateutil.relativedelta import relativedelta
 
 # Support dmy formats (see http://dantallis.blogspot.com/2008/11/date-validation-in-django.html )
 DATE_FORMATS = (
@@ -48,6 +49,20 @@ class DateTimeWidget(forms.DateInput):
             final_attrs['id'] = u'%s_id' % (name)
         id = final_attrs['id']
 
+        #set defaults to start and end days of month if not set explicitly
+        myDate = datetime.date.today()
+        if "start" in name and not myDefaultDate:
+          myDefaultDate = "01-%s-%s" % ( str(myDate.month), str(myDate.year))
+        if "end" in name and not myDefaultDate:
+          # work out the last day of the current month
+          #myEndDate = datetime.date.today() + relativedelta(months=+1)
+          #myEndDate = datetime.date( myFutureDate.year(), myFutureDate.month(), 1) - relativedelta(days=-1)
+
+          # work out yesterdays date
+          myEndDate = datetime.date.today() + relativedelta(days=-1)
+          myDefaultDate = "%s-%s-%s" % ( myEndDate.day, myEndDate.month, myEndDate.year )
+
+
         a = u'''
         <script type="text/javascript">
           $(function() {
@@ -65,10 +80,11 @@ class DateTimeWidget(forms.DateInput):
                   }
                 %s
                 });
+            $("#%s-widget").datepicker("setDate", "%s");
           });
         </script>
         <div id="%s-widget"></div>
-        <input type="hidden" name="%s" id="%s" value="%s" />''' % (id, id, myDefaultDateProperty, id, name, id, myDefaultDate)
+        <input type="hidden" name="%s" id="%s" value="%s" />''' % (id, id, myDefaultDateProperty, id, myDefaultDate, id, name, id, myDefaultDate)
         return mark_safe(a)
 
 
