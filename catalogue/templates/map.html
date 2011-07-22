@@ -66,6 +66,7 @@
       createLegend();
       {% endif %}
       setupMiniIconClickCallback();
+      setupRowClickCallback();
       {% if myExtent %}
       var myBounds = new OpenLayers.Bounds{{myExtent}}; //calculated from search page results
       mMap.zoomToExtent( transformBounds( myBounds ));
