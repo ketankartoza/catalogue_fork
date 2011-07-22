@@ -93,6 +93,9 @@ class DateTimeWidget(forms.DateInput):
                     var myLastDay = new Date(year, month, 0).getDate();
                     $("#%s-widget").datepicker("setDate", myLastDay + "-" + month + "-" + year);
                   }
+                  myDate = $("#%s-widget").datepicker("getDate"); //returns a js date object
+                  myTextDate = myDate.getDate() + "-" + myDate.getMonth() + "-" + myDate.getFullYear();
+                  $('#%s').val( myTextDate );
                   changingDate = false;
                 },
                 onSelect: function( theDate, inst)
@@ -106,7 +109,7 @@ class DateTimeWidget(forms.DateInput):
           });
         </script>
         <div id="%s-widget"></div>
-        <input type="hidden" name="%s" id="%s" value="%s" />''' % (id, id, id, id, id, myDefaultDateProperty, id, myDefaultDate, id, name, id, myDefaultDate)
+        <input type="hidden" name="%s" id="%s" value="%s" />''' % (id, id, id, id, id, id, id, myDefaultDateProperty, id, myDefaultDate, id, name, id, myDefaultDate)
         return mark_safe(a)
 
 
