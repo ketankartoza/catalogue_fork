@@ -6,14 +6,6 @@
 /* Compress this file to catalogue.js using google's closure compiler at
   http://closure-compiler.appspot.com/home */
 
-/* ------------------------------------------------------
- *  Global variables
- *  ------------------------------------------------------ */
-
-/* Setup the style for our scene footprints layer and enable
- * zIndexing so that we can raise the selected on above the others
- * see http://openlayers.org/dev/examples/ordering.html */
-
 
 var DestroyFeatures = OpenLayers.Class(OpenLayers.Control, {
     type: OpenLayers.Control.TYPE_BUTTON,
@@ -27,6 +19,15 @@ OpenLayers.Renderer.VML.prototype.supported = function() {
 OpenLayers.Renderer.VML.prototype.initialize = function(containerID) {
     OpenLayers.Renderer.Elements.prototype.initialize.apply(this, arguments);
 }
+
+/* ------------------------------------------------------
+ *  Global variables
+ *  ------------------------------------------------------ */
+
+/* Setup the style for our scene footprints layer and enable
+ * zIndexing so that we can raise the selected on above the others
+ * see http://openlayers.org/dev/examples/ordering.html */
+
 var mSceneStyleMap = new OpenLayers.StyleMap(
   OpenLayers.Util.applyDefaults(
   {
@@ -52,6 +53,7 @@ var mMapControls = null;
 var mWKTFormat = null;
 var mVectorLayer = null;
 var mMap = null;
+var mLastSelectedRecordId = null;
 
 /*--------------------------------------------------------
  * Things to run on any page first load that uses this lib
@@ -869,6 +871,14 @@ function getFeatureIndexByRecordId( theRecordId )
  * */
 function hightlightRecord( theRecordId, theZoomFlag )
 {
+  //unset the last selected rec table row to not be bold
+  //then set the new selection to bold...
+  if ( mLastSelectedRecordId )
+  {
+    $("#record-"+ mLastSelectedRecordId + " td" ).css("font-weight", "normal");
+  }
+  mLastSelectedRecordId = theRecordId;
+  $("#record-"+ theRecordId + " td" ).css("font-weight", "bold");
   // use ajax to load the thumb preview and then call the prepareFancy callback
   $("#preview-accordion-div").load("/showpreview/" + theRecordId + "/medium/","",prepareFancy);
   resetSceneZIndices();
@@ -895,6 +905,16 @@ function setupMiniIconClickCallback()
   }));
 }
 
+/* Setup a callback so that when a search result table row is
+ * clicked, the corresponding scene is highlighted on the map
+ * and loaded in the preview accordion panel. */
+function setupRowClickCallback()
+{
+  $('.result-row').live('click', (function () {
+    var myRecordId = $(this).attr('id').replace("record-","");
+    hightlightRecord(myRecordId, true);
+  }));
+}
 
 function addOrderClicked()
 {
