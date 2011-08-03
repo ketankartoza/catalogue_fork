@@ -121,7 +121,6 @@ def search(theRequest):
       'myForm': myForm,
       'myHost' : settings.HOST,
       'myFormset' : myFormset,
-      'myLegendFlag' : True, #used to show the legend in the accordion
       'myLayerDefinitions' : myLayerDefinitions,
       'myLayersList' : myLayersList,
       'myActiveBaseMap' : myActiveBaseMap
@@ -135,7 +134,6 @@ def search(theRequest):
     return render_to_response ( 'search.html' ,{
       'myAdvancedFlag' : False,
       'mySearchType' :  None,
-      'myLegendFlag' : True, #used to show the legend in the accordion
       'myForm': myForm,
       'myFormset' : myFormset,
       'myHost' : settings.HOST,

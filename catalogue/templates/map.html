@@ -151,18 +151,6 @@
   {% endif %}
 {% endblock %}
 
-{% block legend %}
-  {% if myLegendFlag %}
-    <h3 id="legend-accordion-h3"><a href="#"><img src="/media/images/search_16.png" alt="" />&nbsp;Legend</a></h3>
-    <div id="legend-accordion-div">
-      <ul id="base-layer-legend" style="list-style-type:none"><li style="display:none;"></li></ul>
-      {% if mySearchAreasToggle %}
-      <input type="checkbox" name="searches-toggle" onclick="getLayerByName('Searches').setVisibility( this.checked );" checked="yes"><label forname="searches-toggle">Toggle search overlay</label>
-      {% endif %}
-    </div>
-  {% endif %}
-{% endblock %}
-
 {% block messages %}
   {% if myMessagesFlag %}
     {{ myMessagesHeading|safe }}
