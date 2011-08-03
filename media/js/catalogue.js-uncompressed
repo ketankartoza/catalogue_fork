@@ -442,33 +442,6 @@ function setHTML(response)
   });
 }
 
-function createLegend()
-{
-  //create the legend
-  myLayers = mMap.layers;
-  for (var i = 0; i < myLayers.length; i++)
-  {
-    myLayer = myLayers[i];
-    myLayerName = myLayer.name;
-    myVisibility = myLayer.visibility;
-    myCheckedString = "";
-    if ( myVisibility )
-    {
-      myCheckedString = "checked";
-    }
-    if ( myLayer.isBaseLayer )
-    {
-      myLegendItem = "<li class=\"ui-corner-all button ui-button ui-widget ui-button-text-only ui-state-default\"><input id=\"" + myLayerName +  "-radiobutton\" name=\"backdrop-layers\" type=\"radio\" value=\"" + myLayerName + "\" " + myCheckedString + "/><label forname=\"" + myLayerName + "-radiobutton\">" + myLayerName + "</label></li>";
-      $("#base-layer-legend").append( myLegendItem );
-    }
-  }
-  // update the current base layer when an item is clicked
-  $(":radio").change(function()
-  {
-    myLayer = getLayerByName( this.value );
-    mMap.setBaseLayer( myLayer );
-  });
-}
 function setupCloudSlider() {
   $("#id_cloud_meanSlider").slider({
     //handle: '#id_cloud_meanSliderHandle',
