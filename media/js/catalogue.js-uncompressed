@@ -540,6 +540,7 @@ function setupBaseMap()
   //show cursor location
   mMap.addControl(new OpenLayers.Control.MousePosition({'div': document.getElementById("map-location")}));
   mMap.addControl(mNavigationPanel);
+  mMap.addControl(new OpenLayers.Control.LayerSwitcher());
 }
 
 /*
@@ -561,7 +562,6 @@ function setupSearchMap( theLayers )
   setupEditingPanel(mVectorLayer);
   mMap.addLayers( theLayers );
   addSelectControl();
-  mMap.addControl(new OpenLayers.Control.LayerSwitcher());
   // Read WKT from the text field.
   var myWKT = document.getElementById('id_geometry').value;
   if (myWKT)
@@ -597,7 +597,6 @@ function setupSearchMap( theLayers )
   //activate Navigation/DragPan by default for searchMap
   enableNavigation();
 
-  createLegend();
 }
 
 /*
@@ -616,7 +615,6 @@ function setupTaskingMap( theLayers )
   theLayers.push(layerMapnik); // add to end of array
   mMap.addLayers( theLayers );
   addSelectControl();
-  mMap.addControl(new OpenLayers.Control.LayerSwitcher());
   // Read WKT from the text field.
   var myWKT = document.getElementById('id_geometry').value;
   if (myWKT)
@@ -646,7 +644,6 @@ function setupTaskingMap( theLayers )
   } else {
     enableDrawing();
   }
-  createLegend();
 }
 
 /*--------------------------
