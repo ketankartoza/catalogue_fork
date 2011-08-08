@@ -116,7 +116,7 @@ UPDATE "catalogue_missionsensor" SET mission_id = ( select distinct gs.mission_i
 -- set defaults for new fields
 
 UPDATE "catalogue_mission" SET "mission_group_id" = 1 WHERE true;
-UPDATE "catalogue_missionsensor" SET "is_taskable" = false WHERE false;
+UPDATE "catalogue_missionsensor" SET "is_taskable" = false ;
 UPDATE "catalogue_acquisitionmode" SET "is_grayscale" = false WHERE true;
 
 -- add constraints
