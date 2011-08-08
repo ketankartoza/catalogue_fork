@@ -118,8 +118,8 @@ simple '+' symbol.
 
 **Response:** Yes the user is able to do this.
 
-**TEST 3100 3.6 Is the interface provided for a user to define centre and
-radius coordinates to select his AOI?**
+**TEST 3100 3.6 Is the interface provided for a user to define centre and**
+**radius coordinates to select his AOI?**
 
 **Response:** Yes the user is able to do this.
 
@@ -134,7 +134,7 @@ MrSid format in UTM North projection.
 
 **Response:** This is still in progress due to technical issues encountered.
 
-** TEST 3100 4.2 Has the latest Spot 5 mosaic been added as default backdrop on**
+**TEST 3100 4.2 Has the latest Spot 5 mosaic been added as default backdrop on**
 **the map canvas for South Africa?**
 
 **Response:** This will be completed when the above dependency has been met.
@@ -174,7 +174,7 @@ triggers have been implemented to populate this data automatically for know
 datasources when they are added if this data is not explicitly defined.
 
 **TEST  3100 5.4 Can users select multiple resolutions to enable a wider**
-**search? **
+**search?**
 
 **Response:** Yes.
 
@@ -194,14 +194,14 @@ multispectral (4 - 8 bands), superspectral (9 - 40 bands) and hyperspectral (>
 **the "SENSOR_TYPE_ABBREVIATION" or "TYPE_NAME" fields out of the Sensor Model**
 **spreadsheet would be preferred. **
 
-**Response:**
+**Response:** Yes
 
 License type. Free data, government license or commercial license or any.
 
 **TEST  3100 5.6 Can a user select to query data by license types:  Free data,**
 **government license or commercial license or any?**
 
-**Response:**
+**Response:** Yes
 
 Define the allowable percentage cloud cover. (optional)
 
@@ -251,22 +251,22 @@ Sensor (Only relevant to Satellite Missions selected previously)
 
 **TEST  3100 5.11 Can Users select multiple Sensors ?**
 
-**Response:** Yes. Only sensors relevant to the selected mission (if any) can**
-**be selected.
+**Response:** Yes. Only sensors relevant to the selected mission (if any) can
+be selected.
 
 Acquisition Mode
 
 **TEST  3100 5.12 Can Users select multiple Acquisition Modes ?**
 
-**Response:** We have implemented drop down menus (as specified above). Note**
-**that drop down menus only support /  only allow single selections. 
+**Response:** We have implemented drop down menus (as specified above). Note
+that drop down menus only support /  only allow single selections. 
 
 Acquisition Type
 
 **TEST  3100 5.13 Can Users select multiple Acquisition Types?**
 
-**Response:** We have implemented drop down menus (as specified above). Note**
-**that drop down menus only support /  only allow single selections. 
+**Response:** We have implemented drop down menus (as specified above). Note
+that drop down menus only support /  only allow single selections. 
 
 Path, Path range or Path Array
 
