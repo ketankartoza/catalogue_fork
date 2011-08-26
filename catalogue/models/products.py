@@ -999,7 +999,7 @@ class OpticalProduct( GenericSensorProduct ):
   ##Descriptors for optical products
   #TODO: all cloud cover values should be normalized to percentages 
   # see http://tracker.sansa.org.za/issues/475
-  cloud_cover = models.IntegerField(null=True, blank=True, max_length=3
+  cloud_cover = models.IntegerField(null=True, blank=True, max_length=3,
       help_text='The maximum cloud cover when searching for images. \
         Note that not all sensors support cloud cover filtering. Range 0-100%'
       )
