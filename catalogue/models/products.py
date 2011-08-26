@@ -997,7 +997,12 @@ class OpticalProduct( GenericSensorProduct ):
   myOpticalProduct = GenericProduct.objects.get(id=1).opticalproduct
   See http://docs.djangoproject.com/en/dev/topics/db/models/#id7 for more info."""
   ##Descriptors for optical products
-  cloud_cover = models.IntegerField(null=True, blank=True)
+  #TODO: all cloud cover values should be normalized to percentages 
+  # see http://tracker.sansa.org.za/issues/475
+  cloud_cover = models.IntegerField(null=True, blank=True, max_length=3
+      help_text='The maximum cloud cover when searching for images. \
+        Note that not all sensors support cloud cover filtering. Range 0-100%'
+      )
   sensor_inclination_angle = models.FloatField(null=True, blank=True,help_text="Orientation of the vehicle on which the sensor is mounted")
   sensor_viewing_angle = models.FloatField(null=True, blank=True,help_text="Angle of acquisition for the image")
   gain_name = models.CharField( max_length=200, null=True, blank=True)

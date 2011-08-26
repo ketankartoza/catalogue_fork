@@ -240,7 +240,7 @@ class Searcher:
       #
       if self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL:
         logging.info('OpticalProduct advanced search activated')
-        if self.mSearch.use_cloud_cover:
+        if self.mSearch.use_cloud_cover and self.mSearch.cloud_mean:
           self.mCloudQuery = Q( cloud_cover__lte=self.mSearch.cloud_mean ) | Q( cloud_cover__isnull=True )
           self.mQuerySet = self.mQuerySet.filter( self.mCloudQuery )
           self.mMessages.append(self.meanCloudString())
