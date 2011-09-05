@@ -17,7 +17,7 @@
           <label>Go to Tasking Request:</label>
           <input name="task_id_text" type="text" size="6" maxlength="5" />
           <input type="button" value="Go!" 
-                onclick="showTask(forms['frmShowTask'].task_id_text.value); return false;"
+            onclick="showTask(forms['frmShowTask'].task_id_text.value); return false;">
         </form>
         </td>              
       </tr>                
@@ -34,6 +34,8 @@
         <td colspan="5" style="text-align: center;">
           <div class="pagination">
             <span class="step-links">
+              Switch to:
+              <button onclick='location="/listorders/"'>Product Orders View</button>
               {% if myRecords.has_previous %}
               <a href="#" onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a>
               {% endif %}
