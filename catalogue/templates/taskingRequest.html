@@ -64,7 +64,7 @@
       <th>Date</th>
       <th>Owner</th>
       <!-- <th>Level</th> -->
-      <th>Resampling</th>
+      <th colspan="2">Resampling</th>
     </tr>
     <tr>
       <td>{{myTaskingRequest.order_date|date:"Y-m-d H:i" }}</td>
@@ -97,7 +97,7 @@
     <tr>
       <td colspan="1">
         {% load avatars %}
-        <img id="avatarimg" src="{% avatar 96 %}" />
+        <img id="avatarimg" src="{% avatar 96 myOrder.user %}" />
       </td>
       <td colspan="3">
       {% if myTaskingRequest.user.get_profile.organisation%}
