@@ -77,6 +77,10 @@ def listOrders(theRequest):
     myRecords = Order.base_objects.filter(user=theRequest.user).order_by('-order_date')
   else:
     '''This view is strictly for staff only'''
+    # This view uses the NoSubclassManager
+    # base_objects is defined in the model and 
+    # will exclude all tasking requests or other
+    # derived classes
     myRecords = Order.base_objects.all().order_by('-order_date')
   if theRequest.GET.has_key('pdf'):
     myPageSize = myRecords.count()

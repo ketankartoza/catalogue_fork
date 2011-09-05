@@ -85,6 +85,44 @@ def myTaskingRequests(theRequest):
       },
       context_instance=RequestContext(theRequest))
 
+@login_required
+@renderWithContext("taskingRequestListPage.html","taskingRequestList.html")
+def listTaskingRequests(theRequest):
+  myRecords = None
+  if not theRequest.user.is_staff:
+    '''Non staff users can only see their own tasking requests listed'''
+    myRecords = TaskingRequest.objects.filter(user=theRequest.user).order_by('-order_date')
+  else:
+    '''This view is strictly for staff only'''
+    # This view uses the NoSubclassManager
+    # base_objects is defined in the model and 
+    # will exclude all tasking requests or other
+    # derived classes
+    myRecords = TaskingRequest.objects.all().order_by('-order_date')
+  if theRequest.GET.has_key('pdf'):
+    myPageSize = myRecords.count()
+  else:
+    myPageSize = 100
+  # Paginate the results
+  try:
+    myPage = int(theRequest.GET.get('page', '1'))
+  except ValueError:
+    myPage = 1
+  myPaginator = Paginator(myRecords, myPageSize)
+  # If page request (9999) is out of range, deliver last page of results.
+  try:
+    myRecords = myPaginator.page(myPage)
+  except (EmptyPage, InvalidPage):
+    myRecords = myPaginator.page(myPaginator.num_pages)
+  myUrl = "listtaskingrequests"
+  #render_to_response is done by the renderWithContext decorator
+  return ({
+        'myRecords': myRecords,
+        'myUrl' : myUrl,
+        'myCurrentMonth': datetime.date.today()
+    })
+
+
 @requireProfile('addtaskingrequest')
 @login_required
 def addTaskingRequest( theRequest ):
