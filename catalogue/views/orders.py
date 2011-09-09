@@ -286,23 +286,26 @@ def coverageForOrder(theOrder, theSearchRecords):
     else:
       myClip = myUnion.intersection( theOrder.delivery_detail.geometry )
     myCoverage[ "IntersectedArea" ] = myClip.area 
-    myCentroid = myClip.centroid
-    # Calculate the zone independently as centroid may differ from product union
-    myZones = utmZoneFromLatLon( myCentroid.x , myCentroid.y)
-    if len(myZones) > 0:
-      myZone = myZones[0]
-      if not myZone:
+    try:
+      myCentroid = myClip.centroid
+      # Calculate the zone independently as centroid may differ from product union
+      myZones = utmZoneFromLatLon( myCentroid.x , myCentroid.y)
+      if len(myZones) > 0:
+        myZone = myZones[0]
+        if not myZone:
+          myCoverage[ "IntersectedArea" ] = "Error calculating clip area"
+          myCoverage[ "ClipZone" ] = "Error calculating zone"
+          return myCoverage
+        myTransform = CoordTransform(SpatialReference(4326),SpatialReference(myZone[0]))
+        myClip.transform(myTransform) 
+        #logging.debug("Utm zones: %s" % myZone)
+        myCoverage[ "IntersectedArea" ] = myClip.area 
+        myCoverage[ "ClipZone" ] = "%s (EPSG:%s)" % (myZone[1],myZone[0]) 
+      else:
+        raise
+    except:
         myCoverage[ "IntersectedArea" ] = "Error calculating clip area"
         myCoverage[ "ClipZone" ] = "Error calculating zone"
-        return myCoverage
-      myTransform = CoordTransform(SpatialReference(4326),SpatialReference(myZone[0]))
-      myClip.transform(myTransform) 
-      #logging.debug("Utm zones: %s" % myZone)
-      myCoverage[ "IntersectedArea" ] = myClip.area 
-      myCoverage[ "ClipZone" ] = "%s (EPSG:%s)" % (myZone[1],myZone[0]) 
-    else:
-      myCoverage[ "IntersectedArea" ] = "Error calculating clip area"
-      myCoverage[ "ClipZone" ] = "Error calculating zone"
 
   else:
     myCoverage[ "IntersectedArea" ] = "Not applicable"
