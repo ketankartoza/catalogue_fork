@@ -8,15 +8,16 @@ Tasking Request Notification: #{{ myTask.id }}
 Dear {{ myRecipient.get_profile.firstname }},
 </p>
 <p>
-This message is to inform you about a change of status in the order
-you made on <b>{{ myTask.order_date|date:"d F Y" }}</b> on SANSA
-ONLINE Catalogue (http://{{ domain }}).
+This message is to inform you about a change of status in the tasking request 
+for {{ myOrder.user.first_name }} {{ myOrder.user.last_name }} made on <b>
+{{ myOrder.order_date|date:"d F Y" }}</b> using the SANSA ONLINE Catalogue
+(http://{{ domain }}).
 </p>
 <p style="text-align:center;font-size:1.1em">
-Your order status: {{ myTask.order_status }}
+Your tasking request status: {{ myTask.order_status }}
 </p>
 
-You can review your order at any time by visiting the
+You can review your tasking request at any time by visiting the
 <a id="link" href="http://{{ domain }}/viewtaskingrequest/{{ myTask.id}}/">
 Tasking Request Page</a> If you have any problems or special
 requests relating to this order, please contact our sales staff
