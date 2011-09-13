@@ -414,7 +414,7 @@ def showThumb(theRequest, theId, theSize):
   logging.info("showThumb : id " + theId)
   myProduct = get_object_or_404( GenericProduct, id=theId )
   myImage = myProduct.thumbnail( theSize )
-  if (isinstance(myImage), str):
+  if (isinstance(myImage, str)):
     return HttpResponse("Thumbnail for %s could not be found" % theId )
   else:
     myResponse = HttpResponse(mimetype="image/png")
