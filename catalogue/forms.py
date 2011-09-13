@@ -130,12 +130,6 @@ class AdvancedSearchForm(forms.ModelForm):
                                               more than one polygon, only the first will be used. \
                                               Complex polygons will increase search time.')
 
-  cloud_mean = forms.CharField(widget=SliderWidget(),
-                                  required=False,
-                                  label="Cloud cover",
-                                  help_text='Select the maximum cloud cover when searching for images. \
-                                               Note that not all sensors support cloud cover filtering.\
-                                              ')
   isAdvanced = forms.CharField(widget=forms.HiddenInput(), required=False)
   polarising_mode = forms.ChoiceField(choices=POLARISING_MODE_CHOICES, required=False)
   geometry = forms.CharField(widget=forms.HiddenInput(), required=False,
