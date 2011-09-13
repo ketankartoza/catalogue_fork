@@ -166,6 +166,20 @@ class Search(models.Model):
     (PRODUCT_SEARCH_IMAGERY,    'Generic imagery product search'),
   )
 
+  # Tim added to use a simple domain list for cloud cover
+  CLOUD_COVER_CHOICES = (
+    (0, '0 - No cloud present'),
+    (1, '1 - '),
+    (2, '2 - '),
+    (3, '3 - '),
+    (4, '4 - 50% Cloud cover'),
+    (5, '5 - '),
+    (6, '6 - '),
+    (7, '7 - '),
+    (8, '8 - '),
+    (9, '9 - 100% Cloud cover'),
+  )
+
   search_type = models.IntegerField('Search type', default=1, choices=PRODUCT_SEARCH_TYPES, db_index=True)
   user = models.ForeignKey(User)
   keywords = models.CharField('Keywords', max_length=255, blank=True)
@@ -204,7 +218,15 @@ class Search(models.Model):
       null=False,
       default = False,
       help_text='If you want to limit searches to optical products with a certain cloud cover, enable this.')
-  cloud_mean = models.IntegerField(null=True, blank=True, default=5, verbose_name="Max Clouds", help_text="Select the maximum permissible cloud cover.", max_length=1)
+  cloud_mean = models.IntegerField(
+      null=True, 
+      blank=True, 
+      default=5, 
+      verbose_name="Max Clouds", 
+      choices=CLOUD_COVER_CHOICES,
+      help_text='Select the maximum cloud cover when searching for images. \
+        Note that not all sensors support cloud cover filtering.'
+      , max_length=1)
   acquisition_mode  = models.ForeignKey(AcquisitionMode, blank=True, null=True, help_text='Choose the acquisition mode.') #e.g. M X T J etc
   license_type = models.IntegerField(choices=License.LICENSE_TYPE_CHOICES, blank=True, null=True, help_text='Choose a license type.')
   band_count = models.IntegerField(choices=BAND_COUNT_CHOICES, blank=True, null=True, help_text='Select the spectral resolution.')

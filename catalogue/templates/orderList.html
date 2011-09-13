@@ -43,6 +43,8 @@
         <td colspan="5" style="text-align: center;">
           <div class="pagination">
             <span class="step-links">
+              Switch to:
+              <button onclick='location="/listtaskingrequests/"'>Tasking Request View</button>
               {% if myRecords.has_previous %}
               <button onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</button>
               {% endif %}

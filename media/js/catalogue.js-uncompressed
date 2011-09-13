@@ -442,22 +442,6 @@ function setHTML(response)
   });
 }
 
-function setupCloudSlider() {
-  $("#id_cloud_meanSlider").slider({
-    //handle: '#id_cloud_meanSliderHandle',
-    value:5,
-    min: 0,
-    max: 10,
-    step: 1,
-    slide: function(e,ui){
-      var myPosition = ($('#id_cloud_meanSlider').width() / 10) * ui.value;
-      $("#id_cloud_mean").val(ui.value);
-     }
-    });
-    $("#id_cloud_mean").val( $("#id_cloud_meanSlider").slider("value") );
-    unblock();
-}
-
 function setupBaseMap()
 {
   // The options hash, w/ zoom, resolution, and projection settings.
@@ -522,11 +506,6 @@ function setupBaseMap()
 function setupSearchMap( theLayers )
 {
 
-  //check if the slider exists first
-  if ($("#id_cloud_mean").length > 0 )
-  {
-    setupCloudSlider();
-  }
   mWKTFormat = new OpenLayers.Format.WKT();
   setupBaseMap();
   mVectorLayer = new OpenLayers.Layer.Vector("search_geometry");
