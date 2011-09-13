@@ -9,14 +9,15 @@ Dear {{ myRecipient.get_profile.firstname }},
 </p>
 <p>
 This message is to inform you about a change of status in the order
-you made on <b>{{ myOrder.order_date|date:"d F Y" }}</b> on SANSA
-ONLINE Catalogue (http://{{domain }}).
+for {{ myOrder.user.first_name }} {{ myOrder.user.last_name }} made on <b>
+{{ myOrder.order_date|date:"d F Y" }}</b> using the SANSA ONLINE Catalogue
+(http://{{ domain }}).
 </p>
 <p style="text-align:center;font-size:1.1em">
 Your order status: {{ myOrder.order_status }}
 </p>
 
-You can review your order at any time by visiting the
+You can review this order at any time by visiting the
 <a id="link" href="http://{{ domain }}/vieworder/{{ myOrder.id }}/">Order
 Page</a> If you have any problems or special requests relating to this
 order, please contact our sales staff
