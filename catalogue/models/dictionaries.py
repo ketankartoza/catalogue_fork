@@ -72,7 +72,7 @@ class SensorType( models.Model ):
            JT = Pansharpened 2.5m Multispectral"""
   abbreviation = models.CharField( max_length="4")
   name = models.CharField( max_length="255" )
-  mission_sensor = models.ForeignKey(MissionSensor ) # e.g. HRV
+  mission_sensor = models.ForeignKey( MissionSensor ) # e.g. HRV
   operator_abbreviation = models.CharField( max_length=255 ) # UI abbreviation
   class Meta:
     app_label= 'catalogue'

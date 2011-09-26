@@ -22,7 +22,7 @@ from dateutil.relativedelta import relativedelta
 
 # Support dmy formats (see http://dantallis.blogspot.com/2008/11/date-validation-in-django.html )
 DATE_FORMATS = (
-        '%d-%m-%Y',                         # '2006-10-25'
+        '%d-%m-%Y',                         # '25-10/2006'
         '%d/%m/%Y', '%d/%m/%y',             # '25/10/2006', '25/12/06'
         '%d %b %Y', '%d %b, %Y',            # '25 Oct 2006', '25 Oct, 2006'
         '%d %B %Y', '%d %B, %Y',            # '25 October 2006', '25 October, 2006'
@@ -34,17 +34,23 @@ class DateTimeWidget(forms.DateInput):
     def render(self, name, value, attrs=None):
         myDefaultDateProperty = ""
         myDefaultDate = ""
-        if value is None: value = ''
+        logging.info("Rendering date widget with %s" % value)
+        if value is None: 
+          logging.info("Value is none - setting to empty string")
+          value = ''
         final_attrs = self.build_attrs(attrs, type=self.input_type, name=name)
         if value != '':
-            try:
-                final_attrs['value'] = \
+          logging.info("Value is not none : %s" % value)
+          try:
+            final_attrs['value'] = \
                                    force_unicode(value.strftime(self.dformat))
-            except:
-                final_attrs['value'] = \
+          except:
+            final_attrs['value'] = \
                                    force_unicode(value)
-            myDefaultDate = "%s" % value.strftime(self.dformat)
-            myDefaultDateProperty = ", defaultDate: '%s'" % value.strftime(self.dformat)
+          myDefaultDate = "%s" % value.strftime(self.dformat)
+          logging.info("MyDefaultDate is not none : %s" % myDefaultDate )
+          myDefaultDateProperty = ", defaultDate: '%s'" % value.strftime(self.dformat)
+          logging.info("MyDefaultDateProperty is : %s" % myDefaultDateProperty )
         if not final_attrs.has_key('id'):
             final_attrs['id'] = u'%s_id' % (name)
         id = final_attrs['id']
@@ -53,7 +59,7 @@ class DateTimeWidget(forms.DateInput):
         myDate = datetime.date.today()
         if "start" in name and not myDefaultDate:
           myDefaultDate = "01-%s-%s" % ( str(myDate.month), str(myDate.year))
-        if "end" in name and not myDefaultDate:
+        elif "end" in name and not myDefaultDate:
           # work out the last day of the current month
           #myEndDate = datetime.date.today() + relativedelta(months=+1)
           #myEndDate = datetime.date( myFutureDate.year(), myFutureDate.month(), 1) - relativedelta(days=-1)
@@ -61,6 +67,8 @@ class DateTimeWidget(forms.DateInput):
           # work out yesterdays date
           myEndDate = datetime.date.today() + relativedelta(days=-1)
           myDefaultDate = "%s-%s-%s" % ( myEndDate.day, myEndDate.month, myEndDate.year )
+        else:
+          myDefaultDate = "%s-%s-%s" % ( myDefaultDate.day, myDefaultDate.month, myDefaultDate.year )
 
 
         a = u'''
@@ -93,8 +101,20 @@ class DateTimeWidget(forms.DateInput):
                     var myLastDay = new Date(year, month, 0).getDate();
                     $("#%s-widget").datepicker("setDate", myLastDay + "-" + month + "-" + year);
                   }
-                  myDate = $("#%s-widget").datepicker("getDate"); //returns a js date object
-                  myTextDate = myDate.getDate() + "-" + myDate.getMonth() + "-" + myDate.getFullYear();
+                  var myDate = $("#%s-widget").datepicker("getDate"); //returns a js date object
+                  var myDay = myDate.getDate();
+                  if ( myDay < 10 ) //zero pad the day
+                  {
+                    myDay = "0" + myDay;
+                  }
+                  //+1 below because js months start at 0
+                  var myMonth = myDate.getMonth() + 1;
+                  if ( myMonth < 10 ) //zero pad the day
+                  {
+                    myMonth = "0" + myMonth;
+                  }
+                  var myYear  = myDate.getFullYear();
+                  var myTextDate = myDay + "-" + myMonth + "-" + myYear;
                   $('#%s').val( myTextDate );
                   changingDate = false;
                 },
@@ -115,7 +135,6 @@ class DateTimeWidget(forms.DateInput):
 
     def value_from_datadict(self, data, files, name):
         logging.info("Getting date value from data dict")
-        #dtf = forms.fields.DEFAULT_DATETIME_INPUT_FORMATS
         empty_values = forms.fields.EMPTY_VALUES
         value = data.get(name, None)
         if value in empty_values:
@@ -124,7 +143,6 @@ class DateTimeWidget(forms.DateInput):
           return value
         if isinstance(value, datetime.date):
           return datetime.datetime(value.year, value.month, value.day)
-        #for format in dtf:
         for format in DATE_FORMATS:
           try:
             myDate = datetime.datetime(*time.strptime(value, format)[:6])
