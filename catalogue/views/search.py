@@ -249,6 +249,7 @@ def productIdSearch(theRequest, theGuid):
       # Save new date ranges
       if myForm.cleaned_data.get('date_range'):
         mySearch.searchdaterange_set.all().delete()
+        # http://stackoverflow.com/questions/400739/what-does-mean-in-python for ** explanation below
         mySearch.searchdaterange_set.add(SearchDateRange(**myForm.cleaned_data.get('date_range')))
       # Save new sensors
       if myForm.cleaned_data.get('sensors'):
@@ -256,7 +257,7 @@ def productIdSearch(theRequest, theGuid):
           mySearch.sensors.add(sensor)
       if theRequest.is_ajax():
         # ABP: Returns a json object with query description.
-        # We need to instanciate the Searcher since search logic
+        # We need to instantiate the Searcher since search logic
         # is not in the Search class :(
         mySearcher = Searcher(theRequest,theGuid)
         return HttpResponse(simplejson.dumps(mySearcher.describeQuery()), mimetype='application/json')

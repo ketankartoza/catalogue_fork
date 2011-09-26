@@ -372,8 +372,8 @@ class SearchDateRange(models.Model):
 
   local_format_string = '%d-%m-%Y'
 
-  start_date = models.DateField(help_text='Product date is required. YYYY-MM-DD.')
-  end_date = models.DateField(help_text='Product date is required. YYYY-MM-DD.')
+  start_date = models.DateField(help_text='Product date is required. DD-MM-YYYY.')
+  end_date = models.DateField(help_text='Product date is required. DD-MM-YYYY.')
   search = models.ForeignKey(Search)
 
   class Meta:
