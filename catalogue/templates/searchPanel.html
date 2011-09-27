@@ -73,9 +73,15 @@
       $('.dr_row').live('click', function(){
         $(this).toggleClass('selected');
       });
-      // Initial fill of dr_text
+      // Initial fill of dr_text - when modifysearch view is loaded
       $('.dr_row .dr_input input[type=text]:nth-child(2)').each(function(){
-        $(this).closest('.dr_row').find('.dr_text').html($(this).val() + ' - ' + $(this).siblings('input[type=text]').val());
+        //the dates passwd in are y-m-d so we need to switch them around to display as d-m-y
+        var myStartDate = $(this).val();
+        var myEndDate = $(this).siblings('input[type=text]').val();
+        myStartDate = myStartDate.split('-').reverse().join('-');
+        myEndDate = myEndDate.split('-').reverse().join('-');
+        var myDateString = myStartDate + " : " + myEndDate;
+        $(this).closest('.dr_row').find('.dr_text').html( myDateString );
       });
     });
 
