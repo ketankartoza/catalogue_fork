@@ -36,7 +36,7 @@
     $("#map-container").mapResizer({'map':mMap});{# //activate mapresizer widget #}
     {# //add tooltip div #}
     $("#map-navigation-panel div[title],#resizer_toolbox img[title]").tooltip('#maptooltip');
-    $(":input").tooltip('#formtooltip');
+    $("#search-panel :input").tooltip('#formtooltip');
   }
 
     function check_search_dates() {
