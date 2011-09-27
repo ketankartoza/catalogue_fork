@@ -67,7 +67,8 @@ class DateTimeWidget(forms.DateInput):
           # work out yesterdays date
           myEndDate = datetime.date.today() + relativedelta(days=-1)
           myDefaultDate = "%s-%s-%s" % ( myEndDate.day, myEndDate.month, myEndDate.year )
-        else:
+        elif not myDefaultDate or myDefaultDate == '':
+          myDefaultDate = datetime.date.today() + relativedelta(days=-1)
           myDefaultDate = "%s-%s-%s" % ( myDefaultDate.day, myDefaultDate.month, myDefaultDate.year )
 
 
