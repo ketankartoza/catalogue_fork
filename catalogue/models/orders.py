@@ -203,7 +203,7 @@ class TaskingRequest( Order ):
   three fields: geometry, target date  and sensor. The tasking
   request is used by end users to queue up acquisition requests
   for a given sensor."""
-  target_date = models.DateTimeField(verbose_name="Target Date", auto_now=True, auto_now_add=True,
+  target_date = models.DateTimeField(verbose_name="Target Date", auto_now=False, auto_now_add=False,
       help_text = "When the image should be acquired (as close as possible to this date).")
   mission_sensor = models.ForeignKey( MissionSensor ) # e.g. Spot5
   objects = models.GeoManager()
