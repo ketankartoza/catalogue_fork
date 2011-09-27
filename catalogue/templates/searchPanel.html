@@ -30,10 +30,28 @@
         {% endifnotequal %}
       {% endfor %}
       $('#dr_add').live('click', function() {
+        // get the start date and zero pad day and month
         var sd = $("#id_start_datepicker").val();
+        var myParts = sd.split('-');
+        var myDay = myParts[0];
+        var myMonth = myParts[1];
+        var myYear = myParts[2];
+        if ( myDay < 10 ) myDay = "0" + parseInt(myDay);
+        if ( myMonth < 10 ) myMonth = "0" + parseInt(myMonth);
+        sd = myDay + "-" + myMonth + "-" + parseInt(myYear);
+        // get the end date and zero pad day and month
         var ed = $("#id_end_datepicker").val();
+        myParts = ed.split('-');
+        myDay = myParts[0];
+        myMonth = myParts[1];
+        myYear = myParts[2];
+        if ( myDay < 10 ) myDay = "0" + parseInt(myDay);
+        if ( myMonth < 10 ) myMonth = "0" + parseInt(myMonth);
+        ed = myDay + "-" + myMonth + "-" + parseInt(myYear);
+        // turn them into iso dates (Y-m-d)
         var iso_sd = sd.split('-').reverse().join('-');
         var iso_ed = ed.split('-').reverse().join('-');
+        // check if the date range already is being used
         if(sd && ed) {
           if (iso_sd <= iso_ed) {
             var in_list;
@@ -47,7 +65,7 @@
             if(in_list){
               alert('The date range is already in the list.')
             } else {
-              $('#dr_container').append(cloneMore('searchdaterange_set', iso_sd, iso_ed, iso_sd, iso_ed));
+              $('#dr_container').append(cloneMore('searchdaterange_set', sd, ed, iso_sd, iso_ed));
             };
           } else {
             alert('Please check the date range.');
