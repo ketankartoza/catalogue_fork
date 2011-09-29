@@ -426,7 +426,8 @@ class ClipForm(forms.ModelForm):
                                   required=False,
                                   help_text = 'Upload a zipped shapefile of less than 1MB. If the shapefile contains\
                                               more than one polygon, only the first will be used. \
-                                              The computation time is related to polygon complexity.')
+                                              The computation time is related to polygon complexity. \
+                                              For multipart and non-polygon features the bounding box of the first feature will be used.')
 
   class Meta:
     model = Clip
