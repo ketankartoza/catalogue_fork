@@ -5,6 +5,7 @@ import traceback
 from settings import *
 # python logging support to django logging middleware
 import logging
+from django.contrib.gis.geos import GEOSGeometry
 
 ###########################################################
 #
@@ -41,9 +42,16 @@ def getGeometryFromUploadedFile(theRequest, theForm, theFileField):
     else:
       extractedGeometries = getFeaturesFromKMLFile(myOutFile, "Polygon", 1)
 
-    #get first geometry from setof geometries
-    myGeometry = extractedGeometries[0]
-    return myGeometry
+    if len(extractedGeometries) == 0:
+      logging.info('No geometries found...')
+      return None
+    #get first geometry from setof geometries (they are in wkt)
+    myGeometry = GEOSGeometry( extractedGeometries[0] ) 
+    # check it is a single part polygon. If it isnt we use its envelope...
+    if myGeometry.geom_type is not 'Polygon':
+      logging.info('Uploaded geometry is not a polygon (its a %s) - using its evenlope instead: ' % str( myGeometry.geom_type ))
+      myGeometry = myGeometry.envelope
+    return myGeometry.wkt
 
 def getFeaturesFromZipFile( zipfile, geometry, numFeatures = "all"):
   """ Takes a zip archive and extracts N features of the specified geometry type. """
@@ -127,7 +135,7 @@ def getFeaturesFromZipFile( zipfile, geometry, numFeatures = "all"):
   
   # cleanup of dezipped files
   for each in zippedShape.namelist():
-    logging.debug( "Failed - removing shps" )
+    logging.debug( "Removing shps" )
     os.remove(os.path.join(SHP_UPLOAD_DIR, each))
 
   # return the data

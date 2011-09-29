@@ -76,6 +76,7 @@ def search(theRequest):
           else:
             logging.info("Failed to set search area from uploaded geometry file")
         except:
+          logging.error( "Could not get geometry for this request" + traceback.format_exc() )
           logging.info("An error occurred trying to set search area from uploaded geometry file")
         #check if aoi_geometry exists
         myAOIGeometry = myForm.cleaned_data.get('aoi_geometry')
