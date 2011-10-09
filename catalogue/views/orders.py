@@ -86,6 +86,9 @@ def listOrders(theRequest):
     myPageSize = myRecords.count()
   else:
     myPageSize = 100
+  if myPageSize == 0:
+    # Prevent divide by zero crash
+    myPageSize = 1
   # Paginate the results
   try:
     myPage = int(theRequest.GET.get('page', '1'))
