@@ -1,4 +1,5 @@
 #!/bin/bash
+source /opt/sac_catalogue/python/bin/activate
 
 STARTDATE=2010-01-01
 DAYCOUNT=365

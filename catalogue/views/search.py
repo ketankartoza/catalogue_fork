@@ -31,7 +31,8 @@ from catalogue.views.searcher import *
 # SHP and KML readers
 from catalogue.featureReaders import *
 
-
+class Http500(Exception):
+  pass
 
 DateRangeInlineFormSet = inlineformset_factory(Search, SearchDateRange, extra=0, max_num=0, formset=DateRangeFormSet)
 
