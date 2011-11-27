@@ -149,11 +149,27 @@ class Searcher:
     # ABP: sensors is mandatory ? Better if not enforced here: too bad in product_id search!
     #assert self.mSearch.sensors.count() > 0, "Search contains no sensors informations"
     if self.mSearch.sensors.count() > 0:
-      self.mSensorQuery = Q( acquisition_mode__sensor_type__mission_sensor__in=self.mSearch.sensors.all()) #__in = match to one or more sensors
-      self.mQuerySet = self.mQuerySet.filter( self.mSensorQuery )
-      self.mMessages.append("sensors <b>%s</b>" % self.mSearch.sensorsAsString())
-      logging.info('Sensor in use is:' + str( self.mSearch.sensors.values_list( 'name',flat=True ) ) )
-
+      try:
+        self.mSensorQuery = Q( acquisition_mode__sensor_type__mission_sensor__in=self.mSearch.sensors.all()) #__in = match to one or more sensors
+        self.mQuerySet = self.mQuerySet.filter( self.mSensorQuery )
+        self.mMessages.append("sensors <b>%s</b>" % self.mSearch.sensorsAsString())
+        logging.info('Sensor in use is:' + str( self.mSearch.sensors.values_list( 'name',flat=True ) ) )
+      except Exception, e:
+        logging.error("QuerySet modification failed \n %s" % e.message())
+        # This exception handler was added to prevent crashes here like this:
+        # FieldError: Cannot resolve keyword 'acquisition_mode' into field.
+        # Choices are: GenericProduct_child, GenericProduct_parent, children,
+        # creating_software, data_type, description, equivalent_scale,
+        # genericproduct, genericproduct_ptr, id, license, local_storage_path,
+        # metadata, name, original_product_id, owner, place, place_type,
+        # primary_topic, processing_level, processing_notes, product_date,
+        # product_id, product_revision, projection, quality,
+        # remote_thumbnail_url, searchrecord, spatial_coverage,
+        # temporal_extent_end, temporal_extent_start
+        #
+        # Somewhere generic product is being used for the search but the form 
+        # is allowing the selection of sensors. This should be fixed.
+        # Tim Nov 27 2011
 
     # ABP: paramters for "advanced search" only
     if self.mAdvancedFlag:
