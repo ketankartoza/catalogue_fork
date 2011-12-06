@@ -1,24 +1,28 @@
-#Note 1.2.4 has broken routers / multidb support
-django==1.2.1
-django-registration
-sorl-thumbnail
-django-db-log
-django-debug-toolbar
-django-extensions
-psycopg2
-# pil must be manually installed - see install notes section 004
-gdata
-#numpy needed for gdal array support which is used by ingesters
-numpy 
-GDAL
-django-dag
+Django==1.2.1
+GDAL==1.7.1
+InformixDB==2.5
+Jinja2==2.5.5
+PIL==1.1.7
+Pygments==1.4
+Sphinx==1.0.7
+distribute==0.6.10
+django-dag==1.1
+django-db-log==2.2.1
+django-debug-toolbar==0.8.3
+django-extensions==0.4.1
+django-registration==0.7
+docutils==0.7
+## FIXME: could not find svn URL in dependency_links for this package:
+elementsoap==0.6-20071224
+gdata==2.0.11
 html5lib==0.90
-reportlab==2.5
+lxml==2.3
+mercurial==1.8.1
+numpy==1.5.1
 pisa==3.0.33
+psycopg2==2.2.2
 pygooglechart==0.3.0
-lxml
-pysqlite
-elementsoap
-mercurial
-#only needed for building api docs
-sphinx
+pysqlite==2.6.3
+reportlab==2.5
+sorl-thumbnail==3.2.5
+wsgiref==0.1.2
