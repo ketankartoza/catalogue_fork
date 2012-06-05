@@ -154,8 +154,22 @@ http://svn.osgeo.org/gdal/branches/1.7/gdal/ogr/swq.h
 Please see the webmapping chapter (600-webmapping.t2t) for notes on the setup process for GDAL
 
 **Note:** When installing gdal from source and you want the python bindings installed into your 
-python virtual env, make sure to activate the virtual environment begore building gdal so that
+python virtual env, make sure to activate the virtual environment before building gdal so that
 its bindings are placed in the v.env site packages dir.
+
+===== GDAL Python Bindings - Ubuntu 12.04 - Python virtual environment =====
+
+To install GDAL Python bindings in virtual environment, manual installation
+is required. After successfully copying swq.h header, in active virtual environment execute:
+
++ delete GDAL folder ``$VIRTUAL_ENV/build/GDAL``, if it exists
++ on Ubuntu 12.04 we have 1.7.2 GDAL library, so we need to install correct
+Python GDAL library from pypi: ``pip install --no-install GDAL==1.7``
++ ``cd $VIRTUAL_ENV/build/GDAL``
++ ``rm setup.cfg``
++ ``python setup.py build_ext --gdal-config=gdal-config --library-dirs=/usr/lib --libraries=gdal1.7.0 --include-dirs=/usr/include/gdal install``
++ TEST: ``python -m gdal`` - success if no output
+
 
 ==== Install django and required django apps ====
 
@@ -234,8 +248,6 @@ Now build pil:
 ```
 python setup.py install
 ```
-
-
 
 ==== Further info on django registration ====
 
