@@ -22,3 +22,4 @@ elementsoap
 mercurial
 #only needed for building api docs
 sphinx
+ipython==0.10
