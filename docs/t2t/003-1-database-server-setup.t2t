@@ -429,6 +429,14 @@ on port 5432.
 
 Now go on to test with QGIS to see if you can connect ok.
 
+==== PostgreSQL 9.1 and GeoDjango 1.2 setup hints ====
+
+Django, prior to version 1.3.2, doesn't support PostgreSQL 9.1 string esaping
+settings. See: https://code.djangoproject.com/ticket/16778
+
+As a quick workaround for Django 1.2.x , in ``postgresql.conf`` set
+``standard_conforming_strings = off``
+
 === Creating readonly user for mapserver access ===
 
 You must do this to allow the mapserver client to connect to the database
