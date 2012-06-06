@@ -1,0 +1,24 @@
+[
+    {
+        "pk": 1,
+        "model": "catalogue.institution",
+        "fields": {
+            "address1": "Hartebeeshoek",
+            "address2": "Gauteng",
+            "address3": "South Africa",
+            "name": "Satellite Applications Centre",
+            "post_code": "0000"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "catalogue.institution",
+        "fields": {
+            "address1": "",
+            "address2": "",
+            "address3": "",
+            "name": "Rapideye AG",
+            "post_code": ""
+        }
+    }
+]
