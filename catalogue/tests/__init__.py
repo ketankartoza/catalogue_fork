@@ -8,6 +8,10 @@ import os4eo_command_test
 import misr_command_test
 import terrasar_command_test
 
+#import unittest classes
+from simpleTest import SimpleTest
+
+#this is only required for doctests
 __test__ = {
   'simple_tests' : simple_tests,
   #'dims_lib_test' : dims_lib_test,
