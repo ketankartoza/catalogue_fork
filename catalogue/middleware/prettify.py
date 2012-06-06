@@ -12,13 +12,12 @@ options = dict(output_xhtml=False,
 
 
 class PrettifyMiddleware(object):
-  """Prettify middleware"""
-  def process_response(self, request, response):
-    if 'text/html' not in response['Content-Type'].lower(): 
-      return response
-    else:
-      content = response.content
-      content = str(tidy.parseString(content, **options))
-      response.content = content
-      return response
-
+    """Prettify middleware"""
+    def process_response(self, request, response):
+        if 'text/html' not in response['Content-Type'].lower():
+            return response
+        else:
+            content = response.content
+            content = str(tidy.parseString(content, **options))
+            response.content = content
+            return response

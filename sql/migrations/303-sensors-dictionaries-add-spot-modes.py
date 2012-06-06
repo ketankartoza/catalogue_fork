@@ -29,58 +29,58 @@ setup_environ(settings)
 transaction.enter_transaction_management()
 transaction.managed()
 try:
-  # Handle rollback on errors
-  # Defaults
-  spot_missions = Mission.objects.filter( operator_abbreviation__startswith = "SPOT" )
-  print "Spot missions:"
-  print "===================="
-  print "===================="
-  print "===================="
-  for myMission in spot_missions:
-    print myMission #.operator_abbreviation
-  
-    mission_sensors = MissionSensor.objects.filter( mission=myMission )
-    print "Spot sensors for mission:" + str(myMission)
+    # Handle rollback on errors
+    # Defaults
+    spot_missions = Mission.objects.filter( operator_abbreviation__startswith = "SPOT" )
+    print "Spot missions:"
     print "===================="
     print "===================="
-    for mySensor in mission_sensors:
-      print mySensor #.operator_abbreviation
+    print "===================="
+    for myMission in spot_missions:
+        print myMission #.operator_abbreviation
 
-      sensor_types = SensorType.objects.filter( mission_sensor=mySensor )
-      print "Spot sensor types for sensor:" +str(mySensor)
-      print "===================="
-      for mySensorType in sensor_types:
-        print "Adding Cam1 and Cam2 for spot sensor type: " + str(mySensorType) #.operator_abbreviation
-        myMode = AcquisitionMode()
-        myMode.sensor_type = mySensorType
-        myMode.abbreviation = str(myMission.abbreviation) + "C1"
-        myMode.name = "Camera 1"
-        myMode.geometric_resolution = 0
-        myMode.band_count = 0
-        myMode.is_grayscale = 0
-        myMode.operator_abbreviation = str(myMission.abbreviation) + "C1"
-        myMode.save()
-        myMode2 = AcquisitionMode()
-        myMode2.sensor_type = mySensorType
-        myMode2.abbreviation =  str(myMission.abbreviation) + "C2"
-        myMode2.name = "Camera 2"
-        myMode2.geometric_resolution = 0
-        myMode2.band_count = 0
-        myMode2.is_grayscale = 0
-        myMode2.operator_abbreviation = str(myMission.abbreviation) + "C2"
-        myMode2.save()
+        mission_sensors = MissionSensor.objects.filter( mission=myMission )
+        print "Spot sensors for mission:" + str(myMission)
+        print "===================="
+        print "===================="
+        for mySensor in mission_sensors:
+            print mySensor #.operator_abbreviation
 
-  if TEST_ONLY:
-    # Rollback
-    print 'Testing: rolling back...'
-    transaction.rollback()
-  else:
-    # Commit
-    print 'Committing...'
-    transaction.commit()
+            sensor_types = SensorType.objects.filter( mission_sensor=mySensor )
+            print "Spot sensor types for sensor:" +str(mySensor)
+            print "===================="
+            for mySensorType in sensor_types:
+                print "Adding Cam1 and Cam2 for spot sensor type: " + str(mySensorType) #.operator_abbreviation
+                myMode = AcquisitionMode()
+                myMode.sensor_type = mySensorType
+                myMode.abbreviation = str(myMission.abbreviation) + "C1"
+                myMode.name = "Camera 1"
+                myMode.geometric_resolution = 0
+                myMode.band_count = 0
+                myMode.is_grayscale = 0
+                myMode.operator_abbreviation = str(myMission.abbreviation) + "C1"
+                myMode.save()
+                myMode2 = AcquisitionMode()
+                myMode2.sensor_type = mySensorType
+                myMode2.abbreviation =  str(myMission.abbreviation) + "C2"
+                myMode2.name = "Camera 2"
+                myMode2.geometric_resolution = 0
+                myMode2.band_count = 0
+                myMode2.is_grayscale = 0
+                myMode2.operator_abbreviation = str(myMission.abbreviation) + "C2"
+                myMode2.save()
+
+    if TEST_ONLY:
+        # Rollback
+        print 'Testing: rolling back...'
+        transaction.rollback()
+    else:
+        # Commit
+        print 'Committing...'
+        transaction.commit()
 except Exception, e:
-  print 'Errors: rolling back...'
-  transaction.rollback()
-  traceback.print_exc(file=sys.stdout)
+    print 'Errors: rolling back...'
+    transaction.rollback()
+    traceback.print_exc(file=sys.stdout)
 finally:
-  transaction.leave_transaction_management()
+    transaction.leave_transaction_management()

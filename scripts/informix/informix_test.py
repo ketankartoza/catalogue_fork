@@ -16,14 +16,13 @@ cursor1.execute('select * from t_file_types')
 
 for row in cursor1:
 
-  # -------------------------------------------
-  # delete row if column 'code' begins with 'C'
-  # -------------------------------------------
-  print "%s %s" % (row['id'], row['file_type_name'])
+    # -------------------------------------------
+    # delete row if column 'code' begins with 'C'
+    # -------------------------------------------
+    print "%s %s" % (row['id'], row['file_type_name'])
 # ---------------------------------------
 # commit transaction and close connection
 # ---------------------------------------
 conn.close()
 
 sys.exit(0);
-

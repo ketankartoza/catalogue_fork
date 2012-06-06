@@ -22,7 +22,7 @@
 """
 This script parse a directory tree looking for python modules and packages and
 create ReST files appropriately to create code documentation with Sphinx.
-It also create a modules index. 
+It also create a modules index.
 """
 
 import os
@@ -79,7 +79,7 @@ def create_module_file(root, module,opts):
         text += write_sub(module)
         text += write_directive(module)
 
-        # write the file        
+        # write the file
         fd = open(name, 'w')
         fd.write(text)
         fd.close()
@@ -105,7 +105,7 @@ def create_package_file(root, subroot, py_files, opts, subs=None):
                 for sub in subs:
                     text += '    %s.%s\n' % (subroot, sub)
                 text += '\n'
-                    
+
         # add each package's module
         for py_file in py_files:
             if not check_for_code('%s/%s' % (root, py_file)):
@@ -136,7 +136,7 @@ def check_for_code(module):
             return True
     fd.close()
     return False
-        
+
 def recurse_tree(path, excludes, opts):
     """
     Look for every file in the directory tree and create the corresponding
@@ -170,7 +170,7 @@ def recurse_tree(path, excludes, opts):
             # we are in package with subpackage(s)
             create_package_file(root, subroot, py_files, opts, subs)
             toc.append(subroot)
-            
+
     # create the module's index
     modules_toc(toc,opts)
 
@@ -178,7 +178,7 @@ def modules_toc(modules, opts, name='modules'):
     """
     Create the module's index.
     """
-    fname=create_file_name(name,opts)    
+    fname=create_file_name(name,opts)
     if os.path.exists(fname):
         print "File %s exists already exists." % name
         return
@@ -188,7 +188,7 @@ def modules_toc(modules, opts, name='modules'):
     text += title_line('Modules:', '-')
     text += '.. toctree::\n'
     text += '   :maxdepth: 4\n\n'
-    
+
     modules.sort()
     prev_module = ''
     for module in modules:
@@ -197,7 +197,7 @@ def modules_toc(modules, opts, name='modules'):
             continue
         prev_module = module
         text += '   %s\n' % module
-        
+
     # write the file
     fd = open(fname, 'w')
     fd.write(text)
@@ -228,7 +228,7 @@ def check_excludes(root, excludes):
 
 def check_py_file(files):
     """
-    Return a list with only the python scripts (remove all other files). 
+    Return a list with only the python scripts (remove all other files).
     """
     py_files = [fich for fich in files if fich[-3:] == '.py']
     return py_files
@@ -250,5 +250,3 @@ if __name__ == '__main__':
             recurse_tree(args[0], excludes, opts)
         else:
             print '%s is not a valid directory.' % args
-            
-            

@@ -156,16 +156,16 @@ class HTTPClient:
         handle = h.getfile()
 
         if debug:
-          print '-' * 50
-          print '>\n'.join(body.split('>'))
-          print '-' * 50
-          print errcode, errmsg, headers
-          print '-' * 50
-          response_xml = handle.readlines()[0]
-          handle = StringIO.StringIO(response_xml)
-          print '>\n'.join(response_xml.split('>'))
-          print '-' * 50
-
+            print '-' * 50
+            print '>\n'.join(body.split('>'))
+            print '-' * 50
+            print errcode, errmsg, headers
+            print '-' * 50
+            response_xml = handle.readlines()[0]
+            handle = StringIO.StringIO(response_xml)
+            print '>\n'.join(response_xml.split('>'))
+            print '-' * 50
+  
         if errcode != 200:
             raise HTTPError(errcode, errmsg, headers, handle)
 

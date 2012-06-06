@@ -135,18 +135,18 @@ def personal(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
     myOrigin = "/"
     if request.GET.has_key('next'):
-      myOrigin = request.GET['next']
+        myOrigin = request.GET['next']
     if request.POST.has_key('next'):
-      myOrigin = request.POST['next']
+        myOrigin = request.POST['next']
 
     if request.method == "POST":
         form = ProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
             if not myOrigin:
-              return HttpResponseRedirect(reverse("profile_edit_personal_done"))
+                return HttpResponseRedirect(reverse("profile_edit_personal_done"))
             else:
-              return HttpResponseRedirect(myOrigin)
+                return HttpResponseRedirect(myOrigin)
     else:
         form = ProfileForm(instance=profile)
 
