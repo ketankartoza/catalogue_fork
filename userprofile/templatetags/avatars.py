@@ -57,8 +57,8 @@ class ResizedThumbnailNode(Node):
         if not os.path.isfile(filename):
             logging.info( "%s does not exist, rendering %s rather" % (filename, avatar_path))
             if not os.path.isfile(avatar_path):
-              logging.error( "avatar_path %s does not exist" % avatar_path )
-              return None
+                logging.error( "avatar_path %s does not exist" % avatar_path )
+                return None
             image = Image.open(avatar_path)
             image.thumbnail((self.size, self.size), Image.ANTIALIAS)
             image.save(filename, "JPEG")

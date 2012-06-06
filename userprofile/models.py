@@ -157,4 +157,3 @@ class EmailValidation(models.Model):
         self.created = datetime.datetime.now()
         self.save()
         return True
-

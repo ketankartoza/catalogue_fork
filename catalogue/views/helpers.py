@@ -42,77 +42,77 @@ CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS = getattr(settings, 'CATALOGUE_DEFAULT
 ###########################################################
 
 class EmailMultiRelated(EmailMultiAlternatives):
-  """
-  A version of EmailMessage that makes it easy to send multipart/related
-  messages. For example, including text and HTML versions with inline images.
-  """
-  related_subtype = 'related'
- 
-  def __init__(self, subject='', body='', from_email=None, to=None, bcc=None, connection=None, attachments=None, headers=None, alternatives=None):
-    # self.related_ids = []
-    self.related_attachments = []
-    return super(EmailMultiRelated, self).__init__(subject, body, from_email, to, bcc, connection, attachments, headers, alternatives)
-
-  def attach_related(self, filename=None, content=None, mimetype=None):
     """
-    Attaches a file with the given filename and content. The filename can
-    be omitted and the mimetype is guessed, if not provided.
-
-    If the first parameter is a MIMEBase subclass it is inserted directly
-    into the resulting message attachments.
+    A version of EmailMessage that makes it easy to send multipart/related
+    messages. For example, including text and HTML versions with inline images.
     """
+    related_subtype = 'related'
 
-    if isinstance(filename, MIMEBase):
-      assert content == mimetype == None
-      self.related_attachments.append(filename)
-    else:
-      assert content is not None
-      self.related_attachments.append((filename, content, mimetype))
+    def __init__(self, subject='', body='', from_email=None, to=None, bcc=None, connection=None, attachments=None, headers=None, alternatives=None):
+        # self.related_ids = []
+        self.related_attachments = []
+        return super(EmailMultiRelated, self).__init__(subject, body, from_email, to, bcc, connection, attachments, headers, alternatives)
 
-  def attach_related_file(self, path, mimetype=None):
-      """Attaches a file from the filesystem."""
-      filename = os.path.basename(path)
-      content = open(path, 'rb').read()
-      self.attach_related(filename, content, mimetype)
+    def attach_related(self, filename=None, content=None, mimetype=None):
+        """
+        Attaches a file with the given filename and content. The filename can
+        be omitted and the mimetype is guessed, if not provided.
 
-  def _create_message(self, msg):
-    return self._create_attachments(self._create_related_attachments(self._create_alternatives(msg)))
+        If the first parameter is a MIMEBase subclass it is inserted directly
+        into the resulting message attachments.
+        """
 
-  def _create_alternatives(self, msg):
-    for i, (content, mimetype) in enumerate(self.alternatives):
-      if mimetype == 'text/html':
-        for filename, _, _ in self.related_attachments:
-          content = re.sub(r'(?<!cid:)%s' % re.escape(filename), 'cid:%s' % filename, content)
-          self.alternatives[i] = (content, mimetype)
+        if isinstance(filename, MIMEBase):
+            assert content == mimetype == None
+            self.related_attachments.append(filename)
+        else:
+            assert content is not None
+            self.related_attachments.append((filename, content, mimetype))
 
-      return super(EmailMultiRelated, self)._create_alternatives(msg)
+    def attach_related_file(self, path, mimetype=None):
+        """Attaches a file from the filesystem."""
+        filename = os.path.basename(path)
+        content = open(path, 'rb').read()
+        self.attach_related(filename, content, mimetype)
 
-  def _create_related_attachments(self, msg):
-    encoding = self.encoding or settings.DEFAULT_CHARSET
-    if self.related_attachments:
-      body_msg = msg
-      msg = SafeMIMEMultipart(_subtype=self.related_subtype, encoding=encoding)
-      if self.body:
-        msg.attach(body_msg)
-        for related in self.related_attachments:
-          msg.attach(self._create_related_attachment(*related))
-    return msg
+    def _create_message(self, msg):
+        return self._create_attachments(self._create_related_attachments(self._create_alternatives(msg)))
 
-  def _create_related_attachment(self, filename, content, mimetype=None):
-      """
-      Convert the filename, content, mimetype triple into a MIME attachment
-      object. Adjust headers to use Content-ID where applicable.
-      Taken from http://code.djangoproject.com/ticket/4771
-      """
-      attachment = super(EmailMultiRelated, self)._create_attachment(filename, content, mimetype)
-      if filename:
-        mimetype = attachment['Content-Type']
-        del(attachment['Content-Type'])
-        del(attachment['Content-Disposition'])
-        attachment.add_header('Content-Disposition', 'inline', filename=filename)
-        attachment.add_header('Content-Type', mimetype, name=filename)
-        attachment.add_header('Content-ID', '<%s>' % filename)
-      return attachment
+    def _create_alternatives(self, msg):
+        for i, (content, mimetype) in enumerate(self.alternatives):
+            if mimetype == 'text/html':
+                for filename, _, _ in self.related_attachments:
+                    content = re.sub(r'(?<!cid:)%s' % re.escape(filename), 'cid:%s' % filename, content)
+                    self.alternatives[i] = (content, mimetype)
+
+            return super(EmailMultiRelated, self)._create_alternatives(msg)
+
+    def _create_related_attachments(self, msg):
+        encoding = self.encoding or settings.DEFAULT_CHARSET
+        if self.related_attachments:
+            body_msg = msg
+            msg = SafeMIMEMultipart(_subtype=self.related_subtype, encoding=encoding)
+            if self.body:
+                msg.attach(body_msg)
+                for related in self.related_attachments:
+                    msg.attach(self._create_related_attachment(*related))
+        return msg
+
+    def _create_related_attachment(self, filename, content, mimetype=None):
+        """
+        Convert the filename, content, mimetype triple into a MIME attachment
+        object. Adjust headers to use Content-ID where applicable.
+        Taken from http://code.djangoproject.com/ticket/4771
+        """
+        attachment = super(EmailMultiRelated, self)._create_attachment(filename, content, mimetype)
+        if filename:
+            mimetype = attachment['Content-Type']
+            del(attachment['Content-Type'])
+            del(attachment['Content-Disposition'])
+            attachment.add_header('Content-Disposition', 'inline', filename=filename)
+            attachment.add_header('Content-Type', mimetype, name=filename)
+            attachment.add_header('Content-ID', '<%s>' % filename)
+        return attachment
 
 
 ###########################################################
@@ -204,69 +204,69 @@ def duplicate(obj, value=None, field=None, duplicate_order=None):
 #
 ###########################################################
 def notifySalesStaff(theUser, theOrderId):
-  """ A helper method to notify sales staff who are subscribed to a sensor
-     Example usage from the console / doctest:
-     >>> from catalogue.models import *
-     >>> from catalogue.views import *
-     >>> myUser = User.objects.get(id=1)
-     >>> myUser
-     >>> notifySalesStaff( myUser, 16 )
+    """ A helper method to notify sales staff who are subscribed to a sensor
+       Example usage from the console / doctest:
+       >>> from catalogue.models import *
+       >>> from catalogue.views import *
+       >>> myUser = User.objects.get(id=1)
+       >>> myUser
+       >>> notifySalesStaff( myUser, 16 )
 
-  """
+    """
 
-  if not settings.EMAIL_NOTIFICATIONS_ENABLED:
-    logging.info("Email sending disabled, set EMAIL_NOTIFICATIONS_ENABLED in settings")
+    if not settings.EMAIL_NOTIFICATIONS_ENABLED:
+        logging.info("Email sending disabled, set EMAIL_NOTIFICATIONS_ENABLED in settings")
+        return
+    myOrder = get_object_or_404(Order,id=theOrderId)
+    myRecords = SearchRecord.objects.filter(user=theUser, order=myOrder).select_related()
+    myHistory = OrderStatusHistory.objects.filter(order=myOrder)
+
+    myEmailSubject = 'SAC Order ' + str(myOrder.id) + ' status update (' + myOrder.order_status.name + ')'
+
+    # Get a list of staff user's email addresses
+    myMessagesList = [] # we will use mass_mail to prevent users seeing who other recipients are
+
+    myRecipients = set()
+    # get the list of recipients
+    for myProduct in [s.product for s in myRecords]:
+        myRecipients.update(OrderNotificationRecipients.getUsersForProduct(myProduct))
+
+    # Add default recipients
+    if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
+        logging.info("Sending notice to default recipients : %s" % CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
+        myRecipients.update(list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS))
+
+    for myRecipient in myRecipients:
+        #txt email template
+        myEmailMessage_txt = render_to_string( 'mail/order.txt', { 'myOrder': myOrder,
+                                                        'myRecords' : myRecords,
+                                                        'myHistory' : myHistory,
+                                                        'myRecipient': myRecipient,
+                                                        'domain':settings.DOMAIN
+                                                      })
+        #html email template
+        myEmailMessage_html = render_to_string( 'mail/order.html', { 'myOrder': myOrder,
+                                                          'myRecords' : myRecords,
+                                                          'myHistory' : myHistory,
+                                                          'myRecipient': myRecipient,
+                                                          'domain':settings.DOMAIN
+                                                      })
+        myAddress = myRecipient.email
+        myMsg = EmailMultiRelated(myEmailSubject, myEmailMessage_txt, 'dontreply@' + settings.DOMAIN, [myAddress])
+        logging.info("Sending notice to : %s" % myAddress)
+
+        #attach alternative payload - html
+        myMsg.attach_alternative(myEmailMessage_html,'text/html')
+        #add required images, as inline attachments, accesed by 'name' in templates
+        myMsg.attach_related_file(os.path.join(settings.MEDIA_ROOT,'images','sac_header_email.jpg'))
+        #add message
+        myMessagesList.append(myMsg)
+
+    logging.info("Sending messages: \n%s" % myMessagesList)
+    # initiate email connection, and send messages in bulk
+    myEmailConnection = mail.get_connection()
+    myEmailConnection.send_messages(myMessagesList)
     return
-  myOrder = get_object_or_404(Order,id=theOrderId)
-  myRecords = SearchRecord.objects.filter(user=theUser, order=myOrder).select_related()
-  myHistory = OrderStatusHistory.objects.filter(order=myOrder)
-
-  myEmailSubject = 'SAC Order ' + str(myOrder.id) + ' status update (' + myOrder.order_status.name + ')'
-
-  # Get a list of staff user's email addresses
-  myMessagesList = [] # we will use mass_mail to prevent users seeing who other recipients are
-
-  myRecipients = set()
-  # get the list of recipients
-  for myProduct in [s.product for s in myRecords]:
-    myRecipients.update(OrderNotificationRecipients.getUsersForProduct(myProduct))
-
-  # Add default recipients
-  if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
-    logging.info("Sending notice to default recipients : %s" % CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
-    myRecipients.update(list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS))
-
-  for myRecipient in myRecipients:
-    #txt email template
-    myEmailMessage_txt = render_to_string( 'mail/order.txt', { 'myOrder': myOrder,
-                                                    'myRecords' : myRecords,
-                                                    'myHistory' : myHistory,
-                                                    'myRecipient': myRecipient,
-                                                    'domain':settings.DOMAIN
-                                                  })
-    #html email template
-    myEmailMessage_html = render_to_string( 'mail/order.html', { 'myOrder': myOrder,
-                                                      'myRecords' : myRecords,
-                                                      'myHistory' : myHistory,
-                                                      'myRecipient': myRecipient,
-                                                      'domain':settings.DOMAIN
-                                                  })
-    myAddress = myRecipient.email
-    myMsg = EmailMultiRelated(myEmailSubject, myEmailMessage_txt, 'dontreply@' + settings.DOMAIN, [myAddress])
-    logging.info("Sending notice to : %s" % myAddress)
-
-    #attach alternative payload - html
-    myMsg.attach_alternative(myEmailMessage_html,'text/html')
-    #add required images, as inline attachments, accesed by 'name' in templates
-    myMsg.attach_related_file(os.path.join(settings.MEDIA_ROOT,'images','sac_header_email.jpg'))
-    #add message
-    myMessagesList.append(myMsg)
-
-  logging.info("Sending messages: \n%s" % myMessagesList)
-  # initiate email connection, and send messages in bulk
-  myEmailConnection = mail.get_connection()
-  myEmailConnection.send_messages(myMessagesList)
-  return
 
 ###########################################################
 #
@@ -274,63 +274,63 @@ def notifySalesStaff(theUser, theOrderId):
 #
 ###########################################################
 def notifySalesStaffOfTaskRequest(theUser, theId):
-  """ A helper method to notify tasking staff who are subscribed to a sensor
-     Example usage from the console / doctest:
-     >>> from catalogue.models import *
-     >>> from catalogue.views import *
-     >>> myUser = User.objects.get(id=1)
-     >>> myUser
-     >>> notifySalesStaffOfTaskRequest( myUser, 11 )"""
-  if not settings.EMAIL_NOTIFICATIONS_ENABLED:
-    logging.info("Email sending disabled, set EMAIL_NOTIFICATIONS_ENABLED in settings")
+    """ A helper method to notify tasking staff who are subscribed to a sensor
+       Example usage from the console / doctest:
+       >>> from catalogue.models import *
+       >>> from catalogue.views import *
+       >>> myUser = User.objects.get(id=1)
+       >>> myUser
+       >>> notifySalesStaffOfTaskRequest( myUser, 11 )"""
+    if not settings.EMAIL_NOTIFICATIONS_ENABLED:
+        logging.info("Email sending disabled, set EMAIL_NOTIFICATIONS_ENABLED in settings")
+        return
+
+    myTaskingRequest = get_object_or_404(TaskingRequest,id=theId)
+    myHistory = OrderStatusHistory.objects.all().filter(order=myTaskingRequest)
+
+    myEmailSubject = 'SAC Tasking Request ' + str(myTaskingRequest.id) + ' status update (' + myTaskingRequest.order_status.name + ')'
+
+    myMessagesList = []
+    # get the list of recipients
+    myTaskingRecipients = OrderNotificationRecipients.objects.filter(sensors=myTaskingRequest.mission_sensor)
+    myRecipients = set()
+    for recepient in myTaskingRecipients:
+        myRecipients.add(recepient.user)
+
+    # Add default recipients if no recipients
+    if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
+        logging.info("Sending notice to default recipients : %s" % CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
+        myRecipients.update(list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS))
+
+    for myRecipient in myRecipients:
+        #txt email template
+        myEmailMessage_txt = render_to_string( 'mail/task.txt', { 'myTask': myTaskingRequest,
+                                                        'myHistory' : myHistory,
+                                                        'myRecipient': myRecipient,
+                                                        'domain':settings.DOMAIN
+                                                      })
+        #html email template
+        myEmailMessage_html = render_to_string( 'mail/task.html', { 'myTask': myTaskingRequest,
+                                                          'myHistory' : myHistory,
+                                                          'myRecipient': myRecipient,
+                                                          'domain':settings.DOMAIN
+                                                      })
+        myAddress = myRecipient.email
+        myMsg = EmailMultiRelated(myEmailSubject, myEmailMessage_txt, 'dontreply@' + settings.DOMAIN, [myAddress])
+        logging.info("Sending notice to : %s" % myAddress)
+
+        #attach alternative payload - html
+        myMsg.attach_alternative(myEmailMessage_html,'text/html')
+        #add required images, as inline attachments, accesed by 'name' in templates
+        myMsg.attach_related_file(os.path.join(settings.MEDIA_ROOT,'images','sac_header_email.jpg'))
+        #add message
+        myMessagesList.append(myMsg)
+
+    logging.info("Sending messages: \n%s" % myMessagesList)
+    # initiate email connection, and send messages in bulk
+    myEmailConnection = mail.get_connection()
+    myEmailConnection.send_messages(myMessagesList)
     return
-
-  myTaskingRequest = get_object_or_404(TaskingRequest,id=theId)
-  myHistory = OrderStatusHistory.objects.all().filter(order=myTaskingRequest)
-
-  myEmailSubject = 'SAC Tasking Request ' + str(myTaskingRequest.id) + ' status update (' + myTaskingRequest.order_status.name + ')'
-
-  myMessagesList = []
-  # get the list of recipients
-  myTaskingRecipients = OrderNotificationRecipients.objects.filter(sensors=myTaskingRequest.mission_sensor)
-  myRecipients = set()
-  for recepient in myTaskingRecipients:
-    myRecipients.add(recepient.user)
-
-  # Add default recipients if no recipients 
-  if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
-    logging.info("Sending notice to default recipients : %s" % CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
-    myRecipients.update(list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS))
-
-  for myRecipient in myRecipients:
-    #txt email template
-    myEmailMessage_txt = render_to_string( 'mail/task.txt', { 'myTask': myTaskingRequest,
-                                                    'myHistory' : myHistory,
-                                                    'myRecipient': myRecipient,
-                                                    'domain':settings.DOMAIN
-                                                  })
-    #html email template
-    myEmailMessage_html = render_to_string( 'mail/task.html', { 'myTask': myTaskingRequest,
-                                                      'myHistory' : myHistory,
-                                                      'myRecipient': myRecipient,
-                                                      'domain':settings.DOMAIN
-                                                  })
-    myAddress = myRecipient.email
-    myMsg = EmailMultiRelated(myEmailSubject, myEmailMessage_txt, 'dontreply@' + settings.DOMAIN, [myAddress])
-    logging.info("Sending notice to : %s" % myAddress)
-
-    #attach alternative payload - html
-    myMsg.attach_alternative(myEmailMessage_html,'text/html')
-    #add required images, as inline attachments, accesed by 'name' in templates
-    myMsg.attach_related_file(os.path.join(settings.MEDIA_ROOT,'images','sac_header_email.jpg'))
-    #add message
-    myMessagesList.append(myMsg)
-
-  logging.info("Sending messages: \n%s" % myMessagesList)
-  # initiate email connection, and send messages in bulk
-  myEmailConnection = mail.get_connection()
-  myEmailConnection.send_messages(myMessagesList)
-  return
 
 """Layer definitions for use in conjunction with open layers"""
 WEB_LAYERS = {
@@ -778,227 +778,227 @@ def genericAdd(theRequest,
     theRedirectPath,
     theOptions
     ):
-  myObject = getObject(theFormClass)
-  logging.info('Generic add called')
-  if theRequest.method == 'POST':
-    # create a form instance using reflection
-    # see http://stackoverflow.com/questions/452969/does-python-have-an-equivalent-to-java-class-forname/452981
-    myForm = myObject(theRequest.POST,theRequest.FILES)
-    myOptions =  {
-            'myForm': myForm,
-            'myTitle': theTitle
-          }
-    myOptions.update(theOptions), #shortcut to join two dicts
-    if myForm.is_valid():
-      myObject = myForm.save(commit=False)
-      myObject.user = theRequest.user
-      myObject.save()
-      logging.info('Add : data is valid')
-      return HttpResponseRedirect(theRedirectPath + str(myObject.id))
+    myObject = getObject(theFormClass)
+    logging.info('Generic add called')
+    if theRequest.method == 'POST':
+        # create a form instance using reflection
+        # see http://stackoverflow.com/questions/452969/does-python-have-an-equivalent-to-java-class-forname/452981
+        myForm = myObject(theRequest.POST,theRequest.FILES)
+        myOptions =  {
+                'myForm': myForm,
+                'myTitle': theTitle
+              }
+        myOptions.update(theOptions), #shortcut to join two dicts
+        if myForm.is_valid():
+            myObject = myForm.save(commit=False)
+            myObject.user = theRequest.user
+            myObject.save()
+            logging.info('Add : data is valid')
+            return HttpResponseRedirect(theRedirectPath + str(myObject.id))
+        else:
+            logging.info('Add : form is NOT valid')
+            return render_to_response('add.html',
+                myOptions,
+                context_instance=RequestContext(theRequest))
     else:
-      logging.info('Add : form is NOT valid')
-      return render_to_response('add.html',
-          myOptions,
-          context_instance=RequestContext(theRequest))
-  else:
-    myForm = myObject()
-    myOptions =  {
-          'myForm': myForm,
-          'myTitle': theTitle
-        }
-    myOptions.update(theOptions), #shortcut to join two dicts
-    logging.info('Add : new object requested')
-    return render_to_response('add.html',
-        myOptions,
-        context_instance=RequestContext(theRequest))
+        myForm = myObject()
+        myOptions =  {
+              'myForm': myForm,
+              'myTitle': theTitle
+            }
+        myOptions.update(theOptions), #shortcut to join two dicts
+        logging.info('Add : new object requested')
+        return render_to_response('add.html',
+            myOptions,
+            context_instance=RequestContext(theRequest))
 
 def genericDelete(theRequest,theObject):
-  if theObject.user != theRequest.user:
-    return ({"myMessage" : "You can only delete an entry that you own!"})
-  else:
-    theObject.delete()
-    return ({'myMessage' : "Entry was deleted successfully"})
+    if theObject.user != theRequest.user:
+        return ({"myMessage" : "You can only delete an entry that you own!"})
+    else:
+        theObject.delete()
+        return ({'myMessage' : "Entry was deleted successfully"})
 
 def getObject( theClass ):
-  #Create an object instance using reflection
-  #from http://stackoverflow.com/questions/452969/does-python-have-an-equivalent-to-java-class-forname/452981
-  myParts = theClass.split('.')
-  myModule = ".".join(myParts[:-1])
-  myObject = __import__( myModule )
-  for myPath in myParts[1:]:
-    myObject = getattr(myObject, myPath)
-  return myObject
+    #Create an object instance using reflection
+    #from http://stackoverflow.com/questions/452969/does-python-have-an-equivalent-to-java-class-forname/452981
+    myParts = theClass.split('.')
+    myModule = ".".join(myParts[:-1])
+    myObject = __import__( myModule )
+    for myPath in myParts[1:]:
+        myObject = getattr(myObject, myPath)
+    return myObject
 
 
 @login_required
 def isStrategicPartner(theRequest):
-  """Returns true if the current user is a CSIR strategic partner
-  otherwise false"""
-  myProfile = None
-  try:
-    myProfile = theRequest.user.get_profile()
-  except:
-    logging.debug('Profile does not exist')
-  myPartnerFlag = False
-  if myProfile and myProfile.strategic_partner:
-    myPartnerFlag = True
-  return myPartnerFlag
+    """Returns true if the current user is a CSIR strategic partner
+    otherwise false"""
+    myProfile = None
+    try:
+        myProfile = theRequest.user.get_profile()
+    except:
+        logging.debug('Profile does not exist')
+    myPartnerFlag = False
+    if myProfile and myProfile.strategic_partner:
+        myPartnerFlag = True
+    return myPartnerFlag
 
 
 def standardLayers(theRequest):
-  """Helper methods used to return standard layer defs for the openlayers control
-     Note intended to be published as a view in urls.py
-    e.g. usage:
-    myLayersList, myLayerDefinitions, myActiveLayer = standardLayers( theRequest )
-    where:
-      myLayersList will be a string representing a javascript array of layers
-      myLayerDefinitions will be an array of strings each representing javascript / openlayers layer defs
-      myActiveLayer will be the name of the active base map
-    """
+    """Helper methods used to return standard layer defs for the openlayers control
+       Note intended to be published as a view in urls.py
+      e.g. usage:
+      myLayersList, myLayerDefinitions, myActiveLayer = standardLayers( theRequest )
+      where:
+        myLayersList will be a string representing a javascript array of layers
+        myLayerDefinitions will be an array of strings each representing javascript / openlayers layer defs
+        myActiveLayer will be the name of the active base map
+      """
 
-  myProfile = None
-  myLayersList = None
-  myLayerDefinitions = None
-  myActiveBaseMap = None
-  try:
-    myProfile = theRequest.user.get_profile()
-  except:
-    logging.debug('Profile does not exist')
-  if myProfile and myProfile.strategic_partner:
-    myLayerDefinitions = [ WEB_LAYERS['ZaSpot2mMosaic2010TC'], 
-                           WEB_LAYERS['ZaSpot2mMosaic2009TC'], 
-                           WEB_LAYERS['ZaSpot2mMosaic2008TC'], 
-                           WEB_LAYERS['ZaSpot2mMosaic2007TC'], 
-                           WEB_LAYERS['ZaSpot10mMosaic2010'],
-                           WEB_LAYERS['ZaSpot10mMosaic2009'],
-                           WEB_LAYERS['ZaSpot10mMosaic2008'],
-                           WEB_LAYERS['ZaSpot10mMosaic2007'], 
-                           WEB_LAYERS['ZaRoadsBoundaries'] ]
-    myLayersList = "[ zaSpot2mMosaic2010TC,zaSpot2mMosaic2009TC,zaSpot2mMosaic2008TC,zaSpot2mMosaic2007TC,zaSpot10mMosaic2010,zaSpot10mMosaic2009,zaSpot10mMosaic2008,zaSpot10mMosaic2007,zaRoadsBoundaries ]"
-    myActiveBaseMap =  "zaSpot2mMosaic2010TC"
-  else:
-    myLayerDefinitions = [ WEB_LAYERS['ZaSpot10mMosaic2010'],
-        WEB_LAYERS['ZaSpot10mMosaic2009'],
-        WEB_LAYERS['ZaSpot10mMosaic2008'],
-        WEB_LAYERS['ZaSpot10mMosaic2007'],
-        WEB_LAYERS['ZaRoadsBoundaries'] ]
-    myLayersList = "[zaSpot10mMosaic2010,zaSpot10mMosaic2009,zaSpot10mMosaic2008,zaSpot10mMosaic2007,zaRoadsBoundaries]"
-    myActiveBaseMap =  "zaSpot10mMosaic2010"
-  return myLayersList, myLayerDefinitions, myActiveBaseMap
+    myProfile = None
+    myLayersList = None
+    myLayerDefinitions = None
+    myActiveBaseMap = None
+    try:
+        myProfile = theRequest.user.get_profile()
+    except:
+        logging.debug('Profile does not exist')
+    if myProfile and myProfile.strategic_partner:
+        myLayerDefinitions = [ WEB_LAYERS['ZaSpot2mMosaic2010TC'],
+                               WEB_LAYERS['ZaSpot2mMosaic2009TC'],
+                               WEB_LAYERS['ZaSpot2mMosaic2008TC'],
+                               WEB_LAYERS['ZaSpot2mMosaic2007TC'],
+                               WEB_LAYERS['ZaSpot10mMosaic2010'],
+                               WEB_LAYERS['ZaSpot10mMosaic2009'],
+                               WEB_LAYERS['ZaSpot10mMosaic2008'],
+                               WEB_LAYERS['ZaSpot10mMosaic2007'],
+                               WEB_LAYERS['ZaRoadsBoundaries'] ]
+        myLayersList = "[ zaSpot2mMosaic2010TC,zaSpot2mMosaic2009TC,zaSpot2mMosaic2008TC,zaSpot2mMosaic2007TC,zaSpot10mMosaic2010,zaSpot10mMosaic2009,zaSpot10mMosaic2008,zaSpot10mMosaic2007,zaRoadsBoundaries ]"
+        myActiveBaseMap =  "zaSpot2mMosaic2010TC"
+    else:
+        myLayerDefinitions = [ WEB_LAYERS['ZaSpot10mMosaic2010'],
+            WEB_LAYERS['ZaSpot10mMosaic2009'],
+            WEB_LAYERS['ZaSpot10mMosaic2008'],
+            WEB_LAYERS['ZaSpot10mMosaic2007'],
+            WEB_LAYERS['ZaRoadsBoundaries'] ]
+        myLayersList = "[zaSpot10mMosaic2010,zaSpot10mMosaic2009,zaSpot10mMosaic2008,zaSpot10mMosaic2007,zaRoadsBoundaries]"
+        myActiveBaseMap =  "zaSpot10mMosaic2010"
+    return myLayersList, myLayerDefinitions, myActiveBaseMap
 
 def standardLayersWithCart(theRequest):
-  """Helper methods used to return standard layer defs for the openlayers control
-     Note intended to be published as a view in urls.py
-     Note. Appends the cart layer to the list of layers otherwise much the same as standardLayers method
-    e.g. usage:
-    myLayersList, myLayerDefinitions, myActiveLayer = standardLayers( theRequest )
-    where:
-      myLayersList will be a string representing a javascript array of layers
-      myLayerDefinitions will be an array of strings each representing javascript / openlayers layer defs
-      myActiveLayer will be the name of the active base map
-    """
-  myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
-  myLayersList = myLayersList.replace("]",",cartLayer]");
-  myLayerDefinitions.append( WEB_LAYERS['CartLayer'].replace("USERNAME", theRequest.user.username ) );
-  return myLayersList, myLayerDefinitions, myActiveBaseMap
+    """Helper methods used to return standard layer defs for the openlayers control
+       Note intended to be published as a view in urls.py
+       Note. Appends the cart layer to the list of layers otherwise much the same as standardLayers method
+      e.g. usage:
+      myLayersList, myLayerDefinitions, myActiveLayer = standardLayers( theRequest )
+      where:
+        myLayersList will be a string representing a javascript array of layers
+        myLayerDefinitions will be an array of strings each representing javascript / openlayers layer defs
+        myActiveLayer will be the name of the active base map
+      """
+    myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers( theRequest )
+    myLayersList = myLayersList.replace("]",",cartLayer]");
+    myLayerDefinitions.append( WEB_LAYERS['CartLayer'].replace("USERNAME", theRequest.user.username ) );
+    return myLayersList, myLayerDefinitions, myActiveBaseMap
 
 
 def writeThumbToZip( mySearchRecord, myZip ):
-  """A helper function to write a thumbnail into a zip file.
-  @parameter myRecord - a searchrecord instance
-  @parameter myZip - a zip file handle ready to write stuff to
-  """
-  # Try to add thumbnail + wld file, we assume that jpg and wld file have same name
-  try:
-    myImageFile = mySearchRecord.product.georeferencedThumbnail()
-    myWLDFile = "%s.wld" %  myImageFile
-    if os.path.isfile(myImageFile):
-      with open(myImageFile,'rb') as myFile:
-        myZip.writestr("%s.jpg" %  mySearchRecord.product.product_id,myFile.read())
-        logging.error("Adding thumbnail image to archive.")
-    else:
-      logging.info("Thumbnail image not found: %s" % myImageFile)
-    if os.path.isfile(myWLDFile):
-      with open(myWLDFile,'rb') as myFile:
-        myZip.writestr("%s.wld" %  mySearchRecord.product.product_id,myFile.read())
-        logging.info("Adding worldfile to archive.")
-    else:
-      logging.error("World file not found: %s" % myImageFile)
-  except:
-    pass
+    """A helper function to write a thumbnail into a zip file.
+    @parameter myRecord - a searchrecord instance
+    @parameter myZip - a zip file handle ready to write stuff to
+    """
+    # Try to add thumbnail + wld file, we assume that jpg and wld file have same name
+    try:
+        myImageFile = mySearchRecord.product.georeferencedThumbnail()
+        myWLDFile = "%s.wld" %  myImageFile
+        if os.path.isfile(myImageFile):
+            with open(myImageFile,'rb') as myFile:
+                myZip.writestr("%s.jpg" %  mySearchRecord.product.product_id,myFile.read())
+                logging.error("Adding thumbnail image to archive.")
+        else:
+            logging.info("Thumbnail image not found: %s" % myImageFile)
+        if os.path.isfile(myWLDFile):
+            with open(myWLDFile,'rb') as myFile:
+                myZip.writestr("%s.wld" %  mySearchRecord.product.product_id,myFile.read())
+                logging.info("Adding worldfile to archive.")
+        else:
+            logging.error("World file not found: %s" % myImageFile)
+    except:
+        pass
 
 #render_to_kml helpers
 def render_to_kml(theTemplate,theContext,filename):
-  response = HttpResponse(render_to_string(theTemplate,theContext))
-  response['Content-Type'] = 'application/vnd.google-earth.kml+xml'
-  response['Content-Disposition'] = 'attachment; filename=%s.kml' % filename
-  return response
+    response = HttpResponse(render_to_string(theTemplate,theContext))
+    response['Content-Type'] = 'application/vnd.google-earth.kml+xml'
+    response['Content-Disposition'] = 'attachment; filename=%s.kml' % filename
+    return response
 
 def render_to_kmz(theTemplate,theContext,filename):
-  """Render a kmz file. If search records are supplied, their georeferenced thumbnails will
-  be bundled into the kmz archive."""
-  #try to get MAX_METADATA_RECORDS from settings, default to 500
-  myMaxMetadataRecords = getattr(settings, 'MAX_METADATA_RECORDS', 500 )
-  myKml = render_to_string(theTemplate,theContext)
-  myZipData = StringIO()
-  myZip = zipfile.ZipFile(myZipData, 'w', zipfile.ZIP_DEFLATED)
-  myZip.writestr('%s.kml' % filename, myKml)
-  if theContext.has_key("mySearchRecords"):
-    for myRecord in theContext["mySearchRecords"][:myMaxMetadataRecords]:
-      writeThumbToZip( myRecord, myZip )
-  myZip.close()
-  response = HttpResponse()
-  response.content = myZipData.getvalue()
-  response['Content-Type']        = 'application/vnd.google-earth.kmz'
-  response['Content-Disposition'] = 'attachment; filename=%s.kmz' % filename
-  response['Content-Length']      = str(len(response.content))
-  return response
+    """Render a kmz file. If search records are supplied, their georeferenced thumbnails will
+    be bundled into the kmz archive."""
+    #try to get MAX_METADATA_RECORDS from settings, default to 500
+    myMaxMetadataRecords = getattr(settings, 'MAX_METADATA_RECORDS', 500 )
+    myKml = render_to_string(theTemplate,theContext)
+    myZipData = StringIO()
+    myZip = zipfile.ZipFile(myZipData, 'w', zipfile.ZIP_DEFLATED)
+    myZip.writestr('%s.kml' % filename, myKml)
+    if theContext.has_key("mySearchRecords"):
+        for myRecord in theContext["mySearchRecords"][:myMaxMetadataRecords]:
+            writeThumbToZip( myRecord, myZip )
+    myZip.close()
+    response = HttpResponse()
+    response.content = myZipData.getvalue()
+    response['Content-Type']        = 'application/vnd.google-earth.kmz'
+    response['Content-Disposition'] = 'attachment; filename=%s.kmz' % filename
+    response['Content-Length']      = str(len(response.content))
+    return response
 
 def downloadISOMetadata(theSearchRecords,theName):
-  """ returns ZIPed XML metadata files for each product """
-  response = HttpResponse()
-  myZipData = StringIO()
-  myZip = zipfile.ZipFile(myZipData,'w', zipfile.ZIP_DEFLATED)
-  #try to get MAX_METADATA_RECORDS from settings, default to 500
-  myMaxMetadataRecords = getattr(settings, 'MAX_METADATA_RECORDS', 500 )
-  for mySearchRecord in theSearchRecords[:myMaxMetadataRecords]:
-    myMetadata = mySearchRecord.product.getXML()
-    logging.info("Adding product XML to ISO Metadata archive.")
-    myZip.writestr('%s.xml' % mySearchRecord.product.product_id, myMetadata)
-    writeThumbToZip( mySearchRecord, myZip )
+    """ returns ZIPed XML metadata files for each product """
+    response = HttpResponse()
+    myZipData = StringIO()
+    myZip = zipfile.ZipFile(myZipData,'w', zipfile.ZIP_DEFLATED)
+    #try to get MAX_METADATA_RECORDS from settings, default to 500
+    myMaxMetadataRecords = getattr(settings, 'MAX_METADATA_RECORDS', 500 )
+    for mySearchRecord in theSearchRecords[:myMaxMetadataRecords]:
+        myMetadata = mySearchRecord.product.getXML()
+        logging.info("Adding product XML to ISO Metadata archive.")
+        myZip.writestr('%s.xml' % mySearchRecord.product.product_id, myMetadata)
+        writeThumbToZip( mySearchRecord, myZip )
 
-  myZip.close()
-  response.content=myZipData.getvalue()
-  myZipData.close()
-  #get ORGANISATION_ACRONYM from settings, default to 'SANSA'
-  myOrganisationAcronym = getattr(settings, 'ORGANISATION_ACRONYM', 'SANSA' )
-  filename = '%s-%s-Metadata.zip' % (myOrganisationAcronym,theName)
-  response['Content-Type']        = 'application/zip'
-  response['Content-Disposition'] = 'attachment; filename=%s' % filename
-  response['Content-Length']      = str(len(response.content))
-  return response
+    myZip.close()
+    response.content=myZipData.getvalue()
+    myZipData.close()
+    #get ORGANISATION_ACRONYM from settings, default to 'SANSA'
+    myOrganisationAcronym = getattr(settings, 'ORGANISATION_ACRONYM', 'SANSA' )
+    filename = '%s-%s-Metadata.zip' % (myOrganisationAcronym,theName)
+    response['Content-Type']        = 'application/zip'
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    response['Content-Length']      = str(len(response.content))
+    return response
 
 def downloadHtmlMetadata(theSearchRecords,theName):
-  """ returns ZIPed html metadata files for each product """
-  response = HttpResponse()
-  myZipData = StringIO()
-  myZip = zipfile.ZipFile(myZipData,'w', zipfile.ZIP_DEFLATED)
-  #try to get MAX_METADATA_RECORDS from settings, default to 500
-  myMaxMetadataRecords = getattr(settings, 'MAX_METADATA_RECORDS', 500 )
-  myThumbIsLocalFlag = True # used to tell html renderer not to prepend server path
-  for mySearchRecord in theSearchRecords[:myMaxMetadataRecords]:
-    myMetadata = mySearchRecord.product.getConcreteInstance().toHtml( myThumbIsLocalFlag )
-    logging.info("Adding product HTML to HTML Metadata archive.")
-    myZip.writestr('%s.html' % mySearchRecord.product.product_id, myMetadata)
-    writeThumbToZip( mySearchRecord, myZip )
+    """ returns ZIPed html metadata files for each product """
+    response = HttpResponse()
+    myZipData = StringIO()
+    myZip = zipfile.ZipFile(myZipData,'w', zipfile.ZIP_DEFLATED)
+    #try to get MAX_METADATA_RECORDS from settings, default to 500
+    myMaxMetadataRecords = getattr(settings, 'MAX_METADATA_RECORDS', 500 )
+    myThumbIsLocalFlag = True # used to tell html renderer not to prepend server path
+    for mySearchRecord in theSearchRecords[:myMaxMetadataRecords]:
+        myMetadata = mySearchRecord.product.getConcreteInstance().toHtml( myThumbIsLocalFlag )
+        logging.info("Adding product HTML to HTML Metadata archive.")
+        myZip.writestr('%s.html' % mySearchRecord.product.product_id, myMetadata)
+        writeThumbToZip( mySearchRecord, myZip )
 
-  myZip.close()
-  response.content=myZipData.getvalue()
-  myZipData.close()
-  #get ORGANISATION_ACRONYM from settings, default to 'SANSA'
-  myOrganisationAcronym = getattr(settings, 'ORGANISATION_ACRONYM', 'SANSA' )
-  filename = '%s-%s-Metadata.zip' % (myOrganisationAcronym,theName)
-  response['Content-Type']        = 'application/zip'
-  response['Content-Disposition'] = 'attachment; filename=%s' % filename
-  response['Content-Length']      = str(len(response.content))
-  return response
+    myZip.close()
+    response.content=myZipData.getvalue()
+    myZipData.close()
+    #get ORGANISATION_ACRONYM from settings, default to 'SANSA'
+    myOrganisationAcronym = getattr(settings, 'ORGANISATION_ACRONYM', 'SANSA' )
+    filename = '%s-%s-Metadata.zip' % (myOrganisationAcronym,theName)
+    response['Content-Type']        = 'application/zip'
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    response['Content-Length']      = str(len(response.content))
+    return response

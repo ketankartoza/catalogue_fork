@@ -34,15 +34,15 @@ def render_to_geojson(query_set, geom_field=None, mimetype='text/plain', pretty_
     # Build list of features
     features = []
     if query_set:
-      for item in query_set:
-         feat = {}
-         feat['type'] = 'Feature'
-         d= item.__dict__.copy()
-         g = getattr(item,geo_field.name)
-         d.pop(geo_field.name)
-         feat['geometry'] = simplejson.loads(g.geojson)
-         feat['properties'] = d
-         features.append(feat)
+        for item in query_set:
+            feat = {}
+            feat['type'] = 'Feature'
+            d= item.__dict__.copy()
+            g = getattr(item,geo_field.name)
+            d.pop(geo_field.name)
+            feat['geometry'] = simplejson.loads(g.geojson)
+            feat['properties'] = d
+            features.append(feat)
     else:
         pass #features.append({'type':'Feature','geometry': {},'properties':{}})
 

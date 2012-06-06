@@ -8,52 +8,52 @@ from django import forms
 # Search and visitors admin
 #
 class SearchAdmin(admin.GeoModelAdmin):
-  list_display = ('search_date', 'user', 'guid','search_date')
-  list_filter = ('search_date', 'user', )
+    list_display = ('search_date', 'user', 'guid','search_date')
+    list_filter = ('search_date', 'user', )
 
 class VisitAdmin(admin.GeoModelAdmin):
-  pass
+    pass
 
 class SacUserProfileAdmin (admin.GeoModelAdmin):
-  list_display = ('user','strategic_partner' )
-  list_filter = ('user','strategic_partner' )
+    list_display = ('user','strategic_partner' )
+    list_filter = ('user','strategic_partner' )
 
 class OrderStatusAdmin(admin.GeoModelAdmin):
-  pass
+    pass
 
 
 class OrderNotificationRecipientsAdminForm(forms.ModelForm):
-  class Meta:
-    model = OrderNotificationRecipients
+    class Meta:
+        model = OrderNotificationRecipients
 
-  def clean(self):
-    """
-    Validates that at least one of the m2m has values
-    """
-    if not self.cleaned_data["classes"] and not self.cleaned_data["sensors"]:
-      raise ValidationError(u'Classes and sensors cannot be simultaneously blank')
-    return self.cleaned_data
+    def clean(self):
+        """
+        Validates that at least one of the m2m has values
+        """
+        if not self.cleaned_data["classes"] and not self.cleaned_data["sensors"]:
+            raise ValidationError(u'Classes and sensors cannot be simultaneously blank')
+        return self.cleaned_data
 
 
 class OrderNotificationRecipientsAdmin(admin.GeoModelAdmin):
-  list_display = ('user', )
-  form = OrderNotificationRecipientsAdminForm
+    list_display = ('user', )
+    form = OrderNotificationRecipientsAdminForm
 
-  # This next method will filter the users list in the admin form
-  # so that only staff members can be chosen from the users list
-  def render_change_form(self, request, context, *args, **kwargs):
-    context['adminform'].form.fields['user'].queryset = User.objects.filter(is_staff=True)
-    return super(OrderNotificationRecipientsAdmin, self).render_change_form(request, context, args, kwargs)
+    # This next method will filter the users list in the admin form
+    # so that only staff members can be chosen from the users list
+    def render_change_form(self, request, context, *args, **kwargs):
+        context['adminform'].form.fields['user'].queryset = User.objects.filter(is_staff=True)
+        return super(OrderNotificationRecipientsAdmin, self).render_change_form(request, context, args, kwargs)
 
-  def formfield_for_manytomany(self, db_field, request, **kwargs):
-    """
-    Filters abstract product classes
-    """
-    if db_field.name == "classes":
-      form_field = super(OrderNotificationRecipientsAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
-      form_field.choices = [c for c in form_field.choices if getattr(ContentType.objects.get(pk=c[0]).model_class(), 'concrete', False)]
-      return form_field
-    return super(OrderNotificationRecipientsAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        """
+        Filters abstract product classes
+        """
+        if db_field.name == "classes":
+            form_field = super(OrderNotificationRecipientsAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+            form_field.choices = [c for c in form_field.choices if getattr(ContentType.objects.get(pk=c[0]).model_class(), 'concrete', False)]
+            return form_field
+        return super(OrderNotificationRecipientsAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
 
@@ -62,43 +62,43 @@ class OrderNotificationRecipientsAdmin(admin.GeoModelAdmin):
 #################################################
 
 class ProcessingLevelAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class DatumAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class InstitutionAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class LicenseAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class ProjectionAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class QualityAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class CreatingSoftwareAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class GenericProductAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class GeospatialProductAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class OpticalProductAdmin( admin.GeoModelAdmin ):
-  list_filter = ('acquisition_mode',)
+    list_filter = ('acquisition_mode',)
 class ResamplingMethodAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class FileFormatAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class DeliveryMethodAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class OrderStatusAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class MissionAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class MissionSensorAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class TaskingRequestAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class SensorTypeAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 class AcquisitionModeAdmin( admin.GeoModelAdmin ):
-  pass
+    pass
 
 admin.site.register(Mission, MissionAdmin)
 admin.site.register(MissionSensor, MissionSensorAdmin)

@@ -35,22 +35,22 @@ class DateTimeWidget(forms.DateInput):
         myDefaultDateProperty = ""
         myDefaultDate = ""
         logging.info("Rendering date widget with %s" % value)
-        if value is None: 
-          logging.info("Value is none - setting to empty string")
-          value = ''
+        if value is None:
+            logging.info("Value is none - setting to empty string")
+            value = ''
         final_attrs = self.build_attrs(attrs, type=self.input_type, name=name)
         if value != '':
-          logging.info("Value is not none : %s" % value)
-          try:
-            final_attrs['value'] = \
-                                   force_unicode(value.strftime(self.dformat))
-          except:
-            final_attrs['value'] = \
-                                   force_unicode(value)
-          myDefaultDate = "%s" % value.strftime(self.dformat)
-          logging.info("MyDefaultDate is not none : %s" % myDefaultDate )
-          myDefaultDateProperty = ", defaultDate: '%s'" % value.strftime(self.dformat)
-          logging.info("MyDefaultDateProperty is : %s" % myDefaultDateProperty )
+            logging.info("Value is not none : %s" % value)
+            try:
+                final_attrs['value'] = \
+                                       force_unicode(value.strftime(self.dformat))
+            except:
+                final_attrs['value'] = \
+                                       force_unicode(value)
+            myDefaultDate = "%s" % value.strftime(self.dformat)
+            logging.info("MyDefaultDate is not none : %s" % myDefaultDate )
+            myDefaultDateProperty = ", defaultDate: '%s'" % value.strftime(self.dformat)
+            logging.info("MyDefaultDateProperty is : %s" % myDefaultDateProperty )
         if not final_attrs.has_key('id'):
             final_attrs['id'] = u'%s_id' % (name)
         id = final_attrs['id']
@@ -58,18 +58,18 @@ class DateTimeWidget(forms.DateInput):
         #set defaults to start and end days of month if not set explicitly
         myDate = datetime.date.today()
         if "start" in name and not myDefaultDate:
-          myDefaultDate = "01-%s-%s" % ( str(myDate.month), str(myDate.year))
+            myDefaultDate = "01-%s-%s" % ( str(myDate.month), str(myDate.year))
         elif "end" in name and not myDefaultDate:
-          # work out the last day of the current month
-          #myEndDate = datetime.date.today() + relativedelta(months=+1)
-          #myEndDate = datetime.date( myFutureDate.year(), myFutureDate.month(), 1) - relativedelta(days=-1)
+            # work out the last day of the current month
+            #myEndDate = datetime.date.today() + relativedelta(months=+1)
+            #myEndDate = datetime.date( myFutureDate.year(), myFutureDate.month(), 1) - relativedelta(days=-1)
 
-          # work out yesterdays date
-          myEndDate = datetime.date.today() + relativedelta(days=-1)
-          myDefaultDate = "%s-%s-%s" % ( myEndDate.day, myEndDate.month, myEndDate.year )
+            # work out yesterdays date
+            myEndDate = datetime.date.today() + relativedelta(days=-1)
+            myDefaultDate = "%s-%s-%s" % ( myEndDate.day, myEndDate.month, myEndDate.year )
         elif not myDefaultDate or myDefaultDate == '':
-          myDefaultDate = datetime.date.today() + relativedelta(days=-1)
-          myDefaultDate = "%s-%s-%s" % ( myDefaultDate.day, myDefaultDate.month, myDefaultDate.year )
+            myDefaultDate = datetime.date.today() + relativedelta(days=-1)
+            myDefaultDate = "%s-%s-%s" % ( myDefaultDate.day, myDefaultDate.month, myDefaultDate.year )
 
 
         a = u'''
@@ -82,7 +82,7 @@ class DateTimeWidget(forms.DateInput):
                 maxDate: '+1Y',
                 changeMonth: true,
                 changeYear: true,
-                onChangeMonthYear: function(year, month, inst) { 
+                onChangeMonthYear: function(year, month, inst) {
                   try {
                     if (changingDate) {
                       return;
@@ -139,18 +139,16 @@ class DateTimeWidget(forms.DateInput):
         empty_values = forms.fields.EMPTY_VALUES
         value = data.get(name, None)
         if value in empty_values:
-          return None
+            return None
         if isinstance(value, datetime.datetime):
-          return value
+            return value
         if isinstance(value, datetime.date):
-          return datetime.datetime(value.year, value.month, value.day)
+            return datetime.datetime(value.year, value.month, value.day)
         for format in DATE_FORMATS:
-          try:
-            myDate = datetime.datetime(*time.strptime(value, format)[:6])
-            logging.info("Parsed date is: " + str(myDate))
-            return myDate
-          except ValueError:
-            continue
+            try:
+                myDate = datetime.datetime(*time.strptime(value, format)[:6])
+                logging.info("Parsed date is: " + str(myDate))
+                return myDate
+            except ValueError:
+                continue
         return None
-
-

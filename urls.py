@@ -124,4 +124,3 @@ urlpatterns = patterns('',
     ( r'^dictionaryReport/$', dictionaryReport),
     ( r'^sensorSummaryTable/(?P<theSensorId>[0-9]+)/$', sensorSummaryTable),
 )
-

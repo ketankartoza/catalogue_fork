@@ -9,7 +9,7 @@ from django.conf import settings
 from django.contrib.gis import gdal
 
 #http://docs.djangoproject.com/en/dev/topics/http/file-uploads/
-#http://www.neverfriday.com/sweetfriday/2008/09/-a-long-time-ago.html 
+#http://www.neverfriday.com/sweetfriday/2008/09/-a-long-time-ago.html
 
 class UploadForm(forms.Form):
 
@@ -30,8 +30,8 @@ class UploadForm(forms.Form):
         """
         # ensure the upload directory exists
         if not os.path.exists(settings.SHP_UPLOAD_DIR):
-            os.makedirs(settings.SHP_UPLOAD_DIR) 
-        
+            os.makedirs(settings.SHP_UPLOAD_DIR)
+
         # contruct the full filepath and filename
         downloaded_file = os.path.normpath(os.path.join(settings.SHP_UPLOAD_DIR, filefield_data.name))
 
@@ -40,7 +40,7 @@ class UploadForm(forms.Form):
         if os.path.exists(downloaded_file):
             name, ext = os.path.splitext(downloaded_file)
             append = datetime.datetime.now().strftime('%d%m%Y_%m')
-            downloaded_file = '%s_%s%s' % (name,append,ext) 
+            downloaded_file = '%s_%s%s' % (name,append,ext)
 
         print downloaded_file
         # write the zip archive to final location
@@ -50,7 +50,7 @@ class UploadForm(forms.Form):
         destination = open(filename, 'wb+')
         for chunk in filefield_data.chunks():
             destination.write(chunk)
-        destination.close()        
+        destination.close()
 
     def check_zip_contents(self, ext, zip_file):
         if not True in [info.filename.endswith(ext) for info in zip_file.infolist()]:
@@ -71,7 +71,7 @@ class UploadForm(forms.Form):
 
         # create zip object
         zfile = zipfile.ZipFile(tmp.name)
-        
+
         # ensure proper file contents by extensions inside
         if not self.check_zip_contents('shp', zfile):
             return False, 'Found Zip Archive but no file with a .shp extension found inside.'
@@ -81,7 +81,7 @@ class UploadForm(forms.Form):
             return False, 'You must supply a .dbf file with the Shapefile to supply attribute data.'
         elif not self.check_zip_contents('shx', zfile):
             return False, 'You must supply a .shx file for the Shapefile to have a valid index.'
-        
+
         # unpack contents into tmp directory
         tmp_dir = tempfile.gettempdir()
         for info in zfile.infolist():
@@ -90,7 +90,7 @@ class UploadForm(forms.Form):
             fout = open(shp_part, "wb")
             fout.write(data)
             fout.close()
-        
+
         # get the datasource name without extension
         ds_name = os.path.splitext(zfile.namelist()[0])[0]
 
@@ -99,7 +99,7 @@ class UploadForm(forms.Form):
 
         # shapefiles have just one layer, so grab the first...
         layer = ds[0]
-        
+
         # one way of testing a sane shapefile...
         # further tests should be able to be plugged in here...
         if layer.test_capability('RandomRead'):
@@ -108,4 +108,4 @@ class UploadForm(forms.Form):
             else:
                 return False, "Sorry, we've experienced a problem on our server. Please try again later."
         else:
-            return False, 'Cannot read the shapefile, data is corrupted inside the zip, please try to upload again' 
+            return False, 'Cannot read the shapefile, data is corrupted inside the zip, please try to upload again'

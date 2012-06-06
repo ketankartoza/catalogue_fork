@@ -87,22 +87,22 @@ class RegistrationForm(forms.Form):
     """
     username = forms.CharField(max_length=255, min_length = 3, label=_(u"Username"))
     email = forms.EmailField(required=False, label=_(u"E-mail address"))
-    firstname = forms.CharField(label=_(u"First Name (required)"), 
+    firstname = forms.CharField(label=_(u"First Name (required)"),
             max_length=255, required=True )
-    surname = forms.CharField(label=_(u"Surname (required)"), 
+    surname = forms.CharField(label=_(u"Surname (required)"),
             max_length=255, required=True )
     url = forms.URLField(required=False)
-    about = forms.CharField(max_length=255, 
+    about = forms.CharField(max_length=255,
             required=False, widget=forms.Textarea)
-    address1 = forms.CharField(label=_(u"Address 1 (required)"), 
+    address1 = forms.CharField(label=_(u"Address 1 (required)"),
             max_length=255, required=True)
-    address2 = forms.CharField(label=_(u"Address 2 (required)"), 
+    address2 = forms.CharField(label=_(u"Address 2 (required)"),
             max_length=255, required=True )
     address3 = forms.CharField(max_length=255, required=False )
     address4 = forms.CharField(max_length=255, required=False )
-    post_code = forms.CharField(label=_(u"Post Code (required)"), 
+    post_code = forms.CharField(label=_(u"Post Code (required)"),
             max_length=25, required=True )
-    organisation = forms.CharField(label=_(u"Organisation (required)"), 
+    organisation = forms.CharField(label=_(u"Organisation (required)"),
             max_length=255, required=True)
     contact_no = forms.CharField(label=_(u"Contact No (required)"),
             max_length=16, required=True)
