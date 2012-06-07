@@ -1,6 +1,8 @@
-== Developer Guide ==
+Developer Guide
+-----------------------------------------
 
-=== Set your ssh config up ===
+Set your ssh config up
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To get started, first add an entry like this to your ssh config file in ~/.ssh/config:
 
@@ -11,7 +13,8 @@ Host linfiniti2
   FallBackToRsh no
 ```
 
-=== Checkout Sources ===
+Checkout Sources
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Then setup a working dir and check out the sources (you can adapt dirs / paths
 as needed, using these paths will keep you consistent with all setup notes but
@@ -42,7 +45,8 @@ Then follow the instructions in README, skipping sections on informix, building
 gdal from source and source code checkout (you already checked it out if you
 have the readme :-)
 
-=== Load a database dump ===
+Load a database dump
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A recent database dump can be obtained from:
 
@@ -50,7 +54,8 @@ A recent database dump can be obtained from:
 http://196.35.94.243/sac_postgis_01February2011.dmp
 ```
 
-== Working with Git ==
+Working with Git
+------------------------------------------
 
 Each devloper works on a remote branch, others can track a specific branch
 locally and try out implemented features. After approving implementation,
@@ -59,7 +64,8 @@ branch is merged with HEAD. (possibly closed/removed from tree)
 This commands are based on http://www.eecs.harvard.edu/~cduan/technical/git/
 
 
-=== Getting a list of branches ===
+Getting a list of branches
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For local branches do:
 
@@ -73,7 +79,8 @@ For remote branches do:
 git branch -r -v
 ```
 
-=== To create remote branch ===
+To create remote branch
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For current versions of git (at least git 1.7 or better). Say we want to create
 a new branch called 'docs-branch':
@@ -85,7 +92,8 @@ git checkout docs-branch
 ```
 
 
-=== Working with a remote branch ===
+Working with a remote branch
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To be able to work with a remote branch locally (if it already exists
 remotely), we must create local branch and setup tracking of remote branch. 
@@ -104,7 +112,8 @@ To pull changes from remote repo do:
 git pull origin
 ```
 
-=== Deleting branches ===
+Deleting branches
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Once you are done with a branch, you can delete it. For a local branch do:
 
@@ -118,7 +127,8 @@ To delete a remote branch do (after first deleting it locally):
 git push origin :new-branch
 ```
 
-=== Distributed Git Repository Topology ===
+Distributed Git Repository Topology
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The repositories are arranged like this:
 
@@ -167,7 +177,8 @@ For the Tim / Drazen / Alessandro clones, the clone was carried out as
 described in the first section of this doc.
 
 
-=== Tracking branches from linfiniti with a master checkout from orasac ===
+Tracking branches from linfiniti with a master checkout from orasac
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this scenario, we want to be tracking master from orasac1 but occationally
 pulling down branches from linfiniti2 to test them under
@@ -225,7 +236,8 @@ When you want to get back to the original again do:
 git checkout origin/master
 ```
 
-=== Tracking Linfiniti in your local repo and pushing changes to orasac1 ===
+Tracking Linfiniti in your local repo and pushing changes to orasac1
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this scenario, we want to have our master repo on the linfiniti development
 server, and then periodically push changes over to orasac1 production repo. Our
@@ -267,9 +279,11 @@ git checkout master
 git push orasac1 master
 ```
 
-== System logic and rules ==
+System logic and rules
+------------------------------------------
 
-=== Computation of geometric_accuracy_mean ===
+Computation of geometric_accuracy_mean
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The geometric accuracy of a product is calculated as the mean of its
 geometric_resolution_x, geometric_resolution_y.
@@ -282,7 +296,8 @@ sensor and per mode. According to the following table:
 ------------ TABLE PLACEHOLDER -------------------
 
 
-=== Sensor viewing angle ===
+Sensor viewing angle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 
@@ -294,7 +309,8 @@ The sensor viewing angle
 
 
 
-== Updates and imports of products ==
+Updates and imports of products
+------------------------------------------
 
 vim /mnt/cataloguestorage/thumbnail_processing/thumb_blobs/lastblob.txt
 

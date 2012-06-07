@@ -1,4 +1,5 @@
-== Suggested Items for future development ==
+Suggested Items for future development
+------------------------------------------
 
 With this work package we have added a great amount of infrastructure to the
 catalogue in order to allow it to store a variety of different types of
@@ -11,7 +12,8 @@ below are a selection of future enhancements that we felt would be benificial
 to the catalogue:
 
 
-=== Automatic creation of virtual products with back referencing ===
+Automatic creation of virtual products with back referencing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Use case:** A pan sharpened product is actually a cross product of (in the
 case of SPOT5) and 'J' image and a 'T' image so the product entry for the pan
@@ -23,7 +25,8 @@ assembled When a J and T from the same pass are added to the catalogue, a
 automatically create these composite products for when new product records are
 ingested.
    
-=== Composite product discovery / drill down ===
+Composite product discovery / drill down
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Use case:** User performs a search and obtains a composite product (e.g.
 PanSharpened JT or Mosaicked image) as a result.  In the results table an icon
@@ -33,16 +36,18 @@ of nested products, each with a thumb, metadata link, add to basket icon etc.
 
 Option when ordering e.g. L4 to get its derived products too.
 
-=== Spatial search options ===
+Spatial search options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Use case:* Allow user to do spatial search based on: 
--Location based on their ip address
--Named place (using GNIS / GEONAMES gazetteer dataset)
--Saved place (a collection of sptial bookmarks)
--Remember AOI between searches (s a new search defaults to the AOI of the last)
+- Location based on their ip address
+- Named place (using GNIS / GEONAMES gazetteer dataset)
+- Saved place (a collection of sptial bookmarks)
+- Remember AOI between searches (s a new search defaults to the AOI of the last)
 Suggested by Adriaan Van Niekerk
                              
-=== Geospatial Products ===
+Geospatial Products
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The infrastructure exists in the database for storing geospatial products but
 no data yet exists. We can make this process 'smart' 
@@ -55,14 +60,16 @@ metadata editor tool to directly 'push' metadata (and dataset thumbnail) from
 the desktop.
 
 
-=== KMZ Improvements ===
+KMZ Improvements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It is possible to embed imagery into kmz documents. We propos an enhancement to
 embed georeferenced thumbnails for products in search results / cart / orders
 so that they appear as low resolution overlays in google earth.
 
 
-=== ACS Migrator Updates ===
+ACS Migrator Updates
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The migrator to import data and thumbs from the legacy ACS catalogue was not
 updated due to being out of scope and due to time constraints. This should be
@@ -71,7 +78,8 @@ the newly written migrators for rapideye etc.) and can easily be invoked from a
 cron job.
 
 
-=== Metadata XML schema review ===
+Metadata XML schema review
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The SANSA-EO ISO19115 profile needs to be reviewed. This should be considered a
 living document and should be reviewed periodically. However, there is a
@@ -83,7 +91,8 @@ DIMS. A parallel effort should be made by Werum to extend the ISO document
 their system produces to cater for all product types and metadata elements.
 
 
-=== Catalogue Product Filtering ===
+Catalogue Product Filtering
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The new implementation of the catalogue supports filtering of search results to
 further reduce the number of records displayed. When a filter is applied, a new
@@ -91,7 +100,8 @@ search history is created. We would like to extend this implementation so that
 filtering is ephemeral and that only the initial search result is saved.
 
 
-=== Multi-spectral and spatial resolution support ===
+Multi-spectral and spatial resolution support
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We discovered late in the implementation phase instances where products do not
 model well into our schema. In particular products having multiple spectral and
@@ -101,7 +111,8 @@ to have 1 or more spectral resolutions (bit depths) and spatial resolutions
 (pixel size). In tandem existing data would be migrated and search
 implementation would need to be updated to cater for this.
 
-=== Enhance security for filedrop ===
+Enhance security for filedrop
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The use of a filedrop for depositing e.g. DIMS products onto the catalogue
 server for ingestion introduces some security worries. We have performed the
@@ -109,7 +120,8 @@ implementation in a fairly secure manner by allowing the filedrop connection
 only a restricted shell. However for improved security, we propose that further
 work is carried out to implement a 'chroot jail' for this file drop user.
 
-=== User preferences ===
+User preferences
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We would like to add to the user interface of the online catalogue a user
 preferences area where things like ordering defaults can be set, options on
@@ -117,7 +129,8 @@ notifications behaviour for orders (notify when all products in order are
 ready, notify on product by product basis) etc.
 
 
-=== OGC Ordering Service Options ===
+OGC Ordering Service Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Ordering Options:** We would like to be able to support the propogation of
 ordering options (resampling method, processing level etc.) to DIMS via the OGC
@@ -147,7 +160,8 @@ In general the OGC interface DIMS could not be implemented fully due to issues
 with product ID's. As such the work needs to be deferred to a future work
 package.
 
-=== Modularise Ingestors ===
+Modularise Ingestors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Something that was illustrated to us during this work package is the future
 shift from relying on one or two ingestors (e.g. from ACS, Sumbandilasat) to a
@@ -176,7 +190,8 @@ benifits:
 
 
 
-=== Desktop Search Support ===
+Desktop Search Support
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It would be convenient for GIS professionals to be able to search for imagery
 from within their desktop GIS environment. INPE has such a tool for QGIS and it
@@ -186,7 +201,8 @@ own data. We propose to devlop a puplic, programmatic API to the catalogue
 searches and visualising results from within the desktop GIS environment.
 
 
-=== User Notifications ===
+User Notifications
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Enable notifications when the number of search results for a user's saved
 searches changes. This will be implemented by adding a small icon next to each
@@ -196,7 +212,8 @@ be sent out once a night.
 
 
 
-=== Smart Ordering ===
+Smart Ordering
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The ordering process can be made more userfriendly and encapsulate better the
 logic of the application domain:
@@ -217,7 +234,8 @@ In addition we suggest that there is an update to the ordering and acquisition
 programming forms so that they have similar look to advanced search forms.
 
 
-=== Data integrity ===
+Data integrity
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Batch processes need to be implemented that can be run across the entire
 database or sections of the database in order to clean anomolies in the
