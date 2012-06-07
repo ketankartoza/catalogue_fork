@@ -1,16 +1,16 @@
+Working with GIT
+------------------------------------------
 
-
-% leave the above two lines blank
-== Working with GIT ==
-
-=== Hosting GIT Repos using gitosis ===
+Hosting GIT Repos using gitosis
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See also [http://blog.agdunn.net/?p=277 this page]. The idea is that we set up
 a single user account ('git') which proxies commit into the repo and has not
 shell access. We then add each ssh key for each user that wants access to the
 repo, assign the user to one or more groups and they can get busy.
 
-==== Set up the server side ====
+Set up the server side
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Note:** The gitosis repos are hosted on 'orasac1'.
 
@@ -24,7 +24,8 @@ sudo -H -u git gitosis-init < /home/timlinux/.ssh/authorized_keys2
 
 ```
 
-==== Allow ssh access to git user ====
+Allow ssh access to git user
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Edit /etc/ssh/sshd_config and add git to AllowUsers list then restart ssh:
 
@@ -32,7 +33,8 @@ Edit /etc/ssh/sshd_config and add git to AllowUsers list then restart ssh:
 sudo /etc/init.d/ssh restart
 ```
 
-==== Check out gitosis admin on the client ====
+Check out gitosis admin on the client
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ```
 mkdir -p ~/dev/gitosis
@@ -40,7 +42,8 @@ cd ~/dev/gitosis
 git clone git@orasac1:gitosis-admin.git sansa-gitosis-admin
 ```
 
-==== Adding a user, group and project ====
+Adding a user, group and project
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ```
 cd sansa-gitosis-admin
@@ -132,7 +135,8 @@ git push
 
 
 
-==== Create a new empty gitosis hosted repo ====
+Create a new empty gitosis hosted repo
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The last step is to actually create the repo we defined above (in this case
 sac_catalogue) and push it up to the server.
@@ -183,7 +187,8 @@ locally and then try to push it up to the server again.
 git-daemon. See the article mentioned at the start of this section for more
 info.
 
-==== Checkout ====
+Checkout
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Finally you can check out your repo e.g. on a different computer:
 
@@ -191,7 +196,8 @@ Finally you can check out your repo e.g. on a different computer:
 git clone git@orasac1:sac_catalogue.git
 ```
 
-==== Hosting a clone of an upstream repo in gitosis ====
+Hosting a clone of an upstream repo in gitosis
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Here we want to host a copy of a git repository from upstream and make it available 
 to internal SANSA developers. We will check out the linfiniti git repo in this case:
@@ -227,7 +233,8 @@ git@orasac01:~/repositories$ git clone --bare git@linfiniti2:qgis.git
 
 On your local machine, you can now clone QGIS, work on it, commit your changes to orasac1. When you would like your changes to be merged into QGIS, you email a pull request to linfiniti, we then pull your changes and commit them to svn. To keep the orasac1 copy 'fresh' (synchronised with upstream) a cron job should be configure to pull changes regularly to it.
 
-==== Check out an existing repo ====
+Check out an existing repo
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 You should not need to do the above for the QGIS and SANSA Catalogue projects since they already exist and are populated. Above process is for when you want to create a new, empty repo.
@@ -248,7 +255,8 @@ git clone git@orasac1:qgis.git qgis
 
 
 
-=== Working with Git ===
+Working with Git
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Each devloper works on a remote branch, others can track a specific branch
 locally and try out implemented features. After approving implementation,
@@ -257,7 +265,8 @@ branch is merged with HEAD. (possibly closed/removed from tree)
 This commands are based on http://www.eecs.harvard.edu/~cduan/technical/git/
 
 
-==== Getting a list of branches ====
+Getting a list of branches
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For local branches do:
 
@@ -271,7 +280,8 @@ For remote branches do:
 git branch -r -v
 ```
 
-==== To create remote branch ====
+To create remote branch
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For current versions of git (at least git 1.7 or better). Say we want to create
 a new branch called 'docs-branch':
@@ -283,7 +293,8 @@ git checkout docs-branch
 ```
 
 
-==== Working with a remote branch ====
+Working with a remote branch
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To be able to work with a remote branch locally (if it already exists
 remotely), we must create local branch and setup tracking of remote branch. 
@@ -302,7 +313,8 @@ To pull changes from remote repo do:
 git pull origin
 ```
 
-==== Deleting branches ====
+Deleting branches
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Once you are done with a branch, you can delete it. For a local branch do:
 
@@ -316,7 +328,8 @@ To delete a remote branch do (after first deleting it locally):
 git push origin :new-branch
 ```
 
-==== Distributed Git Repository Topology ====
+Distributed Git Repository Topology
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The repositories are arranged like this:
 
@@ -365,7 +378,8 @@ For the Tim / Drazen / Alessandro clones, the clone was carried out as
 described in the first section of this doc.
 
 
-==== Tracking branches from linfiniti with a master checkout from orasac ====
+Tracking branches from linfiniti with a master checkout from orasac
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this scenario, we want to be tracking master from orasac1 but occationally
 pulling down branches from linfiniti2 to test them under
@@ -423,7 +437,8 @@ When you want to get back to the original again do:
 git checkout origin/master
 ```
 
-==== Tracking Linfiniti in your local repo and pushing changes to orasac1 ====
+Tracking Linfiniti in your local repo and pushing changes to orasac1
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this scenario, we want to have our master repo on the linfiniti development
 server, and then periodically push changes over to orasac1 production repo. Our

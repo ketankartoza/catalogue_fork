@@ -1,8 +1,5 @@
-
-
-%---------------------------------
-
-== Testing overview ==
+Testing overview
+------------------------------------------
 
 Two kinds of tests are provided:
 
@@ -112,7 +109,8 @@ use the faster spatialite instead of createdb.
 source ../python/bin/activate
 ```
 
-=== Running unit tests using SQLITE backend ===
+Running unit tests using SQLITE backend
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Before you can run the tests, you need to make sure you have pysqlite installed:
 
@@ -129,7 +127,8 @@ Run tests for catalogue app as:
   $ python manage.py test catalogue --settings=settings_test
 ```
 
-=== Running Unit tests using Postgresql ===
+Running Unit tests using Postgresql
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Alternatively you can use postgresql as the test database backend. Before you
 can run the tests you should create a template database and set some

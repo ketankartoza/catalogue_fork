@@ -1,8 +1,5 @@
-
-
-
-%------------ leave the above blank lines they are required --------
-== Metadata ==
+Metadata
+------------------------------------------
 
 Metadata created for products in the SAC Catalogue adheres to the ISO19115
 specification. The aforementioned specification defines many different
@@ -13,7 +10,8 @@ to lack of sufficient information.
 The standard also specifies a core set of attributes that should be present
 for any given metadata document. 
   
-=== Mandatory Core Items ===
+Mandatory Core Items
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 These are listed in the table that follows:
 
@@ -56,7 +54,8 @@ Above listing taken from section 6.5 'Core metadata for geographic subsets' of
 the ISO 19115:2003 specification. Items marked (M) are mandatory, (O) Optional
 and (C) Conditionally required.
 
-=== Optional Core Items ===
+Optional Core Items
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 + **Spatial representation type (O)** 
  - A geographic dataset should be represented as one of the following type codes:
@@ -127,7 +126,8 @@ Above listing taken from section 6.5 'Core metadata for geographic subsets' of
 the ISO 19115:2003 specification. Items marked (M) are mandatory, (O) Optional
 and (C) Conditionally required.
 
-=== Conditional Core Items ===
+Conditional Core Items
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 + **Geographic location of the dataset (C) by four coordinates or by geographic identifier**
  - The footprint of the dataset in GML taken from GenericProduct::spatial_coverage
@@ -157,7 +157,8 @@ Above listing taken from section 6.5 'Core metadata for geographic subsets' of
 the ISO 19115:2003 specification. Items marked (M) are mandatory, (O) Optional
 and (C) Conditionally required.
 
-=== Schema Representation in XML ===
+Schema Representation in XML
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Taking just these core elements we can realise a minimalist document structure
 for raster data as listed below):
@@ -291,7 +292,8 @@ for raster data as listed below):
 </gmd:MD_Metadata>
 ```
 
-=== Editing Metadata ===
+Editing Metadata
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There are a few different potential sources of metadata:
 - Online editors such as the [http://www.inspire-geoportal.eu/EUOSME/ EUOSME] editor
@@ -305,7 +307,8 @@ There are a few different potential sources of metadata:
 -
 
 
-=== Required modifications to the ISOMetadata.xml ===
+Required modifications to the ISOMetadata.xml
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This list is about the modifications that has to be done to the 
 ISOMetadata.xml in order to ingest the DIMS packages.

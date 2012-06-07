@@ -11,8 +11,10 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   modules/catalogue/models/models.rst
-   modules/catalogue/views/views.rst
+   user-docs/index
+   installation-manual/index
+   developer-docs/index
+   api-docs/index
 
 Indices and tables
 ==================
@@ -20,4 +22,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

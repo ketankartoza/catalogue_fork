@@ -87,3 +87,10 @@ Please observe the following coding standards when working on the codebase:
   or more restrictive licesed code, it should be included as it's own module with
   appropriate license information in the header.
 * Undocumented API's: Do not use undocumented API's from libraries (e.g. django)
+* Unit test: 
+  * No code should added without an accompanying unit test.
+  * No code should be modified without (if needed) a new unit test.
+  * No code should be committed to master or live branches without all tests passing.
+* Leaving things better than you found them: if you work on a method / function
+  and it doesn't already comply with these conventions, it is required that you
+  refactor it so that every function after being touched

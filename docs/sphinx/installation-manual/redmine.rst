@@ -1,7 +1,5 @@
-
-
-% Leave above lines blank
-== Redmine Setup ==
+Redmine Setup
+------------------------------------------
 
 Redmine is an issue tracking tool and is useful in general for project management as well as software development.
 
@@ -98,7 +96,8 @@ Default user: admin
 Default password: admin
 
 
-=== Git repository browsing ===
+Git repository browsing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Create a new project, and then go to the administration panel for it. Then choose
 
@@ -110,7 +109,8 @@ Then enter the url to the .git directory e.g.
 /opt/git/repositories/sac_catalogue.git/.git
 ```
 
-=== Trac to Redmine Migration ===
+Trac to Redmine Migration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Do this before setting up email below.
 
@@ -157,25 +157,22 @@ cd /opt
 sudo chmod -R ag-w trac
 ```
 
-=== Redmine Email Configuration ===
+Redmine Email Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-```
-sudo cp /usr/share/redmine/config/email.yml.example /etc/redmine/default/email.yml
-```
+``sudo cp /usr/share/redmine/config/email.yml.example /etc/redmine/default/email.yml``
 
-Now edit that file so it looks like this:
+Now edit that file so it looks like this::
+   
+  production:
+    delivery_method: :sendmail
+    smtp_settings:
+    address: 127.0.0.1
+    port: 25
 
-```
-production:
-  delivery_method: :sendmail
-  smtp_settings:
-  address: 127.0.0.1
-  port: 25
-
-development:
-  delivery_method: :sendmail
-  smtp_settings:
-  address: 127.0.0.1
-  port: 25
-```
+  development:
+    delivery_method: :sendmail
+    smtp_settings:
+    address: 127.0.0.1
+    port: 25
 

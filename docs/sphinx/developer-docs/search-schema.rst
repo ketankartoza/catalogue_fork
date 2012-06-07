@@ -1,8 +1,5 @@
-
-
-% Leave the above two lines blank!
-
-== Search Schema ==
+Search Schema
+------------------------------------------
 
 This section covers the logic and schema related to search. The search process
 begins when the user clicks 'Search' on the main application toolbar. They have
@@ -22,7 +19,8 @@ in more detail.
 
 
 
-=== Simple search ===
+Simple search
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Simple search is the default search interface.
 The use can enter the following search criteria:
@@ -32,7 +30,8 @@ The use can enter the following search criteria:
 
 A new search record is created when the user submits a valid form.
 
-=== Advanced search ===
+Advanced search
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the user press "Advanced search", many more fields appear and a complex
 interface allows to specify almost all other search criteria, which can
@@ -51,7 +50,8 @@ search interface: in advanced search, the Ajax call takes only care of drilling
 down the mission-sensor hierarchy without issuing a new search query on every change.
 
 
-==== Product ID search ====
+Product ID search
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This search view is only available for optical search products because
 other types have no Product ID implementation.
@@ -67,7 +67,8 @@ This is not identical to the behaviour of the modify search view which always cr
 a new search object.
 
 
-====== Ajax search implementation details ======
+Ajax search implementation details
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Ajax product id search has a JS handler which issues an Ajax post call
 on every option select change.
