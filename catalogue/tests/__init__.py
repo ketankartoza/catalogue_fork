@@ -10,10 +10,11 @@ import terrasar_command_test
 
 #import unittest classes
 from simpleTest import SimpleTest
+from license_model import LicenseCRUD_Test
 
 #this is only required for doctests
 __test__ = {
-  'simple_tests' : simple_tests,
+  #'simple_tests' : simple_tests,
   #'dims_lib_test' : dims_lib_test,
   #'dims_command_test': dims_command_test,
   #'rapideye_command_test': rapideye_command_test,
