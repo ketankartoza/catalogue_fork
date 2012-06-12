@@ -36,7 +36,8 @@
     $("#map-container").mapResizer({'map':mMap});{# //activate mapresizer widget #}
     {# //add tooltip div #}
     $("#map-navigation-panel div[title],#resizer_toolbox img[title]").tooltip('#maptooltip');
-    $("#search-panel :input").tooltip('#formtooltip');
+    //removed tooltips as requested Story #65
+    //$("#search-panel :input").tooltip('#formtooltip');
   }
 
     function check_search_dates() {
@@ -132,7 +133,8 @@
 {# div for map tooltips - not shown until a map tool is hovered over #}
 <div id="maptooltip">&nbsp;</div>
 {# div for form tooltips (bigger than map tips)- not shown until a map tool is hovered over #}
-<div id="formtooltip">&nbsp;</div>
+{# removed tooltips as requested Story #65 #}
+{# <div id="formtooltip">&nbsp;</div> #}
   {# layout done with blueprint.css we inherit 22 cols of space from base.html #}
   <div class="span-22 append-bottom last"> {# recommended to use blueprint divs only for layout ... #}
     <div id="map-container" class="span-22 ui-widget-content ui-state-highlight ui-corner-all last"> {# thus nested jquery widget container #}
