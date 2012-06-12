@@ -3,7 +3,7 @@ UPDATE catalogue_genericimageryproduct SET
 band_count = 3
 
 FROM (SELECT
-  count(catalogue_genericimageryproduct.genericproduct_ptr_id) as aqu_id
+  catalogue_genericimageryproduct.genericproduct_ptr_id as aqu_id
 FROM
   public.catalogue_genericsensorproduct,
   public.catalogue_genericimageryproduct
