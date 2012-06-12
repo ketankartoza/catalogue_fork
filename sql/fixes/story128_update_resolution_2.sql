@@ -13,5 +13,5 @@ WHERE
   catalogue_genericsensorproduct.genericimageryproduct_ptr_id = catalogue_genericimageryproduct.genericproduct_ptr_id
   AND acquisition_mode_id BETWEEN 76 AND 79) as aqu_table
 
-WHERE catalogue_genericimageryproduct.genericproduct_ptr_id = aqu_id
+WHERE catalogue_genericimageryproduct.genericproduct_ptr_id = aqu_id;
 COMMIT;

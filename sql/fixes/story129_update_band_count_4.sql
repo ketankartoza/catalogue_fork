@@ -1,4 +1,4 @@
-BEGIN
+BEGIN;
 UPDATE catalogue_genericimageryproduct SET
 band_count = 5
 
