@@ -1,5 +1,5 @@
 BEGIN;
-create table delete_spot_owner_id AS
+create table delete_spot_acquisition AS
 SELECT
    public.catalogue_genericproduct.id
 FROM
@@ -27,14 +27,17 @@ WHERE
 --spot
   catalogue_genericsensorproduct.acquisition_mode_id = spot_prod.id AND
 -- condition
-  catalogue_genericproduct.owner_id = 4;
+(catalogue_genericsensorproduct.path < 80 OR catalogue_genericsensorproduct.path > 190 OR
+catalogue_genericsensorproduct.row < 335 OR catalogue_genericsensorproduct.row > 420)
+AND
+catalogue_genericsensorproduct.acquisition_mode_id BETWEEN 4 AND 10;
 
-delete from catalogue_opticalproduct using delete_spot_owner_id where genericsensorproduct_ptr_id=delete_spot_owner_id.id;
-delete from catalogue_genericsensorproduct using delete_spot_owner_id where genericimageryproduct_ptr_id=delete_spot_owner_id.id;
-delete from catalogue_genericimageryproduct using delete_spot_owner_id where genericproduct_ptr_id=delete_spot_owner_id.id;
-delete from catalogue_searchrecord using delete_spot_owner_id where catalogue_searchrecord.product_id=delete_spot_owner_id.id;
-delete from catalogue_genericproduct using delete_spot_owner_id where catalogue_genericproduct.id=delete_spot_owner_id.id;
+delete from catalogue_opticalproduct using delete_spot_acquisition where genericsensorproduct_ptr_id=delete_spot_acquisition.id;
+delete from catalogue_genericsensorproduct using delete_spot_acquisition where genericimageryproduct_ptr_id=delete_spot_acquisition.id;
+delete from catalogue_genericimageryproduct using delete_spot_acquisition where genericproduct_ptr_id=delete_spot_acquisition.id;
+delete from catalogue_searchrecord using delete_spot_acquisition where catalogue_searchrecord.product_id=delete_spot_acquisition.id;
+delete from catalogue_genericproduct using delete_spot_acquisition where catalogue_genericproduct.id=delete_spot_acquisition.id;
 
 --
-drop table delete_spot_owner_id;
+drop table delete_spot_acquisition;
 COMMIT;

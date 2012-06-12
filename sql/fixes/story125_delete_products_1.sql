@@ -27,8 +27,10 @@ WHERE
 --spot
   catalogue_genericsensorproduct.acquisition_mode_id = spot_prod.id AND
 -- condition
-  catalogue_genericsensorproduct.path NOT BETWEEN 80 AND 190 AND
-  catalogue_genericsensorproduct.row NOT BETWEEN 335 AND 420;
+(catalogue_genericsensorproduct.path < 80 OR catalogue_genericsensorproduct.path > 190 OR
+catalogue_genericsensorproduct.row < 335 OR catalogue_genericsensorproduct.row > 420)
+
+  AND catalogue_genericproduct.owner_id = 4;
 
 delete from catalogue_opticalproduct using delete_spot_path where genericsensorproduct_ptr_id=delete_spot_path.id;
 delete from catalogue_genericsensorproduct using delete_spot_path where genericimageryproduct_ptr_id=delete_spot_path.id;
