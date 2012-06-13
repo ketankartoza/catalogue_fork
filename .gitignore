@@ -48,3 +48,4 @@ docs/t2t/SANSA-Catalogue-Manual.out
 docs/t2t/SANSA-Catalogue-Manual.tex
 docs/t2t/SANSA-Catalogue-Manual.toc
 *.rc
+*.dmp
