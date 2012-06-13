@@ -13,10 +13,12 @@ from django.contrib.gis.geos import GEOSGeometry
 #
 ###########################################################
 
+
 def getGeometryFromUploadedFile(theRequest, theForm, theFileField):
     """Retrieve an uploaded geometry from a file. Note in order for this
        to work, you must have set your form to use multipart encoding
-       type e.g.  <form enctype="multipart/form-data" action="/search/" method="post" id="search_form">
+       type e.g.  <form enctype="multipart/form-data" action="/search/"
+       method="post" id="search_form">
        """
     logging.info('Form cleaned data: ' + str(theForm.cleaned_data))
     if theRequest.FILES[theFileField]:
@@ -24,10 +26,13 @@ def getGeometryFromUploadedFile(theRequest, theForm, theFileField):
 
         #use last part of filename as extension
         myExtension = theForm.cleaned_data[theFileField].name.split(".")[-1].lower()
-        if not(myExtension == "zip" or myExtension == "kml" or myExtension == "kmz"):
-            logging.info('Wrong format for uploaded geometry. Please select a valid file (ZIP, KML, KMZ.')
+        if not(myExtension == "zip" or myExtension == "kml" or
+            myExtension == "kmz"):
+            logging.info('Wrong format for uploaded geometry. Please select a \
+                valid file (ZIP, KML, KMZ.')
             #render_to_response is done by the renderWithContext decorator
-            #@TODO return a clearer error spotmap just like Alert for the missing dates
+            #@TODO return a clearer error spotmap just like Alert for the
+            #missing dates
             return False
 
         #read geometry
@@ -45,16 +50,25 @@ def getGeometryFromUploadedFile(theRequest, theForm, theFileField):
         if len(extractedGeometries) == 0:
             logging.info('No geometries found...')
             return None
+        else:
+            return processGeometriesType(extractedGeometries).wkt
+
+
+def processGeometriesType(theGeometries):
         #get first geometry from setof geometries (they are in wkt)
-        myGeometry = GEOSGeometry( extractedGeometries[0] )
+        myGeometry = GEOSGeometry(theGeometries[0])
+
         # check it is a single part polygon. If it isnt we use its envelope...
         if myGeometry.geom_type is not 'Polygon':
-            logging.info('Uploaded geometry is not a polygon (its a %s) - using its evenlope instead: ' % str( myGeometry.geom_type ))
+            logging.info('Uploaded geometry is not a polygon (its a %s) - \
+                using its evenlope instead: ' % str(myGeometry.geom_type))
             myGeometry = myGeometry.envelope
-        return myGeometry.wkt
+        return myGeometry
 
-def getFeaturesFromZipFile( zipfile, geometry, numFeatures = "all"):
-    """ Takes a zip archive and extracts N features of the specified geometry type. """
+
+def getFeaturesFromZipFile(zipfile, geometry, numFeatures="all"):
+    """ Takes a zip archive and extracts N features of the specified geometry
+    type. """
     # inspect the zip file
     zippedShape = None
     try:
@@ -62,18 +76,20 @@ def getFeaturesFromZipFile( zipfile, geometry, numFeatures = "all"):
         zippedShape = ZipFile(zipfile)
         logging.debug('extract done...')
     except Exception, e:
-        logging.debug( traceback.format_exc() )
+        logging.debug(traceback.format_exc())
         logging.debug("ZipFile Failed: %s" % e)
-    # check if the contents of the archive are the usual 3 files with no subdirectories.
+    # check if the contents of the archive are the usual 3 files with no
+    # subdirectories.
     logging.debug('checking zip contents are a shp, shx, dbf...')
     if any([f.endswith('/') for f in zippedShape.namelist()]):
-        logging.debug( "Extract failed due to subdirs present" )
-        raise RuntimeError('The archive contains subdirectories. Please zip only the shp, .shx, .dbf[, .prj] files.')
+        logging.debug("Extract failed due to subdirs present")
+        raise RuntimeError('The archive contains subdirectories. Please zip \
+            only the shp, .shx, .dbf[, .prj] files.')
     extensionsList = [fullname.split(".")[-1] for fullname in zippedShape.namelist()]
     presentExtensions = set(extensionsList).intersection(set(["shp", "shx", "dbf"]))
     logging.debug('contents ok...')
     if len(presentExtensions) < 3:
-        logging.debug( "Extract failed due to less than 3 files present in zip" )
+        logging.debug("Extract failed due to less than 3 files present in zip")
         raise RuntimeError('At least one of .shp, .shx, .dbf is missing.')
     # extract - for Python 2.5. Python 2.6 has a nice ZipFile.extract()
     for each in zippedShape.namelist():
@@ -84,48 +100,49 @@ def getFeaturesFromZipFile( zipfile, geometry, numFeatures = "all"):
         f.close()
     zippedShape.close()
 
-    logging.debug( "Shapefiles written to  %s " % SHP_UPLOAD_DIR )
+    logging.debug("Shapefiles written to  %s " % SHP_UPLOAD_DIR)
     shpName = [elem for elem in zippedShape.namelist() if "shp" in elem].pop()
     shpFileOnDiskPath = os.path.join(SHP_UPLOAD_DIR, shpName)
-    logging.debug( "Uploaded shp is %s" % shpFileOnDiskPath )
+    logging.debug("Uploaded shp is %s" % shpFileOnDiskPath)
     # load the shapefile in GeoDjango
     dataSource = None
     try:
         logging.debug('loading shapes as a datasource...')
         dataSource = DataSource(shpFileOnDiskPath)
     except Exception, e:
-        logging.debug( str(traceback.format_exc()) )
-        logging.debug( "datasource loading failed :-(" )
+        logging.debug(str(traceback.format_exc()))
+        logging.debug("datasource loading failed :-(")
         logging.debug("Failed: %s" % e)
-        raise RuntimeError ("Loading shp failed")
-    logging.debug( "Datasource loaded ok" )
+        raise RuntimeError("Loading shp failed")
+    logging.debug("Datasource loaded ok")
 
     # extract the first polygon if any
     firstLayer = None
     if dataSource[0].geom_type == geometry:
-        logging.debug( "Extracting poly" )
+        logging.debug("Extracting poly")
         try:
             firstLayer = dataSource[0]
         except Exception, e:
-            logging.debug( traceback.format_exc() )
-            logging.debug( "" )
-            logging.debug( "Crashed: %s" % e)
-        logging.debug( "Extracting poly done" )
+            logging.debug(traceback.format_exc())
+            logging.debug("")
+            logging.debug("Crashed: %s" % e)
+        logging.debug("Extracting poly done")
     else:
-        logging.debug( "Failed - no polygon data" )
+        logging.debug("Failed - no polygon data")
         # cleanup before exiting
         for each in zippedShape.namelist():
-            logging.debug( "Failed - removing shps" )
+            logging.debug("Failed - removing shps")
             os.remove(os.path.join(SHP_UPLOAD_DIR, each))
-        raise RuntimeError('The geometry ' + geometry + ' is not available in this shapefile.')
+        raise RuntimeError('The geometry ' + geometry + ' is not available in \
+            this shapefile.')
 
     # some info.
-    logging.debug( "Zip archive name: " + zippedShape.filename )
-    logging.debug( "Shapefile name: " + shpName )
-    logging.debug( "Full datasource name: " + dataSource.name )
-    logging.debug( "Number of available features: " + str(dataSource[0].num_feat ))
-    logging.debug( "Geometry type: " + firstLayer.geom_type.name )
-    logging.debug( "Number of extracted features: " + str(numFeatures) )
+    logging.debug("Zip archive name: " + zippedShape.filename)
+    logging.debug("Shapefile name: " + shpName)
+    logging.debug("Full datasource name: " + dataSource.name)
+    logging.debug("Number of available features: " + str(dataSource[0].num_feat))
+    logging.debug("Geometry type: " + firstLayer.geom_type.name)
+    logging.debug("Number of extracted features: " + str(numFeatures))
 
     # extract the N geometries, otherwise all of them
     if numFeatures != "all":
@@ -135,7 +152,7 @@ def getFeaturesFromZipFile( zipfile, geometry, numFeatures = "all"):
 
     # cleanup of dezipped files
     for each in zippedShape.namelist():
-        logging.debug( "Removing shps" )
+        logging.debug("Removing shps")
         os.remove(os.path.join(SHP_UPLOAD_DIR, each))
 
     # return the data
