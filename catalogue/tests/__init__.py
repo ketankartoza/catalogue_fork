@@ -11,6 +11,7 @@ import terrasar_command_test
 #import unittest classes
 from simpleTest import SimpleTest
 from license_model import LicenseCRUD_Test
+from featurereaders_return import FeatureReaders_Test
 
 #this is only required for doctests
 __test__ = {
