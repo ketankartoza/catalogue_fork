@@ -1,4 +1,5 @@
 from django.test import TestCase
+from catalogue.tests.test_utils import simpleMessage
 from catalogue import models
 
 
@@ -37,4 +38,5 @@ class SimpleTest(TestCase):
         myExpectedValue = 1
         myMissionGroup_count = models.MissionGroup.objects.all().count()
 
-        self.assertEqual(myMissionGroup_count, myExpectedValue)
+        self.assertEqual(myMissionGroup_count, myExpectedValue,
+                simpleMessage(myMissionGroup_count, myExpectedValue))

@@ -18,6 +18,7 @@ __date__ = '08/06/2012'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
+from catalogue.tests.test_utils import simpleMessage
 from catalogue.models import License
 
 
@@ -49,7 +50,8 @@ class LicenseCRUD_Test(TestCase):
         myLicense.save()
 
         #check if PK exists
-        self.assertTrue(myLicense.pk is not None)
+        self.assertTrue(myLicense.pk != None,
+            simpleMessage(myLicense.pk, "not None"))
 
     def test_license_read(self):
         """
@@ -65,7 +67,8 @@ class LicenseCRUD_Test(TestCase):
         myLicense = License.objects.get(pk=myLicensePK)
         #check if data is correct
         for key, val in myExpectedLicenseData.items():
-            self.assertEqual(myLicense.__dict__.get(key), val)
+            self.assertEqual(myLicense.__dict__.get(key), val,
+                simpleMessage(val, myLicense.__dict__.get(key)))
 
     def test_license_update(self):
         """
@@ -83,9 +86,12 @@ class LicenseCRUD_Test(TestCase):
         myLicense.save()
 
         #check if updated
-        self.assertTrue(myLicense.type == 2)
-        self.assertTrue(myLicense.name == 'Test license')
-        self.assertTrue(myLicense.details == 'This is a test licence')
+        self.assertTrue(myLicense.type == 2, simpleMessage(myLicense.type, 2))
+        self.assertTrue(myLicense.name == 'Test license',
+            simpleMessage(myLicense.name, 'Test license'))
+
+        self.assertTrue(myLicense.details == 'This is a test licence',
+            simpleMessage(myLicense.details, 'This is a test licence'))
 
     def test_license_delete(self):
         """
@@ -97,4 +103,5 @@ class LicenseCRUD_Test(TestCase):
         myLicense.delete()
 
         #check if deleted
-        self.assertTrue(myLicense.pk is None)
+        self.assertTrue(myLicense.pk is None,
+            simpleMessage(myLicense.pk, None))
