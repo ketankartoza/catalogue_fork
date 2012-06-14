@@ -59,7 +59,7 @@ def processGeometriesType(theGeometries):
         myGeometry = GEOSGeometry(theGeometries[0])
 
         # check it is a single part polygon. If it isnt we use its envelope...
-        if myGeometry.geom_type is not 'Polygon':
+        if myGeometry.geom_type != 'Polygon':
             logging.info('Uploaded geometry is not a polygon (its a %s) - \
                 using its evenlope instead: ' % str(myGeometry.geom_type))
             myGeometry = myGeometry.envelope

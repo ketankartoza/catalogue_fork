@@ -39,7 +39,7 @@ class FeatureReaders_Test(TestCase):
         Tests file reader for Polygon
         """
         myExpGeomType = 'Polygon'
-        myExpNumPoints = 5
+        myExpNumPoints = 7
         myExpExtent = (28.69104367281659, -22.34292118429061, \
             28.70027636054984, -22.336069729032527)
 
@@ -48,9 +48,9 @@ class FeatureReaders_Test(TestCase):
         myResult = processGeometriesType(myFeatures)
 
         #test common geometry attributes
-        self.assertTrue(myResult.geom_type == myExpGeomType)
-        self.assertTrue(myResult.num_points == myExpNumPoints)
-        self.assertTrue(myResult.extent == myExpExtent)
+        self.assertEqual(myResult.geom_type, myExpGeomType)
+        self.assertEqual(myResult.num_points, myExpNumPoints)
+        self.assertEqual(myResult.extent, myExpExtent)
 
     def test_read_multi_shape(self):
         """
@@ -66,6 +66,6 @@ class FeatureReaders_Test(TestCase):
         myResult = processGeometriesType(myFeatures)
 
         #test common geometry attributes
-        self.assertTrue(myResult.geom_type == myExpGeomType)
-        self.assertTrue(myResult.num_points == myExpNumPoints)
-        self.assertTrue(myResult.extent == myExpExtent)
+        self.assertEqual(myResult.geom_type, myExpGeomType)
+        self.assertEqual(myResult.num_points, myExpNumPoints)
+        self.assertEqual(myResult.extent, myExpExtent)
