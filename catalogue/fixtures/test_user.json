@@ -1,0 +1,20 @@
+[
+    {
+        "pk": 1,
+        "model": "auth.user",
+        "fields": {
+            "username": "timlinux",
+            "first_name": "",
+            "last_name": "",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2012-06-14 13:51:52",
+            "groups": [],
+            "user_permissions": [],
+            "password": "sha1$bdc8e$90da7bc299705d609069fcc96a53f101850e78be",
+            "email": "tim@linfiniti.com",
+            "date_joined": "2009-07-27 11:47:50"
+        }
+    }
+]
