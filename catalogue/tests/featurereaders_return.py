@@ -69,3 +69,21 @@ class FeatureReaders_Test(TestCase):
         self.assertEqual(myResult.geom_type, myExpGeomType)
         self.assertEqual(myResult.num_points, myExpNumPoints)
         self.assertEqual(myResult.extent, myExpExtent)
+
+    def test_fix_for_story137(self):
+        """
+        Tests file reader for story137 issue
+        """
+        myExpGeomType = 'Polygon'
+        myExpNumPoints = 8
+        myExpExtent = (34.33069277482281, -24.657561281028393,
+            35.557607225177264, -23.759412256205678)
+
+        myFile = 'catalogue/fixtures/Ala_Minaar_Hatch.zip'
+        myFeatures = getFeaturesFromZipFile(myFile, 'Polygon')
+        myResult = processGeometriesType(myFeatures)
+
+        #test common geometry attributes
+        self.assertEqual(myResult.geom_type, myExpGeomType)
+        self.assertEqual(myResult.num_points, myExpNumPoints)
+        self.assertEqual(myResult.extent, myExpExtent)

@@ -99,9 +99,8 @@ def getFeaturesFromZipFile(zipfile, geometry, numFeatures="all"):
         f.write(data)
         f.close()
     zippedShape.close()
-
     logging.debug("Shapefiles written to  %s " % SHP_UPLOAD_DIR)
-    shpName = [elem for elem in zippedShape.namelist() if "shp" in elem].pop()
+    shpName = [elem for elem in zippedShape.namelist() if elem[-3:] == 'shp'].pop()
     shpFileOnDiskPath = os.path.join(SHP_UPLOAD_DIR, shpName)
     logging.debug("Uploaded shp is %s" % shpFileOnDiskPath)
     # load the shapefile in GeoDjango
