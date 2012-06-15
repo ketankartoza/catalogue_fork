@@ -60,7 +60,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "X",
-            "sensor_type": 5,
+            "sensor_type": 4,
             "operator_abbreviation": "X"
         }
     },
@@ -73,7 +73,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "I",
-            "sensor_type": 5,
+            "sensor_type": 4,
             "operator_abbreviation": "I"
         }
     },
@@ -86,7 +86,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "M",
-            "sensor_type": 5,
+            "sensor_type": 4,
             "operator_abbreviation": "M"
         }
     },
@@ -99,7 +99,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "P",
-            "sensor_type": 5,
+            "sensor_type": 4,
             "operator_abbreviation": "P"
         }
     },
@@ -195,6 +195,32 @@
         }
     },
     {
+        "pk": 94,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S5C1",
+            "sensor_type": 186,
+            "operator_abbreviation": "S5C1"
+        }
+    },
+    {
+        "pk": 95,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S5C2",
+            "sensor_type": 186,
+            "operator_abbreviation": "S5C2"
+        }
+    },
+    {
         "pk": 16,
         "model": "catalogue.acquisitionmode",
         "fields": {
@@ -203,7 +229,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S2C1",
-            "sensor_type": 28,
+            "sensor_type": 4,
             "operator_abbreviation": "S2C1"
         }
     },
@@ -216,7 +242,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S2C2",
-            "sensor_type": 28,
+            "sensor_type": 4,
             "operator_abbreviation": "S2C2"
         }
     },
@@ -229,7 +255,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S2C1",
-            "sensor_type": 29,
+            "sensor_type": 5,
             "operator_abbreviation": "S2C1"
         }
     },
@@ -242,7 +268,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S2C2",
-            "sensor_type": 29,
+            "sensor_type": 5,
             "operator_abbreviation": "S2C2"
         }
     },
@@ -255,7 +281,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S2C1",
-            "sensor_type": 30,
+            "sensor_type": 28,
             "operator_abbreviation": "S2C1"
         }
     },
@@ -268,7 +294,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S2C2",
-            "sensor_type": 30,
+            "sensor_type": 28,
             "operator_abbreviation": "S2C2"
         }
     },
@@ -280,9 +306,9 @@
             "geometric_resolution": 0,
             "is_grayscale": false,
             "band_count": 0,
-            "abbreviation": "S4C1",
-            "sensor_type": 34,
-            "operator_abbreviation": "S4C1"
+            "abbreviation": "S2C1",
+            "sensor_type": 29,
+            "operator_abbreviation": "S2C1"
         }
     },
     {
@@ -293,9 +319,9 @@
             "geometric_resolution": 0,
             "is_grayscale": false,
             "band_count": 0,
-            "abbreviation": "S4C2",
-            "sensor_type": 34,
-            "operator_abbreviation": "S4C2"
+            "abbreviation": "S2C2",
+            "sensor_type": 29,
+            "operator_abbreviation": "S2C2"
         }
     },
     {
@@ -306,9 +332,9 @@
             "geometric_resolution": 0,
             "is_grayscale": false,
             "band_count": 0,
-            "abbreviation": "S4C1",
-            "sensor_type": 35,
-            "operator_abbreviation": "S4C1"
+            "abbreviation": "S2C1",
+            "sensor_type": 30,
+            "operator_abbreviation": "S2C1"
         }
     },
     {
@@ -319,9 +345,9 @@
             "geometric_resolution": 0,
             "is_grayscale": false,
             "band_count": 0,
-            "abbreviation": "S4C2",
-            "sensor_type": 35,
-            "operator_abbreviation": "S4C2"
+            "abbreviation": "S2C2",
+            "sensor_type": 30,
+            "operator_abbreviation": "S2C2"
         }
     },
     {
@@ -333,7 +359,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S4C1",
-            "sensor_type": 36,
+            "sensor_type": 34,
             "operator_abbreviation": "S4C1"
         }
     },
@@ -346,7 +372,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S4C2",
-            "sensor_type": 36,
+            "sensor_type": 34,
             "operator_abbreviation": "S4C2"
         }
     },
@@ -359,7 +385,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S4C1",
-            "sensor_type": 37,
+            "sensor_type": 35,
             "operator_abbreviation": "S4C1"
         }
     },
@@ -372,7 +398,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S4C2",
-            "sensor_type": 37,
+            "sensor_type": 35,
             "operator_abbreviation": "S4C2"
         }
     },
@@ -385,7 +411,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S4C1",
-            "sensor_type": 38,
+            "sensor_type": 36,
             "operator_abbreviation": "S4C1"
         }
     },
@@ -398,7 +424,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S4C2",
-            "sensor_type": 38,
+            "sensor_type": 36,
             "operator_abbreviation": "S4C2"
         }
     },
@@ -411,7 +437,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S4C1",
-            "sensor_type": 39,
+            "sensor_type": 37,
             "operator_abbreviation": "S4C1"
         }
     },
@@ -424,7 +450,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S4C2",
-            "sensor_type": 39,
+            "sensor_type": 37,
             "operator_abbreviation": "S4C2"
         }
     },
@@ -436,9 +462,9 @@
             "geometric_resolution": 0,
             "is_grayscale": false,
             "band_count": 0,
-            "abbreviation": "S1C1",
-            "sensor_type": 25,
-            "operator_abbreviation": "S1C1"
+            "abbreviation": "S4C1",
+            "sensor_type": 38,
+            "operator_abbreviation": "S4C1"
         }
     },
     {
@@ -449,9 +475,9 @@
             "geometric_resolution": 0,
             "is_grayscale": false,
             "band_count": 0,
-            "abbreviation": "S1C2",
-            "sensor_type": 25,
-            "operator_abbreviation": "S1C2"
+            "abbreviation": "S4C2",
+            "sensor_type": 38,
+            "operator_abbreviation": "S4C2"
         }
     },
     {
@@ -462,9 +488,9 @@
             "geometric_resolution": 0,
             "is_grayscale": false,
             "band_count": 0,
-            "abbreviation": "S1C1",
-            "sensor_type": 26,
-            "operator_abbreviation": "S1C1"
+            "abbreviation": "S4C1",
+            "sensor_type": 39,
+            "operator_abbreviation": "S4C1"
         }
     },
     {
@@ -475,9 +501,9 @@
             "geometric_resolution": 0,
             "is_grayscale": false,
             "band_count": 0,
-            "abbreviation": "S1C2",
-            "sensor_type": 26,
-            "operator_abbreviation": "S1C2"
+            "abbreviation": "S4C2",
+            "sensor_type": 39,
+            "operator_abbreviation": "S4C2"
         }
     },
     {
@@ -489,7 +515,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S1C1",
-            "sensor_type": 27,
+            "sensor_type": 25,
             "operator_abbreviation": "S1C1"
         }
     },
@@ -502,7 +528,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S1C2",
-            "sensor_type": 27,
+            "sensor_type": 25,
             "operator_abbreviation": "S1C2"
         }
     },
@@ -515,7 +541,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S1C1",
-            "sensor_type": 4,
+            "sensor_type": 26,
             "operator_abbreviation": "S1C1"
         }
     },
@@ -528,7 +554,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S1C2",
-            "sensor_type": 4,
+            "sensor_type": 26,
             "operator_abbreviation": "S1C2"
         }
     },
@@ -541,7 +567,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S1C1",
-            "sensor_type": 5,
+            "sensor_type": 27,
             "operator_abbreviation": "S1C1"
         }
     },
@@ -554,7 +580,7 @@
             "is_grayscale": false,
             "band_count": 0,
             "abbreviation": "S1C2",
-            "sensor_type": 5,
+            "sensor_type": 27,
             "operator_abbreviation": "S1C2"
         }
     },
@@ -972,6 +998,188 @@
             "abbreviation": "S3C2",
             "sensor_type": 33,
             "operator_abbreviation": "S3C2"
+        }
+    },
+    {
+        "pk": 76,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 1,
+            "abbreviation": "MST",
+            "sensor_type": 174,
+            "operator_abbreviation": ""
+        }
+    },
+    {
+        "pk": 77,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 1,
+            "abbreviation": "MST",
+            "sensor_type": 175,
+            "operator_abbreviation": ""
+        }
+    },
+    {
+        "pk": 78,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 1,
+            "abbreviation": "MST",
+            "sensor_type": 176,
+            "operator_abbreviation": ""
+        }
+    },
+    {
+        "pk": 79,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 1,
+            "abbreviation": "MST",
+            "sensor_type": 177,
+            "operator_abbreviation": ""
+        }
+    },
+    {
+        "pk": 80,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 1,
+            "abbreviation": "MST",
+            "sensor_type": 178,
+            "operator_abbreviation": ""
+        }
+    },
+    {
+        "pk": 81,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 1,
+            "abbreviation": "MST",
+            "sensor_type": 179,
+            "operator_abbreviation": ""
+        }
+    },
+    {
+        "pk": 86,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S1C1",
+            "sensor_type": 182,
+            "operator_abbreviation": "S1C1"
+        }
+    },
+    {
+        "pk": 87,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S1C2",
+            "sensor_type": 182,
+            "operator_abbreviation": "S1C2"
+        }
+    },
+    {
+        "pk": 88,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S2C1",
+            "sensor_type": 183,
+            "operator_abbreviation": "S2C1"
+        }
+    },
+    {
+        "pk": 89,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S2C2",
+            "sensor_type": 183,
+            "operator_abbreviation": "S2C2"
+        }
+    },
+    {
+        "pk": 90,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S3C1",
+            "sensor_type": 184,
+            "operator_abbreviation": "S3C1"
+        }
+    },
+    {
+        "pk": 91,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S3C2",
+            "sensor_type": 184,
+            "operator_abbreviation": "S3C2"
+        }
+    },
+    {
+        "pk": 92,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S4C1",
+            "sensor_type": 185,
+            "operator_abbreviation": "S4C1"
+        }
+    },
+    {
+        "pk": 93,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "geometric_resolution": 0,
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S4C2",
+            "sensor_type": 185,
+            "operator_abbreviation": "S4C2"
         }
     }
 ]

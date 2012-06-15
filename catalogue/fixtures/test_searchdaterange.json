@@ -40,8 +40,8 @@
         "model": "catalogue.searchdaterange",
         "fields": {
             "search": 5,
-            "start_date": "1999-01-01",
-            "end_date": "2004-12-31"
+            "start_date": "1900-01-01",
+            "end_date": "2100-12-31"
         }
     }
 ]

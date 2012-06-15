@@ -154,16 +154,14 @@
             "processing_level": [],
             "deleted": false,
             "geometric_accuracy_mean": null,
-            "k_orbit_path": "171",
+            "k_orbit_path": null,
             "band_count": null,
             "user": 1,
-            "sensors": [
-                3
-            ],
+            "sensors": [],
             "geometry": null,
-            "j_frame_row": "67",
+            "j_frame_row": null,
             "search_type": 1,
-            "cloud_mean": 5,
+            "cloud_mean": null,
             "license_type": null
         }
     }

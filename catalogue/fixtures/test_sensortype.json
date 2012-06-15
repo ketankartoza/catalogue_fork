@@ -1,5 +1,15 @@
 [
-   {
+    {
+        "pk": 2,
+        "model": "catalogue.sensortype",
+        "fields": {
+            "abbreviation": "AMI",
+            "mission_sensor": 2,
+            "name": "AMI",
+            "operator_abbreviation": "AMI"
+        }
+    },
+    {
         "pk": 9,
         "model": "catalogue.sensortype",
         "fields": {
@@ -970,16 +980,6 @@
         }
     },
     {
-        "pk": 2,
-        "model": "catalogue.sensortype",
-        "fields": {
-            "abbreviation": "AMI",
-            "mission_sensor": 2,
-            "name": "AMI",
-            "operator_abbreviation": "AMI"
-        }
-    },
-    {
         "pk": 105,
         "model": "catalogue.sensortype",
         "fields": {
@@ -1684,7 +1684,7 @@
         "model": "catalogue.sensortype",
         "fields": {
             "abbreviation": "MST",
-            "mission_sensor": 5,
+            "mission_sensor": 3,
             "name": "Multispectral + Thermal",
             "operator_abbreviation": "MST"
         }
@@ -1727,6 +1727,116 @@
             "mission_sensor": 15,
             "name": "RT",
             "operator_abbreviation": "RT"
+        }
+    },
+    {
+        "pk": 174,
+        "model": "catalogue.sensortype",
+        "fields": {
+            "abbreviation": "HRT",
+            "mission_sensor": 17,
+            "name": "",
+            "operator_abbreviation": ""
+        }
+    },
+    {
+        "pk": 175,
+        "model": "catalogue.sensortype",
+        "fields": {
+            "abbreviation": "HRT",
+            "mission_sensor": 18,
+            "name": "",
+            "operator_abbreviation": ""
+        }
+    },
+    {
+        "pk": 176,
+        "model": "catalogue.sensortype",
+        "fields": {
+            "abbreviation": "HRT",
+            "mission_sensor": 19,
+            "name": "",
+            "operator_abbreviation": ""
+        }
+    },
+    {
+        "pk": 177,
+        "model": "catalogue.sensortype",
+        "fields": {
+            "abbreviation": "HRT",
+            "mission_sensor": 20,
+            "name": "",
+            "operator_abbreviation": ""
+        }
+    },
+    {
+        "pk": 178,
+        "model": "catalogue.sensortype",
+        "fields": {
+            "abbreviation": "HRT",
+            "mission_sensor": 16,
+            "name": "",
+            "operator_abbreviation": ""
+        }
+    },
+    {
+        "pk": 179,
+        "model": "catalogue.sensortype",
+        "fields": {
+            "abbreviation": "HRT",
+            "mission_sensor": 5,
+            "name": "",
+            "operator_abbreviation": ""
+        }
+    },
+    {
+        "pk": 186,
+        "model": "catalogue.sensortype",
+        "fields": {
+            "abbreviation": "H",
+            "mission_sensor": 10,
+            "name": "H",
+            "operator_abbreviation": "H"
+        }
+    },
+    {
+        "pk": 182,
+        "model": "catalogue.sensortype",
+        "fields": {
+            "abbreviation": "X",
+            "mission_sensor": 21,
+            "name": "X",
+            "operator_abbreviation": "X"
+        }
+    },
+    {
+        "pk": 183,
+        "model": "catalogue.sensortype",
+        "fields": {
+            "abbreviation": "X",
+            "mission_sensor": 6,
+            "name": "X",
+            "operator_abbreviation": "X"
+        }
+    },
+    {
+        "pk": 184,
+        "model": "catalogue.sensortype",
+        "fields": {
+            "abbreviation": "X",
+            "mission_sensor": 23,
+            "name": "X",
+            "operator_abbreviation": "X"
+        }
+    },
+    {
+        "pk": 185,
+        "model": "catalogue.sensortype",
+        "fields": {
+            "abbreviation": "I",
+            "mission_sensor": 25,
+            "name": "I",
+            "operator_abbreviation": "I"
         }
     }
 ]
