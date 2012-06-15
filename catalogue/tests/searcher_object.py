@@ -30,11 +30,10 @@ from catalogue.tests.test_utils import simpleMessage
 from catalogue.views.searcher import Searcher
 from catalogue.models import Search, User
 
-from django.test.client import Client
 
-class BandCountSearches_Test(TestCase):
+class SearcherObject_Test(TestCase):
     """
-    Tests FeatureReaders returned geometry type
+    Tests Searcher object
     """
 
     fixtures = [
@@ -75,6 +74,21 @@ class BandCountSearches_Test(TestCase):
             #create Searcher object
             mySearcher = Searcher(request, search.guid)
             mySearcher.search()
-            print len(mySearcher.mRecordCount)
+            print mySearcher.mRecordCount
         #fail test
         assert 1 == 2, 'bla'
+
+    def test_isAdvanced(self):
+        """
+        Tests if search is an advanced search
+        """
+        #test searches pk
+        myTestSearches = [1, 4, 5, 6]
+        myExpectedResults = [False, True, True, True]
+
+        for idx, searchPK in enumerate(myTestSearches):
+            mySearch = Search.objects.get(pk=searchPK)
+
+            assert mySearch.isAdvanced == myExpectedResults[idx], \
+            simpleMessage(mySearch.isAdvanced, myExpectedResults[idx],
+                message='For search pk %s:' % searchPK)

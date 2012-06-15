@@ -19,12 +19,15 @@ __copyright__ = 'South African National Space Agency'
 
 from django.test import Client
 from django.core.handlers.wsgi import WSGIRequest
+from django.test import TestCase
+
+from catalogue.models import User
 
 
-def simpleMessage(theResult, theExpectedResult):
+def simpleMessage(theResult, theExpectedResult, message=''):
     """Format simple assert message"""
 
-    return 'Got: %s \nExpected: %s ' % (theResult,
+    return '%s\nGot: %s \nExpected: %s ' % (message, theResult,
         theExpectedResult)
 
 
