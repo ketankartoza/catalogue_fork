@@ -28,19 +28,22 @@ def setGeometricResolution(sender, instance, **kw):
     from AcquisitionMode.geometric_resolution
     Sets geometric_resolution as the average value from geometric_resolution_x and geometric_resolution_y
     """
-    logging.info('Pre-save signal activated for %s' % instance)
-    if not instance.geometric_resolution_x:
-        instance.geometric_resolution_x = instance.acquisition_mode.geometric_resolution
-        logging.debug('setting geometric_resolution_x to %s' % instance.geometric_resolution_x)
-    if not instance.geometric_resolution_y:
-        instance.geometric_resolution_y = instance.acquisition_mode.geometric_resolution
-        logging.debug('setting geometric_resolution_y to %s' % instance.geometric_resolution_y)
-    instance.geometric_resolution = (instance.geometric_resolution_y + instance.geometric_resolution_y  ) / 2.0
-    logging.debug('setting geometric_resolution to %s' % instance.geometric_resolution)
+    #only trigger on real model save, do not trigger when importing fixtures
+    #https://docs.djangoproject.com/en/1.4/ref/signals/#pre-save
+    if not kw.get('raw', False):
+        logging.info('Pre-save signal activated for %s' % instance)
+        if not instance.geometric_resolution_x:
+            instance.geometric_resolution_x = instance.acquisition_mode.geometric_resolution
+            logging.debug('setting geometric_resolution_x to %s' % instance.geometric_resolution_x)
+        if not instance.geometric_resolution_y:
+            instance.geometric_resolution_y = instance.acquisition_mode.geometric_resolution
+            logging.debug('setting geometric_resolution_y to %s' % instance.geometric_resolution_y)
+        instance.geometric_resolution = (instance.geometric_resolution_y + instance.geometric_resolution_y  ) / 2.0
+        logging.debug('setting geometric_resolution to %s' % instance.geometric_resolution)
 
-    if not instance.band_count:
-        instance.band_count = instance.acquisition_mode.band_count
-        logging.debug('setting band_count to %s' % instance.band_count)
+        if not instance.band_count:
+            instance.band_count = instance.acquisition_mode.band_count
+            logging.debug('setting band_count to %s' % instance.band_count)
 
 # Apply to all GenericImageryProduct and subclasses
 models.signals.pre_save.connect(setGeometricResolution, sender = OpticalProduct)
