@@ -213,9 +213,12 @@ class Searcher:
                     self.mQuerySet = self.mQuerySet.filter( self.mGeometryAccuracyMeanQuery )
                 # Check for none since it can be 0
                 if self.mSearch.band_count is not None:
-                    self.mMessages.append('spectral resolution <b>%s</b>' % self.mSearch.band_count)
-                    self.mSpectralResolutionQuery = Q(band_count = self.mSearch.band_count)
-                    self.mQuerySet = self.mQuerySet.filter( self.mSpectralResolutionQuery)
+                    #get bandcount range
+                    myBandcountRange = self.mSearch.BAND_COUNT_RANGE[self.mSearch.band_count]
+                    self.mMessages.append('spectral resolution <b>%s->%s</b>' % myBandcountRange)
+                    #create a range (BETWEEN) query
+                    self.mSpectralResolutionQuery = Q(band_count__range=myBandcountRange)
+                    self.mQuerySet = self.mQuerySet.filter(self.mSpectralResolutionQuery)
                 logging.info('checking if we should use landsat path / row filtering...')
                 if self.mSearch.k_orbit_path or self.mSearch.j_frame_row:
                     logging.info('path row filtering is enabled')
