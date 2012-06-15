@@ -305,19 +305,23 @@ class Search(models.Model):
         Condition for being an advanced search is that at least one of the
         advanced parameter is set
         """
-        return  self.processing_level.count() \
-                or self.keywords \
-                or self.k_orbit_path \
-                or self.j_frame_row \
-                or self.use_cloud_cover \
-                or self.acquisition_mode \
-                or self.geometric_accuracy_mean \
-                or self.band_count \
-                or self.sensor_inclination_angle_start \
-                or self.sensor_inclination_angle_end \
-                or self.mission \
-                or self.license_type \
-                or self.sensor_type
+        myAdvParameterTestList = [
+            self.processing_level.count() > 0,
+            self.keywords != '',
+            self.k_orbit_path is not None,
+            self.j_frame_row is not None,
+            self.use_cloud_cover == True,
+            self.acquisition_mode is not None,
+            self.geometric_accuracy_mean is not None,
+            self.band_count is not None,
+            self.sensor_inclination_angle_start is not None,
+            self.sensor_inclination_angle_end is not None,
+            self.mission is not None,
+            self.license_type is not None,
+            self.sensor_type is not None
+        ]
+        #if any of myAdvParameterTestList is True, return True
+        return any(myAdvParameterTestList)
 
     def sensorsAsString( self ):
         myList = self.sensors.values_list('operator_abbreviation', flat=True)
