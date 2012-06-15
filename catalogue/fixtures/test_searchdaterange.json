@@ -44,11 +44,38 @@
             "end_date": "2100-12-31"
         }
     },
-        {
+    {
         "pk": 6,
         "model": "catalogue.searchdaterange",
         "fields": {
             "search": 6,
+            "start_date": "1900-01-01",
+            "end_date": "2100-12-31"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "catalogue.searchdaterange",
+        "fields": {
+            "search": 7,
+            "start_date": "1900-01-01",
+            "end_date": "2100-12-31"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "catalogue.searchdaterange",
+        "fields": {
+            "search": 8,
+            "start_date": "1900-01-01",
+            "end_date": "2100-12-31"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "catalogue.searchdaterange",
+        "fields": {
+            "search": 9,
             "start_date": "1900-01-01",
             "end_date": "2100-12-31"
         }
