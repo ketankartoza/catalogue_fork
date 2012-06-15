@@ -1098,5 +1098,27 @@
             "geometric_resolution": 10.0,
             "band_count": 4
         }
+    },
+    {
+        "pk": 3471093,
+        "model": "catalogue.genericimageryproduct",
+        "fields": {
+            "radiometric_resolution": 16,
+            "geometric_resolution_y": 10.0,
+            "geometric_resolution_x": 10.0,
+            "geometric_resolution": 10.0,
+            "band_count": 35
+        }
+    },
+    {
+        "pk": 3471094,
+        "model": "catalogue.genericimageryproduct",
+        "fields": {
+            "radiometric_resolution": 16,
+            "geometric_resolution_y": 10.0,
+            "geometric_resolution_x": 10.0,
+            "geometric_resolution": 10.0,
+            "band_count": 123
+        }
     }
 ]

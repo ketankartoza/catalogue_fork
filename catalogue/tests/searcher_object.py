@@ -130,9 +130,9 @@ class SearcherObject_Test(TestCase):
             mySearcher = Searcher(request, mySearch.guid)
             mySearcher.search()
 
-            assert mySearcher.mQuerySet.count() == myExpectedResults[idx], \
+            assert mySearcher.mQuerySet.count() >= myExpectedResults[idx], \
             simpleMessage(mySearcher.mQuerySet.count(), myExpectedResults[idx],
-                message='For search pk %s:' % searchPK)
+                message='For search pk %s expected more then:' % searchPK)
 
     def test_Superspectral_bandcount(self):
         """
