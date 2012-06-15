@@ -1,9 +1,16 @@
 ﻿-- sample 1000 optical products
+-- 
+-- **************       IMPORTANT      ********************
 -- after execution, termporary add 'db_table' to Meta class
--- for each of the four models in catalogue/models/products.py
--- run, for each of four models
--- python manage.py dumpdata --format=json --indent=4 catalogue.genericproduct > catalogue/fixtures/test_genericproduct.json
-
+-- **************       IMPORTANT      ********************
+-- 
+-- for each of the five models in catalogue/models/products.py
+-- run, for each of five models
+-- python manage.py dumpdata --format=json --indent=4 catalogue.genericproduct > catalogue/fixtures/test_genericproduct.json 
+-- python manage.py dumpdata --format=json --indent=4 catalogue.genericimageryproduct > catalogue/fixtures/test_genericimageryproduct.json 
+-- python manage.py dumpdata --format=json --indent=4 catalogue.genericsensorproduct > catalogue/fixtures/test_genericsensorproduct.json 
+-- python manage.py dumpdata --format=json --indent=4 catalogue.opticalproduct > catalogue/fixtures/test_opticalproduct.json 
+-- python manage.py dumpdata --format=json --indent=4 catalogue.radarproduct > catalogue/fixtures/test_radarproduct.json
 -- manually drop creted tables after data export
 
 drop table sample_opticalproduct;
@@ -11,16 +18,16 @@ drop table sample_opticalproduct;
 create table sample_opticalproduct AS 
 SELECT * from catalogue_opticalproduct
 ORDER BY random()
-LIMIT 950;
+LIMIT 95;
 
 -- create 50 random radarproducts 
 DROP table sample_radarproduct;
 create table sample_radarproduct AS 
 SELECT * from catalogue_radarproduct
 ORDER BY random()
-LIMIT 50;
+LIMIT 5;
 
--- for that 1000 products create parent tables
+-- for that 100 products create parent tables
 drop table sample_genericsensorproduct;
 create table sample_genericsensorproduct AS
 select b.* from sample_opticalproduct a inner join catalogue_genericsensorproduct b
