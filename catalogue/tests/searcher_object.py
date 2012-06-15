@@ -43,7 +43,14 @@ class BandCountSearches_Test(TestCase):
         'test_missionsensor.json',
         'test_search.json',
         'test_searchdaterange.json',
-        'test_processinglevel.json'
+        'test_processinglevel.json',
+        'test_sensortype.json',
+        'test_acquisitionmode.json',
+        'test_genericproduct.json',
+        'test_genericimageryproduct.json',
+        'test_genericsensorproduct.json',
+        'test_opticalproduct.json',
+        'test_radarproduct.json'
         ]
 
     def setUp(self):
@@ -59,12 +66,15 @@ class BandCountSearches_Test(TestCase):
     def test_Panchromatic_bandcount(self):
         """
         """
-        #create a fake request object
-        request = self.factory.get(
-            '/searchresult/69d814b7-3164-42b9-9530-50ae77806da9')
-        #assign user to request (usually done by middleware)
-        request.user = self.user
-        #create Searcher object
-        mySearcher = Searcher(request, '69d814b7-3164-42b9-9530-50ae77806da9')
+        for search in Search.objects.all():
+            #create a fake request object
+            request = self.factory.get(
+                '/searchresult/%s' % search.guid)
+            #assign user to request (usually done by middleware)
+            request.user = self.user
+            #create Searcher object
+            mySearcher = Searcher(request, search.guid)
+            mySearcher.search()
+            print len(mySearcher.mRecordCount)
         #fail test
         assert 1 == 2, 'bla'
