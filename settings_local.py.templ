@@ -34,6 +34,12 @@ SENTRY_DSN = ('http://c9b3062853e34c2b857122d75d4ec663:'
 
 ROOT_PROJECT_FOLDER = os.path.dirname(__file__)
 
+
+# URL prefix for admin static files -- CSS, JavaScript and images.
+# Make sure to use a trailing slash.
+# Examples: 'http://foo.com/static/admin/', '/static/admin/'.
+ADMIN_MEDIA_PREFIX = '/static/admin/'
+
 # External site URL, used in KML data generation and elsewhere
 # No terminating slash
 EXTERNAL_SITE_URL = 'http://catalogue.localhost'
@@ -125,7 +131,6 @@ EXTRA_INSTALLED_APPS = (
     'debug_toolbar',
     )
 
-SERVER_EMAIL = 'error@catalogue.sansa.org.za'
 # Added by Tim for registration app
 ACCOUNT_ACTIVATION_DAYS = 2
 EMAIL_HOST = 'localhost'
@@ -146,6 +151,6 @@ MAX_METADATA_RECORDS = 500
 # These are optional - only set if you have wierd issues like DataSource
 # unknown
 #GEOS_LIBRARY_PATH='/usr/lib/libgeos_c.so.1'
-#GEOIP_LIBRARY_PATH='/usr/lib/libGeoIP.so
+#GEOIP_LIBRARY_PATH='/usr/lib/libGeoIP.so.1'
 #GDAL_LIBRARY_PATH='/usr/local/lib/libgdal.so'
 #GDAL_LIBRARY_PATH='/usr/local/lib/libgdal.so'
