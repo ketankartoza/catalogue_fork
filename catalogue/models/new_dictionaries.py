@@ -48,6 +48,7 @@ class Satellite(models.Model):
     abbreviation = models.CharField(max_length=20, unique=True)
     operator_abbreviation = models.CharField(max_length=255, unique=True,
             help_text='Satellite abbreviation as named by operator.')
+    #image = models.ImageField()
     collection = models.ForeignKey(Collection)
 
     class Meta:
@@ -56,6 +57,12 @@ class Satellite(models.Model):
     def __unicode__(self):
         """Return 'operator_abbreviation' as model representation."""
         return '%s' % self.operator_abbreviation
+
+    def relatedSatelliteInstruments(self):
+        """Get a collection of SatelliteInstruments for this satellite."""
+        mySatelliteInstruments = SatelliteInstrument.objects.filter(
+            satellite=self)
+        return mySatelliteInstruments
 
 
 class InstrumentType(models.Model):
@@ -89,6 +96,11 @@ class InstrumentType(models.Model):
         myInstrumentTypeSpectralModes = (InstrumentTypeSpectralMode.objects.
             filter(instrument_type=self))
         return myInstrumentTypeSpectralModes
+
+    def relatedScannerType(self):
+        """Get a collection of ScannerTypes for this InstrumentType."""
+        myScannerTypes = ScannerType.objects.filter(instrument_type=self)
+        return myScannerTypes
 
 class SatelliteInstrument(models.Model):
     """Satellite instrument - an instrument as deployed on a satellite.

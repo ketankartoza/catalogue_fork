@@ -1,0 +1,12 @@
+[
+    {
+        "pk": 2,
+        "model": "catalogue.scannertype",
+        "fields": {
+            "abbreviation": "PB",
+            "instrument_type": 5,
+            "name": "Pushbroom",
+            "description": "Pushbroom on the SPOT5 satellite."
+        }
+    }
+]

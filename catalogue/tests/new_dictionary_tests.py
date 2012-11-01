@@ -35,7 +35,8 @@ class NewDictionariesTest(TestCase):
         'test_satelliteinstrument.json',
         'test_instrumenttype.json',
         'test_instrumenttypespectralmode.json',
-        'test_spectralmode.json'
+        'test_spectralmode.json',
+        'test_scannertype.json'
     ]
 
     def test_relatedSpectralModes(self):
@@ -45,3 +46,16 @@ class NewDictionariesTest(TestCase):
         myMessage = 'No spectral modes found to be related to InstrumentType'
         self.assertNotEqual(0, myRelated.count(), myMessage)
 
+    def test_relatedScannerType(self):
+        """Test we can get related scanner types for an instrument."""
+        myInstrumentType = InstrumentType.objects.all()[0]
+        myRelated = myInstrumentType.relatedScannerType()
+        myMessage = 'No scanner types found to be related to InstrumentType'
+        self.assertNotEqual(0, myRelated.count(), myMessage)
+
+    def test_relatedSatelliteInstruments(self):
+        """Test we can get related satellite instruments for a satellite."""
+        mySatellite = Satellite.objects.all()[0]
+        myRelated = mySatellite.relatedSatelliteInstruments()
+        myMessage = 'No satellite instruments found for satellite'
+        self.assertNotEqual(0, myRelated.count(), myMessage)

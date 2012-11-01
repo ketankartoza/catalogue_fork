@@ -20,27 +20,28 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.template import RequestContext
-from catalogue.models.new_dictionaries import (Collection,
+from catalogue.models.new_dictionaries import (
                                                Satellite,
                                                SatelliteInstrument,
                                                )
 
 
-def NewDictionaryReport(theRequest):
-    myCollections = Collection.objects.all()
-    myCollection = myCollections[0]
+def newDictionaryReport(theRequest, theSatelliteId):
+    """Produce a nice report for a satellite.
 
-    mySatellites = Satellite.objects.filter(collection=myCollection)
-    mySatellite = mySatellites[0]
+    Args:
+        theSatelliteId: int - pkey of the satellite to produce the report for.
 
-    mySatelliteInstruments = SatelliteInstrument.objects.filter(
-        satellite=mySatellite)
+    Returns:
+        HttpResponse: An html snippet with detailed info for a satellite.
 
+    Raises:
+        None
+    """
+    mySatellite = Satellite.objects.get(id=theSatelliteId)
 
     return render_to_response('dictionaries/detailedReport.html',
         {
-            'collection': myCollection,
             'satellite': mySatellite,
-            'satelliteInstruments': mySatelliteInstruments,
         },
      )
