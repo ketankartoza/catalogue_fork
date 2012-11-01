@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
 {%  block content %}
-    <h1>Satellite: {{ satellite.name }}</h1>
+    {% box_start "box-welcome" "span-22" %}
+    <h1 class="centered">Satellite: {{ satellite.name }}</h1>
     <table>
         <thead>
             <tr></tr><td colspan='3'>{{ satellite.description }}</td></tr>
@@ -8,31 +10,34 @@
         <tbody>
         {% for satelliteInstrument in satellite.relatedSatelliteInstruments %}
             <tr>
-                <th>{{ satelliteInstrument.name }}</th>
-                <td colspan='2'>{{ satelliteInstrument.description }}</td>
+                <th colspan='3'>{{ satelliteInstrument.name }}</th>
+            </tr>
+            <tr>
+                <td colspan='3'>{{ satelliteInstrument.description }}</td>
             </tr>
             </tr>
-                <th>{{ satelliteInstrument.instrument_type.name }}</th>
-                <td>{{ satelliteInstrument.instrument_type.description }}</td>
+                <td>{{ satelliteInstrument.instrument_type.name }}</td>
+                <td colspan='3'>{{ satelliteInstrument.instrument_type.description }}</td>
             </tr>
             <tr>
                 <td>Scanner: {{ satelliteInstrument.instrument_type.relatedScannerType.name }}</td>
                 <td colspan='3'> {{ satelliteInstrument.instrument_type.relatedScannerType.description }}</td>
             </tr>
             {% for mode in satelliteInstrument.instrument_type.relatedSpectralModes %}
-                <tr><td colspan='3'>Instrument Spectral Mode</td></tr>
-                <tr>
-                    <td>{{ mode.name }}</td>
-                    <td colspan='3'>{{ mode.description }}</td>
-                </tr>
+                <tr><td colspan='3'><b>Instrument Spectral Mode</b></td></tr>
                 <tr>
                     <td>{{ mode.spectral_mode.name }}</td>
-                    <td colspan='3'>{{ mode.spectral_mode.description }}</td>
+                    <td colspan='2'>{{ mode.spectral_mode.description }}</td>
+                </tr>
+                <tr>
+                    <td>{{ mode.name }}</td>
+                    <td colspan='2'>{{ mode.description }}</td>
                 </tr>
             {% endfor %}
         {% endfor %}
         </tbody>
     </table>
+    {% box_end %}
 {% endblock %}
 
 
