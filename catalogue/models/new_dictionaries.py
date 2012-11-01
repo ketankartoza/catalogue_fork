@@ -99,8 +99,8 @@ class InstrumentType(models.Model):
 
     def relatedScannerType(self):
         """Get a collection of ScannerTypes for this InstrumentType."""
-        myScannerTypes = ScannerType.objects.filter(instrument_type=self)
-        return myScannerTypes
+        myScannerType = ScannerType.objects.get(instrument_type=self)
+        return myScannerType
 
 class SatelliteInstrument(models.Model):
     """Satellite instrument - an instrument as deployed on a satellite.

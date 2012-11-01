@@ -22,7 +22,6 @@ from django.conf import settings
 from django.template import RequestContext
 from catalogue.models.new_dictionaries import (
                                                Satellite,
-                                               SatelliteInstrument,
                                                )
 
 
@@ -45,3 +44,4 @@ def newDictionaryReport(theRequest, theSatelliteId):
             'satellite': mySatellite,
         },
      )
+
