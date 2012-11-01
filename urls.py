@@ -132,7 +132,7 @@ urlpatterns = patterns('',
 
     # New dictionaries
     (r'^collectionList/$', collectionList),
-    (r'^newDictionaryReport/(?P<theSatelliteId>\d*)/$', newDictionaryReport),
+        (r'^satelliteDetails/(?P<theSatelliteId>\d*)/$', satelliteDetails),
 
 
 )
