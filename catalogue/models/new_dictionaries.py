@@ -38,6 +38,12 @@ class Collection(models.Model):
     def __unicode__(self):
         return self.name
 
+    def relatedSatellites(self):
+        """Get a collection of Satellites for this Collection."""
+        mySatellites = Satellite.objects.filter(
+            collection=self).order_by('name')
+        return mySatellites
+
 class Satellite(models.Model):
     """Satellite e.g. SPOT5 - a real satellite in the sky."""
 

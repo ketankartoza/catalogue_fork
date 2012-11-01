@@ -59,3 +59,10 @@ class NewDictionariesTest(TestCase):
         myRelated = mySatellite.relatedSatelliteInstruments()
         myMessage = 'No satellite instruments found for satellite'
         self.assertNotEqual(0, myRelated.count(), myMessage)
+
+    def test_relatedSatellites(self):
+        """Test we can get related satellites for a collection."""
+        myCollection = Collection.objects.all()[0]
+        myRelated = myCollection.relatedSatellites()
+        myMessage = 'No satellites found for collection'
+        self.assertNotEqual(0, myRelated.count(), myMessage)

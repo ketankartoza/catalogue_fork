@@ -131,6 +131,7 @@ urlpatterns = patterns('',
     (r'^sendMessageToAllUsers/$', messaging.sendMessageToAllUsers),
 
     # New dictionaries
+    (r'^collectionList/$', collectionList),
     (r'^newDictionaryReport/(?P<theSatelliteId>\d*)/$', newDictionaryReport),
 
 

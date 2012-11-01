@@ -21,10 +21,30 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.template import RequestContext
 from catalogue.models.new_dictionaries import (
+                                               Collection,
                                                Satellite,
                                                SatelliteInstrument,
                                                )
 
+def collectionList(theRequest):
+    """Produce a nice report for all satellites.
+
+    Args:
+       None
+
+    Returns:
+        HttpResponse: An html snippet with detailed info for a satellite.
+
+    Raises:
+        None
+    """
+    myCollection = Collection.objects.all()
+
+    return render_to_response('dictionaries/collectionList.html',
+                              {
+                                  'collection': myCollection,
+                                  },
+                              )
 
 def newDictionaryReport(theRequest, theSatelliteId):
     """Produce a nice report for a satellite.
@@ -45,3 +65,4 @@ def newDictionaryReport(theRequest, theSatelliteId):
             'satellite': mySatellite,
         },
      )
+
