@@ -25,7 +25,7 @@ from catalogue.models.new_dictionaries import (
                                                )
 
 
-def newDictionaryReport(theRequest, theSatelliteId):
+def satelliteDetails(theRequest, theSatelliteId):
     """Produce a nice report for a satellite.
 
     Args:
@@ -39,7 +39,7 @@ def newDictionaryReport(theRequest, theSatelliteId):
     """
     mySatellite = Satellite.objects.get(id=theSatelliteId)
 
-    return render_to_response('dictionaries/detailedReport.html',
+    return render_to_response('dictionaries/satelliteDetails.html',
         {
             'satellite': mySatellite,
         },

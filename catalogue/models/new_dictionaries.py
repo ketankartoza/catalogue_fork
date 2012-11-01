@@ -61,7 +61,7 @@ class Satellite(models.Model):
     def relatedSatelliteInstruments(self):
         """Get a collection of SatelliteInstruments for this satellite."""
         mySatelliteInstruments = SatelliteInstrument.objects.filter(
-            satellite=self)
+            satellite=self).order_by('name',)
         return mySatelliteInstruments
 
 
