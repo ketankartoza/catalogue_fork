@@ -130,4 +130,8 @@ urlpatterns = patterns('',
     #need to be staff to use this
     (r'^sendMessageToAllUsers/$', messaging.sendMessageToAllUsers),
 
+    # New dictionaries
+    (r'^newDictionaryReport/$', NewDictionaryReport),
+
+
 )

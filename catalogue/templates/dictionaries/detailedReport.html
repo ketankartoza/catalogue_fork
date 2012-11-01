@@ -1,0 +1,20 @@
+
+    <h1>Collection</h1>
+    <p>Name: {{ collection.name }}</p>
+    <p>Description: {{ collection.description }}</p>
+    <h1>Satellite</h1>
+    <p>Name: {{ satellite.name }}</p>
+    <p>Description: {{ satellite.description }}</p>
+    {% for satelliteInstrument in satelliteInstruments %}
+        <h2>Satellite Instrument</h2>
+        <p>Name: {{ satelliteInstrument.name }}</p>
+        <p>Description: {{ satelliteInstrument.description }}</p>
+        <h3>Instrument Type</h3>
+        <p>Name: {{ satelliteInstrument.instrument_type.name }}</p>
+        <p>Description: {{ satelliteInstrument.instrument_type.description }}</p>
+        {% for mode in satelliteInstrument.instrument_type.relatedSpectralModes %}
+            <h3>Instrument Spectral Mode</h3>
+            <p>Name: {{ mode.name }}</p>
+            <p>Description: {{ mode.description }}</p>
+        {% endfor %}
+    {% endfor %}

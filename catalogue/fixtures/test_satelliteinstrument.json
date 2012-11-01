@@ -1,0 +1,26 @@
+[
+    {
+        "pk": 1,
+        "model": "catalogue.satelliteinstrument",
+        "fields": {
+            "instrument_type": 5,
+            "satellite": 1,
+            "name": "CAMERA 1",
+            "abbreviation": "CAM1",
+            "operator_abbreviation": "CAM1",
+            "description": "HRG Camera 1 on SPOT 5."
+        }
+    },
+    {
+        "pk": 2,
+        "model": "catalogue.satelliteinstrument",
+        "fields": {
+            "instrument_type": 5,
+            "satellite": 1,
+            "name": "CAMERA 2",
+            "abbreviation": "CAM2",
+            "operator_abbreviation": "CAM2",
+            "description": "Second camera on SPOT 5"
+        }
+    }
+]

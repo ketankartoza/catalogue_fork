@@ -52,7 +52,15 @@ from catalogue.models import (
     GeospatialProduct,
     Visit,
     SacUserProfile,
-    AllUsersMessage)
+    AllUsersMessage,
+    Satellite,
+    SatelliteInstrument,
+    InstrumentType,
+    InstrumentTypeSpectralMode,
+    Collection,
+    SpectralMode,
+    ScannerType
+    )
 
 
 #
@@ -229,7 +237,6 @@ class AllUsersMessageAdmin(admin.ModelAdmin):
     list_display = [f.name for f in AllUsersMessage._meta.fields]
     ordering = ('created', 'message')
 
-
 admin.site.register(Mission, MissionAdmin)
 admin.site.register(MissionSensor, MissionSensorAdmin)
 admin.site.register(SensorType, SensorTypeAdmin)
@@ -252,6 +259,8 @@ admin.site.register(GeospatialProduct, GeospatialProductAdmin)
 admin.site.register(
     OrderNotificationRecipients, OrderNotificationRecipientsAdmin)
 
+
+
 #################################################
 # End of admin models for new generic product model
 #################################################
@@ -261,3 +270,35 @@ admin.site.register(Visit, VisitAdmin)
 admin.site.register(SacUserProfile, SacUserProfileAdmin)
 admin.site.register(OfflineMessage, OfflineMessageAdmin)
 admin.site.register(AllUsersMessage, AllUsersMessageAdmin)
+
+####################################
+# New Dictionaries
+####################################
+
+class CollectionAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Collection, CollectionAdmin)
+
+class SatelliteAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Satellite, SatelliteAdmin)
+
+class InstrumentTypeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(InstrumentType, InstrumentTypeAdmin)
+
+class SatelliteInstrumentAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(SatelliteInstrument, SatelliteInstrumentAdmin)
+
+class SpectralModeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(SpectralMode, SpectralModeAdmin)
+
+class InstrumentTypeSpectralModeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(InstrumentTypeSpectralMode, InstrumentTypeSpectralModeAdmin)
+
+class ScannerTypeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(ScannerType, ScannerTypeAdmin)

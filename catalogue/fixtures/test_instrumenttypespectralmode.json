@@ -1,0 +1,54 @@
+[
+    {
+        "pk": 1,
+        "model": "catalogue.instrumenttypespectralmode",
+        "fields": {
+            "instrument_type": 5,
+            "name": "SPOT 5 PAN T",
+            "description": "Panchromatic imagery at 2.5m",
+            "band_count": 1,
+            "abbreviation": "T",
+            "spectral_mode": 1,
+            "spatial_resolution": 2.5
+        }
+    },
+    {
+        "pk": 2,
+        "model": "catalogue.instrumenttypespectralmode",
+        "fields": {
+            "instrument_type": 5,
+            "name": "SPOT 5 PAN A",
+            "description": "SPOT 5 Panchromatic at 5m",
+            "band_count": 1,
+            "abbreviation": "A",
+            "spectral_mode": 1,
+            "spatial_resolution": 5.0
+        }
+    },
+    {
+        "pk": 3,
+        "model": "catalogue.instrumenttypespectralmode",
+        "fields": {
+            "instrument_type": 5,
+            "name": "SPOT 5 PAN B",
+            "description": "Spot 5 panchromatic B This ion the second camera on the SPOT5 vehicle",
+            "band_count": 1,
+            "abbreviation": "B",
+            "spectral_mode": 1,
+            "spatial_resolution": 5.0
+        }
+    },
+    {
+        "pk": 4,
+        "model": "catalogue.instrumenttypespectralmode",
+        "fields": {
+            "instrument_type": 5,
+            "name": "SPOT 5 MSS J",
+            "description": "This is multispectral imagery on the SPOT 5 satellite, from teh 'J' sensor, 10m spatial resolution",
+            "band_count": 4,
+            "abbreviation": "J",
+            "spectral_mode": 2,
+            "spatial_resolution": 10.0
+        }
+    }
+]

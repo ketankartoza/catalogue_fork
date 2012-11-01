@@ -95,6 +95,8 @@ from orders_view_viewOrderItems import OrdersViews_viewOrderItems_Tests
 from orders_view_ordersSummary import OrdersViews_ordersSummary_Tests
 from orders_view_addOrder import OrdersViews_addOrder_Tests
 
+from new_dictionary_tests import NewDictionariesTest
+
 #this is only required for doctests
 __test__ = {
   #'simple_tests' : simple_tests,

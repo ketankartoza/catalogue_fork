@@ -1,0 +1,14 @@
+[
+    {
+        "pk": 5,
+        "model": "catalogue.instrumenttype",
+        "fields": {
+            "is_radar": false,
+            "name": "High Resolution Geometric",
+            "abbreviation": "HRG",
+            "operator_abbreviation": "HRG",
+            "is_taskable": true,
+            "description": "HRG Description"
+        }
+    }
+]
