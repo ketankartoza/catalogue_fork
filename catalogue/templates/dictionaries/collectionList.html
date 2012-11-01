@@ -1,4 +1,8 @@
-
+{% extends 'base.html' %}
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{%  block content %}
+{% box_start "box-welcome" "span-22" %}
+    <h1 class="centered">Collection List</h1>
     {% for item in collection %}
         <h1>Collection</h1>
         <p>Name: {{ item.name }}</p>
@@ -11,3 +15,5 @@
              <p>Description: {{ satellite.description }}</p>
         {% endfor %}
     {% endfor %}
+    {% box_end %}
+{% endblock %}
