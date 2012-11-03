@@ -282,7 +282,7 @@ class GenericProduct(
         return u"Internal ID: %d" % self.pk
 
     @runconcrete
-    def getAbstract():
+    def getAbstract(self):
         """
         Returns a description for this product
         """
@@ -412,7 +412,7 @@ class GenericProduct(
             myImage = ImageOps.expand(myImage, border=5, fill=(255, 255, 255))
         myBackground = None
         if myShadowFlag:
-            myImage = dropShadow(
+            myImage = self.dropShadow(
                 myImage.convert('RGBA')).rotate(myAngle, expand=1)
             myBackground = Image.new('RGBA', myImage.size, myBackgroundColour)
             myBackground.paste(myImage, (0, 0), myImage)
@@ -1036,18 +1036,24 @@ class GenericSensorProduct(GenericImageryProduct):
         myList = []
         # TODO: deprecate the pad function and use string.ljust(3, '-')
         myMode = self.acquisition_mode
+        # Add the mission to the list
         myList.append(
             self.pad(
                 myMode.sensor_type.mission_sensor.mission.abbreviation, 3))
+        # Add the mission sensor
         myList.append(
             self.pad(myMode.sensor_type.mission_sensor.abbreviation, 3))
-        myList.append(self.pad(myMode.abbreviation, 4))
+        # Add the sensor type to the list
         myList.append(self.pad(myMode.sensor_type.abbreviation, 3))
+        # Add the Acuisistion mode to the list
+        myList.append(self.pad(myMode.abbreviation, 4))
+        # Add path / row/ path offset / row offset to the list
         # TODO: deprecate the zeropad function and use string.ljust(3, '0')
         myList.append(self.zeroPad(str(self.path), 4))
         myList.append(self.zeroPad(str(self.path_offset), 2))
         myList.append(self.zeroPad(str(self.row), 4))
         myList.append(self.zeroPad(str(self.row_offset), 2))
+        # Add the date parts to the list
         myDate = str(self.product_acquisition_start.year)[2:4]
         myDate += self.zeroPad(str(self.product_acquisition_start.month), 2)
         myDate += self.zeroPad(str(self.product_acquisition_start.day), 2)
@@ -1056,19 +1062,20 @@ class GenericSensorProduct(GenericImageryProduct):
         myTime += self.zeroPad(str(self.product_acquisition_start.minute), 2)
         myTime += self.zeroPad(str(self.product_acquisition_start.second), 2)
         myList.append(myTime)
+        # Add the processing level to the list
         myList.append("L" + self.pad(self.processing_level.abbreviation, 3))
-        # ABP: changed from 4 to 6 (why was it 4 ? UTM34S is 6 chars)
+        # Add the projection name to the list
         myList.append(self.pad(self.projection.name, 6))
         #print "Product SAC ID %s" % "_".join(myList)
         myNewId = "_".join(myList)
         self.product_id = myNewId
         if theMoveDataFlag:
-            refileProductAssets(
+            self.refileProductAssets(
                 myPreviousId, myPreviousImageryPath, myPreviousThumbPath)
         return
 
     def refileProductAssets(
-            self, theOldId, theOldImageryPath, theOldThumbsPath):
+            self, theOldId, theOldImageryPath, theOldThumbPath):
 
         """
         A helper for when a product id changes so that its assets (thumbs,
@@ -1094,45 +1101,91 @@ class GenericSensorProduct(GenericImageryProduct):
             return
 
         myNewImageryPath = os.path.join(
-            settings.IMAGERY_ROOT, self.productDirectory(),
+            # /opt/sac_catalogue/sac_live/imagery_master_copy
+            settings.IMAGERY_ROOT,
+            # ZA2/1Aa/2009/12/11
+            self.productDirectory(),
+            # ZA2_MSS_R3B_FMC4_098W_56_020N_01_091211_154127_L1Aa_ORBIT-
             self.product_id + '.tif.bz2')
+
         myOldImageryPath = os.path.join(
-            settings.IMAGERY_ROOT, theOldImageryPath, theOldId + '.tif.bz2')
+            # /opt/sac_catalogue/sac_live/imagery_master_copy
+            settings.IMAGERY_ROOT,
+            # ZA2/1Ab/2009/12/11
+            theOldImageryPath,
+            # ZA2_MSS_R3B_FMC4_098W_56_020N_01_091211_154127_L1Ab_ORBIT-
+            theOldId + '.tif.bz2')
         # In some cases the imagery may be in a tar archive (for multiple
-        # files) rather than a simple bz2
+        # files) rather than a simple bz2 so we also try to find a tar file.
         if not os.path.isfile(myOldImageryPath):
-            myPath = myPath.replace('.tar.bz2', '.bz2')
-            myUrl = myUrl.replace('.tar.bz2', '.bz2')
-        #
-        myOutputPath = os.path.join(
-            settings.IMAGERY_ROOT, self.thumbnailDirectory())
-        if not os.path.isdir(myOutputPath):
-            #print "Creating dir: %s" % myOutputPath
+            myNewImageryPath = myNewImageryPath.replace('.tar.bz2', '.bz2')
+            myOldImageryPath = myOldImageryPath.replace('.tar.bz2', '.bz2')
+
+        myImageryOutputPath = os.path.join(
+            settings.IMAGERY_ROOT, self.productDirectory())
+        myThumbOutputPath = os.path.join(
+            settings.THUMBS_ROOT, self.thumbnailDirectory())
+
+
+        # Create the imagery destination dir if it does not exist.
+        if not os.path.isdir(myImageryOutputPath):
             try:
-                os.makedirs(myOutputPath)
+                os.makedirs(myImageryOutputPath)
             except OSError:
                 logging.debug(
                     'Failed to make output directory (%s) ...quitting' % (
-                        myOutputPath,))
+                        myImageryOutputPath,))
                 return 'False'
-        else:
-            #print "Exists: %s" % myOutputPath
-            pass
+
+        # Create the thumbnails destination dir if it does not exist.
+        if not os.path.isdir(myThumbOutputPath):
+            try:
+                os.makedirs(myThumbOutputPath)
+            except OSError:
+                logging.debug(
+                    'Failed to make output directory (%s) ...quitting' % (
+                        myThumbOutputPath,))
+                return 'False'
+
         # now everything is ready do the actual renaming
         try:
-            myNewJpgFile = os.path.join(myOutputPath, myNewId + '.jpg')
-            myNewWorldFile = os.path.join(myOutputPath, myNewId + '.wld')
-            #print "New filename: %s" % myNewJpgFile
-            shutil.move(myJpegThumbnail, myNewJpgFile)
-            shutil.move(myWorldFile, myNewWorldFile)
-        except:
-            logging.debug("Failed to move the thumbnail")
-        #
-        # End of Acs Specific part
-        #
+            myNewReffedPath = os.path.join(myThumbOutputPath,
+                                        self.product_id + '-reffed.jpg')
+            myOldReffedPath = os.path.join(theOldThumbPath,
+                                           theOldId + '-reffed.jpg')
 
-        # now follows a more generic handler for moving products and thumbs if
-        # the product is renamed
+            myNewJpgPath = os.path.join(myThumbOutputPath,
+                                        self.product_id + '.jpg')
+            myOldJpgPath = os.path.join(theOldThumbPath,
+                                           theOldId + '.jpg')
+
+            myNewWorldPath = os.path.join(myThumbOutputPath,
+                                          self.product_id + '.wld')
+            myOldWorldPath = os.path.join(theOldThumbPath,
+                                        theOldId + '.wld')
+
+            if os.path.exists(myOldJpgPath):
+                shutil.move(myOldJpgPath, myNewJpgPath)
+
+            if os.path.exists(myOldReffedPath):
+                # If the reffed jpg is a symlink, replace it with a new one
+                if os.path.islink(myOldReffedPath):
+                    os.remove(myOldReffedPath)
+                    os.symlink(myNewJpgPath, myNewReffedPath)
+                else:
+                    # Otherwise move the file.
+                    shutil.move(myOldReffedPath, myNewReffedPath)
+
+            if os.path.exists(myOldWorldPath):
+                shutil.move(myOldWorldPath, myNewWorldPath)
+
+            # Now move the imagery if it exists
+            if os.path.exists(myOldImageryPath):
+                shutil.move(myOldImageryPath, myNewImageryPath)
+
+
+        except:
+            logging.debug("Failed to move some or all of the assets")
 
         return
 

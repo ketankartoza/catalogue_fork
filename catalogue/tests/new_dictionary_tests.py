@@ -51,7 +51,7 @@ class NewDictionariesTest(TestCase):
         myInstrumentType = InstrumentType.objects.all()[0]
         myRelated = myInstrumentType.relatedScannerType()
         myMessage = 'No scanner types found to be related to InstrumentType'
-        self.assertNotEqual(0, myRelated.count(), myMessage)
+        assert myRelated is not None, myMessage
 
     def test_relatedSatelliteInstruments(self):
         """Test we can get related satellite instruments for a satellite."""

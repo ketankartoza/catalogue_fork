@@ -17,9 +17,24 @@ __version__ = '0.2'
 __date__ = '11/10/2012'
 __copyright__ = 'South African National Space Agency'
 
+import os
+import shutil
+import logging
+import settings
 from django.test import TestCase
+from django.contrib.gis.geos import GEOSGeometry
 from catalogue.tests.test_utils import simpleMessage
-from catalogue.models import OpticalProduct
+from catalogue.models import (OpticalProduct,
+                             Projection,
+                             AcquisitionMode,
+                             ProcessingLevel,
+                             Quality,
+                             CreatingSoftware,
+                             Institution,
+                             License,
+                             GenericImageryProduct,
+                             GenericSensorProduct,
+                             GenericProduct)
 from datetime import datetime
 
 
@@ -29,6 +44,8 @@ class OpticalProductCRUD_Test(TestCase):
     """
     fixtures = [
         'test_user.json',
+        'test_license.json',
+        'test_creatingsoftware.json',
         'test_mission.json',
         'test_missionsensor.json',
         'test_processinglevel.json',
@@ -282,3 +299,76 @@ class OpticalProductCRUD_Test(TestCase):
                 simpleMessage(
                     myRes, myExpResults[idx],
                     message='Model PK %s productDirectory:' % PK))
+
+    def test_ProductIdChange(self):
+        """Check product id change moves assets and sets correct product data.
+        """
+        # First prepare our test images
+        myDir = os.path.join(os.path.dirname(__file__),
+                             'sample_files',
+                             'test_thumbnails',
+                             'L5')
+
+        myThumbOutputPath = settings.THUMBS_ROOT
+        # Create the thumbnails destination dir if it does not exist.
+        if not os.path.isdir(myThumbOutputPath):
+            try:
+                os.makedirs(myThumbOutputPath)
+            except OSError:
+                logging.debug(
+                    'Failed to make output directory (%s) ...quitting' % (
+                        myThumbOutputPath,))
+                return 'False'
+
+        shutil.copytree(myDir, os.path.join(myThumbOutputPath, 'L5'))
+
+        myId = 'L5-_TM-_HRF_BPSM_0176_00_0064_00_050101_081933_L2A-_UTM34S'
+        OpticalProduct.objects.filter(product_id=myId).delete()
+        GenericSensorProduct.objects.filter(product_id=myId).delete()
+        GenericImageryProduct.objects.filter(product_id=myId).delete()
+        GenericProduct.objects.filter(product_id=myId).delete()
+
+        myProduct = OpticalProduct()
+
+        myProjection = Projection.objects.get(epsg_code='32734')
+        myProduct.projection = myProjection
+
+        myProcessingLevel = ProcessingLevel.objects.get(abbreviation='2A')
+        myProduct.processing_level = myProcessingLevel
+
+        myMode = AcquisitionMode.objects.get(id=80)
+        myProduct.acquisition_mode = myMode
+
+        myProduct.product_acquisition_start = datetime(
+            2007, 01, 01, 8, 19, 33, 0)
+
+        myProduct.path = 176
+        myProduct.row = 64
+
+        myProduct.path_offset = 0
+        myProduct.row_offset = 0
+
+        myOwner = Institution.objects.get(id=1)
+        myProduct.owner = myOwner
+
+        myLicense = License.objects.get(id=1)
+        myProduct.license = myLicense
+
+        myQuality = Quality.objects.get(id=1)
+        myProduct.quality = myQuality
+
+        myCreatingSoftware = CreatingSoftware.objects.get(id=1)
+        myProduct.creating_software = myCreatingSoftware
+
+        mySpatialCoverage = GEOSGeometry(
+            'SRID=4326;POLYGON((0.0 0.0, 1.0 0.0, 1.0 1.0, 0.0 1.0, 0.0 0.0))')
+
+        myProduct.spatial_coverage = mySpatialCoverage.ewkt
+
+        myProduct.radiometric_resolution = 8
+
+
+        myProduct.setSacProductId(True)
+        myProduct.save()
+        assert myProduct.product_id == (
+            'L5-_TM-_HRF_BPSM_0176_00_0064_00_050101_081933_L2A-_UTM34S')
