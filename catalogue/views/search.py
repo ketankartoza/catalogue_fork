@@ -225,7 +225,7 @@ def search(theRequest):
     else:
         logging.info('initial search form being rendered')
         myForm = AdvancedSearchForm()
-        myFormset = DateRangeInlineFormSet(theRequest.POST, theRequest.FILES)
+        myFormset = DateRangeInlineFormSet()
         #render_to_response is done by the renderWithContext decorator
         return render_to_response(
             'search.html', {

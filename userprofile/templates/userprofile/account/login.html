@@ -18,6 +18,7 @@
 <div id="content">
 {% box_start "box-" %}
   <form action="{% if next %}?next={{ next }}{% endif %}" method="post" accept-charset="utf-8">
+  {% csrf_token %}
   <fieldset>
     <legend>{% trans "User login" %}</legend>
     <label for="id_username">{% trans "Username" %}</label>
