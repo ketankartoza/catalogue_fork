@@ -13,7 +13,7 @@ AUTH_PROFILE_MODULE = 'catalogue.SacUserProfile'
 MANAGERS = ADMINS
 DATABASES = {
         'default': {  # new db that does not mimic acs system
-         'ENGINE': 'postgresql_psycopg2',
+         'ENGINE': 'django.db.backends.postgresql_psycopg2',
          'NAME': DBNAME,
          'USER': DBUSER,
          'PASSWORD': DBPASSWORD,
@@ -22,7 +22,7 @@ DATABASES = {
          'TEST_NAME': DBTEST,
          },
         'acs': {  # legacy acs port to django
-         'ENGINE': 'postgresql_psycopg2',
+         'ENGINE': 'django.db.backends.postgresql_psycopg2',
          'NAME': ACSDBNAME,
          'USER': ACSDBUSER,
          'PASSWORD': ACSDBPASSWORD,
@@ -78,17 +78,16 @@ SECRET_KEY = 'c(x1$mngg*&#re1shf2r3(j&1&rl528_ubo2#x_)ljabk2*cly'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.middleware.csrf.CsrfResponseMiddleware',
-    'catalogue.middleware.stripwhitespace.StripWhitespaceMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
 )
 MIDDLEWARE_CLASSES += EXTRA_MIDDLEWARE_CLASSES
 
@@ -96,7 +95,7 @@ TEMPLATE_DEBUG = DEBUG
 LOGGING_OUTPUT_ENABLED = DEBUG
 LOGGING_LOG_SQL = DEBUG
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'sansa_catalogue.urls'
 
 TEMPLATE_DIRS = (
     os.path.join(ROOT_PROJECT_FOLDER, 'templates'),
@@ -141,6 +140,7 @@ SOUTH_MIGRATION_MODULES = {
 # For offline messages app
 MESSAGE_STORAGE = 'offline_messages.storage.OfflineStorageEngine'
 
+
 #
 # Sentry settings - logs exceptions to a database
 # see http://sentry.sansa.org.za/account/projects/catalogue-live/docs/django/
@@ -149,3 +149,26 @@ MESSAGE_STORAGE = 'offline_messages.storage.OfflineStorageEngine'
 logging.getLogger().setLevel(LOG_LEVEL)
 setup_logging(SentryHandler())
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}

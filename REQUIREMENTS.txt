@@ -1,4 +1,4 @@
-Django==1.2.1
+Django==1.4.2
 GDAL
 #InformixDB==2.5
 Jinja2==2.5.5
@@ -8,7 +8,7 @@ Sphinx
 distribute==0.6.10
 django-dag==1.1
 django-db-log==2.2.1
-django-debug-toolbar==0.8.3
+django-debug-toolbar==0.9.4
 django-extensions==0.4.1
 django-registration==0.7
 docutils==0.7

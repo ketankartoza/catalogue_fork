@@ -1,4 +1,5 @@
-from django.conf.urls.defaults import *
+#from django.conf.urls.defaults import *
+from django.conf.urls import patterns, include, url
 #from django.views.generic import list_detail
 from catalogue.views import *
 from django.conf import settings
@@ -15,82 +16,81 @@ admin.autodiscover()
 
 
 # Here are our patterns
-
 urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
-    (r'^admin/(.*)', admin.site.root),
+    url(r'^admin/', include(admin.site.urls)),
     # Usually you would do this using apache but since
     # I have deployed the app to the root of the server
     # we need to do it here
-    (r'^admin_media/(.*)$','django.views.static.serve',
+    url(r'^admin_media/(.*)$','django.views.static.serve',
       {'document_root': "/usr/share/python-support/python-django/django/contrib/admin/media/"
         , 'show_indexes': True}),
-    #url(r'^sentry/', include('sentry.web.urls')),
-    (r'^media/(.*)$','django.views.static.serve',
+    #(r'^sentry/', include('sentry.web.urls')),
+    url(r'^media/(.*)$','django.views.static.serve',
       {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
-    (r'^thumbnails/(.*)$','django.views.static.serve',
+    url(r'^thumbnails/(.*)$','django.views.static.serve',
       {'document_root': settings.THUMBS_ROOT, 'show_indexes': False}),
-    (r'^$', index),
-    (r'^video/$', video),
-    (r'^about/$', about),
-    (r'^contact/$', contact),
-    (r'^deletesearch/(?P<theId>[0-9]+)/$', deleteSearch),
-    (r'^kml/$', visitorsKml),
-    (r'^cartkml/$', cartKml),
-    (r'^mapHelp/$', mapHelp),
-    (r'^emptyCartHelp/$', emptyCartHelp),
-    (r'^positionNotFound/$', positionNotFound),
-    (r'^sceneidhelp/$', sceneIdHelp),
-    (r'^modifysearch/(?P<theGuid>[a-h0-9\-]{36})/$', modifySearch ),
+    url(r'^$', index),
+    url(r'^video/$', video),
+    url(r'^about/$', about),
+    url(r'^contact/$', contact),
+    url(r'^deletesearch/(?P<theId>[0-9]+)/$', deleteSearch),
+    url(r'^kml/$', visitorsKml),
+    url(r'^cartkml/$', cartKml),
+    url(r'^mapHelp/$', mapHelp),
+    url(r'^emptyCartHelp/$', emptyCartHelp),
+    url(r'^positionNotFound/$', positionNotFound),
+    url(r'^sceneidhelp/$', sceneIdHelp),
+    url(r'^modifysearch/(?P<theGuid>[a-h0-9\-]{36})/$', modifySearch ),
     # match a product id - its not needed to give teh full id, just enough to be semi unique
-    (r'^showProduct/(?P<theProductId>[A-Za-z0-9\_\-]{38,58})/$', showProduct ),
-    (r'^showProductByOriginalId/(?P<theOriginalProductId>[A-Za-z0-9\_\-]{0,58})/$', showProductByOriginalId ),
-    (r'^clip/$', clip),
-    (r'^myclips/$', clipHistory),
-    (r'^mysearches/$', searchHistory),
-    (r'^recentsearches/$', recentSearches),
-    (r'^searchmonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReport),
-    (r'^searchmonthlyreportaoi/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReportAOI),
-    (r'^search/$', 'catalogue.views.search.search'), # clashes with module name catalogue.views.search
-    (r'^productIdSearchClone/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearchClone),
-    (r'^productIdSearch/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearch),
-    (r'^visit/$', logVisit),
-    (r'^visitormap/$', visitorMap),
-    (r'^whereami/$', whereAmI),
-    (r'^worldmap/$', worldMap),
+    url(r'^showProduct/(?P<theProductId>[A-Za-z0-9\_\-]{38,58})/$', showProduct ),
+    url(r'^showProductByOriginalId/(?P<theOriginalProductId>[A-Za-z0-9\_\-]{0,58})/$', showProductByOriginalId ),
+    url(r'^clip/$', clip),
+    url(r'^myclips/$', clipHistory),
+    url(r'^mysearches/$', searchHistory),
+    url(r'^recentsearches/$', recentSearches),
+    url(r'^searchmonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReport),
+    url(r'^searchmonthlyreportaoi/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReportAOI),
+    url(r'^search/$', 'catalogue.views.search.search'), # clashes with module name catalogue.views.search
+    url(r'^productIdSearchClone/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearchClone),
+    url(r'^productIdSearch/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearch),
+    url(r'^visit/$', logVisit),
+    url(r'^visitormap/$', visitorMap),
+    url(r'^whereami/$', whereAmI),
+    url(r'^worldmap/$', worldMap),
 
     #show all searches that were made
-    (r'^searchesmap/$', searchesMap),
-    (r'^visitorlist/$', visitorList),
-    (r'^visitorfrequency/$', visitorFrequency),
-    (r'^visitorreport/$', visitorReport),
-    (r'^visitormonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', visitorMonthlyReport),
+    url(r'^searchesmap/$', searchesMap),
+    url(r'^visitorlist/$', visitorList),
+    url(r'^visitorfrequency/$', visitorFrequency),
+    url(r'^visitorreport/$', visitorReport),
+    url(r'^visitormonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', visitorMonthlyReport),
     # Profile application
-    (r'^accounts/', include('userprofile.urls')),
-    (r'^searchkml/(?P<theGuid>[a-h0-9\-]{36})/$', searchKml), #single search poly as kml
-     #show a single search map
-    (r'^searchresult/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultMap),
+    url(r'^accounts/', include('userprofile.urls')),
+    url(r'^searchkml/(?P<theGuid>[a-h0-9\-]{36})/$', searchKml), #single search poly as kml
+    #show a single search map
+    url(r'^searchresult/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultMap),
     #show a single search page to insert into search result map
-    (r'^searchpage/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultPage),
+    url(r'^searchpage/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultPage),
     # return the results of a search as a shapefile
-    (r'^downloadsearchresults/(?P<theGuid>[a-h0-9\-]{36})/$', downloadSearchResult),
-    (r'^downloadsearchmetadata/(?P<theGuid>[a-h0-9\-]{36})/$', downloadSearchResultMetadata),
+    url(r'^downloadsearchresults/(?P<theGuid>[a-h0-9\-]{36})/$', downloadSearchResult),
+    url(r'^downloadsearchmetadata/(?P<theGuid>[a-h0-9\-]{36})/$', downloadSearchResultMetadata),
     # show segment thumb for a segment by #
-    (r'^thumbnailpage/(?P<theId>[0-9]+)/$', showThumbPage),
-    (r'^sensordictionaries/$', getSensorDictionaries),
+    url(r'^thumbnailpage/(?P<theId>[0-9]+)/$', showThumbPage),
+    url(r'^sensordictionaries/$', getSensorDictionaries),
     # returns image mime type - show segment thumb info for a segment
-    (r'^thumbnail/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showThumb),
+    url(r'^thumbnail/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showThumb),
     # returns html mime type
-    (r'^showpreview/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showPreview),
+    url(r'^showpreview/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showPreview),
     #show info for a scene or segment by #
-    (r'^metadata/(?P<theId>[0-9]+)/$', metadata),
-    (r'^metadatatext/(?P<theId>[0-9]+)/$', metadataText),
+    url(r'^metadata/(?P<theId>[0-9]+)/$', metadata),
+    url(r'^metadatatext/(?P<theId>[0-9]+)/$', metadataText),
     url(r'^addtocart/(?P<theId>[0-9]+)/$', addToCart, name='addToCart'),
     url(r'^removefromcart/(?P<theId>[0-9]+)/$', removeFromCart, name='removeFromCart'),
     # cart contents for embedding into other pages
     url(r'^downloadcart/$', downloadCart, name='downloadCart'),
     url(r'^downloadcartmetadata/$', downloadCartMetadata, name='downloadCartMetadata'),
-    (r'^myCart/$', showCartContents),
+    url(r'^myCart/$', showCartContents),
     url(r'^showcartcontents/$', showCartContents, name='showCartContents'), #used by xhr requests
     url(r'^showminicartcontents/$', showMiniCartContents, name='showMiniCartContents'),
     #
@@ -119,20 +119,20 @@ urlpatterns = patterns('',
     # upload polygon from zipped shapefile for search/clip
     #( r'^uploadFeature/$', uploadFeature),
 
-    (r'^getFeatureInfo/(?P<theLon>[-]*\d+.\d+)/(?P<theLat>[-]*\d+.\d+)/(?P<theBoundingBox>[0-9\-,.]*)/(?P<thePixelX>\d+)/(?P<thePixelY>\d+)/(?P<theMapWidth>\d+)/(?P<theMapHeight>\d+)/$', getFeatureInfo),
+    url(r'^getFeatureInfo/(?P<theLon>[-]*\d+.\d+)/(?P<theLat>[-]*\d+.\d+)/(?P<theBoundingBox>[0-9\-,.]*)/(?P<thePixelX>\d+)/(?P<thePixelY>\d+)/(?P<theMapWidth>\d+)/(?P<theMapHeight>\d+)/$', getFeatureInfo),
 
-    ( r'^dataSummaryTable/$', dataSummaryTable),
-    ( r'^dictionaryReport/$', dictionaryReport),
-    ( r'^sensorSummaryTable/(?P<theSensorId>[0-9]+)/$', sensorSummaryTable),
-    (r'^getUserMessages/$', messaging.userMessages),
+    url( r'^dataSummaryTable/$', dataSummaryTable),
+    url( r'^dictionaryReport/$', dictionaryReport),
+    url( r'^sensorSummaryTable/(?P<theSensorId>[0-9]+)/$', sensorSummaryTable),
+    url(r'^getUserMessages/$', messaging.userMessages),
     #need to be staff to use this
-    (r'^sendMessageToUser/$', messaging.sendMessageToUser),
+    url(r'^sendMessageToUser/$', messaging.sendMessageToUser),
     #need to be staff to use this
-    (r'^sendMessageToAllUsers/$', messaging.sendMessageToAllUsers),
+    url(r'^sendMessageToAllUsers/$', messaging.sendMessageToAllUsers),
 
     # New dictionaries
-    (r'^collectionList/$', collectionList),
-        (r'^satelliteDetails/(?P<theSatelliteId>\d*)/$', satelliteDetails),
+    url(r'^collectionList/$', collectionList),
+    url(r'^satelliteDetails/(?P<theSatelliteId>\d*)/$', satelliteDetails),
 
 
 )
