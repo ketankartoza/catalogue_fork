@@ -155,7 +155,7 @@ class EmailMultiRelated(EmailMultiAlternatives):
 ###########################################################
 
 
-from django.db.models.query import CollectedObjects
+from django.db.models.deletion import Collector
 from django.db.models.fields.related import ForeignKey
 
 
@@ -167,7 +167,7 @@ def update_related_field(obj, value, field):
                     /query.py#L824
     """
     # Collect all related objects.
-    collected_objs = CollectedObjects()
+    collected_objs = Collector()
     obj._collect_sub_objects(collected_objs)
     classes = collected_objs.keys()
     # Bulk update the objects for performance
@@ -194,7 +194,7 @@ def duplicate(obj, value=None, field=None, duplicate_order=None):
     in the order that they should be saved.
 
     """
-    collected_objs = CollectedObjects()
+    collected_objs = Collector()
     obj._collect_sub_objects(collected_objs)
     related_models = collected_objs.keys()
     root_obj = None
