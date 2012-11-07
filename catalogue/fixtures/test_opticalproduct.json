@@ -1694,5 +1694,21 @@
             "gain_name": null,
             "earth_sun_distance": null
         }
+    },
+        {
+        "pk": 2143443,
+        "model": "catalogue.opticalproduct",
+        "fields": {
+            "solar_azimuth_angle": 0.0,
+            "gain_change_per_channel": null,
+            "gain_value_per_channel": null,
+            "cloud_cover": 50,
+            "bias_per_channel": null,
+            "solar_zenith_angle": 0.0,
+            "sensor_viewing_angle": 23,
+            "sensor_inclination_angle": 26.4796,
+            "gain_name": null,
+            "earth_sun_distance": null
+        }
     }
 ]

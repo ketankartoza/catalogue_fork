@@ -42,5 +42,16 @@
             "name": "ERS",
             "post_code": ""
         }
+    },
+    {
+        "pk": 4,
+        "model": "catalogue.institution",
+        "fields": {
+            "address1": "",
+            "address2": "",
+            "address3": "",
+            "name": "Astrium",
+            "post_code": ""
+        }
     }
 ]

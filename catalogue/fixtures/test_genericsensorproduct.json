@@ -22,6 +22,28 @@
         }
     },
     {
+        "pk": 2143443,
+        "model": "catalogue.genericsensorproduct",
+        "fields": {
+            "product_acquisition_end": null,
+            "acquisition_mode": 86,
+            "path_offset": 0,
+            "orbit_number": null,
+            "radiometric_signal_to_noise_ratio": null,
+            "geometric_accuracy_mean": null,
+            "spectral_accuracy": null,
+            "geometric_accuracy_2sigma": null,
+            "radiometric_percentage_error": null,
+            "row_offset": 0,
+            "online_storage_medium_id": null,
+            "geometric_accuracy_1sigma": null,
+            "offline_storage_medium_id": null,
+            "path": 116,
+            "product_acquisition_start": "1992-01-17 20:51:43",
+            "row": 360
+        }
+    },
+    {
         "pk": 1934163,
         "model": "catalogue.genericsensorproduct",
         "fields": {
