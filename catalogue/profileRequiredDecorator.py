@@ -18,6 +18,7 @@ __version__ = '0.1'
 __date__ = '01/01/2011'
 __copyright__ = 'South African National Space Agency'
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseRedirect
 import logging
 # for error logging
@@ -48,8 +49,15 @@ def requireProfile(theView):
     """
     def decorator(theFunction):
         def inner_decorator(theRequest, *args, **kwargs):
+            myProfile = None
             try:
                 myProfile = theRequest.user.get_profile()
+            except ObjectDoesNotExist:
+                logging.info('User Profile exception - redirecting')
+                logging.debug('User Profile exception - redirecting')
+                logging.debug(traceback.format_exc())
+            finally:
+                #finally always executes, so we can safely redirect here
                 if myProfile and checkProfile(myProfile):
                     logging.info('User Profile is populated')
                     return theFunction(theRequest, *args, **kwargs)
@@ -70,12 +78,7 @@ def requireProfile(theView):
                         return HttpResponseRedirect(
                             "/accounts/profile/edit/personal/?next=/%s/" %
                             theView)
-            except:
-                logging.info('User Profile exception - redirecting')
-                logging.debug('User Profile exception - redirecting')
-                logging.debug(traceback.format_exc())
-                return HttpResponseRedirect(
-                    '/accounts/profile/edit/personal/?next=/%s/' % theView)
+
         return wraps(theFunction)(inner_decorator)
     return decorator
 
