@@ -36,17 +36,14 @@ class OrdersViews_ordersSummary_Tests(TestCase):
     """
 
     fixtures = [
+        'test_missiongroup.json',
         'test_mission.json',
         'test_missionsensor.json',
-        # 'test_search.json',
-        # 'test_searchdaterange.json',
-        # 'test_processinglevel.json',
-        # 'test_sensortype.json',
-        # 'test_acquisitionmode.json',
-        # 'test_genericproduct.json',
-        # 'test_genericimageryproduct.json',
-        # 'test_genericsensorproduct.json',
-        # 'test_opticalproduct.json',
+        'test_processinglevel.json',
+        'test_projection.json',
+        'test_fileformat.json',
+        'test_datum.json',
+        'test_resamplingmethod.json',
         'test_user.json',
         'test_orderstatus.json',
         'test_orderstatushistory.json',
@@ -54,7 +51,13 @@ class OrdersViews_ordersSummary_Tests(TestCase):
         'test_deliverymethod.json',
         'test_deliverydetail.json',
         'test_order.json',
-        'test_searchrecord.json'
+        'test_searchrecord.json',
+        'test_genericproduct.json',
+        'test_institution.json',
+        'test_license.json',
+        'test_quality',
+        'test_creatingsoftware',
+
     ]
 
     def setUp(self):

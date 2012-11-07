@@ -20,7 +20,7 @@ __copyright__ = 'South African National Space Agency'
 import os
 import shutil
 import logging
-import settings
+from django.conf import settings
 from django.test import TestCase
 from django.contrib.gis.geos import GEOSGeometry
 from catalogue.tests.test_utils import simpleMessage
@@ -46,6 +46,7 @@ class OpticalProductCRUD_Test(TestCase):
         'test_user.json',
         'test_license.json',
         'test_creatingsoftware.json',
+        'test_missiongroup.json',
         'test_mission.json',
         'test_missionsensor.json',
         'test_processinglevel.json',

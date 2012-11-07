@@ -40,7 +40,13 @@ class OrdersViews_viewOrder_Tests(TestCase):
 
     fixtures = [
         'test_mission.json',
+        'test_institution.json',
+        'test_license.json',
+        'test_projection.json',
+        'test_quality',
+        'test_creatingsoftware',
         'test_missionsensor.json',
+        'test_missiongroup.json',
         'test_search.json',
         'test_searchdaterange.json',
         'test_processinglevel.json',
@@ -56,7 +62,12 @@ class OrdersViews_viewOrder_Tests(TestCase):
         'test_marketsector.json',
         'test_deliverymethod.json',
         'test_order.json',
-        'test_searchrecord.json'
+        'test_searchrecord.json',
+        'test_deliverymethod.json',
+        'test_deliverydetail.json',
+        'test_datum.json',
+        'test_resamplingmethod.json',
+        'test_fileformat.json',
     ]
 
     def setUp(self):

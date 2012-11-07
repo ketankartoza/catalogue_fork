@@ -29,11 +29,16 @@ class OrderCRUD_Test(TestCase):
     """
     fixtures = [
         'test_user.json',
+        'test_processinglevel.json',
+        'test_projection.json',
         'test_orderstatus.json',
         'test_deliverymethod.json',
         'test_deliverydetail.json',
         'test_marketsector.json',
-        'test_order.json'
+        'test_order.json',
+        'test_datum.json',
+        'test_resamplingmethod.json',
+        'test_fileformat.json',
         ]
 
     def setUp(self):

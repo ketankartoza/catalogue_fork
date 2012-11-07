@@ -28,6 +28,11 @@ class OrderStatusHistoryCRUD_Test(TestCase):
     Tests models.
     """
     fixtures = [
+        'test_resamplingmethod.json',
+        'test_datum.json',
+        'test_fileformat.json',
+        'test_projection.json',
+        'test_processinglevel.json',
         'test_user.json',
         'test_orderstatus.json',
         'test_deliverymethod.json',

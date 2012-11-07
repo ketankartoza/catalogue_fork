@@ -27,7 +27,14 @@ class DeliveryDetailCRUD_Test(TestCase):
     Tests models.
     """
     fixtures = [
-        'test_deliverydetail.json'
+        'test_user.json',
+        'test_deliverydetail.json',
+        'test_processinglevel.json',
+        'test_projection.json',
+        'test_datum.json',
+        'test_resamplingmethod.json',
+        'test_fileformat.json',
+        'test_missiongroup.json',
         ]
 
     def setUp(self):

@@ -41,6 +41,9 @@ class OrdersViews_downloadOrderMetadata_Tests(TestCase):
         'test_fileformat.json',
         'test_processinglevel.json',
         'test_resamplingmethod.json',
+        'test_missionsensor.json',
+        'test_missiongroup.json',
+        'test_mission.json',
     ]
 
     def setUp(self):

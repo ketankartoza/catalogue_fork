@@ -39,11 +39,16 @@ class OrdersViews_addOrder_Tests(TestCase):
     """
 
     fixtures = [
+        'test_creatingsoftware',
+        'test_license.json',
+        'test_quality',
+        'test_institution.json',
         'test_projection.json',
         'test_datum.json',
         'test_fileformat.json',
         'test_processinglevel.json',
         'test_resamplingmethod.json',
+        'test_missiongroup.json',
         'test_mission.json',
         'test_missionsensor.json',
         'test_search.json',
@@ -54,6 +59,7 @@ class OrdersViews_addOrder_Tests(TestCase):
         'test_genericproduct.json',
         'test_genericimageryproduct.json',
         'test_genericsensorproduct.json',
+        'test_radarproduct.json',
         'test_opticalproduct.json',
         'test_user.json',
         'test_sacuserprofile.json',

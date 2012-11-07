@@ -39,6 +39,7 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
     fixtures = [
         'test_mission.json',
         'test_missionsensor.json',
+        'test_missiongroup.json',
         'test_search.json',
         'test_searchdaterange.json',
         'test_processinglevel.json',
@@ -52,7 +53,18 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
         'test_orderstatus.json',
         'test_orderstatushistory.json',
         'test_order.json',
-        'test_searchrecord.json'
+        'test_searchrecord.json',
+        'test_creatingsoftware',
+        'test_license.json',
+        'test_quality',
+        'test_institution.json',
+        'test_projection.json',
+        'test_datum.json',
+        'test_resamplingmethod.json',
+        'test_deliverymethod.json',
+        'test_deliverydetail.json',
+        'test_marketsector.json',
+        'test_fileformat.json',
     ]
 
     def setUp(self):

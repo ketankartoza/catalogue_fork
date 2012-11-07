@@ -41,7 +41,17 @@ class OrdersViews_viewOrderItems_Tests(TestCase):
         'test_deliverymethod.json',
         'test_deliverydetail.json',
         'test_order.json',
-        'test_searchrecord.json'
+        'test_searchrecord.json',
+        'test_processinglevel.json',
+        'test_projection.json',
+        'test_datum.json',
+        'test_resamplingmethod.json',
+        'test_fileformat.json',
+        'test_genericproduct.json',
+        'test_institution.json',
+        'test_creatingsoftware',
+        'test_license.json',
+        'test_quality',
     ]
 
     def setUp(self):

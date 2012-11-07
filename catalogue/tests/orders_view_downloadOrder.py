@@ -34,7 +34,15 @@ class OrdersViews_downloadOrder_Tests(TestCase):
         'test_deliverydetail.json',
         'test_marketsector.json',
         'test_order.json',
-        'test_taskingrequest.json'
+        'test_taskingrequest.json',
+        'test_processinglevel.json',
+        'test_projection.json',
+        'test_datum.json',
+        'test_resamplingmethod.json',
+        'test_fileformat.json',
+        'test_missiongroup.json',
+        'test_mission.json',
+        'test_missionsensor.json',
     ]
 
     def setUp(self):

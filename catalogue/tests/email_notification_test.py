@@ -41,7 +41,7 @@ class EmailNotificationTest(TestCase):
 
     fixtures = [
         'test_user.json',
-        'test_contenttypes.json'
+        #'test_contenttypes.json',
         'test_missiongroup.json',
         'test_mission.json',
         'test_missionsensor.json',
@@ -68,6 +68,7 @@ class EmailNotificationTest(TestCase):
         'test_radarproduct.json',
         'test_datum.json',
         'test_deliverymethod.json',
+        'test_deliverydetail.json',
         'test_fileformat.json',
         'test_resamplingmethod.json',
         'test_taskingrequest.json',

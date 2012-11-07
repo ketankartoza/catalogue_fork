@@ -17,19 +17,22 @@ __date__ = '10/07/2012'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
-from catalogue.models.new_dictionaries import (Collection,
-                                               Satellite,
-                                               SatelliteInstrument,
-                                               InstrumentType,
-                                               InstrumentTypeSpectralMode,
-                                               SpectralMode
-                                               )
+from catalogue.models.new_dictionaries import (
+    Collection,
+    Satellite,
+    SatelliteInstrument,
+    InstrumentType,
+    InstrumentTypeSpectralMode,
+    SpectralMode
+)
 from catalogue.models import Order
 from datetime import datetime
+
 
 class NewDictionariesTest(TestCase):
 
     fixtures = [
+        'test_institution.json',
         'test_collection.json',
         'test_satellite.json',
         'test_satelliteinstrument.json',

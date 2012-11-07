@@ -40,6 +40,9 @@ class OrdersViews_downloadClipGeometry_Tests(TestCase):
         'test_fileformat.json',
         'test_processinglevel.json',
         'test_resamplingmethod.json',
+        'test_missionsensor.json',
+        'test_mission.json',
+        'test_missiongroup.json',
     ]
 
     def setUp(self):
