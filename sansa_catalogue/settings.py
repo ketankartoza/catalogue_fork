@@ -13,7 +13,7 @@ AUTH_PROFILE_MODULE = 'catalogue.SacUserProfile'
 MANAGERS = ADMINS
 DATABASES = {
         'default': {  # new db that does not mimic acs system
-         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+         'ENGINE': 'django.contrib.gis.db.backends.postgis',
          'NAME': DBNAME,
          'USER': DBUSER,
          'PASSWORD': DBPASSWORD,
