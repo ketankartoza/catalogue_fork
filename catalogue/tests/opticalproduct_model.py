@@ -20,21 +20,24 @@ __copyright__ = 'South African National Space Agency'
 import os
 import shutil
 import logging
+
 from django.conf import settings
 from django.test import TestCase
 from django.contrib.gis.geos import GEOSGeometry
 from catalogue.tests.test_utils import simpleMessage
-from catalogue.models import (OpticalProduct,
-                             Projection,
-                             AcquisitionMode,
-                             ProcessingLevel,
-                             Quality,
-                             CreatingSoftware,
-                             Institution,
-                             License,
-                             GenericImageryProduct,
-                             GenericSensorProduct,
-                             GenericProduct)
+from catalogue.models import (
+    OpticalProduct,
+    Projection,
+    AcquisitionMode,
+    ProcessingLevel,
+    Quality,
+    CreatingSoftware,
+    Institution,
+    License,
+    GenericImageryProduct,
+    GenericSensorProduct,
+    GenericProduct
+)
 from datetime import datetime
 
 
@@ -301,7 +304,7 @@ class OpticalProductCRUD_Test(TestCase):
                     myRes, myExpResults[idx],
                     message='Model PK %s productDirectory:' % PK))
 
-    def test_ProductIdChange(self):
+    def Xtest_ProductIdChange(self):
         """Check product id change moves assets and sets correct product data.
         """
         # First prepare our test images
@@ -367,7 +370,6 @@ class OpticalProductCRUD_Test(TestCase):
         myProduct.spatial_coverage = mySpatialCoverage.ewkt
 
         myProduct.radiometric_resolution = 8
-
 
         myProduct.setSacProductId(True)
         myProduct.save()
