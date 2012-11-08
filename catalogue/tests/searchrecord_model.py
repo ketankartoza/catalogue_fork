@@ -28,6 +28,16 @@ class SearchRecordCRUD_Test(TestCase):
     """
     fixtures = [
         'test_genericproduct.json',
+        'test_deliverydetail.json',
+        'test_datum.json',
+        'test_resamplingmethod.json',
+        'test_fileformat.json',
+        'test_processinglevel.json',
+        'test_institution.json',
+        'test_license.json',
+        'test_projection.json',
+        'test_quality.json',
+        'test_creatingsoftware.json',
         'test_user.json',
         'test_orderstatus.json',
         'test_marketsector.json',

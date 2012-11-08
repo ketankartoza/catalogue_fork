@@ -29,6 +29,7 @@ class SearchCRUD_Test(TestCase):
     """
     fixtures = [
         'test_user.json',
+        'test_missiongroup.json',
         'test_mission.json',
         'test_missionsensor.json',
         'test_acquisitionmode.json',

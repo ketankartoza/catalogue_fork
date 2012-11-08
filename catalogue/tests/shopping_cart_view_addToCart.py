@@ -35,6 +35,9 @@ class ShoppingCart_addToCart_Tests(TestCase):
         'test_user.json',
         'test_mission.json',
         'test_missionsensor.json',
+        'test_missiongroup.json',
+        'test_institution.json',
+        'test_license.json',
         'test_search.json',
         'test_searchdaterange.json',
         'test_processinglevel.json',
@@ -49,7 +52,14 @@ class ShoppingCart_addToCart_Tests(TestCase):
         'test_marketsector.json',
         'test_deliverymethod.json',
         'test_order.json',
-        'test_searchrecord.json'
+        'test_searchrecord.json',
+        'test_projection.json',
+        'test_quality.json',
+        'test_creatingsoftware.json',
+        'test_deliverydetail.json',
+        'test_datum.json',
+        'test_resamplingmethod.json',
+        'test_fileformat.json',
     ]
 
     def setUp(self):

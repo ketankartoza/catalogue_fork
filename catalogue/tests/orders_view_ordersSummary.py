@@ -55,8 +55,8 @@ class OrdersViews_ordersSummary_Tests(TestCase):
         'test_genericproduct.json',
         'test_institution.json',
         'test_license.json',
-        'test_quality',
-        'test_creatingsoftware',
+        'test_quality.json',
+        'test_creatingsoftware.json',
 
     ]
 

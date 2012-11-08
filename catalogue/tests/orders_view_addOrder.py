@@ -39,9 +39,9 @@ class OrdersViews_addOrder_Tests(TestCase):
     """
 
     fixtures = [
-        'test_creatingsoftware',
+        'test_creatingsoftware.json',
         'test_license.json',
-        'test_quality',
+        'test_quality.json',
         'test_institution.json',
         'test_projection.json',
         'test_datum.json',

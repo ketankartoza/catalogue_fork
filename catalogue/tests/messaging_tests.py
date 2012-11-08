@@ -25,7 +25,7 @@ from django.contrib.auth.models import User
 
 from offline_messages.models import OfflineMessage
 
-from catalogue.tests.test_utils import RequestFactory
+from django.test.client import RequestFactory
 from catalogue.views import (sendMessageToUser,
                              sendMessageToAllUsers,
                              userMessages)
@@ -48,8 +48,6 @@ class MessagingTests(TestCase):
 
         self.factory = RequestFactory(enforce_csrf_checks=True)
         myClient = Client()
-        # First try to send a message as timlinux who IS staff
-        assert self.factory.login(username='timlinux', password='password')
         self.user = User.objects.get(id=1)
         #self.factory.__setattr__('user', myUser)
         # post payload
@@ -83,8 +81,6 @@ class MessagingTests(TestCase):
 
         self.factory = RequestFactory(enforce_csrf_checks=True)
         myClient = Client()
-        # First try to send a message as timlinux who IS staff
-        assert self.factory.login(username='pompies', password='password')
         self.user = User.objects.get(id=2)
         #self.factory.__setattr__('user', myUser)
         # post payload
@@ -113,8 +109,6 @@ class MessagingTests(TestCase):
 
         self.factory = RequestFactory(enforce_csrf_checks=True)
         myClient = Client()
-        # First try to send a message as timlinux who IS staff
-        assert self.factory.login(username='timlinux', password='password')
         self.user = User.objects.get(id=1)
         #self.factory.__setattr__('user', myUser)
         # post payload
@@ -143,8 +137,6 @@ class MessagingTests(TestCase):
         myMessages.delete()
         self.factory = RequestFactory(enforce_csrf_checks=True)
         #myClient = Client()
-        # First try to send a message as timlinux who IS staff
-        assert self.factory.login(username='timlinux', password='password')
         self.user = User.objects.get(id=1)
         #self.factory.__setattr__('user', myUser)
         # post payload

@@ -30,6 +30,7 @@ class SearchDateRangeCRUD_Test(TestCase):
     fixtures = [
         'test_user.json',
         'test_mission.json',
+        'test_missiongroup.json',
         'test_missionsensor.json',
         'test_acquisitionmode.json',
         'test_sensortype.json',

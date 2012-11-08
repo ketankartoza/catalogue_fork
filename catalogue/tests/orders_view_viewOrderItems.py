@@ -49,9 +49,9 @@ class OrdersViews_viewOrderItems_Tests(TestCase):
         'test_fileformat.json',
         'test_genericproduct.json',
         'test_institution.json',
-        'test_creatingsoftware',
+        'test_creatingsoftware.json',
         'test_license.json',
-        'test_quality',
+        'test_quality.json',
     ]
 
     def setUp(self):

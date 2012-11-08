@@ -38,7 +38,19 @@ class TaskingViews_viewTaskingRequest_Tests(TestCase):
         'test_marketsector.json',
         'test_missionsensor.json',
         'test_order.json',
-        'test_taskingrequest.json'
+        'test_taskingrequest.json',
+        'test_projection.json',
+        'test_creatingsoftware.json',
+        'test_license.json',
+        'test_quality.json',
+        'test_institution.json',
+        'test_projection.json',
+        'test_datum.json',
+        'test_processinglevel.json',
+        'test_resamplingmethod.json',
+        'test_fileformat.json',
+        'test_missiongroup.json',
+        'test_mission.json',
     ]
 
     def setUp(self):

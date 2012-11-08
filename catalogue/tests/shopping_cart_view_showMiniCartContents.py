@@ -35,6 +35,16 @@ class ShoppingCart_showMiniCartContents_Tests(TestCase):
         'test_user.json',
         'test_mission.json',
         'test_missionsensor.json',
+        'test_missiongroup.json',
+        'test_creatingsoftware.json',
+        'test_license.json',
+        'test_quality.json',
+        'test_institution.json',
+        'test_projection.json',
+        'test_datum.json',
+        'test_fileformat.json',
+        'test_processinglevel.json',
+        'test_resamplingmethod.json',
         'test_search.json',
         'test_searchdaterange.json',
         'test_processinglevel.json',
@@ -44,12 +54,13 @@ class ShoppingCart_showMiniCartContents_Tests(TestCase):
         'test_genericimageryproduct.json',
         'test_genericsensorproduct.json',
         'test_opticalproduct.json',
-        'test_user.json',
         'test_orderstatus.json',
         'test_marketsector.json',
         'test_deliverymethod.json',
+        'test_deliverydetail.json',
         'test_order.json',
         'test_searchrecord.json'
+
     ]
 
     def setUp(self):

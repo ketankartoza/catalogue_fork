@@ -47,15 +47,15 @@ class SpotIngestorTest(TestCase):
         'test_acquisitionmode.json',
         'test_institution.json',
         'test_license.json',
-        'test_projection',
-        'test_quality',
+        'test_projection.json',
+        'test_quality.json',
         'test_orderstatus.json',
         'test_order.json',
         'test_searchrecord.json',
         'test_sacuserprofile.json',
         'test_orderstatus.json',
         'test_marketsector.json',
-        'test_creatingsoftware',
+        'test_creatingsoftware.json',
         'test_genericproduct.json',
         'test_genericimageryproduct.json',
         'test_genericsensorproduct.json',
@@ -64,7 +64,8 @@ class SpotIngestorTest(TestCase):
         'test_datum.json',
         'test_deliverymethod.json',
         'test_fileformat.json',
-        'test_resamplingmethod.json'
+        'test_resamplingmethod.json',
+        'test_deliverydetail.json',
         ]
 
     def setUp(self):
