@@ -30,6 +30,7 @@ from django.conf import settings
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.shortcuts import get_object_or_404, render_to_response
 from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 #Dane Springmeyer's django-shapes app for exporting results as a shpfile
 from shapes.views import ShpResponder
 
@@ -175,7 +176,6 @@ def addTaskingRequest(theRequest):
         theRequest)
     logging.debug('Add tasking request called')
     myTitle = 'Create a new tasking request'
-    myRedirectPath = '/viewtaskingrequest/'
     logging.info('Preparing tasking request for user ' + str(theRequest.user))
     myRecords = None
     if str(theRequest.user) == 'AnonymousUser':
@@ -251,7 +251,8 @@ def addTaskingRequest(theRequest):
             logging.info('Tasking request : data is valid')
             # Now add the cart contents to the order
             notifySalesStaffOfTaskRequest(myObject.user, myObject.id)
-            return HttpResponseRedirect(myRedirectPath + str(myObject.id))
+            return HttpResponseRedirect(reverse(
+                'viewTaskingRequest', kwargs={'theId': myObject.id}))
         else:
             logging.info('Add Tasking Request : form is NOT valid')
             return render_to_response(

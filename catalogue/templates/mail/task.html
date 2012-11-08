@@ -1,4 +1,5 @@
 {% extends "mail/base.html" %}
+{% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
 {% block content %}
 
 <p style="font-size:1.3em">
@@ -18,7 +19,7 @@ Your tasking request status: {{ myTask.order_status }}
 </p>
 
 You can review your tasking request at any time by visiting the
-<a id="link" href="http://{{ domain }}/viewtaskingrequest/{{ myTask.id}}/">
+<a id="link" href="http://{{ domain }}{% url 'viewTaskingRequest' myTask.id %}">
 Tasking Request Page</a> If you have any problems or special
 requests relating to this order, please contact our sales staff
 at <a id="link"
