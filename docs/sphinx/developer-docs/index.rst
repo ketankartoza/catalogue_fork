@@ -16,4 +16,5 @@ Developer Manual
    informix-access
    product-schema
    tests
+   django14_migration
 
