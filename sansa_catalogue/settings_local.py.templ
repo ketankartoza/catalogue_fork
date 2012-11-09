@@ -1,5 +1,4 @@
 import os
-import logging
 from catalogue.getIpAddress import get_ip_address
 
 # Things you definately want to edit
@@ -21,8 +20,10 @@ ACSDBPORT = 5432
 # Is debugging enabled? Disable on production machines!
 DEBUG = True
 
+# Python logging configuration expects plain string LOG_LEVEL
+LOG_LEVEL = 'ERROR'
+
 # Sentry server client settings
-LOG_LEVEL = logging.ERROR
 # Local Same as on live server)
 #SENTRY_DSN = ('http://f350e896390d48ceb4ec565ee9f0cabc:'
 #              '5be8f1cfae10427cb18d817d2d5637be@localhost:9000/3')

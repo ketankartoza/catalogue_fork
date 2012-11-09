@@ -1,7 +1,4 @@
 import os
-import logging
-from raven.conf import setup_logging
-from raven.contrib.django.handlers import SentryHandler
 # This is an exception to our 'dont import globally' rule
 from settings_local import *
 
@@ -110,6 +107,7 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'django.contrib.messages',
     'offline_messages',
+    'django_nose',
     'registration',
     'raven.contrib.django',  # for sentry logging
     'catalogue',
@@ -146,30 +144,71 @@ MESSAGE_STORAGE = 'offline_messages.storage.OfflineStorageEngine'
 # Sentry settings - logs exceptions to a database
 # see http://sentry.sansa.org.za/account/projects/catalogue-live/docs/django/
 
-#logging.getLogger().setLevel(logging.INFO)
-logging.getLogger().setLevel(LOG_LEVEL)
-setup_logging(SentryHandler())
-
 LOGGING = {
+    # internal dictConfig version - DON'T CHANGE
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
+    # default root logger - handle with sentry
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['sentry'],
+    },
+    'formatters': {
+        # define output formats
+        'verbose': {
+            'format': '%(levelname)s %(name)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(name)s %(message)s'
+        },
+    },
     'filters': {
+        # user defined filters
         'require_debug_false': {
+            # activate only if DEBUG=False
             '()': 'django.utils.log.RequireDebugFalse'
         }
     },
     'handlers': {
+        # send email to mail_admins, if DEBUG=False
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        # sentry logger
+        'sentry': {
+            'level': LOG_LEVEL, #  use LOG_LEVEL from settings_local
+            'class': 'raven.contrib.django.handlers.SentryHandler',
+        },
+        # console output, useful for debugging
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'temp_log.log',
+        },
     },
     'loggers': {
-        'django.request': {
+        # in case of an ERROR with raven/sentry send an email to project admins
+        'raven': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
-            'propagate': True,
+            'propagate': False,
         },
+        'sentry.errors': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+
+        # i.e. log every db query to the file, only if DEBUG=True
+        # https://docs.djangoproject.com/en/1.4/topics/logging/#django-db-backends
+
+        # 'django.db.backends': {
+        #     'handlers': ['file'],
+        # }
     }
 }
