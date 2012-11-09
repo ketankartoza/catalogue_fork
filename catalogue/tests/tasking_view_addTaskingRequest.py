@@ -170,7 +170,7 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
 
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
-            myResp['Location'], 'http://testserver/viewtaskingrequest/4')
+            myResp['Location'], 'http://testserver/viewtaskingrequest/4/')
 
         # check if tasking request is in the database
         myNewTaskingRequests_count = len(TaskingRequest.objects.all())
@@ -254,7 +254,7 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
 
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
-            myResp['Location'], 'http://testserver/viewtaskingrequest/4')
+            myResp['Location'], 'http://testserver/viewtaskingrequest/4/')
 
         # check if tasking request is in the database
         myNewTaskingRequests_count = len(TaskingRequest.objects.all())
