@@ -28,6 +28,7 @@
 <div id="content">
 {% box_start "box-" %}
   <form action="{{ request.path_info }}" method="post" accept-charset="utf-8">
+  {% csrf_token %}
   <fieldset>
     <legend>{% trans "Crop &amp; resize the area you want" %}</legend>
 

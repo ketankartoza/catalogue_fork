@@ -24,6 +24,7 @@
 <div id="content">
 {% box_start "box-" %}
   <form action="" method="post" accept-charset="utf-8">
+  {% csrf_token %}
   <fieldset>
     <legend>{% trans "Search for an image on Picasa Web" %}</legend>
     <label for="id_search">{% trans "Search on Picasa Web" %}</label>
@@ -41,6 +42,7 @@
   </form>
 
   <form class="hide" id="avatar" action="{% url profile_edit_avatar %}" method="post" accept-charset="utf-8">
+  {% csrf_token %}
     <input type="hidden" name="url" value="" />
   </form>
 {% box_end %}

@@ -30,6 +30,7 @@
 
   {% load avatars %}
   <form action="" method="post">
+  {% csrf_token %}
   <fieldset>
     <legend>{% trans "Overview of your profile" %}</legend>
     <div id="avatar" class="span-3 center">

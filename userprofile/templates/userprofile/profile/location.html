@@ -17,6 +17,7 @@
 <div id="content">
 {% box_start "box-" %}
   <form action="{{ request.path_info }}" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
   {{ form.errors }}
   <fieldset>
     <legend>{% trans "Define your location" %}</legend>

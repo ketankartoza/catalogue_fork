@@ -62,6 +62,7 @@
   </script>
   <div id="maptooltip">&nbsp;</div>
   <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="horizontal" id="add_form">
+  {% csrf_token %}
   {% box_start "box-map-container" "span-22" %}
     <h2 class="centered"><img src="/media/images/letter_32.png" /> {{ myTitle }}</h2>
     <div id="map-container" class="span-22 ui-widget-content ui-state-highlight ui-corner-all last"> {# thus nested jquery widget container #}

@@ -187,6 +187,7 @@
   <div id="statusForm" style="display:none;">
       <h3 id="formHeading">Update Status</h3>
       <form enctype="multipart/form-data" action="/updateorderhistory/" method="post" id="order_form">
+        {% csrf_token %}
         <center>{{ myForm.as_p }}</center>
         <input id="id_order" name="order" type="hidden" value="{{myOrder.id}}" />
         <button type="submit" id="submitButton">Update</button>

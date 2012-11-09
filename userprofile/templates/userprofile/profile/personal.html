@@ -16,6 +16,7 @@
 <div id="content">
 {% box_start "box-" %}
   <form class="personal" action="{{ request.path_info }}" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
   <fieldset>
     <legend>{% trans "Edit your personal information" %}</legend>
     <p>Please make sure we have sufficient information to contact you.</p>

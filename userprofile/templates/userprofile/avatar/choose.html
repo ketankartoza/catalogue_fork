@@ -38,6 +38,7 @@
 {% box_end %}
 {% box_start "box-" %}
   <form action="" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+    {% csrf_token %}
     {% if form.errors %}
       {% for error,desc in form.errors.items %}
         <p class="error">{{desc|join:"; "}}</p>

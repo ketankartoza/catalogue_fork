@@ -18,6 +18,7 @@
 <div id="content">
 {% box_start "box-" %}
   <form action="" method="post" accept-charset="utf-8">
+  {% csrf_token %}
   <fieldset>
     <legend>{% trans "User registration" %}</legend>
 

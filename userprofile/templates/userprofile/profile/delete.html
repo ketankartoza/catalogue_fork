@@ -10,6 +10,7 @@
 <div id="content">
 {% box_start "box-" %}
   <form action="" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
     <fieldset>
       <legend>{% trans "Delete your personal information" %}</legend>
       <p><label for="remove">{% trans "Are you sure?" %}</label> <input id="remove" type="submit" value="{% trans "Yes" %}" /></p>
