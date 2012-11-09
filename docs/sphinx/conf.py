@@ -22,7 +22,7 @@ sys.path.append(os.path.abspath('../../'))
 sys.path.append(os.path.abspath('../../catalogue'))
 sys.path.append(os.path.abspath('../../catalogue/models'))
 #setup django
-import settings
+from sansa_catalogue import settings
 from django.core.management import setup_environ
 setup_environ(settings)
 
