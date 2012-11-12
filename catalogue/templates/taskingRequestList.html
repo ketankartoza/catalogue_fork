@@ -38,7 +38,7 @@
               Switch to:
               <button onclick='location="/listorders/"'>Product Orders View</button>
               {% if myRecords.has_previous %}
-              <a href="#" onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a>
+              <a href="#" onclick='$("#content").load("{{myUrl}}?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a>
               {% endif %}
 
               <span class="current">
@@ -46,7 +46,7 @@
               </span>
 
               {% if myRecords.has_next %}
-              <a href="#" onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</a>
+              <a href="#" onclick='$("#content").load("{{myUrl}}?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</a>
               {% endif %}
             </span>
           </div>
@@ -73,7 +73,7 @@
           <div class="pagination">
             <span class="step-links">
               {% if myRecords.has_previous %}
-              <a href="#" onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a>
+              <a href="#" onclick='$("#content").load("{{myUrl}}?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a>
               {% endif %}
 
               <span class="current">
@@ -81,7 +81,7 @@
               </span>
 
               {% if myRecords.has_next %}
-              <a href="#" onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</a>
+              <a href="#" onclick='$("#content").load("{{myUrl}}?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</a>
               {% endif %}
             </span>
           </div>
