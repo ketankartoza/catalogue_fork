@@ -32,7 +32,7 @@
           <img src="/media/images/tasking_16.png" alt=""/>&nbsp;New Tasking Request</a>
       </li>
       <li>
-        <a href="/mytaskingrequests" onclick='loadContent("/mytaskingrequests/"); return false;'>
+        <a href="{% url 'myTaskingRequests' %}" onclick='loadContent("{% url 'myTaskingRequests' %}"); return false;'>
           <img src="/media/images/tasking_16.png" alt=""/>&nbsp;My Tasking Requests</a>
       </li>
       <li><a href="/whereami"><img src="/media/images/wherami_16.png" />&nbsp;Where am I?</a></li>

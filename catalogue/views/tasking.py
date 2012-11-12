@@ -119,11 +119,10 @@ def myTaskingRequests(theRequest):
         myRecords = myPaginator.page(myPage)
     except (EmptyPage, InvalidPage):
         myRecords = myPaginator.page(myPaginator.num_pages)
-    myUrl = 'mytaskingrequests'
     #render_to_response is done by the renderWithContext decorator
     return render_to_response(myPath, {
         'myRecords': myRecords,
-        'myUrl': myUrl},
+        'myUrl': reverse('myTaskingRequests')},
         context_instance=RequestContext(theRequest))
 
 
