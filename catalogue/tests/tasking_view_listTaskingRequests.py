@@ -90,7 +90,7 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
 
         self.assertEqual(myResp.status_code, 200)
         # check response
-        self.assertEqual(myResp.context['myUrl'], 'listtaskingrequests')
+        self.assertEqual(myResp.context['myUrl'], '/listtaskingrequests/')
 
         # check used templates
         myExpTemplates = [
@@ -117,7 +117,7 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
 
         self.assertEqual(myResp.status_code, 200)
         # check response
-        self.assertEqual(myResp.context['myUrl'], 'listtaskingrequests')
+        self.assertEqual(myResp.context['myUrl'], '/listtaskingrequests/')
 
         # check used templates
         myExpTemplates = [
@@ -159,7 +159,7 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
 
         self.assertEqual(myResp.status_code, 200)
         # check response
-        self.assertEqual(myResp.context['myUrl'], 'listtaskingrequests')
+        self.assertEqual(myResp.context['myUrl'], '/listtaskingrequests/')
 
         # check used templates
         myExpTemplates = [
@@ -189,7 +189,7 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
 
         self.assertEqual(myResp.status_code, 200)
         # check response
-        self.assertEqual(myResp.context['myUrl'], 'listtaskingrequests')
+        self.assertEqual(myResp.context['myUrl'], '/listtaskingrequests/')
 
         # check used templates
         myExpTemplates = [
@@ -218,7 +218,7 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
 
         self.assertEqual(myResp.status_code, 200)
         # check response
-        self.assertEqual(myResp.context['myUrl'], 'listtaskingrequests')
+        self.assertEqual(myResp.context['myUrl'], '/listtaskingrequests/')
 
         # check used templates
         myExpTemplates = [
