@@ -1,4 +1,5 @@
 {# Original code from Tim's SABIO project and copyright is retained by the original author #}
+{% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% block content %}
   {% box_start "box-orders-list" %}
@@ -30,7 +31,7 @@
   </div>
   <table>
     <thead>
-    </thead>               
+    </thead>
     <tbody>
       <tr>
         <th>Id</th>
@@ -44,7 +45,7 @@
           <div class="pagination">
             <span class="step-links">
               Switch to:
-              <button onclick='location="/listtaskingrequests/"'>Tasking Request View</button>
+              <button onclick='location="{% url 'listTaskingRequests' %}"'>Tasking Request View</button>
               {% if myRecords.has_previous %}
               <button onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</button>
               {% endif %}

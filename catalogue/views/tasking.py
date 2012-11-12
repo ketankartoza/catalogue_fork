@@ -157,11 +157,10 @@ def listTaskingRequests(theRequest):
         myRecords = myPaginator.page(myPage)
     except (EmptyPage, InvalidPage):
         myRecords = myPaginator.page(myPaginator.num_pages)
-    myUrl = 'listtaskingrequests'
     #render_to_response is done by the renderWithContext decorator
     return ({
         'myRecords': myRecords,
-        'myUrl': myUrl,
+        'myUrl': reverse('listTaskingRequests'),
         'myCurrentMonth': datetime.date.today()
     })
 
