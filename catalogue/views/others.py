@@ -35,7 +35,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.gis.shortcuts import render_to_kml, render_to_kmz
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template import RequestContext
 from django.forms.util import ErrorList
@@ -300,11 +299,6 @@ def clip(theRequest):
             logging.debug('Clip: ' + str(myClip))
             logging.info('form is VALID after editing')
             #test of registered user messaging system
-            messages.add_message(
-                theRequest,
-                messages.INFO,
-                message='Your clip request has been submitted successfully. '
-                'Please wait for email notification of result availability.')
             return HttpResponseRedirect(myRedirectPath + str(myObject.id))
         else:
             logging.info('form is INVALID after editing')

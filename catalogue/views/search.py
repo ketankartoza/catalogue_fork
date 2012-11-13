@@ -34,7 +34,6 @@ from django.http import (
     HttpResponseServerError)
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 #from django.contrib.admin.views.decorators import staff_member_required
 from django.template import RequestContext
 #from django.db.models import Count, Min, Max  # for aggregate queries
@@ -196,11 +195,6 @@ def search(theRequest):
                 logging.debug('Search: ' + str(mySearch))
                 logging.info('form is VALID after editing')
                 myFormset.save()
-                #test of registered user messaging system
-                messages.add_message(
-                    theRequest,
-                    messages.INFO,
-                    message='Your search was carried out successfully.')
 
                 return HttpResponseRedirect('/searchresult/' + mySearch.guid)
             else:
@@ -390,11 +384,6 @@ def productIdSearch(theRequest, theGuid):
                 return HttpResponse(simplejson.dumps(
                     mySearcher.describeQuery()), mimetype='application/json')
             else:
-                #test of registered user messaging system
-                messages.add_message(
-                    theRequest,
-                    messages.INFO,
-                    message='Your search was modified successfully.')
                 return HttpResponseRedirect('/searchresult/' + mySearch.guid)
 
         else:
