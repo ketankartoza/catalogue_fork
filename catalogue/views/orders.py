@@ -524,7 +524,7 @@ def addOrder(theRequest):
         if myRecords.count() < 1:
             logging.debug('Cart has no records')
             logging.info('User has no items in their cart')
-            return HttpResponseRedirect('/emptyCartHelp/')
+            return HttpResponseRedirect(reverse('emptyCartHelp'))
         else:
             logging.debug('Cart has records')
             logging.info('Cart contains : ' +

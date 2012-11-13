@@ -16,7 +16,7 @@
     <span class="dir"><img src="/media/images/bookmark_16.png" alt="" />&nbsp;Popular Links</span>
     <ul>
       <li>
-        <a href="/mapHelp/" onclick='loadContent("/mapHelp/"); return false;'>
+        <a href="{% url 'mapHelp' %}" onclick='loadContent("/mapHelp/"); return false;'>
           <img src="/media/images/help_16.png" alt=""/>&nbsp;Using the map</a>
       </li>
       <li>
@@ -80,6 +80,6 @@
   <li><a href="/accounts/register/"><img src="/media/images/key_16.png">&nbsp;Register</a></li>
   <li><a href="/accounts/password/reset/"><img src="/media/images/user_16.png">&nbsp;Reset Password</a></li>
   {% endif %}
-  <li><a href="/about/"><img src="/media/images/flag_16.png" alt=""/>&nbsp;About</a></li>
-  <li><a href="/contact/"><img src="/media/images/pencil_16.png" alt=""/>&nbsp;Contact </a></li>
+  <li><a href="{% url 'about' %}"><img src="/media/images/flag_16.png" alt=""/>&nbsp;About</a></li>
+  <li><a href="{% url 'contact' %}"><img src="/media/images/pencil_16.png" alt=""/>&nbsp;Contact </a></li>
 </ul>
