@@ -35,7 +35,7 @@
         <a href="{% url 'myTaskingRequests' %}" onclick='loadContent("{% url 'myTaskingRequests' %}"); return false;'>
           <img src="/media/images/tasking_16.png" alt=""/>&nbsp;My Tasking Requests</a>
       </li>
-      <li><a href="/whereami"><img src="/media/images/wherami_16.png" />&nbsp;Where am I?</a></li>
+      <li><a href="{% url 'whereAmI' %}"><img src="/media/images/wherami_16.png" />&nbsp;Where am I?</a></li>
     </ul>
   </li>
   {# Partners menu #}
@@ -52,14 +52,14 @@
   <li>
     <span class="dir"><img src="/media/images/users_16.png" alt="" />&nbsp;Staff</span>
     <ul>
-      <li><a href="/visitormap/"><img src="/media/images/users_16.png">&nbsp;Vistor Map</a></li>
-      <li><a href="/kml/"><img src="/media/images/darkearth_16.png">&nbsp;Visitor KML</a></li>
+      <li><a href="{% url 'visitorMap' %}"><img src="/media/images/users_16.png">&nbsp;Vistor Map</a></li>
+      <li><a href="{% url 'visitorsKml' %}"><img src="/media/images/darkearth_16.png">&nbsp;Visitor KML</a></li>
       <li>
         <a href="/visitorlist/" onclick='loadContent("/visitorlist/"); return false;'>
           <img src="/media/images/notebook_16.png" alt=""/>&nbsp;Visitor List</a>
       </li>
       <li><a href="/visitorreport/"><img src="/media/images/statistics_16.png">&nbsp;Visitor Stats</a></li>
-      <li><a href="/searchesmap/"><img src="/media/images/search_16.png">&nbsp;Searches Map</a></li>
+      <li><a href="{% url 'searchesMap' %}"><img src="/media/images/search_16.png">&nbsp;Searches Map</a></li>
       <li>
         <a href="/recentsearches/" onclick='loadContent("/recentsearches/"); return false;'>
           <img src="/media/images/notebook_16.png" alt=""/>&nbsp;Searches Table</a>

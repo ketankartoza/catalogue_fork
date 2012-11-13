@@ -30,6 +30,7 @@ import urllib2
 import traceback
 
 # Django helpers for forming html pages
+from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.gis.shortcuts import render_to_kml, render_to_kmz
@@ -475,8 +476,9 @@ def showThumbPage(theRequest, theId):
     myImageFile = os.path.join(
         myProduct.thumbnailDirectory(), myProduct.product_id + '.jpg')
     myDetails.append(
-        '<tr><td><center><img src=\"/thumbnails/'
-        + myImageFile + '"></center></td></tr>')
+        '<tr><td><center><img src="%s"></center></td></tr>' % (
+            reverse('showThumbPage', kwargs={'theId': myImageFile}),)
+    )
     #render_to_response is done by the renderWithContext decorator
     logging.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
     logging.info('Media path    :   ' + str(settings.MEDIA_ROOT))

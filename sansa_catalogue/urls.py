@@ -35,7 +35,8 @@ urlpatterns = patterns('',
     url(r'^about/$', about),
     url(r'^contact/$', contact),
     url(r'^deletesearch/(?P<theId>[0-9]+)/$', deleteSearch),
-    url(r'^kml/$', visitorsKml),
+    url(r'^kml/$', visitorsKml, name='visitorsKml'),
+    # this isn't used?
     url(r'^cartkml/$', cartKml),
     url(r'^mapHelp/$', mapHelp),
     url(r'^emptyCartHelp/$', emptyCartHelp),
@@ -43,8 +44,10 @@ urlpatterns = patterns('',
     url(r'^sceneidhelp/$', sceneIdHelp),
     url(r'^modifysearch/(?P<theGuid>[a-h0-9\-]{36})/$', modifySearch ),
     # match a product id - its not needed to give teh full id, just enough to be semi unique
-    url(r'^showProduct/(?P<theProductId>[A-Za-z0-9\_\-]{38,58})/$', showProduct ),
+    url(r'^showProduct/(?P<theProductId>[A-Za-z0-9\_\-]{38,58})/$', showProduct, name='showProduct'),
+    # is this used?
     url(r'^showProductByOriginalId/(?P<theOriginalProductId>[A-Za-z0-9\_\-]{0,58})/$', showProductByOriginalId ),
+    # is it used?
     url(r'^clip/$', clip),
     url(r'^myclips/$', clipHistory),
     url(r'^mysearches/$', searchHistory),
@@ -54,19 +57,21 @@ urlpatterns = patterns('',
     url(r'^search/$', 'catalogue.views.search.search'), # clashes with module name catalogue.views.search
     url(r'^productIdSearchClone/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearchClone),
     url(r'^productIdSearch/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearch),
-    url(r'^visit/$', logVisit),
-    url(r'^visitormap/$', visitorMap),
-    url(r'^whereami/$', whereAmI),
+    url(r'^visit/$', logVisit, name='logVisit'),
+    url(r'^visitormap/$', visitorMap, name='visitorMap'),
+    url(r'^whereami/$', whereAmI, name='whereAmI'),
+    #this isn't used anywhere
     url(r'^worldmap/$', worldMap),
 
     #show all searches that were made
-    url(r'^searchesmap/$', searchesMap),
+    url(r'^searchesmap/$', searchesMap, name='searchesMap'),
     url(r'^visitorlist/$', visitorList),
     url(r'^visitorfrequency/$', visitorFrequency),
     url(r'^visitorreport/$', visitorReport),
     url(r'^visitormonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', visitorMonthlyReport),
     # Profile application
     url(r'^accounts/', include('userprofile.urls')),
+    # this isn't used?
     url(r'^searchkml/(?P<theGuid>[a-h0-9\-]{36})/$', searchKml), #single search poly as kml
     #show a single search map
     url(r'^searchresult/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultMap),
@@ -76,20 +81,23 @@ urlpatterns = patterns('',
     url(r'^downloadsearchresults/(?P<theGuid>[a-h0-9\-]{36})/$', downloadSearchResult),
     url(r'^downloadsearchmetadata/(?P<theGuid>[a-h0-9\-]{36})/$', downloadSearchResultMetadata),
     # show segment thumb for a segment by #
-    url(r'^thumbnailpage/(?P<theId>[0-9]+)/$', showThumbPage),
+    # thumbnailpage is called only by itself?
+    url(r'^thumbnailpage/(?P<theId>[0-9]+)/$', showThumbPage, name='showThumbPage'),
     url(r'^sensordictionaries/$', getSensorDictionaries),
     # returns image mime type - show segment thumb info for a segment
-    url(r'^thumbnail/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showThumb),
+    url(r'^thumbnail/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showThumb, name='showThumb'),
     # returns html mime type
-    url(r'^showpreview/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showPreview),
+    url(r'^showpreview/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showPreview, name='showPreview'),
     #show info for a scene or segment by #
-    url(r'^metadata/(?P<theId>[0-9]+)/$', metadata),
+    url(r'^metadata/(?P<theId>[0-9]+)/$', metadata, name="metadata"),
+    # this isn't used?
     url(r'^metadatatext/(?P<theId>[0-9]+)/$', metadataText),
     url(r'^addtocart/(?P<theId>[0-9]+)/$', addToCart, name='addToCart'),
     url(r'^removefromcart/(?P<theId>[0-9]+)/$', removeFromCart, name='removeFromCart'),
     # cart contents for embedding into other pages
     url(r'^downloadcart/$', downloadCart, name='downloadCart'),
     url(r'^downloadcartmetadata/$', downloadCartMetadata, name='downloadCartMetadata'),
+    # myCart is never used
     url(r'^myCart/$', showCartContents),
     url(r'^showcartcontents/$', showCartContents, name='showCartContents'), #used by xhr requests
     url(r'^showminicartcontents/$', showMiniCartContents, name='showMiniCartContents'),
