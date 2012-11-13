@@ -24,6 +24,8 @@ Migration procedure
 
       mv settings_local.py sansa_catalogue/
 
+  #. update ``settings_local.py`` according to ``settings_local.py.templ``
+
   * Optionally:
 
     * regenerate documentation: ``cd docs/sphinx; make clean; make html; cd -``
