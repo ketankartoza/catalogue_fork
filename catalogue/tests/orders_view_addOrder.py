@@ -220,7 +220,7 @@ class OrdersViews_addOrder_Tests(TestCase):
 
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
-            myResp['Location'], 'http://testserver/vieworder/4')
+            myResp['Location'], 'http://testserver/vieworder/4/')
 
         myOrdersCount_new = len(Order.objects.all())
         self.assertEqual(myOrdersCount_new, myOrdersCount + 1)
@@ -324,7 +324,7 @@ class OrdersViews_addOrder_Tests(TestCase):
 
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
-            myResp['Location'], 'http://testserver/vieworder/4')
+            myResp['Location'], 'http://testserver/vieworder/4/')
 
         myOrdersCount_new = len(Order.objects.all())
         self.assertEqual(myOrdersCount_new, myOrdersCount + 1)
@@ -355,7 +355,7 @@ class OrdersViews_addOrder_Tests(TestCase):
 
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
-            myResp['Location'], 'http://testserver/vieworder/4')
+            myResp['Location'], 'http://testserver/vieworder/4/')
 
         myOrdersCount_new = len(Order.objects.all())
         self.assertEqual(myOrdersCount_new, myOrdersCount + 1)

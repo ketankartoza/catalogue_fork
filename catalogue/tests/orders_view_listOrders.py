@@ -93,7 +93,7 @@ class OrdersViews_listOrders_Tests(TestCase):
 
         # check response object
         self.assertEqual(
-            myResp.context['myUrl'], 'listorders')
+            myResp.context['myUrl'], '/listorders/')
 
         self.assertEqual(
             myResp.context['myCurrentMonth'], date.today())
@@ -124,7 +124,7 @@ class OrdersViews_listOrders_Tests(TestCase):
 
         # check response object
         self.assertEqual(
-            myResp.context['myUrl'], 'listorders')
+            myResp.context['myUrl'], '/listorders/')
 
         self.assertEqual(
             myResp.context['myCurrentMonth'], date.today())
@@ -156,7 +156,7 @@ class OrdersViews_listOrders_Tests(TestCase):
 
         # check response object
         self.assertEqual(
-            myResp.context['myUrl'], 'listorders')
+            myResp.context['myUrl'], '/listorders/')
 
         self.assertEqual(
             myResp.context['myCurrentMonth'], date.today())
@@ -188,7 +188,7 @@ class OrdersViews_listOrders_Tests(TestCase):
 
         # check response object
         self.assertEqual(
-            myResp.context['myUrl'], 'listorders')
+            myResp.context['myUrl'], '/listorders/')
 
         self.assertEqual(
             myResp.context['myCurrentMonth'], date.today())
@@ -220,7 +220,7 @@ class OrdersViews_listOrders_Tests(TestCase):
 
         # check response object
         self.assertEqual(
-            myResp.context['myUrl'], 'listorders')
+            myResp.context['myUrl'], '/listorders/')
 
         self.assertEqual(
             myResp.context['myCurrentMonth'], date.today())
@@ -251,7 +251,7 @@ class OrdersViews_listOrders_Tests(TestCase):
 
         # check response object
         self.assertEqual(
-            myResp.context['myUrl'], 'listorders')
+            myResp.context['myUrl'], '/listorders/')
 
         self.assertEqual(
             myResp.context['myCurrentMonth'], date.today())

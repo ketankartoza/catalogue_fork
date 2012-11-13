@@ -22,10 +22,10 @@
       </form>
     </div>
     <div class="span-9 centered last " id="order-list-buttonset">
-      <button onclick='location="/{{ myUrl }}/?page={{ myRecords.number}}&pdf"'><img src="/media/images/application-pdf.png" />PDF</button>
-      {% if myUrl = 'listorders' %}
-      <button onclick='location="/ordermonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/"'>Monthly reports</button>
-      <button onclick='location="/orderssummary/"'>Orders summary</button>
+      <button onclick='location="{{ myUrl }}?page={{ myRecords.number}}&pdf"'><img src="/media/images/application-pdf.png" />PDF</button>
+      {% if myUrl = '/listorders/' %} {# can't used url template tag for if evaluation #}
+      <button onclick='location="{% url 'orderMonthlyReport' myCurrentMonth|date:'Y'  myCurrentMonth|date:'m' %}"'>Monthly reports</button>
+      <button onclick='location="{% url 'ordersSummary' %}"'>Orders summary</button>
       {% endif %}
     </div>
   </div>
@@ -47,7 +47,7 @@
               Switch to:
               <button onclick='location="{% url 'listTaskingRequests' %}"'>Tasking Request View</button>
               {% if myRecords.has_previous %}
-              <button onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</button>
+              <button onclick='$("#content").load("{{myUrl}}?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</button>
               {% endif %}
 
               <span class="current">
@@ -55,7 +55,7 @@
               </span>
 
               {% if myRecords.has_next %}
-              <button onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</button>
+              <button onclick='$("#content").load("{{myUrl}}?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</button>
               {% endif %}
             </span>
           </div>
@@ -68,11 +68,11 @@
         <td>{{myOrder.order_status}}</td>
         <td>{{myOrder.user.get_profile.firstname}} {{myOrder.user.get_profile.surname}}</td>
         <td>
-          <img src="/media/images/search_16.png" 
+          <img src="/media/images/search_16.png"
                style="cursor: pointer;"
                onclick='
-               $("#content").load("/vieworder/{{myOrder.id}}/","", zebraTables );
-               return false;' 
+               $("#content").load("{% url 'viewOrder' myOrder.id %}","", zebraTables );
+               return false;'
            / >
         </td>
       </tr>
@@ -82,7 +82,7 @@
           <div class="pagination">
             <span class="step-links">
               {% if myRecords.has_previous %}
-              <button onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</button>
+              <button onclick='$("#content").load("{{myUrl}}?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</button>
               {% endif %}
 
               <span class="current">
@@ -90,7 +90,7 @@
               </span>
 
               {% if myRecords.has_next %}
-              <button onclick='$("#content").load("/{{myUrl}}/?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</button>
+              <button onclick='$("#content").load("{{myUrl}}?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</button>
               {% endif %}
             </span>
           </div>

@@ -91,7 +91,7 @@ class OrdersViews_myOrders_Tests(TestCase):
 
         # check response object
         self.assertEqual(
-            myResp.context['myUrl'], 'myorders')
+            myResp.context['myUrl'], '/myorders/')
 
         # check used templates
         myExpTemplates = [
@@ -122,7 +122,7 @@ class OrdersViews_myOrders_Tests(TestCase):
         # check response
         # check response object
         self.assertEqual(
-            myResp.context['myUrl'], 'myorders')
+            myResp.context['myUrl'], '/myorders/')
 
         # check used templates
         myExpTemplates = [
@@ -153,7 +153,7 @@ class OrdersViews_myOrders_Tests(TestCase):
         # check response
         # check response object
         self.assertEqual(
-            myResp.context['myUrl'], 'myorders')
+            myResp.context['myUrl'], '/myorders/')
 
         # check used templates
         myExpTemplates = [
@@ -183,7 +183,7 @@ class OrdersViews_myOrders_Tests(TestCase):
         self.assertEqual(myResp.status_code, 200)
         # check response object
         self.assertEqual(
-            myResp.context['myUrl'], 'myorders')
+            myResp.context['myUrl'], '/myorders/')
 
         # check used templates
         myExpTemplates = [
@@ -213,7 +213,7 @@ class OrdersViews_myOrders_Tests(TestCase):
         self.assertEqual(myResp.status_code, 200)
         # check response object
         self.assertEqual(
-            myResp.context['myUrl'], 'myorders')
+            myResp.context['myUrl'], '/myorders/')
 
         # check used templates
         myExpTemplates = ['pdf/orderListPage.html', u'pdfpage.html']

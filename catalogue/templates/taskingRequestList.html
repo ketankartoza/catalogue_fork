@@ -36,7 +36,7 @@
           <div class="pagination">
             <span class="step-links">
               Switch to:
-              <button onclick='location="/listorders/"'>Product Orders View</button>
+              <button onclick='location="{% url 'listOrders' %}"'>Product Orders View</button>
               {% if myRecords.has_previous %}
               <a href="#" onclick='$("#content").load("{{myUrl}}?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a>
               {% endif %}

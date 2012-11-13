@@ -29,6 +29,7 @@ from django.core.paginator import (
     Paginator,
     EmptyPage,
     InvalidPage)
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
@@ -105,11 +106,10 @@ def myOrders(theRequest):
         myRecords = myPaginator.page(myPage)
     except (EmptyPage, InvalidPage):
         myRecords = myPaginator.page(myPaginator.num_pages)
-    myUrl = 'myorders'
     #render_to_response is done by the renderWithContext decorator
     return ({
         'myRecords': myRecords,
-        'myUrl': myUrl
+        'myUrl': reverse('myOrders')
     })
 
 
@@ -146,11 +146,10 @@ def listOrders(theRequest):
         myRecords = myPaginator.page(myPage)
     except (EmptyPage, InvalidPage):
         myRecords = myPaginator.page(myPaginator.num_pages)
-    myUrl = 'listorders'
     #render_to_response is done by the renderWithContext decorator
     return ({
         'myRecords': myRecords,
-        'myUrl': myUrl,
+        'myUrl': reverse('listOrders'),
         'myCurrentMonth': datetime.date.today()
     })
 
@@ -487,7 +486,6 @@ def showDeliveryDetail(theRequest, theReferenceId):
 def addOrder(theRequest):
     logging.debug('Order called')
     myTitle = 'Create a new order'
-    myRedirectPath = '/vieworder/'
     logging.info('Preparing order for user ' + str(theRequest.user))
     myRecords = None
     (myLayersList,
@@ -650,7 +648,8 @@ def addOrder(theRequest):
             logging.debug('Search records added')
             #return HttpResponse('Done')
             notifySalesStaff(theRequest.user, myObject.id)
-            return HttpResponseRedirect(myRedirectPath + str(myObject.id))
+            return HttpResponseRedirect(
+                reverse('viewOrder', kwargs={'theId': myObject.id}))
         else:
             logging.info('Add Order: form is NOT valid')
             return render_to_response(

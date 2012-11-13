@@ -9,7 +9,7 @@
       <img src="/media/images/buy_16.png" alt=""/>&nbsp;My Cart</a>
   </li>
   <li>
-    <a href="/addorder"><img src="/media/images/letter_16.png" alt=""/>&nbsp;Order Now!</a>
+    <a href="{% url 'addOrder' %}"><img src="/media/images/letter_16.png" alt=""/>&nbsp;Order Now!</a>
   </li>
   {# popular links #}
   <li>
@@ -24,7 +24,7 @@
           <img src="/media/images/search_16.png" alt=""/>&nbsp;My Search History</a>
       </li>
       <li>
-        <a href="/myorders" onclick='loadContent("/myorders/"); return false;'>
+        <a href="{% url 'myOrders' %}" onclick='loadContent("{% url 'myOrders' %}"); return false;'>
           <img src="/media/images/briefcase_16.png" alt=""/>&nbsp;My Orders</a>
       </li>
       <li>
@@ -65,7 +65,7 @@
           <img src="/media/images/notebook_16.png" alt=""/>&nbsp;Searches Table</a>
       </li>
       <li>
-        <a href="/listorders/" onclick='loadContent("/listorders/"); return false;'>
+        <a href="{% url 'listOrders' %}" onclick='loadContent("{% url 'listOrders' %}"); return false;'>
           <img src="/media/images/briefcase_16.png" alt=""/>&nbsp;Orders List</a>
       </li>
       <li><a href="/dataSummaryTable/"><img src="/media/images/diagram_16.png" alt=""/>&nbsp;Data Summary</a></li>

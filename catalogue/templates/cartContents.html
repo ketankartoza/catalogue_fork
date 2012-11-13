@@ -1,3 +1,4 @@
+{% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% box_start "box-cart-contents" %}
   {% if myCartTitle %}
@@ -33,9 +34,9 @@
   {% if myDownloadOrderFlag %}
   <div id="cart-download-div" style="text-align: center;">
     <img src="/media/images/down_16.png" alt=""/> Download order as
-    <button onclick='location="/downloadorder/{{ myOrder.id }}/?shp";return false;'>SHP</button>
-    <button onclick='location="/downloadorder/{{ myOrder.id }}/?kml";return false;'>KML</button>
-    <button onclick='location="/downloadorder/{{ myOrder.id }}/?kmz";return false;'>KMZ</button>
+    <button onclick='location="{% url 'downloadOrder' myOrder.id %}?shp";return false;'>SHP</button>
+    <button onclick='location="{% url 'downloadOrder' myOrder.id %}?kml";return false;'>KML</button>
+    <button onclick='location="{% url 'downloadOrder' myOrder.id %}?kmz";return false;'>KMZ</button>
   </div>
   {% else %}
   {% if myRecords %}
