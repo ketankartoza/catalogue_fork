@@ -107,7 +107,6 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'django.contrib.messages',
     'offline_messages',
-    'django_nose',
     'registration',
     'raven.contrib.django',  # for sentry logging
     'catalogue',
@@ -131,14 +130,8 @@ AVATAR_WEBSEARCH = False
 #limit the number of returned metadata records
 MAX_METADATA_RECORDS = 500
 
-# South is currently disabled
-SOUTH_MIGRATION_MODULES = {
-  'acs': 'ignore',
-}
-
 # For offline messages app
 MESSAGE_STORAGE = 'offline_messages.storage.OfflineStorageEngine'
-
 
 #
 # Sentry settings - logs exceptions to a database

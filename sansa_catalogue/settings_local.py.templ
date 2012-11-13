@@ -5,12 +5,11 @@ from catalogue.getIpAddress import get_ip_address
 # ----------------------------------------------------------------------------
 
 DBNAME = 'sac'
-#DBNAME = 'sac_unittest'
 DBUSER = 'XXX'
 DBPASSWORD = 'XXX'
 DBHOST = 'localhost'
 DBPORT = 5432
-DBTEST = 'sac_unittest'
+DBTEST = 'sac_unittest_master'
 ACSDBNAME = 'acs'
 ACSDBUSER = 'XXX'
 ACSDBPASSWORD = 'XXX'
@@ -127,8 +126,6 @@ DEBUG_TOOLBAR_PANELS = (
     )
 
 EXTRA_INSTALLED_APPS = (
-    #commented out as needs django >= 1.3
-    #'django_jenkins',
     'debug_toolbar',
     )
 
@@ -153,5 +150,4 @@ MAX_METADATA_RECORDS = 500
 # unknown
 #GEOS_LIBRARY_PATH='/usr/lib/libgeos_c.so.1'
 #GEOIP_LIBRARY_PATH='/usr/lib/libGeoIP.so.1'
-#GDAL_LIBRARY_PATH='/usr/local/lib/libgdal.so'
 #GDAL_LIBRARY_PATH='/usr/local/lib/libgdal.so'
