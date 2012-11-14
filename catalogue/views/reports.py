@@ -28,6 +28,7 @@ import logging
 from django.shortcuts import get_object_or_404
 # from django.http import HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.core.urlresolvers import reverse
 # from django.contrib.gis.shortcuts import render_to_kml, render_to_kmz
 # from django.conf import settings
 from django.contrib.auth.decorators import login_required

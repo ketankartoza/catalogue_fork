@@ -52,10 +52,10 @@ urlpatterns = patterns('',
     url(r'^clip/$', clip),
     # is this used?
     url(r'^myclips/$', clipHistory),
-    url(r'^mysearches/$', searchHistory),
-    url(r'^recentsearches/$', recentSearches),
-    url(r'^searchmonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReport),
-    url(r'^searchmonthlyreportaoi/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReportAOI),
+    url(r'^mysearches/$', searchHistory, name='searchHistory'),
+    url(r'^recentsearches/$', recentSearches, name='recentSearches'),
+    url(r'^searchmonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReport, name='searchMonthlyReport'),
+    url(r'^searchmonthlyreportaoi/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReportAOI, name='searchMonthlyReportAOI'),
     url(r'^search/$', 'catalogue.views.search.search'), # clashes with module name catalogue.views.search
     url(r'^productIdSearchClone/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearchClone),
     url(r'^productIdSearch/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearch),
@@ -67,10 +67,11 @@ urlpatterns = patterns('',
 
     #show all searches that were made
     url(r'^searchesmap/$', searchesMap, name='searchesMap'),
-    url(r'^visitorlist/$', visitorList),
+    url(r'^visitorlist/$', visitorList, name='visitorList'),
+    # is this used?
     url(r'^visitorfrequency/$', visitorFrequency),
-    url(r'^visitorreport/$', visitorReport),
-    url(r'^visitormonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', visitorMonthlyReport),
+    url(r'^visitorreport/$', visitorReport, name='visitorReport'),
+    url(r'^visitormonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', visitorMonthlyReport, name='visitorMonthlyReport'),
     # Profile application
     url(r'^accounts/', include('userprofile.urls')),
     # this isn't used?
@@ -132,8 +133,8 @@ urlpatterns = patterns('',
 
     url(r'^getFeatureInfo/(?P<theLon>[-]*\d+.\d+)/(?P<theLat>[-]*\d+.\d+)/(?P<theBoundingBox>[0-9\-,.]*)/(?P<thePixelX>\d+)/(?P<thePixelY>\d+)/(?P<theMapWidth>\d+)/(?P<theMapHeight>\d+)/$', getFeatureInfo),
 
-    url( r'^dataSummaryTable/$', dataSummaryTable),
-    url( r'^dictionaryReport/$', dictionaryReport),
+    url( r'^dataSummaryTable/$', dataSummaryTable, name='dataSummaryTable'),
+    url( r'^dictionaryReport/$', dictionaryReport, name='dictionaryReport'),
     url( r'^sensorSummaryTable/(?P<theSensorId>[0-9]+)/$', sensorSummaryTable),
     url(r'^getUserMessages/$', messaging.userMessages),
     #need to be staff to use this

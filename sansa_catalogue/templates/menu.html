@@ -16,11 +16,11 @@
     <span class="dir"><img src="/media/images/bookmark_16.png" alt="" />&nbsp;Popular Links</span>
     <ul>
       <li>
-        <a href="{% url 'mapHelp' %}" onclick='loadContent("/mapHelp/"); return false;'>
+        <a href="{% url 'mapHelp' %}" onclick='loadContent("{% url 'mapHelp' %}"); return false;'>
           <img src="/media/images/help_16.png" alt=""/>&nbsp;Using the map</a>
       </li>
       <li>
-        <a href="/mysearches" onclick='loadContent("/mysearches/"); return false;'>
+        <a href="{% url 'searchHistory' %}" onclick='loadContent("{% url 'searchHistory' %}"); return false;'>
           <img src="/media/images/search_16.png" alt=""/>&nbsp;My Search History</a>
       </li>
       <li>
@@ -55,20 +55,20 @@
       <li><a href="{% url 'visitorMap' %}"><img src="/media/images/users_16.png">&nbsp;Vistor Map</a></li>
       <li><a href="{% url 'visitorsKml' %}"><img src="/media/images/darkearth_16.png">&nbsp;Visitor KML</a></li>
       <li>
-        <a href="/visitorlist/" onclick='loadContent("/visitorlist/"); return false;'>
+        <a href="{% url 'visitorList' %}" onclick='loadContent("{% url 'visitorList' %}"); return false;'>
           <img src="/media/images/notebook_16.png" alt=""/>&nbsp;Visitor List</a>
       </li>
-      <li><a href="/visitorreport/"><img src="/media/images/statistics_16.png">&nbsp;Visitor Stats</a></li>
+      <li><a href="{% url 'visitorReport' %}"><img src="/media/images/statistics_16.png">&nbsp;Visitor Stats</a></li>
       <li><a href="{% url 'searchesMap' %}"><img src="/media/images/search_16.png">&nbsp;Searches Map</a></li>
       <li>
-        <a href="/recentsearches/" onclick='loadContent("/recentsearches/"); return false;'>
+        <a href="{% url 'recentSearches' %}" onclick='loadContent("{% url 'recentSearches' %}"); return false;'>
           <img src="/media/images/notebook_16.png" alt=""/>&nbsp;Searches Table</a>
       </li>
       <li>
         <a href="{% url 'listOrders' %}" onclick='loadContent("{% url 'listOrders' %}"); return false;'>
           <img src="/media/images/briefcase_16.png" alt=""/>&nbsp;Orders List</a>
       </li>
-      <li><a href="/dataSummaryTable/"><img src="/media/images/diagram_16.png" alt=""/>&nbsp;Data Summary</a></li>
+      <li><a href="{% url 'dataSummaryTable' %}"><img src="/media/images/diagram_16.png" alt=""/>&nbsp;Data Summary</a></li>
       <li><a href="/admin/"><img src="/media/images/shield_16.png" alt=""/>&nbsp;Admin</a></li>
     </ul>
   </li>

@@ -4,9 +4,9 @@
 {% box_start "box-recent-search-history"%}
   <div class="span-22 centered">
 
-    <button onclick='location="/searchmonthlyreport/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/"'>Monthly reports of user origin</button>
-    <button onclick='location="/recentsearches/?pdf"'><img src="/media/images/application-pdf.png" /> PDF</button>
-    <button onclick='location="/searchmonthlyreportaoi/{{ myCurrentMonth|date:'Y' }}/{{ myCurrentMonth|date:'m' }}/"'>Monthly reports of AOI geometry</button>
+    <button onclick='location="{% url 'searchMonthlyReport' myCurrentMonth|date:'Y' myCurrentMonth|date:'m' %}"'>Monthly reports of user origin</button>
+    <button onclick='location="{% url 'recentSearches' %}?pdf"'><img src="/media/images/application-pdf.png" /> PDF</button>
+    <button onclick='location="{% url 'searchMonthlyReportAOI' myCurrentMonth|date:'Y' myCurrentMonth|date:'m' %}"'>Monthly reports of AOI geometry</button>
   </div>
   <h2 class="centered"><img class="icon" src="/media/images/clock_32.png"> Recent Search History</h2>
   <table width="100%" style="border-bottom: solid 1px; border-top: solid 1px; margin-top: 3px;">

@@ -1,8 +1,9 @@
 {# Original code from Tim's SABIO project and copyright is retained by the original author #}
+{% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% box_start "box-visitors"%}
   {% if myRecords %}
-  <button onclick='location="/visitorlist/?page={{ myRecords.number}}&pdf"'><img src="/media/images/application-pdf.png" /> PDF</button>
+  <button onclick='location="{% url 'visitorList' %}?page={{ myRecords.number}}&pdf"'><img src="/media/images/application-pdf.png" /> PDF</button>
       <table id="gradient-style" summary="Visitors List">
         <thead> 
         </thead>
@@ -21,7 +22,7 @@
               <div class="pagination">
                 <span class="step-links">
                   {% if myRecords.has_previous %}
-                  <a href="#" onclick='$("#content").load("/visitorlist/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a>
+                  <a href="#" onclick='$("#content").load("{% url 'visitorList' %}?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a>
                   {% endif %}
 
                   <span class="current">
@@ -29,7 +30,7 @@
                   </span>
 
                   {% if myRecords.has_next %}
-                  <a href="#" onclick='$("#content").load("/visitorlist/?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</a>
+                  <a href="#" onclick='$("#content").load("{% url 'visitorList' %}?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</a>
                   {% endif %}
                 </span>
               </div>
@@ -49,7 +50,7 @@
               <div class="pagination">
                 <span class="step-links">
                   {% if myRecords.has_previous %}
-                  <a href="#" onclick='$("#content").load("/visitorlist/?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a>
+                  <a href="#" onclick='$("#content").load("{% url 'visitorList' %}?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</a>
                   {% endif %}
 
                   <span class="current">
@@ -57,7 +58,7 @@
                   </span>
 
                   {% if myRecords.has_next %}
-                  <a href="#" onclick='$("#content").load("/visitorlist/?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</a>
+                  <a href="#" onclick='$("#content").load("{% url 'visitorList' %}?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</a>
                   {% endif %}
                 </span>
               </div>
