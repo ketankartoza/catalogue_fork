@@ -42,11 +42,11 @@
   {% if myRecords %}
   <div id="cart-download-div" style="text-align: center;">
     <span class="loud"><img src="/media/images/down_16.png" alt=""/>Download cart as:</span></br/>
-    <button onclick='location="/downloadcart/?shp";return false;'>SHP</button>
-    <button onclick='location="/downloadcart/?kml";return false;'>KML</button>
-    <button onclick='location="/downloadcart/?kmz";return false;'>KMZ</button>
-    <button onclick='location="/downloadcartmetadata/";return false;'>XML</button>
-    <button onclick='location="/downloadcartmetadata/?html";return false;'>HTML</button>
+    <button onclick='location="{% url 'downloadCart' %}?shp";return false;'>SHP</button>
+    <button onclick='location="{% url 'downloadCart' %}?kml";return false;'>KML</button>
+    <button onclick='location="{% url 'downloadCart' %}?kmz";return false;'>KMZ</button>
+    <button onclick='location="{% url 'downloadCartMetadata' %}";return false;'>XML</button>
+    <button onclick='location="{% url 'downloadCartMetadata' %}?html";return false;'>HTML</button>
   </div>
   {% endif %}
   {% endif %}

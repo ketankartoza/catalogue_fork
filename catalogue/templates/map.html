@@ -34,7 +34,7 @@
       });
       $("#accordion").accordion({ autoHeight: false });
       {% if myCartFlag %}
-      $("#cart").load("/showcartcontents/");
+      $("#cart").load("{% url 'showCartContents' %}");
       {% endif %}
       setupBaseMap();
       {% if myShowSearchFeatureInfoFlag %}
