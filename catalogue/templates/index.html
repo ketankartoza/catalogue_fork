@@ -4,8 +4,7 @@
 {% block content%}
   {% box_start box-welcome "span-22 last flat-background" %}
     <h2 class="centered">Welcome to the SANSA Earth Observation Online Catalogue</h2>
-    <center><a href="/search/"><img src="/media/images/overview.gif" alt="overview" /></a></center>
-    
+    <center><a href="{% url 'search' %}"><img src="/media/images/overview.gif" alt="overview" /></a></center>
     <p class="span-9 prepend-1 append-1"><img class="paragraph-icon" src="/media/images/sac_32.png"><b>Welcome: </b>
       This site provides the SANSA (South African National
       Space Agency) Earth Observation data catalogue for South Africa and the SADC Region.

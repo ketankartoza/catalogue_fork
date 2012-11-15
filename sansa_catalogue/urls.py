@@ -43,7 +43,7 @@ urlpatterns = patterns('',
     # is this used?
     url(r'^positionNotFound/$', positionNotFound),
     url(r'^sceneidhelp/$', sceneIdHelp),
-    url(r'^modifysearch/(?P<theGuid>[a-h0-9\-]{36})/$', modifySearch ),
+    url(r'^modifysearch/(?P<theGuid>[a-h0-9\-]{36})/$', modifySearch, name='modifySearch'),
     # match a product id - its not needed to give teh full id, just enough to be semi unique
     url(r'^showProduct/(?P<theProductId>[A-Za-z0-9\_\-]{38,58})/$', showProduct, name='showProduct'),
     # is this used?
@@ -56,9 +56,11 @@ urlpatterns = patterns('',
     url(r'^recentsearches/$', recentSearches),
     url(r'^searchmonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReport),
     url(r'^searchmonthlyreportaoi/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReportAOI),
-    url(r'^search/$', 'catalogue.views.search.search'), # clashes with module name catalogue.views.search
+    url(r'^search/$', 'catalogue.views.search.search', name='search'), # clashes with module name catalogue.views.search
+    # is this used?
     url(r'^productIdSearchClone/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearchClone),
-    url(r'^productIdSearch/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearch),
+    # is this used?
+    url(r'^productIdSearch/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearch, name='productIdSearch'),
     url(r'^visit/$', logVisit, name='logVisit'),
     url(r'^visitormap/$', visitorMap, name='visitorMap'),
     url(r'^whereami/$', whereAmI, name='whereAmI'),
@@ -76,16 +78,16 @@ urlpatterns = patterns('',
     # this isn't used?
     url(r'^searchkml/(?P<theGuid>[a-h0-9\-]{36})/$', searchKml), #single search poly as kml
     #show a single search map
-    url(r'^searchresult/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultMap),
+    url(r'^searchresult/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultMap, name='searchResultMap'),
     #show a single search page to insert into search result map
-    url(r'^searchpage/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultPage),
+    url(r'^searchpage/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultPage, name='searchResultPage'),
     # return the results of a search as a shapefile
-    url(r'^downloadsearchresults/(?P<theGuid>[a-h0-9\-]{36})/$', downloadSearchResult),
-    url(r'^downloadsearchmetadata/(?P<theGuid>[a-h0-9\-]{36})/$', downloadSearchResultMetadata),
+    url(r'^downloadsearchresults/(?P<theGuid>[a-h0-9\-]{36})/$', downloadSearchResult, name='downloadSearchResult'),
+    url(r'^downloadsearchmetadata/(?P<theGuid>[a-h0-9\-]{36})/$', downloadSearchResultMetadata, name='downloadSearchResultMetadata'),
     # show segment thumb for a segment by #
     # thumbnailpage is called only by itself?
     url(r'^thumbnailpage/(?P<theId>[0-9]+)/$', showThumbPage, name='showThumbPage'),
-    url(r'^sensordictionaries/$', getSensorDictionaries),
+    url(r'^sensordictionaries/$', getSensorDictionaries, name='getSensorDictionaries'),
     # returns image mime type - show segment thumb info for a segment
     url(r'^thumbnail/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showThumb, name='showThumb'),
     # returns html mime type

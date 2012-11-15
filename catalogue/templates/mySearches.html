@@ -38,7 +38,7 @@
         {% firstof mySearch.record_count 'N/D' %}
       </td>
       <td>
-        <a href="/searchresult/{{mySearch.guid}}/"><img src="/media/images/search_16.png" style="cursor: pointer;"
+        <a href="{% url 'searchResultMap' mySearch.guid %}"><img src="/media/images/search_16.png" style="cursor: pointer;"
           class="blocking-link"/></a>{# blocking link class used to trap clicks and show block ui while page redirect runs #}
       </td>
       <td>

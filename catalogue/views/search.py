@@ -25,6 +25,7 @@ import traceback
 from django.utils import simplejson
 
 # Django helpers for forming html pages
+from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import (
@@ -196,7 +197,9 @@ def search(theRequest):
                 logging.info('form is VALID after editing')
                 myFormset.save()
 
-                return HttpResponseRedirect('/searchresult/' + mySearch.guid)
+                return HttpResponseRedirect(
+                    reverse('searchResultMap', kwargs={'theGuid': mySearch.guid})
+                )
             else:
                 logging.info('formset is INVALID')
                 logging.debug('%s' % myFormset.errors)
@@ -327,7 +330,9 @@ def productIdSearchClone(theRequest, theGuid):
     logging.info('Original Search %s' % mySearch)
     mySearchClone = duplicate(mySearch, field='guid', value='')
     logging.info('Cloned Search %s' % mySearchClone)
-    return HttpResponseRedirect('/productIdSearch/' + mySearchClone.guid)
+    return HttpResponseRedirect(
+        reverse('productIdSearch', kwarg={'theGuid': mySearchClone.guid})
+    )
 
 
 @login_required
@@ -384,7 +389,9 @@ def productIdSearch(theRequest, theGuid):
                 return HttpResponse(simplejson.dumps(
                     mySearcher.describeQuery()), mimetype='application/json')
             else:
-                return HttpResponseRedirect('/searchresult/' + mySearch.guid)
+                return HttpResponseRedirect(
+                    reverse('searchResultMap', kwargs={'theGuid': mySearch.guid})
+                )
 
         else:
             logging.info('form is INVALID after editing')

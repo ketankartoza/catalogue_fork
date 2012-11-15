@@ -3,7 +3,7 @@
 
   <li><a href="/"><img src="/media/images/home_16.png" alt=""/>&nbsp;Home</a></li>
 {% if user.is_authenticated %}
-  <li><a href="/search/"><img src="/media/images/search_16.png" alt=""/>&nbsp;Search</a></li>
+  <li><a href="{% url 'search' %}"><img src="/media/images/search_16.png" alt=""/>&nbsp;Search</a></li>
   <li>
     <a href="{% url 'showCartContents' %}" onclick='loadContent("{% url 'showCartContents' %}"); return false;'>
       <img src="/media/images/buy_16.png" alt=""/>&nbsp;My Cart</a>
