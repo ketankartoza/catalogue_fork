@@ -52,20 +52,12 @@ urlpatterns = patterns('',
     url(r'^clip/$', clip),
     # is this used?
     url(r'^myclips/$', clipHistory),
-<<<<<<< HEAD
     url(r'^mysearches/$', searchHistory, name='searchHistory'),
     url(r'^recentsearches/$', recentSearches, name='recentSearches'),
     url(r'^searchmonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReport, name='searchMonthlyReport'),
     url(r'^searchmonthlyreportaoi/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReportAOI, name='searchMonthlyReportAOI'),
-    url(r'^search/$', 'catalogue.views.search.search'), # clashes with module name catalogue.views.search
-=======
-    url(r'^mysearches/$', searchHistory),
-    url(r'^recentsearches/$', recentSearches),
-    url(r'^searchmonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReport),
-    url(r'^searchmonthlyreportaoi/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReportAOI),
     url(r'^search/$', 'catalogue.views.search.search', name='search'), # clashes with module name catalogue.views.search
     # is this used?
->>>>>>> named_url
     url(r'^productIdSearchClone/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearchClone),
     # is this used?
     url(r'^productIdSearch/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearch, name='productIdSearch'),
