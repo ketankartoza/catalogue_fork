@@ -44,7 +44,7 @@
         {{ mySearch.datesAsString }}
       </td>
       <td>
-        <a href="/searchresult/{{ mySearch.guid }}/"
+        <a href="{% url 'searchResultMap' mySearch.guid %}"
           >View
           </a>
       </td>

@@ -34,7 +34,7 @@
       });
       $("#accordion").accordion({ autoHeight: false });
       {% if myCartFlag %}
-      $("#cart").load("/showcartcontents/");
+      $("#cart").load("{% url 'showCartContents' %}");
       {% endif %}
       setupBaseMap();
       {% if myShowSearchFeatureInfoFlag %}
@@ -128,16 +128,16 @@
       {% if myRecords %}
       <div id="cart-download-div" style="text-align: center;">
         <span class="loud"><img src="/media/images/down_16.png" alt=""/>Download search as:</span></br/>
-        <button onclick='location="/downloadsearchresults/{{mySearchGuid}}/?shp"'>SHP</button>
-        <button onclick='location="/downloadsearchresults/{{mySearchGuid}}/?kml"'>KML</button>
-        <button onclick='location="/downloadsearchresults/{{mySearchGuid}}/?kmz"'>KMZ</button>
-        <button onclick='location="/downloadsearchmetadata/{{mySearchGuid}}/"'>XML</button>
-        <button onclick='location="/downloadsearchmetadata/{{mySearchGuid}}/?html"'>HTML</button>
+        <button onclick='location="{% url 'downloadSearchResult' mySearchGuid %}?shp"'>SHP</button>
+        <button onclick='location="{% url 'downloadSearchResult' mySearchGuid %}?kml"'>KML</button>
+        <button onclick='location="{% url 'downloadSearchResult' mySearchGuid %}?kmz"'>KMZ</button>
+        <button onclick='location="{% url 'downloadSearchResultMetadata' mySearchGuid %}"'>XML</button>
+        <button onclick='location="{% url 'downloadSearchResultMetadata' mySearchGuid %}?html"'>HTML</button>
       </div>
       {% endif %}
       <br />
     <div style="text-align: center;">
-      <button onclick='location="/modifysearch/{{mySearchGuid}}/"' title="Returns to the main search page (works on a copy of the current search)">Modify this search</button>
+      <button onclick='location="{% url 'modifySearch' mySearchGuid %}"' title="Returns to the main search page (works on a copy of the current search)">Modify this search</button>
     </div>
   <div>
   </div>

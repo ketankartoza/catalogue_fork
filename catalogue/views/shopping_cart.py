@@ -24,7 +24,6 @@ from django.http import HttpResponse, Http404
 # For shopping cart and ajax product id search
 from django.utils import simplejson
 from django.conf import settings
-
 #Dane Springmeyer's django-shapes app for exporting results as a shpfile
 from shapes.views import ShpResponder
 
