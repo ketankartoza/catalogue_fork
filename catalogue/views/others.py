@@ -33,7 +33,6 @@ import traceback
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.gis.shortcuts import render_to_kml, render_to_kmz
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -65,7 +64,7 @@ from catalogue.views.helpers import (
     WEB_LAYERS,
     standardLayers,
     isStrategicPartner)
-
+from catalogue.views.helpers import render_to_kml, render_to_kmz
 #### VIEW FUNCTIONS ####
 
 
