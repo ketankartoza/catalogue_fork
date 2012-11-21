@@ -36,19 +36,12 @@ urlpatterns = patterns('',
     url(r'^contact/$', contact, name='contact'),
     url(r'^deletesearch/(?P<theId>[0-9]+)/$', deleteSearch, name='deleteSearch'),
     url(r'^kml/$', visitorsKml, name='visitorsKml'),
-    # this isn't used?
-    url(r'^cartkml/$', cartKml),
     url(r'^mapHelp/$', mapHelp, name='mapHelp'),
     url(r'^emptyCartHelp/$', emptyCartHelp, name='emptyCartHelp'),
-    # is this used?
-    url(r'^positionNotFound/$', positionNotFound),
     url(r'^sceneidhelp/$', sceneIdHelp),
     url(r'^modifysearch/(?P<theGuid>[a-h0-9\-]{36})/$', modifySearch, name='modifySearch'),
     # match a product id - its not needed to give teh full id, just enough to be semi unique
     url(r'^showProduct/(?P<theProductId>[A-Za-z0-9\_\-]{38,58})/$', showProduct, name='showProduct'),
-    # is this used?
-    url(r'^showProductByOriginalId/(?P<theOriginalProductId>[A-Za-z0-9\_\-]{0,58})/$', showProductByOriginalId ),
-    # is it used?
     url(r'^clip/$', clip),
     # is this used?
     url(r'^myclips/$', clipHistory),
@@ -57,15 +50,10 @@ urlpatterns = patterns('',
     url(r'^searchmonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReport),
     url(r'^searchmonthlyreportaoi/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReportAOI),
     url(r'^search/$', 'catalogue.views.search.search', name='search'), # clashes with module name catalogue.views.search
-    # is this used?
-    url(r'^productIdSearchClone/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearchClone),
-    # is this used?
     url(r'^productIdSearch/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearch, name='productIdSearch'),
     url(r'^visit/$', logVisit, name='logVisit'),
     url(r'^visitormap/$', visitorMap, name='visitorMap'),
     url(r'^whereami/$', whereAmI, name='whereAmI'),
-    #this isn't used anywhere
-    url(r'^worldmap/$', worldMap),
 
     #show all searches that were made
     url(r'^searchesmap/$', searchesMap, name='searchesMap'),
@@ -75,8 +63,6 @@ urlpatterns = patterns('',
     url(r'^visitormonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', visitorMonthlyReport),
     # Profile application
     url(r'^accounts/', include('userprofile.urls')),
-    # this isn't used?
-    url(r'^searchkml/(?P<theGuid>[a-h0-9\-]{36})/$', searchKml), #single search poly as kml
     #show a single search map
     url(r'^searchresult/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultMap, name='searchResultMap'),
     #show a single search page to insert into search result map
@@ -94,15 +80,11 @@ urlpatterns = patterns('',
     url(r'^showpreview/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showPreview, name='showPreview'),
     #show info for a scene or segment by #
     url(r'^metadata/(?P<theId>[0-9]+)/$', metadata, name="metadata"),
-    # this isn't used?
-    url(r'^metadatatext/(?P<theId>[0-9]+)/$', metadataText),
     url(r'^addtocart/(?P<theId>[0-9]+)/$', addToCart, name='addToCart'),
     url(r'^removefromcart/(?P<theId>[0-9]+)/$', removeFromCart, name='removeFromCart'),
     # cart contents for embedding into other pages
     url(r'^downloadcart/$', downloadCart, name='downloadCart'),
     url(r'^downloadcartmetadata/$', downloadCartMetadata, name='downloadCartMetadata'),
-    # myCart is never used
-    url(r'^myCart/$', showCartContents),
     url(r'^showcartcontents/$', showCartContents, name='showCartContents'), #used by xhr requests
     url(r'^showminicartcontents/$', showMiniCartContents, name='showMiniCartContents'),
     #
