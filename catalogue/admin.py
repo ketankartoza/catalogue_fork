@@ -53,14 +53,17 @@ from catalogue.models import (
     Visit,
     SacUserProfile,
     AllUsersMessage,
+
+    Collection,
     Satellite,
     SatelliteInstrument,
     InstrumentType,
-    InstrumentTypeSpectralMode,
-    Collection,
     SpectralMode,
-    ScannerType
-    )
+    ScannerType,
+    Band,
+    PixelSize,
+    BandPixelSize,
+)
 
 
 #
@@ -295,10 +298,18 @@ class SpectralModeAdmin(admin.ModelAdmin):
     pass
 admin.site.register(SpectralMode, SpectralModeAdmin)
 
-class InstrumentTypeSpectralModeAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(InstrumentTypeSpectralMode, InstrumentTypeSpectralModeAdmin)
-
 class ScannerTypeAdmin(admin.ModelAdmin):
     pass
 admin.site.register(ScannerType, ScannerTypeAdmin)
+
+class BandAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Band, BandAdmin)
+
+class PixelSizeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(PixelSize, PixelSizeAdmin)
+
+class BandPixelSizeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(BandPixelSize, BandPixelSizeAdmin)

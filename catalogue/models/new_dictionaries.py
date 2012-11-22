@@ -23,13 +23,15 @@ from dictionaries import Institution
 class Collection(models.Model):
     """Collection of satellites managed by a single operator."""
 
-    name = models.CharField(max_length=255, unique=True,
-                verbose_name='Collection name',
-                help_text='Collection name as defined by operator.')
+    name = models.CharField(
+        max_length=255, unique=True,
+        verbose_name='Collection name',
+        help_text='Collection name as defined by operator.')
     description = models.TextField(
         verbose_name='Collection description',
         help_text='Detailed description for this collection')
-    institution = models.ForeignKey(Institution,
+    institution = models.ForeignKey(
+        Institution,
         help_text='Organisation that owns this satellite collection.')
 
     class Meta:
@@ -38,11 +40,6 @@ class Collection(models.Model):
     def __unicode__(self):
         return self.name
 
-    def relatedSatellites(self):
-        """Get a collection of Satellites for this Collection."""
-        mySatellites = Satellite.objects.filter(
-            collection=self).order_by('name')
-        return mySatellites
 
 class Satellite(models.Model):
     """Satellite e.g. SPOT5 - a real satellite in the sky."""
@@ -52,8 +49,9 @@ class Satellite(models.Model):
         verbose_name='Detailed description.',
         help_text='A detailed description of the satellite.')
     abbreviation = models.CharField(max_length=20, unique=True)
-    operator_abbreviation = models.CharField(max_length=255, unique=True,
-            help_text='Satellite abbreviation as named by operator.')
+    operator_abbreviation = models.CharField(
+        max_length=255, unique=True,
+        help_text='Satellite abbreviation as named by operator.')
     #image = models.ImageField()
     collection = models.ForeignKey(Collection)
 
@@ -64,11 +62,20 @@ class Satellite(models.Model):
         """Return 'operator_abbreviation' as model representation."""
         return '%s' % self.operator_abbreviation
 
-    def relatedSatelliteInstruments(self):
-        """Get a collection of SatelliteInstruments for this satellite."""
-        mySatelliteInstruments = SatelliteInstrument.objects.filter(
-            satellite=self).order_by('name',)
-        return mySatelliteInstruments
+
+class ScannerType(models.Model):
+    """Scanner type for the instrument type e.g. Pushbroom"""
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField(
+        verbose_name='Detailed description.',
+        help_text='A detailed description of the scanner type.')
+    abbreviation = models.CharField(max_length=20, unique=True)
+
+    class Meta:
+        app_label = 'catalogue'
+
+    def __unicode__(self):
+        return self.abbreviation
 
 
 class InstrumentType(models.Model):
@@ -78,7 +85,8 @@ class InstrumentType(models.Model):
         verbose_name='Detailed description.',
         help_text='A detailed description of the instrument type.')
     abbreviation = models.CharField(max_length=20, unique=True)
-    operator_abbreviation = models.CharField(max_length=255, unique=True,
+    operator_abbreviation = models.CharField(
+        max_length=255, unique=True,
         help_text='Satellite abbreviation as named by operator.')
     is_radar = models.BooleanField(
         verbose_name='Is this a RADAR sensor?',
@@ -89,6 +97,7 @@ class InstrumentType(models.Model):
         default=False,
         help_text='Can this sensor be tasked?'
     )
+    scanner_type = models.ForeignKey(ScannerType)
 
     class Meta:
         app_label = 'catalogue'
@@ -96,17 +105,6 @@ class InstrumentType(models.Model):
     def __unicode__(self):
         return self.operator_abbreviation
 
-    def relatedSpectralModes(self):
-        """Get a collection of InstrumentSpectralModes for this InstrumentType.
-        """
-        myInstrumentTypeSpectralModes = (InstrumentTypeSpectralMode.objects.
-            filter(instrument_type=self))
-        return myInstrumentTypeSpectralModes
-
-    def relatedScannerType(self):
-        """Get a collection of ScannerTypes for this InstrumentType."""
-        myScannerType = ScannerType.objects.get(instrument_type=self)
-        return myScannerType
 
 class SatelliteInstrument(models.Model):
     """Satellite instrument - an instrument as deployed on a satellite.
@@ -119,7 +117,8 @@ class SatelliteInstrument(models.Model):
         verbose_name='Detailed description.',
         help_text='A detailed description of the satellite instrument.')
     abbreviation = models.CharField(max_length=20, unique=True)
-    operator_abbreviation = models.CharField(max_length=255, unique=True,
+    operator_abbreviation = models.CharField(
+        max_length=255, unique=True,
         help_text='Satellite abbreviation as named by operator.')
     satellite = models.ForeignKey(Satellite)
     instrument_type = models.ForeignKey(InstrumentType)
@@ -135,30 +134,65 @@ class SatelliteInstrument(models.Model):
         return '%s' % self.operator_abbreviation
 
 
-class SpectralMode(models.Model):
-    """A generic named spectral mode that describes spectral grouping.
-    e.g Panchromatic, Multispectral, Thermal, Hyperspectral.
+class Band(models.Model):
+    """Wavelength to bands relation
+
+    Band examples:
+        red - 400-484 (wavelength)
     """
-    name = models.CharField(max_length=255, unique=True)
-    description = models.TextField(
-        verbose_name='Detailed description.',
-        help_text='A detailed description of the spectral mode.')
-    abbreviation = models.CharField(max_length=20, unique=True)
+    band_name = models.CharField(max_length=50)
+    min_wavelength = models.IntegerField(
+        help_text='Lower band wavelength')
+    max_wavelength = models.IntegerField(
+        help_text='Upper band wavelength')
 
     class Meta:
         app_label = 'catalogue'
 
     def __unicode__(self):
-        return self.name
+        return '%s (%i %i)' % (
+            self.band_name, self.min_wavelength, self.max_wavelength)
 
 
-class InstrumentTypeSpectralMode(models.Model):
-    """Instrument specific mode with common spatial and spectral resolution.
+class PixelSize(models.Model):
+    """Pixelsize of a sensor, related to Bands
 
-    These are operator and instrument specific. It is related to both
-    an Instrument and a generic Spectral Mode. The reason for the spectral
-    mode relate is so that we can get generic attributes e.g. 'this is a
-    panchromatic image'.
+    Some sensors shoot in different resolutions on different bands
+    """
+    pixel_size_avg = models.FloatField(
+        help_text='Average pixel size in meters')
+    pixel_size_x = models.FloatField(
+        help_text='Pixel size in meteres in X direction')
+    pixel_size_y = models.FloatField(
+        help_text='Pixel size in meteres in Y direction')
+
+    class Meta:
+        app_label = 'catalogue'
+
+    def __unicode__(self):
+        return '%f (%f %f)' % (
+            self.pixel_size_avg, self.pixel_size_x, self.pixel_size_y)
+
+
+class BandPixelSize(models.Model):
+    """
+    Band to PixelSize relation
+    """
+    band = models.ForeignKey(Band)
+    pixelsize = models.ForeignKey(PixelSize)
+
+    class Meta:
+        app_label = 'catalogue'
+        unique_together = (('band', 'pixelsize'),)
+
+    def __unicode__(self):
+        return '%s (%f)' % (
+            self.band.band_name, self.pixelsize.pixel_size_avg)
+
+
+class SpectralMode(models.Model):
+    """A generic named spectral mode that describes spectral grouping.
+    e.g Panchromatic, Multispectral, Thermal, Hyperspectral.
 
     Mode examples:
          J = Multispectral 10m
@@ -170,34 +204,15 @@ class InstrumentTypeSpectralMode(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField(
         verbose_name='Detailed description.',
-        help_text=('A detailed description of the instrument type\'s'
-                   'spectral mode.'))
+        help_text='A detailed description of the spectral mode.')
     abbreviation = models.CharField(max_length=20, unique=True)
-    instrument_type = models.ForeignKey(InstrumentType)
-    spectral_mode = models.ForeignKey(SpectralMode)
     spatial_resolution = models.FloatField(
         help_text='Spatial resolution in m')
-    band_count = models.IntegerField()
+    bandpixelsize = models.ManyToManyField(BandPixelSize)
+    instrument_type = models.ForeignKey(InstrumentType)
 
     class Meta:
         app_label = 'catalogue'
 
     def __unicode__(self):
         return self.name
-
-
-class ScannerType(models.Model):
-    """Scanner type for the instrument type e.g. Pushbroom"""
-    name = models.CharField(max_length=255, unique=True)
-    description = models.TextField(
-        verbose_name='Detailed description.',
-        help_text='A detailed description of the scanner type.')
-    abbreviation = models.CharField(max_length=20, unique=True)
-    instrument_type = models.ForeignKey(InstrumentType)
-
-    class Meta:
-        app_label = 'catalogue'
-        unique_together = ('instrument_type', 'abbreviation')
-
-    def __unicode__(self):
-        return self.abbreviation
