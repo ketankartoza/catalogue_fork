@@ -186,28 +186,6 @@ def visitorList(theRequest):
 
 @login_required
 #renderWithContext is explained in renderWith.py
-@renderWithContext('segmentBrowser.html')
-def segmentBrowser(theRequest):
-    myRecords = SegmentCommon.objects.all().order_by('-insertionDate')
-    # Paginate the results
-    myPaginator = Paginator(myRecords, 10)  # Show 10 items per page
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        myPage = int(theRequest.GET.get('page', '1'))
-    except ValueError:
-        myPage = 1
-    # If page request (9999) is out of range, deliver last page of results.
-    try:
-        myRecords = myPaginator.page(myPage)
-    except (EmptyPage, InvalidPage):
-        myRecords = myPaginator.page(myPaginator.num_pages)
-
-    #render_to_response is done by the renderWithContext decorator
-    return ({'myRecords': myRecords})
-
-
-@login_required
-#renderWithContext is explained in renderWith.py
 @renderWithContext('mySearches.html')
 def searchHistory(theRequest):
     mySearchHistory = (
@@ -420,33 +398,3 @@ def sensorSummaryTable(theRequest, theSensorId):
     return ({
         'myResults': myResults, 'mySensor': mySensor,
         'mySensorYearyStats': sliceForDisplay(mySensorYearlyStatsAll)})
-
-
-@staff_member_required
-#renderWithContext is explained in renderWith.py
-@renderWithContext('dictionaryReport.html')
-def dictionaryReport(theRequest):
-    """
-    Summary of mission, sensor, type and mode dictionaries. Later we could add
-    proc level too
-    """
-
-    myReport = []
-    myTypeReport = []
-    myMissions = Mission.objects.all().order_by('name')
-    for myMission in myMissions:
-        mySensors = MissionSensor.objects.filter(
-            mission=myMission).order_by('name')
-        for mySensor in mySensors:
-            myTypes = SensorType.objects.filter(
-                mission_sensor=mySensor).order_by('name')
-            for myType in myTypes:
-                myModes = AcquisitionMode.objects.filter(
-                    sensor_type=myType).order_by('name')
-                myTypeRow = [myMission, mySensor, myType]
-                myTypeReport.append(myTypeRow)
-                for myMode in myModes:
-                    myRow = [myMission, mySensor, myType, myMode]
-                    myReport.append(myRow)
-
-    return({"myTypeResults": myTypeReport, "myResults": myReport})
