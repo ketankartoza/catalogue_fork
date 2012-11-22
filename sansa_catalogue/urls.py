@@ -58,8 +58,6 @@ urlpatterns = patterns('',
     #show all searches that were made
     url(r'^searchesmap/$', searchesMap, name='searchesMap'),
     url(r'^visitorlist/$', visitorList, name='visitorList'),
-    # is this used?
-    url(r'^visitorfrequency/$', visitorFrequency),
     url(r'^visitorreport/$', visitorReport, name='visitorReport'),
     url(r'^visitormonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', visitorMonthlyReport, name='visitorMonthlyReport'),
     # Profile application

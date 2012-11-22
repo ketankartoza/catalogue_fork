@@ -160,27 +160,6 @@ def visitorMonthlyReport(theRequest, theYear, theMonth):
 
 @staff_member_required
 #renderWithContext is explained in renderWith.py
-@renderWithContext('visitorFrequency.html')
-def visitorFrequency(theRequest):
-    myVisitors = (
-        Visit.objects.values('user').annotate(Count('user'))
-        .order_by('-user__count'))
-
-    myRecords = {}
-    for myVisitor in myVisitors:
-        #myRecords[User.objects.get(id=myVisitor['user'])] =
-        #   myVisitor['user__count']
-        if myVisitor['user']:
-            myUser = User.objects.get(id=int(myVisitor['user']))
-            myCount = myVisitor['user__count']
-            myName = myUser.username
-            myRecords[myName] = myCount
-    #render_to_response is done by the renderWithContext decorator
-    return ({'myRecords': myRecords})
-
-
-@staff_member_required
-#renderWithContext is explained in renderWith.py
 @renderWithContext('visitors.html')
 def visitorList(theRequest):
     myRecords = Visit.objects.all().order_by('-visit_date')
