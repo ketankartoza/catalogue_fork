@@ -221,21 +221,6 @@ def whereAmI(theRequest):
         })
 
 
-def worldMap(theRequest):
-    """Show a world"""
-    myMessages = []
-    myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
-        theRequest)
-
-    return render_to_response('simpleMap.html', {
-        'myMessages': myMessages,
-        'myLayerDefinitions': myLayerDefinitions,
-        'myLayersList': myLayersList,
-        'myActiveBaseMap': myActiveBaseMap,
-        'myExtents': '-90, -70, 90, 70'
-    })
-
-
 @login_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('addPage.html')
@@ -407,30 +392,6 @@ def showProduct(theRequest, theProductId):
 
 
 @login_required
-#renderWithContext is explained in renderWith.py
-@renderWithContext('productView.html')
-def showProductByOriginalId(theRequest, theOriginalProductId):
-    """Renders a search results page including the map
-    and all attendant html content - for a single product only
-    identified by its sac product ID"""
-    myProduct = None
-    myMessages = []
-    myProducts = GenericProduct.objects.filter(
-        original_product_id=theOriginalProductId)
-    if len(myProducts) > 0:
-        myProduct = myProducts[0]
-        myProduct.checkForAcsThumb()
-        myObject, myType = myProduct.getConcreteProduct()
-        myMessages.append('Product found')
-    else:
-        myMessages.append('No matching product found')
-    return ({
-        'messages': myMessages,
-        'myProduct': myObject,
-    })
-
-
-@login_required
 def showPreview(theRequest, theId, theSize):
     """Show a segment or scene thumbnail details,
       returning the result as a scaled down image.
@@ -503,31 +464,11 @@ def showThumb(theRequest, theId, theSize):
 
 
 @login_required
-def metadataText(theRequest, theId):
-    myGenericProduct = get_object_or_404(GenericProduct, id=theId)
-    myString = '<pre>%s</pre>' % myGenericProduct.metadata
-    return HttpResponse(myString)
-
-
-@login_required
 def metadata(theRequest, theId):
     """Get the metadata for a product."""
     myGenericProduct = get_object_or_404(GenericProduct, id=theId)
     myObject, myType = myGenericProduct.getConcreteProduct()
     return (HttpResponse(myObject.toHtml()))
-
-
-def searchKml(theRequest, theGuid):
-    """Show a kml of a single search"""
-    mySearch = get_object_or_404(Search, guid=theGuid)
-    return render_to_kml("kml/search.kml", {'search': mySearch}, 'search')
-
-
-def cartKml(theRequest):
-    """Show a kml of a single search"""
-    myRecords = SearchRecord.objects.all().filter(
-        user=theRequest.user).filter(order__isnull=True)
-    return render_to_kmz('kml/cart.kml', {'myRecords': myRecords})
 
 
 @staff_member_required
@@ -725,13 +666,6 @@ def mapHelp(theRequest):
 #renderWithContext is explained in renderWith.py
 @renderWithContext('emptyCartHelp.html')
 def emptyCartHelp(theRequest):
-    #render_to_response is done by the renderWithContext decorator
-    return ()
-
-
-#renderWithContext is explained in renderWith.py
-@renderWithContext('positionNotFound.html')
-def positionNotFound(theRequest):
     #render_to_response is done by the renderWithContext decorator
     return ()
 
