@@ -674,44 +674,6 @@ def addOrder(theRequest):
 
 @login_required
 #renderWithContext is explained in renderWith.py
-@renderWithContext('cartContents.html')
-def viewOrderItems(theRequest, theOrderId):
-    """Just returns a table element - meant for use with ajax"""
-    myOrder = get_object_or_404(Order, id=theOrderId)
-    if not ((myOrder.user == theRequest.user) or (theRequest.user.is_staff)):
-        raise Http404
-    myRecords = SearchRecord.objects.all().filter(order=theOrderId)
-
-    return ({
-        'myRecords': myRecords,
-        # Possible flags for the record template
-        # myShowSensorFlag
-        # myShowSceneIdFlag
-        # myShowDateFlag
-        # myShowCartFlag
-        # myShowRemoveIconFlag
-        # myShowPreviewFlag
-        # myShowDeliveryDetailsFlag
-        # myShowDeliveryDetailsFormFlag
-        'myShowSensorFlag': False,
-        'myShowSceneIdFlag': True,
-        'myShowDateFlag': False,
-        'myShowRemoveIconFlag': False,
-        'myShowRowFlag': False,
-        'myShowPathFlag': False,
-        'myShowCloudCoverFlag': False,
-        'myShowMetdataFlag': False,
-        # used when you need to add an item to the cart only
-        'myShowCartFlag': False,
-        'myShowPreviewFlag': False,
-        'myShowDeliveryDetailsFlag': True,
-        'myShowDeliveryDetailsFormFlag': False,
-        'myBaseTemplate': 'emptytemplate.html',
-    })
-
-
-@login_required
-#renderWithContext is explained in renderWith.py
 @renderWithContext('ordersSummary.html')
 def ordersSummary(theRequest):
     del theRequest

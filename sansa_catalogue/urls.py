@@ -100,8 +100,6 @@ urlpatterns = patterns('',
     url(r'^listorders/$', listOrders, name='listOrders'),
     url(r'^ordermonthlyreport/(?P<theyear>\d{4})/(?P<themonth>\d{1,2})/$', orderMonthlyReport, name='orderMonthlyReport'),
     url(r'^vieworder/(?P<theId>[0-9]+)/$', viewOrder, name='viewOrder'),
-    #vieworderitems is never used, its similar to vieworder story #476
-    url(r'^vieworderitems/(?P<theOrderId>[0-9]+)/$', viewOrderItems, name='viewOrderItems'),
     url(r'^updateorderhistory/$', updateOrderHistory, name='updateOrderHistory'),
     url(r'^orderssummary/$', ordersSummary, name='ordersSummary'),
     # Tasking request managmenet
