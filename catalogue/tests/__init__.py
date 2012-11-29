@@ -99,6 +99,7 @@ from reports_visitorList import ReportsViews_visitorList_Tests
 from reports_searchHistory import ReportsViews_searchHistory_Tests
 from reports_recentSearches import ReportsViews_recentSearches_Tests
 from reports_searchMonthlyReport import ReportsViews_searchMonthlyReport_Tests
+from reports_searchMonthlyReportAOI import ReportsViews_searchMonthlyReportAOI_Tests
 
 from new_dictionary_tests import NewDictionariesTest
 
