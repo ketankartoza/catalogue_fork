@@ -115,7 +115,7 @@ urlpatterns = patterns('',
 
     url( r'^dataSummaryTable/$', dataSummaryTable, name='dataSummaryTable'),
     url( r'^dictionaryReport/$', dictionaryReport, name='dictionaryReport'),
-    url( r'^sensorSummaryTable/(?P<theSensorId>[0-9]+)/$', sensorSummaryTable),
+    url( r'^sensorSummaryTable/(?P<theSensorId>[0-9]+)/$', sensorSummaryTable, name='sensorSummaryTable'),
     url(r'^getUserMessages/$', messaging.userMessages),
     #need to be staff to use this
     url(r'^sendMessageToUser/$', messaging.sendMessageToUser),
