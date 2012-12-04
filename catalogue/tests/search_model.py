@@ -116,7 +116,7 @@ class SearchCRUD_Test(TestCase):
             'guid': '69d814b7-3164-42b9-9530-50ae77806da9',
             'sensor_inclination_angle_start': None,
             'acquisition_mode_id': None,
-            'ip_position': None,
+            'ip_position': '0101000020E6100000A01A2FDD246632C0BC749318043E5040',
             'polarising_mode': None,
             'deleted': False,
             'spatial_resolution': None,
