@@ -6,7 +6,7 @@ Quickstart
 ----------
 
 The catalogue is provided with a test suite. You can run it like this::
-   
+
    ./runtests.sh
 
 
@@ -19,10 +19,10 @@ Two kinds of tests are provided:
 - UnitTests ([see http://ericholscher.com/blog/2008/nov/4/introduction-pythondjango-testing-basic-unit-tests/ ])
 -
 
-For simple tests, you can edit catalogue/tests/simple_tests.py and add additional tests, or add additional files 
+For simple tests, you can edit catalogue/tests/simple_tests.py and add additional tests, or add additional files
 containing doctests. Each test file you create must be registered in catalogue/tests/__init__.py.
 
-To power the tests, various fixtures have been created in catalogue/fixtures which will be loaded in the 
+To power the tests, various fixtures have been created in catalogue/fixtures which will be loaded in the
 test database each time you run the tests. For more info on generating fixtures, [see http://ericholscher.com/blog/2008/nov/5/introduction-pythondjango-testing-fixtures/].
 
 Creating Fixtures
@@ -103,7 +103,7 @@ python manage.py dumpdata catalogue --format=json --indent=4 > \
 catalogue/fixtures/catalogue.json
 `````````````````````````````````
 
-Finally throw away your temporary database and reinstate your settings.py to use the 
+Finally throw away your temporary database and reinstate your settings.py to use the
 normal production database.
 
 ```````````````
@@ -137,7 +137,7 @@ package::
     apt-get install xvfb
 
 We also need to install a web browser, in this case Firefox, however, at the
-time of writing (7th Dec. 2012) latest Selenium version is 2.26 which doesn't 
+time of writing (7th Dec. 2012) latest Selenium version is 2.26 which doesn't
 work well with latest Firefox (ver. 17). So we need to install Firefox 16
 manually by downloading binary archive from Mozilla ftp site, i.e.::
 
@@ -206,33 +206,6 @@ executing tests.
 
 Running unit tests
 ------------------
-
-A settings file for tests is available as `settings_test.py` this settings
-use the faster spatialite instead of createdb.
-
-.. note:: You must enable the virtual environment first!
-
-`````````````````````````````
-source ../python/bin/activate
-`````````````````````````````
-
-Running unit tests using SQLITE backend
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Before you can run the tests, you need to make sure you have pysqlite installed:
-
-````````````````````
-pip install pysqlite
-````````````````````
-
-It should have been installed during the system setup process already.
-
-
-Run tests for catalogue app as:
-
-``````````````````````````````````````````````````````````
-$ python manage.py test catalogue --settings=settings_test
-``````````````````````````````````````````````````````````
 
 Running Unit tests using Postgresql
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
