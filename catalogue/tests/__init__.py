@@ -106,6 +106,9 @@ from reports_dictionaryReport import ReportsViews_dictionaryReport_Tests
 
 from new_dictionary_tests import NewDictionariesTest
 
+# selenium tests
+from selenium_login_test import SeleniumLogin
+
 #this is only required for doctests
 __test__ = {
   #'simple_tests' : simple_tests,

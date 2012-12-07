@@ -110,6 +110,100 @@ normal production database.
 dropdb sac-test
 ```````````````
 
+Selenium setup
+--------------
+
+Selenium is used for automating web applications and testing using standard
+internet browsers.
+
+To execute Selenium test on a virtualized server, that has no display support
+we need to prepare our virtualized server. Basically we can execute in in two
+ways:
+
+#. by forwarding X11 server connections through SSH connection
+#. running it in a headless mode (uses Xvfb X server)
+
+````````````````````
+System prerequisites
+````````````````````
+
+To enable X11 forwarding we need to install ``xauth`` package:
+
+    apt-get install xauth
+
+To enable running selenium in a headless mode we need to install ``xvfb``
+package::
+
+    apt-get install xvfb
+
+We also need to install a web browser, in this case Firefox, however, at the
+time of writing (7th Dec. 2012) latest Selenium version is 2.26 which doesn't 
+work well with latest Firefox (ver. 17). So we need to install Firefox 16
+manually by downloading binary archive from Mozilla ftp site, i.e.::
+
+    wget https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/16.0.2/linux-x86_64/en-GB/firefox-16.0.2.tar.bz2
+
+Then we need to manually unpack, install and symlink it::
+
+    tar jxf firefox-16.0.2.tar.bz2
+    mv firefox /opt/
+    ln -s /opt/firefox/firefox /usr/bin/firefox
+
+This will enable Selenium web driver to execute correct Firefox version.
+
+``````````````````````````````
+Installing Selenium Web Driver
+``````````````````````````````
+
+In an activated Python virtual environment install Selenium Web Driver::
+
+    pip install selenium==2.26.0
+
+
+````````````````````````
+Executing Selenium tests
+````````````````````````
+
+Executing Selenium tests requires a XServer. We can either, export(forward)
+local XServer using SSH, or start Xvfb on virtualized server.
+
+Xvfb disadvantage is it's *hidden* view, so it's hard to debug/write tests,
+but it's faster. On the other hand forwarding X11 will show browser which
+speeds up debugging/writing tests, but it's slower. We can actually use both,
+we just need to set correct ``DISPLAY`` environment variable, i.e.::
+
+    # run on forwarded X11 Server
+    DISPLAY=:10 python manage.py test  catalogue.tests
+    # run on local Xvfb Server
+    DISPLAY=:99 python manage.py test  catalogue.tests
+
+
+Forwarding X11
+^^^^^^^^^^^^^^
+
+Connect to local virtualized server using SSH, i.e ::
+
+    ssh -Y sac-live.local
+
+.. note:: -Y enables X11 forwarding
+
+Check if ``DISPLAY`` environment variable is set (``echo $DISPLAY``), continue
+as normal, initializing Python virtual environment and executing tests.
+
+
+Running locally on Xvfb
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Before running any tests, we need to start local ``xvfb`` XServer and set
+``DISPLAY`` environment variable::
+
+    Xvfb -ac :99 > /dev/null 2>&1 &
+    export DISPLAY=:99
+
+After we can continue as normal, initializing Python virtual environment and
+executing tests.
+
+
 Running unit tests
 ------------------
 
