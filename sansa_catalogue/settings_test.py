@@ -4,9 +4,8 @@ from settings import *
 # See http://hustoknow.blogspot.com/2011/02/setting-up-django-nose-on-hudson.html
 INSTALLED_APPS += (
     'django_nose',
-    #commented out as needs django >= 1.3
-    #'django_jenkins',
-)  # don't remove this comma
+    'django_jenkins', # don't remove this comma
+)
 
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
