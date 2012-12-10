@@ -61,8 +61,7 @@ from catalogue.models import (
     SpectralMode,
     ScannerType,
     Band,
-    PixelSize,
-    BandPixelSize,
+    BandSpectralMode,
 )
 
 
@@ -306,10 +305,6 @@ class BandAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Band, BandAdmin)
 
-class PixelSizeAdmin(admin.ModelAdmin):
+class BandSpectralModeAdmin(admin.ModelAdmin):
     pass
-admin.site.register(PixelSize, PixelSizeAdmin)
-
-class BandPixelSizeAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(BandPixelSize, BandPixelSizeAdmin)
+admin.site.register(BandSpectralMode, BandSpectralModeAdmin)

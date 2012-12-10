@@ -47,41 +47,37 @@ CREATE TABLE "catalogue_satelliteinstrument" (
 ;
 CREATE TABLE "catalogue_band" (
     "id" serial NOT NULL PRIMARY KEY,
+    "instrument_type_id" integer NOT NULL REFERENCES "catalogue_instrumenttype" ("id") DEFERRABLE INITIALLY DEFERRED,
     "band_name" varchar(50) NOT NULL,
+    "band_number" integer NOT NULL,
     "min_wavelength" integer NOT NULL,
-    "max_wavelength" integer NOT NULL
-)
-;
-CREATE TABLE "catalogue_pixelsize" (
-    "id" serial NOT NULL PRIMARY KEY,
-    "pixel_size_avg" double precision NOT NULL,
-    "pixel_size_x" double precision NOT NULL,
-    "pixel_size_y" double precision NOT NULL
-)
-;
-CREATE TABLE "catalogue_bandpixelsize" (
-    "id" serial NOT NULL PRIMARY KEY,
-    "band_id" integer NOT NULL REFERENCES "catalogue_band" ("id") DEFERRABLE INITIALLY DEFERRED,
-    "pixelsize_id" integer NOT NULL REFERENCES "catalogue_pixelsize" ("id") DEFERRABLE INITIALLY DEFERRED,
-    UNIQUE ("band_id", "pixelsize_id")
-)
-;
-CREATE TABLE "catalogue_spectralmode_bandpixelsize" (
-    "id" serial NOT NULL PRIMARY KEY,
-    "spectralmode_id" integer NOT NULL,
-    "bandpixelsize_id" integer NOT NULL REFERENCES "catalogue_bandpixelsize" ("id") DEFERRABLE INITIALLY DEFERRED,
-    UNIQUE ("spectralmode_id", "bandpixelsize_id")
+    "max_wavelength" integer NOT NULL,
+    "pixelsize" integer NOT NULL
 )
 ;
 CREATE TABLE "catalogue_spectralmode" (
     "id" serial NOT NULL PRIMARY KEY,
     "name" varchar(255) NOT NULL UNIQUE,
     "description" text NOT NULL,
-    "abbreviation" varchar(20) NOT NULL UNIQUE,
-    "spatial_resolution" double precision NOT NULL,
-    "instrument_type_id" integer NOT NULL REFERENCES "catalogue_instrumenttype" ("id") DEFERRABLE INITIALLY DEFERRED
+    "abbreviation" varchar(20) NOT NULL UNIQUE
 )
 ;
-ALTER TABLE "catalogue_spectralmode_bandpixelsize" ADD CONSTRAINT "spectralmode_id_refs_id_dbcc36ae" FOREIGN KEY ("spectralmode_id") REFERENCES "catalogue_spectralmode" ("id") DEFERRABLE INITIALLY DEFERRED;
+CREATE TABLE "catalogue_bandspectralmode" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "band_id" integer NOT NULL REFERENCES "catalogue_band" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "spectral_mode_id" integer NOT NULL REFERENCES "catalogue_spectralmode" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "operator_name" varchar(20),
+    UNIQUE ("band_id", "spectral_mode_id")
+)
+;
+
+CREATE INDEX "catalogue_collection_institution_id" ON "catalogue_collection" ("institution_id");
+CREATE INDEX "catalogue_satellite_collection_id" ON "catalogue_satellite" ("collection_id");
+CREATE INDEX "catalogue_instrumenttype_scanner_type_id" ON "catalogue_instrumenttype" ("scanner_type_id");
+CREATE INDEX "catalogue_satelliteinstrument_satellite_id" ON "catalogue_satelliteinstrument" ("satellite_id");
+CREATE INDEX "catalogue_satelliteinstrument_instrument_type_id" ON "catalogue_satelliteinstrument" ("instrument_type_id");
+CREATE INDEX "catalogue_band_instrument_type_id" ON "catalogue_band" ("instrument_type_id");
+CREATE INDEX "catalogue_bandspectralmode_band_id" ON "catalogue_bandspectralmode" ("band_id");
+CREATE INDEX "catalogue_bandspectralmode_spectral_mode_id" ON "catalogue_bandspectralmode" ("spectral_mode_id");
 
 COMMIT;

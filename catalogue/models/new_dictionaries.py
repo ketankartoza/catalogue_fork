@@ -140,54 +140,24 @@ class Band(models.Model):
     Band examples:
         red - 400-484 (wavelength)
     """
+    instrument_type = models.ForeignKey(InstrumentType)
     band_name = models.CharField(max_length=50)
+    band_number = models.IntegerField(
+        help_text='Instrument specific band number, e.g. 1,2, ...')
     min_wavelength = models.IntegerField(
-        help_text='Lower band wavelength')
+        help_text='Lower band wavelength in nanometeres')
     max_wavelength = models.IntegerField(
-        help_text='Upper band wavelength')
+        help_text='Upper band wavelength in nanometeres')
+    pixelsize = models.IntegerField(
+        help_text='Pixel size in m (resolution)')
 
     class Meta:
         app_label = 'catalogue'
 
     def __unicode__(self):
-        return '%s (%i %i)' % (
-            self.band_name, self.min_wavelength, self.max_wavelength)
-
-
-class PixelSize(models.Model):
-    """Pixelsize of a sensor, related to Bands
-
-    Some sensors shoot in different resolutions on different bands
-    """
-    pixel_size_avg = models.FloatField(
-        help_text='Average pixel size in meters')
-    pixel_size_x = models.FloatField(
-        help_text='Pixel size in meteres in X direction')
-    pixel_size_y = models.FloatField(
-        help_text='Pixel size in meteres in Y direction')
-
-    class Meta:
-        app_label = 'catalogue'
-
-    def __unicode__(self):
-        return '%f (%f %f)' % (
-            self.pixel_size_avg, self.pixel_size_x, self.pixel_size_y)
-
-
-class BandPixelSize(models.Model):
-    """
-    Band to PixelSize relation
-    """
-    band = models.ForeignKey(Band)
-    pixelsize = models.ForeignKey(PixelSize)
-
-    class Meta:
-        app_label = 'catalogue'
-        unique_together = (('band', 'pixelsize'),)
-
-    def __unicode__(self):
-        return '%s (%f)' % (
-            self.band.band_name, self.pixelsize.pixel_size_avg)
+        return '%s (%i %i) %i' % (
+            self.band_name, self.min_wavelength, self.max_wavelength,
+            self.pixelsize)
 
 
 class SpectralMode(models.Model):
@@ -206,13 +176,29 @@ class SpectralMode(models.Model):
         verbose_name='Detailed description.',
         help_text='A detailed description of the spectral mode.')
     abbreviation = models.CharField(max_length=20, unique=True)
-    spatial_resolution = models.FloatField(
-        help_text='Spatial resolution in m')
-    bandpixelsize = models.ManyToManyField(BandPixelSize)
-    instrument_type = models.ForeignKey(InstrumentType)
 
     class Meta:
         app_label = 'catalogue'
 
     def __unicode__(self):
         return self.name
+
+
+class BandSpectralMode(models.Model):
+    """
+    Band to SpectralMode relation
+    """
+    band = models.ForeignKey(Band)
+    spectral_mode = models.ForeignKey(SpectralMode)
+    operator_name = models.CharField(
+        max_length=20, blank=True, null=True,
+        help_text='Operator specific name for a spectral mode, i.e. Landsat7 '
+        'specific MSS is called HRF')
+
+    class Meta:
+        app_label = 'catalogue'
+        unique_together = (('band', 'spectral_mode'),)
+
+    def __unicode__(self):
+        return '%s (%f)' % (
+            self.band.band_name, self.spectral_mode.name)
