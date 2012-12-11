@@ -151,6 +151,10 @@ Then we need to manually unpack, install and symlink it::
 
 This will enable Selenium web driver to execute correct Firefox version.
 
+After installing Firefox 16.0.2, we need to *DISABLE* automatic Firefox
+updates, Edit -> Preferences -> Advanced -> Update and then select *Never
+check for updates*.
+
 ``````````````````````````````
 Installing Selenium Web Driver
 ``````````````````````````````
