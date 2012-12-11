@@ -108,6 +108,7 @@ from new_dictionary_tests import NewDictionariesTest
 
 # selenium tests
 from selenium_login_test import SeleniumLogin
+from selenium_login_test import SeleniumSearch
 
 #this is only required for doctests
 __test__ = {
