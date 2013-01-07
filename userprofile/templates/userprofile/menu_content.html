@@ -1,23 +1,38 @@
 {% load i18n %}
-    <li>
-      <a href="#"><img src="/media/images/user_16.png" alt="" />&nbsp;Account</a>
-      <ul>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> <span class="hidden-phone hidden-tablet">Account</span><b class="caret"></b></a>
+      <ul class="dropdown-menu">
       {% if user.is_authenticated %}
         {% comment %}
-        <li><a href="{% url profile_overview %}">{% trans "Overview" %}</a></li>
+        <li>
+          <a href="{% url profile_overview %}">{% trans "Overview" %}</a>
+        </li>
         {% endcomment %}
-        <li><a href="{% url profile_edit_personal %}"><img src="/media/images/notebook_16.png" alt="" />{% trans "Personal information" %}</a></li>
-        <li><a href="{% url profile_edit_avatar %}"><img src="/media/images/user_16.png" alt="" />{% trans "Avatar" %}</a></li>
-        <li><a href="{% url password_change %}"><img src="/media/images/refresh_16.png" alt="" />{% trans "Change password" %}</a></li>
-        <li><a href="{% url email_validation %}"><img src="/media/images/new_mail_16.png" alt="" />
-        {% if email %}{% trans "Change your e-mail address" %}{% else %}{% trans "Add your e-mail address" %}{% endif %}
-        </a></li>
+        <li>
+          <a href="{% url profile_edit_personal %}">{% trans "Personal information" %}</a>
+        </li>
+        <li>
+          <a href="{% url profile_edit_avatar %}">{% trans "Avatar" %}</a>
+        </li>
+        <li>
+          <a href="{% url password_change %}">{% trans "Change password" %}</a>
+        </li>
+        <li>
+          <a href="{% url email_validation %}">
+          {% if email %}{% trans "Change your e-mail address" %}{% else %}{% trans "Add your e-mail address" %}{% endif %}</a>
+        </li>
         {% if not validated and email %}
-        <li><a href="{% url email_validation_reset %}"><img src="/media/images/send_16.png" alt="" />{% trans "Resend validation e-mail" %}</a></li>
+        <li>
+          <a href="{% url email_validation_reset %}">{% trans "Resend validation e-mail" %}</a>
+        </li>
         {% endif %}
-        <li><a href="/accounts/logout/"><img src="/media/images/exit_16.png" alt="" />Logout</a></li>
+        <li>
+          <a href="/accounts/logout/">Logout</a>
+        </li>
       {% else %}
-        <li><a href="/accounts/login/">Login</a></li>
+        <li>
+          <a href="/accounts/login/">Login</a>
+        </li>
       {% endif %}
       </ul>
     </li>

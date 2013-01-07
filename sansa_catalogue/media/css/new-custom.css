@@ -1,0 +1,7 @@
+hr {display: block;position: relative;padding: 0;margin: 8px auto;height: 0;width: 100%;max-height: 0;font-size: 1px;line-height: 0;clear: both;border: none;border-top: 1px solid #aaaaaa;border-bottom: 1px solid #ffffff;}
+.center{text-align:center;}
+.jumbotron {margin: 60px 0;text-align: center;}
+.jumbotron h2 {color:#228441;font-family: arial;}
+.footer-text{font-size: 12px;line-height: 14px;text-align:center;padding-top:3px;}
+.brand{padding:4px 20px 2px!important;}
+.gap-bottom{padding-bottom:20px;}
