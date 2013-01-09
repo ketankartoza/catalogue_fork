@@ -1,44 +1,50 @@
-{% extends myTemplate %}
-
-{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% extends 'base2.html' %}
 {% block content %}
-{% box_start "box-map-help" "span-22"%}
-<div class="span-10 prepend-1">
-  <h2 class="centered">Using the map</h2>
-  <p><img src="/media/images/zoom_out_18.png">
-  <img src="/media/images/zoom_in_18.png">
-  Use the <b>zoom out and zoom in icons</b> to zoom in and out on the
-  map by dragging rectangles.</p>
-  <p><img src="/media/js/openlayers/theme/default/img/panning-hand-on.png">
-  Use the <b>pan</b> icon on the map to enable map panning by dragging the map.</p>
-  <p><img src="/media/images/view-restore-2.png">
-  <img src="/media/images/view-fullscreen-4.png">
-  Use to <b>restore and fullscreen icons</b> to quickly resize map
-  window. Restore will resize map to original size, while fullscreen
-  will resize map to fill current browser window.</p>
-  <p>When the pan tool is enabled, and you are viewing search results,
-  you can click on the yellow image footprint in the map to see its
-  preview in the preview area.</p>
-
+<div class="main-content well span12">
+  <div class="row-fluid">
+    <div class="span4">
+      <h2>Using the map</h2>
+      <p class="align-left">
+        <img src="/media/images/zoom_out_18.png">
+        <img src="/media/images/zoom_in_18.png">
+        Use the <strong>zoom out and zoom in icons</strong> to zoom in and out on the map by dragging rectangles.
+      </p>
+      <p class="align-left">
+        <img src="/media/js/openlayers/theme/default/img/panning-hand-on.png">
+        Use the <strong>pan</strong> icon on the map to enable map panning by dragging the map.
+      </p>
+      <p class="align-left">
+        <img src="/media/images/view-restore-2.png">
+        <img src="/media/images/view-fullscreen-4.png">
+        Use to <strong>restore and fullscreen icons</strong> to quickly resize map window. Restore will resize map to original size, while fullscreen will resize map to fill current browser window.
+      </p>
+      <p class="align-left">
+        When the pan tool is enabled, and you are viewing search results, you can click on the yellow image footprint in the map to see its preview in the preview area.
+      </p>
+    </div>
+    <div class="span4">
+      <h2>When searching</h2>
+      <p class="align-left">
+        Digitising an area of interest is not required but is recommended. Draw an area of interest on the map to refine the set of search results to a specific area.
+      </p>
+      <p class="align-left">
+        <img class="icon" src="/media/js/openlayers/theme/default/img/draw_polygon_off.png">
+        Use the <strong>capture</strong> icon on the map to your left to draw an area of interest for your search.
+      </p>
+      <p class="align-left">
+        <img class="icon" src="/media/images/edit.png">
+        Use the <strong>edit</strong> icon on the map to your left to adjust your area of interest for your search.
+      </p>
+    </div>
+    <div class="span4">
+      <h2>Keyboard shortcuts</h2>
+      <p class="align-left">
+        Use the <strong>'d' or 'delete'</strong> key (while holding the mouse cursor over it) to delete a vertex when editing the area of interest.
+      </p>
+      <p class="align-left">
+        Use <strong>shift</strong> while dragging a rectangle on the map to zoom in to that rectangle.
+      </p>
+    </div>
+  </div>
 </div>
-<div class="span-10 prepend-1 last">
-  <h2 class="centered">When searching</h2>
-  <p>Digitising an area of interest is not required but is recommended. 
-  Draw an area of interest on the map to refine the set of search results to a
-  specific area.</p>
-  <p><img class="icon" src="/media/js/openlayers/theme/default/img/draw_polygon_off.png">
-  Use the <b>capture</b> icon on the map to your left to draw an area of interest for your search.</p>
-  <p><img class="icon" src="/media/images/edit.png">
-  Use the <b>edit</b> icon on the map to your left to adjust your area of interest for your search.</p>
-  <br/>
-</div>
-<div class="span-10 prepend-1">
-  <h2 class="centered">Keyboard shortcuts</h2>
-  <p>Use the <b>'d' or 'delete'</b> key (while holding the mouse cursor over
-  it) to delete a vertex when editing the area of interest.</p>
-  <p>Use <b>shift</b> while dragging a rectangle on the map to zoom in to that rectangle.</p>
-</div>
-<div class="span-10 prepend-1 last">
-</div>
-{% box_end %}
 {% endblock %}
