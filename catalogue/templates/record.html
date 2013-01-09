@@ -26,9 +26,9 @@
         </td>
         {% endif %}
         {% if myShowCloudCoverFlag %}
-        <td>
+        <td class="center">
           {% if myRecord.product.cloud_cover < 0 %}
-          UNK
+          Unknown
           {% else %}
           {{ myRecord.product.cloud_cover }}%
           {% endif %}
@@ -53,20 +53,14 @@
         </td>
         {% endif %}
         {% if myShowRemoveIconFlag %}
-        <td>
-          <img src="/media/images/delete_16.png"
-             alt="Remove"
-             {% if myShowMiniCartFlag %}
-             onclick='removeFromMiniCart({{myRecord.id}}, $(this));'
-             {% else %}
-             onclick='removeFromCart({{myRecord.id}}, $(this));'
-             {% endif %}
-             style='cursor: pointer;'
-             />
+        <td class="center">
+          <a href="#" {% if myShowMiniCartFlag %}onClick='removeFromMiniCart({{myRecord.id}}, $(this));'{% else %}onClick='removeFromCart({{myRecord.id}}, $(this));'{% endif %}>
+            <i class="icon-remove"></i>
+          </a>
         </td>
         {% endif %}
         {% if myShowPreviewFlag %}
-        <td>
+        <td class="center">
           <img src="/thumbnail/{{ myRecord.product.id }}/small/"
                  class='mini-icon'
                  alt="Thumbnail"
