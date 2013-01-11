@@ -9,7 +9,7 @@
       </li>
       {% if user.is_authenticated %}
       <li>
-        <a href="{% url 'search' %}"><i class="icon-search"></i> <span class="hidden-phone hidden-tablet">Search</span></a>
+        <a href="{% url 'search' %}"><i class="icon-white icon-search"></i> <span class="hidden-phone hidden-tablet">Search</span></a>
       </li>
       <li>
         <a href="{% url 'showCartContents' %}" onclick='loadContent("{% url 'showCartContents' %}"); return false;'><i class="icon-shopping-cart"></i> <span class="hidden-phone hidden-tablet">My Cart</span></a>
