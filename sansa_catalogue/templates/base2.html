@@ -66,9 +66,9 @@
     </head>
     <body {% block body_load %}{% endblock %}>
       {% include "menu.html" %}
-      <div class="container">
+      <div class="container main-content well">
         {% if messages %}
-        <div id="system-messages" class="span12">
+        <div id="system-messages">
           <ul>
             {% for message in messages %}
             <li>Message: {{ message }}</li>
@@ -76,10 +76,9 @@
           </ul>
         </div>
         {% endif %}
-        <div id="content" class="span12 row-fluid">
+
           {% block content%}
           {% endblock %}
-        </div>
       </div>
       <div id="main-footer" class="navbar navbar-fixed-bottom">
         <div class="navbar-inner"  style="padding-left:10px;padding-right:10px;">
