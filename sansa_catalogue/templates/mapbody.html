@@ -1,24 +1,24 @@
-{% extends "base.html" %}
-{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% extends "base2.html" %}
 {% block extrajs %}
-    {{ block.super }}
+{{ block.super }}
 {% endblock%}
 {% block body_load%}{{ block.super }}{% endblock%}
 {% block content%}
-  {# layout done with blueprint.css we inherit 22 cols of space from base.html #}
-  <div class="span-15 append-1"> {# recommended to use blueprint divs only for layout ... #}
-    <div id="map-container" class="span-15 ui-widget-content ui-state-highlight ui-corner-all"> {# thus nested jquery widget container #}
-      <div id="map" class="span-15 last"></div>
-      <div id="map-panel" class="span-15 last">
-        <div id="map-navigation-panel" class="span-4 append-1"></div>
-        <div id="map-location" class="span-3 small"></div>{# small class from blueprint css #}
-        <div class="span-4 olControlScalebar" id="map-scale"></div>
-      </div>
-      <div id="mapquery" class="span-15 last"></div>
+
+<div class="row-fluid">
+  <div id="map-container" class="ui-widget-content ui-state-highlight ui-corner-all"> {# thus nested jquery widget container #}
+    <div id="map" class="last"></div>
+    <div id="map-panel" class="last">
+      <div id="map-navigation-panel" class=""></div>
+      <div id="map-location"></div>
+      <div class="olControlScalebar" id="map-scale"></div>
     </div>
+    <div id="mapquery" class="last"></div>
   </div>
-  <div id="sidebar" class="span-6 last">
-    <div id="accordion" class="">
+</div>
+<div class="row-fluid">
+  <div id="sidebar" class="span4">
+    <div id="accordion">
       {% block messages %}{% endblock %}
       {% block search %}{% endblock %}
       {% block preview %}{% endblock %}
@@ -26,8 +26,8 @@
       {% block legend %}{% endblock %}
     </div>
   </div>
-  <br />
-  <div id="table" class="span-22">
+  <div id="table" class="span8">
     {% block table %}{% endblock %}
   </div>
+</div>
 {% endblock%}

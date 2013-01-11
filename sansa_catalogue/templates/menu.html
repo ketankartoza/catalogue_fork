@@ -4,12 +4,52 @@
   <div class="navbar-inner">
     <a class="brand" href="/"><img src="/media/sansa-logos/SANSA-whirl-small.png" height="20px"/></a>
     <ul class="nav">
-      <li class="active">
+      <li>
         <a href="/"><i class="icon-home"></i> <span class="hidden-phone hidden-tablet">Home</span></a>
+      </li>
+      {% if not user.is_authenticated %}
+      <li>
+        <a href="{% url 'about' %}"><i class="icon-question-sign"></i> <span class="hidden-phone hidden-tablet">About</span></a>
+      </li>
+      {% endif %}
+      <li>
+        <a href="#"><i class="icon-share"></i> <span class="hidden-phone hidden-tablet">Archive Summary</span></a>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-circle-arrow-right"></i> <span class="hidden-phone hidden-tablet">Links</span><b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li>
+            <a href="#">SANSA</a>
+          </li>
+          <li>
+            <a href="#">AFIS</a>
+          </li>
+          <li>
+            <a href="#">WAMIS</a>
+          </li>
+          <li>
+            <a href="#">Digital Globe</a>
+          </li>
+          <li>
+            <a href="#">RapidEye</a>
+          </li>
+          <li>
+            <a href="#">GeoEye</a>
+          </li>
+          <li>
+            <a href="#">IRS</a>
+          </li>
+          <li>
+            <a href="#">USGS</a>
+          </li>
+        </ul>
       </li>
       {% if user.is_authenticated %}
       <li>
-        <a href="{% url 'search' %}"><i class="icon-white icon-search"></i> <span class="hidden-phone hidden-tablet">Search</span></a>
+        <a href="{% url 'search' %}"><i class="icon-search"></i> <span class="hidden-phone hidden-tablet">Search</span></a>
+      </li>
+      <li>
+        <a href="#"><i class="icon-wrench"></i> <span class="hidden-phone hidden-tablet">Tasking Requests</span></a>
       </li>
       <li>
         <a href="{% url 'showCartContents' %}" onclick='loadContent("{% url 'showCartContents' %}"); return false;'><i class="icon-shopping-cart"></i> <span class="hidden-phone hidden-tablet">My Cart</span></a>
@@ -40,8 +80,18 @@
           <li><a href="{% url 'whereAmI' %}">Where am I?</a></li>
         </ul>
       </li>
+      {% else %}
+      <li>
+        <a href="/accounts/register/"><i class="icon-road"></i> <span class="hidden-phone hidden-tablet">Register</span></a>
+      </li>
+      {% endif %}
+      <li>
+        <a href="{% url 'contact' %}"><i class="icon-envelope"></i> <span class="hidden-phone hidden-tablet">Contact</span></a>
+      </li>
+    </ul>
 
-      {# Partners menu #}
+
+    <ul class="nav pull-right">
       {% if myPartnerFlag %}
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-star"></i> <span class="hidden-phone hidden-tablet">Partners</span><b class="caret"></b></a>
@@ -50,7 +100,6 @@
         </ul>
       </li>
       {% endif %}
-      {# staff menu #}
       {% if user.is_staff %}
       <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown"><i class="icon-lock"></i> <span class="hidden-phone hidden-tablet">Staff</span><b class="caret"></b></a>
@@ -70,27 +119,16 @@
         </ul>
       </li>
       {% endif %}
-
-      {% include "userprofile/menu_content.html" %}
-
-      {# login menu #}
-      {% else %} {# User is not authenticated #}
+      {% if user.is_authenticated %}
+        {% include "userprofile/menu_content.html" %}
+      {% else %}
       <li>
         <a href="/accounts/login/"><i class="icon-user"></i> <span class="hidden-phone hidden-tablet">Login</span></a>
-      </li>
-      <li>
-        <a href="/accounts/register/"><i class="icon-road"></i> <span class="hidden-phone hidden-tablet">Register</span></a>
       </li>
       <li>
         <a href="/accounts/password/reset/"><i class="icon-random"></i> <span class="hidden-phone hidden-tablet">Reset Password</span></a>
       </li>
       {% endif %}
-      <li>
-        <a href="{% url 'about' %}"><i class="icon-question-sign"></i> <span class="hidden-phone hidden-tablet">About</span></a>
-      </li>
-      <li>
-        <a href="{% url 'contact' %}"><i class="icon-envelope"></i> <span class="hidden-phone hidden-tablet">Contact</span></a>
-      </li>
     </ul>
   </div>
 </div>
