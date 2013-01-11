@@ -9,17 +9,14 @@
     <meta name="keywords" content="sansa south african national space agency earth observation south africa" />
     <meta name="description" content="This web site provides a catalogue of remote sensing data (satellite imagery) available from the SANSA-EO (South African National Space Agency), Hartebeeshoek, South Africa. The catalogue includes data for South Africa and the rest of Africa. This web site was developed by Linfiniti Consulting under contract to SANSA-EO." />
     <meta name="robots" content="NONE,NOARCHIVE" />
-    {# for Bootstrap responsive layout #}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     {% block extrajs %}
-      <script type="text/javascript" charset="utf-8" src="/media/js/openlayers/OpenLayers.js">	</script>
+      <script type="text/javascript" charset="utf-8" src="/media/js/openlayers/OpenLayers.js">  </script>
       <script type="text/javascript" charset="utf-8" src="/media/js/openlayers-plugins/ScaleBar.js"> </script>
       {# bring in the OpenStreetMap OpenLayers layers. Using this hosted file will make sure we are kept up to date with any necessary changes #}
       <script type="text/javascript" charset="utf-8" src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
       {# jquery stuff must be **after** openlayers #}
-      {# updated jQuery to version 1.8.2 #}
-      <script type="text/javascript" src="/media/js/jquery/jquery-1.8.2.min.js"></script>
+      <script type="text/javascript" src="/media/js/jquery/jquery-1.4.4.min.js"></script>
       <script type="text/javascript" src="/media/js/jquery/jquery-ui-1.8.custom.min.js"></script>
       <script type="text/javascript" src="/media/js/jquery-plugins/tools.tooltip-1.1.3.min.js"></script>
       <script type="text/javascript" src="/media/js/jquery-plugins/jquery.easing.1.3.js"></script>
@@ -53,8 +50,6 @@
       <link href="/media/css/jquery.fancybox.css" media="screen" rel="stylesheet" type="text/css"/>
       <link href="/media/css/map.css" rel="stylesheet" type="text/css" />
       <link href="/media/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen" />
-{% comment %}
-      {# DEPRECATED AS OF BOOTSTRAP #}
       {# for free css dropdown menus http://lwis.net/free-css-drop-down-menu/ #}
       <style type="text/css">
         /* Layout */
@@ -65,11 +60,7 @@
       <link href="/media/css/blueprint/screen.css"  rel="stylesheet" type="text/css" media="screen, projection" />
       <link href="/media/css/blueprint/print.css"  rel="stylesheet" type="text/css"  media="print" />
       <!--[if lt IE 8]><link rel="stylesheet" href="/media/css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
-{% endcomment %}
-      {# Bootstrap and other new CSS/JS #}
-      <link href="/media/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
-      <script type="text/javascript" src="/media/bootstrap/js/bootstrap.min.js"></script>
-      {# keep this last as it overrides various selectors in the above stylesheets #}
+      {# keep this last as it overrides varios selectors in the above stylesheets #}
       <link href="/media/css/catalogue.css" rel="stylesheet" type="text/css" />
 
 
@@ -82,11 +73,11 @@
   <body {% block body_load %}{% endblock %}>
     <div id="header" class=""><div id="logo"></div></div>
     <div class="container"> {# for blueprint css #}
-      <div class="span12">
+      <div class="menu-container span-24">
         {% include "menu.html" %}
       </div>
       {% if messages %}
-      <div id="system-messages" class="span12">
+      <div id="system-messages" class="span-22 append-1 prepend-1">
         <ul>
           {% for message in messages %}
             <li>Message: {{ message }}</li>
@@ -94,34 +85,36 @@
         </ul>
       </div>
       {% endif %}
-      <div id="content" class="span12 row-fluid">
+      <div id="content" class="span-22 append-1 prepend-1 prepend-top append-bottom">
         {% block content%}
         {% endblock %}
       </div>
       <hr/>
-      <div id="footer" class="span12">
-        <div id="dst-credits" class="span7">
+      <div id="footer" class="span-24">
+        <div id="dst-credits" class="span-7 append-1 prepend-1">
           {% box_start "box-sponsor" %}
-          <img src="/media/images/dst_logo_small.png" />
+          {# left css class defined by blueprint css #}
+          <img src="/media/images/dst_logo_small.png" class="left" />
           <p class="padded">
-            This catalogue was funded by the <a href="http://www.dst.gov.za/">Department of Science and
+            This catalogue was funded by the <a
+            href="http://www.dst.gov.za/">Department of Science and
             Technology.</a>
           </p>
           {% box_end %}
         </div>
-        <div id="user-box" class="span6">
+        <div id="user-box" class="span-6 append-1">
           {% box_start "box-user" %}
           {% if user.is_authenticated %}
           {% load avatars %}
           {# left css class defined by blueprint css #}
-          <img id="avatarimg" src="{% avatar 96 %}" />
+          <img id="avatarimg" src="{% avatar 96 %}" class="left"/>
           <p class="padded">
           You are logged in as {{user.first_name}} {{user.last_name}}({{user}})
           </p>
           {% endif %}
           {% box_end %}
         </div>{# end of footer #}
-        <div id="legal" class="span7">
+        <div id="legal" class="span-7 append-1 last">
           {% box_start "box-copyright" %}
           <p class="padded">
             Website &copy; 2010 SANSA, Earth Observation. &copy; 2008 CSIR, Satellite Applications Centre. All Rights Reserved. This catalogue was developed by <a href="http://linfiniti.com">Linfiniti Consulting CC.</a>
