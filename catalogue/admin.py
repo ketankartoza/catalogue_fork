@@ -62,6 +62,8 @@ from catalogue.models import (
     ScannerType,
     Band,
     BandSpectralMode,
+    RadarBeam,
+    ImagingMode
 )
 
 
@@ -308,3 +310,11 @@ admin.site.register(Band, BandAdmin)
 class BandSpectralModeAdmin(admin.ModelAdmin):
     pass
 admin.site.register(BandSpectralMode, BandSpectralModeAdmin)
+
+class RadarBeamAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(RadarBeam, RadarBeamAdmin)
+
+class ImagingModeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(ImagingMode, ImagingModeAdmin)

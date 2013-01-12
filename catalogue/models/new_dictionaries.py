@@ -106,6 +106,75 @@ class InstrumentType(models.Model):
         return self.operator_abbreviation
 
 
+class RadarBeam(models.Model):
+    """
+    Only for Radar products
+    """
+    instrument_type = models.OneToOneField(InstrumentType)
+    band_name = models.CharField(
+        max_length=50,
+        help_text='RadarBeam band name'
+    )
+    wavelength = models.IntegerField(
+        help_text='Band wavelength in nanometeres')
+    looking_distance = models.CharField(
+        max_length=50,
+        help_text='REPLACE ME!'
+    )
+    azimuth_direction = models.CharField(
+        max_length=50,
+        help_text='REPLACE ME!'
+    )
+
+    class Meta:
+        app_label = 'catalogue'
+
+    def __unicode__(self):
+        return u'%s (%i)' % (self.band_name, self.wavelength, )
+
+
+class ImagingMode(models.Model):
+    """
+    Imaging mode for a radar beam
+    """
+    POLARIZATION_SET = (
+        ('HH', 'Horizontal-Horizontal'),
+        ('HV', 'Horizontal-Vertical'),
+        ('VH', 'Vertical-Horizontal'),
+        ('VV', 'Vertical-Vertical'),
+    )
+    radarbeam = models.ForeignKey(RadarBeam)
+    name = models.CharField(
+        max_length=50,
+        help_text='ImagingMode name'
+    )
+    incidence_angle_min = models.FloatField(
+        help_text='Minimum incidence angle'
+    )
+    incidence_angle_max = models.FloatField(
+        help_text='Maximum incidence angle'
+    )
+    approximate_resolution = models.FloatField(
+        help_text='Approximate ImagingMode resolution in REPLACE ME'
+    )
+    swath_width = models.FloatField(
+        help_text='Swath width in REPLACE ME'
+    )
+    number_of_looks = models.IntegerField(
+        help_text='REPLACE ME!'
+    )
+    polarization = models.CharField(
+        max_length=2, choices=POLARIZATION_SET,
+        help_text='Polarization type'
+    )
+
+    class Meta:
+        app_label = 'catalogue'
+
+    def __unicode__(self):
+        return u'%s (%s)' % (self.name, self.polarization)
+
+
 class SatelliteInstrument(models.Model):
     """Satellite instrument - an instrument as deployed on a satellite.
     Note that there may be more than one instrument of the same type per

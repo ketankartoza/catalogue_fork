@@ -34,6 +34,27 @@ CREATE TABLE "catalogue_instrumenttype" (
     "scanner_type_id" integer NOT NULL REFERENCES "catalogue_scannertype" ("id") DEFERRABLE INITIALLY DEFERRED
 )
 ;
+CREATE TABLE "catalogue_radarbeam" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "instrument_type_id" integer NOT NULL UNIQUE REFERENCES "catalogue_instrumenttype" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "band_name" varchar(50) NOT NULL,
+    "wavelength" integer NOT NULL,
+    "looking_distance" varchar(50) NOT NULL,
+    "azimuth_direction" varchar(50) NOT NULL
+)
+;
+CREATE TABLE "catalogue_imagingmode" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "radarbeam_id" integer NOT NULL REFERENCES "catalogue_radarbeam" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "name" varchar(50) NOT NULL,
+    "incidence_angle_min" double precision NOT NULL,
+    "incidence_angle_max" double precision NOT NULL,
+    "approximate_resolution" double precision NOT NULL,
+    "swath_width" double precision NOT NULL,
+    "number_of_looks" integer NOT NULL,
+    "polarization" varchar(2) NOT NULL
+)
+;
 CREATE TABLE "catalogue_satelliteinstrument" (
     "id" serial NOT NULL PRIMARY KEY,
     "name" varchar(255) NOT NULL UNIQUE,
@@ -74,6 +95,7 @@ CREATE TABLE "catalogue_bandspectralmode" (
 CREATE INDEX "catalogue_collection_institution_id" ON "catalogue_collection" ("institution_id");
 CREATE INDEX "catalogue_satellite_collection_id" ON "catalogue_satellite" ("collection_id");
 CREATE INDEX "catalogue_instrumenttype_scanner_type_id" ON "catalogue_instrumenttype" ("scanner_type_id");
+CREATE INDEX "catalogue_imagingmode_radarbeam_id" ON "catalogue_imagingmode" ("radarbeam_id");
 CREATE INDEX "catalogue_satelliteinstrument_satellite_id" ON "catalogue_satelliteinstrument" ("satellite_id");
 CREATE INDEX "catalogue_satelliteinstrument_instrument_type_id" ON "catalogue_satelliteinstrument" ("instrument_type_id");
 CREATE INDEX "catalogue_band_instrument_type_id" ON "catalogue_band" ("instrument_type_id");
