@@ -1,77 +1,70 @@
 {% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
-{% load boxtag %} {# Custom tag defined in templatetags/ #}
-{% box_start "box-cart-contents" %}
+<div class="row-fluid">
   {% if myCartTitle %}
-  <h2 class="centered"><img class="icon" src="/media/images/buy_32.png"> {{ myCartTitle }}</h2>
+  <h2>{{ myCartTitle }}</h2>
   {% endif %}
   {% if myRecords %}
-  <table id="cart-contents-table" width="100%" style="border-bottom: solid 1px; border-top: solid 1px; margin-top: 3px;">
+  <table id="cart-contents-table" class="table table-bordered">
     {% include "recordHeader.html" %}
     {% for myRecord in myRecords %}
-      {% include "record.html" %}
+    {% include "record.html" %}
     {% endfor %}
   </table>
-  <div style="text-align: center;">
-    <b id="cart-item-count">{{ myRecords.count }}</b> item(s).
+  <div class="center">
+    <p id="cart-item-count">{{ myRecords.count }} item(s).</p>
+    {% endif %}
+    {% if not myRecords and not myMiniCartFlag %}
+    <p>
+      Your cart is currently empty. You need to add some items to the cart before you can place your order. To do this, use the <a href="/search">search</a> form to search for some data. Then from the search results, choose which items interest you and add them to your cart using the green cart icon.
+    </p>
+    {% endif %}
+    {% if not myRecords and myMiniCartFlag %}
+    <p>
+      Your cart is currently empty. You need to add some items to the cart before you can place your order. To do this, click on the green cart icon <img class="icon" src="/media/images/buy_16.png"> next to records in the table below.
+    </p>
+    {% endif %}
+    {% if myDownloadOrderFlag %}
+    <div id="cart-download-div">
+      <p>Download order as:</p>
+      <button onclick='location="{% url 'downloadOrder' myOrder.id %}?shp";return false;' class="btn">SHP</button>
+      <button onclick='location="{% url 'downloadOrder' myOrder.id %}?kml";return false;' class="btn">KML</button>
+      <button onclick='location="{% url 'downloadOrder' myOrder.id %}?kmz";return false;' class="btn">KMZ</button>
+    </div>
+    {% else %}
+    {% if myRecords %}
+    <div id="cart-download-div">
+      <p>Download cart as:</p>
+      <button onclick='location="{% url 'downloadCart' %}?shp";return false;' class="btn">SHP</button>
+      <button onclick='location="{% url 'downloadCart' %}?kml";return false;' class="btn">KML</button>
+      <button onclick='location="{% url 'downloadCart' %}?kmz";return false;' class="btn">KMZ</button>
+      <button onclick='location="{% url 'downloadCartMetadata' %}";return false;' class="btn">XML</button>
+      <button onclick='location="{% url 'downloadCartMetadata' %}?html";return false;' class="btn">HTML</button>
+    </div>
   </div>
-  {% endif %}
-  {% if not myRecords and not myMiniCartFlag %}
-  <div class="prepend-1 append-1 append-bottom">
-    Your cart is currently empty. You need to add some items to the cart before
-    you can place your order. To do this, use the <a href="/search">search</a>
-    form to search for some data. Then from the search results, choose which
-    items interest you and add them to your cart using the green cart icon.<img
-    class="icon" src="/media/images/buy_16.png">
-  </div>
-  {% endif %}
-  {% if not myRecords and myMiniCartFlag %}
-  <div class="">
-    Your cart is currently empty. You need to add some items to the cart before
-    you can place your order. To do this, click on the green cart icon <img
-    class="icon" src="/media/images/buy_16.png"> next to records in the table below.
-  </div>
-  {% endif %}
-  {% if myDownloadOrderFlag %}
-  <div id="cart-download-div" style="text-align: center;">
-    <img src="/media/images/down_16.png" alt=""/> Download order as
-    <button onclick='location="{% url 'downloadOrder' myOrder.id %}?shp";return false;'>SHP</button>
-    <button onclick='location="{% url 'downloadOrder' myOrder.id %}?kml";return false;'>KML</button>
-    <button onclick='location="{% url 'downloadOrder' myOrder.id %}?kmz";return false;'>KMZ</button>
-  </div>
-  {% else %}
-  {% if myRecords %}
-  <div id="cart-download-div" style="text-align: center;">
-    <span class="loud"><img src="/media/images/down_16.png" alt=""/>Download cart as:</span></br/>
-    <button onclick='location="{% url 'downloadCart' %}?shp";return false;'>SHP</button>
-    <button onclick='location="{% url 'downloadCart' %}?kml";return false;'>KML</button>
-    <button onclick='location="{% url 'downloadCart' %}?kmz";return false;'>KMZ</button>
-    <button onclick='location="{% url 'downloadCartMetadata' %}";return false;'>XML</button>
-    <button onclick='location="{% url 'downloadCartMetadata' %}?html";return false;'>HTML</button>
-  </div>
-  {% endif %}
-  {% endif %}
-{% box_end %}
+</div>
+{% endif %}
+{% endif %}
 {# script for showing deliveryDetails#}
 <script>
 $(document).ready(function(){
 
-{% if myShowDeliveryDetailsFlag %}
-var show_delivery=$('a.show_delivery');
-show_delivery.bind('click', function (evt){
-var ref_id = $(this).attr('ref_id');
-$.ajax({
-url:"/showdeliverydetail/"+ref_id+"/",
-success: function (result){
-  $(result).dialog({title:'Delivery details'});
-}
-});
-evt.preventDefault();
-})
-{% endif %}
+  {% if myShowDeliveryDetailsFlag %}
+  var show_delivery=$('a.show_delivery');
+  show_delivery.bind('click', function (evt){
+    var ref_id = $(this).attr('ref_id');
+    $.ajax({
+      url:"/showdeliverydetail/"+ref_id+"/",
+      success: function (result){
+        $(result).dialog({title:'Delivery details'});
+      }
+    });
+    evt.preventDefault();
+  })
+  {% endif %}
 
-{% if myShowDeliveryDetailsFormFlag %}
-$('a.show_form').deliveryDetails();
-{% endif %}
+  {% if myShowDeliveryDetailsFormFlag %}
+  $('a.show_form').deliveryDetails();
+  {% endif %}
 });
 </script>
 

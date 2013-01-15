@@ -1,85 +1,134 @@
 {% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
-<ul id="menu" class="dropdown dropdown-linear">
 
-  <li><a href="/"><img src="/media/images/home_16.png" alt=""/>&nbsp;Home</a></li>
-{% if user.is_authenticated %}
-  <li><a href="{% url 'search' %}"><img src="/media/images/search_16.png" alt=""/>&nbsp;Search</a></li>
-  <li>
-    <a href="{% url 'showCartContents' %}" onclick='loadContent("{% url 'showCartContents' %}"); return false;'>
-      <img src="/media/images/buy_16.png" alt=""/>&nbsp;My Cart</a>
-  </li>
-  <li>
-    <a href="{% url 'addOrder' %}"><img src="/media/images/letter_16.png" alt=""/>&nbsp;Order Now!</a>
-  </li>
-  {# popular links #}
-  <li>
-    <span class="dir"><img src="/media/images/bookmark_16.png" alt="" />&nbsp;Popular Links</span>
-    <ul>
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <a class="brand" href="/"><img src="/media/sansa-logos/SANSA-whirl-small.png" height="20px"/></a>
+    <ul class="nav">
       <li>
-        <a href="{% url 'mapHelp' %}" onclick='loadContent("{% url 'mapHelp' %}"); return false;'>
-          <img src="/media/images/help_16.png" alt=""/>&nbsp;Using the map</a>
+        <a href="/"><i class="icon-home"></i> <span class="hidden-phone hidden-tablet">Home</span></a>
+      </li>
+      {% if not user.is_authenticated %}
+      <li>
+        <a href="{% url 'about' %}"><i class="icon-question-sign"></i> <span class="hidden-phone hidden-tablet">About</span></a>
+      </li>
+      {% endif %}
+      <li>
+        <a href="#"><i class="icon-share"></i> <span class="hidden-phone hidden-tablet">Archive Summary</span></a>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-circle-arrow-right"></i> <span class="hidden-phone hidden-tablet">Links</span><b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li>
+            <a href="#">SANSA</a>
+          </li>
+          <li>
+            <a href="#">AFIS</a>
+          </li>
+          <li>
+            <a href="#">WAMIS</a>
+          </li>
+          <li>
+            <a href="#">Digital Globe</a>
+          </li>
+          <li>
+            <a href="#">RapidEye</a>
+          </li>
+          <li>
+            <a href="#">GeoEye</a>
+          </li>
+          <li>
+            <a href="#">IRS</a>
+          </li>
+          <li>
+            <a href="#">USGS</a>
+          </li>
+        </ul>
+      </li>
+      {% if user.is_authenticated %}
+      <li>
+        <a href="{% url 'search' %}"><i class="icon-search"></i> <span class="hidden-phone hidden-tablet">Search</span></a>
       </li>
       <li>
-        <a href="{% url 'searchHistory' %}" onclick='loadContent("{% url 'searchHistory' %}"); return false;'>
-          <img src="/media/images/search_16.png" alt=""/>&nbsp;My Search History</a>
+        <a href="#"><i class="icon-wrench"></i> <span class="hidden-phone hidden-tablet">Tasking Requests</span></a>
       </li>
       <li>
-        <a href="{% url 'myOrders' %}" onclick='loadContent("{% url 'myOrders' %}"); return false;'>
-          <img src="/media/images/briefcase_16.png" alt=""/>&nbsp;My Orders</a>
+        <a href="{% url 'showCartContents' %}" onclick='loadContent("{% url 'showCartContents' %}"); return false;'><i class="icon-shopping-cart"></i> <span class="hidden-phone hidden-tablet">My Cart</span></a>
       </li>
       <li>
-        <a href="{% url 'addTaskingRequest' %}">
-          <img src="/media/images/tasking_16.png" alt=""/>&nbsp;New Tasking Request</a>
+        <a href="{% url 'addOrder' %}"><i class="icon-plane"></i> <span class="hidden-phone hidden-tablet">Order Now!</span></a>
       </li>
+
+      {# popular links #}
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-thumbs-up"></i> <span class="hidden-phone hidden-tablet">Popular Links</span><b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li>
+            <a href="{% url 'mapHelp' %}" onclick='loadContent("{% url 'mapHelp' %}"); return false;'>Using the map</a>
+          </li>
+          <li>
+            <a href="{% url 'searchHistory' %}" onclick='loadContent("{% url 'searchHistory' %}"); return false;'>My Search History</a>
+          </li>
+          <li>
+            <a href="{% url 'myOrders' %}" onclick='loadContent("{% url 'myOrders' %}"); return false;'>My Orders</a>
+          </li>
+          <li>
+            <a href="{% url 'addTaskingRequest' %}">New Tasking Request</a>
+          </li>
+          <li>
+            <a href="{% url 'myTaskingRequests' %}" onclick='loadContent("{% url 'myTaskingRequests' %}"); return false;'>My Tasking Requests</a>
+          </li>
+          <li><a href="{% url 'whereAmI' %}">Where am I?</a></li>
+        </ul>
+      </li>
+      {% else %}
       <li>
-        <a href="{% url 'myTaskingRequests' %}" onclick='loadContent("{% url 'myTaskingRequests' %}"); return false;'>
-          <img src="/media/images/tasking_16.png" alt=""/>&nbsp;My Tasking Requests</a>
+        <a href="/accounts/register/"><i class="icon-road"></i> <span class="hidden-phone hidden-tablet">Register</span></a>
       </li>
-      <li><a href="{% url 'whereAmI' %}"><img src="/media/images/wherami_16.png" />&nbsp;Where am I?</a></li>
+      {% endif %}
+      <li>
+        <a href="{% url 'contact' %}"><i class="icon-envelope"></i> <span class="hidden-phone hidden-tablet">Contact</span></a>
+      </li>
     </ul>
-  </li>
-  {# Partners menu #}
-  {% if myPartnerFlag %}
-  <li>
-    <span class="dir"><img src="/media/images/globe_16.png" alt="" />&nbsp;Partners</span>
-    <ul>
-      <li><a href="/clip"><img src="/media/images/globe_16.png">&nbsp;Clip Mosaic</a></li>
+
+
+    <ul class="nav pull-right">
+      {% if myPartnerFlag %}
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-star"></i> <span class="hidden-phone hidden-tablet">Partners</span><b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="/clip">Clip Mosaic</a></li>
+        </ul>
+      </li>
+      {% endif %}
+      {% if user.is_staff %}
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown"><i class="icon-lock"></i> <span class="hidden-phone hidden-tablet">Staff</span><b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="{% url 'visitorMap' %}">Vistor Map</a></li>
+          <li><a href="{% url 'visitorsKml' %}">Visitor KML</a></li>
+          <li><a href="{% url 'visitorList' %}" onclick='loadContent("{% url 'visitorList' %}"); return false;'>Visitor List</a>
+          </li>
+          <li><a href="{% url 'visitorReport' %}">Visitor Stats</a></li>
+          <li><a href="{% url 'searchesMap' %}">Searches Map</a></li>
+          <li><a href="{% url 'recentSearches' %}" onclick='loadContent("{% url 'recentSearches' %}"); return false;'>Searches Table</a>
+          </li>
+          <li><a href="{% url 'listOrders' %}" onclick='loadContent("{% url 'listOrders' %}"); return false;'>Orders List</a>
+          </li>
+          <li><a href="{% url 'dataSummaryTable' %}">Data Summary</a></li>
+          <li><a href="/admin/">Admin</a></li>
+        </ul>
+      </li>
+      {% endif %}
+      {% if user.is_authenticated %}
+        {% include "userprofile/menu_content.html" %}
+      {% else %}
+      <li>
+        <a href="/accounts/login/"><i class="icon-user"></i> <span class="hidden-phone hidden-tablet">Login</span></a>
+      </li>
+      <li>
+        <a href="/accounts/password/reset/"><i class="icon-random"></i> <span class="hidden-phone hidden-tablet">Reset Password</span></a>
+      </li>
+      {% endif %}
     </ul>
-  </li>
-  {% endif %}
-  {# staff menu #}
-  {% if user.is_staff %}
-  <li>
-    <span class="dir"><img src="/media/images/users_16.png" alt="" />&nbsp;Staff</span>
-    <ul>
-      <li><a href="{% url 'visitorMap' %}"><img src="/media/images/users_16.png">&nbsp;Vistor Map</a></li>
-      <li><a href="{% url 'visitorsKml' %}"><img src="/media/images/darkearth_16.png">&nbsp;Visitor KML</a></li>
-      <li>
-        <a href="{% url 'visitorList' %}" onclick='loadContent("{% url 'visitorList' %}"); return false;'>
-          <img src="/media/images/notebook_16.png" alt=""/>&nbsp;Visitor List</a>
-      </li>
-      <li><a href="{% url 'visitorReport' %}"><img src="/media/images/statistics_16.png">&nbsp;Visitor Stats</a></li>
-      <li><a href="{% url 'searchesMap' %}"><img src="/media/images/search_16.png">&nbsp;Searches Map</a></li>
-      <li>
-        <a href="{% url 'recentSearches' %}" onclick='loadContent("{% url 'recentSearches' %}"); return false;'>
-          <img src="/media/images/notebook_16.png" alt=""/>&nbsp;Searches Table</a>
-      </li>
-      <li>
-        <a href="{% url 'listOrders' %}" onclick='loadContent("{% url 'listOrders' %}"); return false;'>
-          <img src="/media/images/briefcase_16.png" alt=""/>&nbsp;Orders List</a>
-      </li>
-      <li><a href="{% url 'dataSummaryTable' %}"><img src="/media/images/diagram_16.png" alt=""/>&nbsp;Data Summary</a></li>
-      <li><a href="/admin/"><img src="/media/images/shield_16.png" alt=""/>&nbsp;Admin</a></li>
-    </ul>
-  </li>
-  {% endif %}
-  {% include "userprofile/menu_content.html" %}
-  {# login menu #}
-  {% else %} {# User is not authenticated #}
-  <li><a href="/accounts/login/"><img src="/media/images/user_16.png">&nbsp;Login</a></li>
-  <li><a href="/accounts/register/"><img src="/media/images/key_16.png">&nbsp;Register</a></li>
-  <li><a href="/accounts/password/reset/"><img src="/media/images/user_16.png">&nbsp;Reset Password</a></li>
-  {% endif %}
-  <li><a href="{% url 'about' %}"><img src="/media/images/flag_16.png" alt=""/>&nbsp;About</a></li>
-  <li><a href="{% url 'contact' %}"><img src="/media/images/pencil_16.png" alt=""/>&nbsp;Contact </a></li>
-</ul>
+  </div>
+</div>

@@ -1,18 +1,17 @@
-{% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% load rangetag %} {# Custom tag defined in templatetags/ #}
 {% if myRecords %}
-  <script type="text/javascript">
-    /* <![CDATA[ */
-    function loadMoreData() {
-      {# vars initialised inside a function using var will have local scope #}
-      {# vars initialised inside a function withoug using var will have global scope #}
-      clearSearchResults();
+<script type="text/javascript">
+/* <![CDATA[ */
+function loadMoreData() {
+  {# vars initialised inside a function using var will have local scope #}
+  {# vars initialised inside a function withoug using var will have global scope #}
+  clearSearchResults();
       {# see http://trac.openlayers.org/wiki/Styles for more info on styling #}
       var myScenesLayer = new OpenLayers.Layer.Vector("scenes",{
         styleMap: mSceneStyleMap,
         rendererOptions: {zIndexing: true},
         projection: new OpenLayers.Projection("EPSG:900913")
-        });
+      });
       var myGJFormat = new OpenLayers.Format.GeoJSON(
 
         );
@@ -35,67 +34,63 @@
 
     }
     if (pageLoaded) {
-        loadMoreData();
-        loadMoreData = null;
+      loadMoreData();
+      loadMoreData = null;
     }
 
-  /* ]]> */
-  </script>
-  <br />
-  {% box_start page "span-22" %}
-    <div class="pagination span-23">
-      <div class="step-links span-1 left vcentered">
-        {% if myPage.has_previous %}
-        <a href="#" onclick='loadPage({{ myPage.previous_page_number }},"{{mySearchGuid}}"); return false;'><img alt="previous" src="/media/images/back_alt.png" /></a>
-        {% else %}
-        <img alt="previous" src="/media/images/back_alt_inactive.png" />
+    /* ]]> */
+    </script>
+      <div class="pagination">
+        <div class="step-links left vcentered">
+          {% if myPage.has_previous %}
+          <a href="#" onclick='loadPage({{ myPage.previous_page_number }},"{{mySearchGuid}}"); return false;'><img alt="previous" src="/media/images/back_alt.png" /></a>
+          {% else %}
+          <img alt="previous" src="/media/images/back_alt_inactive.png" />
+          {% endif %}
+        </div>
+        {% if myPage %}
+        <div class="current center">
+          Page  
+          <select id="page-selector" value="{{ myPage.number }}"  name="page-selector" onchange='loadPage( $("#page-selector option:selected").val(),"{{mySearchGuid}}"); return false;'>
+            {% for i in myPage.paginator.num_pages|get_range %}<option value='{{ i }}' {% if i == myPage.number %}selected='yes'{% endif %}>{{i}}</option>{% endfor %}
+          </select> of {{ myPage.paginator.num_pages }}.
+        </div>
         {% endif %}
-      </div>
-      {% if myPage %}
-      <div class="current centered span-20">
-        Page  
-        <select id="page-selector" value="{{ myPage.number }}"  name="page-selector" onchange='loadPage( $("#page-selector option:selected").val(),"{{mySearchGuid}}"); return false;'>
-          {% for i in myPage.paginator.num_pages|get_range %}<option value='{{ i }}' {% if i == myPage.number %}selected='yes'{% endif %}>{{i}}</option>{% endfor %}
-        </select> of {{ myPage.paginator.num_pages }}.
-      </div>
-      {% endif %}
-      <div class="step-links span-1 vcentered">
-        {% if myPage.has_next %}
+        <div class="step-links vcentered">
+          {% if myPage.has_next %}
           <a href="#" onclick='loadPage({{ myPage.next_page_number }},"{{mySearchGuid}}"); return false;'><img alt="previous" src="/media/images/forward_alt.png" /></a>
-        {% else %}
-        <img alt="previous" src="/media/images/forward_alt_inactive.png" />
+          {% else %}
+          <img alt="previous" src="/media/images/forward_alt_inactive.png" />
+          {% endif %}
+        </div>
+      </div>
+      <div class="span8">
+        <table id="results" class="table table-striped">
+          {% include "recordHeader.html" %}
+          <tbody>
+            {% for myRecord in myRecords %}
+            {% include "record.html" %}
+            {% empty %}
+            <h2>No records found.</h2>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div id="results" class="span8">
+        <p class="lead">
+          No Records Found
+        </p>
+      </div>
+      {% endif %}
+
+      {% if myMessagesFlag %}
+      {{ myMessagesHeading|safe }}
+      <div>
+        {% if myMessages %}
+        {% for myValue in myMessages %}
+        {{ myValue|safe }}<br/>
+        {% endfor %}
         {% endif %}
       </div>
-    </div>
-    <div class="span-22 last">
-      <table id="results" cellpadding="0" cellspacing="0" class="span-22 last">
-        {% include "recordHeader.html" %}
-        <tbody>
-          {% for myRecord in myRecords %}
-          {% include "record.html" %}
-          {% empty %}
-          <h2>No records found.</h2>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  {% box_end %}
-{% else %}
-  <br />
-  {% box_start page "span-22" %}
-    <table id="results" cellpadding="0" cellspacing="0" width="100%">
-      <tr><td>No records found</td></tr>
-    </table>
-  {% box_end %}
-{% endif %}
-
-{% if myMessagesFlag %}
-  {{ myMessagesHeading|safe }}
-  <div>
-      {% if myMessages %}
-        {% for myValue in myMessages %}
-          {{ myValue|safe }}<br/>
-        {% endfor %}
       {% endif %}
-  </div>
-{% endif %}

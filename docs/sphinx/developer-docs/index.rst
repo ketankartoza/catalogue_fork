@@ -17,4 +17,5 @@ Developer Manual
    product-schema
    tests
    django14_migration
+   css-notes
 

@@ -1,5 +1,4 @@
-{% extends "base.html" %}
-{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% extends "base2.html" %}
 {% load i18n %}
 
 {% block title %}{% trans "User registration" %}{% endblock %}
@@ -7,139 +6,170 @@
 {% block extrajs %}
 {{ block.super }}
 <script type="text/javascript">
-  $(function() {
-    $("input#id_username").focus();
-    $("input[type='text'], input[type='password']").addClass("text");
-  });
+$(function() {
+  $("input#id_username").focus();
+  $("input[type='text'], input[type='password']").addClass("text");
+});
 </script>
 {% endblock %}
 
 {% block content %}
-<div id="content">
-{% box_start "box-" %}
-  <form action="" method="post" accept-charset="utf-8">
-  {% csrf_token %}
-  <fieldset>
+<div class="row-fluid">
+  <form class="form-horizontal span8" action="" method="post" accept-charset="utf-8">
+    {% csrf_token %}
     <legend>{% trans "User registration" %}</legend>
 
-    <label for="id_username">{% trans "Username (required)" %}</label>
-    <p>{{ form.username }}
-      {% if form.username.errors %}
-        <span class="quiet red"><br />* {{ form.username.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
-
-    <label for="id_firstname">{% trans "First Name (required)" %}</label>
-    <p>{{ form.firstname }}
-      {% if form.firstname.errors %}
-        <span class="quiet red"><br />* {{ form.firstname.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
-
-    <label for="id_surname">{% trans "Surname (required)" %}</label>
-    <p>{{ form.surname }}
-      {% if form.surname.errors %}
-        <span class="quiet red"><br />* {{ form.surname.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
-
-    <label for="id_email">{% trans "E-mail (required)" %}</label>
-    <p>{{ form.email }}
-      {% if form.email.errors %}
-        <span class="quiet red"><br />* {{ form.email.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
-
-    <label for="id_password1">{% trans "Password" %}</label>
-    <p>{{ form.password1 }}
-      {% if form.password1.errors %}
-        <span class="quiet red"><br />* {{ form.password1.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
-
-    <label for="id_password2">{% trans "Password (again)" %}</label>
-    <p>{{ form.password2 }}
-      {% if form.password2.errors %}
-        <span class="quiet red"><br />* {{ form.password2.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
-
-    <label for="id_address1">{% trans "Address Line 1 (required)" %}</label>
-    <p>{{ form.address1 }}
-      {% if form.address1.errors %}
-        <span class="quiet red"><br />* {{ form.address1.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
-
-    <label for="id_address2">{% trans "Address Line 2 (required)" %}</label>
-    <p>{{ form.address2 }}
-      {% if form.address2.errors %}
-        <span class="quiet red"><br />* {{ form.address2.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
-
-    <label for="id_address3">{% trans "Address Line 3" %}</label>
-    <p>{{ form.address3 }}
-      {% if form.address3.errors %}
-        <span class="quiet red"><br />* {{ form.address3.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
-
-    <label for="id_address4">{% trans "Address Line 4" %}</label>
-    <p>{{ form.address4 }}
-      {% if form.address4.errors %}
-        <span class="quiet red"><br />* {{ form.address4.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
-
-    <label for="id_post_code">{% trans "Post Code (required)" %}</label>
-    <p>{{ form.post_code }}
-      {% if form.post_code.errors %}
-        <span class="quiet red"><br />* {{ form.post_code.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
-
-    <label for="id_organisation">{% trans "Organisation (required)" %}</label>
-    <p>{{ form.organisation }}
-      {% if form.organisation.errors %}
-        <span class="quiet red"><br />* {{ form.organisation.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
-
-    <label for="id_contact_no">{% trans "Contact No (required)" %}</label>
-    <p>{{ form.contact_no }}
-      {% if form.contact_no.errors %}
-        <span class="quiet red"><br />* {{ form.contact_no.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
-
-    <label for="id_url">{% trans "Website URL" %}</label>
-    <p>{{ form.url }}
-      {% if form.url.errors %}
-        <span class="quiet red"><br />* {{ form.url.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
-
-    <label for="id_about">{% trans "More About Yourself" %}</label>
-    <p>{{ form.about }}
-      {% if form.about.errors %}
-        <span class="quiet red"><br />* {{ form.about.errors|join:"; " }}</span>
-      {% endif %}
-    </p>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_username">{% trans "Username (required)" %}</label>
+      <div class="controls">{{ form.username }}
+        {% if form.username.errors %}
+        <span class="help-inline">{{ form.username.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_firstname">{% trans "First Name (required)" %}</label>
+      <div class="controls">
+        {{ form.firstname }}
+        {% if form.firstname.errors %}
+        <span class="inline-help"><br />* {{ form.firstname.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_surname">{% trans "Surname (required)" %}</label>
+      <div class="controls">
+        {{ form.surname }}
+        {% if form.surname.errors %}
+        <span class="inline-help"><br />* {{ form.surname.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_email">{% trans "E-mail (required)" %}</label>
+      <div class="controls">
+        {{ form.email }}
+        {% if form.email.errors %}
+        <span class="inline-help"><br />* {{ form.email.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_password1">{% trans "Password" %}</label>
+      <div class="controls">
+        {{ form.password1 }}
+        {% if form.password1.errors %}
+        <span class="inline-help"><br />* {{ form.password1.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_password2">{% trans "Password (again)" %}</label>
+      <div class="controls">
+        {{ form.password2 }}
+        {% if form.password2.errors %}
+        <span class="inline-help"><br />* {{ form.password2.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_address1">{% trans "Address Line 1 (required)" %}</label>
+      <div class="controls">
+        {{ form.address1 }}
+        {% if form.address1.errors %}
+        <span class="inline-help"><br />* {{ form.address1.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_address2">{% trans "Address Line 2 (required)" %}</label>
+      <div class="controls">
+        {{ form.address2 }}
+        {% if form.address2.errors %}
+        <span class="inline-help"><br />* {{ form.address2.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_address3">{% trans "Address Line 3" %}</label>
+      <div class="controls">
+        {{ form.address3 }}
+        {% if form.address3.errors %}
+        <span class="inline-help"><br />* {{ form.address3.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_address4">{% trans "Address Line 4" %}</label>
+      <div class="controls">
+        {{ form.address4 }}
+        {% if form.address4.errors %}
+        <span class="inline-help"><br />* {{ form.address4.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_post_code">{% trans "Post Code (required)" %}</label>
+      <div class="controls">
+        {{ form.post_code }}
+        {% if form.post_code.errors %}
+        <span class="inline-help"><br />* {{ form.post_code.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_organisation">{% trans "Organisation (required)" %}</label>
+      <div class="controls">
+        {{ form.organisation }}
+        {% if form.organisation.errors %}
+        <span class="inline-help"><br />* {{ form.organisation.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_contact_no">{% trans "Contact No (required)" %}</label>
+      <div class="controls">
+        {{ form.contact_no }}
+        {% if form.contact_no.errors %}
+        <span class="inline-help"><br />* {{ form.contact_no.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_url">{% trans "Website URL" %}</label>
+      <div class="controls">
+        {{ form.url }}
+        {% if form.url.errors %}
+        <span class="inline-help"><br />* {{ form.url.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="control-group {% if form.username.errors %}error{% endif %}">
+      <label class="control-label" for="id_about">{% trans "More About Yourself" %}</label>
+      <div class="controls">
+        {{ form.about }}
+        {% if form.about.errors %}
+        <span class="inline-help"><br />* {{ form.about.errors|join:"; " }}</span>
+        {% endif %}
+      </div>
+    </div>
 
     {% if form.non_field_errors %}
-      <ul class="quiet red">{{ form.non_field_errors.as_ul }}</ul>
+    <ul class="error">{{ form.non_field_errors.as_ul }}</ul>
     {% endif %}
-  </fieldset>
-  <p><input type="submit" value="{% trans 'Register' %}" /></p>
+    <div class="control-group">
+      <div class="controls">
+        <input class="btn" type="submit" value="{% trans 'Register' %}" /></p>
+      </div>
+    </div>
   </form>
-{% box_end %}
-{% box_start "box-" %}
-  <div class="box">
-    <h3>{% trans "Register a new account" %}</h3>
-    <p>{% trans "In order to be able to do searches and place orders you need to have an account." %}.</p>
+  <div class="span4">
+    <div class="box">
+      <h3>{% trans "Register a new account" %}</h3>
+      <p>{% trans "In order to be able to do searches and place orders you need to have an account." %}.</p>
+    </div>
   </div>
-{% box_end %}
 </div>
 {% include "userprofile/menu.html" %}
 {% endblock %}
+

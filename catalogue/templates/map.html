@@ -1,7 +1,6 @@
 {% extends "mapbody.html" %}
 {# Original code from Tim's SABIO project and copyright is retained by the original author #}
 {% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
-{% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% block extrajs %}
   {{ block.super }}
   {% block ol_map %}
@@ -32,7 +31,7 @@
       {
         resizeTable();
       });
-      $("#accordion").accordion({ autoHeight: false });
+      //$("#accordion").accordion({ autoHeight: false });
       {% if myCartFlag %}
       $("#cart").load("{% url 'showCartContents' %}");
       {% endif %}
@@ -97,7 +96,7 @@
     <div id="cart-accordion-div">
       <div>Click the basket icon to add an image to your collection.</div>
       <div id="cart"></div>
-      <div style="text-align: center;">
+      <div class="center">
         <a href="{% url 'addOrder' %}" onclick='addOrderClicked(); return false;'>{# return false to prevent invoking link #}
           <img src="/media/images/letter_16.png" alt="" /> Order Now!
         </a>
@@ -128,20 +127,20 @@
       {% if myRecords %}
       <div id="cart-download-div" style="text-align: center;">
         <span class="loud"><img src="/media/images/down_16.png" alt=""/>Download search as:</span></br/>
-        <button onclick='location="{% url 'downloadSearchResult' mySearchGuid %}?shp"'>SHP</button>
-        <button onclick='location="{% url 'downloadSearchResult' mySearchGuid %}?kml"'>KML</button>
-        <button onclick='location="{% url 'downloadSearchResult' mySearchGuid %}?kmz"'>KMZ</button>
-        <button onclick='location="{% url 'downloadSearchResultMetadata' mySearchGuid %}"'>XML</button>
-        <button onclick='location="{% url 'downloadSearchResultMetadata' mySearchGuid %}?html"'>HTML</button>
+        <button class="btn" onclick='location="{% url 'downloadSearchResult' mySearchGuid %}?shp"'>SHP</button>
+        <button class="btn" onclick='location="{% url 'downloadSearchResult' mySearchGuid %}?kml"'>KML</button>
+        <button class="btn" onclick='location="{% url 'downloadSearchResult' mySearchGuid %}?kmz"'>KMZ</button>
+        <button class="btn" onclick='location="{% url 'downloadSearchResultMetadata' mySearchGuid %}"'>XML</button>
+        <button class="btn" onclick='location="{% url 'downloadSearchResultMetadata' mySearchGuid %}?html"'>HTML</button>
       </div>
       {% endif %}
       <br />
-    <div style="text-align: center;">
-      <button onclick='location="{% url 'modifySearch' mySearchGuid %}"' title="Returns to the main search page (works on a copy of the current search)">Modify this search</button>
+    <div class="center">
+      <button class="btn" onclick='location="{% url 'modifySearch' mySearchGuid %}"' title="Returns to the main search page (works on a copy of the current search)">Modify this search</button>
     </div>
   <div>
   </div>
-          {#% if user.is_staff %}<div id="sql" style="display: none;">{{ mySqlString }}</div><input type=button id="sql-button" value="Show SQL" />{% endif %#}
+          {#% if user.is_staff %}<div id="sql" style="display: none;">{{ mySqlString }}</div><input type="button" class="btn" id="sql-button" value="Show SQL" />{% endif %#}
     </div>
   {% endif %}
 {% endblock %}

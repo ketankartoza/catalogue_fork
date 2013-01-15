@@ -1,9 +1,10 @@
+{% extends 'base2.html' %}
 {# Original code from Tim's SABIO project and copyright is retained by the original author #}
 {% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
-{% load boxtag %} {# Custom tag defined in templatetags/ #}
-{% box_start "box-search-history"%}
+{% block content %}
   <h2 class="centered"> My Search History</h2>
-  <table width="100%" style="border-bottom: solid 1px; border-top: solid 1px; margin-top: 3px;">
+  <div class="row-fluid">
+  <table width="100%" class="table table-striped">
     <tr>
       <th>
         <b>Searched on</b>
@@ -38,8 +39,7 @@
         {% firstof mySearch.record_count 'N/D' %}
       </td>
       <td>
-        <a href="{% url 'searchResultMap' mySearch.guid %}"><img src="/media/images/search_16.png" style="cursor: pointer;"
-          class="blocking-link"/></a>{# blocking link class used to trap clicks and show block ui while page redirect runs #}
+        <a href="{% url 'searchResultMap' mySearch.guid %}"><i class="icon-search"></i></a>{# blocking link class used to trap clicks and show block ui while page redirect runs #}
       </td>
       <td>
         <a href="{% url 'deleteSearch' mySearch.id %}"
@@ -48,10 +48,11 @@
           $(this).parent().parent().remove();
           return false;'
           >
-          <img src="/media/images/delete_16.png">
+          <i class="icon-remove"></i>
           </a>
       </td>
     </tr>
     {% endfor %}
   </table>
-{% box_end %}
+</div>
+{% endblock %}

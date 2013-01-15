@@ -1,24 +1,26 @@
-{% extends "base.html" %}
-{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% extends "base2.html" %}
 {% block content%}
-{% box_start "box-contact-us" "span-22" %}
-  <h2 class="centered">Contact Us</h2>
-  <div class="span-10 prepend-1">
-    <p><b>Earth Observation</b><br>
-
-    Jane Olwoch<br>
-    Email: <a href="mailto:jolwoch@sansa.org.za">jolwoch@sansa.org.za</a><br> 
-    Tel: +27 12 842 7838<br>
-   
-
-    <p><b>Data enquiries, quotes and sales</b><br>
-
-    Email: <a href="mailto:customers-eo@sansa.org.za">customers-eo@sansa.org.za </a><br>
-    Tel:  +27 12 334 5000
-    Fax:  +27 12 334 5001
+<div class="row-fluid">
+  <h2>Contact Us</h2>
+</div>
+<div class="row-fluid">
+  <div class="span6 center">
+    <address>
+      <strong>Earth Observation</strong><br>
+      Jane Olwoch<br>
+      Email: <a href="mailto:jolwoch@sansa.org.za">jolwoch@sansa.org.za</a><br>
+      <abbr title="Phone">Tel:</abbr> +27 12 842 7838
+    </address>
   </div>
+  <div class="span6 center">
+    <address>
+      <strong>Data enquiries, quotes and sales</strong><br>
+      Email: <a href="mailto:customers-eo@sansa.org.za">customers-eo@sansa.org.za </a><br>
+      <abbr title="Phone">Tel:</abbr> +27 12 334 5000
+      <abbr title="Phone">Fax:</abbr> +27 12 334 5001
+    </address>
+  </div>
+</div>
 
-
- {% box_end %}
 {% endblock %}
 

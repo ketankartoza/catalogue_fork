@@ -1,15 +1,17 @@
-{% extends "base.html" %}
-{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% extends "base2.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "Logged out" %}{% endblock %}
+{% block title %}{% trans "Logged Out" %}{% endblock %}
 
 {% block content %}
-<div id="content">
-{% box_start "box-" %}
+<div class="row-fluid center">
   <h3>{% trans "Logged out" %}</h3>
-  <p class="large">{% trans "You've been logged out" %}. (<a href="{% url profile_overview %}">{% trans 'Log in again' %}</a>)</p>
-{% box_end %}
+  <p class="lead">
+    {% trans "You've been logged out" %}.
+  </p>
+  <p class="lead">
+    (<a href="{% url profile_overview %}">{% trans 'Log in again' %}</a>)
+  </p>
 </div>
 {% include "userprofile/menu.html" %}
 {% endblock %}

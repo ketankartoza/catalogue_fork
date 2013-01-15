@@ -139,7 +139,7 @@ def whereAmI(theRequest):
         # 'postal_code': None, 'dma_code': 0, 'country_code': 'ZA',
         # 'country_name':'South Africa'}
         myHeading = (
-            '<h3><a href="#"><img src="/media/images/wherami_16.png">&nbsp;'
+            '<h3><a href="#"><i class="icon-globe"></i>&nbsp;'
             'Your Location</a></h3>')
         myMessages.append('Nearest City: ' + str(myLatLong['city']))
         myMessages.append('Country: ' + str(myLatLong['country_name']))
@@ -207,7 +207,7 @@ def whereAmI(theRequest):
 
     else:
         myHeading = (
-            '<h3><img src="/media/images/wherami_16.png">&nbsp;'
+            '<h3><i class="icon-globe"></i>&nbsp;'
             'Your Location</h3>')
         myMessages.append('Sorry, we could not resolve your position.')
         return ({
