@@ -51,11 +51,11 @@ To get started, first add an entry like this to your ssh config file in ~/.ssh/c
     Port 8697
     HostName 188.40.123.80
     FallBackToRsh no
-    
+
   Host orasac1
     Port 8697
     HostName 196.35.94.196
-    FallBackToRsh no  
+    FallBackToRsh no
 
 Checkout Sources
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -117,7 +117,7 @@ Then extract the python informix client to tmp and install it into your venv::
   python setup.py build_ext
   python setup.py install
 
-**Note:** See 
+**Note:** See
 
 GDAL Python Bindings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -132,7 +132,7 @@ here::
 
 Please see the webmapping chapter (600-webmapping.t2t) for notes on the setup process for GDAL
 
-**Note:** When installing gdal from source and you want the python bindings installed into your 
+**Note:** When installing gdal from source and you want the python bindings installed into your
 python virtual env, make sure to activate the virtual environment before building gdal so that
 its bindings are placed in the v.env site packages dir.
 
@@ -159,7 +159,7 @@ To install django, django authentication etc into our virtual environment do::
   pip install -r sac_catalogue/REQUIREMENTS.txt
 
 
-Then make sure the appropriate settings from djangodblog in settings.py.templ are 
+Then make sure the appropriate settings from djangodblog in settings.py.templ are
 deployed in your production settings.py
 
 The full list of packages installed using the REQUIREMENTS file is:
@@ -177,7 +177,7 @@ avoid using the installed python-imaging (the debian pil package) on your
 system that is needed by tilecache.
 
 If you get an error like this when trying to view jpg thumbs::
-  
+
   decoder jpeg not available
 
 
@@ -192,15 +192,21 @@ Your PIL is missing jpg (and probably png support). To fix it do::
   tar xfz Imaging-1.1.7.tar.gz
   cd Imaging-1.1.7
 
-Now edit setup.py to set these::
+Now edit setup.py to set these (for 32 bit)::
+
+   TCL_ROOT = "/usr/lib/i386-linux-gnu/", "/usr/include"
+   JPEG_ROOT = "/usr/lib/i386-linux-gnu/", "/usr/include"
+   ZLIB_ROOT = "/usr/lib/i386-linux-gnu/", "/usr/include"
+   TIFF_ROOT = "/usr/lib/i386-linux-gnu/", "/usr/include"
+   FREETYPE_ROOT = "/usr/lib/i386-linux-gnu/", "/usr/include"
+
+Or for 64 bit::
 
   TCL_ROOT = "/usr/lib/x86_64-linux-gnu/", "/usr/include"
   JPEG_ROOT = "/usr/lib/x86_64-linux-gnu/", "/usr/include"
   ZLIB_ROOT = "/usr/lib/x86_64-linux-gnu/", "/usr/include"
   TIFF_ROOT = "/usr/lib/x86_64-linux-gnu/", "/usr/include"
   FREETYPE_ROOT = "/usr/lib/x86_64-linux-gnu/", "/usr/include"
-
-**Note:** Above assumes 64bit arch
 
 Test if your configs work::
 
@@ -226,8 +232,8 @@ You may also want to read this:
 
 http://devdoodles.wordpress.com/2009/02/16/user-authentication-with-django-registration/
 
-if you want more info on how the registration stuff works.  
-  
+if you want more info on how the registration stuff works.
+
 *Note:* that you need to log in to the admin area of the site and change the
 domain name in the sites table from something other than 'example.com',
 otherwise the registration middleware will send the reminder with an incorrect
@@ -239,15 +245,15 @@ url.
 Source code Check out
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Check out this folder using 
+Check out this folder using
 
 ```
 git clone orasac1:sac_catalogue.git sac_catalogue
 cd sac_catalogue
 ```
 
-Copy settings.py.template to settings.py and then 
-modify settings.py as needed (probably you just need to set 
+Copy settings.py.template to settings.py and then
+modify settings.py as needed (probably you just need to set
 the eth adapter and db connection settings).
 
 Database setup
@@ -279,7 +285,7 @@ And if you have the legacy acs catalogue do:
 python manage.py syncdb --database=acs
 ```
 
-The django fixtures included with this project should populate the 
+The django fixtures included with this project should populate the
 initial database when you run the above command.
 
 Restoring an existing database
@@ -306,7 +312,7 @@ Setup apache (mod  python way)
 
 Make sure you have mod_expires and mod_deflate installed.
 
-The assumption is that you are using name based virtual hosts and that the 
+The assumption is that you are using name based virtual hosts and that the
 catalogue will run at the root of such a virtual host. Add to you apache site config:
 
 ```
@@ -338,10 +344,10 @@ sudo /etc/init.d/apache reload
 Setup apache (mod_wsgi way)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The assumption is that you are using name based virtual hosts and that the 
+The assumption is that you are using name based virtual hosts and that the
 catalogue will run at the root of such a virtual host. Add to you apache site config:
 
-Modify as appropriate a copy of the apache-site-wsgi.templ file found in the apache 
+Modify as appropriate a copy of the apache-site-wsgi.templ file found in the apache
 dir in the source tree then link it to apache.
 
 
@@ -413,9 +419,9 @@ http://trac.openlayers.org/browser/trunk/openlayers/examples/proxy.cgi?format=ra
 sudo chmod +x /usr/lib/cgi-bin/proxy.cgi
 ```
 
-Once you have installed the proxy.cgi you need to configure it to tell it the 
-list of allowed servers it can proxy for. This is to prevent it becoming 
-an open relay on the internet. Edit /usr/lib/cgi-bin/proxy/cgi and change 
+Once you have installed the proxy.cgi you need to configure it to tell it the
+list of allowed servers it can proxy for. This is to prevent it becoming
+an open relay on the internet. Edit /usr/lib/cgi-bin/proxy/cgi and change
 line 18 to look like this:
 
 ```
@@ -439,8 +445,8 @@ Creating branches
 **Note:** This section uses svn commands and should be updated to use git
 equivalents.
 
-When the code gets stabilised to a certain point you should create a branch 
-to mark that stable code base and then deploy it on the live server. To 
+When the code gets stabilised to a certain point you should create a branch
+to mark that stable code base and then deploy it on the live server. To
 create the branch do e.g.:
 
 ```
