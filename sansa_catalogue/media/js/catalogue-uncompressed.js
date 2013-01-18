@@ -474,24 +474,26 @@ function setupBaseMap()
   // we need to explicitly define the styles for the icons etc.
   mNavigationPanel = new OpenLayers.Control.Panel({'div' : document.getElementById("map-navigation-panel")});
   var myZoomInControl = new OpenLayers.Control.ZoomBox({
-        title: "<b>Zoom in box</b> draw a box on the map, to see the area at a larger scale.",
-        displayClass:'olControlZoomBoxIn', //so we can set its css
+        title: "Zoom In Box: draw a box on the map, to see the area at a larger scale.",
+        displayClass:'icon-zoom-in icon-2x right ', //Bootstrap/Font-Awesome Icons. SPACE AFTER right CRUCIAL
         out: false
       });
   mMap.addControl(myZoomInControl);
+
   var myZoomOutControl = new OpenLayers.Control.ZoomBox({
-        title: "<b>Zoom out box</b> draw a box on the map, to see the area at a smaller scale.",
-        displayClass:'olControlZoomBoxOut', //so we can set its css
+        title: "Zoom Out Box: draw a box on the map, to see the area at a smaller scale.",
+        displayClass:'icon-zoom-out icon-2x right ', //Bootstrap/Font-Awesome Icons. SPACE AFTER right CRUCIAL
         out: true
       });
   mMap.addControl(myZoomOutControl);
+
     var myNavigationControl = new OpenLayers.Control.Navigation({
     title : "<b>Pan map</b> click and drag map to move the map in the direction of the mouse.",
     zoomWheelEnabled: false
     }
   );
-
   mMap.addControl(myNavigationControl);
+
     var myHistoryControl = new OpenLayers.Control.NavigationHistory({
   previousOptions: {
       title : "<b>Previous view</b> quickly jump to the prevoius map view."
@@ -502,9 +504,13 @@ function setupBaseMap()
   });
   mMap.addControl(myHistoryControl);
   // add map help button
-  mMap.addControl(map_help_button);
+  var myHelpButton = new OpenLayers.Control({
+    title: "Help",
+    displayClass: 'icon-question-sign icon-2x right '
+  })
+  mMap.addControl(myHelpButton);
   // now add these controls all to our toolbar / panel
-  mNavigationPanel.addControls([map_help_button, myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.next, myHistoryControl.previous]);
+  mNavigationPanel.addControls([myHelpButton, myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.next, myHistoryControl.previous]);
   mMap.addControl(new OpenLayers.Control.ScaleBar({
       align: "left",
       minWidth: 150,
