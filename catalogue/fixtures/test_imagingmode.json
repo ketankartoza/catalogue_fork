@@ -1,0 +1,16 @@
+[
+    {
+        "pk": 1,
+        "model": "catalogue.imagingmode",
+        "fields": {
+            "incidence_angle_min": 23.0,
+            "polarization": "VV",
+            "name": "ERS-1 AMI SAR Image Mode",
+            "approximate_resolution": 30.0,
+            "number_of_looks": 3,
+            "radarbeam": 1,
+            "swath_width": 100.0,
+            "incidence_angle_max": 23.0
+        }
+    }
+]
