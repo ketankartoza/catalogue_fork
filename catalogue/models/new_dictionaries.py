@@ -269,5 +269,5 @@ class BandSpectralMode(models.Model):
         unique_together = (('band', 'spectral_mode'),)
 
     def __unicode__(self):
-        return '%s (%f)' % (
+        return '%s (%s)' % (
             self.band.band_name, self.spectral_mode.name)
