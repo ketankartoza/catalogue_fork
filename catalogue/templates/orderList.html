@@ -17,17 +17,33 @@ function showOrder(theId) {
       <label>Go to order:</label>
       <div class="input-append">
         <input name="order_id_text" type="text" size="6" maxlength="5" placeholder="Enter Order ID"/>
-        <button class="btn" onclick="showOrder(forms['frmShowOrder'].order_id_text.value); return false;">Go!</button>
+        <button class="btn btn-success" onclick="showOrder(forms['frmShowOrder'].order_id_text.value); return false;">Go!</button>
       </div>
     </fieldset>
   </form>
 </div>
-<div class="row-fluid center" id="order-list-buttonset">
-  <button class="btn" onclick='location="{{ myUrl }}?page={{ myRecords.number}}&pdf"'><i class="icon-download"></i> Download as PDF</button>
-  {% if myUrl = '/listorders/' %} {# can't used url template tag for if evaluation #}
-  <button class="btn" onclick='location="{% url 'orderMonthlyReport' myCurrentMonth|date:'Y'  myCurrentMonth|date:'m' %}"'>Monthly Reports</button>
-  <button class="btn" onclick='location="{% url 'ordersSummary' %}"'>Orders Summary</button>
-  {% endif %}
+<div class="row-fluid">
+  <div id="order-list-buttonset" class="span6">
+    <button class="btn" onclick='location="{{ myUrl }}?page={{ myRecords.number}}&pdf"'><i class="icon-download"></i> Download as PDF</button>
+    {% if myUrl = '/listorders/' %} {# can't used url template tag for if evaluation #}
+    <button class="btn" onclick='location="{% url 'orderMonthlyReport' myCurrentMonth|date:'Y'  myCurrentMonth|date:'m' %}"'>Monthly Reports</button>
+    <button class="btn" onclick='location="{% url 'ordersSummary' %}"'>Orders Summary</button>
+    {% endif %}
+    <button class="btn" onclick='location="{% url 'listTaskingRequests' %}"'>Switch to Tasking Request View</button>
+  </div>
+  <div class="">
+    <span class="step-links span6">
+      {% if myRecords.has_previous %}
+      <button onclick='$("#content").load("{{myUrl}}?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</button>
+        {% endif %}
+      <span class="current">
+        Page {{ myRecords.number }} of {{ myRecords.paginator.num_pages }}.
+      </span>
+      {% if myRecords.has_next %}
+      <button onclick='$("#content").load("{{myUrl}}?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</button>
+      {% endif %}
+    </span>
+  </div>
 </div>
 <table class="table table-striped">
   <thead>
@@ -38,27 +54,6 @@ function showOrder(theId) {
     <th>View</th>
   </thead>
   <tbody>
-    <tr>
-      <td colspan="5" style="text-align: center;">
-        <div class="pagination">
-          <span class="step-links">
-            <p>
-              <button class="btn" onclick='location="{% url 'listTaskingRequests' %}"'>Switch to Tasking Request View</button>
-              {% if myRecords.has_previous %}
-              <button onclick='$("#content").load("{{myUrl}}?page={{ myRecords.previous_page_number }}","",zebraTables)'>Previous</button>
-              {% endif %}
-            </p>
-            <span class="current">
-              <p>Page {{ myRecords.number }} of {{ myRecords.paginator.num_pages }}.</p>
-            </span>
-
-            {% if myRecords.has_next %}
-            <button onclick='$("#content").load("{{myUrl}}?page={{ myRecords.next_page_number }}","",zebraTables)'>Next</button>
-            {% endif %}
-          </span>
-        </div>
-      </td>
-    </tr>
     {% for myOrder in myRecords.object_list %}
     <tr>
       <td>{{myOrder.id }}</td>
