@@ -58,9 +58,6 @@ from catalogue.models import (
     AcquisitionMode)
 from catalogue.renderDecorator import renderWithContext
 
-from acscatalogue.models import (
-    SegmentCommon,)
-
 
 # in case you need to slice ResultSet (paginate) for display
 def sliceForDisplay(theList, thePageSize=10):
