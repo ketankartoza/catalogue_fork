@@ -489,7 +489,7 @@ function setupBaseMap()
 
     var myNavigationControl = new OpenLayers.Control.Navigation({
     title : "<b>Pan map</b> click and drag map to move the map in the direction of the mouse.",
-    zoomWheelEnabled: false
+    zoomWheelEnabled: false,
     }
   );
   mMap.addControl(myNavigationControl);
