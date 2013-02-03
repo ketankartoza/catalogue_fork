@@ -338,7 +338,7 @@ def visitorMap(theRequest):
     # 28.08329963684082, 'country_code3': 'ZAF',
     # 'latitude': -26.200000762939453, 'postal_code': None, 'dma_code': 0,
     # 'country_code': 'ZA', 'country_name': 'South Africa'}
-    myMessages.append('<h3 class="centered">Your details</h3><br/>')
+    myMessages.append('<h3>Your details</h3>')
     if not myLatLong:
         myMessages.append('Could not calculate your location')
     else:

@@ -20,14 +20,14 @@
           data.addRows([
             {% for myCountry in myScores %}
             {% ifnotequal myCountry.country 'south africa' %}
-            ['{{myCountry.country}}', {{ myCountry.count }}],
+            ['{{myCountry.country|title}}', {{ myCountry.count }}],
             {% endifnotequal %}
             {% endfor %}
           [null,null]]);
 
           // Instantiate and draw our chart, passing in some options.
           var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-          chart.draw(data, {width: 400, height: 240, is3D: true, title: 'Visitors by country'});
+          chart.draw(data, {height: 300, is3D: true, backgroundColor:'transparent'});
         }
       </script>
 {% endblock %}
