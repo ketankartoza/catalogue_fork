@@ -123,8 +123,5 @@ urlpatterns = patterns('',
     url(r'^sendMessageToAllUsers/$', messaging.sendMessageToAllUsers),
 
     # New dictionaries
-    url(r'^collectionList/$', collectionList),
-    url(r'^satelliteDetails/(?P<theSatelliteId>\d*)/$', satelliteDetails),
-
-
+    url(r'', include('dictionaries.urls')),
 )

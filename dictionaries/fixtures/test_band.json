@@ -1,7 +1,7 @@
 [
     {
         "pk": 1,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 1,
             "instrument_type": 3,
@@ -13,7 +13,7 @@
     },
     {
         "pk": 2,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 2,
             "instrument_type": 3,
@@ -25,7 +25,7 @@
     },
     {
         "pk": 3,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 3,
             "instrument_type": 3,
@@ -37,7 +37,7 @@
     },
     {
         "pk": 4,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 4,
             "instrument_type": 3,
@@ -49,7 +49,7 @@
     },
     {
         "pk": 5,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 1,
             "instrument_type": 4,
@@ -61,7 +61,7 @@
     },
     {
         "pk": 6,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 2,
             "instrument_type": 4,
@@ -73,7 +73,7 @@
     },
     {
         "pk": 7,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 3,
             "instrument_type": 4,
@@ -85,7 +85,7 @@
     },
     {
         "pk": 8,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 4,
             "instrument_type": 4,
@@ -97,7 +97,7 @@
     },
     {
         "pk": 10,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 7,
             "instrument_type": 4,
@@ -109,7 +109,7 @@
     },
     {
         "pk": 9,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 5,
             "instrument_type": 4,
@@ -121,7 +121,7 @@
     },
     {
         "pk": 11,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 6,
             "instrument_type": 4,
@@ -133,7 +133,7 @@
     },
     {
         "pk": 12,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 1,
             "instrument_type": 5,
@@ -145,7 +145,7 @@
     },
     {
         "pk": 13,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 2,
             "instrument_type": 5,
@@ -157,7 +157,7 @@
     },
     {
         "pk": 14,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 3,
             "instrument_type": 5,
@@ -169,7 +169,7 @@
     },
     {
         "pk": 15,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 4,
             "instrument_type": 5,
@@ -181,7 +181,7 @@
     },
     {
         "pk": 16,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 5,
             "instrument_type": 5,
@@ -193,7 +193,7 @@
     },
     {
         "pk": 17,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 7,
             "instrument_type": 5,
@@ -205,7 +205,7 @@
     },
     {
         "pk": 18,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 6,
             "instrument_type": 5,
@@ -217,7 +217,7 @@
     },
     {
         "pk": 19,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 8,
             "instrument_type": 5,
@@ -229,7 +229,7 @@
     },
     {
         "pk": 20,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 1,
             "instrument_type": 6,
@@ -241,7 +241,7 @@
     },
     {
         "pk": 21,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 2,
             "instrument_type": 6,
@@ -253,7 +253,7 @@
     },
     {
         "pk": 22,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 3,
             "instrument_type": 6,
@@ -265,7 +265,7 @@
     },
     {
         "pk": 23,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 0,
             "instrument_type": 6,
@@ -277,7 +277,7 @@
     },
     {
         "pk": 24,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 0,
             "instrument_type": 7,
@@ -289,7 +289,7 @@
     },
     {
         "pk": 25,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 1,
             "instrument_type": 7,
@@ -301,7 +301,7 @@
     },
     {
         "pk": 26,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 2,
             "instrument_type": 7,
@@ -313,7 +313,7 @@
     },
     {
         "pk": 27,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 3,
             "instrument_type": 7,
@@ -325,7 +325,7 @@
     },
     {
         "pk": 28,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 0,
             "instrument_type": 8,
@@ -337,7 +337,7 @@
     },
     {
         "pk": 29,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 1,
             "instrument_type": 8,
@@ -349,7 +349,7 @@
     },
     {
         "pk": 30,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 2,
             "instrument_type": 8,
@@ -361,7 +361,7 @@
     },
     {
         "pk": 31,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 3,
             "instrument_type": 8,
@@ -373,7 +373,7 @@
     },
     {
         "pk": 32,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 4,
             "instrument_type": 8,
@@ -385,7 +385,7 @@
     },
     {
         "pk": 33,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 1,
             "instrument_type": 2,
@@ -397,7 +397,7 @@
     },
     {
         "pk": 34,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 2,
             "instrument_type": 2,
@@ -409,7 +409,7 @@
     },
     {
         "pk": 35,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 3,
             "instrument_type": 2,
@@ -421,7 +421,7 @@
     },
     {
         "pk": 36,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 1,
             "instrument_type": 10,
@@ -433,7 +433,7 @@
     },
     {
         "pk": 37,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 2,
             "instrument_type": 10,
@@ -445,7 +445,7 @@
     },
     {
         "pk": 38,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 3,
             "instrument_type": 10,
@@ -457,7 +457,7 @@
     },
     {
         "pk": 39,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 4,
             "instrument_type": 10,
@@ -469,7 +469,7 @@
     },
     {
         "pk": 40,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 5,
             "instrument_type": 10,
@@ -481,7 +481,7 @@
     },
     {
         "pk": 41,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 1,
             "instrument_type": 9,
@@ -493,7 +493,7 @@
     },
     {
         "pk": 42,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 2,
             "instrument_type": 9,
@@ -505,7 +505,7 @@
     },
     {
         "pk": 43,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 3,
             "instrument_type": 9,
@@ -517,7 +517,7 @@
     },
     {
         "pk": 44,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 4,
             "instrument_type": 9,
@@ -529,7 +529,7 @@
     },
     {
         "pk": 45,
-        "model": "catalogue.band",
+        "model": "dictionaries.band",
         "fields": {
             "band_number": 5,
             "instrument_type": 9,

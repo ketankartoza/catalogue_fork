@@ -1,7 +1,7 @@
 [
     {
         "pk": 5,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 1,
             "spectral_mode": 2,
@@ -10,7 +10,7 @@
     },
     {
         "pk": 6,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 2,
             "spectral_mode": 2,
@@ -19,7 +19,7 @@
     },
     {
         "pk": 7,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 3,
             "spectral_mode": 2,
@@ -28,7 +28,7 @@
     },
     {
         "pk": 8,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 4,
             "spectral_mode": 2,
@@ -37,7 +37,7 @@
     },
     {
         "pk": 9,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 5,
             "spectral_mode": 2,
@@ -46,7 +46,7 @@
     },
     {
         "pk": 10,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 6,
             "spectral_mode": 2,
@@ -55,7 +55,7 @@
     },
     {
         "pk": 11,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 7,
             "spectral_mode": 2,
@@ -64,7 +64,7 @@
     },
     {
         "pk": 12,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 8,
             "spectral_mode": 2,
@@ -73,7 +73,7 @@
     },
     {
         "pk": 13,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 9,
             "spectral_mode": 2,
@@ -82,7 +82,7 @@
     },
     {
         "pk": 14,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 10,
             "spectral_mode": 2,
@@ -91,7 +91,7 @@
     },
     {
         "pk": 15,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 11,
             "spectral_mode": 4,
@@ -100,7 +100,7 @@
     },
     {
         "pk": 16,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 5,
             "spectral_mode": 3,
@@ -109,7 +109,7 @@
     },
     {
         "pk": 17,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 6,
             "spectral_mode": 3,
@@ -118,7 +118,7 @@
     },
     {
         "pk": 18,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 7,
             "spectral_mode": 3,
@@ -127,7 +127,7 @@
     },
     {
         "pk": 19,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 12,
             "spectral_mode": 2,
@@ -136,7 +136,7 @@
     },
     {
         "pk": 20,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 13,
             "spectral_mode": 2,
@@ -145,7 +145,7 @@
     },
     {
         "pk": 21,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 14,
             "spectral_mode": 2,
@@ -154,7 +154,7 @@
     },
     {
         "pk": 22,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 15,
             "spectral_mode": 2,
@@ -163,7 +163,7 @@
     },
     {
         "pk": 23,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 16,
             "spectral_mode": 2,
@@ -172,7 +172,7 @@
     },
     {
         "pk": 24,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 17,
             "spectral_mode": 2,
@@ -181,7 +181,7 @@
     },
     {
         "pk": 25,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 18,
             "spectral_mode": 4,
@@ -190,7 +190,7 @@
     },
     {
         "pk": 26,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 19,
             "spectral_mode": 1,
@@ -199,7 +199,7 @@
     },
     {
         "pk": 27,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 12,
             "spectral_mode": 3,
@@ -208,7 +208,7 @@
     },
     {
         "pk": 28,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 13,
             "spectral_mode": 3,
@@ -217,7 +217,7 @@
     },
     {
         "pk": 29,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 14,
             "spectral_mode": 3,
@@ -226,7 +226,7 @@
     },
     {
         "pk": 30,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 20,
             "spectral_mode": 2,
@@ -235,7 +235,7 @@
     },
     {
         "pk": 31,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 21,
             "spectral_mode": 2,
@@ -244,7 +244,7 @@
     },
     {
         "pk": 32,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 22,
             "spectral_mode": 2,
@@ -253,7 +253,7 @@
     },
     {
         "pk": 33,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 23,
             "spectral_mode": 1,
@@ -262,7 +262,7 @@
     },
     {
         "pk": 34,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 24,
             "spectral_mode": 1,
@@ -271,7 +271,7 @@
     },
     {
         "pk": 35,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 25,
             "spectral_mode": 2,
@@ -280,7 +280,7 @@
     },
     {
         "pk": 36,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 26,
             "spectral_mode": 2,
@@ -289,7 +289,7 @@
     },
     {
         "pk": 37,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 27,
             "spectral_mode": 2,
@@ -298,7 +298,7 @@
     },
     {
         "pk": 38,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 28,
             "spectral_mode": 1,
@@ -307,7 +307,7 @@
     },
     {
         "pk": 39,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 29,
             "spectral_mode": 2,
@@ -316,7 +316,7 @@
     },
     {
         "pk": 40,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 30,
             "spectral_mode": 2,
@@ -325,7 +325,7 @@
     },
     {
         "pk": 41,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 31,
             "spectral_mode": 2,
@@ -334,7 +334,7 @@
     },
     {
         "pk": 42,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 32,
             "spectral_mode": 2,
@@ -343,7 +343,7 @@
     },
     {
         "pk": 43,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 33,
             "spectral_mode": 2,
@@ -352,7 +352,7 @@
     },
     {
         "pk": 44,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 34,
             "spectral_mode": 2,
@@ -361,7 +361,7 @@
     },
     {
         "pk": 45,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 35,
             "spectral_mode": 2,
@@ -370,7 +370,7 @@
     },
     {
         "pk": 46,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 36,
             "spectral_mode": 2,
@@ -379,7 +379,7 @@
     },
     {
         "pk": 47,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 37,
             "spectral_mode": 2,
@@ -388,7 +388,7 @@
     },
     {
         "pk": 48,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 38,
             "spectral_mode": 2,
@@ -397,7 +397,7 @@
     },
     {
         "pk": 49,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 39,
             "spectral_mode": 2,
@@ -406,7 +406,7 @@
     },
     {
         "pk": 50,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 40,
             "spectral_mode": 2,
@@ -415,7 +415,7 @@
     },
     {
         "pk": 51,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 41,
             "spectral_mode": 1,
@@ -424,7 +424,7 @@
     },
     {
         "pk": 52,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 42,
             "spectral_mode": 2,
@@ -433,7 +433,7 @@
     },
     {
         "pk": 53,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 43,
             "spectral_mode": 2,
@@ -442,7 +442,7 @@
     },
     {
         "pk": 54,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 44,
             "spectral_mode": 2,
@@ -451,7 +451,7 @@
     },
     {
         "pk": 55,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 45,
             "spectral_mode": 2,
@@ -460,7 +460,7 @@
     },
     {
         "pk": 56,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 42,
             "spectral_mode": 3,
@@ -469,7 +469,7 @@
     },
     {
         "pk": 57,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 43,
             "spectral_mode": 3,
@@ -478,7 +478,7 @@
     },
     {
         "pk": 58,
-        "model": "catalogue.bandspectralmode",
+        "model": "dictionaries.bandspectralmode",
         "fields": {
             "band": 44,
             "spectral_mode": 3,

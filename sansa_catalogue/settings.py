@@ -108,11 +108,12 @@ INSTALLED_APPS = (
     'offline_messages',
     'registration',
     'raven.contrib.django',  # for sentry logging
-    'catalogue',
-    #'acscatalogue',
     'shapes',
     'django_extensions',
     'userprofile',
+    # catalogue apps
+    'catalogue',
+    'dictionaries'
 )
 INSTALLED_APPS += EXTRA_INSTALLED_APPS
 

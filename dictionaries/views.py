@@ -20,10 +20,11 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from django.template import RequestContext
-from catalogue.models.new_dictionaries import (
-                                               Collection,
-                                               Satellite,
-                                               )
+from dictionaries.models import (
+    Collection,
+    Satellite
+)
+
 
 def collectionList(theRequest):
     """Produce a nice report for all satellites.
@@ -39,11 +40,13 @@ def collectionList(theRequest):
     """
     myCollection = Collection.objects.all()
 
-    return render_to_response('dictionaries/collectionList.html',
-                              {
-                                  'collection': myCollection,
-                                  },
-                              )
+    return render_to_response(
+        'dictionaries/collectionList.html',
+        {
+            'collection': myCollection,
+        },
+    )
+
 
 def satelliteDetails(theRequest, theSatelliteId):
     """Produce a nice report for a satellite.
@@ -59,9 +62,9 @@ def satelliteDetails(theRequest, theSatelliteId):
     """
     mySatellite = Satellite.objects.get(id=theSatelliteId)
 
-    return render_to_response('dictionaries/satelliteDetails.html',
+    return render_to_response(
+        'dictionaries/satelliteDetails.html',
         {
             'satellite': mySatellite,
         },
-     )
-
+    )

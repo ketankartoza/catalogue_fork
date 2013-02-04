@@ -53,17 +53,6 @@ from catalogue.models import (
     Visit,
     SacUserProfile,
     AllUsersMessage,
-
-    Collection,
-    Satellite,
-    SatelliteInstrument,
-    InstrumentType,
-    SpectralMode,
-    ScannerType,
-    Band,
-    BandSpectralMode,
-    RadarBeam,
-    ImagingMode
 )
 
 
@@ -274,47 +263,3 @@ admin.site.register(Visit, VisitAdmin)
 admin.site.register(SacUserProfile, SacUserProfileAdmin)
 admin.site.register(OfflineMessage, OfflineMessageAdmin)
 admin.site.register(AllUsersMessage, AllUsersMessageAdmin)
-
-####################################
-# New Dictionaries
-####################################
-
-class CollectionAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(Collection, CollectionAdmin)
-
-class SatelliteAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(Satellite, SatelliteAdmin)
-
-class InstrumentTypeAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(InstrumentType, InstrumentTypeAdmin)
-
-class SatelliteInstrumentAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(SatelliteInstrument, SatelliteInstrumentAdmin)
-
-class SpectralModeAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(SpectralMode, SpectralModeAdmin)
-
-class ScannerTypeAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(ScannerType, ScannerTypeAdmin)
-
-class BandAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(Band, BandAdmin)
-
-class BandSpectralModeAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(BandSpectralMode, BandSpectralModeAdmin)
-
-class RadarBeamAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(RadarBeam, RadarBeamAdmin)
-
-class ImagingModeAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(ImagingMode, ImagingModeAdmin)

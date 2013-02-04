@@ -17,7 +17,7 @@ __date__ = '01/11/2012'
 __copyright__ = 'South African National Space Agency'
 
 from django.contrib.gis.db import models
-from dictionaries import Institution
+from catalogue.models import Institution
 
 
 class Collection(models.Model):
@@ -33,9 +33,6 @@ class Collection(models.Model):
     institution = models.ForeignKey(
         Institution,
         help_text='Organisation that owns this satellite collection.')
-
-    class Meta:
-        app_label = 'catalogue'
 
     def __unicode__(self):
         return self.name
@@ -55,9 +52,6 @@ class Satellite(models.Model):
     #image = models.ImageField()
     collection = models.ForeignKey(Collection)
 
-    class Meta:
-        app_label = 'catalogue'
-
     def __unicode__(self):
         """Return 'operator_abbreviation' as model representation."""
         return '%s' % self.operator_abbreviation
@@ -70,9 +64,6 @@ class ScannerType(models.Model):
         verbose_name='Detailed description.',
         help_text='A detailed description of the scanner type.')
     abbreviation = models.CharField(max_length=20, unique=True)
-
-    class Meta:
-        app_label = 'catalogue'
 
     def __unicode__(self):
         return self.abbreviation
@@ -99,9 +90,6 @@ class InstrumentType(models.Model):
     )
     scanner_type = models.ForeignKey(ScannerType)
 
-    class Meta:
-        app_label = 'catalogue'
-
     def __unicode__(self):
         return self.operator_abbreviation
 
@@ -125,9 +113,6 @@ class RadarBeam(models.Model):
         max_length=50,
         help_text='REPLACE ME!'
     )
-
-    class Meta:
-        app_label = 'catalogue'
 
     def __unicode__(self):
         return u'%s (%i)' % (self.band_name, self.wavelength, )
@@ -168,9 +153,6 @@ class ImagingMode(models.Model):
         help_text='Polarization type'
     )
 
-    class Meta:
-        app_label = 'catalogue'
-
     def __unicode__(self):
         return u'%s (%s)' % (self.name, self.polarization)
 
@@ -193,7 +175,6 @@ class SatelliteInstrument(models.Model):
     instrument_type = models.ForeignKey(InstrumentType)
 
     class Meta:
-        app_label = 'catalogue'
         unique_together = ('operator_abbreviation',
                            'satellite',
                            'instrument_type')
@@ -220,9 +201,6 @@ class Band(models.Model):
     pixelsize = models.IntegerField(
         help_text='Pixel size in m (resolution)')
 
-    class Meta:
-        app_label = 'catalogue'
-
     def __unicode__(self):
         return '%s (%i %i) %i' % (
             self.band_name, self.min_wavelength, self.max_wavelength,
@@ -246,9 +224,6 @@ class SpectralMode(models.Model):
         help_text='A detailed description of the spectral mode.')
     abbreviation = models.CharField(max_length=20, unique=True)
 
-    class Meta:
-        app_label = 'catalogue'
-
     def __unicode__(self):
         return self.name
 
@@ -265,7 +240,6 @@ class BandSpectralMode(models.Model):
         'specific MSS is called HRF')
 
     class Meta:
-        app_label = 'catalogue'
         unique_together = (('band', 'spectral_mode'),)
 
     def __unicode__(self):
