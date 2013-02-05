@@ -26,7 +26,7 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from catalogue.models.orders import Order, DeliveryDetail
 from catalogue.models.products import GenericProduct, RadarProduct
-from catalogue.models.dictionaries import (
+from catalogue.models import (
     MissionSensor,
     AcquisitionMode,
     License,

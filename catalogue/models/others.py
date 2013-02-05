@@ -25,7 +25,7 @@ from offline_messages.models import OfflineMessage
 from offline_messages.utils import create_offline_message, constants
 #for translation
 from userprofile.models import BaseProfile
-from catalogue.models.dictionaries import MissionSensor
+from catalogue.models import MissionSensor
 from catalogue.models.products import GenericSensorProduct
 
 

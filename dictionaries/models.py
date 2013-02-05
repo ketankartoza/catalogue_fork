@@ -17,7 +17,6 @@ __date__ = '01/11/2012'
 __copyright__ = 'South African National Space Agency'
 
 from django.contrib.gis.db import models
-from catalogue.models import Institution
 
 
 class Collection(models.Model):
@@ -31,7 +30,9 @@ class Collection(models.Model):
         verbose_name='Collection description',
         help_text='Detailed description for this collection')
     institution = models.ForeignKey(
-        Institution,
+        # NOTE: when referencing models in another application we need ti
+        # specify a model with the full application label
+        'catalogue.Institution',
         help_text='Organisation that owns this satellite collection.')
 
     def __unicode__(self):

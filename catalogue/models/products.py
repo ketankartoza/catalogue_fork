@@ -38,7 +38,7 @@ from django_dag.models import node_factory, edge_factory
 
 from catalogue.utmzonecalc import utmZoneFromLatLon
 from catalogue.dims_lib import dimsWriter
-from catalogue.models.dictionaries import (
+from catalogue.models import (
     Mission,
     MissionSensor,
     MissionGroup,
@@ -56,6 +56,10 @@ from catalogue.models.dictionaries import (
     Unit,
 )
 
+
+from dictionaries.models import (
+    SatelliteInstrument,
+)
 # for thumb georeferencer
 #from osgeo.gdalconst import *
 
@@ -918,6 +922,9 @@ class GenericSensorProduct(GenericImageryProduct):
     """
     # e.g. CAM1, BUMP, etc
     acquisition_mode = models.ForeignKey(AcquisitionMode)
+    # new dicts
+    satellite_instrument = models.ForeignKey(SatelliteInstrument)
+
     product_acquisition_start = models.DateTimeField(db_index=True)
     product_acquisition_end = models.DateTimeField(
         null=True, blank=True, db_index=True)

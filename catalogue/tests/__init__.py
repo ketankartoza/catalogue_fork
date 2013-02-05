@@ -104,8 +104,6 @@ from reports_dataSummaryTable import ReportsViews_dataSummaryTable_Tests
 from reports_sensorSummaryTable import ReportsViews_sensorSummaryTable_Tests
 from reports_dictionaryReport import ReportsViews_dictionaryReport_Tests
 
-from new_dictionary_tests import NewDictionariesTest
-
 # selenium tests
 from selenium_login_test import SeleniumLogin
 from selenium_login_test import SeleniumSearch
