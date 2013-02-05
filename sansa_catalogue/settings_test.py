@@ -32,6 +32,11 @@ NOSE_ARGS = [
     '--cover-package=dictionaries',
     '--nocapture',
     '--nologcapture',
+    # we need to specify which tests to execute
+    # this is needed as we can't use Nose default test discoverer, because we
+    # are still using tests customized for Django default test runner
+    'catalogue.tests',
+    'dictionaries.tests'
 ]
 
 JENKINS_NOSE_ARGS = (
