@@ -56,10 +56,6 @@ from catalogue.models import (
     Unit,
 )
 
-
-from dictionaries.models import (
-    SatelliteInstrument,
-)
 # for thumb georeferencer
 #from osgeo.gdalconst import *
 
@@ -923,7 +919,8 @@ class GenericSensorProduct(GenericImageryProduct):
     # e.g. CAM1, BUMP, etc
     acquisition_mode = models.ForeignKey(AcquisitionMode)
     # new dicts
-    satellite_instrument = models.ForeignKey(SatelliteInstrument)
+    # satellite_instrument = models.ForeignKey(
+    #     'dictionaries.SatelliteInstrument')
 
     product_acquisition_start = models.DateTimeField(db_index=True)
     product_acquisition_end = models.DateTimeField(
