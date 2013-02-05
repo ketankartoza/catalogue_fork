@@ -22,21 +22,30 @@ import logging
 from django.contrib.gis import admin
 
 from .models import (
+    ProcessingLevel,
     Collection,
     Satellite,
-    SatelliteInstrument,
-    InstrumentType,
-    SpectralMode,
     ScannerType,
-    Band,
-    BandSpectralMode,
+    InstrumentType,
     RadarBeam,
-    ImagingMode
+    ImagingMode,
+    SatelliteInstrument,
+    Band,
+    SpectralGroup,
+    SpectralMode,
+    BandSpectralMode,
+    ProcessingLevelForInstrumentType,
+    ProcessingCostsForSpectralMode
 )
+
 
 ####################################
 # New Dictionaries
 ####################################
+
+class ProcessingLevelAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(ProcessingLevel, ProcessingLevelAdmin)
 
 
 class CollectionAdmin(admin.ModelAdmin):
@@ -49,34 +58,14 @@ class SatelliteAdmin(admin.ModelAdmin):
 admin.site.register(Satellite, SatelliteAdmin)
 
 
-class InstrumentTypeAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(InstrumentType, InstrumentTypeAdmin)
-
-
-class SatelliteInstrumentAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(SatelliteInstrument, SatelliteInstrumentAdmin)
-
-
-class SpectralModeAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(SpectralMode, SpectralModeAdmin)
-
-
 class ScannerTypeAdmin(admin.ModelAdmin):
     pass
 admin.site.register(ScannerType, ScannerTypeAdmin)
 
 
-class BandAdmin(admin.ModelAdmin):
+class InstrumentTypeAdmin(admin.ModelAdmin):
     pass
-admin.site.register(Band, BandAdmin)
-
-
-class BandSpectralModeAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(BandSpectralMode, BandSpectralModeAdmin)
+admin.site.register(InstrumentType, InstrumentTypeAdmin)
 
 
 class RadarBeamAdmin(admin.ModelAdmin):
@@ -87,3 +76,40 @@ admin.site.register(RadarBeam, RadarBeamAdmin)
 class ImagingModeAdmin(admin.ModelAdmin):
     pass
 admin.site.register(ImagingMode, ImagingModeAdmin)
+
+
+class SatelliteInstrumentAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(SatelliteInstrument, SatelliteInstrumentAdmin)
+
+
+class BandAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Band, BandAdmin)
+
+
+class SpectralGroupAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(SpectralGroup, SpectralGroupAdmin)
+
+
+class SpectralModeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(SpectralMode, SpectralModeAdmin)
+
+
+class BandSpectralModeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(BandSpectralMode, BandSpectralModeAdmin)
+
+
+class ProcessingLevelForInstrumentTypeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(
+    ProcessingLevelForInstrumentType, ProcessingLevelForInstrumentTypeAdmin)
+
+
+class ProcessingCostsForSpectralModeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(
+    ProcessingCostsForSpectralMode, ProcessingCostsForSpectralModeAdmin)
