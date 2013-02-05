@@ -194,7 +194,7 @@ class AdvancedSearchForm(forms.ModelForm):
 
     isAdvanced = forms.CharField(widget=forms.HiddenInput(), required=False)
     polarising_mode = forms.ChoiceField(
-        choices=POLARISING_MODE_CHOICES, required=False)
+        choices=tuple(POLARISING_MODE_CHOICES.viewitems()), required=False)
     geometry = forms.CharField(
         widget=forms.HiddenInput(), required=False,
         help_text=(
