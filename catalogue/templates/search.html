@@ -121,7 +121,10 @@
       {% if myAdvancedFlag %}// Filter initial options
       get_dictionary_options();
       {% endif %}
+
+
     });
+
 
 
   /* ]]> */
@@ -148,6 +151,18 @@
   <div id="search-panel" class="row-fluid">
     {% include "searchPanel.html" %}
   </div>
+<script>
+setTimeout(applyMapNavTooltips, 500);
+
+function applyMapNavTooltips(){
+      $('#map-navigation-panel > .icon-2x').each(function(){
+        var title = $(this).attr('title');
+        $(this).tooltip({
+          placement:'bottom',
+        });
+      });
+}
+</script>
 {% endblock%}
 
 
