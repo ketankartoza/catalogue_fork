@@ -115,6 +115,7 @@
 }
 .olControlNavigationHistoryPreviousItemInactive {
   margin-right: 5px;
+  color:grey;
    /*background-position: 0px -24px;*/
 }
 .olControlNavigationHistoryNextItemActive {
@@ -124,6 +125,7 @@
 }
 .olControlNavigationHistoryNextItemInactive {
   margin-right: 5px;
+  color:grey;
    /*background-position: -24px -24px;*/
 }
 
