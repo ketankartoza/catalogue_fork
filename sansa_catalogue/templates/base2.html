@@ -90,10 +90,12 @@
         </p>
         <p id="user-box" class="navbar-text span4 footer-text">
           {% if user.is_authenticated %}
+          {% comment %}
           {% load avatars %}
           <img id="avatarimg" src="{% avatar 96 %}" />
             You are logged in as {{user.first_name}} {{user.last_name}}({{user}})
           </p>
+          {% endcomment %}
           {% else %}
           You are not logged in.</p>
           {% endif %}

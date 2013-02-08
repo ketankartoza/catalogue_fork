@@ -82,7 +82,7 @@
       </li>
       {% else %}
       <li>
-        <a href="/accounts/register/"><i class="icon-road"></i> <span class="hidden-phone hidden-tablet">Register</span></a>
+        <a href="{% url 'userena_signup' %}"><i class="icon-road"></i> <span class="hidden-phone hidden-tablet">Register</span></a>
       </li>
       {% endif %}
       <li>
@@ -120,13 +120,13 @@
       </li>
       {% endif %}
       {% if user.is_authenticated %}
-        {% include "userprofile/menu_content.html" %}
+        {% include "useraccounts/menu_content.html" %}
       {% else %}
       <li>
-        <a href="/accounts/login/"><i class="icon-user"></i> <span class="hidden-phone hidden-tablet">Login</span></a>
+        <a href="{% url 'userena_signin' %}"><i class="icon-user"></i> <span class="hidden-phone hidden-tablet">Login</span></a>
       </li>
       <li>
-        <a href="/accounts/password/reset/"><i class="icon-random"></i> <span class="hidden-phone hidden-tablet">Reset Password</span></a>
+        <a href="{% url 'userena_password_reset' %}"><i class="icon-random"></i> <span class="hidden-phone hidden-tablet">Reset Password</span></a>
       </li>
       {% endif %}
     </ul>
