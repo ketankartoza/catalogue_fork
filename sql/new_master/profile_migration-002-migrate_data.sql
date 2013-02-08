@@ -25,4 +25,9 @@ FROM
 INSERT INTO userena_userenasignup (user_id, activation_key, activation_notification_send, email_unconfirmed, email_confirmation_key, email_confirmation_key_created)
 SELECT catalogue_sacuserprofile.user_id, 'ALREADY_ACTIVATED', FALSE, '' ,'', now() FROM catalogue_sacuserprofile;
 
+-- fix auth_user first_name, last_name
+UPDATE auth_user set first_name=new_name, last_name=new_surname FROM (
+  SElect user_id, coalesce(firstname,first_name) as new_name,coalesce(surname,last_name) as new_surname
+  from catalogue_sacuserprofile inner join auth_user on auth_user.id = catalogue_sacuserprofile.user_id) as newnames
+WHERE auth_user.id = user_id;
 COMMIT;
