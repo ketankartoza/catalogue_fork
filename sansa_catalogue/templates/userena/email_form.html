@@ -1,0 +1,25 @@
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
+
+{% block content_title %}<h2>{% blocktrans with user.username as username %}Account &raquo; {{ username }}{% endblocktrans %}</h2>{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+<form class="form-horizontal span6" action="" method="post" accept-charset="utf-8">
+  {% csrf_token %}
+  <fieldset>
+    <legend>{% trans "Change email address" %}</legend>
+    <div class="control-group">
+      <label class="control-label" for="id_email">{% trans 'New e-mail address' %}</label>
+      <div class="controls">{{ form.email }}
+    {% if form.email.errors %}
+      <span class="quiet red"><br />* {{ form.email.errors|join:"; " }}</span>
+    {% endif %}
+    </p>
+    {% if form.non_field_errors %}
+      <ul class="quiet red">{{ form.non_field_errors.as_ul }}</ul>
+    {% endif %}
+  </fieldset>
+ <p><input class="btn" type="submit" value="{% trans 'Send confirmation' %}" /></p>
+</form>
+{% endblock %}
