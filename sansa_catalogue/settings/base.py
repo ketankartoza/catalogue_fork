@@ -15,9 +15,6 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-# See: http://www.djangobook.com/en/1.0/chapter12/#cn222
-AUTH_PROFILE_MODULE = 'catalogue.SacUserProfile'
-
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
@@ -106,16 +103,11 @@ TEMPLATE_DIRS = (
 )
 
 # Django specific apps
-INSTALLED_APPS = [
+INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.gis',
-]
-
-#where to take the user after they logged in
-LOGIN_REDIRECT_URL = '/'
-#where to take the user if they try to access a page requiring a logged in user
-LOGIN_URL = '/accounts/login/'
+)

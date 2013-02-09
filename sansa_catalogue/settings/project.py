@@ -26,6 +26,7 @@ DATABASE_ROUTERS = ['catalogue.dbrouter.CatalogueRouter']
 INSTALLED_APPS += (
     'catalogue',
     'dictionaries',
+    'useraccounts',
 )
 
 # Set debug to false for production
