@@ -7,7 +7,6 @@ from django.conf import settings
 from django.contrib import admin
 admin.autodiscover()
 
-
 # These dictionaries are used for our generic views
 # see http://docs.djangoproject.com/en/dev/intro/tutorial04/
 #myOrdersDict = { 'queryset': Order.objects.all(),
@@ -60,9 +59,7 @@ urlpatterns = patterns('',
     url(r'^visitorlist/$', visitorList, name='visitorList'),
     url(r'^visitorreport/$', visitorReport, name='visitorReport'),
     url(r'^visitormonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', visitorMonthlyReport, name='visitorMonthlyReport'),
-    # Profile application
-    # url(r'^accounts/', include('userprofile.urls')),
-    url(r'^accounts/', include('userena.urls')),
+
     #show a single search map
     url(r'^searchresult/(?P<theGuid>[a-h0-9\-]{36})/$', searchResultMap, name='searchResultMap'),
     #show a single search page to insert into search result map
@@ -125,4 +122,6 @@ urlpatterns = patterns('',
 
     # New dictionaries
     url(r'', include('dictionaries.urls')),
+    # New user profile management
+    url(r'', include('useraccounts.urls')),
 )

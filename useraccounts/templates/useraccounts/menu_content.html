@@ -4,7 +4,10 @@
       <ul class="dropdown-menu">
       {% if user.is_authenticated %}
         <li>
-          <a href="{% url userena_profile_edit user %}">{% trans "Personal information" %}</a>
+          <a href="{% url userena_profile_detail user %}">{% trans "Personal information" %}</a>
+        </li>
+        <li>
+          <a href="{% url userena_profile_edit user %}">{% trans "Edit profile" %}</a>
         </li>
         {% comment %}
         <li>
@@ -16,7 +19,7 @@
         </li>
         <li>
           <a href="{% url userena_email_change user %}">
-          {% if email %}{% trans "Change your e-mail address" %}{% else %}{% trans "Add your e-mail address" %}{% endif %}</a>
+          {% if email %}{% trans "Change your e-mail address" %}{% else %}{% trans "Change your e-mail address" %}{% endif %}</a>
         </li>
         {% if not validated and email %}
         <li>
