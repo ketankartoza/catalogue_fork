@@ -51,7 +51,6 @@ from catalogue.models import (
     OpticalProduct,
     GeospatialProduct,
     Visit,
-    SacUserProfile,
     AllUsersMessage,
 )
 
@@ -67,11 +66,6 @@ class SearchAdmin(admin.GeoModelAdmin):
 class VisitAdmin(admin.GeoModelAdmin):
     pass
 
-
-class SacUserProfileAdmin (admin.GeoModelAdmin):
-    list_display = ('user', 'firstname', 'surname', 'strategic_partner', 'date')
-    list_filter = ('strategic_partner', 'date')
-    list_per_page = 200
 
 
 class OrderStatusAdmin(admin.GeoModelAdmin):
@@ -260,6 +254,5 @@ admin.site.register(
 
 admin.site.register(Search, SearchAdmin)
 admin.site.register(Visit, VisitAdmin)
-admin.site.register(SacUserProfile, SacUserProfileAdmin)
 admin.site.register(OfflineMessage, OfflineMessageAdmin)
 admin.site.register(AllUsersMessage, AllUsersMessageAdmin)

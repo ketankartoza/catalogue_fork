@@ -38,5 +38,18 @@ class SansaUserProfile(UserenaBaseProfile):
         'Contact No (required)', max_length=16, null=False, blank=False
     )
 
+    def first_name(self):
+        """
+        Proxy to main user model needed for admin
+        """
+        return self.user.first_name
+
+    def last_name(self):
+        """
+        Proxy to main user model needed for admin
+        """
+        return self.user.last_name
+
     def __unicode__(self):
-        return self.user.username
+        return u'{0}, ({1})'.format(
+            self.user.username, self.user.get_full_name())
