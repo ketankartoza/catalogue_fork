@@ -20,6 +20,10 @@
               <label class="control-label" for="{{field.html_name}}">{{field.label}}:</label>
               <div class="controls">
                 {{field}}
+                <span class="help-inline ">{{ field.help_text }}</span>
+                {% if field.errors %}
+                <span class="help-inline ">{{ field.errors|striptags }}</span>
+                {% endif %}
               </div>
             </div>
           {% endfor %}
@@ -31,6 +35,10 @@
               <label class="control-label" for="{{field.html_name}}">{{field.label}}:</label>
               <div class="controls">
                 {{field}}
+                <span class="help-inline ">{{ field.help_text }}</span>
+                {% if field.errors %}
+                <span class="help-inline ">{{ field.errors|striptags }}</span>
+                {% endif %}
               </div>
             </div>
           {% endif %}
