@@ -18,6 +18,7 @@ INSTALLED_APPS += (
     'dictionaries',
     'useraccounts',
     'search',
+    'pycsw_integration',
 )
 
 # Set debug to false for production

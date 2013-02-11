@@ -117,4 +117,6 @@ urlpatterns = patterns('',
     url(r'', include('useraccounts.urls')),
     # New search app
     url(r'', include('search.urls')),
+    # pycsw integration
+    url(r'', include('pycsw_integration.urls')),
 )

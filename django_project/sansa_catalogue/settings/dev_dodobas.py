@@ -15,25 +15,36 @@ DATABASES = {
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['console']
+    },
+    'formatters': {
+        # define output formats
+        'verbose': {
+            'format': (
+                '%(levelname)s %(name)s %(asctime)s %(module)s %(process)d '
+                '%(thread)d %(message)s')
+        },
+        'simple': {
+            'format': '%(levelname)s %(name)s %(message)s'
+        },
     },
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
+        # console output, useful for debugging
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            # 'level': 'DEBUG',
         }
     },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
+    # 'loggers': {
+    #     'pycsw': {
+    #         'handlers': ['console'],
+    #         'level': 'DEBUG',
+    #        'propagate': True
+    #    }
+    # }
 }
 
 # set up devserver if installed
