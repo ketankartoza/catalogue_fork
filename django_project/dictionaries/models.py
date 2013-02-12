@@ -91,7 +91,6 @@ class Satellite(models.Model):
         help_text='Satellite mission URL')
     license_type = models.ForeignKey(
         'catalogue.License',
-        blank=True, null=True,
         help_text='Satellite product license type')
 
     def __unicode__(self):
@@ -132,8 +131,7 @@ class InstrumentType(models.Model):
     )
     scanner_type = models.ForeignKey(ScannerType)
     base_processing_level = models.ForeignKey(
-        ProcessingLevel,
-        blank=True, null=True)
+        ProcessingLevel)
     reference_system = models.CharField(
         max_length=255, blank=True, null=True,
         help_text='Textual information for reference system')
@@ -279,10 +277,9 @@ class Band(models.Model):
         help_text='Lower band wavelength in nanometeres')
     max_wavelength = models.IntegerField(
         help_text='Upper band wavelength in nanometeres')
-    pixelsize_resampled = models.IntegerField(
+    pixelsize_resampled = models.FloatField(
         help_text='Pixel size in m (resolution) resampled')
-    pixelsize_acquired = models.IntegerField(
-        blank=True, null=True,
+    pixelsize_acquired = models.FloatField(
         help_text='Pixel size in m (resolution) acquired')
 
     def __unicode__(self):
@@ -320,11 +317,10 @@ class SpectralMode(models.Model):
     description = models.TextField(
         verbose_name='Detailed description.',
         help_text='A detailed description of the spectral mode.')
-    abbreviation = models.CharField(max_length=20, unique=True)
+    abbreviation = models.CharField(max_length=20)
     instrument_type = models.ForeignKey(InstrumentType)
     spectralgroup = models.ForeignKey(
-        SpectralGroup,
-        blank=True, null=True)
+        SpectralGroup)
 
     def __unicode__(self):
         return u'{0} - {1}'.format(self.name, self.instrument_type.name)
@@ -336,8 +332,7 @@ class BandSpectralMode(models.Model):
     """
     band = models.ForeignKey(Band)
     spectral_mode = models.ForeignKey(
-        SpectralMode,
-        blank=True, null=True)
+        SpectralMode)
 
     class Meta:
         unique_together = (('band', 'spectral_mode'),)
@@ -369,7 +364,7 @@ class ProcessingCostsForSpectralMode(models.Model):
     """
     Processing costs for specific processing level per spectral mode
     """
-    spectral_mode = models.ForeignKey(SpectralGroup)
+    spectral_mode = models.ForeignKey(SpectralMode)
     processinglevelforinstrument_type = models.ForeignKey(
         ProcessingLevelForInstrumentType)
     cost_per_scene = models.IntegerField(
