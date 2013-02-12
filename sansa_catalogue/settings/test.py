@@ -9,6 +9,8 @@ INSTALLED_APPS += (
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 NOSE_ARGS = (
+    '--with-coverage',
+    '--cover-erase',
     '--cover-html',
     '--cover-html-dir=xmlrunner/html',
     '--cover-inclusive',

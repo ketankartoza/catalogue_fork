@@ -93,7 +93,12 @@ class ReportsViews_visitorList_Tests(TestCase):
         self.assertEqual(
             len(myResp.context['myRecords'].object_list), len(myRecords))
         # check used templates
-        myExpTemplates = ['visitors.html']
+        myExpTemplates = [
+            'visitors.html',
+            u'base.html',
+            u'menu.html',
+            u'useraccounts/menu_content.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -138,7 +143,12 @@ class ReportsViews_visitorList_Tests(TestCase):
         self.assertEqual(
             len(myResp.context['myRecords'].object_list), len(myRecords))
         # check used templates
-        myExpTemplates = ['visitors.html']
+        myExpTemplates = [
+            'visitors.html',
+            u'base.html',
+            u'menu.html',
+            u'useraccounts/menu_content.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -159,7 +169,12 @@ class ReportsViews_visitorList_Tests(TestCase):
         self.assertEqual(
             len(myResp.context['myRecords'].object_list), len(myRecords))
         # check used templates
-        myExpTemplates = ['visitors.html']
+        myExpTemplates = [
+            'visitors.html',
+            u'base.html',
+            u'menu.html',
+            u'useraccounts/menu_content.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

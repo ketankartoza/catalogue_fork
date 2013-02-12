@@ -86,8 +86,8 @@ def requireProfile(theView):
 def checkProfile(theProfile):
     """Does basic checking that required fields are not just populated with
       zero length strings."""
-    if not (theProfile.firstname
-            or theProfile.surname
+    if not (theProfile.user.first_name
+            or theProfile.user.last_name
             or theProfile.address1
             or theProfile.address2
             or theProfile.post_code
