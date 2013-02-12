@@ -90,7 +90,7 @@ class ShoppingCart_addToCart_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/addtocart/1934163/')
+            'http://testserver/accounts/signin/?next=/addtocart/1934163/')
 
     def test_addToCart_login_staff(self):
         """

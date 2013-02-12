@@ -62,7 +62,7 @@ class OrdersViews_addOrder_Tests(TestCase):
         'test_radarproduct.json',
         'test_opticalproduct.json',
         'test_user.json',
-        'test_sacuserprofile.json',
+        'test_sansauserprofile.json',
         'test_orderstatus.json',
         'test_orderstatushistory.json',
         'test_marketsector.json',
@@ -98,7 +98,7 @@ class OrdersViews_addOrder_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/addorder/')
+            'http://testserver/accounts/signin/?next=/addorder/')
 
     def test_addOrder_login_user_noprofile(self):
         """
@@ -170,7 +170,7 @@ class OrdersViews_addOrder_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'addPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'add.html',
+            u'useraccounts/menu_content.html', u'add.html',
             u'cartContents.html', u'recordHeader.html', u'record.html',
             u'record.html', u'record.html']
 
@@ -291,7 +291,7 @@ class OrdersViews_addOrder_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'addPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'add.html',
+            u'useraccounts/menu_content.html', u'add.html',
             u'cartContents.html', u'recordHeader.html', u'record.html',
             u'record.html', u'record.html']
 

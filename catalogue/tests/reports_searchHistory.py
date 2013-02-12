@@ -82,7 +82,7 @@ class ReportsViews_searchHistory_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/mysearches/')
+            'http://testserver/accounts/signin/?next=/mysearches/')
 
     def test_myReports_userlogin(self):
         """

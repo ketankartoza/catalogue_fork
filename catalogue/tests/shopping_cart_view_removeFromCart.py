@@ -90,7 +90,7 @@ class ShoppingCart_removeFromCart_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/removefromcart/5/')
+            'http://testserver/accounts/signin/?next=/removefromcart/5/')
 
     def test_removeFromCart_login_staff(self):
         """

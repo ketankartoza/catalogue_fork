@@ -37,10 +37,8 @@ The SANSA-EO team.
 </p>
 <div style="background:white;padding:5px;margin:5px;color:black;">
 <h2>Timeline</h2>
-{% load avatars %}
 {% for myRecord in myHistory %}
 <p>
-<img src="http://{{domain}}/{% avatar 48 myRecord.user %}" />
 <b>Who:</b> {{ myRecord.user.first_name}} {{myRecord.user.last_name}} <b>Date</b> {{ myRecord.order_change_date|date:"d F Y" }}<br/>
 <b>Status change:</b> {{ myRecord.old_order_status }} -> {{ myRecord.new_order_status }}<br/>
 <b>Notes:</b> {{ myRecord.notes }}

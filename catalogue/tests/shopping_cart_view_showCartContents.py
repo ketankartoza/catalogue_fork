@@ -88,7 +88,7 @@ class ShoppingCart_showCartContents_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/showcartcontents/')
+            'http://testserver/accounts/signin/?next=/showcartcontents/')
 
     def test_showCartContents_login_staff(self):
         """
@@ -113,7 +113,7 @@ class ShoppingCart_showCartContents_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'cartContentsPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'cartContents.html',
+            u'useraccounts/menu_content.html', u'cartContents.html',
             u'recordHeader.html', u'record.html', u'record.html',
             u'record.html']
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]

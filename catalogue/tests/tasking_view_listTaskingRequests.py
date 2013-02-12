@@ -77,7 +77,7 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/listtaskingrequests/')
+            'http://testserver/accounts/signin/?next=/listtaskingrequests/')
 
     def test_listTaskingRequests_login_staff(self):
         """
@@ -95,7 +95,7 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'taskingRequestListPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'taskingRequestList.html']
+            u'useraccounts/menu_content.html', u'taskingRequestList.html']
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
@@ -122,7 +122,7 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'taskingRequestListPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'taskingRequestList.html']
+            u'useraccounts/menu_content.html', u'taskingRequestList.html']
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
@@ -164,7 +164,7 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'taskingRequestListPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'taskingRequestList.html']
+            u'useraccounts/menu_content.html', u'taskingRequestList.html']
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
@@ -194,7 +194,7 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'taskingRequestListPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'taskingRequestList.html']
+            u'useraccounts/menu_content.html', u'taskingRequestList.html']
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
@@ -223,7 +223,7 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'taskingRequestListPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'taskingRequestList.html']
+            u'useraccounts/menu_content.html', u'taskingRequestList.html']
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 

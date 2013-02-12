@@ -74,7 +74,7 @@ class OrdersViews_downloadOrderMetadata_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/downloadordermetadata/1/')
+            'http://testserver/accounts/signin/?next=/downloadordermetadata/1/')
 
     def test_downloadOrderMetadata_login_staff(self):
         """

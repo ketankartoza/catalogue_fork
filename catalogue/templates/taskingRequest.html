@@ -98,8 +98,7 @@
         </tr>
         <tr>
           <td colspan="1">
-            {% load avatars %}
-            <img id="avatarimg" src="{% avatar 96 myOrder.user %}" />
+            avatar:remove
           </td>
           <td colspan="3">
             {% if myTaskingRequest.user.get_profile.organisation%}

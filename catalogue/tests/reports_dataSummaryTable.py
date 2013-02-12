@@ -104,7 +104,7 @@ class ReportsViews_dataSummaryTable_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'dataSummaryTable.html', u'base.html',
-            u'menu.html', u'userprofile/menu_content.html']
+            u'menu.html', u'useraccounts/menu_content.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

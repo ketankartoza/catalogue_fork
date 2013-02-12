@@ -52,7 +52,7 @@ class SpotIngestorTest(TestCase):
         'test_orderstatus.json',
         'test_order.json',
         'test_searchrecord.json',
-        'test_sacuserprofile.json',
+        'test_sansauserprofile.json',
         'test_orderstatus.json',
         'test_marketsector.json',
         'test_creatingsoftware.json',
