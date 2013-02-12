@@ -64,11 +64,11 @@ $("#map-navigation-panel div[title]").tooltip('#maptooltip');
     <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="form-horizontal span12" id="add_form">
       {% csrf_token %}
       <h2 class="centered">{{ myTitle }}</h2>
-      <div id="map-container" class="ui-widget-content ui-state-highlight ui-corner-all last"> {# thus nested jquery widget container #}
-        <div id="map" class="last"></div>
-        <div id="map-panel" class="last">
+      <div id="map-container" class=""> {# thus nested jquery widget container #}
+        <div id="map" class=""></div>
+        <div id="map-panel" class="">
           <div id="map-navigation-panel" class=""></div>
-          <div id="map-location"  class="small"></div>{# small class from blueprint css #}
+          <div id="map-location"  class=""></div>{#  class from blueprint css #}
           <div class="olControlScalebar" id="map-scale"></div>
         </div>
       </div>
@@ -79,14 +79,14 @@ $("#map-navigation-panel div[title]").tooltip('#maptooltip');
 
       {% for field in myDeliveryDetailForm %}
       <fieldset class="control-group {% if field.errors %}error{% endif %}">
-        <label class="control-label" for="{{ field.auto_id }}">{{ field.label }}</label>
+        <label class="control-label" for="{{ field.auto_id }}">{{ field.label }}: </label>
         <div class="controls">
           {{ field }}
           {% if field.help_text %}
-          <span class="help-inline">{{ field.help_text }}</span>
+          <span class="help-inline ">{{ field.help_text }}</span>
           {% endif %}
           {% if field.errors %}
-          <span class="help-inline">{{ field.errors|striptags }}</span>
+          <span class="help-inline ">{{ field.errors|striptags }}</span>
           {% endif %}
         </div>
       </fieldset>
@@ -97,10 +97,10 @@ $("#map-navigation-panel div[title]").tooltip('#maptooltip');
         <div class="controls">
           {{ field }}
           {% if field.help_text %}
-          <span class="help-inline">{{ field.help_text }}</span>
+          <span class="help-inline ">{{ field.help_text }}</span>
           {% endif %}
           {% if field.errors %}
-          <span class="help-inline">{{ field.errors|striptags }}</span>
+          <span class="help-inline ">{{ field.errors|striptags }}</span>
           {% endif %}
         </div>
       </fieldset>
@@ -116,10 +116,10 @@ $("#map-navigation-panel div[title]").tooltip('#maptooltip');
         <div class="controls">
           {{ field }}
           {% if field.help_text %}
-          <span class="help-inline">{{ field.help_text }}</span>
+          <span class="help-inline ">{{ field.help_text }}</span>
           {% endif %}
           {% if field.errors %}
-          <span class="help-inline">{{ field.errors|striptags }}</span>
+          <span class="help-inline ">{{ field.errors|striptags }}</span>
           {% endif %}
         </div>
       </fieldset>
@@ -130,10 +130,10 @@ $("#map-navigation-panel div[title]").tooltip('#maptooltip');
         <div class="controls">
           {{ field }}
           {% if field.help_text %}
-          <span class="help-inline">{{ field.help_text }}</span>
+          <span class="help-inline ">{{ field.help_text }}</span>
           {% endif %}
           {% if field.errors %}
-          <span class="help-inline">{{ field.errors|striptags }}</span>
+          <span class="help-inline ">{{ field.errors|striptags }}</span>
           {% endif %}
         </div>
       </fieldset>
@@ -148,10 +148,10 @@ $("#map-navigation-panel div[title]").tooltip('#maptooltip');
         <div class="controls">
           {{ field }}
           {% if field.help_text %}
-          <span class="help-inline">{{ field.help_text }}</span>
+          <span class="help-inline ">{{ field.help_text }}</span>
           {% endif %}
           {% if field.errors %}
-          <span class="help-inline">{{ field.errors|striptags }}</span>
+          <span class="help-inline ">{{ field.errors|striptags }}</span>
           {% endif %}
         </div>
       </fieldset>
@@ -193,3 +193,6 @@ $("#map-navigation-panel div[title]").tooltip('#maptooltip');
     {# popup ends #}
   {% endfor %}
 -->
+<script>
+$('select, input, textarea, .help-inline ').addClass('span8');
+</script>

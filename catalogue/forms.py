@@ -194,7 +194,7 @@ class AdvancedSearchForm(forms.ModelForm):
 
     isAdvanced = forms.CharField(widget=forms.HiddenInput(), required=False)
     polarising_mode = forms.ChoiceField(
-        choices=POLARISING_MODE_CHOICES, required=False)
+        choices=tuple(POLARISING_MODE_CHOICES.viewitems()), required=False)
     geometry = forms.CharField(
         widget=forms.HiddenInput(), required=False,
         help_text=(
@@ -254,9 +254,12 @@ class AdvancedSearchForm(forms.ModelForm):
         """
 
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
+        # define smmple search form fields
+        SIMPLE_FORM_FIELDS = ['sensors', 'start_datepicker', 'end_datepicker']
         for myFieldName, myField in self.fields.items():
             # Simple way to assign css class to every field
-            myField.widget.attrs['data-search-type'] = 'adv'
+            if myFieldName not in SIMPLE_FORM_FIELDS:
+                myField.widget.attrs['data-search-type'] = 'adv'
             myField.widget.attrs['class'] = 'ui-corner-all'
             if (not 'title' in myField.widget.attrs or
                     myField.widget.attrs['title'] == ''):

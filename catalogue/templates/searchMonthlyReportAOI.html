@@ -20,53 +20,60 @@
           data.addRows([
             {% for myCountry in myScores %}
             {% ifnotequal myCountry.country 'south africa' %}
-            ['{{myCountry.country}}', {{ myCountry.count }}],
+            ['{{myCountry.country|title}}', {{ myCountry.count }}],
             {% endifnotequal %}
             {% endfor %}
           [null,null]]);
 
           // Instantiate and draw our chart, passing in some options.
           var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-          chart.draw(data, {width: 400, height: 240, is3D: true, title: 'Visitors by country'});
+          chart.draw(data, {height: 300, is3D: true, backgroundColor:'transparent'});
         }
       </script>
 {% endblock %}
 {% block content %}
-{% box_start "box-search-history" %}
-<div id="monthSelector" class="span-22 last">
-  <div class="span-8">
-    <button onclick='location="{% url 'searchMonthlyReportAOI' myPrevDate|date:'Y' myPrevDate|date:'m' %}"'>Previous month</button>
-  </div>
-  <div class="span-6 centered">
-    <button onclick='location="?pdf"'><img src="/media/images/application-pdf.png" /> PDF</button>
-  </div>
-  <div class="span-8 last" style="text-align: right;">
-    <button onclick='location="{% url 'searchMonthlyReportAOI' myNextDate|date:'Y' myNextDate|date:'m' %}"'>Next month</button>
+<div class="row-fluid center gap-bottom">
+  <button onclick='location="?pdf"' class="btn" id="download-btn"><i class="icon-download"></i></button>
+  <div class="btn-group">
+    <button onclick='location="{% url 'searchMonthlyReportAOI' myPrevDate|date:'Y' myPrevDate|date:'m' %}"' class="btn"><i class="icon-backward"></i></button>
+    <button class="btn disabled btn-success">{{ myCurrentDate|date:'M, Y' }}</button>
+    <button onclick='location="{% url 'searchMonthlyReportAOI' myNextDate|date:'Y' myNextDate|date:'m' %}"' class="btn"><i class="icon-forward"></i></button>
   </div>
 </div>
-    {% if myScores %}
-      <!--Load the AJAX API-->
-      <h2 class="centered chartTitle">Searches by country of AOI geometry for {{ myCurrentDate|date:'M, Y' }}</h2>
-      <!--Div that will hold the pie chart-->
-      <div id="chart_div" class="centered"></div>
-
-      <div id="allCountries">
-        <h3 class="centered chartTitle">All Countries</h3>
-         <table id="gradient-style" summary="SAC Catalogue Searches" style="width:100%; margin:0px;">
-            <thead> 
-              <th>Country</th>
-              <th>Searches</th>
-            </thead>
-            <tfoot></tfoot>
-            <tbody>
-              {% for myCountry in myScores %}
-                <tr><td>{% filter force_escape|capfirst %}{{myCountry.country}}{% endfilter %}</td><td>{{ myCountry.count }}</td></tr>
-              {% endfor %}
-            </tbody>
-         </table>
-       </div>
-    {% else %}
-      <p>No reports to generate.</p>
-    {% endif %}
-{% box_end %}
+{% if myScores %}
+<div class="row-fluid">
+  <h2>Searches of AOI Geometry</h2>
+  <h4 class="muted">for {{ myCurrentDate|date:'M, Y' }} (by country)</h4>
+</div>
+<div class="row-fluid">
+  <div id="chart_div"></div>
+</div>
+<div id="allCountries" class="row-fluid">
+  <h3>All Countries</h3>
+  <table id="gradient-style" summary="SAC Catalogue Searches" class="table table-striped">
+    <thead> 
+      <th>Country</th>
+      <th>Searches</th>
+    </thead>
+    <tfoot></tfoot>
+    <tbody>
+      {% for myCountry in myScores %}
+        <tr><td>{% filter force_escape|capfirst %}{{myCountry.country}}{% endfilter %}</td><td>{{ myCountry.count }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="row-fluid center">
+  <p class="lead">No reports to generate.</p>
+</div>
+{% endif %}
+<script>
+$('#download-btn').popover({
+  placement:'left',
+  trigger:'hover',
+  content:'Click to download the entire list of visitors in PDF format',
+  title:'Download as PDF'
+});
+</script>
 {% endblock %}

@@ -189,16 +189,16 @@ function setupEditingPanel(theLayer)
 {
   var myDrawingControl = new OpenLayers.Control.DrawFeature(theLayer,
       OpenLayers.Handler.Polygon, {
-    'displayClass': 'olControlDrawFeaturePolygon',
-    'title': '<b>Capture polygon</b> left click to add points, double click to finish capturing'
+    'displayClass': 'right icon-check-empty icon-2x olControlDrawFeaturePolygon',
+    'title': 'Capture polygon: left click to add points, double click to finish capturing'
       });
   var myModifyFeatureControl = new OpenLayers.Control.ModifyFeature(theLayer, {
-      'displayClass': 'olControlModifyFeature',
-      'title': '<b>Modify polygon</b> left click to move/add points, hover and press <i>delete</i> to delete points'
+      'displayClass': 'right icon-edit icon-2x olControlModifyFeature',
+      'title': 'Modify polygon: left click to move/add points, hover and press <i>delete</i> to delete points'
   });
   var myDestroyFeaturesControl = new DestroyFeatures({
-      'displayClass': 'destroyFeature',
-      'title':'<b>Delete polygon</b> deletes polygon',
+      'displayClass': 'right icon-remove icon-2x destroyFeature',
+      'title':'Delete polygon: deletes polygon',
       'layer': theLayer
       }
     );
@@ -475,42 +475,44 @@ function setupBaseMap()
   mNavigationPanel = new OpenLayers.Control.Panel({'div' : document.getElementById("map-navigation-panel")});
   var myZoomInControl = new OpenLayers.Control.ZoomBox({
         title: "Zoom In Box: draw a box on the map, to see the area at a larger scale.",
-        displayClass:'icon-zoom-in icon-2x right ', //Bootstrap/Font-Awesome Icons. SPACE AFTER right CRUCIAL
+        displayClass:'right icon-zoom-in icon-2x olControlZoomBoxIn',
         out: false
       });
   mMap.addControl(myZoomInControl);
 
   var myZoomOutControl = new OpenLayers.Control.ZoomBox({
         title: "Zoom Out Box: draw a box on the map, to see the area at a smaller scale.",
-        displayClass:'icon-zoom-out icon-2x right ', //Bootstrap/Font-Awesome Icons. SPACE AFTER right CRUCIAL
+        displayClass:'right icon-zoom-out icon-2x olControlZoomBoxOut', 
         out: true
       });
   mMap.addControl(myZoomOutControl);
 
     var myNavigationControl = new OpenLayers.Control.Navigation({
-    title : "<b>Pan map</b> click and drag map to move the map in the direction of the mouse.",
-    zoomWheelEnabled: false
+    title : "Pan map: click and drag map to move the map in the direction of the mouse.",
+    zoomWheelEnabled: false,
+    displayClass:'right icon-move icon-2x olControlNavigation',
     }
   );
   mMap.addControl(myNavigationControl);
 
     var myHistoryControl = new OpenLayers.Control.NavigationHistory({
-  previousOptions: {
-      title : "<b>Previous view</b> quickly jump to the prevoius map view."
-  },
   nextOptions: {
-      title : "<b>Next view</b> quickly jump to the next map view, works only with prevoius view."
+      title : "Next view: quickly jump to the next map view, works only with prevoius view.",
+      displayClass:'right icon-chevron-right icon-2x olControlNavigationHistoryNext',
+    },
+  previousOptions: {
+      title : "Previous view: quickly jump to the prevoius map view.",
+      displayClass:'right icon-chevron-left icon-2x olControlNavigationHistoryPrevious',
     }
   });
   mMap.addControl(myHistoryControl);
   // add map help button
   var myHelpButton = new OpenLayers.Control({
     title: "Help",
-    displayClass: 'icon-question-sign icon-2x right '
   })
   mMap.addControl(myHelpButton);
   // now add these controls all to our toolbar / panel
-  mNavigationPanel.addControls([myHelpButton, myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.next, myHistoryControl.previous]);
+  mNavigationPanel.addControls([myHelpButton, myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.previous, myHistoryControl.next]);
   mMap.addControl(new OpenLayers.Control.ScaleBar({
       align: "left",
       minWidth: 150,

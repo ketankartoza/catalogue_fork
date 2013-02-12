@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% block extrajs %}
   {{ block.super }}
 
@@ -56,23 +55,24 @@
 {# div for map tooltips - not shown until a map tool is hovered over #}
 <div id="maptooltip">&nbsp;</div>
 {# div for form tooltips (bigger than map tips)- not shown until a map tool is hovered over #}
-  {# layout done with blueprint.css we inherit 22 cols of space from base.html #}
-  {% box_start "box-simple-map" "span-22 last" %}
-    <div id="map" class="span-22 last"></div>
-    <div id="map-panel" class="span-22 last">
-      <div id="map-navigation-panel" class="span-7 append-1"></div>
-      <div id="map-location"  class="prepend-1 span-4 append-1 small"></div>{# small class from blueprint css #}
-      <div class="olControlScalebar span-6 append-1" id="map-scale"></div>
+  <div class="row-fluid">
+    <div class="span12">
+      <div id="map"></div>
+      <div id="map-panel">
+        <div id="map-navigation-panel"></div>
+        <div id="map-location"></div>
+        <div class="olControlScalebar" id="map-scale"></div>
+      </div>
     </div>
-  {% box_end %}
+  </div>
+  <div class="row-fluid center">
   {% if myMessages %}
-  {% box_start "box-messages" "span-22 prepend-top last" %}
   {% for myMessage in myMessages %}
     {{ myMessage|safe }}
   {% endfor %}
-  {% box_end %}
   {% endif %}
-{% endblock%}
+  </div>
+{% endblock %}
 
 
 

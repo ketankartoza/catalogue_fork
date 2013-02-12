@@ -1,5 +1,5 @@
 hr {display: block;position: relative;padding: 0;margin: 8px auto;height: 0;width: 100%;max-height: 0;font-size: 1px;line-height: 0;clear: both;border: none;border-top: 1px solid #aaaaaa;border-bottom: 1px solid #ffffff;}
-.center{text-align:center;}
+.center{text-align:center!important;}
 .main-content {margin-top: 100px;}
 h2 {color:#228441;font-family: arial; text-align:center;}
 h3 {color:#66B786;font-family: arial;}
