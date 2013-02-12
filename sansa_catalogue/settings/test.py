@@ -2,7 +2,7 @@ from .project import *
 
 # http://hustoknow.blogspot.com/2011/02/setting-up-django-nose-on-hudson.html
 INSTALLED_APPS += (
-    'django_nose', # don't remove this comma
+    'django_nose',  # don't remove this comma
 )
 
 
@@ -14,6 +14,7 @@ NOSE_ARGS = (
     '--cover-inclusive',
     '--cover-package=catalogue',
     '--cover-package=dictionaries',
+    '--cover-package=useraccounts',
     '--nocapture',
     '--nologcapture',
     #  default test settings don't include any specific tests (see jenkins.py)

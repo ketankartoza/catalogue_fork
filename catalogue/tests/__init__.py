@@ -61,9 +61,7 @@ from integerCSVIntervalsField_return import IntegersCSVIntervalsField_Test
 from AOIGeometryField_return import AOIGeometryField_Test
 from visit_model import VisitCRUD_Test
 from allusersmessage_model import AllUsersMesageCRUD_Test
-from sacuserprofile_model import SacUserProfileCRUD_Test
 from ordernotificationrecipients_model import OrderNotificationRecipientsCRUD_Test
-from sacuserprofile_model import SacUserProfileCRUD_Test
 from utmzonecalc_module import utmZoneFromLatLon_Test
 from rangetag_templatetag import RangeTag_Test
 from graphtag_templatetag import gPieChart_Test

@@ -19,18 +19,17 @@ __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
 from catalogue.tests.test_utils import simpleMessage
-from catalogue.models import SacUserProfile
-from datetime import datetime
+from ..models import SansaUserProfile
 
 
-class SacUserProfileCRUD_Test(TestCase):
+class SansaUserProfileCRUD_Test(TestCase):
     '''
     Tests models.
     '''
     fixtures = [
         'test_user.json',
-        'test_sacuserprofile.json'
-        ]
+        'test_sansauserprofile.json'
+    ]
 
     def setUp(self):
         '''
@@ -38,76 +37,67 @@ class SacUserProfileCRUD_Test(TestCase):
         '''
         pass
 
-    def test_SacUserProfile_create(self):
+    def test_SansaUserProfile_create(self):
         '''
-        Tests SacUserProfile model creation
+        Tests SansaUserProfile model creation
         '''
         myNewData = {
             'about': '',
             'post_code': '123',
-            'surname': 'Sutton',
             'strategic_partner': False,
-            'firstname': 'Tim',
             'url': '',
-            'country': None,
             'address2': 'kjkj',
             'address3': '',
             'address4': '',
-            'longitude': None,
             'contact_no': '123123',
-            'latitude': None,
-            'location': '',
             'address1': '12321 kjk',
-            'date': '2012-07-09 14:14:08',
             'organisation': 'None',
             'user_id': 999
         }
-        myModel = SacUserProfile(**myNewData)
+        myModel = SansaUserProfile(**myNewData)
         myModel.save()
         #check if PK exists
-        self.assertTrue(myModel.pk != None,
-            simpleMessage(myModel.pk, 'not None',
-                message='Model PK should NOT equal None'))
+        self.assertTrue(
+            myModel.pk is not None,
+            simpleMessage(
+                myModel.pk, 'not None',
+                message='Model PK should NOT equal None')
+        )
 
-    def test_SacUserProfile_read(self):
+    def test_SansaUserProfile_read(self):
         '''
-        Tests SacUserProfile model read
+        Tests SansaUserProfile model read
         '''
         myModelPK = 1
         myExpectedModelData = {
             'about': '',
             'post_code': '123',
-            'surname': 'Sutton',
             'strategic_partner': False,
-            'firstname': 'Tim',
             'url': '',
-            'country': None,
             'address2': 'kjkj',
             'address3': '',
             'address4': '',
-            'longitude': None,
             'contact_no': '123123',
-            'latitude': None,
-            'location': '',
             'address1': '12321 kjk',
-            'date': datetime.strptime('2012-07-09 14:14:08', '%Y-%m-%d %H:%M:%S'),
             'organisation': 'None',
             'user_id': 1
         }
 
-        myModel = SacUserProfile.objects.get(pk=myModelPK)
+        myModel = SansaUserProfile.objects.get(pk=myModelPK)
         #check if data is correct
         for key, val in myExpectedModelData.items():
-            self.assertEqual(myModel.__dict__.get(key), val,
-                simpleMessage(myModel.__dict__.get(key), val,
+            self.assertEqual(
+                myModel.__dict__.get(key), val,
+                simpleMessage(
+                    myModel.__dict__.get(key), val,
                     message='For key %s' % key))
 
-    def test_SacUserProfile_update(self):
+    def test_SansaUserProfile_update(self):
         '''
-        Tests SacUserProfile model update
+        Tests SansaUserProfile model update
         '''
         myModelPK = 1
-        myModel = SacUserProfile.objects.get(pk=myModelPK)
+        myModel = SansaUserProfile.objects.get(pk=myModelPK)
         myNewModelData = {
             'about': '',
             'post_code': '123123',
@@ -134,20 +124,24 @@ class SacUserProfileCRUD_Test(TestCase):
 
         #check if updated
         for key, val in myNewModelData.items():
-            self.assertEqual(myModel.__dict__.get(key), val,
-                simpleMessage(myModel.__dict__.get(key), val,
-                message='For key %s' % key))
+            self.assertEqual(
+                myModel.__dict__.get(key), val,
+                simpleMessage(
+                    myModel.__dict__.get(key), val,
+                    message='For key %s' % key))
 
-    def test_SacUserProfile_delete(self):
+    def test_SansaUserProfile_delete(self):
         '''
-        Tests SacUserProfile model delete
+        Tests SansaUserProfile model delete
         '''
         myModelPK = 1
-        myModel = SacUserProfile.objects.get(pk=myModelPK)
+        myModel = SansaUserProfile.objects.get(pk=myModelPK)
 
         myModel.delete()
 
         #check if deleted
-        self.assertTrue(myModel.pk is None,
-            simpleMessage(myModel.pk, None,
-            message='Model PK should equal None'))
+        self.assertTrue(
+            myModel.pk is None,
+            simpleMessage(
+                myModel.pk, None,
+                message='Model PK should equal None'))

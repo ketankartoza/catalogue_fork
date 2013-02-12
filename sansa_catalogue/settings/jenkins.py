@@ -13,7 +13,8 @@ NOSE_ARGS += (
     # this is needed as we can't use Nose default test discoverer, because we
     # are still using tests customized for Django default test runner
     'catalogue.tests',
-    'dictionaries.tests'
+    'dictionaries.tests',
+    'useraccounts.tests'
 )
 
 #
