@@ -10,17 +10,7 @@ DATABASES = {
         'PORT': '5432',
         'TEST_NAME': 'sac_unittest_master',
     },
-    'acs': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'acs',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
 }
-
-DATABASE_ROUTERS = ['catalogue.dbrouter.CatalogueRouter']
 
 # Application specific apps
 INSTALLED_APPS += (

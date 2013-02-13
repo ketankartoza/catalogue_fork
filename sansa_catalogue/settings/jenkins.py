@@ -1,5 +1,17 @@
 from .test import *
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'sac-master',
+        'USER': 'jenkins',
+        'PASSWORD': 'jenkins-test',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'TEST_NAME': 'sac_unittest_master',
+        }
+}
+
 INSTALLED_APPS += (
     'django_jenkins',  # don't remove this comma
 )
