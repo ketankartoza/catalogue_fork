@@ -17,6 +17,7 @@ INSTALLED_APPS += (
     'catalogue',
     'dictionaries',
     'useraccounts',
+    'search',
 )
 
 # Set debug to false for production

@@ -39,19 +39,19 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 #from django.db.models import Count, Min, Max  # for aggregate queries
 from django.forms.models import inlineformset_factory
+
 # Models and forms for our app
 from catalogue.models import (
-    Search,
-    SearchDateRange,
     AcquisitionMode,
     Mission,
     MissionSensor,
-    SensorType,
-    SearchRecord)
+    SensorType
+)
 from catalogue.forms import (
     AdvancedSearchForm,
     DateRangeFormSet,
-    ProductIdSearchForm,)
+    ProductIdSearchForm,
+)
 
 from catalogue.renderDecorator import renderWithContext
 
@@ -66,14 +66,23 @@ from catalogue.views.helpers import (
     render_to_kmz,
     downloadHtmlMetadata,
     downloadISOMetadata)
-from catalogue.views.searcher import (
-    Searcher)
 
 # SHP and KML readers
 from catalogue.featureReaders import (
     getGeometryFromUploadedFile,)
 
 from catalogue.views.geoiputils import GeoIpUtils
+
+
+# modularized app dependencies
+from .searcher import (
+    Searcher)
+
+from .models import (
+    Search,
+    SearchDateRange,
+    SearchRecord
+)
 
 
 class Http500(Exception):

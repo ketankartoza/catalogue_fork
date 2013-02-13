@@ -22,18 +22,11 @@ import uuid
 from datetime import datetime
 
 from django.contrib.gis.db import models
-#for user id foreign keys
-from django.contrib.auth.models import User
-from catalogue.models.orders import Order, DeliveryDetail
-from catalogue.models.products import GenericProduct, RadarProduct
+
 from catalogue.models import (
-    MissionSensor,
-    AcquisitionMode,
     License,
-    SensorType,
-    Mission,
-    ProcessingLevel)
-#for translation
+    RadarProduct
+)
 
 from catalogue.fields import IntegersCSVIntervalsField
 
@@ -55,10 +48,12 @@ class SearchRecord(models.Model):
     When the user creates a new order, all current search records that do not
     havean order id should be added to it.
     """
-    user = models.ForeignKey(User)
-    order = models.ForeignKey(Order, null=True, blank=True)
-    product = models.ForeignKey(GenericProduct, null=False, blank=False)
-    delivery_detail = models.ForeignKey(DeliveryDetail, null=True, blank=True)
+    user = models.ForeignKey('auth.User')
+    order = models.ForeignKey('catalogue.Order', null=True, blank=True)
+    product = models.ForeignKey(
+        'catalogue.GenericProduct', null=False, blank=False)
+    delivery_detail = models.ForeignKey(
+        'catalogue.DeliveryDetail', null=True, blank=True)
     # DIMS ordering related fields
     internal_order_id = models.IntegerField(null=True, blank=True)
     download_path = models.CharField(
@@ -76,7 +71,6 @@ class SearchRecord(models.Model):
     class Meta:
         verbose_name = 'Record'
         verbose_name_plural = 'Records'
-        app_label = 'catalogue'
 
     def __unicode__(self):
         return self.product.product_id
@@ -201,12 +195,13 @@ class Search(models.Model):
 
     search_type = models.IntegerField(
         'Search type', default=1, choices=PRODUCT_SEARCH_TYPES, db_index=True)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey('auth.User')
     keywords = models.CharField('Keywords', max_length=255, blank=True)
     # foreign keys require the first arg to the be the relation name
     # so we explicitly have to use verbose_name for the user friendly name
     sensors = models.ManyToManyField(
-        MissionSensor, verbose_name='Sensors', null=True, blank=True,
+        'catalogue.MissionSensor',
+        verbose_name='Sensors', null=True, blank=True,
         help_text=(
             'Choosing one or more sensor is required. Use ctrl-click to '
             'select more than one.'))
@@ -253,7 +248,7 @@ class Search(models.Model):
         verbose_name="Max Clouds",
         max_length=3)
     acquisition_mode = models.ForeignKey(
-        AcquisitionMode, blank=True, null=True,
+        'catalogue.AcquisitionMode', blank=True, null=True,
         help_text='Choose the acquisition mode.')  # e.g. M X T J etc
     license_type = models.IntegerField(
         choices=License.LICENSE_TYPE_CHOICES, blank=True, null=True,
@@ -273,13 +268,14 @@ class Search(models.Model):
         null=True, blank=True,
         help_text='Select sensor inclination angle end.')
     mission = models.ForeignKey(
-        Mission, null=True, blank=True,
+        'catalogue.Mission', null=True, blank=True,
         help_text='Select satellite mission.')  # e.g. S5
     # e.g. CAM1
     sensor_type = models.ForeignKey(
-        SensorType, null=True, blank=True, related_name='search_sensor_type')
+        'catalogue.SensorType',
+        null=True, blank=True, related_name='search_sensor_type')
     processing_level = models.ManyToManyField(
-        ProcessingLevel, null=True, blank=True,
+        'catalogue.ProcessingLevel', null=True, blank=True,
         help_text='Select one or more processing level.')
     polarising_mode = models.CharField(
         max_length=1, null=True, blank=True,
@@ -289,7 +285,6 @@ class Search(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        app_label = 'catalogue'
         verbose_name = 'Search'
         verbose_name_plural = 'Searches'
         ordering = ('search_date',)
@@ -430,9 +425,6 @@ class SearchDateRange(models.Model):
         help_text='Product date is required. DD-MM-YYYY.')
     search = models.ForeignKey(Search)
 
-    class Meta:
-        app_label = 'catalogue'
-
     def __unicode__(self):
         return "%s Guid: %s" % (self.local_format(), self.search.guid)
 
@@ -467,7 +459,7 @@ class Clip(models.Model):
     status.
     """
     guid = models.CharField(max_length=40)
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey('auth.User')
     date = models.DateTimeField(
         verbose_name='Date', auto_now=True, auto_now_add=True,
         help_text='Not shown to users')
@@ -498,6 +490,5 @@ class Clip(models.Model):
         super(Clip, self).save()
 
     class Meta:
-        app_label = 'catalogue'
         verbose_name = 'Clip'
         verbose_name_plural = 'Clips'
