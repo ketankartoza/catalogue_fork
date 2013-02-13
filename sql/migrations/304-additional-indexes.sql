@@ -1,1 +1,0 @@
-create index catalogue_genericproduct_original_product_id on catalogue_genericproduct (original_product_id);

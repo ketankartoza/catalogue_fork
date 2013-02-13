@@ -9,11 +9,13 @@
 #
 # from the dir above scripts dir
 #
-from catalogue.models import *
-from settings import *
 import traceback
 import sys
 import shutil
+
+from django_project.catalogue.models import *
+from settings import *
+
 mSourcePath = "/mnt/cataloguestorage/imagery_processing/sacc/20080929_20091231/imp/"
 
 def run( ):

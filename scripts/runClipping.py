@@ -4,11 +4,8 @@ It is run by a cronjob.
 
 #imports from Django
 from django.conf import settings
-from django.core.mail import send_mail
-from django.contrib.gis.gdal import *
 
 # Models and forms for our app
-from catalogue.models import *
 
 # Tools to run gdal and ogrinfo and postgis commands
 import shlex, subprocess
