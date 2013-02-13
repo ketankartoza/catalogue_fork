@@ -22,7 +22,8 @@ NOSE_ARGS += (
 #
 PROJECT_APPS = (
     'catalogue',
-    'dictionaries'
+    'dictionaries',
+    'useraccounts',
 )
 
 JENKINS_TASKS = (
@@ -34,5 +35,5 @@ JENKINS_TASKS = (
     #'django_jenkins.tasks.run_jslint',
     #'django_jenkins.tasks.run_csslint',
     'django_jenkins.tasks.run_pyflakes',
-    'django_jenkins.tasks.run_sloccount',
+    #'django_jenkins.tasks.run_sloccount',
 )
