@@ -369,7 +369,7 @@ class MapContainerWidget():
 class SeleniumLogin(SansaLiverServerTestCase):
     fixtures = ['test_user.json']
 
-    def test_login_staff(self):
+    def Xtest_login_staff(self):
         # we use 'urljoin' to prepare URL
         self.browser.get(urljoin(self.live_server_url, reverse('index')))
 
@@ -389,7 +389,7 @@ class SeleniumLogin(SansaLiverServerTestCase):
 
         self.assertTrue(myMenu.for_staff_user())
 
-    def test_login_user(self):
+    def Xtest_login_user(self):
         # we use 'urljoin' to prepare URL
         self.browser.get(urljoin(self.live_server_url, reverse('index')))
 
@@ -431,7 +431,7 @@ class SeleniumSearch(SansaLiverServerTestCase):
         'test_missiongroup.json',
     ]
 
-    def test_search_staff(self):
+    def Xtest_search_staff(self):
         # we use 'urljoin' to prepare URL
         self.browser.get(urljoin(self.live_server_url, reverse('index')))
 
@@ -477,7 +477,7 @@ class SeleniumSearch(SansaLiverServerTestCase):
         self.assertEquals(
             mySearchResults.find_element_by_tag_name('b').text, '2')
 
-    def test_search_polygon(self):
+    def Xtest_search_polygon(self):
         # we use 'urljoin' to prepare URL
         self.browser.get(urljoin(self.live_server_url, reverse('index')))
 
