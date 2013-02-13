@@ -117,7 +117,12 @@ class ReportsViews_recentSearches_Tests(TestCase):
         self.assertEqual(
             myResp.context['myCurrentMonth'], datetime.date.today())
         # check used templates
-        myExpTemplates = ['recentSearches.html']
+        myExpTemplates = [
+            'recentSearches.html',
+            u'base.html',
+            u'menu.html',
+            u'useraccounts/menu_content.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

@@ -1,0 +1,38 @@
+[
+    {
+        "pk": 1,
+        "model": "dictionaries.spectralmode",
+        "fields": {
+            "abbreviation": "PAN",
+            "name": "Panchromatic",
+            "description": "Black and white single band spectral group"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "dictionaries.spectralmode",
+        "fields": {
+            "abbreviation": "MSS",
+            "name": "Multi-Spectral",
+            "description": "Multi-spectral group of many visible and infrared bands, but not hyperspectral"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "dictionaries.spectralmode",
+        "fields": {
+            "abbreviation": "RGB",
+            "name": "Visible RGB",
+            "description": "True Visible spectrum bands only (three band combination of red, green and blue). Not derived RGB as for SPOT where no Blue band is acquired."
+        }
+    },
+    {
+        "pk": 4,
+        "model": "dictionaries.spectralmode",
+        "fields": {
+            "abbreviation": "THM",
+            "name": "Thermal",
+            "description": "Thermal band group"
+        }
+    }
+]

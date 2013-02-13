@@ -73,7 +73,7 @@ class OrdersViews_downloadOrder_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'], (
-                'http://testserver/accounts/login/?next=/downloadorder/1/'))
+                'http://testserver/accounts/signin/?next=/downloadorder/1/'))
 
     def test_downloadOrder_login_staff_shp(self):
         """

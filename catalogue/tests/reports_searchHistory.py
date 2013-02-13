@@ -82,7 +82,7 @@ class ReportsViews_searchHistory_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/mysearches/')
+            'http://testserver/accounts/signin/?next=/mysearches/')
 
     def test_myReports_userlogin(self):
         """
@@ -96,7 +96,12 @@ class ReportsViews_searchHistory_Tests(TestCase):
         self.assertEqual(
             len(myResp.context['mySearches']), 1)
         # check used templates
-        myExpTemplates = ['mySearches.html']
+        myExpTemplates = [
+            'mySearches.html',
+            u'base.html',
+            u'menu.html',
+            u'useraccounts/menu_content.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -113,7 +118,12 @@ class ReportsViews_searchHistory_Tests(TestCase):
         self.assertEqual(
             len(myResp.context['mySearches']), 25)
         # check used templates
-        myExpTemplates = ['mySearches.html']
+        myExpTemplates = [
+            'mySearches.html',
+            u'base.html',
+            u'menu.html',
+            u'useraccounts/menu_content.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

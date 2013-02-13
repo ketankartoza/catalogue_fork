@@ -86,7 +86,7 @@ class OrdersViews_ordersSummary_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/orderssummary/')
+            'http://testserver/accounts/signin/?next=/orderssummary/')
 
     def test_ordersSummary_login_staff(self):
         """
@@ -113,7 +113,7 @@ class OrdersViews_ordersSummary_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'ordersSummary.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html']
+            u'useraccounts/menu_content.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)

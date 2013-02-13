@@ -23,7 +23,7 @@ from django.contrib.auth.models import User
 # Helper classes
 # ABP: unused ? from catalogue.geoiputils import *
 from catalogue.nosubclassmanager import NoSubclassManager
-from catalogue.models.dictionaries import (
+from catalogue.models import (
     ProcessingLevel,
     Projection,
     MissionSensor)

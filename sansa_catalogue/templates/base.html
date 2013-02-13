@@ -91,9 +91,13 @@
         </p>
         <p id="user-box" class="navbar-text span4 footer-text">
           {% if user.is_authenticated %}
+          {% comment %}
           {% load avatars %}
-          <img id="avatarimg" src="{% avatar 96 %}" />
-            You are logged in as {{user.first_name}} {{user.last_name}}({{user}})
+          {# left css class defined by blueprint css #}
+          <img id="avatarimg" src="{% avatar 96 %}" class="left"/>
+          {% endcomment %}
+          <p class="padded">
+          You are logged in as {{user.first_name}} {{user.last_name}}({{user}})
           </p>
           {% else %}
           You are not logged in.</p>

@@ -81,7 +81,7 @@ class TaskingViews_viewTaskingRequest_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/viewtaskingrequest/1/')
+            'http://testserver/accounts/signin/?next=/viewtaskingrequest/1/')
 
     def test_viewTaskingRequest_login_staff(self):
         """
@@ -100,7 +100,7 @@ class TaskingViews_viewTaskingRequest_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'taskingRequestPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'taskingRequest.html']
+            u'useraccounts/menu_content.html', u'taskingRequest.html']
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
@@ -125,7 +125,7 @@ class TaskingViews_viewTaskingRequest_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'taskingRequestPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'taskingRequest.html']
+            u'useraccounts/menu_content.html', u'taskingRequest.html']
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
@@ -151,7 +151,7 @@ class TaskingViews_viewTaskingRequest_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'taskingRequestPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'taskingRequest.html']
+            u'useraccounts/menu_content.html', u'taskingRequest.html']
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 

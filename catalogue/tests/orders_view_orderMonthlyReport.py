@@ -82,7 +82,7 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            ('http://testserver/accounts/login/?next=/ordermonthlyreport/'
+            ('http://testserver/accounts/signin/?next=/ordermonthlyreport/'
                 '2012/6/'))
 
     def test_orderMonthlyReport_login_staff(self):
@@ -125,7 +125,7 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'orderMonthlyReport.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html']
+            u'useraccounts/menu_content.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -174,7 +174,7 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'orderMonthlyReport.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html']
+            u'useraccounts/menu_content.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)

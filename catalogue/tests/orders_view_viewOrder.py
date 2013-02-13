@@ -98,7 +98,7 @@ class OrdersViews_viewOrder_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/vieworder/1/')
+            'http://testserver/accounts/signin/?next=/vieworder/1/')
 
     def test_viewOrder_login_staff(self):
         """
@@ -145,7 +145,7 @@ class OrdersViews_viewOrder_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'orderPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'order.html',
+            u'useraccounts/menu_content.html', u'order.html',
             u'cartContents.html', u'recordHeader.html', u'record.html',
             u'record.html', u'record.html', u'orderStatusHistory.html']
 
@@ -197,7 +197,7 @@ class OrdersViews_viewOrder_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'orderPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'order.html',
+            u'useraccounts/menu_content.html', u'order.html',
             u'cartContents.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]

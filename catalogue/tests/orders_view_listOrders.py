@@ -76,7 +76,7 @@ class OrdersViews_listOrders_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/listorders/')
+            'http://testserver/accounts/signin/?next=/listorders/')
 
     def test_listOrders_login_staff(self):
         """
@@ -100,7 +100,7 @@ class OrdersViews_listOrders_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'orderListPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'orderList.html']
+            u'useraccounts/menu_content.html', u'orderList.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -131,7 +131,7 @@ class OrdersViews_listOrders_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'orderListPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'orderList.html']
+            u'useraccounts/menu_content.html', u'orderList.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -163,7 +163,7 @@ class OrdersViews_listOrders_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'orderListPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'orderList.html']
+            u'useraccounts/menu_content.html', u'orderList.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -195,7 +195,7 @@ class OrdersViews_listOrders_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'orderListPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'orderList.html']
+            u'useraccounts/menu_content.html', u'orderList.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -227,7 +227,7 @@ class OrdersViews_listOrders_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'orderListPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'orderList.html']
+            u'useraccounts/menu_content.html', u'orderList.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)

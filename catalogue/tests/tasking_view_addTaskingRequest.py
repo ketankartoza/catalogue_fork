@@ -39,7 +39,7 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
     """
     fixtures = [
         'test_user.json',
-        'test_sacuserprofile.json',
+        'test_sansauserprofile.json',
         'test_orderstatus.json',
         'test_deliverymethod.json',
         'test_deliverydetail.json',
@@ -122,7 +122,7 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'addPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'add.html']
+            u'useraccounts/menu_content.html', u'add.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -220,7 +220,7 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'addPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'add.html']
+            u'useraccounts/menu_content.html', u'add.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -316,7 +316,7 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'addPage.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html', u'add.html']
+            u'useraccounts/menu_content.html', u'add.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)

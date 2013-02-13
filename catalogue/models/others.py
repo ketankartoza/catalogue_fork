@@ -24,8 +24,7 @@ from django.contrib.contenttypes.models import ContentType
 from offline_messages.models import OfflineMessage
 from offline_messages.utils import create_offline_message, constants
 #for translation
-from userprofile.models import BaseProfile
-from catalogue.models.dictionaries import MissionSensor
+from catalogue.models import MissionSensor
 from catalogue.models.products import GenericSensorProduct
 
 
@@ -96,59 +95,6 @@ class VisitorReport(models.Model):
         managed = False
 
 ##############################################################################
-
-
-class SacUserProfile(BaseProfile):
-    # See:
-    # http://www.djangobook.com/en/1.0/chapter12/#cn222
-    # We define extra properties we want to store about users
-    # here - in particular if they belong to institutions
-    # that have strategic partnerships with SAC so that they may
-    # view hires spot data etc.
-    #
-    # update : 25 May 2010 - add django-profile app for more flexible
-    # profile management. See http://code.google.com/p/django-profile/
-
-    # This first field won't be made available to users in their
-    # profile forms since admins must set it only if the user is a
-    # employee of a sac strategic partner
-    strategic_partner = models.BooleanField(
-        'Strategic Partner?', help_text=('Mark this as true if the person '
-        'belongs to an institution that is a CSIR/SAC strategic partner')
-    )
-    firstname = models.CharField(
-        'First Name (required)', max_length=255, null=False, blank=False
-    )
-    surname = models.CharField(
-        'Surname (required)', max_length=255, null=False, blank=False
-    )
-    url = models.URLField(blank=True)
-    about = models.TextField(blank=True)
-    address1 = models.CharField(
-        'Address 1 (required)', max_length=255, null=False, blank=False
-    )
-    address2 = models.CharField(
-        'Address 2 (required)', max_length=255, null=False, blank=False
-    )
-    address3 = models.CharField(max_length=255, blank=True)
-    address4 = models.CharField(max_length=255, blank=True)
-    post_code = models.CharField(
-        'Post Code (required)', max_length=25, null=False, blank=False
-    )
-    organisation = models.CharField(
-        'Organisation (required)', max_length=255, null=False, blank=False
-    )
-    contact_no = models.CharField(
-        'Contact No (required)', max_length=16, null=False, blank=False
-    )
-
-    class Meta:
-        app_label = 'catalogue'
-        verbose_name = 'User Profile'
-        verbose_name_plural = 'User Profiles'
-
-    def __unicode(self):
-        return str(self.user.name)
 
 
 class OrderNotificationRecipients(models.Model):
@@ -233,6 +179,7 @@ world_borders_mapping = {
     'geometry': 'POLYGON'
 }
 
+
 class AllUsersMessage(models.Model):
     """A simple model for creating messages to broadcase to all users."""
     message = models.TextField()
@@ -251,4 +198,3 @@ class AllUsersMessage(models.Model):
                 create_offline_message(
                     myUser, self.message, level=constants.INFO)
         super(AllUsersMessage, self).save(*args, **kwargs)
-

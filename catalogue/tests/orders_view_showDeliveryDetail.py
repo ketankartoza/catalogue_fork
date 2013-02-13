@@ -89,7 +89,7 @@ class OrdersViews_showDeliveryDetail_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/showdeliverydetail/1/')
+            'http://testserver/accounts/signin/?next=/showdeliverydetail/1/')
 
     def test_showDeliveryDetail_login_staff(self):
         """

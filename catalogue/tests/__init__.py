@@ -61,9 +61,7 @@ from integerCSVIntervalsField_return import IntegersCSVIntervalsField_Test
 from AOIGeometryField_return import AOIGeometryField_Test
 from visit_model import VisitCRUD_Test
 from allusersmessage_model import AllUsersMesageCRUD_Test
-from sacuserprofile_model import SacUserProfileCRUD_Test
 from ordernotificationrecipients_model import OrderNotificationRecipientsCRUD_Test
-from sacuserprofile_model import SacUserProfileCRUD_Test
 from utmzonecalc_module import utmZoneFromLatLon_Test
 from rangetag_templatetag import RangeTag_Test
 from graphtag_templatetag import gPieChart_Test
@@ -103,8 +101,6 @@ from reports_searchMonthlyReportAOI import ReportsViews_searchMonthlyReportAOI_T
 from reports_dataSummaryTable import ReportsViews_dataSummaryTable_Tests
 from reports_sensorSummaryTable import ReportsViews_sensorSummaryTable_Tests
 from reports_dictionaryReport import ReportsViews_dictionaryReport_Tests
-
-from new_dictionary_tests import NewDictionariesTest
 
 # selenium tests
 from selenium_login_test import SeleniumLogin

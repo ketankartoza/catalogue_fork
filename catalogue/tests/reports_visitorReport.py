@@ -95,7 +95,7 @@ class ReportsViews_visitorReport_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'visitorReport.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html']
+            u'useraccounts/menu_content.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.template]
         self.assertEqual(myUsedTemplates, myExpTemplates)
