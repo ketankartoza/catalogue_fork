@@ -18,6 +18,9 @@ __date__ = '01/01/2011'
 __copyright__ = 'South African National Space Agency'
 
 import logging
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 from datetime import timedelta
 
 from django.shortcuts import get_object_or_404
@@ -116,7 +119,7 @@ class Searcher:
         })
 
     def __del__(self):
-        logging.info('Searcher destroyed')
+        logger.info('Searcher destroyed')
         return
 
     def initQuery(self):
@@ -149,26 +152,26 @@ mMap.addLayer(mySearchAreaLayer);''' % self.mSearch.geometry.geojson)
 
         if (not self.mSearch.isAdvanced or
                 self.mSearch.search_type == Search.PRODUCT_SEARCH_GENERIC):
-            logging.info('Search type is PRODUCT_SEARCH_GENERIC')
+            logger.info('Search type is PRODUCT_SEARCH_GENERIC')
             self.mSearch.search_type = Search.PRODUCT_SEARCH_GENERIC
             # ABP: changed simple search to GenericSensorProduct
             #      because sensors are now mandatory
             self.mQuerySet = GenericSensorProduct.objects.all()
         elif self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL:
-            logging.info('Search type is PRODUCT_SEARCH_OPTICAL')
+            logger.info('Search type is PRODUCT_SEARCH_OPTICAL')
             self.mQuerySet = OpticalProduct.objects.all()
         elif self.mSearch.search_type == Search.PRODUCT_SEARCH_RADAR:
-            logging.info('Search type is PRODUCT_SEARCH_RADAR')
+            logger.info('Search type is PRODUCT_SEARCH_RADAR')
             self.mQuerySet = RadarProduct.objects.all()
         elif self.mSearch.search_type == Search.PRODUCT_SEARCH_GEOSPATIAL:
-            logging.info('Search type is PRODUCT_SEARCH_GEOSPATIAL')
+            logger.info('Search type is PRODUCT_SEARCH_GEOSPATIAL')
             self.mQuerySet = GeospatialProduct.objects.all()
         elif self.mSearch.search_type == Search.PRODUCT_SEARCH_IMAGERY:
-            logging.info('Search type is PRODUCT_SEARCH_IMAGERY')
+            logger.info('Search type is PRODUCT_SEARCH_IMAGERY')
             self.mQuerySet = GeospatialProduct.objects.all()
 
         # -----------------------------------------------------
-        logging.info('filtering by search criteria ...')
+        logger.info('filtering by search criteria ...')
         #
         # ABP: new logic is to get directly from the request which kind of
         # product to search on
@@ -207,11 +210,11 @@ mMap.addLayer(mySearchAreaLayer);''' % self.mSearch.geometry.geojson)
                 self.mQuerySet = self.mQuerySet.filter(self.mSensorQuery)
                 self.mMessages.append(
                     'sensors <b>%s</b>' % self.mSearch.sensorsAsString())
-                logging.info(
+                logger.info(
                     'Sensor in use is:' + str(
                         self.mSearch.sensors.values_list('name', flat=True)))
             except Exception, e:
-                logging.error(
+                logger.error(
                     'QuerySet modification failed \n %s' % e.message)
                 # This exception handler was added to prevent crashes here like
                 # this:
@@ -233,7 +236,7 @@ mMap.addLayer(mySearchAreaLayer);''' % self.mSearch.geometry.geojson)
 
         # ABP: paramters for "advanced search" only
         if self.mAdvancedFlag:
-            logging.info('Search is advanced')
+            logger.info('Search is advanced')
             # ABP: adds informations about search_type
             self.mMessages.append('search type <b>%s</b>' % dict(
                 self.mSearch.PRODUCT_SEARCH_TYPES)[self.mSearch.search_type])
@@ -258,7 +261,7 @@ mMap.addLayer(mySearchAreaLayer);''' % self.mSearch.geometry.geojson)
             if self.mSearch.search_type in (
                     Search.PRODUCT_SEARCH_OPTICAL,
                     Search.PRODUCT_SEARCH_RADAR):
-                logging.info('GenericSensorProduct advanced search activated')
+                logger.info('GenericSensorProduct advanced search activated')
                 if self.mSearch.acquisition_mode:
                     self.mMessages.append(
                         'acquisition mode <b>%s</b>' % (
@@ -307,10 +310,10 @@ mMap.addLayer(mySearchAreaLayer);''' % self.mSearch.geometry.geojson)
                         band_count__range=myBandcountRange)
                     self.mQuerySet = self.mQuerySet.filter(
                         self.mSpectralResolutionQuery)
-                logging.info(
+                logger.info(
                     'checking if we should use landsat path / row filtering..')
                 if self.mSearch.k_orbit_path or self.mSearch.j_frame_row:
-                    logging.info('path row filtering is enabled')
+                    logger.info('path row filtering is enabled')
                     # used for scene searches only (landsat only)
                     if self.mSearch.k_orbit_path:
                         self.mKOrbitPathQuery = Q()
@@ -343,13 +346,13 @@ mMap.addLayer(mySearchAreaLayer);''' % self.mSearch.geometry.geojson)
                         self.mQuerySet = self.mQuerySet.filter(
                             self.mJFrameRowQuery)
                 else:
-                    logging.info('path row filtering is DISABLED')
+                    logger.info('path row filtering is DISABLED')
 
             ##
             # radar only
             #
             if self.mSearch.search_type == Search.PRODUCT_SEARCH_RADAR:
-                logging.info('RadarProduct advanced search activated')
+                logger.info('RadarProduct advanced search activated')
                 if self.mSearch.polarising_mode:
                     self.mMessages.append(
                         'polarisation mode <b>%s</b>' % (
@@ -362,7 +365,7 @@ mMap.addLayer(mySearchAreaLayer);''' % self.mSearch.geometry.geojson)
             # optical only
             #
             if self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL:
-                logging.info('OpticalProduct advanced search activated')
+                logger.info('OpticalProduct advanced search activated')
                 if self.mSearch.use_cloud_cover and self.mSearch.cloud_mean:
                     self.mCloudQuery = (
                         Q(cloud_cover__lte=self.mSearch.cloud_mean)
@@ -399,10 +402,10 @@ mMap.addLayer(mySearchAreaLayer);''' % self.mSearch.geometry.geojson)
             # geospatial only
             #
             if self.mSearch.search_type == Search.PRODUCT_SEARCH_GEOSPATIAL:
-                logging.info('GeospatialProduct advanced search activated')
+                logger.info('GeospatialProduct advanced search activated')
 
         else:
-            logging.info('Search is simple (advanced flag is not set)')
+            logger.info('Search is simple (advanced flag is not set)')
 
         self.mSqlString = self.mQuerySet.query
         self.mRecordCount = self.mQuerySet.count()
@@ -434,17 +437,17 @@ mMap.addLayer(mySearchAreaLayer);''' % self.mSearch.geometry.geojson)
         self.mSearchPage = None
         self.mPaginator = None
         self.initQuery()
-        logging.info('Searcher initialised')
+        logger.info('Searcher initialised')
 
     def logResults(self):
-        logging.info('New results: ')
+        logger.info('New results: ')
         for myResult in self.mSearchRecords:
-            logging.info('Result product: ' + str(myResult.product.product_id))
+            logger.info('Result product: ' + str(myResult.product.product_id))
         return
 
     def search(self, thePaginateFlag=True):
         """Performs a search and shows a map of a single search for scenes"""
-        logging.info('search by Scene paginating...')
+        logger.info('search by Scene paginating...')
         # Can also write the query like this:
         # mQuerySet = Localization.objects.filter(sensor=mSearch.sensor)
         # .filter(timeStamp__range=(mSearch.start_date,mSearch.end_date))
@@ -454,7 +457,7 @@ mMap.addLayer(mySearchAreaLayer);''' % self.mSearch.geometry.geojson)
         if thePaginateFlag:
             # only use this next line for serious debugging - its a performance
             # killer
-            # logging.info(
+            # logger.info(
             #    'search by scene pre-paginator count...' + str(
             #        self.mQuerySet.count()))
             # Paginate the results
@@ -466,15 +469,15 @@ mMap.addLayer(mySearchAreaLayer);''' % self.mSearch.geometry.geojson)
             self.mPageNo = int(self.mRequest.GET.get('page', '1'))
         except ValueError:
             self.mPageNo = 1
-        logging.info(
+        logger.info(
             'search by scene using paginator page...' + str(self.mPageNo))
         # If page request (9999) is out of range, deliver last page of results.
         try:
-            logging.info('search by scene - getting page')
+            logger.info('search by scene - getting page')
             self.mSearchPage = self.mPaginator.page(self.mPageNo)
-            logging.info('search by scene - search results paginated')
+            logger.info('search by scene - search results paginated')
         except (EmptyPage, InvalidPage):
-            logging.info(
+            logger.info(
                 'search by scene - paginator page requested is out of range')
             self.mSearchPage = self.mPaginator.page(self.mPaginator.num_pages)
 
@@ -492,15 +495,15 @@ mMap.addLayer(mySearchAreaLayer);''' % self.mSearch.geometry.geojson)
                 # This can be done faster using cascaded union but needs
                 # geos 3.1
                 myUnion = myUnion.union(myObject.spatial_coverage.envelope)
-            logging.info('%s added to myRecords' % myObject.product_id)
+            logger.info('%s added to myRecords' % myObject.product_id)
         if myUnion:
             self.mExtent = str(myUnion.extent)
 
         # -----------------------------------------------------
         # Wrap up now ...
         # -----------------------------------------------------
-        logging.info('search : wrapping up search result presentation')
-        logging.info('extent of search results page...' + str(self.mExtent))
+        logger.info('search : wrapping up search result presentation')
+        logger.info('extent of search results page...' + str(self.mExtent))
         self.logResults()
         return ()
 

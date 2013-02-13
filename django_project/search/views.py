@@ -17,8 +17,11 @@ __version__ = '0.1'
 __date__ = '01/01/2011'
 __copyright__ = 'South African National Space Agency'
 
-# python logging support to django logging middleware
+# python logger support to django logger middleware
 import logging
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 import traceback
 
 # For shopping cart and ajax product id search
@@ -129,8 +132,8 @@ def search(theRequest):
 
     myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
         theRequest)
-    logging.debug(('Post vars:' + str(theRequest.POST)))
-    logging.info('search called')
+    logger.debug(('Post vars:' + str(theRequest.POST)))
+    logger.info('search called')
     if theRequest.method == 'POST':
         myForm = AdvancedSearchForm(theRequest.POST, theRequest.FILES)
         if myForm.is_valid():
@@ -142,7 +145,7 @@ def search(theRequest):
                 theRequest.POST, theRequest.FILES, instance=mySearch,
                 save_as_new=True)
             if myFormset.is_valid():
-                logging.info('formset is VALID')
+                logger.info('formset is VALID')
                 myLatLong = {'longitude': 0, 'latitude': 0}
 
                 if settings.USE_GEOIP:
@@ -167,20 +170,20 @@ def search(theRequest):
                     if myGeometry:
                         mySearch.geometry = myGeometry
                     else:
-                        logging.info(
+                        logger.info(
                             'Failed to set search area from uploaded geometry '
                             'file')
                 except:
-                    logging.error(
+                    logger.error(
                         'Could not get geometry for this request' +
                         traceback.format_exc())
-                    logging.info(
+                    logger.info(
                         'An error occurred trying to set search area from '
                         'uploaded geometry file')
                 #check if aoi_geometry exists
                 myAOIGeometry = myForm.cleaned_data.get('aoi_geometry')
                 if myAOIGeometry:
-                    logging.info('Using AOI geometry, specified by user')
+                    logger.info('Using AOI geometry, specified by user')
                     mySearch.geometry = myAOIGeometry
                 # else use the on-the-fly digitised geometry
                 mySearch.save()
@@ -203,8 +206,8 @@ def search(theRequest):
                             /modelforms/#the-save-method
                 """
                 myForm.save_m2m()
-                logging.debug('Search: ' + str(mySearch))
-                logging.info('form is VALID after editing')
+                logger.debug('Search: ' + str(mySearch))
+                logger.info('form is VALID after editing')
                 myFormset.save()
 
                 return HttpResponseRedirect(
@@ -212,15 +215,15 @@ def search(theRequest):
                         'searchResultMap', kwargs={'theGuid': mySearch.guid})
                 )
             else:
-                logging.info('formset is INVALID')
-                logging.debug('%s' % myFormset.errors)
+                logger.info('formset is INVALID')
+                logger.debug('%s' % myFormset.errors)
         else:
             myFormset = DateRangeInlineFormSet(
                 theRequest.POST, theRequest.FILES, save_as_new=True)
 
-        logging.info('form is INVALID after editing')
-        logging.debug('%s' % myForm.errors)
-        logging.debug('%s' % myFormset.errors)
+        logger.info('form is INVALID after editing')
+        logger.debug('%s' % myForm.errors)
+        logger.debug('%s' % myFormset.errors)
         #render_to_response is done by the renderWithContext decorator
         return render_to_response(
             'search.html', {
@@ -235,7 +238,7 @@ def search(theRequest):
             context_instance=RequestContext(theRequest))
 
     else:
-        logging.info('initial search form being rendered')
+        logger.info('initial search form being rendered')
         myForm = AdvancedSearchForm()
         myFormset = DateRangeInlineFormSet()
         #render_to_response is done by the renderWithContext decorator
@@ -314,7 +317,7 @@ def modifySearch(theRequest, theGuid):
     """
     myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
         theRequest)
-    logging.info('initial search form being rendered')
+    logger.info('initial search form being rendered')
     mySearch = get_object_or_404(Search, guid=theGuid)
     myForm = AdvancedSearchForm(instance=mySearch)
     myFormset = DateRangeInlineFormSet(instance=mySearch)
@@ -351,7 +354,7 @@ def productIdSearch(theRequest, theGuid):
             'productIdSearch is only available for products of type '
             'PRODUCT_SEARCH_OPTICAL')
 
-    logging.info(
+    logger.info(
         'productIdSearch initializing values from existing search %s' % (
             theGuid,))
     mySearcher = Searcher(theRequest, theGuid)
@@ -362,8 +365,8 @@ def productIdSearch(theRequest, theGuid):
         myForm = ProductIdSearchForm(
             theRequest.POST, theRequest.FILES, instance=mySearch)
         if myForm.is_valid():
-            logging.info('productIdSearch form is VALID after editing')
-            logging.info(
+            logger.info('productIdSearch form is VALID after editing')
+            logger.info(
                 'productIdSearch cleaned_data: %s' % myForm.cleaned_data)
             myForm.save()
             # Save new date ranges
@@ -392,7 +395,7 @@ def productIdSearch(theRequest, theGuid):
                 )
 
         else:
-            logging.info('form is INVALID after editing')
+            logger.info('form is INVALID after editing')
             if theRequest.is_ajax():
                 # Sends a 500
                 return HttpResponseServerError(
@@ -406,7 +409,7 @@ def productIdSearch(theRequest, theGuid):
                 context_instance=RequestContext(theRequest))
     else:
         myForm = ProductIdSearchForm(instance=mySearch)
-        logging.info('initial search form being rendered')
+        logger.info('initial search form being rendered')
         myTemplateData['mySearch'] = mySearch
         myTemplateData['myForm'] = myForm
         myTemplateData['theGuid'] = theGuid
@@ -474,7 +477,7 @@ def downloadSearchResult(theRequest, theGuid):
                 'myThumbsFlag': True},
             myFilename)
     else:
-        logging.info(
+        logger.info(
             'Request cannot be proccesed, unsupported download file type')
         raise Http404
 

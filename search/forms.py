@@ -18,6 +18,9 @@ __date__ = '01/01/2011'
 __copyright__ = 'South African National Space Agency'
 
 import logging
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 import datetime
 import time
 
@@ -112,7 +115,7 @@ class DateRangeFormSet(BaseInlineFormSet):
         if not len(self.forms):
             raise forms.ValidationError, 'At least one date range is required.'
         #Next line disabled as it causes a crash
-        #logging.debug('Date range forms:', self.forms)
+        #loggerg.debug('Date range forms:', self.forms)
 
     def is_valid(self):
         """
@@ -327,7 +330,7 @@ class AdvancedSearchForm(forms.ModelForm):
 
     def clean(self):
         myCleanedData = self.cleaned_data
-        logging.info('cleaned data: ' + str(myCleanedData))
+        loggerg.info('cleaned data: ' + str(myCleanedData))
         # ABP: checks for advanced search only (not in cleaned_data because it
         # does not belong to Search model)
         if self.data.get('isAdvanced') == 'true':
