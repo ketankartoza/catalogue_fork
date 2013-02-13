@@ -33,9 +33,9 @@ class Command(BaseCommand):
         make_option(
             '--migrations', metavar="MIGRATION_TYPE", default='all',
             help=(
-                'Selectively migrate parts of the database, semicolon '
-                'delimited list of migrations (new_dicts, userprofiles) '
-                'defaults to "all"')),
+                'Selectively migrate parts of the database, semicolon ";" '
+                'delimited list of migrations (new_dicts, userprofiles,'
+                'search) defaults to "all"')),
     )
 
     def handle(self, *args, **options):
@@ -45,12 +45,16 @@ class Command(BaseCommand):
         if 'all' in myMigrations:
             self.migrate_new_dicts()
             self.migrate_userprofiles()
+            self.migrate_search()
 
-        if 'new_dicts':
+        if 'new_dicts' in myMigrations:
             self.migrate_new_dicts()
 
         if 'userprofiles' in myMigrations:
             self.migrate_userprofiles()
+
+        if 'search' in myMigrations:
+            self.migrate_search()
 
     def migrate_new_dicts(self):
         print '* Starting new_dicts migration...'
@@ -69,3 +73,11 @@ class Command(BaseCommand):
         os.chdir(origWD)
         print '* Checking user permission (might take awhile)...'
         call_command('check_permissions')
+
+    def migrate_search(self):
+        print '* Starting search app migration...'
+        origWD = os.getcwd()
+        os.chdir(os.path.join(origWD, 'sql', 'new_master'))
+        print '* Executing database migration scripts...'
+        subprocess.call(['sh', '003_search_migration.sh', self.db])
+        os.chdir(origWD)
