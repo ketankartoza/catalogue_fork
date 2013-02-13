@@ -19,7 +19,7 @@ Please observe the following coding standards when working on the codebase:
 * **pep257:** `Python documentation guide <http://www.python.org/dev/peps/pep-0257>`_
 * **String literals:** String literals should be enclosed in single quotes :samp:`'foo'` and not
   `"foo"`
-* Line continuation should be done using brackets not slashes e.g.::
+* **Line continuation**  should be done using brackets not slashes e.g.::
 
    myString = ('Very long'
               'string')
@@ -28,6 +28,13 @@ Please observe the following coding standards when working on the codebase:
 
    myString = 'Very long' \
               'string'
+
+* In cases where you need to wrap you should align parameters e.g.::
+
+      myNewReffedPath = os.path.join(
+          myThumbOutputPath,
+          self.product_id + '-reffed.jpg')
+
 
 * Use single blank lines to separate logic in a function e.g::
 
