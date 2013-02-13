@@ -1,6 +1,6 @@
 """
-SANSA-EO Catalogue - search_cloudcover - test correctness of
-    cloud cover search results
+SANSA-EO Catalogue - search_inclinationangle - test correctness of
+    search results for inclinationangle
 
 Contact : lkleyn@sansa.org.za
 
@@ -19,26 +19,25 @@ __date__ = '18/06/2012'
 __copyright__ = 'South African National Space Agency'
 
 from catalogue.tests.test_utils import simpleMessage, SearchTestCase
-from catalogue.views.searcher import Searcher
-from catalogue.models import Search
+from search.searcher import Searcher
+from search.models import Search
 
 
-class SearchCloudCover_Test(SearchTestCase):
+class SearchIncliantionAngle_Test(SearchTestCase):
     """
-    Tests Search Cloud Cover
+    Tests Search Inclination Angle
     """
 
-    def test_CloudCoverSearch(self):
+    def test_InclinationAngleRange(self):
         """
-        Test cloud cover range:
-        - with 10% or less - search 19
-        - with 30% or less - search 20
-        - with 60% or less - search 21
-        - with 100% or less - search 22
+        Test inclination angle range:
+            - 0-90 (positive) (search 10)
+            - -90-0 (negative) (search 11)
+            - -10-10 (normal) (search 12)
         """
-        myTestSearches = [19, 20, 21, 22]
+        myTestSearches = [10, 11, 12]
         #we need to bound results
-        myExpectedResults = [40, 50, 70, 100]
+        myExpectedResults = [(50, 60), (35, 50), (25, 40)]
 
         for idx, searchPK in enumerate(myTestSearches):
             mySearch = Search.objects.get(pk=searchPK)
@@ -52,6 +51,7 @@ class SearchCloudCover_Test(SearchTestCase):
             #create Searcher object
             mySearcher = Searcher(request, mySearch.guid)
             mySearcher.search()
-            assert mySearcher.mQuerySet.count() >= myExpectedResults[idx], \
+            assert mySearcher.mQuerySet.count() >= myExpectedResults[idx][0] and \
+            mySearcher.mQuerySet.count() <= myExpectedResults[idx][1], \
             simpleMessage(mySearcher.mQuerySet.count(), myExpectedResults[idx],
-                message='For search pk %s expected:' % searchPK)
+                message='For search pk %s expected in range:' % searchPK)

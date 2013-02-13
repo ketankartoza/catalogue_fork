@@ -61,7 +61,6 @@ urlpatterns = patterns('',
    # show segment thumb for a segment by #
     # thumbnailpage is called only by itself?
     url(r'^thumbnailpage/(?P<theId>[0-9]+)/$', showThumbPage, name='showThumbPage'),
-    url(r'^senso/$', getSensorDictionaries, name='getSensorDictionaries'),
 
     # returns image mime type - show segment thumb info for a segment
     url(r'^thumbnail/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showThumb, name='showThumb'),

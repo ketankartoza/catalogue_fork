@@ -58,6 +58,7 @@ from search.models import (
     SearchRecord,
 )
 
+
 # in case you need to slice ResultSet (paginate) for display
 def sliceForDisplay(theList, thePageSize=10):
     """
@@ -223,7 +224,7 @@ def searchMonthlyReport(theRequest, theYear, theMonth):
     SELECT name,date_trunc('month',search_date) as date_of_search,
         count(*) as searches
     FROM (SELECT a.name, b.search_date FROM catalogue_worldborders a
-        INNER JOIN catalogue_search b ON
+        INNER JOIN search_search b ON
         st_intersects(a.geometry,b.ip_position) OFFSET 0) ss
     WHERE search_date BETWEEN to_date(%(date)s,'MM-YYYY') AND
         to_date(%(date)s,'MM-YYYY') + interval '1 month'
@@ -263,7 +264,7 @@ def searchMonthlyReportAOI(theRequest, theYear, theMonth):
     myCountryStats = myQuerySet.customSQL("""
     SELECT a.name, date_trunc('month',b.search_date) as date_of_search,
         count(*) as searches
-    FROM catalogue_worldborders a INNER JOIN catalogue_search b
+    FROM catalogue_worldborders a INNER JOIN search_search b
         ON st_intersects(a.geometry,b.geometry)
     WHERE search_date between to_date(%(date)s,'MM-YYYY') AND
         to_date(%(date)s,'MM-YYYY') + interval '1 month'

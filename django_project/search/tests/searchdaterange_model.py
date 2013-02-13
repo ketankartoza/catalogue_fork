@@ -18,11 +18,9 @@ __date__ = '09/07/2012'
 __copyright__ = 'South African National Space Agency'
 
 from datetime import date, datetime
-
 from django.test import TestCase
-
 from catalogue.tests.test_utils import simpleMessage
-from catalogue.models import SearchDateRange
+from search.models import SearchDateRange
 
 
 class SearchDateRangeCRUD_Test(TestCase):

@@ -24,7 +24,7 @@ from django.test import TestCase
 from django.test.client import Client
 
 
-from catalogue.models import Search
+from search.models import Search
 
 
 class ReportsViews_recentSearches_Tests(TestCase):

@@ -27,10 +27,9 @@ from catalogue.forms import (
     DeliveryDetailForm
 )
 
-from catalogue.models import (
-    SearchRecord,
-    Order
-)
+from catalogue.models import Order
+
+from search.models import SearchRecord
 
 
 class OrdersViews_addOrder_Tests(TestCase):

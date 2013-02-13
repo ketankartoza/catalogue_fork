@@ -24,9 +24,10 @@ from django.test.client import Client
 
 from catalogue.models import (
     Order,
-    OrderStatusHistory,
-    SearchRecord
+    OrderStatusHistory
 )
+
+from search.models import SearchRecord
 
 from catalogue.forms import OrderStatusHistoryForm
 

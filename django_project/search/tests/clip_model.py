@@ -17,12 +17,10 @@ __version__ = '0.1'
 __date__ = '09/07/2012'
 __copyright__ = 'South African National Space Agency'
 
-from datetime import datetime
-
 from django.test import TestCase
-
 from catalogue.tests.test_utils import simpleMessage
-from catalogue.models import Clip
+from search.models import Clip
+from datetime import datetime
 
 
 class ClipCRUD_Test(TestCase):

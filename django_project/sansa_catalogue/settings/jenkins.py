@@ -9,7 +9,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432',
         'TEST_NAME': 'sac_unittest_master',
-        }
+    }
 }
 
 INSTALLED_APPS += (
@@ -25,8 +25,9 @@ NOSE_ARGS += (
     # this is needed as we can't use Nose default test discoverer, because we
     # are still using tests customized for Django default test runner
     'catalogue.tests',
-    .tests',
-    'useraccounts.tests'
+    'dictionaries.tests',
+    'useraccounts.tests',
+    'search.tests'
 )
 
 #
@@ -34,8 +35,9 @@ NOSE_ARGS += (
 #
 PROJECT_APPS = (
     'catalogue',
-    ',
+    'dictionaries',
     'useraccounts',
+    'search',
 )
 
 JENKINS_TASKS = (

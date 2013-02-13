@@ -1,7 +1,7 @@
 [
     {
         "pk": 1,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -33,7 +33,7 @@
     },
     {
         "pk": 2,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -72,7 +72,7 @@
     },
     {
         "pk": 3,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -104,7 +104,7 @@
     },
     {
         "pk": 4,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -136,7 +136,7 @@
     },
     {
         "pk": 5,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -166,7 +166,7 @@
     },
     {
         "pk": 6,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -196,7 +196,7 @@
     },
     {
         "pk": 7,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -226,7 +226,7 @@
     },
     {
         "pk": 8,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -256,7 +256,7 @@
     },
     {
         "pk": 9,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -286,7 +286,7 @@
     },
     {
         "pk": 10,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -316,7 +316,7 @@
     },
     {
         "pk": 11,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -346,7 +346,7 @@
     },
     {
         "pk": 12,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -376,7 +376,7 @@
     },
     {
         "pk": 13,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -406,7 +406,7 @@
     },
     {
         "pk": 14,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -436,7 +436,7 @@
     },
     {
         "pk": 15,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -466,7 +466,7 @@
     },
     {
         "pk": 16,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -496,7 +496,7 @@
     },
     {
         "pk": 17,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -526,7 +526,7 @@
     },
     {
         "pk": 18,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -556,7 +556,7 @@
     },
     {
         "pk": 19,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": true,
@@ -586,7 +586,7 @@
     },
     {
         "pk": 20,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": true,
@@ -616,7 +616,7 @@
     },
     {
         "pk": 21,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": true,
@@ -646,7 +646,7 @@
     },
     {
         "pk": 22,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": true,
@@ -676,7 +676,7 @@
     },
     {
         "pk": 23,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -706,7 +706,7 @@
     },
     {
         "pk": 24,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -736,7 +736,7 @@
     },
     {
         "pk": 25,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,
@@ -766,7 +766,7 @@
     },
     {
         "pk": 26,
-        "model": "catalogue.search",
+        "model": "search.search",
         "fields": {
             "record_count": null,
             "use_cloud_cover": false,

@@ -1,6 +1,6 @@
 """
-SANSA-EO Catalogue - search_bandcount - test correctness of
-    search results for band counts
+SANSA-EO Catalogue - search_rowpath - test correctness of
+    cloud cover search results
 
 Contact : lkleyn@sansa.org.za
 
@@ -15,30 +15,30 @@ Contact : lkleyn@sansa.org.za
 
 __author__ = 'dodobasic@gmail.com'
 __version__ = '0.1'
-__date__ = '18/06/2012'
+__date__ = '21/06/2012'
 __copyright__ = 'South African National Space Agency'
 
 from catalogue.tests.test_utils import simpleMessage, SearchTestCase
-from catalogue.views.searcher import Searcher
-from catalogue.models import Search
+from search.searcher import Searcher
+from search.models import Search
 
 
-class SearchBandCount_Test(SearchTestCase):
+class SearchRowPath_Test(SearchTestCase):
     """
-    Tests Search Band Count
+    Tests Search Row/Path
     """
 
-    def test_Search_bandcount(self):
+    def test_RowPathRange(self):
         """
-        Test band count searches:
-        - Panchromatic band count, range 0-2 (search 5)
-        - Truecolor band count, range 3 (search 6)
-        - Multispectral band count, range 4-8 (search 7)
-        - Superspectral band count, range 9-40 (search 8)
-        - Hyperspectral band count, range 41-1000 (search 9)
+        Test row/path searches:
+        - row 319 - search 23
+        - path 144 - search 24
+        - row 412 and path 137 - search 25
+        - row 380-390, 391 and path 144, 100-120 - search 26
         """
-        myTestSearches = [5, 6, 7, 8, 9]
-        myExpectedResults = [8, 10, 15, 1, 1]
+        myTestSearches = [23, 24, 25, 26]
+        #we need to bound results
+        myExpectedResults = [1, 3, 0, 2]
 
         for idx, searchPK in enumerate(myTestSearches):
             mySearch = Search.objects.get(pk=searchPK)
@@ -52,7 +52,6 @@ class SearchBandCount_Test(SearchTestCase):
             #create Searcher object
             mySearcher = Searcher(request, mySearch.guid)
             mySearcher.search()
-
             assert mySearcher.mQuerySet.count() >= myExpectedResults[idx], \
             simpleMessage(mySearcher.mQuerySet.count(), myExpectedResults[idx],
-                message='For search pk %s expected more then:' % searchPK)
+                message='For search pk %s expected:' % searchPK)

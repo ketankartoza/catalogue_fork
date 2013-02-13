@@ -1,6 +1,6 @@
 """
-SANSA-EO Catalogue - search_spatialresolution - test correctness of
-    search results for spatial resolution
+SANSA-EO Catalogue - search_bandcount - test correctness of
+    search results for band counts
 
 Contact : lkleyn@sansa.org.za
 
@@ -15,32 +15,30 @@ Contact : lkleyn@sansa.org.za
 
 __author__ = 'dodobasic@gmail.com'
 __version__ = '0.1'
-__date__ = '26/06/2012'
+__date__ = '18/06/2012'
 __copyright__ = 'South African National Space Agency'
 
 from catalogue.tests.test_utils import simpleMessage, SearchTestCase
-from catalogue.views.searcher import Searcher
-from catalogue.models import Search
+from search.searcher import Searcher
+from search.models import Search
 
 
-class SearchSpatialResolution_Test(SearchTestCase):
+class SearchBandCount_Test(SearchTestCase):
     """
-    Tests Search spatial resolution
+    Tests Search Band Count
     """
 
-    def test_SpatialResolution(self):
+    def test_Search_bandcount(self):
         """
-        Test spatial resolution:
-        -   0 - '<= 1m' (search 13),
-        -   1 - '1m - 2m' (search 14),
-        -   2 - '2m - 6m' (search 15),
-        -   3 - '6m - 20m' (search 16),
-        -   4 - '20m - 35m' (search 17),
-        -   5 - '35m - 60m' (search 18),
+        Test band count searches:
+        - Panchromatic band count, range 0-2 (search 5)
+        - Truecolor band count, range 3 (search 6)
+        - Multispectral band count, range 4-8 (search 7)
+        - Superspectral band count, range 9-40 (search 8)
+        - Hyperspectral band count, range 41-1000 (search 9)
         """
-        myTestSearches = [13, 14, 15, 16, 17, 18]
-        #we need to bound results
-        myExpectedResults = [1, 2, 4, 69, 31, 2]
+        myTestSearches = [5, 6, 7, 8, 9]
+        myExpectedResults = [8, 10, 15, 1, 1]
 
         for idx, searchPK in enumerate(myTestSearches):
             mySearch = Search.objects.get(pk=searchPK)
@@ -54,6 +52,7 @@ class SearchSpatialResolution_Test(SearchTestCase):
             #create Searcher object
             mySearcher = Searcher(request, mySearch.guid)
             mySearcher.search()
+
             assert mySearcher.mQuerySet.count() >= myExpectedResults[idx], \
             simpleMessage(mySearcher.mQuerySet.count(), myExpectedResults[idx],
                 message='For search pk %s expected more then:' % searchPK)

@@ -1,7 +1,7 @@
 [
     {
         "pk": 1,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 1,
             "start_date": "1901-01-01",
@@ -10,7 +10,7 @@
     },
     {
         "pk": 2,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 2,
             "start_date": "2009-01-01",
@@ -19,7 +19,7 @@
     },
     {
         "pk": 3,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 3,
             "start_date": "2011-01-01",
@@ -28,7 +28,7 @@
     },
     {
         "pk": 4,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 4,
             "start_date": "2000-01-01",
@@ -37,7 +37,7 @@
     },
     {
         "pk": 5,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 5,
             "start_date": "1900-01-01",
@@ -46,7 +46,7 @@
     },
     {
         "pk": 6,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 6,
             "start_date": "1900-01-01",
@@ -55,7 +55,7 @@
     },
     {
         "pk": 7,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 7,
             "start_date": "1900-01-01",
@@ -64,7 +64,7 @@
     },
     {
         "pk": 8,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 8,
             "start_date": "1900-01-01",
@@ -73,7 +73,7 @@
     },
     {
         "pk": 9,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 9,
             "start_date": "1900-01-01",
@@ -82,7 +82,7 @@
     },
     {
         "pk": 10,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 10,
             "start_date": "1900-01-01",
@@ -91,7 +91,7 @@
     },
     {
         "pk": 11,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 11,
             "start_date": "1900-01-01",
@@ -100,7 +100,7 @@
     },
     {
         "pk": 12,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 12,
             "start_date": "1900-01-01",
@@ -109,7 +109,7 @@
     },
     {
         "pk": 13,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 13,
             "start_date": "1900-01-01",
@@ -118,7 +118,7 @@
     },
     {
         "pk": 14,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 14,
             "start_date": "1900-01-01",
@@ -127,7 +127,7 @@
     },
     {
         "pk": 15,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 15,
             "start_date": "1900-01-01",
@@ -136,7 +136,7 @@
     },
     {
         "pk": 16,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 16,
             "start_date": "1900-01-01",
@@ -145,7 +145,7 @@
     },
     {
         "pk": 17,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 17,
             "start_date": "1900-01-01",
@@ -154,7 +154,7 @@
     },
     {
         "pk": 18,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 18,
             "start_date": "1900-01-01",
@@ -163,7 +163,7 @@
     },
     {
         "pk": 19,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 19,
             "start_date": "1900-01-01",
@@ -172,7 +172,7 @@
     },
     {
         "pk": 20,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 20,
             "start_date": "1900-01-01",
@@ -181,7 +181,7 @@
     },
     {
         "pk": 21,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 21,
             "start_date": "1900-01-01",
@@ -190,7 +190,7 @@
     },
     {
         "pk": 22,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 22,
             "start_date": "1900-01-01",
@@ -199,7 +199,7 @@
     },
     {
         "pk": 23,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 23,
             "start_date": "1900-01-01",
@@ -208,7 +208,7 @@
     },
     {
         "pk": 24,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 24,
             "start_date": "1900-01-01",
@@ -217,7 +217,7 @@
     },
     {
         "pk": 25,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 25,
             "start_date": "1900-01-01",
@@ -226,7 +226,7 @@
     },
     {
         "pk": 26,
-        "model": "catalogue.searchdaterange",
+        "model": "search.searchdaterange",
         "fields": {
             "search": 26,
             "start_date": "1900-01-01",

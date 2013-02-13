@@ -1,6 +1,6 @@
 """
-SANSA-EO Catalogue - search_rowpath - test correctness of
-    cloud cover search results
+SANSA-EO Catalogue - search_spatialresolution - test correctness of
+    search results for spatial resolution
 
 Contact : lkleyn@sansa.org.za
 
@@ -15,30 +15,32 @@ Contact : lkleyn@sansa.org.za
 
 __author__ = 'dodobasic@gmail.com'
 __version__ = '0.1'
-__date__ = '21/06/2012'
+__date__ = '26/06/2012'
 __copyright__ = 'South African National Space Agency'
 
 from catalogue.tests.test_utils import simpleMessage, SearchTestCase
-from catalogue.views.searcher import Searcher
-from catalogue.models import Search
+from search.searcher import Searcher
+from search.models import Search
 
 
-class SearchRowPath_Test(SearchTestCase):
+class SearchSpatialResolution_Test(SearchTestCase):
     """
-    Tests Search Row/Path
+    Tests Search spatial resolution
     """
 
-    def test_RowPathRange(self):
+    def test_SpatialResolution(self):
         """
-        Test row/path searches:
-        - row 319 - search 23
-        - path 144 - search 24
-        - row 412 and path 137 - search 25
-        - row 380-390, 391 and path 144, 100-120 - search 26
+        Test spatial resolution:
+        -   0 - '<= 1m' (search 13),
+        -   1 - '1m - 2m' (search 14),
+        -   2 - '2m - 6m' (search 15),
+        -   3 - '6m - 20m' (search 16),
+        -   4 - '20m - 35m' (search 17),
+        -   5 - '35m - 60m' (search 18),
         """
-        myTestSearches = [23, 24, 25, 26]
+        myTestSearches = [13, 14, 15, 16, 17, 18]
         #we need to bound results
-        myExpectedResults = [1, 3, 0, 2]
+        myExpectedResults = [1, 2, 4, 69, 31, 2]
 
         for idx, searchPK in enumerate(myTestSearches):
             mySearch = Search.objects.get(pk=searchPK)
@@ -54,4 +56,4 @@ class SearchRowPath_Test(SearchTestCase):
             mySearcher.search()
             assert mySearcher.mQuerySet.count() >= myExpectedResults[idx], \
             simpleMessage(mySearcher.mQuerySet.count(), myExpectedResults[idx],
-                message='For search pk %s expected:' % searchPK)
+                message='For search pk %s expected more then:' % searchPK)
