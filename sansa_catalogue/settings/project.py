@@ -30,11 +30,6 @@ EXTERNAL_SITE_URL = 'http://catalogue.localhost'
 # Url that holds directories of thumbnails...
 THUMBS_ROOT = ABS_PATH('thumbs_out')
 
-# Dir where image rectified thumbs from acs are put - see catalogue/informix.py
-# This var is used by catalogue/models/products.py
-# Note products in that folder are named after their original_product_id
-ACS_THUMBS_ROOT = ('/mnt/cataloguestorage/thumbnail_processing/'
-                   '3_scenes_referenced')
 # And this is the dir that holds imagery
 IMAGERY_ROOT = ABS_PATH('imagery_mastercopies')
 

@@ -53,8 +53,7 @@ from catalogue.models import (
     PlaceType,
     Place,
     Topic,
-    Unit,
-)
+    Unit,)
 
 # for thumb georeferencer
 #from osgeo.gdalconst import *
@@ -210,8 +209,8 @@ def runconcrete(func):
     return wrapper
 
 
-class GenericProduct(
-        node_factory('catalogue.ProductLink', base_model=models.Model)):
+class GenericProduct(node_factory('catalogue.ProductLink',
+                                  base_model=models.Model)):
 
     """
     A generic model (following R-5.1-160 of DIMS system architecture document).
@@ -388,7 +387,7 @@ class GenericProduct(
         logging.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
         logging.info('Media path    :   ' + str(settings.MEDIA_ROOT))
         logging.info('Project root path:' + str(settings.ROOT_PROJECT_FOLDER))
-        myImage = None
+
         if not os.path.isfile(myFileName):
             #file does not exist so show an error icon
             #return HttpResponse("%s not found" % myFileName)
@@ -496,12 +495,12 @@ class GenericProduct(
                 'area')
 
     def dropShadow(
-        theImage,
-        myOffset=(5, 5),
-        theBackground=(49, 89, 125),
-        theShadow=(0, 0, 0, 100),
-        theBorder = 8,
-        theIterations = 5
+            theImage,
+            myOffset=(5, 5),
+            theBackground=(49, 89, 125),
+            theShadow=(0, 0, 0, 100),
+            theBorder = 8,
+            theIterations = 5
     ):
 
         # Create the myBackgrounddrop image -- a box in the theBackground
@@ -574,7 +573,7 @@ class GenericProduct(
             self.product_id + '-reffed.log'), 'w')
         if os.path.exists(myJpgFile) and not theForceFlag:
             return myJpgFile
-        # Get the minima, maxima - used to test if we are on the edge
+            # Get the minima, maxima - used to test if we are on the edge
         myExtents = self.spatial_coverage.extent
         #print "Envelope: %s %s" % (len(myExtents), str(myExtents))
         # There should only be 4 vertices touching the edges of the
@@ -600,14 +599,14 @@ class GenericProduct(
                         myCandidates.append(myCoord)
         except:
             raise
-        # print "Candidates Before: %s %s " % (
+            # print "Candidates Before: %s %s " % (
         #    len(myCandidates), str(myCandidates))
         myCentroid = self.spatial_coverage.centroid
         try:
             myCandidates = sortCandidates(myCandidates, myExtents, myCentroid)
         except:
             raise
-        # print "Candidates After: %s %s " % (
+            # print "Candidates After: %s %s " % (
         #    len(myCandidates), str(myCandidates))
         myTL = myCandidates[0]
         myTR = myCandidates[1]
@@ -824,7 +823,7 @@ class GenericProduct(
         """
         return render_to_string(
             'productTypes/genericProduct.html', {
-            'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
+                'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
 
 
 class ProductLink(
@@ -907,7 +906,7 @@ class GenericImageryProduct(GenericProduct):
         """
         return render_to_string(
             'productTypes/genericImageryProduct.html', {
-            'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
+                'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
 
 
 ###############################################################################
@@ -1130,7 +1129,6 @@ class GenericSensorProduct(GenericImageryProduct):
         myThumbOutputPath = os.path.join(
             settings.THUMBS_ROOT, self.thumbnailDirectory())
 
-
         # Create the imagery destination dir if it does not exist.
         if not os.path.isdir(myImageryOutputPath):
             try:
@@ -1153,20 +1151,22 @@ class GenericSensorProduct(GenericImageryProduct):
 
         # now everything is ready do the actual renaming
         try:
-            myNewReffedPath = os.path.join(myThumbOutputPath,
-                                        self.product_id + '-reffed.jpg')
-            myOldReffedPath = os.path.join(theOldThumbPath,
-                                           theOldId + '-reffed.jpg')
+            myNewReffedPath = os.path.join(
+                myThumbOutputPath,
+                self.product_id + '-reffed.jpg')
+            myOldReffedPath = os.path.join(
+                theOldThumbPath,
+                theOldId + '-reffed.jpg')
 
             myNewJpgPath = os.path.join(myThumbOutputPath,
                                         self.product_id + '.jpg')
             myOldJpgPath = os.path.join(theOldThumbPath,
-                                           theOldId + '.jpg')
+                                        theOldId + '.jpg')
 
             myNewWorldPath = os.path.join(myThumbOutputPath,
                                           self.product_id + '.wld')
             myOldWorldPath = os.path.join(theOldThumbPath,
-                                        theOldId + '.wld')
+                                          theOldId + '.wld')
 
             if os.path.exists(myOldJpgPath):
                 shutil.move(myOldJpgPath, myNewJpgPath)
@@ -1186,7 +1186,6 @@ class GenericSensorProduct(GenericImageryProduct):
             # Now move the imagery if it exists
             if os.path.exists(myOldImageryPath):
                 shutil.move(myOldImageryPath, myNewImageryPath)
-
 
         except:
             logging.debug("Failed to move some or all of the assets")
@@ -1243,7 +1242,7 @@ class GenericSensorProduct(GenericImageryProduct):
         except ObjectDoesNotExist:
             if not force:
                 raise
-            # Create missing pieces of the chain
+                # Create missing pieces of the chain
             mission = Mission.objects.get_or_create(
                 abbreviation=parts[0], defaults={
                     'name': parts[0],
@@ -1262,7 +1261,7 @@ class GenericSensorProduct(GenericImageryProduct):
         except Projection.DoesNotExist:
             if not force:
                 raise
-            # Create Projection
+                # Create Projection
             self.projection = Projection.objects.get_or_create(
                 name=parts[11][:6], defaults={'epsg_code': 0})
 
@@ -1296,7 +1295,7 @@ class GenericSensorProduct(GenericImageryProduct):
         """
         return render_to_string(
             'productTypes/genericSensorProduct.html', {
-            'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
+                'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
 
 ###############################################################################
 
@@ -1373,8 +1372,7 @@ class OpticalProduct(GenericSensorProduct):
             institution_city=self.owner.address2,
             institution_region='',
             institution_postcode=self.owner.post_code,
-            institution_country=self.owner.address3,
-        )
+            institution_country=self.owner.address3,)
         return metadata
 
     def productDirectory(self):
@@ -1399,7 +1397,7 @@ class OpticalProduct(GenericSensorProduct):
 
         return render_to_string(
             'productTypes/opticalProduct.html', {
-            'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
+                'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
 
 
 ###############################################################################
@@ -1476,8 +1474,8 @@ class RadarProduct(GenericSensorProduct):
         """
         return render_to_string(
             'productTypes/radarProduct.html', {
-            'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
-###############################################################################
+                'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
+    ###########################################################################
 
 
 class GeospatialProduct(GenericProduct):
@@ -1547,8 +1545,8 @@ class GeospatialProduct(GenericProduct):
         """
         return render_to_string(
             'productTypes/geospatialProduct.html', {
-            'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
-###############################################################################
+                'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
+    ###########################################################################
 
 
 class OrdinalProduct(GenericProduct):
@@ -1587,8 +1585,8 @@ class OrdinalProduct(GenericProduct):
         """
         return render_to_string(
             'productTypes/ordinalProduct.html', {
-            'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
-###############################################################################
+                'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
+    ###########################################################################
 
 
 class ContinuousProduct(GenericProduct):
@@ -1628,4 +1626,4 @@ class ContinuousProduct(GenericProduct):
         """
         return render_to_string(
             'productTypes/continuousProduct.html', {
-            'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
+                'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
