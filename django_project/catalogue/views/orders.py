@@ -21,6 +21,9 @@ import logging
 import datetime
 import traceback
 
+#other modules
+from shapes.views import ShpResponder
+
 from django.http import (
     Http404,
     HttpResponse,
@@ -46,7 +49,6 @@ from django.contrib.gis.gdal import (
 from catalogue.models import (
     Order,
     OrderStatusHistory,
-    SearchRecord,
     DeliveryDetail,
     OrderStatus,
     TaskingRequest,
@@ -72,9 +74,7 @@ from catalogue.utmzonecalc import utmZoneFromLatLon
 from catalogue.profileRequiredDecorator import requireProfile
 from catalogue.renderDecorator import renderWithContext
 
-#other modules
-from shapes.views import ShpResponder
-
+from search.models import SearchRecord
 ###########################################################
 #
 # Ordering related views

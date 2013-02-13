@@ -47,11 +47,7 @@ from catalogue.models import (
     MissionSensor,
     SensorType
 )
-from catalogue.forms import (
-    AdvancedSearchForm,
-    DateRangeFormSet,
-    ProductIdSearchForm,
-)
+
 
 from catalogue.renderDecorator import renderWithContext
 
@@ -82,6 +78,12 @@ from .models import (
     Search,
     SearchDateRange,
     SearchRecord
+)
+
+from .forms import (
+    AdvancedSearchForm,
+    DateRangeFormSet,
+    ProductIdSearchForm,
 )
 
 
@@ -206,7 +208,8 @@ def search(theRequest):
                 myFormset.save()
 
                 return HttpResponseRedirect(
-                    reverse('searchResultMap', kwargs={'theGuid': mySearch.guid})
+                    reverse(
+                        'searchResultMap', kwargs={'theGuid': mySearch.guid})
                 )
             else:
                 logging.info('formset is INVALID')
@@ -384,7 +387,8 @@ def productIdSearch(theRequest, theGuid):
                     mySearcher.describeQuery()), mimetype='application/json')
             else:
                 return HttpResponseRedirect(
-                    reverse('searchResultMap', kwargs={'theGuid': mySearch.guid})
+                    reverse(
+                        'searchResultMap', kwargs={'theGuid': mySearch.guid})
                 )
 
         else:

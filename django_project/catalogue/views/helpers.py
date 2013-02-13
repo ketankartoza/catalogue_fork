@@ -17,35 +17,36 @@ __version__ = '0.1'
 __date__ = '01/01/2011'
 __copyright__ = 'South African National Space Agency'
 
-import logging
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
-from django.template import RequestContext
-
-from catalogue.models import (Order,
-                              OrderStatusHistory,
-                              OrderNotificationRecipients,
-                              TaskingRequest,
-                              SearchRecord,
-                              )
-
-# for rendering template to email
-from django.template.loader import render_to_string
-# for sending email
-from django.core import mail
-
 # for kmz
 import zipfile
 from cStringIO import StringIO
-
 import os.path
 import re
 from email.MIMEBase import MIMEBase
 
+import logging
+
+from django.template import RequestContext
+# for rendering template to email
+from django.template.loader import render_to_string
+# for sending email
+from django.core import mail
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, SafeMIMEMultipart
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render_to_response, get_object_or_404
+from django.http import HttpResponseRedirect, HttpResponse
+
+from catalogue.models import (
+    Order,
+    OrderStatusHistory,
+    OrderNotificationRecipients,
+    TaskingRequest,
+)
+
+from search.models import SearchRecord
 
 # Read default notification recipients from settings
 CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS = getattr(

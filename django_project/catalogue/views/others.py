@@ -44,10 +44,8 @@ from django.contrib.gis.geos import Point
 # Models and forms for our app
 from catalogue.models import (
     GenericProduct,
-    Search,
     Visit,
     VisitorReport,
-    Clip,
     Mission)
 from catalogue.forms import (
     ClipForm)
@@ -64,6 +62,14 @@ from catalogue.views.helpers import (
     standardLayers,
     isStrategicPartner)
 from catalogue.views.helpers import render_to_kml
+
+from search.models import (
+    Search,
+    # SearchRecord,
+    Clip,
+)
+
+
 #### VIEW FUNCTIONS ####
 
 

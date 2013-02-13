@@ -43,8 +43,6 @@ from django.db.models import Count  # for aggregate queries
 # Models and forms for our app
 from catalogue.models import (
     Visit,
-    Search,
-    SearchRecord,
     Mission,
     MissionSensor,
     TaskingRequest,
@@ -55,6 +53,10 @@ from catalogue.models import (
     AcquisitionMode)
 from catalogue.renderDecorator import renderWithContext
 
+from search.models import (
+    Search,
+    SearchRecord,
+)
 
 # in case you need to slice ResultSet (paginate) for display
 def sliceForDisplay(theList, thePageSize=10):

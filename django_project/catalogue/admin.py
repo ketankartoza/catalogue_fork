@@ -31,7 +31,6 @@ from catalogue.models import (
     Mission,
     MissionSensor,
     SensorType,
-    Search,
     DeliveryMethod,
     AcquisitionMode,
     TaskingRequest,
@@ -54,11 +53,8 @@ from catalogue.models import (
 
 
 #
-# Search and visitors admin
+# Visitors admin
 #
-class SearchAdmin(admin.GeoModelAdmin):
-    list_display = ('search_date', 'user', 'guid', 'search_date')
-    list_filter = ('search_date', 'user', )
 
 
 class VisitAdmin(admin.GeoModelAdmin):
@@ -250,7 +246,6 @@ admin.site.register(
 # End of admin models for new generic product model
 #################################################
 
-admin.site.register(Search, SearchAdmin)
 admin.site.register(Visit, VisitAdmin)
 admin.site.register(OfflineMessage, OfflineMessageAdmin)
 admin.site.register(AllUsersMessage, AllUsersMessageAdmin)

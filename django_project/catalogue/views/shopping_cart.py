@@ -30,7 +30,6 @@ from shapes.views import ShpResponder
 # Models and forms for our app
 from catalogue.renderDecorator import renderWithContext
 from catalogue.models import (
-    SearchRecord,
     GenericProduct)
 
 # Helper classes (render_as_kml, ...)
@@ -40,6 +39,7 @@ from catalogue.views.helpers import (
     downloadHtmlMetadata,
     downloadISOMetadata)
 
+from search.models import SearchRecord
 ###########################################################
 #
 # Shopping cart stuff

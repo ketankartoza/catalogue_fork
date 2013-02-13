@@ -32,9 +32,10 @@ from catalogue.models import (
     RadarProduct,
     OpticalProduct,
     License)
-from catalogue.forms import IntegersCSVIntervalsField
+
+from catalogue.fields import IntegersCSVIntervalsField
 # for using django Q() query defs
-from helpers import standardLayersWithCart
+from catalogue.views.helpers import standardLayersWithCart
 
 # Models and forms for our app
 from .models import (
