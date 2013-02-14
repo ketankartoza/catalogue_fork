@@ -5,7 +5,7 @@
     <div id="search-headings" class="row-fluid gap-top center">
       <div class="btn-group">
         <button class="btn" id="advancedSearch" title="Click here to switch between simple and advanced search modes." onClick="toggleAdvFields();"><span id="search-btn-text">{% if myAdvancedFlag %}Simple Search{% else %}Advanced Search{% endif %}</span></button>
-        <input type="submit" class="btn btn-success" value="Search" class="default" name="_search" title="Click here to execute your search."/>
+        <button onClick="submitSearchForm();" class="btn btn-success" class="default" name="_search" title="Click here to execute your search.">Search</button>
       </div>
     </div>
     <hr>
@@ -97,6 +97,26 @@
         $(this).closest('.control-group').fadeOut('slow');
       });
       $('#search-btn-text').text('Advanced Search');
+    }
+  }
+
+  function submitSearchForm(){
+    check_search_dates();
+    if (datesOk){
+      document.forms["search_form"].submit();
+    } else {
+      alert ("The Start Date is later than the End Date.");
+    }
+  }
+
+  function check_search_dates() {
+    var datesOK;
+    var sd = $("#id_start_datepicker").val();
+    var ed = $("#id_end_datepicker").val();
+    if (sd > ed) {
+      datesOk=false;
+    } else {
+      datesOk=true;
     }
   }
 </script>
