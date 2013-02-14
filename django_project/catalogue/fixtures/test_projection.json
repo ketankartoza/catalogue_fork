@@ -1,0 +1,706 @@
+[
+    {
+        "pk": 89,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "ORBIT",
+            "epsg_code": 0
+        }
+    },
+    {
+        "pk": 86,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "Geographic WGS84",
+            "epsg_code": 4326
+        }
+    },
+    {
+        "pk": 83,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM04N",
+            "epsg_code": 32604
+        }
+    },
+    {
+        "pk": 82,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM08N",
+            "epsg_code": 32608
+        }
+    },
+    {
+        "pk": 14,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM09N",
+            "epsg_code": 32609
+        }
+    },
+    {
+        "pk": 68,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM10N",
+            "epsg_code": 32610
+        }
+    },
+    {
+        "pk": 77,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM11N",
+            "epsg_code": 32611
+        }
+    },
+    {
+        "pk": 61,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM12N",
+            "epsg_code": 32612
+        }
+    },
+    {
+        "pk": 40,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM13N",
+            "epsg_code": 32613
+        }
+    },
+    {
+        "pk": 41,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM14N",
+            "epsg_code": 32614
+        }
+    },
+    {
+        "pk": 31,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM15N",
+            "epsg_code": 32615
+        }
+    },
+    {
+        "pk": 65,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM16N",
+            "epsg_code": 32616
+        }
+    },
+    {
+        "pk": 42,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM17N",
+            "epsg_code": 32617
+        }
+    },
+    {
+        "pk": 70,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM18N",
+            "epsg_code": 32618
+        }
+    },
+    {
+        "pk": 17,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM19N",
+            "epsg_code": 32619
+        }
+    },
+    {
+        "pk": 69,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM20N",
+            "epsg_code": 32620
+        }
+    },
+    {
+        "pk": 22,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM21N",
+            "epsg_code": 32621
+        }
+    },
+    {
+        "pk": 47,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM22N",
+            "epsg_code": 32622
+        }
+    },
+    {
+        "pk": 33,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM23N",
+            "epsg_code": 32623
+        }
+    },
+    {
+        "pk": 46,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM24N",
+            "epsg_code": 32624
+        }
+    },
+    {
+        "pk": 45,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM25N",
+            "epsg_code": 32625
+        }
+    },
+    {
+        "pk": 44,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM26N",
+            "epsg_code": 32626
+        }
+    },
+    {
+        "pk": 11,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM27N",
+            "epsg_code": 32627
+        }
+    },
+    {
+        "pk": 24,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM28N",
+            "epsg_code": 32628
+        }
+    },
+    {
+        "pk": 7,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM29N",
+            "epsg_code": 32629
+        }
+    },
+    {
+        "pk": 16,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM30N",
+            "epsg_code": 32630
+        }
+    },
+    {
+        "pk": 30,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM31N",
+            "epsg_code": 32631
+        }
+    },
+    {
+        "pk": 38,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM32N",
+            "epsg_code": 32632
+        }
+    },
+    {
+        "pk": 23,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM33N",
+            "epsg_code": 32633
+        }
+    },
+    {
+        "pk": 25,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM34N",
+            "epsg_code": 32634
+        }
+    },
+    {
+        "pk": 34,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM35N",
+            "epsg_code": 32635
+        }
+    },
+    {
+        "pk": 35,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM36N",
+            "epsg_code": 32636
+        }
+    },
+    {
+        "pk": 29,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM37N",
+            "epsg_code": 32637
+        }
+    },
+    {
+        "pk": 13,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM38N",
+            "epsg_code": 32638
+        }
+    },
+    {
+        "pk": 55,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM39N",
+            "epsg_code": 32639
+        }
+    },
+    {
+        "pk": 54,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM40N",
+            "epsg_code": 32640
+        }
+    },
+    {
+        "pk": 63,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM41N",
+            "epsg_code": 32641
+        }
+    },
+    {
+        "pk": 67,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM42N",
+            "epsg_code": 32642
+        }
+    },
+    {
+        "pk": 15,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM43N",
+            "epsg_code": 32643
+        }
+    },
+    {
+        "pk": 59,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM44N",
+            "epsg_code": 32644
+        }
+    },
+    {
+        "pk": 73,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM45N",
+            "epsg_code": 32645
+        }
+    },
+    {
+        "pk": 66,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM46N",
+            "epsg_code": 32646
+        }
+    },
+    {
+        "pk": 75,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM47N",
+            "epsg_code": 32647
+        }
+    },
+    {
+        "pk": 57,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM48N",
+            "epsg_code": 32648
+        }
+    },
+    {
+        "pk": 49,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM49N",
+            "epsg_code": 32649
+        }
+    },
+    {
+        "pk": 74,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM50N",
+            "epsg_code": 32650
+        }
+    },
+    {
+        "pk": 78,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM51N",
+            "epsg_code": 32651
+        }
+    },
+    {
+        "pk": 64,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM52N",
+            "epsg_code": 32652
+        }
+    },
+    {
+        "pk": 80,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM53N",
+            "epsg_code": 32653
+        }
+    },
+    {
+        "pk": 39,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM54N",
+            "epsg_code": 32654
+        }
+    },
+    {
+        "pk": 81,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM57N",
+            "epsg_code": 32657
+        }
+    },
+    {
+        "pk": 51,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM17S",
+            "epsg_code": 32717
+        }
+    },
+    {
+        "pk": 50,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM18S",
+            "epsg_code": 32718
+        }
+    },
+    {
+        "pk": 43,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM19S",
+            "epsg_code": 32719
+        }
+    },
+    {
+        "pk": 72,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM20S",
+            "epsg_code": 32720
+        }
+    },
+    {
+        "pk": 79,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM21S",
+            "epsg_code": 32721
+        }
+    },
+    {
+        "pk": 76,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM22S",
+            "epsg_code": 32722
+        }
+    },
+    {
+        "pk": 56,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM23S",
+            "epsg_code": 32723
+        }
+    },
+    {
+        "pk": 20,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM24S",
+            "epsg_code": 32724
+        }
+    },
+    {
+        "pk": 28,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM27S",
+            "epsg_code": 32727
+        }
+    },
+    {
+        "pk": 19,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM28S",
+            "epsg_code": 32728
+        }
+    },
+    {
+        "pk": 21,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM29S",
+            "epsg_code": 32729
+        }
+    },
+    {
+        "pk": 26,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM30S",
+            "epsg_code": 32730
+        }
+    },
+    {
+        "pk": 8,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM31S",
+            "epsg_code": 32731
+        }
+    },
+    {
+        "pk": 5,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM32S",
+            "epsg_code": 32732
+        }
+    },
+    {
+        "pk": 2,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM33S",
+            "epsg_code": 32733
+        }
+    },
+    {
+        "pk": 4,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM34S",
+            "epsg_code": 32734
+        }
+    },
+    {
+        "pk": 6,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM35S",
+            "epsg_code": 32735
+        }
+    },
+    {
+        "pk": 9,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM36S",
+            "epsg_code": 32736
+        }
+    },
+    {
+        "pk": 1,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM37S",
+            "epsg_code": 32737
+        }
+    },
+    {
+        "pk": 3,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM38S",
+            "epsg_code": 32738
+        }
+    },
+    {
+        "pk": 10,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM39S",
+            "epsg_code": 32739
+        }
+    },
+    {
+        "pk": 12,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM40S",
+            "epsg_code": 32740
+        }
+    },
+    {
+        "pk": 48,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM45S",
+            "epsg_code": 32745
+        }
+    },
+    {
+        "pk": 60,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM48S",
+            "epsg_code": 32748
+        }
+    },
+    {
+        "pk": 37,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM49S",
+            "epsg_code": 32749
+        }
+    },
+    {
+        "pk": 36,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM50S",
+            "epsg_code": 32750
+        }
+    },
+    {
+        "pk": 18,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM51S",
+            "epsg_code": 32751
+        }
+    },
+    {
+        "pk": 32,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM52S",
+            "epsg_code": 32752
+        }
+    },
+    {
+        "pk": 53,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM53S",
+            "epsg_code": 32753
+        }
+    },
+    {
+        "pk": 52,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM54S",
+            "epsg_code": 32754
+        }
+    },
+    {
+        "pk": 62,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM55S",
+            "epsg_code": 32755
+        }
+    },
+    {
+        "pk": 85,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM56S",
+            "epsg_code": 32756
+        }
+    },
+    {
+        "pk": 27,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM57S",
+            "epsg_code": 32757
+        }
+    },
+    {
+        "pk": 84,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM58S",
+            "epsg_code": 32758
+        }
+    },
+    {
+        "pk": 71,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM59S",
+            "epsg_code": 32759
+        }
+    },
+    {
+        "pk": 58,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "UTM60S",
+            "epsg_code": 32760
+        }
+    },
+    {
+        "pk": 87,
+        "model": "catalogue.projection",
+        "fields": {
+            "name": "Google Mercator",
+            "epsg_code": 900913
+        }
+    }
+]

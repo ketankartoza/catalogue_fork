@@ -1,0 +1,160 @@
+{% extends "mapbody.html" %}
+{# Original code from Tim's SABIO project and copyright is retained by the original author #}
+{% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
+{% block extrajs %}
+  {{ block.super }}
+  {% block ol_map %}
+  <!-- bring in the OpenStreetMap OpenLayers layers.
+       Using this hosted file will make sure we are kept up
+       to date with any necessary changes -->
+  <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    {# // create global for each search result layer so we can manipulate them later #}
+    var pageLoaded = false; var loadMoreData = null;
+    function init() {
+      if (OpenLayers.Util.getBrowserName() == "msie" && !window.ieLoaded) {
+        window.ieLoaded = true;
+        setTimeout(init, 2000);
+        return;
+      }
+      {% if user.is_staff %}//setupSqlDialog();{% endif %}
+      setupMetadataDialog();
+      {# vars initialised inside a function using var will have local scope #}
+      {# vars initialised inside a function without using var will have global scope #}
+      {# tooltips setup - see http://flowplayer.org/tools/demos/tooltip/index.html #}
+      $("#results img[title]").tooltip('#recordtooltip');
+      {# manage table resizing #}
+      resizeTable(); {# for initial page load #}
+      $(window).resize(function () {# for page resize #}
+      {
+        resizeTable();
+      });
+      //$("#accordion").accordion({ autoHeight: false });
+      {% if myCartFlag %}
+      $("#cart").load("{% url 'showCartContents' %}");
+      {% endif %}
+      setupBaseMap();
+      {% if myShowSearchFeatureInfoFlag %}
+        setupSearchFeatureInfo();
+      {% endif %}
+      {# manage map height but only if there is no results table on the same page #}
+      {% if not myRecords %}
+      //resizeMap();
+      {% endif %}
+      {% if myLayerDefinitions %}
+      //layerdefs
+        {% for myValue in myLayerDefinitions %}
+          {{ myValue|safe }}
+        {% endfor %}
+      {% endif %}
+      {# //layers to show on the map #}
+      {% if myLayersList %}
+        //layers list
+        var myLayersList = {{myLayersList|safe}}
+        // Here we use a predefined layer that will be kept up to date with URL changes
+        layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Open Street Map");
+        //myLayersList.unshift(layerMapnik); // add to start of array
+        myLayersList.push(layerMapnik); // add to end of array
+        mMap.addLayers(myLayersList);
+      {% endif %}
+      {% if myShowCartFlag %}
+      showMiniCart( false );
+      {% endif %}
+      setupMiniIconClickCallback();
+      setupRowClickCallback();
+      {% if myExtent %}
+      var myBounds = new OpenLayers.Bounds{{myExtent}}; //calculated from search page results
+      mMap.zoomToExtent( transformBounds( myBounds ));
+      {% else %}
+      mMap.zoomToExtent( transformBounds(new OpenLayers.Bounds(14.0,-35.0,34.0,-21.0)));  //sa
+      {% endif %}
+      pageLoaded = true;
+      if (loadMoreData) {
+        loadMoreData();
+        loadMoreData = null;
+      }
+      $("#map-container").mapResizer({'map':mMap});{# //activate mapresizer widget #}
+      $("#map-navigation-panel div[title],#resizer_toolbox img[title]").tooltip('#maptooltip');
+    } {# //end init #}
+    {# // make OL compute scale according to WMS spec #}
+    OpenLayers.DOTS_PER_INCH = 25.4 / 0.28;
+  /* ]]> */
+  </script>
+  {% endblock %}
+{% endblock %}
+{% block body_load %}onload="init()";{% endblock %}
+
+{% block table %}
+    {% include "page.html" %}
+{% endblock %}
+
+{% block cart %}
+  {% if myShowCartFlag %}
+    <h3 id="cart-accordion-h3"><a href="#"><img src="/media/images/buy_16.png" alt="" />&nbsp;Your Basket</a></h3>
+    <div id="cart-accordion-div">
+      <div>Click the basket icon to add an image to your collection.</div>
+      <div id="cart"></div>
+      <div class="center">
+        <a href="{% url 'addOrder' %}" onclick='addOrderClicked(); return false;'>{# return false to prevent invoking link #}
+          <img src="/media/images/letter_16.png" alt="" /> Order Now!
+        </a>
+        <div style="display: none;" id="cart-empty-dialog" title="SAC Catalogue"><b>Your cart is empty.</b> Please add some items to your cart first!</div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block preview %}
+  {% if myShowPreviewFlag %}
+    <h3 id="preview-accordion-h3"><a href="#"><img src="/media/images/picture_16.png" alt="" />&nbsp;Preview</a></h3>
+    <div id="preview-accordion-div">Click the thumbnail images to see a larger preview here.</div>
+  {% endif %}
+{% endblock %}
+
+{% block search %}
+  {% if mySearchFlag %}
+    <h3 id="search-summary-accordion-h3"><a href="#"><img src="/media/images/search_16.png" alt="" />&nbsp;Search Summary</a></h3>
+    <div id="search-summary-accordion-div">
+      {% if myMessages %}<div id="search-messages">
+        <b>{{ myPaginator.count }}</b> record found for
+        {% for myValue in myMessages %}
+          {{ myValue|safe }}{% if not forloop.last %},{% else %}.{% endif %}<br/>
+        {% endfor %}
+        <div><b>Note:</b>The SPOT Imagery provided in this backdrop has been degraded to 10m</div>
+      </div>{% endif %}
+      {% if myRecords %}
+      <div id="cart-download-div" style="text-align: center;">
+        <span class="loud"><img src="/media/images/down_16.png" alt=""/>Download search as:</span></br/>
+        <button class="btn" onclick='location="{% url 'downloadSearchResult' mySearchGuid %}?shp"'>SHP</button>
+        <button class="btn" onclick='location="{% url 'downloadSearchResult' mySearchGuid %}?kml"'>KML</button>
+        <button class="btn" onclick='location="{% url 'downloadSearchResult' mySearchGuid %}?kmz"'>KMZ</button>
+        <button class="btn" onclick='location="{% url 'downloadSearchResultMetadata' mySearchGuid %}"'>XML</button>
+        <button class="btn" onclick='location="{% url 'downloadSearchResultMetadata' mySearchGuid %}?html"'>HTML</button>
+      </div>
+      {% endif %}
+      <br />
+    <div class="center">
+      <button class="btn" onclick='location="{% url 'modifySearch' mySearchGuid %}"' title="Returns to the main search page (works on a copy of the current search)">Modify this search</button>
+    </div>
+  <div>
+  </div>
+          {#% if user.is_staff %}<div id="sql" style="display: none;">{{ mySqlString }}</div><input type="button" class="btn" id="sql-button" value="Show SQL" />{% endif %#}
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block messages %}
+  {% if myMessagesFlag %}
+    {{ myMessagesHeading|safe }}
+    <div>
+        {% if myMessages %}
+          {% for myValue in myMessages %}
+            {{ myValue|safe }}<br/>
+          {% endfor %}
+        {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}
+

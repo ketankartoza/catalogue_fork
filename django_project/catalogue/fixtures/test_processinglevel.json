@@ -1,0 +1,1146 @@
+[
+    {
+        "pk": 19,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L0",
+            "name": "Data products are unprocessed telemetry data as received from the observing platform excluding communication artifacts introduced by ground system.(Source www.ngdc.noaa.gov)"
+        }
+    },
+    {
+        "pk": 20,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L1A",
+            "name": "Data products are telemetry data that have been extracted but not decommutated from level 0 and formatted into time-sequenced datasets for easier processing. Level 1a formats are NOAA's internal formats and are only used for NOAA processing. They only exi"
+        }
+    },
+    {
+        "pk": 21,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L1B",
+            "name": "Data products are discrete, instrument-specific datasets derived from level 1a containing unprocessed data at full resolution, time-referenced, and annotated with ancillary information including data quality indicators, calibration coefficients and georef"
+        }
+    },
+    {
+        "pk": 22,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L2",
+            "name": "Data products are derived geophysical variables at the same resolution and locations as the level 1 source data. (Source www.ngdc.noaa.gov)"
+        }
+    },
+    {
+        "pk": 23,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3",
+            "name": "Data products are mapped on uniform space-time grid scales, usually with some completeness and consistency. (Source www.ngdc.noaa.gov)"
+        }
+    },
+    {
+        "pk": 24,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4A",
+            "name": "Data products are model output or results from analysis of lower level data e.g.variables derived from multiple measurements. (Source www.ngdc.noaa.gov)"
+        }
+    },
+    {
+        "pk": 25,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L1Aa",
+            "name": "Single Look Complex Image. This is pre-processed but retains the data in complex (i.e. phase-preserving) form. The product is single-look (no speckle reduction) and in slant range. Full frame (SLCI) format. (Source Eurimage)"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "2A",
+            "name": "Level 2A"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "1A",
+            "name": "Level 1A"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "1Ab",
+            "name": "Level 1Ab"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "1Aa",
+            "name": "Level 1Aa"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "3Aa",
+            "name": "Level 3Aa"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "3Ab",
+            "name": "Level 3Ab"
+        }
+    },
+    {
+        "pk": 14,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "3Ac",
+            "name": "Level 3Ac"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "3Ad",
+            "name": "Level 3Ad"
+        }
+    },
+    {
+        "pk": 16,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "3Ba",
+            "name": "Level 3Ba"
+        }
+    },
+    {
+        "pk": 17,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "3Bb",
+            "name": "Level 3Bb"
+        }
+    },
+    {
+        "pk": 18,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "4",
+            "name": "Level 4"
+        }
+    },
+    {
+        "pk": 26,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L1Ab",
+            "name": "Single Look Complex Image. This is pre-processed but retains the data in complex (i.e. phase-preserving) form. The product is single-look (no speckle reduction) and in slant range. Quarter frame (SLCn) (Source Eurimage)"
+        }
+    },
+    {
+        "pk": 27,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L2A",
+            "name": "Precision Image (PRI). This is the standard product for most imaging-radar applications. It is the first product from which radar backscatter can be derived for geophysical modelling. No correction is applied for terrain-induced radiometric effects, the i"
+        }
+    },
+    {
+        "pk": 28,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L2B",
+            "name": "Ellipsoid Geocoded Image (GEC). This high level product precisely locates and rectifies the SAR image on a map projection. Radar backscatter can be derived for geophysical modelling. The scene measures 100 x 100 km and is rotated according to the map grid"
+        }
+    },
+    {
+        "pk": 29,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3A",
+            "name": "Orthorectified Image (ORTHO). This high level product precisely locates and rectifies the SAR image on a map projection. Radar backscatter can be derived for geophysical modelling. The scene measures 100 x 100 km and is rotated according to the map grid. "
+        }
+    },
+    {
+        "pk": 30,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4Ad",
+            "name": "Digital Surface Model (DSM). This is a interferrometrically derived Digital Surface Model."
+        }
+    },
+    {
+        "pk": 31,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L0A",
+            "name": "Raw Computer Compatible Format. This is the raw format of data with no callibration parameters or definitive orbit information imbedded used to exchange data between ground receiving stations."
+        }
+    },
+    {
+        "pk": 32,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L0Ra",
+            "name": "Imagery provided in acquisition strips with no Radiometric or Geometric corrections applied but containing Ancillary data to do the corrections. This is the archive processing level used by the USGS"
+        }
+    },
+    {
+        "pk": 33,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L0Rp",
+            "name": "Imagery provided in WRS scenes with no Radiometric or Geometric corrections applied but containing Ancillary data to do the corrections. This is the processing level used to exchange data to institutions that have a Landsat Product Generation System"
+        }
+    },
+    {
+        "pk": 34,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L2Aa",
+            "name": "Systematic Radio- and Geo-metric corrections applied. With poor positional accuracy due to the use of Predictive Ephemeris data and imagery orbit orientated."
+        }
+    },
+    {
+        "pk": 35,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L2Ab",
+            "name": "Systematic Radio- and Geo-metric corrections applied. With poor positional accuracy due to the use of Predictive Ephemeris data and imagery North Up / Map orientated."
+        }
+    },
+    {
+        "pk": 36,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L2Ba",
+            "name": "Systematic Radio- and Geo-metric corrections applied. With good positional accuracy due to the use of Definitive Ephemeris data and imagery orbit orientated."
+        }
+    },
+    {
+        "pk": 37,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L2Bb",
+            "name": "Systematic Radio- and Geo-metric corrections applied. With poor good positional accuracy due to the use of Definitive Ephemeris data and imagery North Up / Map orientated."
+        }
+    },
+    {
+        "pk": 38,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3Aa",
+            "name": "Orthorectified imagery in 8Bit Digital Number (DN) values"
+        }
+    },
+    {
+        "pk": 39,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3Ab",
+            "name": "Orthorectified imagery in signed 16Bit values converted to Top of Atmosphere / At Sensor Reflectance scaled to 10 000"
+        }
+    },
+    {
+        "pk": 40,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3Ac",
+            "name": "Orthorectified imagery in signed 16Bit values converted to Top of Canopy / At Surface Reflectance scaled to 10 000 (this data is atmospherically corrected)"
+        }
+    },
+    {
+        "pk": 41,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3At",
+            "name": "Orthorectified imagery in signed 16Bit values converted to Top of Atmosphere / At Sensor Reflectance scaled to 10 000 and radiometrically corrected for terrain  (shadow and sunny slopes) applying a topographic normalisation / solar correction"
+        }
+    },
+    {
+        "pk": 42,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4Aa",
+            "name": "Thematic continuous ancillary data of relevance to an image"
+        }
+    },
+    {
+        "pk": 43,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4Ab",
+            "name": "Thematic continuous image derivatives consisting of Bare or build-up indices"
+        }
+    },
+    {
+        "pk": 44,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4Am",
+            "name": "Thematic continuous image derivatives consisting of Mathematical Transformations"
+        }
+    },
+    {
+        "pk": 45,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4As",
+            "name": "Thematic continuous image derivatives consisting of Statistical calculations"
+        }
+    },
+    {
+        "pk": 46,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4At",
+            "name": "Thematic continuous image derivatives consisting of Texture Parameters"
+        }
+    },
+    {
+        "pk": 47,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4Av",
+            "name": "Thematic continuous image derivatives consisting of Vegetation Indices"
+        }
+    },
+    {
+        "pk": 48,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4Aw",
+            "name": "Thematic continuous image derivatives consisting of Water and Moisture Indices"
+        }
+    },
+    {
+        "pk": 49,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4Ax",
+            "name": "Thematic continuous image derivatives consisting of Time-Series or Metrics"
+        }
+    },
+    {
+        "pk": 50,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4Af",
+            "name": "Thematic continuous image derivatives consisting of Spectral Rule Based Features including indices used for a Spectral Rule Based Classification"
+        }
+    },
+    {
+        "pk": 51,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4Br",
+            "name": "Thematic ordinal image derivatives as raster layer consisting of L1 Spectral Rule Based Layers used in a classification"
+        }
+    },
+    {
+        "pk": 52,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4Bc",
+            "name": "Thematic ordinal image derivatives as raster layer consisting of L2 Spectral Rule Based Layers used in a classification"
+        }
+    },
+    {
+        "pk": 53,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4B",
+            "name": "Thematic ordinal image derivatives as raster layer representing classes"
+        }
+    },
+    {
+        "pk": 54,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L4C",
+            "name": "Thematic ordinal image derivatives as vector layer representing classes"
+        }
+    },
+    {
+        "pk": 55,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3Ad",
+            "name": "Orthorectified imagery in 8Bit Digital Number (DN) values. This is a three band true colour product with a reconstructed blue and green band."
+        }
+    },
+    {
+        "pk": 56,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3Ba",
+            "name": "Mosaic of orthorectified images"
+        }
+    },
+    {
+        "pk": 57,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3Bb",
+            "name": "Mosaic of orthorectified images in \u00bc degree tiles"
+        }
+    },
+    {
+        "pk": 58,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L1P",
+            "name": "Ideal system corrected data in Orbit segment"
+        }
+    },
+    {
+        "pk": 59,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3DS",
+            "name": "Daily Synthesis in Geographic Zone"
+        }
+    },
+    {
+        "pk": 60,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3PS",
+            "name": "Period synthesis in Geographic Zone"
+        }
+    },
+    {
+        "pk": 61,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3P4",
+            "name": "Degraded resolution 4km in Geographical Zone"
+        }
+    },
+    {
+        "pk": 62,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3P8",
+            "name": "Degraded resolution 4km in Geographical Zone"
+        }
+    },
+    {
+        "pk": 63,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L2Bc",
+            "name": "Geocoded Ellipsoid Corrected. Since the ellipsoid correction does not use height information from a Digital Elevation Model (DEM) for geometric correction, the pixel location accuracy varies depending on the local Terrain. Radiometrically Enhanced is opti"
+        }
+    },
+    {
+        "pk": 64,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L2Bd",
+            "name": "Geocoded Ellipsoid Corrected. Since the ellipsoid correction does not use height information from a Digital Elevation Model (DEM) for geometric correction, the pixel location accuracy varies depending on the local Terrain. Radiometrically Enhanced is opti"
+        }
+    },
+    {
+        "pk": 65,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3Ae",
+            "name": "Orthorectified Image with a highly accurate DEM,  Spatially Enhanced with the highest possible square ground resolution"
+        }
+    },
+    {
+        "pk": 66,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3Af",
+            "name": "Orthorectified Image with a highly accurate DEM, Spatially Enhanced with the highest possible square ground resolution, Radiometrically Corrected"
+        }
+    },
+    {
+        "pk": 67,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3Ag",
+            "name": "Orthorectified Image with a highly accurate DEM, Radiometrically Enhanced is optimized with respect to radiometry to the detriment of resolution"
+        }
+    },
+    {
+        "pk": 68,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3Ah",
+            "name": "Orthorectified Image with a highly accurate DEM, Radiometrically Enhanced is optimized with respect to radiometry to the detriment of resolution, Radiometrically Normalised"
+        }
+    },
+    {
+        "pk": 69,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L2Ac",
+            "name": "ScanSAR Narrow beam product"
+        }
+    },
+    {
+        "pk": 70,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L2Ad",
+            "name": "ScanSAR Wide"
+        }
+    },
+    {
+        "pk": 71,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L1Ba",
+            "name": "L1B AMSU-A radiances"
+        }
+    },
+    {
+        "pk": 72,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L1Bb",
+            "name": "L1B HSB radiances"
+        }
+    },
+    {
+        "pk": 73,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L1Bc",
+            "name": "L1B AIRS radiances"
+        }
+    },
+    {
+        "pk": 74,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L1Bd",
+            "name": "L1B VIS radiances"
+        }
+    },
+    {
+        "pk": 75,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L1Be",
+            "name": "L1B AIRS QA"
+        }
+    },
+    {
+        "pk": 76,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L1Bf",
+            "name": "L1B VIS QA"
+        }
+    },
+    {
+        "pk": 77,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3A8",
+            "name": "L3 8-day standard product. AIRS Level 3 products are a direct representation of the lower level datasets; the underlying geophysical values are retained in Level 3. In addition, counts and standard deviations are carried forth in the AIRS Level 3 products"
+        }
+    },
+    {
+        "pk": 78,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "L3Am",
+            "name": "L3 monthly standard product. AIRS Level 3 products are a direct representation of the lower level datasets; the underlying geophysical values are retained in Level 3. In addition, counts and standard deviations are carried forth in the AIRS Level 3 produc"
+        }
+    },
+    {
+        "pk": 79,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "09A1",
+            "name": "Surface Reflectance Bands 1\u20137 Tile 500m 8 Day composite"
+        }
+    },
+    {
+        "pk": 80,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "09CM",
+            "name": "Surface Reflectance Bands 1\u20137 CMG 5600m Daily"
+        }
+    },
+    {
+        "pk": 81,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "09GA",
+            "name": "Surface Reflectance Bands 1\u20137 Tile 500/1000m Daily"
+        }
+    },
+    {
+        "pk": 82,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "09GQ",
+            "name": "Surface Reflectance Bands 1\u20132 Tile 250m Daily"
+        }
+    },
+    {
+        "pk": 83,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "09Q1",
+            "name": "Surface Reflectance Bands 1\u20132 Tile 250m 8 Day"
+        }
+    },
+    {
+        "pk": 84,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "11L2",
+            "name": "Land Surface Temperature & Emissivity Swath 1000m 5 Min"
+        }
+    },
+    {
+        "pk": 85,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "11A1",
+            "name": "Land Surface Temperature & Emissivity Tile 1000m Daily"
+        }
+    },
+    {
+        "pk": 86,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "11A2",
+            "name": "Land Surface Temperature & Emissivity Tile 1000m 8 Day"
+        }
+    },
+    {
+        "pk": 87,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "11B1",
+            "name": "Land Surface Temperature & Emissivity Tile 6000m Daily"
+        }
+    },
+    {
+        "pk": 88,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "11C1",
+            "name": "Land Surface Temperature & Emissivity CMG 5600m Daily"
+        }
+    },
+    {
+        "pk": 89,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "11C2",
+            "name": "Land Surface Temperature & Emissivity CMG 5600m 8 Day"
+        }
+    },
+    {
+        "pk": 90,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "11C3",
+            "name": "Land Surface Temperature & Emissivity CMG 5600m Monthly"
+        }
+    },
+    {
+        "pk": 91,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "13A1",
+            "name": "Vegetation Indices Tile 500m 16 Day"
+        }
+    },
+    {
+        "pk": 92,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "13A2",
+            "name": "Vegetation Indices Tile 1000m 16 Day"
+        }
+    },
+    {
+        "pk": 93,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "13A3",
+            "name": "Vegetation Indices Tile 1000m Monthly"
+        }
+    },
+    {
+        "pk": 94,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "13C1",
+            "name": "Vegetation Indices CMG 5600 m16 Day"
+        }
+    },
+    {
+        "pk": 95,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "13C2",
+            "name": "Vegetation Indices CMG 5600m Monthly"
+        }
+    },
+    {
+        "pk": 96,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "13Q1",
+            "name": "Vegetation Indices Tile 250m 16 Day"
+        }
+    },
+    {
+        "pk": 97,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "14",
+            "name": "Thermal Anomalies & Fire Swath 1000m 5 Min"
+        }
+    },
+    {
+        "pk": 98,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "14A1",
+            "name": "Thermal Anomalies & Fire Tile 1000m Daily"
+        }
+    },
+    {
+        "pk": 99,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "14A2",
+            "name": "Thermal Anomalies & Fire Tile 1000m 8 Day"
+        }
+    },
+    {
+        "pk": 100,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "15A2",
+            "name": "Leaf Area Index \u2013 FPAR Tile 1000m 8 Day"
+        }
+    },
+    {
+        "pk": 101,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "17A2",
+            "name": "Gross Primary Productivity Tile 1000m 8 Day"
+        }
+    },
+    {
+        "pk": 102,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "206V",
+            "name": "Decorrelation stretch -VNIR"
+        }
+    },
+    {
+        "pk": 103,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "206S",
+            "name": "Decorrelation stretch -SWIR"
+        }
+    },
+    {
+        "pk": 104,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "206T",
+            "name": "Decorrelation stretch -TIR"
+        }
+    },
+    {
+        "pk": 105,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "204",
+            "name": "Brightness temperature"
+        }
+    },
+    {
+        "pk": 106,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "207",
+            "name": "Surface reflectance VNIR,SWIR"
+        }
+    },
+    {
+        "pk": 107,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "209",
+            "name": "Surface radiance -VNIR, SWIR"
+        }
+    },
+    {
+        "pk": 108,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "209T",
+            "name": "Surface radiance -TIR"
+        }
+    },
+    {
+        "pk": 109,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "205",
+            "name": "Surface emissivity"
+        }
+    },
+    {
+        "pk": 110,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "208",
+            "name": "Surface kinetic temperature"
+        }
+    },
+    {
+        "pk": 111,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "1CAL",
+            "name": "L1A Calibration Experiment Data"
+        }
+    },
+    {
+        "pk": 112,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "1NAV",
+            "name": "L1A Raw Orbit Navigation Data"
+        }
+    },
+    {
+        "pk": 113,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "1ENG",
+            "name": "L1A Engineering Data"
+        }
+    },
+    {
+        "pk": 114,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "1OBC",
+            "name": "L1A On-Board Calibrator Data"
+        }
+    },
+    {
+        "pk": 115,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "1MTR",
+            "name": "L1A Motor Currents"
+        }
+    },
+    {
+        "pk": 116,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "1SCI",
+            "name": "L1A Instrument Data Numbers"
+        }
+    },
+    {
+        "pk": 117,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "1RP",
+            "name": "L1B1 Radiances"
+        }
+    },
+    {
+        "pk": 118,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "2ELL",
+            "name": "L1B2 Ellipsoid-Projected Radiances"
+        }
+    },
+    {
+        "pk": 119,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "RCCM",
+            "name": "L2 Camera-by-Camera Cloud Mask"
+        }
+    },
+    {
+        "pk": 120,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "ALBD",
+            "name": "L2 Cloud Albedos"
+        }
+    },
+    {
+        "pk": 121,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "CCLS",
+            "name": "L2 Cloud Classifiers"
+        }
+    },
+    {
+        "pk": 122,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "STER",
+            "name": "L2 Stereo Heights/Winds"
+        }
+    },
+    {
+        "pk": 123,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "LAND",
+            "name": "L2 Land Surface Retrievals"
+        }
+    },
+    {
+        "pk": 124,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "ARSL",
+            "name": "L2 Aerosol Retrievals"
+        }
+    },
+    {
+        "pk": 125,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "4CMV",
+            "name": "L3 Cloud Motion Vector Product"
+        }
+    },
+    {
+        "pk": 126,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "CfbA",
+            "name": "L3 Cloud Fraction by Altitude Product"
+        }
+    },
+    {
+        "pk": 127,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "CGLS",
+            "name": "L3 Component Global Land/Surface Product"
+        }
+    },
+    {
+        "pk": 128,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "CGAS",
+            "name": "L3 Component Global Aerosol Product"
+        }
+    },
+    {
+        "pk": 129,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "CGCL",
+            "name": "L3 Component Gloabl Cloud Product"
+        }
+    },
+    {
+        "pk": 130,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "CGAL",
+            "name": "L3 Component Global Albedo Product"
+        }
+    },
+    {
+        "pk": 131,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "CGGR",
+            "name": "L3 Component Global Georectified Product"
+        }
+    },
+    {
+        "pk": 132,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "12C1",
+            "name": "Land Cover Type CMG 5600m Yearly"
+        }
+    },
+    {
+        "pk": 133,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "12Q1",
+            "name": "Land Cover Type Tile 1000m Yearly"
+        }
+    },
+    {
+        "pk": 134,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "12Q2",
+            "name": "Land Cover Dynamics Tile 1000m Yearly"
+        }
+    },
+    {
+        "pk": 135,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "44B",
+            "name": "Vegetation Continious Fields Tile 500m Yearly"
+        }
+    },
+    {
+        "pk": 136,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "44W",
+            "name": "Land Water Mask Derived Tile 250m"
+        }
+    },
+    {
+        "pk": 137,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "45A1",
+            "name": "Burned Area Tile 500m"
+        }
+    },
+    {
+        "pk": 138,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "43A1",
+            "name": "BRDF-Albedo Model Parameters Tile 500m 16 Day"
+        }
+    },
+    {
+        "pk": 139,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "43A2",
+            "name": "BRDF-Albedo Quality Tile 500m 16 Day"
+        }
+    },
+    {
+        "pk": 140,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "43A3",
+            "name": "Albedo Tile 500m 16 Day"
+        }
+    },
+    {
+        "pk": 141,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "43A4",
+            "name": "Nadir BRDF-Adjusted Reflectance Tile 500m 16 Day"
+        }
+    },
+    {
+        "pk": 142,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "43B1",
+            "name": "BRDF-Albedo Model Parameters Tile 1000m 16 Day"
+        }
+    },
+    {
+        "pk": 143,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "43B2",
+            "name": "BRDF-Albedo Quality Tile 1000m 16 Day"
+        }
+    },
+    {
+        "pk": 144,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "43B3",
+            "name": "Albedo Tile 1000m 16 Day"
+        }
+    },
+    {
+        "pk": 145,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "43B4",
+            "name": "Nadir BRDF-Adjusted Reflectance Tile 1000m 16 Day"
+        }
+    },
+    {
+        "pk": 146,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "43C1",
+            "name": "BRDF-Albedo Model Parameters CMG 5600m 16 Day"
+        }
+    },
+    {
+        "pk": 147,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "43C2",
+            "name": "BRDF-Albedo Snow-free Quality CMG 5600m 16 Day"
+        }
+    },
+    {
+        "pk": 148,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "43C3",
+            "name": "Albedo CMG 5600m 16 Day"
+        }
+    },
+    {
+        "pk": 149,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "43C4",
+            "name": "Nadir BRDF-Adjusted Reflectance CMG 5600m 16 Day"
+        }
+    },
+    {
+        "pk": 152,
+        "model": "catalogue.processinglevel",
+        "fields": {
+            "abbreviation": "1B",
+            "name": "Level 1B"
+        }
+    }
+]

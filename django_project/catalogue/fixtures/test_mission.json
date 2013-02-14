@@ -1,0 +1,541 @@
+[
+    {
+        "pk": 1,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "N14",
+            "owner": "NOAA",
+            "mission_group": 1,
+            "name": "National Oceanic and Atmospheric Administration Satellite 14",
+            "operator_abbreviation": "NOAA-14"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "N16",
+            "owner": "NOAA",
+            "mission_group": 1,
+            "name": "National Oceanic and Atmospheric Administration Satellite 16",
+            "operator_abbreviation": "NOAA-16"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "N11",
+            "owner": "NOAA",
+            "mission_group": 1,
+            "name": "National Oceanic and Atmospheric Administration Satellite 11",
+            "operator_abbreviation": "NOAA-11"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "N9",
+            "owner": "NOAA",
+            "mission_group": 1,
+            "name": "National Oceanic and Atmospheric Administration Satellite 9",
+            "operator_abbreviation": "NOAA-9"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "N17",
+            "owner": "NOAA",
+            "mission_group": 1,
+            "name": "National Oceanic and Atmospheric Administration Satellite 17",
+            "operator_abbreviation": "NOAA-17"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "N12",
+            "owner": "NOAA",
+            "mission_group": 1,
+            "name": "National Oceanic and Atmospheric Administration Satellite 12",
+            "operator_abbreviation": "NOAA-12"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "N15",
+            "owner": "NOAA",
+            "mission_group": 1,
+            "name": "National Oceanic and Atmospheric Administration Satellite 15",
+            "operator_abbreviation": "NOAA-15"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "E2",
+            "owner": "ESA",
+            "mission_group": 1,
+            "name": "European Remote-Sensing Satellite-2",
+            "operator_abbreviation": "ERS-2"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "E1",
+            "owner": "ESA",
+            "mission_group": 1,
+            "name": "European Remote-Sensing Satellite-1",
+            "operator_abbreviation": "ERS-1"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "L5",
+            "owner": "NASA, USGS",
+            "mission_group": 1,
+            "name": "Landsat 5",
+            "operator_abbreviation": "LS-5"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "L7",
+            "owner": "NASA, USGS",
+            "mission_group": 1,
+            "name": "Landsat 7",
+            "operator_abbreviation": "LS-7"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "L2",
+            "owner": "NASA",
+            "mission_group": 1,
+            "name": "Landsat 2",
+            "operator_abbreviation": "LS-2"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "L3",
+            "owner": "NASA",
+            "mission_group": 1,
+            "name": "Landsat 3",
+            "operator_abbreviation": "LS-3"
+        }
+    },
+    {
+        "pk": 14,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "L4",
+            "owner": "NASA",
+            "mission_group": 1,
+            "name": "Landsat 4",
+            "operator_abbreviation": "LS-4"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "S2",
+            "owner": "CNES",
+            "mission_group": 1,
+            "name": "Syst\u00e8me Pour l'Observation de la Terre 2",
+            "operator_abbreviation": "SPOT-2"
+        }
+    },
+    {
+        "pk": 16,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "S4",
+            "owner": "CNES",
+            "mission_group": 1,
+            "name": "Syst\u00e8me Pour l'Observation de la Terre 4",
+            "operator_abbreviation": "SPOT-4"
+        }
+    },
+    {
+        "pk": 17,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "S1",
+            "owner": "CNES",
+            "mission_group": 1,
+            "name": "Syst\u00e8me Pour l'Observation de la Terre 1",
+            "operator_abbreviation": "SPOT-1"
+        }
+    },
+    {
+        "pk": 18,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "S5",
+            "owner": "CNES",
+            "mission_group": 1,
+            "name": "Syst\u00e8me Pour l'Observation de la Terre 5",
+            "operator_abbreviation": "SPOT-5"
+        }
+    },
+    {
+        "pk": 19,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "ZA2",
+            "owner": "DST",
+            "mission_group": 1,
+            "name": "Sumbandilasat",
+            "operator_abbreviation": "ZASat-002"
+        }
+    },
+    {
+        "pk": 20,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "C2B",
+            "owner": "CAST, INPE",
+            "mission_group": 1,
+            "name": "China-Brazil Earth Resources Satellite 2 B",
+            "operator_abbreviation": "CBERS-2-B"
+        }
+    },
+    {
+        "pk": 21,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "S-C",
+            "owner": "CONAE",
+            "mission_group": 1,
+            "name": "Sat\u00e9lite de Aplicaciones Cient\u00edficas-C",
+            "operator_abbreviation": "SAC-C"
+        }
+    },
+    {
+        "pk": 22,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "S3",
+            "owner": "CNES",
+            "mission_group": 1,
+            "name": "Syst\u00e8me Pour l'Observation de la Terre 3",
+            "operator_abbreviation": "SPOT-3"
+        }
+    },
+    {
+        "pk": 23,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "L1",
+            "owner": "NASA",
+            "mission_group": 1,
+            "name": "Landsat 1",
+            "operator_abbreviation": "LS-1"
+        }
+    },
+    {
+        "pk": 24,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "CB3",
+            "owner": "CAST, INPE",
+            "mission_group": 1,
+            "name": "China-Brazil Earth Resources Satellite 3",
+            "operator_abbreviation": "CBERS 3"
+        }
+    },
+    {
+        "pk": 25,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "QB2",
+            "owner": "Digital Globe",
+            "mission_group": 1,
+            "name": "Quick Bird 2",
+            "operator_abbreviation": "QuickBird-2"
+        }
+    },
+    {
+        "pk": 26,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "WV1",
+            "owner": "Digital Globe",
+            "mission_group": 1,
+            "name": "World View 1",
+            "operator_abbreviation": "WorldView-1"
+        }
+    },
+    {
+        "pk": 27,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "WV2",
+            "owner": "Digital Globe",
+            "mission_group": 1,
+            "name": "World View 2",
+            "operator_abbreviation": "WorldView-2"
+        }
+    },
+    {
+        "pk": 28,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "IK2",
+            "owner": "GeoEye (Formerly Space Imaging)",
+            "mission_group": 1,
+            "name": "Ikonos 2",
+            "operator_abbreviation": "Ikonos-2"
+        }
+    },
+    {
+        "pk": 29,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "GE1",
+            "owner": "GeoEye (Formerly Space Imaging)",
+            "mission_group": 1,
+            "name": "Geo Eye 1 previously known as OrbView-5",
+            "operator_abbreviation": "GeoEye-1"
+        }
+    },
+    {
+        "pk": 30,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "TSX",
+            "owner": "DLR",
+            "mission_group": 1,
+            "name": "TerraSAR-X 1",
+            "operator_abbreviation": "TSX-1"
+        }
+    },
+    {
+        "pk": 31,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "TDX",
+            "owner": "DLR",
+            "mission_group": 1,
+            "name": "TerraSAR-X add-on for Digital Elevation Measurement",
+            "operator_abbreviation": "TanDEM-X"
+        }
+    },
+    {
+        "pk": 32,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "RE1",
+            "owner": "Rapideye AG",
+            "mission_group": 1,
+            "name": "Tachys RapidEye 1",
+            "operator_abbreviation": "RapidEye-1"
+        }
+    },
+    {
+        "pk": 33,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "RE2",
+            "owner": "Rapideye AG",
+            "mission_group": 1,
+            "name": "Mati RapidEye 2",
+            "operator_abbreviation": "RapidEye-2"
+        }
+    },
+    {
+        "pk": 34,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "RE3",
+            "owner": "Rapideye AG",
+            "mission_group": 1,
+            "name": "Choma RapidEye 3",
+            "operator_abbreviation": "RapidEye-3"
+        }
+    },
+    {
+        "pk": 35,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "RE4",
+            "owner": "Rapideye AG",
+            "mission_group": 1,
+            "name": "Choros RapidEye 4",
+            "operator_abbreviation": "RapidEye-4"
+        }
+    },
+    {
+        "pk": 36,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "RE5",
+            "owner": "Rapideye AG",
+            "mission_group": 1,
+            "name": "Trochia RapidEye 5",
+            "operator_abbreviation": "RapidEye-5"
+        }
+    },
+    {
+        "pk": 37,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "RS1",
+            "owner": "CSA",
+            "mission_group": 1,
+            "name": "RADARSAT 1",
+            "operator_abbreviation": "RADARSAT-1"
+        }
+    },
+    {
+        "pk": 38,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "RS2",
+            "owner": "MDA",
+            "mission_group": 1,
+            "name": "RADARSAT 2",
+            "operator_abbreviation": "RADARSAT-2"
+        }
+    },
+    {
+        "pk": 39,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "R-1",
+            "owner": "ISRO",
+            "mission_group": 1,
+            "name": "ResourceSat 1",
+            "operator_abbreviation": "IRS-P6"
+        }
+    },
+    {
+        "pk": 40,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "R-2",
+            "owner": "ISRO",
+            "mission_group": 1,
+            "name": "ResourceSat 2",
+            "operator_abbreviation": "ResourceSat-2"
+        }
+    },
+    {
+        "pk": 41,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "CS1",
+            "owner": "ISRO",
+            "mission_group": 1,
+            "name": "CartoSat 1",
+            "operator_abbreviation": "IRS-P5"
+        }
+    },
+    {
+        "pk": 42,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "AL1",
+            "owner": "JAXA",
+            "mission_group": 1,
+            "name": "Advanced Land Observing Satellite / Daichi",
+            "operator_abbreviation": "ALOS-1"
+        }
+    },
+    {
+        "pk": 43,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "AL2",
+            "owner": "JAXA",
+            "mission_group": 1,
+            "name": "Advanced Land Observing Satellite-2",
+            "operator_abbreviation": "ALOS-2"
+        }
+    },
+    {
+        "pk": 44,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "AQA",
+            "owner": "NASA",
+            "mission_group": 1,
+            "name": "Aqua Mission (EOS/PM-1)",
+            "operator_abbreviation": "Aqua"
+        }
+    },
+    {
+        "pk": 45,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "TER",
+            "owner": "NASA",
+            "mission_group": 1,
+            "name": "Terra Mission (EOS/AM-1)",
+            "operator_abbreviation": "Terra"
+        }
+    },
+    {
+        "pk": 46,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "A-T",
+            "owner": "NASA",
+            "mission_group": 1,
+            "name": "Image product composites of both Terra and Aqua",
+            "operator_abbreviation": "Aqua-Terra"
+        }
+    },
+    {
+        "pk": 47,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "E-A",
+            "owner": "ImageSat International N.V.",
+            "mission_group": 1,
+            "name": "Earth Remote Observation System-A",
+            "operator_abbreviation": "EROS-A"
+        }
+    },
+    {
+        "pk": 48,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "OV2",
+            "owner": "ORBIMAGE",
+            "mission_group": 1,
+            "name": "OrbView-2 (SeaStar)",
+            "operator_abbreviation": "OrbView-2"
+        }
+    },
+    {
+        "pk": 100,
+        "model": "catalogue.mission",
+        "fields": {
+            "abbreviation": "SSU",
+            "owner": "Unknown",
+            "mission_group": 1,
+            "name": "Super secret unknown mission",
+            "operator_abbreviation": ""
+        }
+    }
+]

@@ -1,0 +1,457 @@
+[
+    {
+        "pk": 2,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Vertical Vertical Polarisation",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "VV",
+            "sensor_type": 2,
+            "operator_abbreviation": "VV",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 11,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Forward Motion Compensation 4",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "FMC4",
+            "sensor_type": 6,
+            "operator_abbreviation": "FMC4",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 1,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Multispectral",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "MS",
+            "sensor_type": 1,
+            "operator_abbreviation": "MS",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 12,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "3BG",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "3BG",
+            "sensor_type": 7,
+            "operator_abbreviation": "3BG",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 13,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "5BF",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "5BF",
+            "sensor_type": 7,
+            "operator_abbreviation": "5BF",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 14,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "3BP",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "3BP",
+            "sensor_type": 7,
+            "operator_abbreviation": "3BP",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 15,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "HR",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "HR",
+            "sensor_type": 8,
+            "operator_abbreviation": "HR",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 22,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S2C1",
+            "sensor_type": 29,
+            "operator_abbreviation": "S2C1",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 23,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S2C2",
+            "sensor_type": 29,
+            "operator_abbreviation": "S2C2",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 30,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S4C1",
+            "sensor_type": 36,
+            "operator_abbreviation": "S4C1",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 31,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S4C2",
+            "sensor_type": 36,
+            "operator_abbreviation": "S4C2",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 40,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S1C1",
+            "sensor_type": 26,
+            "operator_abbreviation": "S1C1",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 41,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S1C2",
+            "sensor_type": 26,
+            "operator_abbreviation": "S1C2",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 44,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S5C1",
+            "sensor_type": 40,
+            "operator_abbreviation": "S5C1",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 45,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S5C2",
+            "sensor_type": 40,
+            "operator_abbreviation": "S5C2",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 46,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S5C1",
+            "sensor_type": 41,
+            "operator_abbreviation": "S5C1",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 47,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S5C2",
+            "sensor_type": 41,
+            "operator_abbreviation": "S5C2",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 48,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S5C1",
+            "sensor_type": 42,
+            "operator_abbreviation": "S5C1",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 49,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S5C2",
+            "sensor_type": 42,
+            "operator_abbreviation": "S5C2",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 52,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S5C1",
+            "sensor_type": 44,
+            "operator_abbreviation": "S5C1",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 53,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S5C2",
+            "sensor_type": 44,
+            "operator_abbreviation": "S5C2",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 72,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S3C1",
+            "sensor_type": 32,
+            "operator_abbreviation": "S3C1",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 73,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S3C2",
+            "sensor_type": 32,
+            "operator_abbreviation": "S3C2",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 76,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "",
+            "is_grayscale": false,
+            "band_count": 1,
+            "abbreviation": "MST",
+            "sensor_type": 174,
+            "operator_abbreviation": "",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 77,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "",
+            "is_grayscale": false,
+            "band_count": 1,
+            "abbreviation": "MST",
+            "sensor_type": 175,
+            "operator_abbreviation": "",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 78,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "",
+            "is_grayscale": false,
+            "band_count": 1,
+            "abbreviation": "MST",
+            "sensor_type": 176,
+            "operator_abbreviation": "",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 79,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "",
+            "is_grayscale": false,
+            "band_count": 1,
+            "abbreviation": "MST",
+            "sensor_type": 177,
+            "operator_abbreviation": "",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 80,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "",
+            "is_grayscale": false,
+            "band_count": 1,
+            "abbreviation": "MST",
+            "sensor_type": 178,
+            "operator_abbreviation": "",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 81,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "",
+            "is_grayscale": false,
+            "band_count": 1,
+            "abbreviation": "MST",
+            "sensor_type": 179,
+            "operator_abbreviation": "",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 86,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S1C1",
+            "sensor_type": 182,
+            "operator_abbreviation": "S1C1",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 87,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S1C2",
+            "sensor_type": 182,
+            "operator_abbreviation": "S1C2",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 90,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S3C1",
+            "sensor_type": 184,
+            "operator_abbreviation": "S3C1",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 91,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S3C2",
+            "sensor_type": 184,
+            "operator_abbreviation": "S3C2",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 92,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 1",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S4C1",
+            "sensor_type": 185,
+            "operator_abbreviation": "S4C1",
+            "spatial_resolution": 0.0
+        }
+    },
+    {
+        "pk": 93,
+        "model": "catalogue.acquisitionmode",
+        "fields": {
+            "name": "Camera 2",
+            "is_grayscale": false,
+            "band_count": 0,
+            "abbreviation": "S4C2",
+            "sensor_type": 185,
+            "operator_abbreviation": "S4C2",
+            "spatial_resolution": 0.0
+        }
+    }
+]

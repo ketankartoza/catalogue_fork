@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block extrajs %}
+{{ block.super }}
+{% endblock%}
+{% block body_load%}{{ block.super }}{% endblock%}
+{% block content%}
+
+<div class="row-fluid">
+  <div id="map-container" class=""> {# thus nested jquery widget container #}
+    <div id="map" class=""></div>
+    <div id="map-panel" class="">
+      <div id="map-navigation-panel" class=""></div>
+      <div id="map-location"></div>
+      <div class="olControlScalebar" id="map-scale"></div>
+    </div>
+    <div id="mapquery" class=""></div>
+  </div>
+</div>
+<div class="row-fluid">
+  <div id="sidebar" class="span4">
+    <div id="accordion">
+      {% block messages %}{% endblock %}
+      {% block search %}{% endblock %}
+      {% block preview %}{% endblock %}
+      {% block cart %}{% endblock %}
+      {% block legend %}{% endblock %}
+    </div>
+  </div>
+  <div id="table" class="span8">
+    {% block table %}{% endblock %}
+  </div>
+</div>
+{% endblock%}

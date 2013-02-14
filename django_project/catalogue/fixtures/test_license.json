@@ -1,0 +1,29 @@
+[
+    {
+        "pk": 1,
+        "model": "catalogue.license",
+        "fields": {
+            "type": 3,
+            "name": "SAC Commercial License",
+            "details": "SAC Commercial License"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "catalogue.license",
+        "fields": {
+            "type": 1,
+            "name": "SAC Free License",
+            "details": "SAC Free License"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "catalogue.license",
+        "fields": {
+            "type": 2,
+            "name": "SAC Partner License",
+            "details": "SAC Partner License"
+        }
+    }
+]

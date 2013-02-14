@@ -1,0 +1,5 @@
+This directory needs the GeoIP lite dataset in it:
+
+wget http://www.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+gunzip GeoLiteCity.dat.gz
+

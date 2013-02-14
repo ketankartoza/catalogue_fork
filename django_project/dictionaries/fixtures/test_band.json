@@ -1,0 +1,542 @@
+[
+    {
+        "pk": 1,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 1,
+            "instrument_type": 3,
+            "band_name": "Green",
+            "max_wavelength": 600,
+            "min_wavelength": 500,
+            "pixelsize": 60
+        }
+    },
+    {
+        "pk": 2,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 2,
+            "instrument_type": 3,
+            "band_name": "Red",
+            "max_wavelength": 700,
+            "min_wavelength": 600,
+            "pixelsize": 60
+        }
+    },
+    {
+        "pk": 3,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 3,
+            "instrument_type": 3,
+            "band_name": "Near Infrared",
+            "max_wavelength": 800,
+            "min_wavelength": 700,
+            "pixelsize": 60
+        }
+    },
+    {
+        "pk": 4,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 4,
+            "instrument_type": 3,
+            "band_name": "Near Infrared 2",
+            "max_wavelength": 1100,
+            "min_wavelength": 800,
+            "pixelsize": 60
+        }
+    },
+    {
+        "pk": 5,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 1,
+            "instrument_type": 4,
+            "band_name": "Blue",
+            "max_wavelength": 520,
+            "min_wavelength": 450,
+            "pixelsize": 30
+        }
+    },
+    {
+        "pk": 6,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 2,
+            "instrument_type": 4,
+            "band_name": "Green",
+            "max_wavelength": 600,
+            "min_wavelength": 520,
+            "pixelsize": 30
+        }
+    },
+    {
+        "pk": 7,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 3,
+            "instrument_type": 4,
+            "band_name": "Red",
+            "max_wavelength": 690,
+            "min_wavelength": 630,
+            "pixelsize": 30
+        }
+    },
+    {
+        "pk": 8,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 4,
+            "instrument_type": 4,
+            "band_name": "Near Infrared",
+            "max_wavelength": 900,
+            "min_wavelength": 760,
+            "pixelsize": 30
+        }
+    },
+    {
+        "pk": 10,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 7,
+            "instrument_type": 4,
+            "band_name": "Shortwave Infrared 2",
+            "max_wavelength": 2350,
+            "min_wavelength": 2080,
+            "pixelsize": 30
+        }
+    },
+    {
+        "pk": 9,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 5,
+            "instrument_type": 4,
+            "band_name": "Shortwave Infrared 1",
+            "max_wavelength": 1750,
+            "min_wavelength": 1550,
+            "pixelsize": 30
+        }
+    },
+    {
+        "pk": 11,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 6,
+            "instrument_type": 4,
+            "band_name": "Thermal",
+            "max_wavelength": 12500,
+            "min_wavelength": 10400,
+            "pixelsize": 120
+        }
+    },
+    {
+        "pk": 12,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 1,
+            "instrument_type": 5,
+            "band_name": "Blue",
+            "max_wavelength": 520,
+            "min_wavelength": 450,
+            "pixelsize": 30
+        }
+    },
+    {
+        "pk": 13,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 2,
+            "instrument_type": 5,
+            "band_name": "Green",
+            "max_wavelength": 600,
+            "min_wavelength": 520,
+            "pixelsize": 30
+        }
+    },
+    {
+        "pk": 14,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 3,
+            "instrument_type": 5,
+            "band_name": "Red",
+            "max_wavelength": 690,
+            "min_wavelength": 630,
+            "pixelsize": 30
+        }
+    },
+    {
+        "pk": 15,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 4,
+            "instrument_type": 5,
+            "band_name": "Near Infrared",
+            "max_wavelength": 900,
+            "min_wavelength": 770,
+            "pixelsize": 30
+        }
+    },
+    {
+        "pk": 16,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 5,
+            "instrument_type": 5,
+            "band_name": "Shortwave Infrared 1",
+            "max_wavelength": 1750,
+            "min_wavelength": 1550,
+            "pixelsize": 30
+        }
+    },
+    {
+        "pk": 17,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 7,
+            "instrument_type": 5,
+            "band_name": "Shortwave Infrared 2",
+            "max_wavelength": 2350,
+            "min_wavelength": 2090,
+            "pixelsize": 30
+        }
+    },
+    {
+        "pk": 18,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 6,
+            "instrument_type": 5,
+            "band_name": "Thermal",
+            "max_wavelength": 12500,
+            "min_wavelength": 10400,
+            "pixelsize": 60
+        }
+    },
+    {
+        "pk": 19,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 8,
+            "instrument_type": 5,
+            "band_name": "Panchromatic",
+            "max_wavelength": 900,
+            "min_wavelength": 520,
+            "pixelsize": 15
+        }
+    },
+    {
+        "pk": 20,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 1,
+            "instrument_type": 6,
+            "band_name": "Green",
+            "max_wavelength": 590,
+            "min_wavelength": 500,
+            "pixelsize": 20
+        }
+    },
+    {
+        "pk": 21,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 2,
+            "instrument_type": 6,
+            "band_name": "Red",
+            "max_wavelength": 680,
+            "min_wavelength": 610,
+            "pixelsize": 20
+        }
+    },
+    {
+        "pk": 22,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 3,
+            "instrument_type": 6,
+            "band_name": "Near Infrared",
+            "max_wavelength": 890,
+            "min_wavelength": 780,
+            "pixelsize": 20
+        }
+    },
+    {
+        "pk": 23,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 0,
+            "instrument_type": 6,
+            "band_name": "Panchromatic",
+            "max_wavelength": 730,
+            "min_wavelength": 510,
+            "pixelsize": 10
+        }
+    },
+    {
+        "pk": 24,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 0,
+            "instrument_type": 7,
+            "band_name": "Monospectral",
+            "max_wavelength": 680,
+            "min_wavelength": 610,
+            "pixelsize": 10
+        }
+    },
+    {
+        "pk": 25,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 1,
+            "instrument_type": 7,
+            "band_name": "Green",
+            "max_wavelength": 590,
+            "min_wavelength": 500,
+            "pixelsize": 20
+        }
+    },
+    {
+        "pk": 26,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 2,
+            "instrument_type": 7,
+            "band_name": "Red",
+            "max_wavelength": 680,
+            "min_wavelength": 610,
+            "pixelsize": 20
+        }
+    },
+    {
+        "pk": 27,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 3,
+            "instrument_type": 7,
+            "band_name": "Near Infrared",
+            "max_wavelength": 890,
+            "min_wavelength": 780,
+            "pixelsize": 20
+        }
+    },
+    {
+        "pk": 28,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 0,
+            "instrument_type": 8,
+            "band_name": "Panchromatic",
+            "max_wavelength": 710,
+            "min_wavelength": 480,
+            "pixelsize": 5
+        }
+    },
+    {
+        "pk": 29,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 1,
+            "instrument_type": 8,
+            "band_name": "Green",
+            "max_wavelength": 590,
+            "min_wavelength": 500,
+            "pixelsize": 10
+        }
+    },
+    {
+        "pk": 30,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 2,
+            "instrument_type": 8,
+            "band_name": "Red",
+            "max_wavelength": 680,
+            "min_wavelength": 610,
+            "pixelsize": 10
+        }
+    },
+    {
+        "pk": 31,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 3,
+            "instrument_type": 8,
+            "band_name": "Near Infrared",
+            "max_wavelength": 890,
+            "min_wavelength": 780,
+            "pixelsize": 10
+        }
+    },
+    {
+        "pk": 32,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 4,
+            "instrument_type": 8,
+            "band_name": "Shortwave Infrared",
+            "max_wavelength": 1750,
+            "min_wavelength": 1580,
+            "pixelsize": 20
+        }
+    },
+    {
+        "pk": 33,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 1,
+            "instrument_type": 2,
+            "band_name": "Red",
+            "max_wavelength": 680,
+            "min_wavelength": 620,
+            "pixelsize": 6
+        }
+    },
+    {
+        "pk": 34,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 2,
+            "instrument_type": 2,
+            "band_name": "Red-edge",
+            "max_wavelength": 730,
+            "min_wavelength": 690,
+            "pixelsize": 6
+        }
+    },
+    {
+        "pk": 35,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 3,
+            "instrument_type": 2,
+            "band_name": "Near Infrared",
+            "max_wavelength": 890,
+            "min_wavelength": 840,
+            "pixelsize": 6
+        }
+    },
+    {
+        "pk": 36,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 1,
+            "instrument_type": 10,
+            "band_name": "Blue",
+            "max_wavelength": 500,
+            "min_wavelength": 480,
+            "pixelsize": 175
+        }
+    },
+    {
+        "pk": 37,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 2,
+            "instrument_type": 10,
+            "band_name": "Green",
+            "max_wavelength": 560,
+            "min_wavelength": 540,
+            "pixelsize": 175
+        }
+    },
+    {
+        "pk": 38,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 3,
+            "instrument_type": 10,
+            "band_name": "Red",
+            "max_wavelength": 690,
+            "min_wavelength": 630,
+            "pixelsize": 175
+        }
+    },
+    {
+        "pk": 39,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 4,
+            "instrument_type": 10,
+            "band_name": "Near Infrared",
+            "max_wavelength": 835,
+            "min_wavelength": 795,
+            "pixelsize": 175
+        }
+    },
+    {
+        "pk": 40,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 5,
+            "instrument_type": 10,
+            "band_name": "Shortwave Infrared",
+            "max_wavelength": 1700,
+            "min_wavelength": 1550,
+            "pixelsize": 175
+        }
+    },
+    {
+        "pk": 41,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 1,
+            "instrument_type": 9,
+            "band_name": "Panchromatic",
+            "max_wavelength": 730,
+            "min_wavelength": 510,
+            "pixelsize": 20
+        }
+    },
+    {
+        "pk": 42,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 2,
+            "instrument_type": 9,
+            "band_name": "Blue",
+            "max_wavelength": 520,
+            "min_wavelength": 450,
+            "pixelsize": 20
+        }
+    },
+    {
+        "pk": 43,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 3,
+            "instrument_type": 9,
+            "band_name": "Green",
+            "max_wavelength": 590,
+            "min_wavelength": 520,
+            "pixelsize": 20
+        }
+    },
+    {
+        "pk": 44,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 4,
+            "instrument_type": 9,
+            "band_name": "Red",
+            "max_wavelength": 690,
+            "min_wavelength": 630,
+            "pixelsize": 20
+        }
+    },
+    {
+        "pk": 45,
+        "model": "dictionaries.band",
+        "fields": {
+            "band_number": 5,
+            "instrument_type": 9,
+            "band_name": "Near Infrared",
+            "max_wavelength": 890,
+            "min_wavelength": 770,
+            "pixelsize": 20
+        }
+    }
+]

@@ -1,0 +1,35 @@
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% box_start "box-sensor-dictionaries-report" %}
+<h2 class="centered">Summary of sensor dictionaries</h2>
+<h3 class="centered">This report is for mission - sensor - type</h3>
+<table>
+  <thead>
+  </thead>
+  <tbody>
+    <tr><th>Mission</th><th>Sensor</th><th>Type</th></tr>
+    {% for myRecord in myTypeResults %}
+    <tr>
+    {% for myObject in myRecord %}
+    <td>{{myObject}}</td>
+    {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<h3>This report is for mission - sensor - type - mode</h3>
+<table>
+  <thead>
+  </thead>
+  <tbody>
+    <tr><th>Mission</th><th>Sensor</th><th>Type</th><th>Mode</th></tr>
+    {% for myRecord in myResults %}
+    <tr>
+    {% for myObject in myRecord %}
+    <td>{{myObject}}</td>
+    {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% box_end %}
+

@@ -1,0 +1,132 @@
+[
+    {
+        "pk": 1,
+        "model": "dictionaries.instrumenttype",
+        "fields": {
+            "is_radar": true,
+            "name": "AMI",
+            "abbreviation": "AMI",
+            "operator_abbreviation": "AMI",
+            "is_taskable": false,
+            "scanner_type": 1,
+            "description": "Active Microwave Instrument"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "dictionaries.instrumenttype",
+        "fields": {
+            "is_radar": false,
+            "name": "MSI",
+            "abbreviation": "MSI",
+            "operator_abbreviation": "MSI",
+            "is_taskable": false,
+            "scanner_type": 4,
+            "description": "Multi-Spectral Imager"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "dictionaries.instrumenttype",
+        "fields": {
+            "is_radar": false,
+            "name": "MSS",
+            "abbreviation": "MSS",
+            "operator_abbreviation": "MSS",
+            "is_taskable": false,
+            "scanner_type": 3,
+            "description": "Multi-Spectral Scanner"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "dictionaries.instrumenttype",
+        "fields": {
+            "is_radar": false,
+            "name": "TM",
+            "abbreviation": "TM",
+            "operator_abbreviation": "TM",
+            "is_taskable": false,
+            "scanner_type": 3,
+            "description": "Thematic Mapper"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "dictionaries.instrumenttype",
+        "fields": {
+            "is_radar": false,
+            "name": "ETM+",
+            "abbreviation": "ETM+",
+            "operator_abbreviation": "ETM+",
+            "is_taskable": false,
+            "scanner_type": 3,
+            "description": "Enhanced Thematic Mapper Plus"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "dictionaries.instrumenttype",
+        "fields": {
+            "is_radar": false,
+            "name": "HRV",
+            "abbreviation": "HRV",
+            "operator_abbreviation": "HRV",
+            "is_taskable": false,
+            "scanner_type": 2,
+            "description": "High Resolution Visible"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "dictionaries.instrumenttype",
+        "fields": {
+            "is_radar": false,
+            "name": "MMRS",
+            "abbreviation": "MMR",
+            "operator_abbreviation": "MMRS",
+            "is_taskable": false,
+            "scanner_type": 2,
+            "description": "Multi-Spectral Medium Resolution Scanner"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "dictionaries.instrumenttype",
+        "fields": {
+            "is_radar": false,
+            "name": "HRCCD",
+            "abbreviation": "HRC",
+            "operator_abbreviation": "HRCCD",
+            "is_taskable": false,
+            "scanner_type": 2,
+            "description": "High Resolution Couple Charged Device"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "dictionaries.instrumenttype",
+        "fields": {
+            "is_radar": false,
+            "name": "HRG",
+            "abbreviation": "HRG",
+            "operator_abbreviation": "HRG",
+            "is_taskable": false,
+            "scanner_type": 2,
+            "description": "High Resolution Geometric"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "dictionaries.instrumenttype",
+        "fields": {
+            "is_radar": false,
+            "name": "HRVIR",
+            "abbreviation": "HIR",
+            "operator_abbreviation": "HRVIR",
+            "is_taskable": false,
+            "scanner_type": 2,
+            "description": "High Resolution Visible and Infra-Red "
+        }
+    }
+]

@@ -1,0 +1,178 @@
+[
+    {
+        "pk": 3,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "LS2",
+            "collection": 2,
+            "name": "Landsat 2",
+            "operator_abbreviation": "LS-2",
+            "description": "Landsat 2"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "L3",
+            "collection": 2,
+            "name": "Landsat 3",
+            "operator_abbreviation": "LS-3",
+            "description": "Landsat 3"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "L4",
+            "collection": 2,
+            "name": "Landsat 4",
+            "operator_abbreviation": "LS-4",
+            "description": "Landsat 4"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "L5",
+            "collection": 2,
+            "name": "Landsat 5",
+            "operator_abbreviation": "LS-5",
+            "description": "Landsat 5"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "L7",
+            "collection": 2,
+            "name": "Landsat 7",
+            "operator_abbreviation": "LS-7",
+            "description": "Landsat 7"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "ZA2",
+            "collection": 3,
+            "name": "ZA-2 SumbandilaSat",
+            "operator_abbreviation": "ZASat-002",
+            "description": "The second South African Satellite ZA-2 renamed as SumbandilaSat"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "L1",
+            "collection": 2,
+            "name": "Landsat 1",
+            "operator_abbreviation": "LS-1",
+            "description": "Landsat 1"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "S1",
+            "collection": 1,
+            "name": "SPOT 1",
+            "operator_abbreviation": "SPOT-1",
+            "description": "SPOT 1"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "S2",
+            "collection": 1,
+            "name": "SPOT 2",
+            "operator_abbreviation": "SPOT-2",
+            "description": "SPOT 2"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "S3",
+            "collection": 1,
+            "name": "SPOT 3",
+            "operator_abbreviation": "SPOT-3",
+            "description": "SPOT 3"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "S4",
+            "collection": 1,
+            "name": "SPOT 4",
+            "operator_abbreviation": "SPOT-4",
+            "description": "SPOT 4"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "S5",
+            "collection": 1,
+            "name": "SPOT 5",
+            "operator_abbreviation": "SPOT-5",
+            "description": "SPOT 5"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "C2B",
+            "collection": 4,
+            "name": "CBERS-2B",
+            "operator_abbreviation": "CBERS-2-B",
+            "description": "CBERS-2B"
+        }
+    },
+    {
+        "pk": 14,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "SCC",
+            "collection": 5,
+            "name": "SAC-C",
+            "operator_abbreviation": "SAC-C",
+            "description": "SAC-C"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "E1",
+            "collection": 6,
+            "name": "ERS-1",
+            "operator_abbreviation": "ERS-1",
+            "description": "European Remote-Sensing Satellite 1"
+        }
+    },
+    {
+        "pk": 16,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "abbreviation": "E2",
+            "collection": 6,
+            "name": "ERS-2",
+            "operator_abbreviation": "ERS-2",
+            "description": "European Remote-Sensing Satellite-2"
+        }
+    }
+]

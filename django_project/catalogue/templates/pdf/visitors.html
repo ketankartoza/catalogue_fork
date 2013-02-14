@@ -1,0 +1,32 @@
+{% extends "pdfpage.html" %}
+
+{% block content %}
+
+<div class="h2">
+Visitor list
+</div>
+
+<table>
+<thead>
+          <tr>
+            <th>User</th>
+            <th>IP Address</th>
+            <th>Country</th>
+            <th>City</th>
+            <th>Date</th>
+          </tr>
+</thead>
+<tbody>
+          {% for myRecord in myRecords.object_list %}
+          <tr>
+            <td>{{ myRecord.user.get_profile.firstname}} {{myRecord.user.get_profile.surname}}</td>
+            <td>{{ myRecord.ip_address }}</td>
+            <td>{{ myRecord.country}}</td>
+            <td>{{ myRecord.city }}</td>
+            <td>{{ myRecord.visit_date }}</td>
+          </tr>
+	  {% endfor %}
+</tbody>
+</table>
+{% endblock %}
+

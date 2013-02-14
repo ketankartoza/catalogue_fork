@@ -1,0 +1,55 @@
+{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% box_start "box-sensor-summary" %}
+<h2 class="centered"><img src="/media/images/statistics_32.png" /> Summary of catalogue activity for</h2>
+<h3 class="centered">{{mySensor.name}}</h3>
+<table>
+  <thead>
+  </thead>
+  <tbody>
+    <tr><th>Metric</th><th>Count</th></tr>
+    {% for myRecord,myCount in myResults.items %}
+    <tr>
+      <td>
+          {{myRecord}}
+      </td>
+      <td>{{myCount}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p>
+  <h3>Yearly catalogue product overview for {{mySensor.name}}</h3>
+<table >
+  <thead>
+  </thead>
+  <tbody>
+    {% for myDataPage in mySensorYearyStats %}
+    <tr>
+      {% for myData in myDataPage %}
+      <th>
+          {{ myData.year }}
+      </th>
+      {% endfor %}
+    </tr>
+    <tr>
+      {% for myData in myDataPage %}
+      <td>
+          {{ myData.count }}
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</p>
+
+<p>Please note:</p>
+<ul>
+  <li>These results are for 'all time'.</li>
+  <li>Test and experimental requests by SAC staff have not been filtered out.</li>
+  <li>The report doesn't distinguish between cancelled requests or requests
+  that were never carried out for whatever reason by SAC staff.</li>
+  <li>Searches can include more than one sensor so the search count for this is
+  not the inverse of all other sensor searches.</li>
+</ul>
+{% box_end %}

@@ -1,0 +1,38 @@
+[
+    {
+        "pk": 1,
+        "model": "auth.user",
+        "fields": {
+            "username": "timlinux",
+            "first_name": "",
+            "last_name": "",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2012-06-14 13:51:52",
+            "groups": [],
+            "user_permissions": [],
+            "password": "sha1$9c5b5$fe5f24c48a2afc1eb6bf6871c1e61dde5116d532",
+            "email": "tim@linfiniti.com",
+            "date_joined": "2009-07-27 11:47:50"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "auth.user",
+        "fields": {
+            "username": "pompies",
+            "first_name": "Piet",
+            "last_name": "Pompies",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2012-06-14 13:51:52",
+            "groups": [],
+            "user_permissions": [],
+            "password": "sha1$9c5b5$fe5f24c48a2afc1eb6bf6871c1e61dde5116d532",
+            "email": "piet@pompies.com",
+            "date_joined": "2009-07-27 11:47:50"
+        }
+    }
+]

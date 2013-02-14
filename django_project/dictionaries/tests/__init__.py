@@ -1,0 +1,1 @@
+from django_project.dictionaries.tests.new_dictionary_tests import NewDictionariesTest
