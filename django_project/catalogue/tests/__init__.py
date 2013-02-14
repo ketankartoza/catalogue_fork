@@ -29,10 +29,6 @@ from catalogue.tests.radarproduct_model import RadarProductCRUD_Test
 from catalogue.tests.geospatialproduct_model import GeospatialProductCRUD_Test
 from catalogue.tests.ordinalproduct_model import OrdinalProductCRUD_Test
 from catalogue.tests.continuousproduct_model import ContinuousProductCRUD_Test
-from catalogue.tests.searchrecord_model import SearchRecordCRUD_Test
-from catalogue.tests.search_model import SearchCRUD_Test
-from catalogue.tests.searchdaterange_model import SearchDateRangeCRUD_Test
-from catalogue.tests.clip_model import ClipCRUD_Test
 from catalogue.tests.datum_model import DatumCRUD_Test
 from catalogue.tests.resamplingmethod_model import ResamplingMethodCRUD_Test
 from catalogue.tests.fileformat_model import FileFormatCRUD_Test
@@ -44,12 +40,6 @@ from catalogue.tests.order_model import OrderCRUD_Test
 from catalogue.tests.orderstatushistory_model import OrderStatusHistoryCRUD_Test
 from catalogue.tests.taskingrequest_model import TaskingRequestCRUD_Test
 from catalogue.tests.featurereaders_return import FeatureReaders_Test
-from catalogue.tests.searcher_object import SearcherObject_Test
-from catalogue.tests.search_bandcount import SearchBandCount_Test
-from catalogue.tests.search_inclinationangle import SearchIncliantionAngle_Test
-from catalogue.tests.search_spatialresolution import SearchSpatialResolution_Test
-from catalogue.tests.search_cloudcover import SearchCloudCover_Test
-from catalogue.tests.search_rowpath import SearchRowPath_Test
 from catalogue.tests.email_notification_test import EmailNotificationTest, EmailTest
 from catalogue.tests.integerCSVIntervalsField_return import IntegersCSVIntervalsField_Test
 from catalogue.tests.AOIGeometryField_return import AOIGeometryField_Test
