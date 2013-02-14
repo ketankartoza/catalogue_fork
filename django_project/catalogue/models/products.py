@@ -378,7 +378,7 @@ class GenericProduct(node_factory('catalogue.ProductLink',
         logging.info('Creating thumbnail of : ' + myFileName)
         logging.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
         logging.info('Media path    :   ' + str(settings.MEDIA_ROOT))
-        logging.info('Project root path:' + str(settings.ROOT_PROJECT_FOLDER))
+        logging.info('Project root path:' + str(settings.PROJECT_ROOT))
 
         if not os.path.isfile(myFileName):
             #file does not exist so show an error icon

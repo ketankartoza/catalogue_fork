@@ -447,7 +447,7 @@ def showThumbPage(theRequest, theId):
     #render_to_response is done by the renderWithContext decorator
     logging.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
     logging.info('Media path    :   ' + str(settings.MEDIA_ROOT))
-    logging.info('Project root path:' + str(settings.ROOT_PROJECT_FOLDER))
+    logging.info('Project root path:' + str(settings.PROJECT_ROOT))
     return ({'myDetails': myDetails})
 
 

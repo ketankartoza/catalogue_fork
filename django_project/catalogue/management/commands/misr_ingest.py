@@ -102,7 +102,7 @@ def GetFootPrintFromKML(path, block):
     """
     Reads the KML and returns the polygon points
     """
-    kml = open(os.path.join(settings.ROOT_PROJECT_FOLDER, 'resources', 'misr_paths.kml'))
+    kml = open(os.path.join(settings.PROJECT_ROOT, 'resources', 'misr_paths.kml'))
     lines = kml.readlines()
     for l in range(0, len(lines)):
         if lines[l].find('MISR Path %s Block %s' % (path, block)) != -1:
