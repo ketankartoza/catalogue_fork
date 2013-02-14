@@ -75,17 +75,7 @@ class DateTimeWidget(forms.DateInput):
             myCurrentDate = datetime.date.today() + relativedelta(days=-1)
 
         myA = u'''
-<script type="text/javascript">
-$(function() {
-    //acivate widget on document ready
-    $('#%(id)s_widget').sansa_datepicker({
-        currentDate: "%(currentDate)s"
-        });
-});
-</script>
-<div %(attrs)s>
-<input type="hidden" name="%(name)s" id="%(id)s"/>
-</div>
+    <input type="text" name="%(name)s" value="%(currentDate)s" id="%(id)s" data-date-format="dd-mm-yyyy">
 ''' % {'id': myId, 'name': theName, 'attrs': flatatt(myFinal_attrs),
        'currentDate': myCurrentDate.strftime(self.dformat)}
 

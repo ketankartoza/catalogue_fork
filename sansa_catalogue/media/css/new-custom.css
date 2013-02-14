@@ -8,6 +8,7 @@ h3 {color:#66B786;font-family: arial;}
 .gap-bottom{padding-bottom:20px;}
 .gap-top{margin-top:20px;}
 .align-left{text-align:left;}
+.datepicker-dropdown{position:relative;top:-200px;}
 .custom-well{background-color: 
 #f5f5f5;
 border: 1px solid 
