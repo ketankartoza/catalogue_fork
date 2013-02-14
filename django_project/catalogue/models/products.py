@@ -59,11 +59,6 @@ from catalogue.models import (
 #from osgeo.gdalconst import *
 
 # Read from settings
-ACS_CATALOGUE_SCENES_PATH = getattr(
-    settings,
-    'ACS_CATALOGUE_SCENES_PATH',
-    '/mnt/cataloguestorage/scenes_out_projected_sorted/'
-)
 CATALOGUE_ISO_METADATA_XML_TEMPLATE = getattr(
     settings,
     'CATALOGUE_ISO_METADATA_XML_TEMPLATE'
@@ -375,9 +370,6 @@ class GenericProduct(node_factory('catalogue.ProductLink',
             myWriter.close()
             self.remote_thumbnail_url = ""
             self.save()
-        # spot hack ends
-        elif not os.path.exists(myFileName):
-            self.checkForAcsThumb()
 
         # Specify background colour, should be the same as div background
         myBackgroundColour = (255, 255, 255)
@@ -431,68 +423,6 @@ class GenericProduct(node_factory('catalogue.ProductLink',
         logging.debug('Caching image : %s' % myCacheImage)
         myBackground.save(myCacheImage)
         return (myBackground)
-
-    def checkForAcsThumb(self):
-        """
-        Hack to use ACS extracted thumb if it hasnt been filed yet ideally we
-        should be able to use the catalogue.informix class to fetch it directly
-        from acs on demand but there is a bug in PIL that cuases the images
-        extracted from acs to be corrupt so the thumbs need to be prefetched
-        from outside the django context using e.g.:
-            source ../python/bin/activate
-            python getAcsLandsatThumbs.py
-
-        Typically the above should run on a cron job.
-
-
-        >>> myP = GenericProduct.objects.get(original_product_id=9861)
-        >>> myP.checkForAcsThumb()
-        """
-
-        logging.info("Checking if there is an acs thumb for : %s " % (
-            self.original_product_id,))
-        myImageFile = os.path.join(
-            settings.THUMBS_ROOT, self.thumbnailDirectory(),
-            self.product_id + '.jpg')
-        #check if there is perhaps an acs catalogue imported, referenced thumb
-        #available. If there is use that.
-        myAcsJpgFile = os.path.join(
-            settings.ACS_THUMBS_ROOT, self.original_product_id + '.jpg')
-        myAcsWldFile = os.path.join(
-            settings.ACS_THUMBS_ROOT, self.original_product_id + '.wld')
-        # we will use the same file for reffed and unreffed
-        myReffedJpgFile = os.path.join(
-            settings.THUMBS_ROOT, self.thumbnailDirectory(),
-            self.product_id + '-reffed.jpg')
-        logging.info("Looking for thumb : %s" % myImageFile)
-        if os.path.exists(myAcsJpgFile):
-            logging.info("Found: %s" % myAcsJpgFile)
-            try:
-                if not os.path.exists(os.path.dirname(myImageFile)):
-                    logging.info("Making Directory: %s" % (
-                        os.path.dirname(myImageFile),))
-                    os.makedirs(os.path.dirname(myImageFile))
-                #os.rename fails with [Errno 18] Invalid cross-device link so
-                # using copy, remove
-                logging.info("Moving %s to %s" % (myAcsJpgFile, myImageFile))
-                shutil.move(myAcsJpgFile, myImageFile)
-                logging.info("Symlinking %s to %s" % (
-                    myImageFile, myReffedJpgFile))
-                os.symlink(myImageFile, myReffedJpgFile)
-                logging.info("Moving %s to %s" % (
-                    myAcsWldFile, myImageFile.replace('.jpg', '-reffed.wld')))
-
-                shutil.move(
-                    myAcsWldFile, myImageFile.replace('.jpg', '-reffed.wld'))
-                os.remove(myAcsJpgFile + '.aux.xml')
-            except Exception as e:
-                logging.error('Error in checkthumb')
-                logging.error(exceptionToString(e))
-                pass
-        else:
-            logging.info(
-                'No acs thumb found or thumb already moved into production '
-                'area')
 
     def dropShadow(
             theImage,
@@ -564,10 +494,7 @@ class GenericProduct(node_factory('catalogue.ProductLink',
         myJpgFile = os.path.join(
             settings.THUMBS_ROOT, self.thumbnailDirectory(),
             self.product_id + '-reffed.jpg')
-        #check if there is perhaps an acs catalogue imported, referenced thumb
-        #available. If there is use that.
-        if not os.path.exists(myJpgFile) or theForceFlag:
-            self.checkForAcsThumb()
+
         myLogFile = file(os.path.join(
             settings.THUMBS_ROOT, self.thumbnailDirectory(),
             self.product_id + '-reffed.log'), 'w')

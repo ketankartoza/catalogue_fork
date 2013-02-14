@@ -78,9 +78,6 @@ MIDDLEWARE_CLASSES += (
     '.StripWhitespaceMiddleware',
 )
 
-# PLace where thumbs from ACS catalogue are extracted into a flat dir tree
-ACS_CATALOGUE_SCENES_PATH = ''
-
 CATALOGUE_ISO_METADATA_XML_TEMPLATE = ABS_PATH((
     'resources/PackageTemplate/Metadata/'
     'ISOMetadata/ISOMetadata_template.xml'))
