@@ -19,6 +19,26 @@ __copyright__ = 'South African National Space Agency'
 from django.contrib.gis.db import models
 
 
+class ProductProfile(models.Model):
+    """
+    An unique product profile, consists of:
+    * satellite_instrument
+
+    """
+    satellite_instrument = models.ForeignKey('SatelliteInstrument')
+    spectral_mode = models.ManyToManyField(
+        'SpectralMode',
+        blank=True, null=True
+    )
+
+    def __unicode__(self):
+        return u'id={2} {0} {1}'.format(
+            self.satellite_instrument,
+            [str(sm) for sm in self.spectral_mode.all()],
+            self.id
+        )
+
+
 class ProcessingLevel(models.Model):
     """
     Available ProcessingLevels, e.g. L1, L1A, ...
@@ -259,7 +279,7 @@ class SatelliteInstrument(models.Model):
 
     def __unicode__(self):
         """Return 'operator_abbreviation' as model representation."""
-        return u'{0}'.format(self.operator_abbreviation)
+        return u'{0} (si={1})'.format(self.operator_abbreviation, self.id)
 
 
 class Band(models.Model):
@@ -323,7 +343,8 @@ class SpectralMode(models.Model):
         SpectralGroup)
 
     def __unicode__(self):
-        return u'{0} - {1}'.format(self.name, self.instrument_type.name)
+        return u'(sm={2}) {0} - {1}'.format(
+            self.name, self.instrument_type.name, self.id)
 
 
 class BandSpectralMode(models.Model):

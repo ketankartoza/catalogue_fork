@@ -1,5 +1,3 @@
-BEGIN;
-
 --
 -- PostgreSQL database dump
 --
@@ -389,13 +387,6 @@ SELECT pg_catalog.setval('dictionaries_processinglevelforinstrumenttype_id_seq',
 
 
 --
--- Name: dictionaries_radarbeam_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_radarbeam_id_seq', 1, true);
-
-
---
 -- Data for Name: dictionaries_satellite; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
@@ -417,13 +408,6 @@ COPY dictionaries_satellite (id, name, description, abbreviation, operator_abbre
 16	ERS-2	European Remote-Sensing Satellite-2\r\n	E2	ERS-2	6	\N		\N		\N		1
 15	ERS-1	European Remote-Sensing Satellite 1\r\n	E1	ERS-1	6	\N		\N		\N		1
 \.
-
-
---
--- Name: dictionaries_satellite_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_satellite_id_seq', 16, true);
 
 
 --
@@ -458,6 +442,128 @@ COPY dictionaries_satelliteinstrument (id, name, description, abbreviation, oper
 
 
 --
+-- Data for Name: dictionaries_productprofile; Type: TABLE DATA; Schema: public; Owner: dodobas
+--
+
+COPY dictionaries_productprofile (id, satellite_instrument_id) FROM stdin;
+1	21
+2	19
+3	23
+4	9
+5	10
+6	9
+7	10
+8	7
+9	8
+10	7
+11	8
+12	5
+13	6
+14	5
+15	6
+16	3
+17	4
+18	3
+19	4
+20	1
+21	2
+22	1
+23	2
+24	1
+25	2
+26	1
+27	2
+28	12
+29	13
+30	14
+31	16
+32	17
+33	18
+34	20
+\.
+
+
+--
+-- Name: dictionaries_productprofile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_productprofile_id_seq', 34, true);
+
+
+--
+-- Data for Name: dictionaries_productprofile_spectral_mode; Type: TABLE DATA; Schema: public; Owner: dodobas
+--
+
+COPY dictionaries_productprofile_spectral_mode (id, productprofile_id, spectralmode_id) FROM stdin;
+1	2	25
+2	3	31
+3	4	20
+4	5	20
+5	6	19
+6	7	19
+7	8	20
+8	9	20
+9	10	19
+10	11	19
+11	12	19
+12	13	19
+13	14	20
+14	15	20
+15	16	17
+16	17	17
+17	18	18
+18	19	18
+19	20	14
+20	21	14
+21	22	15
+22	23	15
+23	24	16
+24	25	16
+25	26	13
+26	27	13
+27	28	6
+28	29	6
+29	30	6
+30	30	5
+31	30	4
+32	30	29
+33	31	5
+34	31	29
+35	32	4
+36	33	30
+37	33	3
+38	33	2
+39	33	1
+40	34	26
+41	34	27
+42	34	33
+43	34	34
+44	34	35
+\.
+
+
+--
+-- Name: dictionaries_productprofile_spectral_mode_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_productprofile_spectral_mode_id_seq', 44, true);
+
+
+--
+-- Name: dictionaries_radarbeam_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_radarbeam_id_seq', 1, true);
+
+
+--
+-- Name: dictionaries_satellite_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_satellite_id_seq', 16, true);
+
+
+--
 -- Name: dictionaries_satelliteinstrument_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
 --
 
@@ -489,4 +595,3 @@ SELECT pg_catalog.setval('dictionaries_spectralmode_id_seq', 35, true);
 -- PostgreSQL database dump complete
 --
 
-COMMIT;

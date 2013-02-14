@@ -33,7 +33,8 @@ from .models import (
     SpectralMode,
     BandSpectralMode,
     ProcessingLevelForInstrumentType,
-    ProcessingCostsForSpectralMode
+    ProcessingCostsForSpectralMode,
+    ProductProfile
 )
 
 
@@ -111,3 +112,8 @@ class ProcessingCostsForSpectralModeAdmin(admin.ModelAdmin):
     pass
 admin.site.register(
     ProcessingCostsForSpectralMode, ProcessingCostsForSpectralModeAdmin)
+
+
+class ProductProfileAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(ProductProfile, ProductProfileAdmin)
