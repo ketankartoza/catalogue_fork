@@ -23,7 +23,7 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from django_project.catalogue.models import SearchRecord
+from catalogue.models import SearchRecord
 
 
 class ShoppingCart_addToCart_Tests(TestCase):

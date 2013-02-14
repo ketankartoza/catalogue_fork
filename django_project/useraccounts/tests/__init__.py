@@ -1,1 +1,1 @@
-from django_project.useraccounts.tests.sansauserprofile_model import SansaUserProfileCRUD_Test
+from useraccounts.tests.sansauserprofile_model import SansaUserProfileCRUD_Test

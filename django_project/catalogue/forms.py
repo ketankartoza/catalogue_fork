@@ -28,11 +28,11 @@ from django.forms.models import BaseInlineFormSet
 from django.core.exceptions import ValidationError
 #from django.core.validators import EMPTY_VALUES
 
-from django_project.catalogue.fields import (
+from catalogue.fields import (
     IntegersCSVIntervalsField,
     NoValidationChoiceField,
     AbbreviationModelChoiceField)
-from django_project.catalogue.models import (
+from catalogue.models import (
     RadarProduct,
     MissionSensor,
     Search,
@@ -49,9 +49,9 @@ from django_project.catalogue.models import (
     TaskingRequest,
     OrderStatusHistory,
     Clip)
-from django_project.catalogue.datetimewidget import DateTimeWidget
-from django_project.catalogue.geometrywidget import GeometryWidget
-from django_project.catalogue.aoigeometry import AOIGeometryField
+from catalogue.datetimewidget import DateTimeWidget
+from catalogue.geometrywidget import GeometryWidget
+from catalogue.aoigeometry import AOIGeometryField
 
 # Support dmy formats (see
 #    http://dantallis.blogspot.com/2008/11/date-validation-in-django.html )

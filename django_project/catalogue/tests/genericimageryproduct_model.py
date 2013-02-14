@@ -18,8 +18,8 @@ __date__ = '27/06/2012'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
-from django_project.catalogue.tests.test_utils import simpleMessage
-from django_project.catalogue.models import GenericImageryProduct
+from catalogue.tests.test_utils import simpleMessage
+from catalogue.models import GenericImageryProduct
 
 
 class GenericImageryProductCRUD_Test(TestCase):

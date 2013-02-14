@@ -24,9 +24,9 @@ from datetime import datetime
 from django.contrib.gis.db import models
 #for user id foreign keys
 from django.contrib.auth.models import User
-from django_project.catalogue.models.orders import Order, DeliveryDetail
-from django_project.catalogue.models.products import GenericProduct, RadarProduct
-from django_project.catalogue.models import (
+from catalogue.models.orders import Order, DeliveryDetail
+from catalogue.models.products import GenericProduct, RadarProduct
+from catalogue.models import (
     MissionSensor,
     AcquisitionMode,
     License,
@@ -35,7 +35,7 @@ from django_project.catalogue.models import (
     ProcessingLevel)
 #for translation
 
-from django_project.catalogue.fields import IntegersCSVIntervalsField
+from catalogue.fields import IntegersCSVIntervalsField
 
 ###############################################################################
 

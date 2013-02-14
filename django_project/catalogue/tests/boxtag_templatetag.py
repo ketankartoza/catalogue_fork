@@ -21,7 +21,7 @@ __copyright__ = 'South African National Space Agency'
 from django.test import TestCase
 from django.template import Template, Context
 
-from django_project.catalogue.tests.test_utils import simpleMessage
+from catalogue.tests.test_utils import simpleMessage
 
 
 class BoxTag_Test(TestCase):

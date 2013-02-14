@@ -24,7 +24,7 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from django_project.catalogue.models import Order
+from catalogue.models import Order
 
 
 class OrdersViews_listOrders_Tests(TestCase):

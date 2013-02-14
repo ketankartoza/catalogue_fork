@@ -23,7 +23,7 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from django_project.catalogue.models import Visit
+from catalogue.models import Visit
 
 
 class ReportsViews_visitorMonthlyReport_Tests(TestCase):

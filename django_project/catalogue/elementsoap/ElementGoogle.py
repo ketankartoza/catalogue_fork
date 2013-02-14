@@ -21,8 +21,8 @@
 # <a href='http://www.google.com/apis/'>http://www.google.com/apis/</a>.
 ##
 
-from django_project.catalogue.elementsoap.ElementSOAP import SoapService, SoapRequest, SoapElement
-from django_project.catalogue.elementsoap.ElementSOAP import decode, decode_element
+from catalogue.elementsoap.ElementSOAP import SoapService, SoapRequest, SoapElement
+from catalogue.elementsoap.ElementSOAP import decode, decode_element
 
 ##
 # Google service client.  To talk to the Google Web API, create an

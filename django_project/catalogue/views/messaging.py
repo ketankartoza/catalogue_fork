@@ -29,7 +29,7 @@ from django.contrib.auth.models import User
 from offline_messages.models import OfflineMessage
 from offline_messages.utils import create_offline_message, constants
 
-from django_project.catalogue.forms import AllUsersMessageForm, MessageForm
+from catalogue.forms import AllUsersMessageForm, MessageForm
 
 
 @staff_member_required

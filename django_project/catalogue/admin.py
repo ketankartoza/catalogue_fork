@@ -26,7 +26,7 @@ from django.contrib.admin import widgets
 from django.contrib.auth.models import User
 from offline_messages.models import OfflineMessage
 
-from django_project.catalogue.models import (
+from catalogue.models import (
     OrderNotificationRecipients,
     Mission,
     MissionSensor,

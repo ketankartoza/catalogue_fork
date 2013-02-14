@@ -1,6 +1,6 @@
 from django.test import TestCase
-from django_project.catalogue.tests.test_utils import simpleMessage
-from django_project.catalogue import models
+from catalogue.tests.test_utils import simpleMessage
+from catalogue import models
 
 
 class SimpleTest(TestCase):

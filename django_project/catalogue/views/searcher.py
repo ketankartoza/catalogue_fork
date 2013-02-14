@@ -26,7 +26,7 @@ from django.db.models import Q
 from django.conf import settings
 
 # Models and forms for our app
-from django_project.catalogue.models import (
+from catalogue.models import (
     Search,
     SearchRecord,
     GenericSensorProduct,
@@ -34,9 +34,9 @@ from django_project.catalogue.models import (
     RadarProduct,
     OpticalProduct,
     License)
-from django_project.catalogue.forms import IntegersCSVIntervalsField
+from catalogue.forms import IntegersCSVIntervalsField
 # for using django Q() query defs
-from django_project.catalogue.views.helpers import standardLayersWithCart
+from catalogue.views.helpers import standardLayersWithCart
 
 DEFAULT_EXTENT = (
     '(-61.773122863038, -74.531249997024, 128.32031249488, 70.612614236677)')

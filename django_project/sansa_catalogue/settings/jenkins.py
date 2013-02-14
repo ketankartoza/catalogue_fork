@@ -1,4 +1,4 @@
-from .django_project.sansa_catalogue.settings.test import *
+from .test import *
 
 DATABASES = {
     'default': {
@@ -25,7 +25,7 @@ NOSE_ARGS += (
     # this is needed as we can't use Nose default test discoverer, because we
     # are still using tests customized for Django default test runner
     'catalogue.tests',
-    'dictionaries.tests',
+    .tests',
     'useraccounts.tests'
 )
 
@@ -34,7 +34,7 @@ NOSE_ARGS += (
 #
 PROJECT_APPS = (
     'catalogue',
-    'dictionaries',
+    ',
     'useraccounts',
 )
 

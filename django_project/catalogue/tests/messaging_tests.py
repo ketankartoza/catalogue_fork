@@ -27,7 +27,7 @@ from django.contrib.auth.models import AnonymousUser
 from offline_messages.models import OfflineMessage
 
 from django.test.client import RequestFactory
-from django_project.catalogue.views import (sendMessageToUser,
+from catalogue.views import (sendMessageToUser,
                              sendMessageToAllUsers,
                              userMessages)
 

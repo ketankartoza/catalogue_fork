@@ -63,7 +63,7 @@ import urlparse
 # HTTP exception.  This exception contains the error code, the error
 # message, an HTTP header dictionary, and a file handle, in that
 # order.  The file handle can be used to read the error response.
-from django_project.catalogue.elementsoap import ElementTree as ET
+from catalogue.elementsoap import ElementTree as ET
 
 
 class HTTPError(Exception):

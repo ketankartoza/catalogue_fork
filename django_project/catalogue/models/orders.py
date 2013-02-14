@@ -22,8 +22,8 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 # Helper classes
 # ABP: unused ? from catalogue.geoiputils import *
-from django_project.catalogue.nosubclassmanager import NoSubclassManager
-from django_project.catalogue.models import (
+from catalogue.nosubclassmanager import NoSubclassManager
+from catalogue.models import (
     ProcessingLevel,
     Projection,
     MissionSensor)

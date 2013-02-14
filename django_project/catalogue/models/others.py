@@ -24,8 +24,8 @@ from django.contrib.contenttypes.models import ContentType
 from offline_messages.models import OfflineMessage
 from offline_messages.utils import create_offline_message, constants
 #for translation
-from django_project.catalogue.models import MissionSensor
-from django_project.catalogue.models.products import GenericSensorProduct
+from catalogue.models import MissionSensor
+from catalogue.models.products import GenericSensorProduct
 
 
 ###############################################################################

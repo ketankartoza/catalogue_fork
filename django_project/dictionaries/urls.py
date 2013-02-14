@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-from .django_project.dictionaries.views import collectionList, satelliteDetails
+from .views import collectionList, satelliteDetails
 
 urlpatterns = patterns(
     '',

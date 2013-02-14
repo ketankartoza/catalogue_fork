@@ -22,15 +22,15 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from django_project.catalogue.models import (
+from catalogue.models import (
     Order,
     SearchRecord,
     OrderStatusHistory,
 )
 
-from django_project.catalogue.forms import OrderStatusHistoryForm
+from catalogue.forms import OrderStatusHistoryForm
 
-from django_project.catalogue.views.orders import coverageForOrder
+from catalogue.views.orders import coverageForOrder
 
 
 class OrdersViews_viewOrder_Tests(TestCase):

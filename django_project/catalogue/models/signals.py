@@ -22,7 +22,7 @@ import logging
 
 from django.contrib.gis.db import models
 
-from django_project.catalogue.models.products import (
+from catalogue.models.products import (
     OpticalProduct,
     RadarProduct,
     GenericImageryProduct,

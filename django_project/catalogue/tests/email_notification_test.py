@@ -23,7 +23,7 @@ from django.core import mail
 from catalogue.models import (Order,
                               User,
                               TaskingRequest)
-from django_project.catalogue.views.helpers import (notifySalesStaff,
+from catalogue.views.helpers import (notifySalesStaff,
                                      notifySalesStaffOfTaskRequest)
 
 

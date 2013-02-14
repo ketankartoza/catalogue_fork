@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url, include
 
-from django_project.useraccounts.forms import EditProfileFormExtra
+from useraccounts.forms import EditProfileFormExtra
 
 
 urlpatterns = patterns(

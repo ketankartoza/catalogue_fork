@@ -24,7 +24,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 
-from django_project.catalogue.models import (Order,
+from catalogue.models import (Order,
                               OrderStatusHistory,
                               OrderNotificationRecipients,
                               TaskingRequest,
@@ -247,7 +247,7 @@ def notifySalesStaff(theUser, theOrderId, theContext=None):
     Example usage from the console / doctest:
 
 
-       >>> from django_project.catalogue.views import *
+       >>> from catalogue.views import *
        >>> myUser = User.objects.get(id=1)
        >>> myUser
        >>> notifySalesStaff(myUser, 16)
@@ -350,7 +350,7 @@ def notifySalesStaffOfTaskRequest(theUser, theId, theContext=None):
     A helper method to notify tasking staff who are subscribed to a sensor
     Example usage from the console / doctest:
 
-       >>> from django_project.catalogue.views import *
+       >>> from catalogue.views import *
        >>> notifySalesStaffOfTaskRequest(11)
 
     Args:

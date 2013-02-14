@@ -1,4 +1,4 @@
-from .django_project.sansa_catalogue.settings.project import *
+from .project import *
 
 # http://hustoknow.blogspot.com/2011/02/setting-up-django-nose-on-hudson.html
 INSTALLED_APPS += (
@@ -15,7 +15,7 @@ NOSE_ARGS = (
     '--cover-html-dir=xmlrunner/html',
     '--cover-inclusive',
     '--cover-package=catalogue',
-    '--cover-package=dictionaries',
+    '--cover-package',
     '--cover-package=useraccounts',
     '--nocapture',
     '--nologcapture',

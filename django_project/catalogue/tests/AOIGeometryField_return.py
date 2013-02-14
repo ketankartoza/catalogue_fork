@@ -21,8 +21,8 @@ __copyright__ = 'South African National Space Agency'
 from django.test import TestCase
 from django import forms
 
-from django_project.catalogue.tests.test_utils import simpleMessage
-from django_project.catalogue.aoigeometry import AOIGeometryField
+from catalogue.tests.test_utils import simpleMessage
+from catalogue.aoigeometry import AOIGeometryField
 
 
 class AOIGeometryFieldForm(forms.Form):

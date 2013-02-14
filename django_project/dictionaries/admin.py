@@ -19,7 +19,7 @@ __copyright__ = 'South African National Space Agency'
 
 from django.contrib.gis import admin
 
-from .django_project.dictionaries.models import (
+from .models import (
     ProcessingLevel,
     Collection,
     Satellite,

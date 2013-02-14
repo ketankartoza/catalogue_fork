@@ -1,4 +1,4 @@
-from .django_project.sansa_catalogue.settings.project import *
+from .project import *
 
 # Set debug to True for development
 DEBUG = True

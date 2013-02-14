@@ -18,8 +18,8 @@ __date__ = '09/07/2012'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
-from django_project.catalogue.tests.test_utils import simpleMessage
-from django_project.catalogue.models import FileFormat
+from catalogue.tests.test_utils import simpleMessage
+from catalogue.models import FileFormat
 
 
 class FileFormatCRUD_Test(TestCase):

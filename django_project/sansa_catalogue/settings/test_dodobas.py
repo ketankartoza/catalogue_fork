@@ -1,4 +1,4 @@
-from .django_project.sansa_catalogue.settings.test import *
+from .test import *
 
 DATABASES = {
     'default': {

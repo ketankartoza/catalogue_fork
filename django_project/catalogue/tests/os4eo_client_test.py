@@ -2,7 +2,7 @@
 
 os4eo WS client tests
 
->>> from django_project.catalogue.os4eo_client import OS4EOClient
+>>> from catalogue.os4eo_client import OS4EOClient
 >>> os4eo = OS4EOClient(debug=False)
 
 >>> os4eo.GetCapabilities()

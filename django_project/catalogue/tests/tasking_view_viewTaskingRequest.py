@@ -22,7 +22,7 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from django_project.catalogue.forms import OrderStatusHistoryForm
+from catalogue.forms import OrderStatusHistoryForm
 
 
 class TaskingViews_viewTaskingRequest_Tests(TestCase):

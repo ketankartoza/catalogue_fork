@@ -31,8 +31,8 @@ from django.db import transaction
 from django.contrib.gis.geos import Polygon
 from django.contrib.gis.gdal import SpatialReference
 
-from django_project.catalogue.models import *
-from django_project.catalogue.dims_lib import dimsReader
+from catalogue.models import *
+from catalogue.dims_lib import dimsReader
 
 
 class Command(BaseCommand):

@@ -18,7 +18,7 @@ __copyright__ = 'South African National Space Agency'
 
 from django.shortcuts import render_to_response
 
-from django_project.dictionaries.models import (
+from.models import (
     Collection,
     Satellite
 )

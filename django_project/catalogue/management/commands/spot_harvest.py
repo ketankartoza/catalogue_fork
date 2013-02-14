@@ -51,7 +51,7 @@ from optparse import make_option
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
-from django_project.catalogue.ingestors import spot
+from catalogue.ingestors import spot
 
 
 def get_row_path_from_polygon(poly, as_int=False, no_compass=False):

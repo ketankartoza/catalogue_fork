@@ -43,7 +43,7 @@ from django.contrib.gis.gdal import (
     SpatialReference,
     CoordTransform)
 # Models and forms for our app
-from django_project.catalogue.models import (
+from catalogue.models import (
     Order,
     OrderStatusHistory,
     SearchRecord,
@@ -52,13 +52,13 @@ from django_project.catalogue.models import (
     TaskingRequest,
     MissionSensor)
 
-from django_project.catalogue.forms import (
+from catalogue.forms import (
     OrderStatusHistoryForm,
     ProductDeliveryDetailForm,
     DeliveryDetailForm,
     OrderForm)
 # Helper classes
-from django_project.catalogue.views.helpers import (
+from catalogue.views.helpers import (
     notifySalesStaff,
     notifySalesStaffOfTaskRequest,
     standardLayers,
@@ -67,13 +67,13 @@ from django_project.catalogue.views.helpers import (
     downloadISOMetadata,
     downloadHtmlMetadata,)
 # SHP and KML readers
-from django_project.catalogue.featureReaders import getGeometryFromUploadedFile
-from django_project.catalogue.utmzonecalc import utmZoneFromLatLon
-from django_project.catalogue.profileRequiredDecorator import requireProfile
-from django_project.catalogue.renderDecorator import renderWithContext
+from catalogue.featureReaders import getGeometryFromUploadedFile
+from catalogue.utmzonecalc import utmZoneFromLatLon
+from catalogue.profileRequiredDecorator import requireProfile
+from catalogue.renderDecorator import renderWithContext
 
 #other modules
-from django_project.shapes.views import ShpResponder
+from shapes.views import ShpResponder
 
 ###########################################################
 #

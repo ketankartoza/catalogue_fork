@@ -1,4 +1,4 @@
-from .django_project.sansa_catalogue.settings.project import *
+from .project import *
 
 SENTRY_DSN = ('http://c9b3062853e34c2b857122d75d4ec663:'
               'ff3010968b4e47c0a84166da3c1842ae@sentry.linfiniti.com/3')

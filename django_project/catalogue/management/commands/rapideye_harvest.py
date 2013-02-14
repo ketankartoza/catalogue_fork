@@ -31,7 +31,7 @@ from django.db import transaction
 from django.contrib.gis.gdal import DataSource
 from django.contrib.gis.gdal.geometries import Polygon
 
-from django_project.catalogue.models import *
+from catalogue.models import *
 
 
 # Hardcoded constants

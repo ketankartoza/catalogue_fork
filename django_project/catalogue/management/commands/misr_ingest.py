@@ -45,7 +45,7 @@ from django.conf import settings
 from django.db import transaction
 from django.contrib.gis.geos import Polygon
 
-from django_project.catalogue.models import *
+from catalogue.models import *
 
 
 # Hardcoded constants

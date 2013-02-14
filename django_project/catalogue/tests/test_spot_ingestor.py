@@ -21,11 +21,11 @@ __copyright__ = 'South African National Space Agency'
 import os
 from django.test import TestCase
 from django.core.management import call_command
-from django_project.catalogue.models import (Institution,
+from catalogue.models import (Institution,
                               GenericProduct,
                               AcquisitionMode,
                               SensorType)
-from django_project.catalogue.ingestors import spot
+from catalogue.ingestors import spot
 
 SHAPEFILE_NAME = os.path.join(os.path.dirname( __file__),
                               'sample_files/spot-ingestion/Africa_2012_subset.shp')

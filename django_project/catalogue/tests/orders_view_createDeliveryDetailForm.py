@@ -22,7 +22,7 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from django_project.catalogue.forms import ProductDeliveryDetailForm
+from catalogue.forms import ProductDeliveryDetailForm
 
 
 class OrdersViews_createDeliveryDetailForm_Tests(TestCase):

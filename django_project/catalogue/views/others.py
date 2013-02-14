@@ -42,28 +42,28 @@ from django.contrib.gis.geos import Point
 
 
 # Models and forms for our app
-from django_project.catalogue.models import (
+from catalogue.models import (
     GenericProduct,
     Search,
     Visit,
     VisitorReport,
     Clip,
     Mission)
-from django_project.catalogue.forms import (
+from catalogue.forms import (
     ClipForm)
-from django_project.catalogue.renderDecorator import renderWithContext
+from catalogue.renderDecorator import renderWithContext
 
 # SHP and KML readers
-from django_project.catalogue.featureReaders import (
+from catalogue.featureReaders import (
     getGeometryFromUploadedFile,)
 
 # View Helper classes
-from django_project.catalogue.views.geoiputils import GeoIpUtils
-from django_project.catalogue.views.helpers import (
+from catalogue.views.geoiputils import GeoIpUtils
+from catalogue.views.helpers import (
     WEB_LAYERS,
     standardLayers,
     isStrategicPartner)
-from django_project.catalogue.views.helpers import render_to_kml
+from catalogue.views.helpers import render_to_kml
 #### VIEW FUNCTIONS ####
 
 

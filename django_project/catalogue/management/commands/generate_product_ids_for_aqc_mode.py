@@ -20,7 +20,7 @@ __copyright__ = 'South African National Space Agency'
 
 from django.core.management.base import BaseCommand
 
-from django_project.catalogue.models import (GenericSensorProduct, AcquisitionMode )
+from catalogue.models import (GenericSensorProduct, AcquisitionMode )
 
 
 class Command(BaseCommand):

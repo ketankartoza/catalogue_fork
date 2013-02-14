@@ -1,4 +1,4 @@
-from .django_project.sansa_catalogue.settings.contrib import *
+from .contrib import *
 
 DATABASES = {
     'default': {
@@ -14,9 +14,9 @@ DATABASES = {
 
 # Application specific apps
 INSTALLED_APPS += (
-    'django_project.catalogue',
-    'django_project.dictionaries',
-    'django_project.useraccounts',
+    'catalogue',
+    'dictionaries',
+    'useraccounts',
 )
 
 # Set debug to false for production
@@ -73,7 +73,7 @@ EMAIL_NOTIFICATIONS_ENABLED = True
 
 # extra middleware classes
 MIDDLEWARE_CLASSES += (
-    'django_project.catalogue.middleware.stripwhitespace'
+    'catalogue.middleware.stripwhitespace'
     '.StripWhitespaceMiddleware',
 )
 

@@ -20,7 +20,7 @@ __copyright__ = 'South African National Space Agency'
 from django.test import TestCase
 from django.test.client import RequestFactory
 
-from django_project.catalogue.models import User
+from catalogue.models import User
 
 
 def simpleMessage(theResult, theExpectedResult, message='', enclose_in=''):

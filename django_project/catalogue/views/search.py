@@ -40,7 +40,7 @@ from django.template import RequestContext
 #from django.db.models import Count, Min, Max  # for aggregate queries
 from django.forms.models import inlineformset_factory
 # Models and forms for our app
-from django_project.catalogue.models import (
+from catalogue.models import (
     Search,
     SearchDateRange,
     AcquisitionMode,
@@ -48,32 +48,32 @@ from django_project.catalogue.models import (
     MissionSensor,
     SensorType,
     SearchRecord)
-from django_project.catalogue.forms import (
+from catalogue.forms import (
     AdvancedSearchForm,
     DateRangeFormSet,
     ProductIdSearchForm,)
 
-from django_project.catalogue.renderDecorator import renderWithContext
+from catalogue.renderDecorator import renderWithContext
 
 # Helper classes
 
 #Dane Springmeyer's django-shapes app for exporting results as a shpfile
-from django_project.shapes.views import ShpResponder
+from shapes.views import ShpResponder
 
-from django_project.catalogue.views.helpers import (
+from catalogue.views.helpers import (
     standardLayers,
     render_to_kml,
     render_to_kmz,
     downloadHtmlMetadata,
     downloadISOMetadata)
-from django_project.catalogue.views.searcher import (
+from catalogue.views.searcher import (
     Searcher)
 
 # SHP and KML readers
-from django_project.catalogue.featureReaders import (
+from catalogue.featureReaders import (
     getGeometryFromUploadedFile,)
 
-from django_project.catalogue.views.geoiputils import GeoIpUtils
+from catalogue.views.geoiputils import GeoIpUtils
 
 
 class Http500(Exception):

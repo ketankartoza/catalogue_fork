@@ -1,13 +1,13 @@
 #from django.conf.urls.defaults import *
 from django.conf.urls import patterns, include, url
 #from django.views.generic import list_detail
-from django_project.catalogue.views import *
+from catalogue.views import *
 from django.conf import settings
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
-# These dictionaries are used for our generic views
+# These are used for our generic views
 # see http://docs.djangoproject.com/en/dev/intro/tutorial04/
 #myOrdersDict = { 'queryset': Order.objects.all(),
    #  "template_object_name" : "myOrders",
@@ -48,7 +48,7 @@ urlpatterns = patterns('',
     url(r'^recentsearches/$', recentSearches, name='recentSearches'),
     url(r'^searchmonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReport, name='searchMonthlyReport'),
     url(r'^searchmonthlyreportaoi/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReportAOI, name='searchMonthlyReportAOI'),
-    url(r'^search/$', 'django_project.catalogue.views.search.search', name='search'), # clashes with module name catalogue.views.search
+    url(r'^search/$', 'catalogue.views.search.search', name='search'), # clashes with module name catalogue.views.search
     url(r'^productIdSearch/(?P<theGuid>[a-h0-9\-]{36})/$', productIdSearch, name='productIdSearch'),
     url(r'^visit/$', logVisit, name='logVisit'),
     url(r'^visitormap/$', visitorMap, name='visitorMap'),
@@ -70,7 +70,7 @@ urlpatterns = patterns('',
     # show segment thumb for a segment by #
     # thumbnailpage is called only by itself?
     url(r'^thumbnailpage/(?P<theId>[0-9]+)/$', showThumbPage, name='showThumbPage'),
-    url(r'^sensordictionaries/$', getSensorDictionaries, name='getSensorDictionaries'),
+    url(r'^senso/$', getSensorDictionaries, name='getSensorDictionaries'),
     # returns image mime type - show segment thumb info for a segment
     url(r'^thumbnail/(?P<theId>[0-9]+)/(?P<theSize>[a-z]+)/$', showThumb, name='showThumb'),
     # returns html mime type
@@ -121,7 +121,7 @@ urlpatterns = patterns('',
     url(r'^sendMessageToAllUsers/$', messaging.sendMessageToAllUsers),
 
     # New dictionaries
-    url(r'', include('django_project.dictionaries.urls')),
+    url(r'', include('dictionaries.urls')),
     # New user profile management
-    url(r'', include('django_project.useraccounts.urls')),
+    url(r'', include('useraccounts.urls')),
 )

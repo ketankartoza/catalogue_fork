@@ -30,7 +30,7 @@ from django.db import transaction
 from django.contrib.gis.gdal import OGRGeometry
 from django.contrib.gis.gdal import DataSource
 
-from django_project.catalogue.models import (Quality,
+from catalogue.models import (Quality,
                               License,
                               CreatingSoftware,
                               Institution,

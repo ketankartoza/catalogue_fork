@@ -22,12 +22,12 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from django_project.catalogue.forms import (
+from catalogue.forms import (
     OrderForm,
     DeliveryDetailForm
 )
 
-from django_project.catalogue.models import (
+from catalogue.models import (
     SearchRecord,
     Order
 )

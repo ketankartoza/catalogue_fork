@@ -25,16 +25,16 @@ from django.http import HttpResponse, Http404
 from django.utils import simplejson
 from django.conf import settings
 #Dane Springmeyer's django-shapes app for exporting results as a shpfile
-from django_project.shapes.views import ShpResponder
+from shapes.views import ShpResponder
 
 # Models and forms for our app
-from django_project.catalogue.renderDecorator import renderWithContext
-from django_project.catalogue.models import (
+from catalogue.renderDecorator import renderWithContext
+from catalogue.models import (
     SearchRecord,
     GenericProduct)
 
 # Helper classes (render_as_kml, ...)
-from django_project.catalogue.views.helpers import (
+from catalogue.views.helpers import (
     render_to_kml,
     render_to_kmz,
     downloadHtmlMetadata,

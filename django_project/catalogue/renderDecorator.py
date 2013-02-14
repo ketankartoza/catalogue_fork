@@ -21,7 +21,7 @@ __copyright__ = 'South African National Space Agency'
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django_project.catalogue.pdfReport import render_to_pdf
+from catalogue.pdfReport import render_to_pdf
 
 
 class renderWithContext(object):

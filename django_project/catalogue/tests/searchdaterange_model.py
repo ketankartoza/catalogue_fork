@@ -21,8 +21,8 @@ from datetime import date, datetime
 
 from django.test import TestCase
 
-from django_project.catalogue.tests.test_utils import simpleMessage
-from django_project.catalogue.models import SearchDateRange
+from catalogue.tests.test_utils import simpleMessage
+from catalogue.models import SearchDateRange
 
 
 class SearchDateRangeCRUD_Test(TestCase):

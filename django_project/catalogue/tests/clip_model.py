@@ -21,8 +21,8 @@ from datetime import datetime
 
 from django.test import TestCase
 
-from django_project.catalogue.tests.test_utils import simpleMessage
-from django_project.catalogue.models import Clip
+from catalogue.tests.test_utils import simpleMessage
+from catalogue.models import Clip
 
 
 class ClipCRUD_Test(TestCase):

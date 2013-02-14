@@ -32,27 +32,27 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 #Dane Springmeyer's django-shapes app for exporting results as a shpfile
-from django_project.shapes.views import ShpResponder
+from shapes.views import ShpResponder
 
 # Models and forms for our app
-from django_project.catalogue.renderDecorator import renderWithContext
-from django_project.catalogue.profileRequiredDecorator import requireProfile
+from catalogue.renderDecorator import renderWithContext
+from catalogue.profileRequiredDecorator import requireProfile
 
-from django_project.catalogue.models import (
+from catalogue.models import (
     TaskingRequest,
     OrderStatusHistory,)
-from django_project.catalogue.views.helpers import (
+from catalogue.views.helpers import (
     standardLayers,
     notifySalesStaffOfTaskRequest,
     render_to_kml,
     render_to_kmz,)
-from django_project.catalogue.forms import (
+from catalogue.forms import (
     OrderStatusHistoryForm,
     TaskingRequestForm,
     TaskingRequestDeliveryDetailForm)
 
 # SHP and KML readers
-from django_project.catalogue.featureReaders import (
+from catalogue.featureReaders import (
     getGeometryFromUploadedFile,)
 
 ###########################################################

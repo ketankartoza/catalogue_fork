@@ -15,9 +15,9 @@ at least one DIMS product
 ###############################################
 
 
-Load an initial fixture with dictionaries
+Load an initial fixture with
 
->>> call_command('loaddata', 'fixtures/catalogue_dictionaries.json', verbosity=0)
+>>> call_command('loaddata', 'fixtures/catalogue.json', verbosity=0)
 
 
 TODO: tests

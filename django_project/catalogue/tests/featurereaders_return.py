@@ -19,8 +19,8 @@ __date__ = '13/06/2012'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
-from django_project.catalogue.tests.test_utils import simpleMessage
-from django_project.catalogue.featureReaders import getFeaturesFromZipFile, \
+from catalogue.tests.test_utils import simpleMessage
+from catalogue.featureReaders import getFeaturesFromZipFile, \
     processGeometriesType
 
 

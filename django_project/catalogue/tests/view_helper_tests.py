@@ -21,7 +21,7 @@ import os
 import logging
 import zipfile
 from django.test import TestCase
-from django_project.catalogue.views.helpers import writeThumbToZip
+from catalogue.views.helpers import writeThumbToZip
 
 class ViewHelperTests(TestCase):
 

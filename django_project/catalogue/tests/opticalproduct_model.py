@@ -26,8 +26,8 @@ from django.conf import settings
 from django.test import TestCase
 from django.contrib.gis.geos import GEOSGeometry
 
-from django_project.catalogue.tests.test_utils import simpleMessage
-from django_project.catalogue.models import (
+from catalogue.tests.test_utils import simpleMessage
+from catalogue.models import (
     OpticalProduct,
     Projection,
     AcquisitionMode,

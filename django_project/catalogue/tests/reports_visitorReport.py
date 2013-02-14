@@ -24,7 +24,7 @@ from django.test import TestCase
 from django.test.client import Client
 
 
-from django_project.catalogue.models import Visit
+from catalogue.models import Visit
 
 
 class ReportsViews_visitorReport_Tests(TestCase):

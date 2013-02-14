@@ -51,7 +51,7 @@ class Collection(models.Model):
     institution = models.ForeignKey(
         # NOTE: when referencing models in another application we need ti
         # specify a model with the full application label
-        'django_project.catalogue.Institution',
+        'catalogue.Institution',
         help_text='Organisation that owns this satellite collection.')
 
     def __unicode__(self):
@@ -90,7 +90,7 @@ class Satellite(models.Model):
         blank=True, null=True,
         help_text='Satellite mission URL')
     license_type = models.ForeignKey(
-        'django_project.catalogue.License',
+        'catalogue.License',
         blank=True, null=True,
         help_text='Satellite product license type')
 

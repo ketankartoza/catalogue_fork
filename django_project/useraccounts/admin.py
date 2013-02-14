@@ -1,6 +1,6 @@
 from django.contrib.gis import admin
 
-from .django_project.useraccounts.models import SansaUserProfile
+from .models import SansaUserProfile
 
 
 class SansaUserProfileAdmin (admin.GeoModelAdmin):

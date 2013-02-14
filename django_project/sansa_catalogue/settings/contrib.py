@@ -1,4 +1,4 @@
-from .django_project.sansa_catalogue.settings.base import *
+from .base import *
 
 # Extra installed apps
 INSTALLED_APPS += (

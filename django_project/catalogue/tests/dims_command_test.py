@@ -3,7 +3,7 @@
 Tests ingestion
 
 >>> from django.core.management import call_command
->>> from django_project.catalogue.models import *
+>>> from catalogue.models import *
 
 ###############################################
 
@@ -17,10 +17,10 @@ Prepare testing, copying the package in a test folder
 >>> shutil.copy('catalogue/tests/sample_files/ORD_420882_20110124_20110124_SPOT-_V01_1.tar.gz', package)
 
 
-Load an initial fixture with dictionaries
+Load an initial fixture with
 
->>> call_command('loaddata', 'fixtures/catalogue_dictionaries.json')
-Installing json fixture 'fixtures/catalogue_dictionaries' from absolute path.
+>>> call_command('loaddata', 'fixtures/catalogue.json')
+Installing json fixture 'fixtures/catalogue' from absolute path.
 Installed ...
 
 ###############################################

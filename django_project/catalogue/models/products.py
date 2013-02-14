@@ -36,9 +36,9 @@ from PIL import Image, ImageFilter, ImageOps
 
 from django_dag.models import node_factory, edge_factory
 
-from django_project.catalogue.utmzonecalc import utmZoneFromLatLon
-from django_project.catalogue.dims_lib import dimsWriter
-from django_project.catalogue.models import (
+from catalogue.utmzonecalc import utmZoneFromLatLon
+from catalogue.dims_lib import dimsWriter
+from catalogue.models import (
     Mission,
     MissionSensor,
     MissionGroup,
@@ -919,7 +919,7 @@ class GenericSensorProduct(GenericImageryProduct):
     acquisition_mode = models.ForeignKey(AcquisitionMode)
     # new dicts
     # satellite_instrument = models.ForeignKey(
-    #     'dictionaries.SatelliteInstrument')
+    #     .SatelliteInstrument')
 
     product_acquisition_start = models.DateTimeField(db_index=True)
     product_acquisition_end = models.DateTimeField(

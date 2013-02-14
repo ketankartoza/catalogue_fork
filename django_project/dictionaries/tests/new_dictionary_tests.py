@@ -17,7 +17,7 @@ __date__ = '10/07/2012'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
-from ..django_project.dictionaries.models import (
+from ..models import (
     Collection,
     Satellite,
     InstrumentType

@@ -21,8 +21,8 @@ from datetime import datetime
 
 from django.test import TestCase
 
-from django_project.catalogue.tests.test_utils import simpleMessage
-from django_project.catalogue.models import OrderStatusHistory
+from catalogue.tests.test_utils import simpleMessage
+from catalogue.models import OrderStatusHistory
 
 
 class OrderStatusHistoryCRUD_Test(TestCase):

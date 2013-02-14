@@ -18,8 +18,8 @@ __date__ = '20/06/2012'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
-from django_project.catalogue.tests.test_utils import simpleMessage
-from django_project.catalogue.models import PlaceType
+from catalogue.tests.test_utils import simpleMessage
+from catalogue.models import PlaceType
 
 
 class PlaceTypeCRUD_Test(TestCase):

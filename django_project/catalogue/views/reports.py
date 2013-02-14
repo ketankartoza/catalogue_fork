@@ -34,14 +34,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 # from django.template import RequestContext
 # from django.forms.util import ErrorList
-#for sorted dictionaries, useful when rendering templates
+#for sorted, useful when rendering templates
 from django.utils.datastructures import SortedDict
 
 # for aggregate queries
 from django.db.models import Count  # for aggregate queries
 
 # Models and forms for our app
-from django_project.catalogue.models import (
+from catalogue.models import (
     Visit,
     Search,
     SearchRecord,
@@ -53,7 +53,7 @@ from django_project.catalogue.models import (
     OpticalProduct,
     SensorType,
     AcquisitionMode)
-from django_project.catalogue.renderDecorator import renderWithContext
+from catalogue.renderDecorator import renderWithContext
 
 
 # in case you need to slice ResultSet (paginate) for display
@@ -399,7 +399,7 @@ def sensorSummaryTable(theRequest, theSensorId):
 @renderWithContext('dictionaryReport.html')
 def dictionaryReport(theRequest):
     """
-    Summary of mission, sensor, type and mode dictionaries. Later we could add
+    Summary of mission, sensor, type and mode. Later we could add
     proc level too
     """
 

@@ -7,7 +7,7 @@ Unit tests for DIMS
 Tests reader
 
 >>> import os
->>> from django_project.catalogue.dims_lib import dimsWriter, dimsReader
+>>> from catalogue.dims_lib import dimsWriter, dimsReader
 >>> d = dimsReader(os.path.join(os.path.split(__file__)[0], 'sample_files', 'ORD_420882_20110124_20110124_SPOT-_V01_1.tar.gz'))
 >>> products = d.get_products()
 >>> product_code = products.keys()[0]

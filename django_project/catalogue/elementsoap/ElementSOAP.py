@@ -31,12 +31,12 @@ import random
 import binascii
 
 import ElementTree as ET
-from django_project.catalogue.elementsoap.HTTPClient import HTTPError
+from catalogue.elementsoap.HTTPClient import HTTPError
 
 # --------------------------------------------------------------------
 
 # SOAP 1.1 namespaces
-from django_project.catalogue.elementsoap import HTTPClient
+from catalogue.elementsoap import HTTPClient
 
 NS_SOAP_ENV = "{http://schemas.xmlsoap.org/soap/envelope/}"
 NS_SOAP_ENC = "{http://schemas.xmlsoap.org/soap/encoding/}"
@@ -297,7 +297,7 @@ def decode_element(element):
 ##
 # (Experimental) Decoder for the standard SOAP encoding scheme.  This
 # function supports SOAP arrays, and maps custom types to Python
-# dictionaries (using accessor names as keys, and decoded elements
+# (using accessor names as keys, and decoded elements
 # as values).
 #
 # @param element Element.

@@ -22,7 +22,7 @@ from django.test import TestCase
 from django import forms
 
 from catalogue.tests.test_utils import simpleMessage
-from django_project.catalogue.fields import IntegersCSVIntervalsField, validateIntegerRange
+from catalogue.fields import IntegersCSVIntervalsField, validateIntegerRange
 
 
 class IntegersCSVIntervalsForm(forms.Form):

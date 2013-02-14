@@ -18,9 +18,9 @@ __version__ = '0.1'
 __date__ = '18/06/2012'
 __copyright__ = 'South African National Space Agency'
 
-from django_project.catalogue.tests.test_utils import simpleMessage, SearchTestCase
-from django_project.catalogue.views.searcher import Searcher
-from django_project.catalogue.models import Search
+from catalogue.tests.test_utils import simpleMessage, SearchTestCase
+from catalogue.views.searcher import Searcher
+from catalogue.models import Search
 
 
 class SearchIncliantionAngle_Test(SearchTestCase):

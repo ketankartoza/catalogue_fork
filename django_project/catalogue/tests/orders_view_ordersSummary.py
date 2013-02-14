@@ -24,7 +24,7 @@ from django.test.client import Client
 
 from django.db.models import Count
 
-from django_project.catalogue.models import (
+from catalogue.models import (
     OrderStatus,
     MissionSensor
 )
