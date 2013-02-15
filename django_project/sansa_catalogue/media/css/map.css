@@ -12,6 +12,7 @@
  */
 
 .destroyFeatureItemInactive {
+  cursor:pointer;
   margin-right: 5px;
   /*height: 24px;
   width: 24px;
@@ -22,6 +23,7 @@
 {
   color:#228441;
   margin-right: 5px;
+  cursor:pointer;
   /*background:url(/media/images/draw_polygon_on.png) no-repeat;
   height:24px;
   width:24px;*/
@@ -29,6 +31,7 @@
 .olControlDrawFeaturePolygonItemInactive
 {
   margin-right: 5px;
+  cursor:pointer;
   /*background:url(/media/images/draw_polygon_off.png) no-repeat;
   height:24px;
   width:24px;*/
@@ -37,6 +40,7 @@
 {
   color:#228441;
   margin-right: 5px;
+  cursor:pointer;
   /*background:url(/media/images/draw_line_on.png) no-repeat;
   height:24px;
   width:24px;*/
@@ -44,6 +48,7 @@
 .olControlModifyFeatureItemInactive
 {
   margin-right: 5px;
+  cursor:pointer;
   /*background:url(/media/images/draw_line_off.png) no-repeat;
   height:24px;
   width:24px;*/
@@ -52,10 +57,12 @@
 {
   color:#228441;
   margin-right: 5px;
+  cursor:pointer;
 }
 .olControlNavigationItemInactive
 {
   margin-right: 5px;
+  cursor:pointer;
   /*background:url(/media/images/pan_off.png) no-repeat;
   height:24px;
   width:24px;*/
@@ -64,6 +71,7 @@
 {
   color:#228441;
   margin-right: 5px;
+  cursor:pointer;
   /*background:url(/media/images/zoom_in_24.png) no-repeat;
   height:24px;
   width:24px;*/
@@ -72,6 +80,7 @@
 {
   color:#228441;
   margin-right: 5px;
+  cursor:pointer;
   /*background:url(/media/images/zoom_out_24.png) no-repeat;
   height:24px;
   width:24px;*/
@@ -79,6 +88,7 @@
 .olControlZoomBoxInItemInactive 
 {
   margin-right: 5px;
+  cursor:pointer;
   /*background:url(/media/images/zoom_in_off_24.png) no-repeat;
   height:24px;
   width:24px;*/
@@ -86,6 +96,7 @@
 .olControlZoomBoxOutItemInactive 
 {
   margin-right: 5px;
+  cursor:pointer;
   /*background:url(/media/images/zoom_out_off_24.png) no-repeat;
   height:24px;
   width:24px;*/
@@ -93,6 +104,7 @@
 .olControlMapHelpItemInactive
 {
   margin-right: 5px;
+  cursor:pointer;
   /* OL button control uses ItemInactive CSS class
   http://dev.openlayers.org/docs/files/OpenLayers/Control/Button-js.html
   */
@@ -103,27 +115,34 @@
 
 .olControlNavigationHistory {
   margin-right: 5px;
+  cursor:pointer;
    /*background-image: url("img/navigation_history.png");
    background-repeat: no-repeat;
    width:  24px;
    height: 24px;*/
 }
 .olControlNavigationHistoryPreviousItemActive {
-  color:#228441;
+  color:black;
   margin-right: 5px;
+  cursor:pointer;
  /* background-position: 0px 0px;*/
 }
 .olControlNavigationHistoryPreviousItemInactive {
   margin-right: 5px;
+  color:grey;
+  cursor:pointer;
    /*background-position: 0px -24px;*/
 }
 .olControlNavigationHistoryNextItemActive {
   margin-right: 5px;
-  color:#228441;
+  color:black;
+  cursor:pointer;
    /*background-position: -24px 0px;*/
 }
 .olControlNavigationHistoryNextItemInactive {
   margin-right: 5px;
+  color:grey;
+  cursor:pointer;
    /*background-position: -24px -24px;*/
 }
 
