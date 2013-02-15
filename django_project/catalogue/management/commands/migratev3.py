@@ -77,7 +77,7 @@ class Command(BaseCommand):
     def migrate_search(self):
         print '* Starting search app migration...'
         origWD = os.getcwd()
-        os.chdir(os.path.join(origWD, 'sql', 'new_master'))
+        os.chdir(os.path.join(origWD, '..', 'sql', 'new_master'))
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '003_search_migration.sh', self.db])
         os.chdir(origWD)
