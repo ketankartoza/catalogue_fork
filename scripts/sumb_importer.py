@@ -7,12 +7,14 @@
 # source ../python/bin/activate
 # python manage.py runscript --pythonpath=scripts -v 2 sumb_importer
 # from the dir above scripts dir
-from catalogue.models import *
-from importutils import *
-from settings import *
 import shutil
 import sys
 import traceback
+
+from django_project.catalogue.models import *
+from importutils import *
+from settings import *
+
 
 mProgressInterval = 10
 mSourcePath = "/mnt/cataloguestorage/imagery_processing/sumbandilasat/"

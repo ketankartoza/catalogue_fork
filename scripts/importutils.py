@@ -1,17 +1,12 @@
 import sys
-from timeit import *
-from django.contrib.gis.geos import Polygon
-from django.contrib.gis.geos import Point
-from django.core.exceptions import ValidationError
-from datetime import datetime
 import os
-import shutil
-import re
-from catalogue.models import *
-from acscatalogue.models import *
 import traceback
+
 import osgeo.gdal
-from osgeo.gdalconst import *
+
+from django_project.catalogue.models import *
+from acscatalogue.models import *
+
 
 #################################################################
 # Helper methods for computing various properties and creating objects

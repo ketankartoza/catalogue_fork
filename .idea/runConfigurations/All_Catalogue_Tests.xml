@@ -13,6 +13,8 @@
     <option name="TARGET" value="catalogue" />
     <option name="SETTINGS_FILE" value="$PROJECT_DIR$/sansa_catalogue/settings.py" />
     <option name="CUSTOM_SETTINGS" value="true" />
+    <option name="USE_OPTIONS" value="false" />
+    <option name="OPTIONS" value="" />
     <RunnerSettings RunnerId="PythonRunner" />
     <ConfigurationWrapper RunnerId="PythonRunner" />
     <method />

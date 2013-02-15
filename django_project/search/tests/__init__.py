@@ -1,0 +1,12 @@
+from searchrecord_model import SearchRecordCRUD_Test
+from search_model import SearchCRUD_Test
+from searchdaterange_model import SearchDateRangeCRUD_Test
+
+from searcher_object import SearcherObject_Test
+from search_bandcount import SearchBandCount_Test
+from search_inclinationangle import SearchIncliantionAngle_Test
+from search_spatialresolution import SearchSpatialResolution_Test
+from search_cloudcover import SearchCloudCover_Test
+from search_rowpath import SearchRowPath_Test
+
+from clip_model import ClipCRUD_Test

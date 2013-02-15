@@ -244,6 +244,17 @@ Additional parameters can be easily added in the future as needed.
 
 Sample session:
 ```
+>>> from django_project.catalogue.os4eo_client import OS4EOClient
+>>> os4eo = OS4EOClient(debug=False)
+
+>>> os4eo.GetCapabilities()
+[<Element '{
+set of parameters needed to successfully place and handle an order has been implemented so far.
+Additional parameters can be easily added in the future as needed.
+
+
+Sample session:
+```
 >>> from catalogue.os4eo_client import OS4EOClient
 >>> os4eo = OS4EOClient(debug=False)
 
