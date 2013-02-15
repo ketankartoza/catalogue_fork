@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 {% block extrajs %}
 {{ block.super }}
-{% endblock%}
-{% block body_load%}{{ block.super }}{% endblock%}
-{% block content%}
+{% endblock %}
+{% block body_load %}{{ block.super }}{% endblock %}
+{% block content %}
 
 <div class="row-fluid">
   <div id="map-container">
     <div id="map"></div>
-    <div id="map-panel">
-      <div id="map-navigation-panel"></div>
-      <div id="map-location"></div>
-      <div class="olControlScalebar" id="map-scale"></div>
+    <div id="map-panel" class="row-fluid gap-top">
+      <div id="map-navigation-panel" class="span4 center"></div>
+      <div id="map-location" class="span4 center"></div>
+      <div class="olControlScalebar span4 center" id="map-scale"></div>
     </div>
     <div id="mapquery"></div>
   </div>
