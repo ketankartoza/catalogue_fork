@@ -4,7 +4,7 @@
   {% if myForm %}
     <div id="search-headings" class="row-fluid gap-top center">
       <div class="btn-group">
-        <button class="btn btn-success" id="advancedSearch" title="Click here to switch between simple and advanced search modes." onClick="toggleAdvFields();"><span id="search-btn-text">{% if myAdvancedFlag %}Activate Simple Search{% else %}Activate Advanced Search{% endif %}</span></button>
+        <button class="btn btn-info" id="advancedSearch" title="Click here to switch between simple and advanced search modes." onClick="toggleAdvFields();"><span id="search-btn-text">{% if myAdvancedFlag %}Activate Simple Search{% else %}Activate Advanced Search{% endif %}</span></button>
         <button onClick="submitSearchForm();" class="btn btn-success" class="default" name="_search" title="Click here to execute your search.">Search</button>
       </div>
     </div>
@@ -17,12 +17,12 @@
         <div class="span5">
           {% for field in myForm.visible_fields|slice:":9" %}
             <div class="control-group">
-              <label class="control-label" for="{{field.html_name}}">{{field.label}}:</label>
+              <label class="control-label" for="{{field.html_name}}"><strong>{{field.label}}:</strong></label>
               <div class="controls">
                 {{field}}
-                <span class="help-inline ">{{ field.help_text }}</span>
+                <span class="help-block">{{ field.help_text }}</span>
                 {% if field.errors %}
-                <span class="help-inline ">{{ field.errors|striptags }}</span>
+                <span class="help-inline">{{ field.errors|striptags }}</span>
                 {% endif %}
               </div>
             </div>
@@ -32,12 +32,12 @@
           {% for field in myForm.visible_fields %}
           {% if forloop.counter >= 10 %}
             <div class="control-group">
-              <label class="control-label" for="{{field.html_name}}">{{field.label}}:</label>
+              <label class="control-label" for="{{field.html_name}}"><strong>{{field.label}}:</strong></label>
               <div class="controls">
                 {{field}}
-                <span class="help-inline ">{{ field.help_text }}</span>
+                <span class="help-block">{{ field.help_text }}</span>
                 {% if field.errors %}
-                <span class="help-inline ">{{ field.errors|striptags }}</span>
+                <span class="help-inline">{{ field.errors|striptags }}</span>
                 {% endif %}
               </div>
             </div>
