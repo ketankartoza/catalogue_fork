@@ -4,7 +4,7 @@
   {% if myForm %}
     <div id="search-headings" class="row-fluid gap-top center">
       <div class="btn-group">
-        <button class="btn" id="advancedSearch" title="Click here to switch between simple and advanced search modes." onClick="toggleAdvFields();"><span id="search-btn-text">{% if myAdvancedFlag %}Simple Search{% else %}Advanced Search{% endif %}</span></button>
+        <button class="btn btn-success" id="advancedSearch" title="Click here to switch between simple and advanced search modes." onClick="toggleAdvFields();"><span id="search-btn-text">{% if myAdvancedFlag %}Activate Simple Search{% else %}Activate Advanced Search{% endif %}</span></button>
         <button onClick="submitSearchForm();" class="btn btn-success" class="default" name="_search" title="Click here to execute your search.">Search</button>
       </div>
     </div>
@@ -90,13 +90,13 @@
       $('[data-search-type="adv"]').each(function(){
         $(this).closest('.control-group').fadeIn('slow');
       });
-      $('#search-btn-text').text('Simple Search');
+      $('#search-btn-text').text('Activate Simple Search');
     } else {
       advFieldsFlag = false;
       $('[data-search-type="adv"]').each(function(){
         $(this).closest('.control-group').fadeOut('slow');
       });
-      $('#search-btn-text').text('Advanced Search');
+      $('#search-btn-text').text('Activate Advanced Search');
     }
   }
 
