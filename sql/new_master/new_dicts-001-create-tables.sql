@@ -1,4 +1,17 @@
 BEGIN;
+CREATE TABLE "dictionaries_productprofile_spectral_mode" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "productprofile_id" integer NOT NULL,
+    "spectralmode_id" integer NOT NULL,
+    UNIQUE ("productprofile_id", "spectralmode_id")
+)
+;
+CREATE TABLE "dictionaries_productprofile" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "satellite_instrument_id" integer NOT NULL
+)
+;
+ALTER TABLE "dictionaries_productprofile_spectral_mode" ADD CONSTRAINT "productprofile_id_refs_id_6754253a" FOREIGN KEY ("productprofile_id") REFERENCES "dictionaries_productprofile" ("id") DEFERRABLE INITIALLY DEFERRED;
 CREATE TABLE "dictionaries_processinglevel" (
     "id" serial NOT NULL PRIMARY KEY,
     "abbreviation" varchar(4) NOT NULL UNIQUE,
@@ -28,7 +41,7 @@ CREATE TABLE "dictionaries_satellite" (
     "orbit" text,
     "revisttime_days" integer,
     "reference_url" varchar(200),
-    "license_type_id" integer REFERENCES "catalogue_license" ("id") DEFERRABLE INITIALLY DEFERRED
+    "license_type_id" integer NOT NULL REFERENCES "catalogue_license" ("id") DEFERRABLE INITIALLY DEFERRED
 )
 ;
 CREATE TABLE "dictionaries_scannertype" (
@@ -47,7 +60,7 @@ CREATE TABLE "dictionaries_instrumenttype" (
     "is_radar" boolean NOT NULL,
     "is_taskable" boolean NOT NULL,
     "scanner_type_id" integer NOT NULL REFERENCES "dictionaries_scannertype" ("id") DEFERRABLE INITIALLY DEFERRED,
-    "base_processing_level_id" integer REFERENCES "dictionaries_processinglevel" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "base_processing_level_id" integer NOT NULL REFERENCES "dictionaries_processinglevel" ("id") DEFERRABLE INITIALLY DEFERRED,
     "reference_system" varchar(255),
     "swath_optical_km" integer,
     "band_number_total" integer,
@@ -92,6 +105,7 @@ CREATE TABLE "dictionaries_satelliteinstrument" (
     UNIQUE ("operator_abbreviation", "satellite_id", "instrument_type_id")
 )
 ;
+ALTER TABLE "dictionaries_productprofile" ADD CONSTRAINT "satellite_instrument_id_refs_id_450b0348" FOREIGN KEY ("satellite_instrument_id") REFERENCES "dictionaries_satelliteinstrument" ("id") DEFERRABLE INITIALLY DEFERRED;
 CREATE TABLE "dictionaries_band" (
     "id" serial NOT NULL PRIMARY KEY,
     "instrument_type_id" integer NOT NULL REFERENCES "dictionaries_instrumenttype" ("id") DEFERRABLE INITIALLY DEFERRED,
@@ -100,8 +114,8 @@ CREATE TABLE "dictionaries_band" (
     "band_number" integer NOT NULL,
     "min_wavelength" integer NOT NULL,
     "max_wavelength" integer NOT NULL,
-    "pixelsize_resampled" integer NOT NULL,
-    "pixelsize_acquired" integer
+    "pixelsize_resampled" double precision NOT NULL,
+    "pixelsize_acquired" double precision NOT NULL
 )
 ;
 CREATE TABLE "dictionaries_spectralgroup" (
@@ -115,15 +129,16 @@ CREATE TABLE "dictionaries_spectralmode" (
     "id" serial NOT NULL PRIMARY KEY,
     "name" varchar(255) NOT NULL UNIQUE,
     "description" text NOT NULL,
-    "abbreviation" varchar(20) NOT NULL UNIQUE,
+    "abbreviation" varchar(20) NOT NULL,
     "instrument_type_id" integer NOT NULL REFERENCES "dictionaries_instrumenttype" ("id") DEFERRABLE INITIALLY DEFERRED,
-    "spectralgroup_id" integer REFERENCES "dictionaries_spectralgroup" ("id") DEFERRABLE INITIALLY DEFERRED
+    "spectralgroup_id" integer NOT NULL REFERENCES "dictionaries_spectralgroup" ("id") DEFERRABLE INITIALLY DEFERRED
 )
 ;
+ALTER TABLE "dictionaries_productprofile_spectral_mode" ADD CONSTRAINT "spectralmode_id_refs_id_f1507601" FOREIGN KEY ("spectralmode_id") REFERENCES "dictionaries_spectralmode" ("id") DEFERRABLE INITIALLY DEFERRED;
 CREATE TABLE "dictionaries_bandspectralmode" (
     "id" serial NOT NULL PRIMARY KEY,
     "band_id" integer NOT NULL REFERENCES "dictionaries_band" ("id") DEFERRABLE INITIALLY DEFERRED,
-    "spectral_mode_id" integer REFERENCES "dictionaries_spectralmode" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "spectral_mode_id" integer NOT NULL REFERENCES "dictionaries_spectralmode" ("id") DEFERRABLE INITIALLY DEFERRED,
     UNIQUE ("band_id", "spectral_mode_id")
 )
 ;
@@ -137,12 +152,13 @@ CREATE TABLE "dictionaries_processinglevelforinstrumenttype" (
 ;
 CREATE TABLE "dictionaries_processingcostsforspectralmode" (
     "id" serial NOT NULL PRIMARY KEY,
-    "spectral_mode_id" integer NOT NULL REFERENCES "dictionaries_spectralgroup" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "spectral_mode_id" integer NOT NULL REFERENCES "dictionaries_spectralmode" ("id") DEFERRABLE INITIALLY DEFERRED,
     "processinglevelforinstrument_type_id" integer NOT NULL REFERENCES "dictionaries_processinglevelforinstrumenttype" ("id") DEFERRABLE INITIALLY DEFERRED,
     "cost_per_scene" integer NOT NULL,
     "currency_abbr" varchar(12) NOT NULL
 )
 ;
+CREATE INDEX "dictionaries_productprofile_satellite_instrument_id" ON "dictionaries_productprofile" ("satellite_instrument_id");
 CREATE INDEX "dictionaries_processinglevel_precursor_processing_level_id" ON "dictionaries_processinglevel" ("precursor_processing_level_id");
 CREATE INDEX "dictionaries_collection_institution_id" ON "dictionaries_collection" ("institution_id");
 CREATE INDEX "dictionaries_satellite_collection_id" ON "dictionaries_satellite" ("collection_id");

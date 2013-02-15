@@ -11,18 +11,19 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys
+import os
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.append(os.path.abspath('.'))
+from django_project.sansa_catalogue import settings
 
 sys.path.append(os.path.abspath('../../'))
 sys.path.append(os.path.abspath('../../catalogue'))
 sys.path.append(os.path.abspath('../../catalogue/models'))
 #setup django
-from sansa_catalogue import settings
 from django.core.management import setup_environ
 setup_environ(settings)
 
