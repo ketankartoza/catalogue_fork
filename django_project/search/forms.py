@@ -115,7 +115,7 @@ class DateRangeFormSet(BaseInlineFormSet):
         if not len(self.forms):
             raise forms.ValidationError, 'At least one date range is required.'
         #Next line disabled as it causes a crash
-        #loggerg.debug('Date range forms:', self.forms)
+        #logging.debug('Date range forms:', self.forms)
 
     def is_valid(self):
         """
@@ -330,7 +330,7 @@ class AdvancedSearchForm(forms.ModelForm):
 
     def clean(self):
         myCleanedData = self.cleaned_data
-        loggerg.info('cleaned data: ' + str(myCleanedData))
+        logging.info('cleaned data: ' + str(myCleanedData))
         # ABP: checks for advanced search only (not in cleaned_data because it
         # does not belong to Search model)
         if self.data.get('isAdvanced') == 'true':
