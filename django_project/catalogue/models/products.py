@@ -845,12 +845,8 @@ class GenericSensorProduct(GenericImageryProduct):
     # e.g. CAM1, BUMP, etc
     acquisition_mode = models.ForeignKey(AcquisitionMode)
     # new dicts
-    satellite_instrument = models.ForeignKey(
-        'dictionaries.SatelliteInstrument'
-    )
-    spectral_mode = models.ForeignKey(
-        'dictionaries.SpectralMode',
-        blank=True, null=True
+    product_profile = models.ForeignKey(
+        'dictionaries.ProductProfile'
     )
 
     product_acquisition_start = models.DateTimeField(db_index=True)
