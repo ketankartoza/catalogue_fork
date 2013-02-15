@@ -6,20 +6,15 @@
 {% block content_title %}<h2>{% trans "Registration" %}</h2>{% endblock %}
 
 {% block content %}
-<div class="row-fluid">
-<p>{% trans "Thank you for signing up with us!" %}</p>
-</div>
-
-<div class="row-fluid">
-  <h3 class="center">{% trans "Thank You." %}</h3>
-  <p class="lead center">{% trans "Thank you for registering with us. We will use your personal details to ship ordered products to you and to build a demographic profile of our clients so that we can improve the quality of service on this site." %}</p>
-</div>
-<div class="row-fluid">
-{% if userena_activation_required %}
-<p>{% blocktrans %}You have been sent an e-mail with an activation link to the supplied email.{% endblocktrans %}</p>
-<p>{% blocktrans %}We will store your signup information for {{ userena_activation_days }} days on our server. {% endblocktrans %}</p>
-{% else  %}
-<p>{% blocktrans %}You can now use the supplied credentials to signin.{% endblocktrans %}</p>
-{% endif %}
+<div id="content" class="row-fluid">
+    <img src="/media/sansa-logos/SANSA-logo.png" class="gap-bottom"/>
+    <p class="lead">{% trans "Thank you for signing up with us!" %}</p>
+    <p>{% trans "We will use your personal details to ship ordered products to you and to build a demographic profile of our clients so that we can improve the quality of service on this site." %}</p>
+  {% if userena_activation_required %}
+    <p>{% blocktrans %}You have been sent an e-mail with an activation link to the supplied email.{% endblocktrans %}</p>
+    <p>{% blocktrans %}We will store your signup information for {{ userena_activation_days }} days on our server. {% endblocktrans %}</p>
+  {% else  %}
+    <p>{% blocktrans %}You can now use the supplied credentials to signin.{% endblocktrans %}</p>
+  {% endif %}
 </div>
 {% endblock %}

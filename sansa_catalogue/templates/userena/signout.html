@@ -2,10 +2,15 @@
 {% load i18n %}
 
 {% block title %}{% trans "Signed out" %}{% endblock %}
-{% block content_title %}<h2>{% trans "You have been signed out" %}.</h2>{% endblock %}
+{% block content_title %}<h2>{% trans "Successfully Signed Out" %}.</h2>{% endblock %}
 
 {% block content %}
-<div class="row-fluid">
-<p>{% trans "You have been signed out. Till we meet again." %}</p>
+<div id="content" class="row-fluid center">
+  <img src="/media/sansa-logos/SANSA-logo.png" class="gap-bottom"/>
+  <p class="lead">{% trans "You have been successfully signed out. We look forward to seeing you again." %}</p>
+</div>
+<div id="buttons" class="row-fluid center">
+  <a href="/" class="btn">Home</a>
+  <a href="/accounts/signin/" class="btn btn-success">Login Again</a>
 </div>
 {% endblock %}

@@ -5,45 +5,52 @@
 {% block content_title %}<h2>{{ profile.user.username }} {% if profile.user.get_full_name %}({{ profile.user.get_full_name }}){% endif %}</h2>{% endblock %}
 
 {% block content %}
-<div class="row-fluid">
-    <div id="details">
+<div id="content" class="row-fluid">
+  <div class="span4 center">
+    <h3>{% trans "Your Profile" %}</h3>
+    <p class="lead">These are the personal details which we currently have on our system.</p> 
+    <a href="{% url userena_profile_edit user %}" class="btn btn-success">Edit Profile</a>
+  </div>
+    <div id="details" class="span6 offset1">
       {% block profile_details %}
-        <dl>
-          {% block profile_definition_list %}
-            {% if profile.user.get_full_name %}
-              <dt>{% trans "Name" %}</dt>
-              <dd>{{ profile.user.get_full_name }}</dd>
-            {% endif %}
-            {% if profile.user.email and not hide_email %}
-              <dt>{% trans "Email" %}</dt>
-              <dd>{{ profile.user.email }}</dd>
-            {% endif %}
-            {% if profile.url %}
-              <dt>{% trans "Website" %}</dt>
-              <dd>{{ profile.url|urlize }}</dd>
-            {% endif %}
+        <div class="span6">
+        {% block profile_definition_list %}
+          {% if profile.user.get_full_name %}
+            <strong>{% trans "Name: " %}</strong>
+            {{ profile.user.get_full_name }}
+          {% endif %}
+          {% if profile.user.email and not hide_email %}
+            <br /><strong>{% trans "Email: " %}</strong>
+            {{ profile.user.email }}
+          {% endif %}
+          {% if profile.url %}
+            <br /><strong>{% trans "Website: " %}</strong>
+            {{ profile.url|urlize }}
+          {% endif %}
+          {% if profile.address1 %}
+            <br /><strong>{% trans "Primary Address: " %}</strong>
+            {{ profile.address1 }}
+          {% endif %}
+          {% if profile.address2 %}
+            <br /><strong>{% trans "Secondary Address: " %}</strong>
+            {{ profile.address2 }}
+          {% endif %}
+          {% if profile.organisation %}
+            <br /><strong>{% trans "Organisation: " %}</strong>
+            {{ profile.organisation }}
+          {% endif %}
+          {% if profile.contact_no %}
+            <br /><strong>{% trans "Contact Telephone: " %}</strong>
+            {{ profile.contact_no }}
+          {% endif %}
+        </div>
+        <div class="span6">
             {% if profile.about %}
-              <dt>{% trans "About me" %}</dt>
-              <dd>{{ profile.about }}</dd>
-            {% endif %}
-            {% if profile.address1 %}
-              <dt>{% trans "Primary address" %}</dt>
-              <dd>{{ profile.address1 }}</dd>
-            {% endif %}
-            {% if profile.address2 %}
-              <dt>{% trans "Secondary address" %}</dt>
-              <dd>{{ profile.address2 }}</dd>
-            {% endif %}
-            {% if profile.organisation %}
-              <dt>{% trans "Organisation" %}</dt>
-              <dd>{{ profile.organisation }}</dd>
-            {% endif %}
-            {% if profile.contact_no %}
-              <dt>{% trans "Contact phone nunber" %}</dt>
-              <dd>{{ profile.contact_no }}</dd>
+              <strong>{% trans "About Me:" %}</strong>
+              <br />{{ profile.about }}
             {% endif %}
           {% endblock %}
-        </dl>
+        </div>
       {% endblock %}
     </div>
   </div>

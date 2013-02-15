@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load url from future %} 
 
-{% block title %}{% trans "Signin" %}{% endblock %}
+{% block title %}{% trans "Sign In" %}{% endblock %}
 
 {% block extrajs %}
 {{ block.super }}
@@ -10,55 +10,66 @@
 $(function() {
   $("input[type='text'], input[type='password']").addClass("text");
   $("#id_identification").focus();
+  var formHeight=$('#login-form').height();
+  var halfFormHeight=formHeight / 2;
+  var extrasHeight=$('#login-extras').height();
+  var halfExtrasHeight = extrasHeight / 2;
+  var topMargin = halfFormHeight - halfExtrasHeight;
+      if(topMargin > 0){
+        $('#login-extras').css("margin-top", topMargin);
+      }
 });
 </script>
 {% endblock %}
 
 {% block content %}
 <div id="content" class="row-fluid center">
-<form class="span6 form-horizontal" method="post" accept-charset="utf-8">
+  <form id="login-form" class="span6 form-horizontal" method="post" accept-charset="utf-8">
   {% csrf_token %}
-<fieldset>
-  <legend>{% trans "User Signin" %}</legend>
+  <fieldset>
+    <legend>{% trans "User Sign In" %}</legend>
+      <div class="control-group">
+        <label class="control-label" for="id_identification">{% trans "Username" %}</label>
+        <div class="controls">
+          {{ form.identification }}
+          {% if form.identification.errors %}
+          <span class="text-error">{{ form.identification.html_error_list }}</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="id_password">{% trans "Password" %}</label>
+        <div class="controls">
+          {{ form.password }}
+          {% if form.password.errors %}
+          <span class="text-error">{{ form.password.html_error_list }}</span>
+          {% endif %}
+        </div>
+      </div>
+      {% if form.non_field_errors %}
+      <ul class="text-error">
+        {{ form.non_field_errors.as_ul }}
+      </ul>
+      {% endif %}
+    </fieldset>
     <div class="control-group">
-      <label class="control-label" for="id_identification">{% trans "Username" %}</label>
       <div class="controls">
-        {{ form.identification }}
-        {% if form.identification.errors %}
-        <span class="quiet red">{{ form.identification.html_error_list }}</span>
-        {% endif %}
+        <input class="btn btn-success" type="submit" value="{% trans 'Login' %}" />
       </div>
     </div>
-    <div class="control-group">
-      <label class="control-label" for="id_password">{% trans "Password" %}</label>
-      <div class="controls">
-        {{ form.password }}
-        {% if form.password.errors %}
-        <span class="quiet red">{{ form.password.html_error_list }}</span>
-        {% endif %}
-      </div>
-    </div>
-    {% if form.non_field_errors %}
-    <ul class="quiet red">
-      {{ form.non_field_errors.as_ul }}
-    </ul>
-    {% endif %}
-  </fieldset>
-  <div class="control-group">
-    <div class="controls">
-      <input class="btn" type="submit" value="{% trans 'Login' %}" />
-    </div>
-  </div>
-  </fieldset>
-  {% if next %}<input type="hidden" name="next" value="{{ next }}" />{% endif %}
+    {% if next %}<input type="hidden" name="next" value="{{ next }}" />{% endif %}
 </form>
-<div class="span6">
-  <p>
-    If you do not already have a user account, you'll need register before can access the catalogue.
-    {# http://code.djangoproject.com/ticket/7239 #}
+<div id="login-extras" class="span6 gap-top">
+  <p class="lead">
+    If you do not already have a user account, you'll need to register before you can access the catalogue.
   </p>
-  <a class="btn btn-success" href="{% url 'userena_signup' %}">{% trans "Sign up!" %}</a>
-  <a class="btn btn-info" href="{% url 'userena_password_reset' %}">{% trans "Lost Your Password?" %}</a>
+  {# http://code.djangoproject.com/ticket/7239 #}
+  <a class="btn btn-success" href="{% url 'userena_signup' %}">
+    {% trans "Sign up!" %}
+  </a>
+  <a class="btn btn-info" href="{% url 'userena_password_reset' %}">
+    {% trans "Lost Your Password?" %}
+  </a>
 </div>
 </div>
 {% endblock %}

@@ -5,8 +5,9 @@
 {% block content_title %}<h2>{% trans "Your email could not be verified..." %}</h2>{% endblock %}
 
 {% block content %}
-<div class="row-fluid">
-<p>{% trans "Your email could not be verified..." %}</p>
-<p>{% trans "You could try changing it again in your account settings." %}</p>
+<div id="content" class="row-fluid center">
+  <img src="/media/sansa-logos/SANSA-logo.png" class="gap-bottom"/>
+  <p class="lead">{% trans "Sorry! Your email address could not be verified..." %}</p>
+  <p class="lead">{% trans "You could try changing it again in your account settings." %}</p>
 </div>
 {% endblock %}
