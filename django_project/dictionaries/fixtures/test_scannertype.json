@@ -1,29 +1,20 @@
 [
     {
-        "pk": 2,
-        "model": "dictionaries.scannertype",
-        "fields": {
-            "abbreviation": "PB",
-            "name": "Push Broom",
-            "description": "Push Broom Optical Scanner"
-        }
-    },
-    {
-        "pk": 4,
-        "model": "dictionaries.scannertype",
-        "fields": {
-            "abbreviation": "FMC",
-            "name": "Forward Motion Compensation",
-            "description": "Forward Motion Compensation factor of 4:1"
-        }
-    },
-    {
         "pk": 1,
         "model": "dictionaries.scannertype",
         "fields": {
             "abbreviation": "ACT",
             "name": "Active Beam",
-            "description": "Active Beam Scanner"
+            "description": "Active Beam Scanner\r\n"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "dictionaries.scannertype",
+        "fields": {
+            "abbreviation": "PB",
+            "name": "Push Broom",
+            "description": "Push Broom Optical Scanner\r\n"
         }
     },
     {
@@ -32,7 +23,16 @@
         "fields": {
             "abbreviation": "WB",
             "name": "Whisk Broom",
-            "description": "Whisk Broom or Cross-track Optical Scanner"
+            "description": "Whisk Broom or Cross-track Optical Scanner\r\n"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "dictionaries.scannertype",
+        "fields": {
+            "abbreviation": "FMC",
+            "name": "Forward Motion Compensation",
+            "description": "Forward Motion Compensation factor of 4:1\r\n"
         }
     }
 ]

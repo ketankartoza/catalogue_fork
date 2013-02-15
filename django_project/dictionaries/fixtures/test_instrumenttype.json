@@ -3,130 +3,240 @@
         "pk": 1,
         "model": "dictionaries.instrumenttype",
         "fields": {
+            "keywords": "",
             "is_radar": true,
+            "spatial_resolution_range": "",
             "name": "AMI",
+            "base_processing_level": 1,
+            "band_number_total": null,
+            "reference_system": "",
+            "swath_optical_km": null,
             "abbreviation": "AMI",
+            "band_type": "",
+            "processing_software": "",
             "operator_abbreviation": "AMI",
             "is_taskable": false,
+            "spectral_range": "",
+            "image_size_km": "",
+            "quantization_bits": null,
             "scanner_type": 1,
-            "description": "Active Microwave Instrument"
+            "description": "Active Microwave Instrument\r\n"
         }
     },
     {
         "pk": 2,
         "model": "dictionaries.instrumenttype",
         "fields": {
+            "keywords": "",
             "is_radar": false,
+            "spatial_resolution_range": "",
             "name": "MSI",
+            "base_processing_level": 1,
+            "band_number_total": null,
+            "reference_system": "",
+            "swath_optical_km": null,
             "abbreviation": "MSI",
+            "band_type": "",
+            "processing_software": "",
             "operator_abbreviation": "MSI",
             "is_taskable": false,
+            "spectral_range": "",
+            "image_size_km": "",
+            "quantization_bits": null,
             "scanner_type": 4,
-            "description": "Multi-Spectral Imager"
+            "description": "Multi-Spectral Imager\r\n"
         }
     },
     {
         "pk": 3,
         "model": "dictionaries.instrumenttype",
         "fields": {
+            "keywords": "",
             "is_radar": false,
+            "spatial_resolution_range": "",
             "name": "MSS",
+            "base_processing_level": 1,
+            "band_number_total": null,
+            "reference_system": "",
+            "swath_optical_km": null,
             "abbreviation": "MSS",
+            "band_type": "",
+            "processing_software": "",
             "operator_abbreviation": "MSS",
             "is_taskable": false,
+            "spectral_range": "",
+            "image_size_km": "",
+            "quantization_bits": null,
             "scanner_type": 3,
-            "description": "Multi-Spectral Scanner"
+            "description": "Multi-Spectral Scanner\r\n"
         }
     },
     {
         "pk": 4,
         "model": "dictionaries.instrumenttype",
         "fields": {
+            "keywords": "",
             "is_radar": false,
+            "spatial_resolution_range": "",
             "name": "TM",
+            "base_processing_level": 1,
+            "band_number_total": null,
+            "reference_system": "",
+            "swath_optical_km": null,
             "abbreviation": "TM",
+            "band_type": "",
+            "processing_software": "",
             "operator_abbreviation": "TM",
             "is_taskable": false,
+            "spectral_range": "",
+            "image_size_km": "",
+            "quantization_bits": null,
             "scanner_type": 3,
-            "description": "Thematic Mapper"
-        }
-    },
-    {
-        "pk": 5,
-        "model": "dictionaries.instrumenttype",
-        "fields": {
-            "is_radar": false,
-            "name": "ETM+",
-            "abbreviation": "ETM+",
-            "operator_abbreviation": "ETM+",
-            "is_taskable": false,
-            "scanner_type": 3,
-            "description": "Enhanced Thematic Mapper Plus"
+            "description": "Thematic Mapper\r\n"
         }
     },
     {
         "pk": 6,
         "model": "dictionaries.instrumenttype",
         "fields": {
+            "keywords": "",
             "is_radar": false,
+            "spatial_resolution_range": "",
             "name": "HRV",
+            "base_processing_level": 1,
+            "band_number_total": null,
+            "reference_system": "",
+            "swath_optical_km": null,
             "abbreviation": "HRV",
+            "band_type": "",
+            "processing_software": "",
             "operator_abbreviation": "HRV",
             "is_taskable": false,
+            "spectral_range": "",
+            "image_size_km": "",
+            "quantization_bits": null,
             "scanner_type": 2,
-            "description": "High Resolution Visible"
-        }
-    },
-    {
-        "pk": 10,
-        "model": "dictionaries.instrumenttype",
-        "fields": {
-            "is_radar": false,
-            "name": "MMRS",
-            "abbreviation": "MMR",
-            "operator_abbreviation": "MMRS",
-            "is_taskable": false,
-            "scanner_type": 2,
-            "description": "Multi-Spectral Medium Resolution Scanner"
-        }
-    },
-    {
-        "pk": 9,
-        "model": "dictionaries.instrumenttype",
-        "fields": {
-            "is_radar": false,
-            "name": "HRCCD",
-            "abbreviation": "HRC",
-            "operator_abbreviation": "HRCCD",
-            "is_taskable": false,
-            "scanner_type": 2,
-            "description": "High Resolution Couple Charged Device"
+            "description": "High Resolution Visible\r\n"
         }
     },
     {
         "pk": 8,
         "model": "dictionaries.instrumenttype",
         "fields": {
+            "keywords": "",
             "is_radar": false,
+            "spatial_resolution_range": "",
             "name": "HRG",
+            "base_processing_level": 1,
+            "band_number_total": null,
+            "reference_system": "",
+            "swath_optical_km": null,
             "abbreviation": "HRG",
+            "band_type": "",
+            "processing_software": "",
             "operator_abbreviation": "HRG",
-            "is_taskable": false,
+            "is_taskable": true,
+            "spectral_range": "",
+            "image_size_km": "",
+            "quantization_bits": null,
             "scanner_type": 2,
-            "description": "High Resolution Geometric"
+            "description": "High Resolution Geometric\r\n"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "dictionaries.instrumenttype",
+        "fields": {
+            "keywords": "",
+            "is_radar": false,
+            "spatial_resolution_range": "",
+            "name": "HRCCD",
+            "base_processing_level": 1,
+            "band_number_total": null,
+            "reference_system": "",
+            "swath_optical_km": null,
+            "abbreviation": "HRC",
+            "band_type": "",
+            "processing_software": "",
+            "operator_abbreviation": "HRCCD",
+            "is_taskable": false,
+            "spectral_range": "",
+            "image_size_km": "",
+            "quantization_bits": null,
+            "scanner_type": 2,
+            "description": "High Resolution Couple Charged Device\r\n"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "dictionaries.instrumenttype",
+        "fields": {
+            "keywords": "",
+            "is_radar": false,
+            "spatial_resolution_range": "",
+            "name": "MMRS",
+            "base_processing_level": 1,
+            "band_number_total": null,
+            "reference_system": "",
+            "swath_optical_km": null,
+            "abbreviation": "MMR",
+            "band_type": "",
+            "processing_software": "",
+            "operator_abbreviation": "MMRS",
+            "is_taskable": false,
+            "spectral_range": "",
+            "image_size_km": "",
+            "quantization_bits": null,
+            "scanner_type": 2,
+            "description": "Multi-Spectral Medium Resolution Scanner\r\n"
         }
     },
     {
         "pk": 7,
         "model": "dictionaries.instrumenttype",
         "fields": {
+            "keywords": "",
             "is_radar": false,
+            "spatial_resolution_range": "",
             "name": "HRVIR",
+            "base_processing_level": 1,
+            "band_number_total": null,
+            "reference_system": "",
+            "swath_optical_km": null,
             "abbreviation": "HIR",
+            "band_type": "",
+            "processing_software": "",
             "operator_abbreviation": "HRVIR",
             "is_taskable": false,
+            "spectral_range": "",
+            "image_size_km": "",
+            "quantization_bits": null,
             "scanner_type": 2,
-            "description": "High Resolution Visible and Infra-Red "
+            "description": "High Resolution Visible and Infra-Red\r\n"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "dictionaries.instrumenttype",
+        "fields": {
+            "keywords": "",
+            "is_radar": false,
+            "spatial_resolution_range": "",
+            "name": "ETM+",
+            "base_processing_level": 1,
+            "band_number_total": null,
+            "reference_system": "",
+            "swath_optical_km": null,
+            "abbreviation": "ETM+",
+            "band_type": "",
+            "processing_software": "",
+            "operator_abbreviation": "ETM+",
+            "is_taskable": false,
+            "spectral_range": "",
+            "image_size_km": "",
+            "quantization_bits": null,
+            "scanner_type": 3,
+            "description": "Enhanced Thematic Mapper Plus\r\n"
         }
     }
 ]

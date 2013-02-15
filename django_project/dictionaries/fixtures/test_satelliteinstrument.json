@@ -8,7 +8,7 @@
             "name": "SPOT 5 HRG 1",
             "abbreviation": "S5-HRG1",
             "operator_abbreviation": "S5-HRG1",
-            "description": "HRG Camera 1 on the SPOT 5 Satellite"
+            "description": "HRG Camera 1 on the SPOT 5 Satellite\r\n"
         }
     },
     {
@@ -20,7 +20,7 @@
             "name": "SPOT 5 HRG 2",
             "abbreviation": "S5-HRG2",
             "operator_abbreviation": "S5-HRG2",
-            "description": "HRG Camera 2 on the SPOT 5 Satellite"
+            "description": "HRG Camera 2 on the SPOT 5 Satellite\r\n"
         }
     },
     {
@@ -32,7 +32,7 @@
             "name": "SPOT 4 HRVIR 1",
             "abbreviation": "S4-HIR1",
             "operator_abbreviation": "S4-HIR1",
-            "description": "HRVIR Camera 1 on the SPOT 4 Satellite"
+            "description": "HRVIR Camera 1 on the SPOT 4 Satellite\r\n"
         }
     },
     {
@@ -44,19 +44,7 @@
             "name": "SPOT 4 HRVIR 2",
             "abbreviation": "S4-HIR2",
             "operator_abbreviation": "S4-HIR2",
-            "description": "HRVIR Camera 2 on the SPOT 4 Satellite"
-        }
-    },
-    {
-        "pk": 6,
-        "model": "dictionaries.satelliteinstrument",
-        "fields": {
-            "instrument_type": 6,
-            "satellite": 10,
-            "name": "SPOT 3 HRV 2",
-            "abbreviation": "S3-HRV2",
-            "operator_abbreviation": "S3-HRV2",
-            "description": "HRV Camera 2 on the SPOT 3 Satellite"
+            "description": "HRVIR Camera 2 on the SPOT 4 Satellite\r\n"
         }
     },
     {
@@ -68,7 +56,19 @@
             "name": "SPOT 3 HRV 1",
             "abbreviation": "S3-HRV1",
             "operator_abbreviation": "S3-HRV1",
-            "description": "HRV Camera 1 on the SPOT 3 Satellite"
+            "description": "HRV Camera 1 on the SPOT 3 Satellite\r\n"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "dictionaries.satelliteinstrument",
+        "fields": {
+            "instrument_type": 6,
+            "satellite": 10,
+            "name": "SPOT 3 HRV 2",
+            "abbreviation": "S3-HRV2",
+            "operator_abbreviation": "S3-HRV2",
+            "description": "HRV Camera 2 on the SPOT 3 Satellite\r\n"
         }
     },
     {
@@ -80,7 +80,7 @@
             "name": "SPOT 2 HRV 1",
             "abbreviation": "S2-HRV1",
             "operator_abbreviation": "S2-HRV1",
-            "description": "HRV Camera 1 on the SPOT 2 Satellite"
+            "description": "HRV Camera 1 on the SPOT 2 Satellite\r\n"
         }
     },
     {
@@ -92,7 +92,7 @@
             "name": "SPOT 2 HRV 2",
             "abbreviation": "S2-HRV2",
             "operator_abbreviation": "S2-HRV2",
-            "description": "HRV Camera 2 on the SPOT 2 Satellite"
+            "description": "HRV Camera 2 on the SPOT 2 Satellite\r\n"
         }
     },
     {
@@ -100,11 +100,11 @@
         "model": "dictionaries.satelliteinstrument",
         "fields": {
             "instrument_type": 6,
-            "satellite": 8,
+            "satellite": 9,
             "name": "SPOT 1 HRV 1",
             "abbreviation": "S1-HRV1",
             "operator_abbreviation": "S1-HRV1",
-            "description": "HRV Camera 1 on the SPOT 1 Satellite"
+            "description": "HRV Camera 1 on the SPOT 1 Satellite\r\n"
         }
     },
     {
@@ -116,7 +116,7 @@
             "name": "SPOT 1 HRV 2",
             "abbreviation": "S1-HRV2",
             "operator_abbreviation": "S1-HRV2",
-            "description": "HRV Camera 2 on the SPOT 1 Satellite"
+            "description": "HRV Camera 2 on the SPOT 1 Satellite\r\n"
         }
     },
     {
@@ -128,7 +128,7 @@
             "name": "Landsat 1 MSS",
             "abbreviation": "L1-MSS",
             "operator_abbreviation": "L1-MSS",
-            "description": "Landsat 1 MSS"
+            "description": "Landsat 1 MSS\r\n"
         }
     },
     {
@@ -136,11 +136,11 @@
         "model": "dictionaries.satelliteinstrument",
         "fields": {
             "instrument_type": 3,
-            "satellite": 3,
-            "name": "Landsat 2",
+            "satellite": 9,
+            "name": "Landsat 2 MSS",
             "abbreviation": "L2-MSS",
             "operator_abbreviation": "L2-MSS",
-            "description": "Landsat 2"
+            "description": "Landsat 2 MSS\r\n"
         }
     },
     {
@@ -148,11 +148,11 @@
         "model": "dictionaries.satelliteinstrument",
         "fields": {
             "instrument_type": 3,
-            "satellite": 4,
-            "name": "Landsat 3 ",
+            "satellite": 10,
+            "name": "Landsat 3 MSS",
             "abbreviation": "L3-MSS",
             "operator_abbreviation": "L3-MSS",
-            "description": "Landsat 3"
+            "description": "Landsat 3 MSS"
         }
     },
     {
@@ -164,7 +164,7 @@
             "name": "Landsat 4 MSS",
             "abbreviation": "L4-MSS",
             "operator_abbreviation": "L4-MSS",
-            "description": "Landsat 4 MSS"
+            "description": "Landsat 4 MSS\r\n"
         }
     },
     {
@@ -176,7 +176,7 @@
             "name": "Landsat 4 TM",
             "abbreviation": "L4-TM",
             "operator_abbreviation": "L4-TM",
-            "description": "Landsat 4 TM"
+            "description": "Landsat 4 TM\r\n"
         }
     },
     {
@@ -188,7 +188,7 @@
             "name": "Landsat 5 MSS",
             "abbreviation": "L5-MSS",
             "operator_abbreviation": "L5-MSS",
-            "description": "Landsat 5 MSS"
+            "description": "Landsat 5 MSS\r\n"
         }
     },
     {
@@ -200,7 +200,7 @@
             "name": "Landsat 5 TM",
             "abbreviation": "L5-TM",
             "operator_abbreviation": "L5-TM",
-            "description": "Landsat 5 TM"
+            "description": "Landsat 5 TM\r\n"
         }
     },
     {
@@ -212,7 +212,7 @@
             "name": "Landsat 7 ETM+",
             "abbreviation": "L7-ETM+",
             "operator_abbreviation": "L7-ETM+",
-            "description": "Landsat 7 ETM Plus"
+            "description": "Landsat 7 ETM Plus\r\n"
         }
     },
     {
@@ -224,7 +224,7 @@
             "name": "ZA-2 SumbandilaSat MSI",
             "abbreviation": "ZA2-MSI",
             "operator_abbreviation": "ZA2-MSI",
-            "description": "ZA-2 SumbandilaSat MSI"
+            "description": "ZA-2 SumbandilaSat MSI\r\n"
         }
     },
     {
@@ -236,23 +236,11 @@
             "name": "CBERS-2B HRCCD",
             "abbreviation": "C2B-CCD",
             "operator_abbreviation": "C2B-CCD",
-            "description": "CBERS-2B HRCCD"
+            "description": "CBERS-2B HRCCD\r\n"
         }
     },
     {
         "pk": 21,
-        "model": "dictionaries.satelliteinstrument",
-        "fields": {
-            "instrument_type": 10,
-            "satellite": 14,
-            "name": "SAC-C MMRS",
-            "abbreviation": "SCC-MMR",
-            "operator_abbreviation": "SCC-MMR",
-            "description": "SAC-C MMRS"
-        }
-    },
-    {
-        "pk": 22,
         "model": "dictionaries.satelliteinstrument",
         "fields": {
             "instrument_type": 1,
@@ -260,11 +248,11 @@
             "name": "ERS-1 AMI",
             "abbreviation": "E1-AMI",
             "operator_abbreviation": "E1-AMI",
-            "description": "ERS-1 AMI"
+            "description": "ERS-1 AMI\r\n"
         }
     },
     {
-        "pk": 23,
+        "pk": 22,
         "model": "dictionaries.satelliteinstrument",
         "fields": {
             "instrument_type": 1,
@@ -272,7 +260,19 @@
             "name": "ERS-2 SMI",
             "abbreviation": "E2-AMI",
             "operator_abbreviation": "E2-AMI",
-            "description": "ERS-2 AMI"
+            "description": "ERS-2 SMI\r\n"
+        }
+    },
+    {
+        "pk": 23,
+        "model": "dictionaries.satelliteinstrument",
+        "fields": {
+            "instrument_type": 10,
+            "satellite": 14,
+            "name": "SAC-C MMRS",
+            "abbreviation": "SCC-MMRS",
+            "operator_abbreviation": "SCC-MMRS",
+            "description": "SAC-C MMRS"
         }
     }
 ]

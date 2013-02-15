@@ -1,0 +1,252 @@
+[
+    {
+        "pk": 1,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "EUR",
+            "spectral_mode": 14,
+            "cost_per_scene": 400,
+            "instrumenttypeprocessinglevel": 14
+        }
+    },
+    {
+        "pk": 2,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "EUR",
+            "spectral_mode": 16,
+            "cost_per_scene": 400,
+            "instrumenttypeprocessinglevel": 14
+        }
+    },
+    {
+        "pk": 9,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 1,
+            "cost_per_scene": 2000,
+            "instrumenttypeprocessinglevel": 7
+        }
+    },
+    {
+        "pk": 11,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 4,
+            "cost_per_scene": 2000,
+            "instrumenttypeprocessinglevel": 5
+        }
+    },
+    {
+        "pk": 12,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "EUR",
+            "spectral_mode": 15,
+            "cost_per_scene": 400,
+            "instrumenttypeprocessinglevel": 14
+        }
+    },
+    {
+        "pk": 13,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "EUR",
+            "spectral_mode": 13,
+            "cost_per_scene": 800,
+            "instrumenttypeprocessinglevel": 14
+        }
+    },
+    {
+        "pk": 4,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "EUR",
+            "spectral_mode": 17,
+            "cost_per_scene": 200,
+            "instrumenttypeprocessinglevel": 11
+        }
+    },
+    {
+        "pk": 3,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "EUR",
+            "spectral_mode": 18,
+            "cost_per_scene": 200,
+            "instrumenttypeprocessinglevel": 11
+        }
+    },
+    {
+        "pk": 5,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "EUR",
+            "spectral_mode": 19,
+            "cost_per_scene": 200,
+            "instrumenttypeprocessinglevel": 9
+        }
+    },
+    {
+        "pk": 6,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "EUR",
+            "spectral_mode": 20,
+            "cost_per_scene": 200,
+            "instrumenttypeprocessinglevel": 9
+        }
+    },
+    {
+        "pk": 14,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 6,
+            "cost_per_scene": 2000,
+            "instrumenttypeprocessinglevel": 4
+        }
+    },
+    {
+        "pk": 15,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 4,
+            "cost_per_scene": 1000,
+            "instrumenttypeprocessinglevel": 6
+        }
+    },
+    {
+        "pk": 16,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 1,
+            "cost_per_scene": 1000,
+            "instrumenttypeprocessinglevel": 8
+        }
+    },
+    {
+        "pk": 17,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 13,
+            "cost_per_scene": 1000,
+            "instrumenttypeprocessinglevel": 15
+        }
+    },
+    {
+        "pk": 18,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 16,
+            "cost_per_scene": 1000,
+            "instrumenttypeprocessinglevel": 15
+        }
+    },
+    {
+        "pk": 19,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 16,
+            "cost_per_scene": 2500,
+            "instrumenttypeprocessinglevel": 16
+        }
+    },
+    {
+        "pk": 20,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 16,
+            "cost_per_scene": 500,
+            "instrumenttypeprocessinglevel": 17
+        }
+    },
+    {
+        "pk": 21,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 18,
+            "cost_per_scene": 1000,
+            "instrumenttypeprocessinglevel": 12
+        }
+    },
+    {
+        "pk": 22,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 18,
+            "cost_per_scene": 1000,
+            "instrumenttypeprocessinglevel": 12
+        }
+    },
+    {
+        "pk": 23,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 18,
+            "cost_per_scene": 2500,
+            "instrumenttypeprocessinglevel": 13
+        }
+    },
+    {
+        "pk": 24,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 18,
+            "cost_per_scene": 500,
+            "instrumenttypeprocessinglevel": 18
+        }
+    },
+    {
+        "pk": 25,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 20,
+            "cost_per_scene": 1000,
+            "instrumenttypeprocessinglevel": 10
+        }
+    },
+    {
+        "pk": 26,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 19,
+            "cost_per_scene": 1000,
+            "instrumenttypeprocessinglevel": 10
+        }
+    },
+    {
+        "pk": 27,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 19,
+            "cost_per_scene": 2500,
+            "instrumenttypeprocessinglevel": 22
+        }
+    },
+    {
+        "pk": 28,
+        "model": "dictionaries.spectralmodeprocessingcosts",
+        "fields": {
+            "currency_abbr": "ZAR",
+            "spectral_mode": 19,
+            "cost_per_scene": 500,
+            "instrumenttypeprocessinglevel": 23
+        }
+    }
+]

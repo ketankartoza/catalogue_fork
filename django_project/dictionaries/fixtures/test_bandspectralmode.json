@@ -1,488 +1,490 @@
 [
     {
+        "pk": 1,
+        "model": "dictionaries.bandspectralmode",
+        "fields": {
+            "band": 29,
+            "spectral_mode": 14
+        }
+    },
+    {
+        "pk": 3,
+        "model": "dictionaries.bandspectralmode",
+        "fields": {
+            "band": 31,
+            "spectral_mode": 13
+        }
+    },
+    {
+        "pk": 4,
+        "model": "dictionaries.bandspectralmode",
+        "fields": {
+            "band": 32,
+            "spectral_mode": 16
+        }
+    },
+    {
         "pk": 5,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 1,
-            "spectral_mode": 2,
-            "operator_name": "Landsat MSS Band 1"
+            "band": 33,
+            "spectral_mode": 16
         }
     },
     {
         "pk": 6,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 2,
-            "spectral_mode": 2,
-            "operator_name": "Landsat MSS Band 2"
+            "band": 34,
+            "spectral_mode": 16
         }
     },
     {
         "pk": 7,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 3,
-            "spectral_mode": 2,
-            "operator_name": "Landsat MSS Band 3"
+            "band": 35,
+            "spectral_mode": 16
         }
     },
     {
         "pk": 8,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 4,
-            "spectral_mode": 2,
-            "operator_name": "Landsat MSS Band 4"
+            "band": 26,
+            "spectral_mode": 18
         }
     },
     {
         "pk": 9,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 5,
-            "spectral_mode": 2,
-            "operator_name": "Landsat TM Band 1"
+            "band": 27,
+            "spectral_mode": 18
         }
     },
     {
         "pk": 10,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 6,
-            "spectral_mode": 2,
-            "operator_name": "Landsat TM Band 2"
+            "band": 28,
+            "spectral_mode": 18
         }
     },
     {
         "pk": 11,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 7,
-            "spectral_mode": 2,
-            "operator_name": "Landsat TM Band 3"
+            "band": 49,
+            "spectral_mode": 18
         }
     },
     {
         "pk": 12,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 8,
-            "spectral_mode": 2,
-            "operator_name": "Landsat TM Band 4"
+            "band": 25,
+            "spectral_mode": 17
         }
     },
     {
         "pk": 13,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 9,
-            "spectral_mode": 2,
-            "operator_name": "Landsat TM Band 5"
+            "band": 21,
+            "spectral_mode": 19
         }
     },
     {
         "pk": 14,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 10,
-            "spectral_mode": 2,
-            "operator_name": "Landsat TM Band 7"
+            "band": 22,
+            "spectral_mode": 19
         }
     },
     {
         "pk": 15,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 11,
-            "spectral_mode": 4,
-            "operator_name": "Landsat TM Band 6"
+            "band": 23,
+            "spectral_mode": 19
         }
     },
     {
         "pk": 16,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 5,
-            "spectral_mode": 3,
-            "operator_name": "Landsat TM Band 1"
+            "band": 24,
+            "spectral_mode": 20
         }
     },
     {
         "pk": 17,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 6,
-            "spectral_mode": 3,
-            "operator_name": "Landsat TM Band 2"
+            "band": 36,
+            "spectral_mode": 25
         }
     },
     {
         "pk": 18,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 7,
-            "spectral_mode": 3,
-            "operator_name": "Landsat TM Band 3"
+            "band": 37,
+            "spectral_mode": 25
         }
     },
     {
         "pk": 19,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 12,
-            "spectral_mode": 2,
-            "operator_name": "Landsat ETM+ Band 1"
+            "band": 38,
+            "spectral_mode": 25
         }
     },
     {
         "pk": 20,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 13,
-            "spectral_mode": 2,
-            "operator_name": "Landsat ETM+ Band 2"
+            "band": 45,
+            "spectral_mode": 26
         }
     },
     {
         "pk": 21,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 14,
-            "spectral_mode": 2,
-            "operator_name": "Landsat ETM+ Band 3"
+            "band": 46,
+            "spectral_mode": 26
         }
     },
     {
         "pk": 22,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 15,
-            "spectral_mode": 2,
-            "operator_name": "Landsat ETM+ Band 4"
+            "band": 47,
+            "spectral_mode": 26
         }
     },
     {
         "pk": 23,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 16,
-            "spectral_mode": 2,
-            "operator_name": "Landsat ETM+ Band 5"
+            "band": 48,
+            "spectral_mode": 26
         }
     },
     {
         "pk": 24,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 17,
-            "spectral_mode": 2,
-            "operator_name": "Landsat ETM+ Band 7"
+            "band": 44,
+            "spectral_mode": 27
         }
     },
     {
         "pk": 25,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 18,
-            "spectral_mode": 4,
-            "operator_name": "Landsat ETM+ Band 6"
+            "band": 39,
+            "spectral_mode": 28
         }
     },
     {
         "pk": 26,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 19,
-            "spectral_mode": 1,
-            "operator_name": "Landsat ETM+ Band 8"
+            "band": 40,
+            "spectral_mode": 28
         }
     },
     {
         "pk": 27,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 12,
-            "spectral_mode": 3,
-            "operator_name": "Landsat ETM+ Band 1"
+            "band": 41,
+            "spectral_mode": 31
         }
     },
     {
         "pk": 28,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 13,
-            "spectral_mode": 3,
-            "operator_name": "Landsat ETM+ Band 2"
+            "band": 42,
+            "spectral_mode": 28
         }
     },
     {
         "pk": 29,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 14,
-            "spectral_mode": 3,
-            "operator_name": "Landsat ETM+ Band 3"
+            "band": 43,
+            "spectral_mode": 28
         }
     },
     {
         "pk": 30,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 20,
-            "spectral_mode": 2,
-            "operator_name": "SPOT HRV Band 1"
+            "band": 1,
+            "spectral_mode": 6
         }
     },
     {
         "pk": 31,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 21,
-            "spectral_mode": 2,
-            "operator_name": "SPOT HRV Band 2"
+            "band": 2,
+            "spectral_mode": 6
         }
     },
     {
         "pk": 32,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 22,
-            "spectral_mode": 2,
-            "operator_name": "SPOT HRV Band 3"
+            "band": 3,
+            "spectral_mode": 6
         }
     },
     {
         "pk": 33,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 23,
-            "spectral_mode": 1,
-            "operator_name": "SPOT HRV Band 0"
+            "band": 4,
+            "spectral_mode": 6
         }
     },
     {
         "pk": 34,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 24,
-            "spectral_mode": 1,
-            "operator_name": "SPOT HRVIR Band 0"
+            "band": 5,
+            "spectral_mode": 4
         }
     },
     {
         "pk": 35,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 25,
-            "spectral_mode": 2,
-            "operator_name": "SPOT HRVIR Band 1"
+            "band": 6,
+            "spectral_mode": 4
         }
     },
     {
         "pk": 36,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 26,
-            "spectral_mode": 2,
-            "operator_name": "SPOT HRVIR Band 2"
+            "band": 7,
+            "spectral_mode": 4
         }
     },
     {
         "pk": 37,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 27,
-            "spectral_mode": 2,
-            "operator_name": "SPOT HRVIR Band 3"
+            "band": 8,
+            "spectral_mode": 4
         }
     },
     {
         "pk": 38,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 28,
-            "spectral_mode": 1,
-            "operator_name": "SPOT HRG Band 0"
+            "band": 9,
+            "spectral_mode": 4
         }
     },
     {
         "pk": 39,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 29,
-            "spectral_mode": 2,
-            "operator_name": "SPOT HRG Band 1"
+            "band": 11,
+            "spectral_mode": 4
         }
     },
     {
         "pk": 40,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 30,
-            "spectral_mode": 2,
-            "operator_name": "SPOT HRG Band 2"
+            "band": 10,
+            "spectral_mode": 5
         }
     },
     {
         "pk": 41,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 31,
-            "spectral_mode": 2,
-            "operator_name": "SPOT HRG Band 3"
+            "band": 12,
+            "spectral_mode": 1
         }
     },
     {
         "pk": 42,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 32,
-            "spectral_mode": 2,
-            "operator_name": "SPOT HRG Band 4"
+            "band": 13,
+            "spectral_mode": 1
         }
     },
     {
         "pk": 43,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 33,
-            "spectral_mode": 2,
-            "operator_name": "ZA-2 MSI Band 1"
+            "band": 14,
+            "spectral_mode": 1
         }
     },
     {
         "pk": 44,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 34,
-            "spectral_mode": 2,
-            "operator_name": "ZA-2 MSI Band 2"
+            "band": 15,
+            "spectral_mode": 1
         }
     },
     {
         "pk": 45,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 35,
-            "spectral_mode": 2,
-            "operator_name": "ZA-2 MSI Band 3"
+            "band": 16,
+            "spectral_mode": 1
         }
     },
     {
         "pk": 46,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 36,
-            "spectral_mode": 2,
-            "operator_name": "SAC-C MMRS Band 1"
+            "band": 19,
+            "spectral_mode": 1
         }
     },
     {
         "pk": 47,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 37,
-            "spectral_mode": 2,
-            "operator_name": "SAC-C MMRS Band 2"
+            "band": 17,
+            "spectral_mode": 2
         }
     },
     {
         "pk": 48,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 38,
-            "spectral_mode": 2,
-            "operator_name": "SAC-C MMRS Band 3"
+            "band": 18,
+            "spectral_mode": 2
         }
     },
     {
         "pk": 49,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 39,
-            "spectral_mode": 2,
-            "operator_name": "SAC-C MMRS Band 4"
+            "band": 20,
+            "spectral_mode": 3
         }
     },
     {
         "pk": 50,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 40,
-            "spectral_mode": 2,
-            "operator_name": "SAC-C MMRS Band 5"
+            "band": 5,
+            "spectral_mode": 29
         }
     },
     {
         "pk": 51,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 41,
-            "spectral_mode": 1,
-            "operator_name": "CBERS-2B HRCCD Band1"
+            "band": 6,
+            "spectral_mode": 29
         }
     },
     {
         "pk": 52,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 42,
-            "spectral_mode": 2,
-            "operator_name": "CBERS-2B HRCCD Band2"
+            "band": 7,
+            "spectral_mode": 29
         }
     },
     {
         "pk": 53,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 43,
-            "spectral_mode": 2,
-            "operator_name": "CBERS-2B HRCCD Band3"
+            "band": 12,
+            "spectral_mode": 30
         }
     },
     {
         "pk": 54,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 44,
-            "spectral_mode": 2,
-            "operator_name": "CBERS-2B HRCCD Band4"
+            "band": 13,
+            "spectral_mode": 30
         }
     },
     {
         "pk": 55,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 45,
-            "spectral_mode": 2,
-            "operator_name": "CBERS-2B HRCCD Band5"
+            "band": 14,
+            "spectral_mode": 30
         }
     },
     {
         "pk": 56,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 42,
-            "spectral_mode": 3,
-            "operator_name": "CBERS-2B HRCCD Band2"
+            "band": 39,
+            "spectral_mode": 31
         }
     },
     {
         "pk": 57,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 43,
-            "spectral_mode": 3,
-            "operator_name": "CBERS-2B HRCCD Band3"
+            "band": 40,
+            "spectral_mode": 31
         }
     },
     {
         "pk": 58,
         "model": "dictionaries.bandspectralmode",
         "fields": {
-            "band": 44,
-            "spectral_mode": 3,
-            "operator_name": "CBERS-2B HRCCD Band4"
+            "band": 45,
+            "spectral_mode": 32
+        }
+    },
+    {
+        "pk": 59,
+        "model": "dictionaries.bandspectralmode",
+        "fields": {
+            "band": 46,
+            "spectral_mode": 32
+        }
+    },
+    {
+        "pk": 60,
+        "model": "dictionaries.bandspectralmode",
+        "fields": {
+            "band": 47,
+            "spectral_mode": 32
+        }
+    },
+    {
+        "pk": 61,
+        "model": "dictionaries.bandspectralmode",
+        "fields": {
+            "band": 41,
+            "spectral_mode": 28
+        }
+    },
+    {
+        "pk": 2,
+        "model": "dictionaries.bandspectralmode",
+        "fields": {
+            "band": 30,
+            "spectral_mode": 15
         }
     }
 ]

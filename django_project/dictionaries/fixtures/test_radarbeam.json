@@ -5,7 +5,7 @@
         "fields": {
             "band_name": "C-Band",
             "instrument_type": 1,
-            "looking_distance": "250km",
+            "looking_distance": "250",
             "azimuth_direction": "23",
             "wavelength": 5660
         }

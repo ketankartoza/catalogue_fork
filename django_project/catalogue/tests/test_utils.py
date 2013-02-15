@@ -60,6 +60,16 @@ class SearchTestCase(TestCase):
         'test_genericsensorproduct.json',
         'test_opticalproduct.json',
         'test_radarproduct.json',
+        # new_dicts
+        'test_spectralgroup.json',
+        'test_spectralmode.json',
+        'test_scannertype.json',
+        'test_instrumenttype.json',
+        'test_collection.json',
+        'test_satellite.json',
+        'test_satelliteinstrument.json',
+        'test_productprofile.json',
+
         'test_missiongroup.json'
         ]
 

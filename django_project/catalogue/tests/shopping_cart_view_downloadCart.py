@@ -44,6 +44,16 @@ class ShoppingCart_downloadCart_Tests(TestCase):
         'test_processinglevel.json',
         'test_sensortype.json',
         'test_acquisitionmode.json',
+        # new_dicts
+        'test_spectralgroup.json',
+        'test_spectralmode.json',
+        'test_scannertype.json',
+        'test_instrumenttype.json',
+        'test_collection.json',
+        'test_satellite.json',
+        'test_satelliteinstrument.json',
+        'test_productprofile.json',
+
         'test_genericproduct.json',
         'test_genericimageryproduct.json',
         'test_genericsensorproduct.json',

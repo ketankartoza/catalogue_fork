@@ -1,100 +1,163 @@
 [
     {
-        "pk": 3,
-        "model": "dictionaries.satellite",
-        "fields": {
-            "abbreviation": "LS2",
-            "collection": 2,
-            "name": "Landsat 2",
-            "operator_abbreviation": "LS-2",
-            "description": "Landsat 2"
-        }
-    },
-    {
-        "pk": 4,
-        "model": "dictionaries.satellite",
-        "fields": {
-            "abbreviation": "L3",
-            "collection": 2,
-            "name": "Landsat 3",
-            "operator_abbreviation": "LS-3",
-            "description": "Landsat 3"
-        }
-    },
-    {
-        "pk": 5,
-        "model": "dictionaries.satellite",
-        "fields": {
-            "abbreviation": "L4",
-            "collection": 2,
-            "name": "Landsat 4",
-            "operator_abbreviation": "LS-4",
-            "description": "Landsat 4"
-        }
-    },
-    {
-        "pk": 6,
-        "model": "dictionaries.satellite",
-        "fields": {
-            "abbreviation": "L5",
-            "collection": 2,
-            "name": "Landsat 5",
-            "operator_abbreviation": "LS-5",
-            "description": "Landsat 5"
-        }
-    },
-    {
-        "pk": 7,
-        "model": "dictionaries.satellite",
-        "fields": {
-            "abbreviation": "L7",
-            "collection": 2,
-            "name": "Landsat 7",
-            "operator_abbreviation": "LS-7",
-            "description": "Landsat 7"
-        }
-    },
-    {
         "pk": 1,
         "model": "dictionaries.satellite",
         "fields": {
-            "abbreviation": "ZA2",
-            "collection": 3,
+            "status": "",
+            "reference_url": "",
             "name": "ZA-2 SumbandilaSat",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 3,
+            "abbreviation": "ZA2",
             "operator_abbreviation": "ZASat-002",
-            "description": "The second South African Satellite ZA-2 renamed as SumbandilaSat"
+            "revist_time_days": null,
+            "license_type": 2,
+            "launch_date": null,
+            "description": "The second South African Satellite ZA-2 renamed as SumbandilaSat\r\n"
         }
     },
     {
         "pk": 2,
         "model": "dictionaries.satellite",
         "fields": {
-            "abbreviation": "L1",
-            "collection": 2,
+            "status": "",
+            "reference_url": "",
             "name": "Landsat 1",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 2,
+            "abbreviation": "L1",
             "operator_abbreviation": "LS-1",
-            "description": "Landsat 1"
+            "revist_time_days": null,
+            "license_type": 1,
+            "launch_date": null,
+            "description": "Landsat 1\r\n"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "status": "",
+            "reference_url": "",
+            "name": "Landsat 2",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 2,
+            "abbreviation": "LS2",
+            "operator_abbreviation": "LS-2",
+            "revist_time_days": null,
+            "license_type": 1,
+            "launch_date": null,
+            "description": "Landsat 2\r\n"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "status": "",
+            "reference_url": "",
+            "name": "Landsat 3",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 2,
+            "abbreviation": "L3-MSS",
+            "operator_abbreviation": "LS-3",
+            "revist_time_days": null,
+            "license_type": 1,
+            "launch_date": null,
+            "description": "Landsat 3\r\n"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "status": "",
+            "reference_url": "",
+            "name": "Landsat 4",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 2,
+            "abbreviation": "L4",
+            "operator_abbreviation": "LS-4",
+            "revist_time_days": null,
+            "license_type": 1,
+            "launch_date": null,
+            "description": "Landsat 4\r\n"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "status": "",
+            "reference_url": "",
+            "name": "Landsat 5",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 2,
+            "abbreviation": "L5",
+            "operator_abbreviation": "LS-5",
+            "revist_time_days": null,
+            "license_type": 1,
+            "launch_date": null,
+            "description": "Landsat 5\r\n"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "status": "",
+            "reference_url": "",
+            "name": "Landsat 7",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 2,
+            "abbreviation": "L7",
+            "operator_abbreviation": "LS-7",
+            "revist_time_days": null,
+            "license_type": 1,
+            "launch_date": null,
+            "description": "Landsat 7\r\n"
         }
     },
     {
         "pk": 8,
         "model": "dictionaries.satellite",
         "fields": {
-            "abbreviation": "S1",
-            "collection": 1,
+            "status": "",
+            "reference_url": "",
             "name": "SPOT 1",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 1,
+            "abbreviation": "S1",
             "operator_abbreviation": "SPOT-1",
-            "description": "SPOT 1"
+            "revist_time_days": null,
+            "license_type": 1,
+            "launch_date": null,
+            "description": "SPOT 1\r\n"
         }
     },
     {
         "pk": 9,
         "model": "dictionaries.satellite",
         "fields": {
-            "abbreviation": "S2",
-            "collection": 1,
+            "status": "",
+            "reference_url": "",
             "name": "SPOT 2",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 1,
+            "abbreviation": "S2",
             "operator_abbreviation": "SPOT-2",
+            "revist_time_days": null,
+            "license_type": 1,
+            "launch_date": null,
             "description": "SPOT 2"
         }
     },
@@ -102,77 +165,126 @@
         "pk": 10,
         "model": "dictionaries.satellite",
         "fields": {
-            "abbreviation": "S3",
-            "collection": 1,
+            "status": "",
+            "reference_url": "",
             "name": "SPOT 3",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 1,
+            "abbreviation": "S3",
             "operator_abbreviation": "SPOT-3",
-            "description": "SPOT 3"
+            "revist_time_days": null,
+            "license_type": 1,
+            "launch_date": null,
+            "description": "SPOT 3\r\n"
         }
     },
     {
         "pk": 11,
         "model": "dictionaries.satellite",
         "fields": {
-            "abbreviation": "S4",
-            "collection": 1,
+            "status": "",
+            "reference_url": "",
             "name": "SPOT 4",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 1,
+            "abbreviation": "S4",
             "operator_abbreviation": "SPOT-4",
-            "description": "SPOT 4"
+            "revist_time_days": null,
+            "license_type": 1,
+            "launch_date": null,
+            "description": "SPOT 4\r\n"
         }
     },
     {
         "pk": 12,
         "model": "dictionaries.satellite",
         "fields": {
-            "abbreviation": "S5",
-            "collection": 1,
+            "status": "",
+            "reference_url": "",
             "name": "SPOT 5",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 1,
+            "abbreviation": "S5",
             "operator_abbreviation": "SPOT-5",
-            "description": "SPOT 5"
+            "revist_time_days": null,
+            "license_type": 1,
+            "launch_date": null,
+            "description": "SPOT 5\r\n"
         }
     },
     {
         "pk": 13,
         "model": "dictionaries.satellite",
         "fields": {
-            "abbreviation": "C2B",
-            "collection": 4,
+            "status": "",
+            "reference_url": "",
             "name": "CBERS-2B",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 4,
+            "abbreviation": "C2B",
             "operator_abbreviation": "CBERS-2-B",
-            "description": "CBERS-2B"
+            "revist_time_days": null,
+            "license_type": 2,
+            "launch_date": null,
+            "description": "CBERS-2B\r\n"
         }
     },
     {
         "pk": 14,
         "model": "dictionaries.satellite",
         "fields": {
-            "abbreviation": "SCC",
-            "collection": 5,
+            "status": "",
+            "reference_url": "",
             "name": "SAC-C",
-            "operator_abbreviation": "SAC-C",
-            "description": "SAC-C"
-        }
-    },
-    {
-        "pk": 15,
-        "model": "dictionaries.satellite",
-        "fields": {
-            "abbreviation": "E1",
-            "collection": 6,
-            "name": "ERS-1",
-            "operator_abbreviation": "ERS-1",
-            "description": "European Remote-Sensing Satellite 1"
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 5,
+            "abbreviation": "SCC",
+            "operator_abbreviation": "SCC",
+            "revist_time_days": null,
+            "license_type": 2,
+            "launch_date": null,
+            "description": "SAC-C\r\n"
         }
     },
     {
         "pk": 16,
         "model": "dictionaries.satellite",
         "fields": {
-            "abbreviation": "E2",
-            "collection": 6,
+            "status": "",
+            "reference_url": "",
             "name": "ERS-2",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 6,
+            "abbreviation": "E2",
             "operator_abbreviation": "ERS-2",
-            "description": "European Remote-Sensing Satellite-2"
+            "revist_time_days": null,
+            "license_type": 1,
+            "launch_date": null,
+            "description": "European Remote-Sensing Satellite-2\r\n"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "dictionaries.satellite",
+        "fields": {
+            "status": "",
+            "reference_url": "",
+            "name": "ERS-1",
+            "altitude_km": null,
+            "orbit": "",
+            "collection": 6,
+            "abbreviation": "E1",
+            "operator_abbreviation": "ERS-1",
+            "revist_time_days": null,
+            "license_type": 1,
+            "launch_date": null,
+            "description": "European Remote-Sensing Satellite 1\r\n"
         }
     }
 ]

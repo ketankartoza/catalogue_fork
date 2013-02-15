@@ -452,6 +452,8 @@ def ingest(theShapeFile,
                   'solar_azimuth_angle': mySolarAzimuthAngle,
                   'spatial_resolution_x': myFeature.get('RESOL'),
                   'spatial_resolution_y': myFeature.get('RESOL'),
+                  # temporary product_profile place holder
+                  'product_profile_id': 1
                 }
                 logMessage(myData, 2)
 
