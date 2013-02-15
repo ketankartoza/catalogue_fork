@@ -1,6 +1,7 @@
 --
 -- PostgreSQL database dump
 --
+BEGIN;
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -283,7 +284,7 @@ COPY dictionaries_radarbeam (id, instrument_type_id, band_name, wavelength, look
 -- Data for Name: dictionaries_imagingmode; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_imagingmode (id, radarbeam_id, name, incidence_angle_min, incidence_angle_max, approximate_resolution, swath_width, number_of_looks, polarization) FROM stdin;
+COPY dictionaries_imagingmode (id, radarbeam_id, name, incidence_angle_min, incidence_angle_max, approximate_resolution, swath_width_km, number_of_looks, polarization) FROM stdin;
 1	1	ERS-1 AMI SAR Image Mode	23	23	30	100	3	VV
 \.
 
@@ -306,7 +307,7 @@ SELECT pg_catalog.setval('dictionaries_instrumenttype_id_seq', 10, true);
 -- Data for Name: dictionaries_processinglevelforinstrumenttype; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_processinglevelforinstrumenttype (id, instrument_type_id, processinglevel_id, original_processing_level_name, original_processing_level_abbr) FROM stdin;
+COPY dictionaries_instrumenttypeprocessinglevel (id, instrument_type_id, processinglevel_id, operator_processing_level_name, operator_processing_level_abbreviation) FROM stdin;
 1	2	2	Level 1A	L1A
 2	2	3	Level 1B	L1B
 4	3	3	Level 1G	L1G
@@ -336,7 +337,7 @@ COPY dictionaries_processinglevelforinstrumenttype (id, instrument_type_id, proc
 -- Data for Name: dictionaries_processingcostsforspectralmode; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_processingcostsforspectralmode (id, spectral_mode_id, processinglevelforinstrument_type_id, cost_per_scene, currency_abbr) FROM stdin;
+COPY dictionaries_spectralmodeprocessingcosts (id, spectral_mode_id, instrumenttypeprocessinglevel_id, cost_per_scene, currency_abbr) FROM stdin;
 1	14	14	400	EUR
 2	16	14	400	EUR
 9	1	7	2000	ZAR
@@ -369,7 +370,7 @@ COPY dictionaries_processingcostsforspectralmode (id, spectral_mode_id, processi
 -- Name: dictionaries_processingcostsforspectralmode_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
 --
 
-SELECT pg_catalog.setval('dictionaries_processingcostsforspectralmode_id_seq', 28, true);
+SELECT pg_catalog.setval('dictionaries_spectralmodeprocessingcosts_id_seq', 28, true);
 
 
 --
@@ -383,14 +384,14 @@ SELECT pg_catalog.setval('dictionaries_processinglevel_id_seq', 13, true);
 -- Name: dictionaries_processinglevelforinstrumenttype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
 --
 
-SELECT pg_catalog.setval('dictionaries_processinglevelforinstrumenttype_id_seq', 23, true);
+SELECT pg_catalog.setval('dictionaries_instrumenttypeprocessinglevel_id_seq', 23, true);
 
 
 --
 -- Data for Name: dictionaries_satellite; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_satellite (id, name, description, abbreviation, operator_abbreviation, collection_id, launch_date, status, altitude_km, orbit, revisttime_days, reference_url, license_type_id) FROM stdin;
+COPY dictionaries_satellite (id, name, description, abbreviation, operator_abbreviation, collection_id, launch_date, status, altitude_km, orbit, revist_time_days, reference_url, license_type_id) FROM stdin;
 1	ZA-2 SumbandilaSat	The second South African Satellite ZA-2 renamed as SumbandilaSat\r\n	ZA2	ZASat-002	3	\N		\N		\N		2
 2	Landsat 1	Landsat 1\r\n	L1	LS-1	2	\N		\N		\N		1
 3	Landsat 2	Landsat 2\r\n	LS2	LS-2	2	\N		\N		\N		1
@@ -595,3 +596,5 @@ SELECT pg_catalog.setval('dictionaries_spectralmode_id_seq', 35, true);
 -- PostgreSQL database dump complete
 --
 
+
+COMMIT;

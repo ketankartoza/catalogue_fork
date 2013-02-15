@@ -103,7 +103,7 @@ class Satellite(models.Model):
     orbit = models.TextField(
         blank=True, null=True,
         help_text='Satellite orbit description')
-    revisttime_days = models.IntegerField(
+    revist_time_days = models.IntegerField(
         blank=True, null=True,
         help_text='Days elapsed between observations of the same point')
     reference_url = models.URLField(
@@ -240,8 +240,8 @@ class ImagingMode(models.Model):
     approximate_resolution = models.FloatField(
         help_text='Approximate ImagingMode resolution in REPLACE ME'
     )
-    swath_width = models.FloatField(
-        help_text='Swath width in REPLACE ME'
+    swath_width_km = models.FloatField(
+        help_text='Swath width in kilometres'
     )
     number_of_looks = models.IntegerField(
         help_text='REPLACE ME!'
@@ -363,38 +363,43 @@ class BandSpectralMode(models.Model):
             self.band.band_name, 'spectral mode name')
 
 
-class ProcessingLevelForInstrumentType(models.Model):
+class InstrumentTypeProcessingLevel(models.Model):
     """
     Relation between ProcessingLevel and InstrumentType
     """
     instrument_type = models.ForeignKey(InstrumentType)
     processinglevel = models.ForeignKey(ProcessingLevel)
-    original_processing_level_name = models.CharField(
+    operator_processing_level_name = models.CharField(
         max_length=50,
-        help_text='Original processing level name')
-    original_processing_level_abbr = models.CharField(
+        help_text='Operator original processing level name'
+    )
+    operator_processing_level_abbreviation = models.CharField(
         max_length=4,
-        help_text='Original processing level abbreviation')
+        help_text='Operator original processing level abbreviation'
+    )
 
     def __unicode__(self):
         return u'{0} - {1}'.format(
             self.instrument_type.name, self.processinglevel.abbreviation)
 
 
-class ProcessingCostsForSpectralMode(models.Model):
+class SpectralModeProcessingCosts(models.Model):
     """
     Processing costs for specific processing level per spectral mode
     """
     spectral_mode = models.ForeignKey(SpectralMode)
-    processinglevelforinstrument_type = models.ForeignKey(
-        ProcessingLevelForInstrumentType)
+    instrumenttypeprocessinglevel = models.ForeignKey(
+        InstrumentTypeProcessingLevel
+    )
     cost_per_scene = models.IntegerField(
-        help_text='Cost per scene')
+        help_text='Cost per scene'
+    )
     currency_abbr = models.CharField(
         max_length=12,
-        help_text='Currency abbreviation')
+        help_text='Currency abbreviation'
+    )
 
     def __unicode__(self):
         return u'{0}{1} ({2} - {3})'.format(
             self.cost_per_scene, self.currency_abbr,
-            self.spectral_mode.name, self.processinglevelforinstrument_type)
+            self.spectral_mode.name, self.instrumenttypeprocessinglevel)
