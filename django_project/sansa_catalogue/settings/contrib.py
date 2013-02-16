@@ -8,7 +8,8 @@ INSTALLED_APPS += (
     'django_extensions',
     'userena',
     'guardian',
-    'easy_thumbnails'
+    'easy_thumbnails',
+    'crispy_forms'
 )
 
 # Added by Tim for registration app

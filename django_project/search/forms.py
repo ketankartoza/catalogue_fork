@@ -28,7 +28,23 @@ from django import forms
 from django.forms.models import BaseInlineFormSet
 #from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 #from django.core.validators import EMPTY_VALUES
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import (
+    Layout,
+    Fieldset,
+    Submit,
+    Button,
+    Div,
+    Tab,
+    TabHolder,
+    HTML,
+    Field
+)
+from crispy_forms.bootstrap import (
+    FormActions
+)
 
 from catalogue.fields import (
     IntegersCSVIntervalsField,
@@ -269,6 +285,105 @@ class AdvancedSearchForm(forms.ModelForm):
         set, its left as is.
         """
 
+        self.helper = FormHelper()
+        self.helper.form_class = 'span12 form-horizontal gap-top'
+        self.helper.form_id = 'search_form'
+        self.helper.form_method = 'post'
+        self.helper.help_text_inline = True
+        self.helper.form_action = reverse('search', kwargs={})
+
+        self.helper.layout = Layout(
+            Div(
+                Fieldset(
+                    'Product type details:',
+                    Div(
+                        Field('search_type', template='myField.html'),
+                        css_class="span5"
+                    ),
+                    Div(
+                        Field('license_type', template='myField.html'),
+                        css_class="offset1 span5"
+                    ),
+                    data_search_type='adv'
+                ),
+                Fieldset(
+                    'Sensors:',
+                    Div(
+                        Field('sensors', template='myField.html'),
+                        css_class="span5"
+                    ),
+                    Div(
+                        Field('mission', template='myField.html'),
+                        Field('sensor_type', template='myField.html'),
+                        Field('acquisition_mode', template='myField.html'),
+                        css_class="offset1 span5"
+                    )
+                ),
+                Fieldset(
+                    'Image details:',
+                    Div(
+                        Field('use_cloud_cover', template='myField.html'),
+                        Field('sensor_inclination_angle_start', template='myField.html'),
+                        Field('spatial_resolution', template='myField.html'),
+                        css_class="span5"
+                    ),
+                    Div(
+                        Field('cloud_mean', template='myField.html'),
+                        Field('sensor_inclination_angle_end', template='myField.html'),
+                        Field('band_count', template='myField.html'),
+                        css_class="offset1 span5"
+                    ),
+                    data_search_type='adv'
+                ),
+                Fieldset(
+                    'Row & path:',
+                    Div(
+                        Field('k_orbit_path', template='myField.html'),
+                        css_class="span5"
+                    ),
+                    Div(
+                        Field('j_frame_row', template='myField.html'),
+                        css_class="offset1 span5"
+                    ),
+                    data_search_type='adv'
+                ),
+                Fieldset(
+                    'Geometry:',
+                    Div(
+                        Field('aoi_geometry', template='myField.html'),
+                        css_class="span5"
+                    ),
+                    Div(
+                        Field('geometry_file', template='myField.html'),
+                        css_class="offset1 span5"
+                    ),
+                    data_search_type='adv'
+                ),
+                Fieldset(
+                    'Dates:',
+                    Div(
+                        Field('start_datepicker', template='myField.html'),
+                        Field('end_datepicker', template='myField.html'),
+                        css_class="span5"
+                    ),
+                    Div(
+                        HTML('<a id="dr_add" title="Select the dates in the calendar and click here to add to the list." href="javascript:void(0)"><img src="/media/images/selector-add.gif"></a><br />'),
+                        HTML('<a id="dr_del" title="Select the ranges in the list and click here to remove." href="javascript:void(0)"><img src="/media/images/selector-remove.gif"></a>'),
+                        css_class="span1"
+                    ),
+                    Div(
+                        HTML('{{ myFormset.management_form }}'),
+                        Div(
+                            HTML('{% for form in myFormset.forms %}<div class="dr_row"><div class="dr_input">{{ form }}</div><div class="dr_text" title="Click to select."></div></div>{% endfor %}'),
+                            id="dr_container"
+                        ),
+                        css_class="span5"
+                    )
+                ),
+                css_class="span11"
+            ),
+            'geometry'
+        )
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
         # define smmple search form fields
         SIMPLE_FORM_FIELDS = ['sensors', 'start_datepicker', 'end_datepicker']
@@ -281,6 +396,7 @@ class AdvancedSearchForm(forms.ModelForm):
                     myField.widget.attrs['title'] == ''):
                 myField.widget.attrs['title'] = myField.help_text
 
+        self.fields['sensors'].required = True
         # Do not list empty dictionary items (avoid null searches)
         qs = AcquisitionMode.objects.order_by()
         self.fields['sensors'].queryset = (MissionSensor.objects

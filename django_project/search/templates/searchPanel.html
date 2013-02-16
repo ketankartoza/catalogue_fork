@@ -1,5 +1,6 @@
 {# included in search.html or pulled in by ajax #}
 {% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
+{% load crispy_forms_tags %}
 
   {% if myForm %}
     <div id="search-headings" class="row-fluid gap-top center">
@@ -11,6 +12,7 @@
     <hr>
     <div class="row-fluid">
       <h3 class="center">Search Criteria<small> (you can optionally digitise a search area on the map)</small></h3>
+      {% comment %}
       <form enctype="multipart/form-data" action="{% url 'search' %}" method="post" id="search_form" class="span12 form-horizontal gap-top">
         {% csrf_token %}
         {{myForm.geometry}}
@@ -45,14 +47,19 @@
           {% endfor %}
         </div>        
       </form>
+      {% endcomment %}
+      {% crispy myForm %}
+      {{myForm.media}}
     {% else %}
       Error search form could not be loaded.
     {% endif %}
   </div>
 <script type="text/javascript">
+  $('#dr_container').sansa_daterangecontainer();
   var advFieldsFlag = false;
 
   $('[data-search-type="adv"]').each(function(){
+    $(this).hide();
     $(this).closest('.control-group').hide();
   });
 
@@ -88,12 +95,14 @@
     if(!advFieldsFlag){
       advFieldsFlag = true;
       $('[data-search-type="adv"]').each(function(){
+        $(this).fadeIn('slow');
         $(this).closest('.control-group').fadeIn('slow');
       });
       $('#search-btn-text').text('Activate Simple Search');
     } else {
       advFieldsFlag = false;
       $('[data-search-type="adv"]').each(function(){
+        $(this).fadeOut('slow');
         $(this).closest('.control-group').fadeOut('slow');
       });
       $('#search-btn-text').text('Activate Advanced Search');
