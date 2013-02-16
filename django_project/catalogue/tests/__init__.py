@@ -87,6 +87,8 @@ from catalogue.tests.reports_sensorSummaryTable import ReportsViews_sensorSummar
 from catalogue.tests.reports_dictionaryReport import ReportsViews_dictionaryReport_Tests
 from catalogue.tests.others_showProduct import OthersViews_showProduct_Tests
 from catalogue.tests.others_visitorMap import OthersViews_visitorMap_Tests
+from catalogue.tests.others_showPreview import OthersViews_showPreview_Tests
+from catalogue.tests.others_showThumbPage import OthersViews_showThumbPage_Tests
 
 # selenium tests
 from catalogue.tests.selenium_login_test import SeleniumLogin

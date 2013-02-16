@@ -75,7 +75,7 @@ class OthersViews_visitorMap_Tests(TestCase):
         self.assertEqual(
             myResp.context['app_path'], u'/visitormap/')
 
-    def test_myReports_stafflogin(self):
+    def test_visitorMap_stafflogin(self):
         """
         Test view if user is logged as staff
         """
