@@ -32,6 +32,14 @@ class OthersViews_showProduct_Tests(TestCase):
     """
     fixtures = [
         'test_user.json',
+        'test_spectralgroup.json',
+        'test_spectralmode.json',
+        'test_scannertype.json',
+        'test_instrumenttype.json',
+        'test_collection.json',
+        'test_satellite.json',
+        'test_satelliteinstrument.json',
+        'test_productprofile.json',
         'test_genericproduct.json',
         'test_processinglevel.json',
         'test_institution.json',
@@ -76,7 +84,7 @@ class OthersViews_showProduct_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/showProduct/S1-_HRV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_ORBIT-/')
+            'http://testserver/accounts/signin/?next=/showProduct/S1-_HRV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_ORBIT-/')
 
     def test_showProduct_userlogin(self):
         """
@@ -98,7 +106,7 @@ class OthersViews_showProduct_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'productView.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html',
+            u'useraccounts/menu_content.html',
             'productTypes/genericImageryProduct.html',
             u'productTypes/genericProduct.html']
 

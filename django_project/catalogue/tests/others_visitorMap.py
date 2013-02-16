@@ -87,7 +87,7 @@ class OthersViews_visitorMap_Tests(TestCase):
                 kwargs={}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
-            len(myResp.context['myMessages']), 8)
+            len(myResp.context['myMessages']), 2)
         self.assertEqual(
             len(myResp.context['myExtents']), 16)
         self.assertEqual(
@@ -106,7 +106,7 @@ class OthersViews_visitorMap_Tests(TestCase):
         # check used templates
         myExpTemplates = [
             'simpleMap.html', u'base.html', u'menu.html',
-            u'userprofile/menu_content.html']
+            u'useraccounts/menu_content.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

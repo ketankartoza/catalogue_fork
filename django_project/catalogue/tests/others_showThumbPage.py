@@ -33,6 +33,14 @@ class OthersViews_showThumbPage_Tests(TestCase):
     """
     fixtures = [
         'test_user.json',
+        'test_spectralgroup.json',
+        'test_spectralmode.json',
+        'test_scannertype.json',
+        'test_instrumenttype.json',
+        'test_collection.json',
+        'test_satellite.json',
+        'test_satelliteinstrument.json',
+        'test_productprofile.json',
         'test_genericproduct.json',
         'test_processinglevel.json',
         'test_institution.json',
@@ -77,7 +85,7 @@ class OthersViews_showThumbPage_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/thumbnailpage/1934163/')
+            'http://testserver/accounts/signin/?next=/thumbnailpage/1934163/')
 
     def test_showThumbPage_userlogin(self):
         """

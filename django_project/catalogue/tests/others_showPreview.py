@@ -60,7 +60,7 @@ class OthersViews_showPreview_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/login/?next=/showpreview/1/a/')
+            'http://testserver/accounts/signin/?next=/showpreview/1/a/')
 
     def test_showPreview_userlogin(self):
         """
