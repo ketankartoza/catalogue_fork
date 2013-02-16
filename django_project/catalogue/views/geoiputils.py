@@ -18,7 +18,7 @@ __date__ = '17/08/2012'
 __copyright__ = 'South African National Space Agency'
 
 
-from django.contrib.gis.utils.geoip import GeoIP
+from django.contrib.gis.geoip import GeoIP
 import re  # regex support
 import urllib2
 
