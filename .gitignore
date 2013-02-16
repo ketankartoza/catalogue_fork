@@ -51,3 +51,6 @@ docs/t2t/SANSA-Catalogue-Manual.toc
 *.orig
 build
 .idea/workspace.xml
+GeoIP.dat
+GeoLiteCity.dat
+python-dev
