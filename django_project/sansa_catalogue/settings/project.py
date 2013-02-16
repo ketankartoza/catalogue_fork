@@ -49,6 +49,10 @@ USE_GEOIP = True
 
 # This is the path to MaxMinds Datasets, can be relative or absolute
 GEOIP_PATH = ABS_PATH('sansa_catalogue', 'geoip_data')
+# Hack to make geoip work on OSX
+# See https://code.djangoproject.com/ticket/19168
+GEOIP_COUNTRY = 'GeoIP.dat'
+GEOIP_CITY = 'GeoLiteCity.dat'
 
 # this is the public domain name or IP address of this django instance.
 # get ip address logic provided in utils.py
@@ -56,7 +60,7 @@ GEOIP_PATH = ABS_PATH('sansa_catalogue', 'geoip_data')
 HOST = '192.168.1.1'
 
 # used in various places including kml generator
-DOMAIN = 'catalogue.locahost'
+DOMAIN = 'catalogue.localhost'
 
 # Standard page size for pagination
 PAGE_SIZE = 20

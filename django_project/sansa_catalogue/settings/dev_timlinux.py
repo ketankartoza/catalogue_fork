@@ -49,3 +49,6 @@ except ImportError:
 # unknown
 #GEOS_LIBRARY_PATH = '/usr/lib/libgeos_c.so.1'
 #GDAL_LIBRARY_PATH = '/usr/lib/libgdal1.7.0.so.1'
+
+# OSX - see readme in geoip data dir
+GEOIP_LIBRARY_PATH = '/opt/local/lib/libGeoIP.dylib'

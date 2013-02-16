@@ -3,3 +3,19 @@ This directory needs the GeoIP lite dataset in it:
 wget http://www.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
 gunzip GeoLiteCity.dat.gz
 
+wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP
+.dat.gz
+gunzip GeoIP.dat.gz
+
+You also need the geoip c library:
+
+On linux : sudo apt-get install geoip
+
+On OSX:
+
+* Install MacPorts : http://www.macports.org/install.php
+* Open a new shell (one spawend after ports was installed)
+* sudo port install libgeoip
+* add this to your dev settings.py
+* GEOIP_LIBRARY_PATH = '/opt/local/lib/libGeoIP.dylib'
+
