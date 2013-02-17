@@ -19,9 +19,9 @@ jQuery(function($){
                                  
           // Components
           slides          :   [     // Slideshow Images
-                            {image : '/media/supersized/bgs/kflood.jpg'},
-                            {image : '/media/supersized/bgs/kruger.jpg'},
-                            {image : '/media/supersized/bgs/kflood2.jpg'}
+                            {image : '/media/supersized/bgs/kfloodbw.jpg'},
+                            {image : '/media/supersized/bgs/kparkbw.jpg'},
+                            {image : '/media/supersized/bgs/floodbw.jpg'}
                         ]
           
         });
