@@ -11,3 +11,6 @@ DATABASES = {
         'TEST_NAME': 'sac_unittest_master',
     }
 }
+
+# OSX - see readme in geoip data dir
+GEOIP_LIBRARY_PATH = '/opt/local/lib/libGeoIP.dylib'
