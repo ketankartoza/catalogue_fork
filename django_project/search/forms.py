@@ -372,10 +372,12 @@ class AdvancedSearchForm(forms.ModelForm):
                         css_class="span1"
                     ),
                     Div(
+                        HTML('<label for="id_searchdaterange_set">Date range *</label>'),
                         HTML('{{ myFormset.management_form }}'),
                         Div(
                             HTML('{% for form in myFormset.forms %}<div class="dr_row"><div class="dr_input">{{ form }}</div><div class="dr_text" title="Click to select."></div></div>{% endfor %}'),
-                            id="dr_container"
+                            id="dr_container",
+                            css_class="well well-small"
                         ),
                         css_class="span5"
                     )

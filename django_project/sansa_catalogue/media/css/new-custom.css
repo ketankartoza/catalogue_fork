@@ -14,3 +14,28 @@ h3 {color:#66B786;font-family: arial;}
 @media (min-width: 980px) and (max-width: 1370px) {
   .custom-hide{display:none;}
 }
+div#dr_container{
+    width: 180px;
+    border:solid 1px #999;
+    background-color:white;
+    line-height:1.5em;
+    min-height:180px
+}
+div.dr_row .dr_input{
+    display:none
+}
+div.dr_text{
+    padding:0.25em;
+    cursor:pointer
+}
+div.dr_row{
+    border:solid 1px #DDD
+}
+.dr_row:hover{
+    border:solid 1px #333;
+    background-color:#ddd
+}
+.dr_row.selected{
+    background-color:#00277B;
+    color:white
+}
