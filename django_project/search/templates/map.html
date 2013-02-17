@@ -62,7 +62,7 @@
       showMiniCart( false );
       {% endif %}
       setupMiniIconClickCallback();
-      //setupRowClickCallback();
+      setupRowClickCallback();
       {% if myExtent %}
       var myBounds = new OpenLayers.Bounds{{myExtent}}; //calculated from search page results
       mMap.zoomToExtent( transformBounds( myBounds ));
@@ -92,32 +92,56 @@
 
 {% block cart %}
   {% if myShowCartFlag %}
-    <h3 id="cart-accordion-h3"><a href="#"><img src="/media/images/buy_16.png" alt="" />&nbsp;Your Basket</a></h3>
-    <div id="cart-accordion-div">
-      <div>Click the basket icon to add an image to your collection.</div>
-      <div id="cart"></div>
-      <div class="center">
-        <a href="{% url 'addOrder' %}" onclick='addOrderClicked(); return false;'>{# return false to prevent invoking link #}
-          <img src="/media/images/letter_16.png" alt="" /> Order Now!
-        </a>
-        <div style="display: none;" id="cart-empty-dialog" title="SAC Catalogue"><b>Your cart is empty.</b> Please add some items to your cart first!</div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+        <h3 id="cart-accordion-h3"><img src="/media/images/buy_16.png" alt="" />&nbsp;Your Basket</h3>
+       </a>
+    </div>
+    <div id="collapseOne" class="accordion-body collapse">
+      <div class="accordion-inner" id="cart-accordion-div">
+        <div>Click the basket icon to add an image to your collection.</div>
+        <div id="cart"></div>
+        <div class="center">
+          <a href="{% url 'addOrder' %}" onclick='addOrderClicked(); return false;'>{# return false to prevent invoking link #}
+            <img src="/media/images/letter_16.png" alt="" /> Order Now!
+          </a>
+          <div style="display: none;" id="cart-empty-dialog" title="SAC Catalogue"><b>Your cart is empty.</b> Please add some items to your cart first!</div>
+        </div>
       </div>
     </div>
+  </div>
   {% endif %}
 {% endblock %}
 
 {% block preview %}
   {% if myShowPreviewFlag %}
-    <h3 id="preview-accordion-h3"><a href="#"><img src="/media/images/picture_16.png" alt="" />&nbsp;Preview</a></h3>
-    <div id="preview-accordion-div">Click the thumbnail images to see a larger preview here.</div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+        <h3 id="preview-accordion-h3"><img src="/media/images/picture_16.png" alt="" />&nbsp;Preview</h3>
+       </a>
+    </div>
+    <div id="collapseTwo" class="accordion-body collapse">
+      <div class="accordion-inner" id="preview-accordion-div">
+        Click the thumbnail images to see a larger preview here.
+      </div>
+    </div>
+  </div>
   {% endif %}
 {% endblock %}
 
 {% block search %}
   {% if mySearchFlag %}
-    <h3 id="search-summary-accordion-h3"><a href="#"><img src="/media/images/search_16.png" alt="" />&nbsp;Search Summary</a></h3>
-    <div id="search-summary-accordion-div">
-      {% if myMessages %}<div id="search-messages">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+        <h3 id="search-summary-accordion-h3"><img src="/media/images/search_16.png" alt="" />&nbsp;Search Summary</h3>
+       </a>
+    </div>
+    <div id="collapseThree" class="accordion-body collapse in">
+      <div class="accordion-inner" id="search-summary-accordion-div">
+              {% if myMessages %}<div id="search-messages">
         <b>{{ myPaginator.count }}</b> record found for
         {% for myValue in myMessages %}
           {{ myValue|safe }}{% if not forloop.last %},{% else %}.{% endif %}<br/>
@@ -140,8 +164,9 @@
     </div>
   <div>
   </div>
-          {#% if user.is_staff %}<div id="sql" style="display: none;">{{ mySqlString }}</div><input type="button" class="btn" id="sql-button" value="Show SQL" />{% endif %#}
+      </div>
     </div>
+  </div>
   {% endif %}
 {% endblock %}
 

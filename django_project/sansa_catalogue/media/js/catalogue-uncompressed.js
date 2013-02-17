@@ -220,7 +220,7 @@ function zebraTables()
  */
 $(function()
 {
-  $("#accordion").accordion({ autoHeight: false });
+  //$("#accordion").accordion({ autoHeight: false });
   zebraTables();
 });
 
@@ -240,7 +240,8 @@ function clearSearchResults()
 }
 function prepareFancy()
 {
-  $("#accordion").accordion("activate", 1);
+  $("#collapseTwo").collapse('toggle');
+  //$("#accordion").accordion("activate", 1);
   $("a#large_preview").fancybox(
    {
      "overlayShow"           : false,
