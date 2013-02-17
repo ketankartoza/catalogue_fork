@@ -68,6 +68,11 @@ LOGGING = {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True
-        }
+        },
+        'pycsw': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+           'propagate': True
+       }
     }
 }

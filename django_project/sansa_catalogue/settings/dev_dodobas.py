@@ -38,13 +38,13 @@ LOGGING = {
             # 'level': 'DEBUG',
         }
     },
-    # 'loggers': {
-    #     'pycsw': {
-    #         'handlers': ['console'],
-    #         'level': 'DEBUG',
-    #        'propagate': True
-    #    }
-    # }
+    'loggers': {
+        'pycsw': {
+            'handlers': ['console'],
+            'level': 'INFO',
+           'propagate': True
+       }
+    }
 }
 
 # set up devserver if installed
