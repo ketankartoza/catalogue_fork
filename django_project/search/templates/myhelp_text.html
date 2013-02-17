@@ -1,9 +1,5 @@
 {% if field.help_text %}
     {% if help_text_inline %}
-            <i id="hint_{{ field.auto_id }}" class="icon-question-sign" data-toggle="tooltip" title="{{ field.help_text|safe }}"> </i>
-            <script>
-                $('#hint_{{ field.auto_id }}').tooltip({'placement':'top'});
-            </script>
     {% else %}
         <p id="hint_{{ field.auto_id }}" class="help-block">{{ field.help_text|safe }}</p>
     {% endif %}
