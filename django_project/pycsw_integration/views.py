@@ -4,6 +4,7 @@ from ConfigParser import SafeConfigParser
 # from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 from pycsw import server
 
@@ -18,7 +19,10 @@ CONFIGURATION = {
         'profiles': 'apiso'
     },
     'repository': {
-        'database': 'postgresql+psycopg2://dodobas:@/sac_new2',
+        'database': 'postgresql+psycopg2://%s:@/%s' % (
+            settings.DATABASES['default']['USER'],
+            settings.DATABASES['default']['NAME'],
+        ),
         'mappings': os.path.join(os.path.dirname(__file__), 'mappings.py'),
         'table': 'pycsw_catalogue'
     },
