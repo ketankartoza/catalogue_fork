@@ -41,7 +41,7 @@ function loadMoreData() {
     /* ]]> */
     </script>
       <div class="pagination">
-        <div class="step-links left vcentered">
+        <div class="step-links left vcentered" style="width:50px; float:left; margin-left: 25px;">
           {% if myPage.has_previous %}
           <a href="#" onclick='loadPage({{ myPage.previous_page_number }},"{{mySearchGuid}}"); return false;'><img alt="previous" src="/media/images/back_alt.png" /></a>
           {% else %}
@@ -49,14 +49,14 @@ function loadMoreData() {
           {% endif %}
         </div>
         {% if myPage %}
-        <div class="current center">
+        <div class="current center" style="width:400px; float:left;">
           Page  
-          <select id="page-selector" value="{{ myPage.number }}"  name="page-selector" onchange='loadPage( $("#page-selector option:selected").val(),"{{mySearchGuid}}"); return false;'>
+          <select style="width:50px;" id="page-selector" value="{{ myPage.number }}"  name="page-selector" onchange='loadPage( $("#page-selector option:selected").val(),"{{mySearchGuid}}"); return false;'>
             {% for i in myPage.paginator.num_pages|get_range %}<option value='{{ i }}' {% if i == myPage.number %}selected='yes'{% endif %}>{{i}}</option>{% endfor %}
           </select> of {{ myPage.paginator.num_pages }}.
         </div>
         {% endif %}
-        <div class="step-links vcentered">
+        <div class="step-links vcentered" style="width:50px; float:left; margin-left: 25px;">
           {% if myPage.has_next %}
           <a href="#" onclick='loadPage({{ myPage.next_page_number }},"{{mySearchGuid}}"); return false;'><img alt="previous" src="/media/images/forward_alt.png" /></a>
           {% else %}
@@ -83,17 +83,6 @@ function loadMoreData() {
         </p>
       </div>
       {% endif %}
-      <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <h3 id="myModalLabel">Metadata</h3>
-        </div>
-        <div class="modal-body" id="modalContainer">
-        </div>
-        <div class="modal-footer">
-          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-        </div>
-      </div>
       {% if myMessagesFlag %}
       {{ myMessagesHeading|safe }}
       <div>

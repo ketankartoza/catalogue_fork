@@ -81,6 +81,7 @@ function unblock()
 
 function block()
 {
+  /*
   $.blockUI({ message: '<h2><img src="/media/images/ajax-loader.gif" /> Loading...</h2>',
       css: {
         border: '1px solid #000',
@@ -92,6 +93,7 @@ function block()
         color: '#000'
         }
       });
+*/
 }
 
 function getLayerByName( theName )
@@ -240,7 +242,10 @@ function clearSearchResults()
 }
 function prepareFancy()
 {
-  $("#collapseTwo").collapse('toggle');
+  //$("#collapseOne").collapse('hide');
+  //$("#collapseThree").collapse('hide');
+  $("#collapseTwo").collapse('show');
+  $("#collapseTwo").collapse({parent:'#accordion', toggle:true});
   //$("#accordion").accordion("activate", 1);
   $("a#large_preview").fancybox(
    {
@@ -395,7 +400,7 @@ function loadPage( theNumber, theSearchGuid )
 {
   block();
   // Show a wait image before we hit our ajax call
-  $("#page").parent().parent().load("/searchpage/" + theSearchGuid + "/?page=" + theNumber,"",revealTable);
+  $("#page").load("/searchpage/" + theSearchGuid + "/?page=" + theNumber,"",revealTable);
 }
 
 function resizeTable()
