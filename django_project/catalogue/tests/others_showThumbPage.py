@@ -78,14 +78,10 @@ class OthersViews_showThumbPage_Tests(TestCase):
         Test view if user is not logged in
         """
         myClient = Client()
-        myResp = myClient.get(
-            reverse(
-                'showThumbPage',
-                kwargs={'theId': '1934163'}))
-        self.assertEqual(myResp.status_code, 302)
-        self.assertEqual(
-            myResp['Location'],
-            'http://testserver/accounts/signin/?next=/thumbnailpage/1934163/')
+        myResp = reverse(
+            'showThumbPage',
+            kwargs={'theId': '1934163'})
+        self.assertRaises(NotImplementedError, myClient.get, myResp)
 
     def test_showThumbPage_userlogin(self):
         """
@@ -94,6 +90,6 @@ class OthersViews_showThumbPage_Tests(TestCase):
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = reverse(
-                'showThumbPage',
-                kwargs={'theId': '90541'})
+            'showThumbPage',
+            kwargs={'theId': '90541'})
         self.assertRaises(NotImplementedError, myClient.get, myResp)

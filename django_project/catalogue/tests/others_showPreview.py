@@ -57,10 +57,25 @@ class OthersViews_showPreview_Tests(TestCase):
             reverse(
                 'showPreview',
                 kwargs={'theId': '1', 'theSize': 'a'}))
-        self.assertEqual(myResp.status_code, 302)
+        self.assertEqual(myResp.status_code, 200)
+        expString = (
+            '<center><img src="/thumbnail/1/a/"><center><img src="/media/image'
+            's/info_32.png" onclick=\'showMetadata(1);\'  alt="Click to view m'
+            'etadata for this image"\n            title="Click to view metadat'
+            'a for this image" />&nbsp;<img src="/media/images/buy_32.png" onc'
+            'lick=\'addToCart(1);\'  alt="Click to add to your cart" title="Cl'
+            'ick\n            to add this image to your cart" />&nbsp;<a id="l'
+            'arge_preview" href="/thumbnailpage/1/"><img src="/media/images/se'
+            'arch_32.png" alt="Click for larger\n            view" title="Clic'
+            'k for larger preview"/></a></center>'
+        )
         self.assertEqual(
-            myResp['Location'],
-            'http://testserver/accounts/signin/?next=/showpreview/1/a/')
+            myResp.content, expString)
+        # check used templates
+        myExpTemplates = []
+
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
+        self.assertEqual(myUsedTemplates, myExpTemplates)
 
     def test_showPreview_userlogin(self):
         """
@@ -73,7 +88,17 @@ class OthersViews_showPreview_Tests(TestCase):
                 'showPreview',
                 kwargs={'theId': '1', 'theSize': 'a'}))
         self.assertEqual(myResp.status_code, 200)
-        expString = '<center><img src="/thumbnail/1/a/"><center><img src="/media/images/info_32.png" onclick=\'showMetadata(1);\'  alt="Click to view metadata for this image"\n            title="Click to view metadata for this image" />&nbsp;<img src="/media/images/buy_32.png" onclick=\'addToCart(1);\'  alt="Click to add to your cart" title="Click\n            to add this image to your cart" />&nbsp;<a id="large_preview" href="/thumbnailpage/1/"><img src="/media/images/search_32.png" alt="Click for larger\n            view" title="Click for larger preview"/></a></center>'
+        expString = (
+            '<center><img src="/thumbnail/1/a/"><center><img src="/media/image'
+            's/info_32.png" onclick=\'showMetadata(1);\'  alt="Click to view m'
+            'etadata for this image"\n            title="Click to view metadat'
+            'a for this image" />&nbsp;<img src="/media/images/buy_32.png" onc'
+            'lick=\'addToCart(1);\'  alt="Click to add to your cart" title="Cl'
+            'ick\n            to add this image to your cart" />&nbsp;<a id="l'
+            'arge_preview" href="/thumbnailpage/1/"><img src="/media/images/se'
+            'arch_32.png" alt="Click for larger\n            view" title="Clic'
+            'k for larger preview"/></a></center>'
+        )
         self.assertEqual(
             myResp.content, expString)
         # check used templates
