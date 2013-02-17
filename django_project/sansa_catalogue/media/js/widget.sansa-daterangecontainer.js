@@ -51,7 +51,8 @@ $.widget( "linfinity.sansa_daterangecontainer", {
             //increase datecount
             self.datecount++;
         });
-
+        $('#id_searchdaterange_set-TOTAL_FORMS').val(self.datecount);
+        $('#id_searchdaterange_set-INITIAL_FORMS').val(self.datecount);
         //setup events
         this._setup_events();
         this._check_date_count();
@@ -80,6 +81,7 @@ $.widget( "linfinity.sansa_daterangecontainer", {
                     } else {
                         self.element.append(self._cloneMore(myStartDate, myEndDate));
                         self.datecount++;
+                        console.log(self.datecount);
                         self._check_date_count();
                     }
                 } else {
@@ -99,6 +101,8 @@ $.widget( "linfinity.sansa_daterangecontainer", {
                     $(this).hide('slow');
                 } else {
                     // not fetched from the database, added by web app
+                    $('#id_searchdaterange_set-TOTAL_FORMS').val(self.datecount-1);
+                    $('#id_searchdaterange_set-INITIAL_FORMS').val(self.datecount-1);
                     $(this).hide('slow', function(){
                         $(this).remove();
                     });
