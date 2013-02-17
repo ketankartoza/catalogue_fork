@@ -19,7 +19,6 @@
         setTimeout(init, 2000);
         return;
       }
-      {% if user.is_staff %}//setupSqlDialog();{% endif %}
       setupMetadataDialog();
       {# vars initialised inside a function using var will have local scope #}
       {# vars initialised inside a function without using var will have global scope #}
@@ -63,7 +62,7 @@
       showMiniCart( false );
       {% endif %}
       setupMiniIconClickCallback();
-      setupRowClickCallback();
+      //setupRowClickCallback();
       {% if myExtent %}
       var myBounds = new OpenLayers.Bounds{{myExtent}}; //calculated from search page results
       mMap.zoomToExtent( transformBounds( myBounds ));
@@ -77,6 +76,7 @@
       }
       $("#map-container").mapResizer({'map':mMap});{# //activate mapresizer widget #}
       $("#map-navigation-panel div[title],#resizer_toolbox img[title]").tooltip('#maptooltip');
+      $('#myModal').modal();
     } {# //end init #}
     {# // make OL compute scale according to WMS spec #}
     OpenLayers.DOTS_PER_INCH = 25.4 / 0.28;
@@ -157,4 +157,3 @@
     </div>
   {% endif %}
 {% endblock %}
-

@@ -76,7 +76,7 @@ $(document).ready(function()
 
 function unblock()
 {
-  $.unblockUI();
+  //$.unblockUI();
 }
 
 function block()
@@ -776,22 +776,12 @@ function setupMapHelpDialog()
  * @note also used from withing image preview panel */
 function showMetadata( theRecordId )
 {
-    var myMetadataDialog = $('<div></div>').load("/metadata/" + theRecordId + "/").dialog({
-      autoOpen: true,
-      title: 'Metadata',
-      modal: true,
-      show: 'slide',
-      hide: 'slide',
-      zIndex: 9999,
-      height: $(window).height() / 2,
-      width: $(window).width() / 2,
-      buttons: { "Close" : function() { $(this).dialog('close'); } }
-    });
+    $('#modalContainer').load("/metadata/" + theRecordId + "/");
+    $('#myModal').modal('show');
 }
 
 function setupMetadataDialog( )
 {
-
   $('.metadata-icon').live('click', (function () {
     var myRecordId = $(this).attr('longdesc');
     showMetadata( myRecordId );
