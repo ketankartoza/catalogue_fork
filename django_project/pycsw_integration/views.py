@@ -15,9 +15,7 @@ CONFIGURATION = {
         'language': 'en-US',
         'maxrecords': '10',
         'pretty_print': 'true',
-        'profiles': 'apiso,dif,fgdc,atom,ebrim',
-        # 'loglevel': 'INFO',
-        # 'logfile': '/tmp/bla.log'
+        'profiles': 'apiso'
     },
     'repository': {
         'database': 'postgresql+psycopg2://dodobas:@/sac_new2',
@@ -28,27 +26,29 @@ CONFIGURATION = {
 
 CSW = {
     'metadata:main': {
-        'identification_title': 'Open Data Catalog CSW',
-        'identification_abstract': 'Open Data Catalog is an open data catalog based on Django, Python and PostgreSQL. It was originally developed for OpenDataPhilly.org, a portal that provides access to open data sets, applications, and APIs related to the Philadelphia region. The Open Data Catalog is a generalized version of the original source code with a simple skin. It is intended to display information and links to publicly available data in an easily searchable format. The code also includes options for data owners to submit data for consideration and for registered public users to nominate a type of data they would like to see openly available to the public.',
-        'identification_keywords': 'odc,Open Data Catalog,catalog,discovery',
+        'identification_title': 'SANSA PyCSW Catalogue',
+        'identification_abstract': '',
+        'identification_keywords': 'sansa, pycsw, catalogue',
         'identification_keywords_type': 'theme',
         'identification_fees': 'None',
         'identification_accessconstraints': 'None',
-        'provider_name': 'a@b.com',
-        'provider_url': 'https://github.com/azavea/Open-Data-Catalog',
-        'contact_name': 'a@b.com',
-        'contact_position': 'a@b.com',
-        'contact_address': 'TBA',
-        'contact_city': 'City',
-        'contact_stateorprovince': 'State',
-        'contact_postalcode': '12345',
-        'contact_country': 'United States of America',
-        'contact_phone': '+01-xxx-xxx-xxxx',
-        'contact_fax': '+01-xxx-xxx-xxxx',
-        'contact_email': 'a@b.com',
-        'contact_url': 'https://github.com/azavea/Open-Data-Catalog/',
-        'contact_hours': '0800h - 1600h EST',
-        'contact_instructions': 'During hours of service. Off on weekends.',
+        'provider_name': 'South African National Space Agency (SANSA)',
+        'provider_url': 'http://www.sansa.org.za/',
+        'contact_name': 'Unknown',
+        'contact_position': 'Unknown',
+        'contact_address': 'Unknown',
+        'contact_city': 'Unknown',
+        'contact_stateorprovince': 'Unknown',
+        'contact_postalcode': 'Unknown',
+        'contact_country': 'South Africa',
+        'contact_phone': 'Unknown',
+        'contact_fax': 'Unknown',
+        'contact_email': 'Unknown',
+        'contact_url': (
+            'http://www.sansa.org.za/contact-us/sansa-earth-observation'
+        ),
+        'contact_hours': 'Unknown',
+        'contact_instructions': 'Unknown',
         'contact_role': 'pointOfContact',
     }
 }

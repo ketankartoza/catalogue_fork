@@ -13,10 +13,12 @@ SELECT
   ''::text as csw_type,
   st_astext(spatial_coverage) as wkt_geometry,
   ''::text as accessconstraints,
-  metadata as csw_description,
+  metadata as csw_metadata,
   ''::text as relation,
   catalogue_genericproduct.id as id,
-  spatial_coverage
+  spatial_coverage,
+  'image'::text as csw_keywords,
+  'test,test_desc,http,http://catalogue.sansa.org.za/showProduct/'||product_id::text as csw_links
 FROM
   public.catalogue_genericproduct;
 

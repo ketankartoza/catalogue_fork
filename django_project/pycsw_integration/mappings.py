@@ -12,7 +12,7 @@ MD_CORE_MODEL = {
         'pycsw:Language': '',
         'pycsw:MdSource': '',
         'pycsw:Abstract': 'csw_metadata',
-        'pycsw:Keywords': '',
+        'pycsw:Keywords': 'csw_keywords',
         'pycsw:KeywordType': '',
         'pycsw:Format': '',
         'pycsw:Source': '',
@@ -57,6 +57,6 @@ MD_CORE_MODEL = {
         'pycsw:Publisher': '',
         'pycsw:Contributor': '',
         'pycsw:Relation': '',
-        'pycsw:Links': '',
+        'pycsw:Links': 'csw_links',
     }
 }
