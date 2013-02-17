@@ -35,7 +35,7 @@ class Command(BaseCommand):
             help=(
                 'Selectively migrate parts of the database, semicolon ";" '
                 'delimited list of migrations (new_dicts, userprofiles,'
-                'search) defaults to "all"')),
+                'search, pycsw) defaults to "all"')),
     )
 
     def handle(self, *args, **options):
@@ -56,6 +56,9 @@ class Command(BaseCommand):
         if 'search' in myMigrations:
             self.migrate_search()
 
+        if 'pycsw' in myMigrations:
+            self.migrate_pycsw()
+
     def migrate_new_dicts(self):
         print '* Starting new_dicts migration...'
         origWD = os.getcwd()
@@ -71,6 +74,8 @@ class Command(BaseCommand):
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '002_profile_migration.sh', self.db])
         os.chdir(origWD)
+        print '* Trying to install required python modules (it might fail)'
+        subprocess.call(['pip', 'install', 'django-userena==1.1.2'])
         print '* Checking user permission (might take awhile)...'
         call_command('check_permissions')
 
@@ -81,3 +86,16 @@ class Command(BaseCommand):
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '003_search_migration.sh', self.db])
         os.chdir(origWD)
+
+    def migrate_pycsw(self):
+        print '* Starting pycsw app migration...'
+        origWD = os.getcwd()
+        os.chdir(os.path.join(origWD, '..', 'sql', 'new_master'))
+        print '* Executing database migration scripts...'
+        subprocess.call(['sh', '100_pycsw_integration.sh', self.db])
+        os.chdir(origWD)
+        print '* Trying to install required python modules (it might fail)'
+        subprocess.call([
+            'pip', 'install', 'git+git://github.com/dodobas/pycsw.git',
+            'SQLAlchemy==0.8.0b2'
+        ])
