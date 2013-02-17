@@ -44,10 +44,10 @@
           </li>
         </ul>
       </li>
-      {% if user.is_authenticated %}
       <li>
         <a href="{% url 'search' %}"><i class="icon-search"></i> <span class="hidden-phone hidden-tablet custom-hide">Search</span></a>
       </li>
+      {% if user.is_authenticated %}
       <li>
         <a href="#"><i class="icon-wrench"></i> <span class="hidden-phone hidden-tablet">Tasking Requests</span></a>
       </li>

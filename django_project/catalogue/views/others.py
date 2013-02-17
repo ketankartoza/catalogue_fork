@@ -396,7 +396,7 @@ def showProduct(theRequest, theProductId):
     })
 
 
-@login_required
+#@login_required
 def showPreview(theRequest, theId, theSize):
     """Show a segment or scene thumbnail details,
       returning the result as a scaled down image.
@@ -424,7 +424,7 @@ def showPreview(theRequest, theId, theSize):
         + """</center>""", mimetype="text/html")
 
 
-@login_required
+#@login_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('thumbnail.html')
 def showThumbPage(theRequest, theId):
@@ -451,7 +451,7 @@ def showThumbPage(theRequest, theId):
     return ({'myDetails': myDetails})
 
 
-@login_required
+#@login_required
 def showThumb(theRequest, theId, theSize):
     """
     Show a scene thumbnail details,
@@ -468,7 +468,7 @@ def showThumb(theRequest, theId, theSize):
         return (myResponse)
 
 
-@login_required
+#@login_required
 def metadata(theRequest, theId):
     """Get the metadata for a product."""
     myGenericProduct = get_object_or_404(GenericProduct, id=theId)

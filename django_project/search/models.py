@@ -195,7 +195,7 @@ class Search(models.Model):
 
     search_type = models.IntegerField(
         'Search type', default=1, choices=PRODUCT_SEARCH_TYPES, db_index=True)
-    user = models.ForeignKey('auth.User')
+    user = models.ForeignKey('auth.User', null=True, blank=True)
     keywords = models.CharField('Keywords', max_length=255, blank=True)
     # foreign keys require the first arg to the be the relation name
     # so we explicitly have to use verbose_name for the user friendly name

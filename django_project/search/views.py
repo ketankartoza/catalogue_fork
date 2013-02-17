@@ -122,7 +122,7 @@ def detectAdvancedSearchForm(theSearchForm):
     return any(myFormIsAdvancedTest)
 
 
-@login_required
+#@login_required
 #theRequest context decorator not used here since we have different return
 #paths
 def search(theRequest):
@@ -162,7 +162,11 @@ def search(theRequest):
                     mySearch.ip_position = (
                         'SRID=4326;POINT(' + str(myLatLong['longitude']) + ' '
                         + str(myLatLong['latitude']) + ')')
-                mySearch.user = theRequest.user
+                #if user is anonymous set to None
+                if theRequest.user.is_anonymous():
+                    mySearch.user = None
+                else:
+                    mySearch.user = theRequest.user
                 mySearch.deleted = False
                 try:
                     myGeometry = getGeometryFromUploadedFile(
@@ -308,7 +312,7 @@ def getSensorDictionaries(theRequest):
     raise Http500('This view must be called by XHR')
 
 
-@login_required
+#@login_required
 def modifySearch(theRequest, theGuid):
     """
     Given a search guid, give the user a form prepopulated with
@@ -420,7 +424,7 @@ def productIdSearch(theRequest, theGuid):
             context_instance=RequestContext(theRequest))
 
 
-@login_required
+#@login_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('map.html')
 def searchResultMap(theRequest, theGuid):
@@ -433,7 +437,7 @@ def searchResultMap(theRequest, theGuid):
     return(mySearcher.templateData())
 
 
-@login_required
+#@login_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('page.html')
 def searchResultPage(theRequest, theGuid):
@@ -446,7 +450,7 @@ def searchResultPage(theRequest, theGuid):
     return(mySearcher.templateData())
 
 
-@login_required
+#@login_required
 def downloadSearchResult(theRequest, theGuid):
     """Dispaches request and returns searchresults in desired file format"""
     mySearcher = Searcher(theRequest, theGuid)
@@ -482,7 +486,7 @@ def downloadSearchResult(theRequest, theGuid):
         raise Http404
 
 
-@login_required
+#@login_required
 def downloadSearchResultMetadata(theRequest, theGuid):
     """
     Returns ISO 19115 metadata for searchresults. I t defaults to xml format
