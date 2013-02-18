@@ -417,7 +417,9 @@ def showPreview(theRequest, theId, theSize):
         + """<img src="/media/images/buy_32.png" onclick='addToCart("""
         + str(theId) + """);'  alt="Click to add to your cart" title="Click
             to add this image to your cart" />&nbsp;"""
-        + """<a id="large_preview" href="/thumbnailpage/"""
+        + """<a data-toggle="modal" data-target="#myModal" data-remote="/thumbnailpage/"""
+        + str(theId)
+        + """/" id="large_preview" href="/thumbnailpage/"""
         + str(theId)
         + """/"><img src="/media/images/search_32.png" alt="Click for larger
             view" title="Click for larger preview"/></a>"""
@@ -441,9 +443,8 @@ def showThumbPage(theRequest, theId):
     myImageFile = os.path.join(
         myProduct.thumbnailDirectory(), myProduct.product_id + '.jpg')
     myDetails.append(
-        '<tr><td><center><img src="%s"></center></td></tr>' % (
-            reverse('showThumbPage', kwargs={'theId': myImageFile}),)
-    )
+        '<tr><td><center><img src=\"/thumbnails/'
+        + myImageFile + '"></center></td></tr>')
     #render_to_response is done by the renderWithContext decorator
     logging.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
     logging.info('Media path    :   ' + str(settings.MEDIA_ROOT))

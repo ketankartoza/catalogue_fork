@@ -240,6 +240,7 @@ function clearSearchResults()
     myLayer.destroy();
   }
 }
+
 function prepareFancy()
 {
   //$("#collapseOne").collapse('hide');
@@ -247,6 +248,7 @@ function prepareFancy()
   $("#collapseTwo").collapse('show');
   $("#collapseTwo").collapse({parent:'#accordion', toggle:true});
   //$("#accordion").accordion("activate", 1);
+  /*
   $("a#large_preview").fancybox(
    {
      "overlayShow"           : false,
@@ -258,6 +260,7 @@ function prepareFancy()
      "frameWidth"            : 500,
      "frameHeight"           : 500
     });
+*/
 }
 function showMiniCart( )
 {
@@ -857,6 +860,7 @@ function hightlightRecord( theRecordId, theZoomFlag )
     mMap.zoomToExtent(myLayer.features[myIndex].geometry.bounds);
   }
   myLayer.redraw();
+  $('#modalContainer').load("/thumbnailpage/" + theRecordId + "/");
 }
 
 /* Setup a callback so that when a mini preview icon is
