@@ -92,6 +92,14 @@ from catalogue.tests.others_showThumbPage import OthersViews_showThumbPage_Tests
 from catalogue.tests.others_metadata import OthersViews_metadata
 from catalogue.tests.others_searchesmap import OthersViews_searchesMap
 from catalogue.tests.others_index import OthersViews_index
+from catalogue.tests.others_video import OthersViews_video
+from catalogue.tests.others_about import OthersViews_about
+from catalogue.tests.others_contact import OthersViews_contact
+from catalogue.tests.others_mapHelp import OthersViews_mapHelp
+from catalogue.tests.others_emptyCartHelp import OthersViews_emptyCartHelp
+from catalogue.tests.others_sceneIdHelp import OthersViews_sceneIdHelp
+
+
 
 # selenium tests
 from catalogue.tests.selenium_login_test import SeleniumLogin

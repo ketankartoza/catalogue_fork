@@ -37,7 +37,7 @@ urlpatterns = patterns('',
     url(r'^kml/$', visitorsKml, name='visitorsKml'),
     url(r'^mapHelp/$', mapHelp, name='mapHelp'),
     url(r'^emptyCartHelp/$', emptyCartHelp, name='emptyCartHelp'),
-    url(r'^sceneidhelp/$', sceneIdHelp),
+    url(r'^sceneidhelp/$', sceneIdHelp, name='sceneIdHelp'),
 
     # match a product id - its not needed to give teh full id, just enough to be semi unique
     url(r'^showProduct/(?P<theProductId>[A-Za-z0-9\_\-]{38,58})/$', showProduct, name='showProduct'),
