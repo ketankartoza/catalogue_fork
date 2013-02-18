@@ -417,9 +417,7 @@ def showPreview(theRequest, theId, theSize):
         + """<img src="/media/images/buy_32.png" onclick='addToCart("""
         + str(theId) + """);'  alt="Click to add to your cart" title="Click
             to add this image to your cart" />&nbsp;"""
-        + """<a data-toggle="modal" data-target="#myModal" data-remote="/thumbnailpage/"""
-        + str(theId)
-        + """/" id="large_preview" href="/thumbnailpage/"""
+        + """<a data-toggle="modal" data-target="#myModal" id="large_preview" href="/thumbnailpage/"""
         + str(theId)
         + """/"><img src="/media/images/search_32.png" alt="Click for larger
             view" title="Click for larger preview"/></a>"""

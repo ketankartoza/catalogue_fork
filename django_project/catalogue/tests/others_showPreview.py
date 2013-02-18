@@ -64,10 +64,11 @@ class OthersViews_showPreview_Tests(TestCase):
             'etadata for this image"\n            title="Click to view metadat'
             'a for this image" />&nbsp;<img src="/media/images/buy_32.png" onc'
             'lick=\'addToCart(1);\'  alt="Click to add to your cart" title="Cl'
-            'ick\n            to add this image to your cart" />&nbsp;<a id="l'
-            'arge_preview" href="/thumbnailpage/1/"><img src="/media/images/se'
-            'arch_32.png" alt="Click for larger\n            view" title="Clic'
-            'k for larger preview"/></a></center>'
+            'ick\n            to add this image to your cart" />&nbsp;<a data-'
+            'toggle="modal" data-target="#myModal" id="large_preview" href="/t'
+            'humbnailpage/1/"><img src="/media/images/search_32.png" alt="Clic'
+            'k for larger\n            view" title="Click for larger preview"/'
+            '></a></center>'
         )
         self.assertEqual(
             myResp.content, expString)
@@ -94,10 +95,11 @@ class OthersViews_showPreview_Tests(TestCase):
             'etadata for this image"\n            title="Click to view metadat'
             'a for this image" />&nbsp;<img src="/media/images/buy_32.png" onc'
             'lick=\'addToCart(1);\'  alt="Click to add to your cart" title="Cl'
-            'ick\n            to add this image to your cart" />&nbsp;<a id="l'
-            'arge_preview" href="/thumbnailpage/1/"><img src="/media/images/se'
-            'arch_32.png" alt="Click for larger\n            view" title="Clic'
-            'k for larger preview"/></a></center>'
+            'ick\n            to add this image to your cart" />&nbsp;<a data-'
+            'toggle="modal" data-target="#myModal" id="large_preview" href="/t'
+            'humbnailpage/1/"><img src="/media/images/search_32.png" alt="Clic'
+            'k for larger\n            view" title="Click for larger preview"/'
+            '></a></center>'
         )
         self.assertEqual(
             myResp.content, expString)
