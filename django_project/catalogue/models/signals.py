@@ -19,6 +19,7 @@ __copyright__ = 'South African National Space Agency'
 
 import datetime
 import logging
+logger = logging.getLogger(__name__)
 
 from django.contrib.gis.db import models
 
@@ -57,7 +58,7 @@ def setGenericProductDate(sender, instance, **kwargs):
         )
     else:
         instance.product_date = instance.product_acquisition_start
-    logging.info('Pre-save signal activated for %s' % instance)
+    logger.info('Pre-save signal activated for %s' % instance)
 
 
 # ABP: doesn't work for GenericSensorProduct
@@ -91,29 +92,29 @@ def setGeometricResolution(sender, instance, **kwargs):
     #only trigger on real model save, do not trigger when importing fixtures
     #https://docs.djangoproject.com/en/1.4/ref/signals/#pre-save
     if not kwargs.get('raw', False):
-        logging.info('Pre-save signal activated for %s' % instance)
+        logger.info('Pre-save signal activated for %s' % instance)
         if not instance.spatial_resolution_x:
             instance.spatial_resolution_x = (
                 instance.acquisition_mode.spatial_resolution)
-            logging.debug('setting spatial_resolution_x to %s' % (
+            logger.debug('setting spatial_resolution_x to %s' % (
                 instance.spatial_resolution_x,)
             )
         if not instance.spatial_resolution_y:
             instance.spatial_resolution_y = (
                 instance.acquisition_mode.spatial_resolution)
-            logging.debug('setting spatial_resolution_y to %s' % (
+            logger.debug('setting spatial_resolution_y to %s' % (
                 instance.spatial_resolution_y,)
             )
         instance.spatial_resolution = (
             instance.spatial_resolution_y +
             instance.spatial_resolution_y) / 2.0
-        logging.debug('setting spatial_resolution to %s' % (
+        logger.debug('setting spatial_resolution to %s' % (
             instance.spatial_resolution,)
         )
 
         if not instance.band_count:
             instance.band_count = instance.acquisition_mode.band_count
-            logging.debug('setting band_count to %s' % instance.band_count)
+            logger.debug('setting band_count to %s' % instance.band_count)
 
 # Apply to all GenericImageryProduct and subclasses
 models.signals.pre_save.connect(

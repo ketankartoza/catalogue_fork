@@ -18,6 +18,7 @@ __date__ = '01/01/2011'
 __copyright__ = 'South African National Space Agency'
 
 import logging
+logger = logging.getLogger(__name__)
 
 from django import forms
 from django.contrib.auth.models import User

@@ -20,6 +20,8 @@ __copyright__ = 'South African National Space Agency'
 import sys
 import shutil
 import logging
+logger = logging.getLogger(__name__)
+
 import os
 import re
 import datetime
@@ -326,7 +328,7 @@ class GenericProduct(node_factory('catalogue.ProductLink',
         elif theSize == 'large':
             mySize = 400
 
-        logging.info('showThumb : id ' + self.product_id)
+        logger.info('showThumb : id ' + self.product_id)
         myImageFile = os.path.join(
             self.thumbnailDirectory(), self.product_id + '.jpg')
         myFileName = str(settings.THUMBS_ROOT) + '/' + myImageFile
@@ -353,17 +355,17 @@ class GenericProduct(node_factory('catalogue.ProductLink',
         # catalogue and store them locally
         if self.remote_thumbnail_url and not os.path.exists(myFileName):
             if not os.path.isdir(myThumbDir):
-                logging.debug('Creating dir: %s' % myThumbDir)
+                logger.debug('Creating dir: %s' % myThumbDir)
                 try:
                     os.makedirs(myThumbDir)
                 except OSError:
-                    logging.debug('Failed to make output directory...quitting')
+                    logger.debug('Failed to make output directory...quitting')
                     return 'Failed to make output dir.'
-            logging.debug('Fetching image: %s' % self.remote_thumbnail_url)
+            logger.debug('Fetching image: %s' % self.remote_thumbnail_url)
             myOpener = urllib2.build_opener()
             myImagePage = myOpener.open(self.remote_thumbnail_url)
             myImage = myImagePage.read()
-            logging.debug('Image fetched, saving as %s' % myImageFile)
+            logger.debug('Image fetched, saving as %s' % myImageFile)
             myWriter = open(os.path.join(
                 settings.THUMBS_ROOT, myImageFile), 'wb')
             myWriter.write(myImage)
@@ -375,10 +377,10 @@ class GenericProduct(node_factory('catalogue.ProductLink',
         myBackgroundColour = (255, 255, 255)
         myAngle = 0
         myShadowFlag = False
-        logging.info('Creating thumbnail of : ' + myFileName)
-        logging.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
-        logging.info('Media path    :   ' + str(settings.MEDIA_ROOT))
-        logging.info('Project root path:' + str(settings.PROJECT_ROOT))
+        logger.info('Creating thumbnail of : ' + myFileName)
+        logger.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
+        logger.info('Media path    :   ' + str(settings.MEDIA_ROOT))
+        logger.info('Project root path:' + str(settings.PROJECT_ROOT))
 
         if not os.path.isfile(myFileName):
             #file does not exist so show an error icon
@@ -414,13 +416,13 @@ class GenericProduct(node_factory('catalogue.ProductLink',
 
         # Now cache the scaled thumb for faster access next time...
         if not os.path.isdir(myCacheThumbDir):
-            logging.debug('Creating dir: %s' % myCacheThumbDir)
+            logger.debug('Creating dir: %s' % myCacheThumbDir)
             try:
                 os.makedirs(myCacheThumbDir)
             except OSError:
-                logging.debug('Failed to make output directory...quitting')
+                logger.debug('Failed to make output directory...quitting')
                 return 'Failed to make output dir'
-        logging.debug('Caching image : %s' % myCacheImage)
+        logger.debug('Caching image : %s' % myCacheImage)
         myBackground.save(myCacheImage)
         return (myBackground)
 
@@ -486,7 +488,7 @@ class GenericProduct(node_factory('catalogue.ProductLink',
             # We need to know the pixel dimensions of the segment so that we
             # can create GCP's
         except:
-            logging.info('File not found %s' % myInputImageFile)
+            logger.info('File not found %s' % myInputImageFile)
             return 'no file'
         myTempTifFile = os.path.join('/tmp/', self.product_id + '.tif')
         myTempReffedTifFile = os.path.join(
@@ -635,8 +637,8 @@ class GenericProduct(node_factory('catalogue.ProductLink',
         if not os.path.isfile(myPath):
             myPath = myPath.replace('.tar.bz2', '.bz2')
             myUrl = myUrl.replace('.tar.bz2', '.bz2')
-        logging.info('Raw Image Path: %s' % myPath)
-        logging.info('Raw Image Url: %s' % myUrl)
+        logger.info('Raw Image Path: %s' % myPath)
+        logger.info('Raw Image Url: %s' % myUrl)
         if os.path.isfile(myPath):
             return myUrl
         else:
@@ -1062,7 +1064,7 @@ class GenericSensorProduct(GenericImageryProduct):
             try:
                 os.makedirs(myImageryOutputPath)
             except OSError:
-                logging.debug(
+                logger.debug(
                     'Failed to make output directory (%s) ...quitting' % (
                         myImageryOutputPath,))
                 return 'False'
@@ -1072,7 +1074,7 @@ class GenericSensorProduct(GenericImageryProduct):
             try:
                 os.makedirs(myThumbOutputPath)
             except OSError:
-                logging.debug(
+                logger.debug(
                     'Failed to make output directory (%s) ...quitting' % (
                         myThumbOutputPath,))
                 return 'False'
@@ -1116,7 +1118,7 @@ class GenericSensorProduct(GenericImageryProduct):
                 shutil.move(myOldImageryPath, myNewImageryPath)
 
         except:
-            logging.debug("Failed to move some or all of the assets")
+            logger.debug("Failed to move some or all of the assets")
 
         return
 

@@ -18,6 +18,7 @@ __date__ = '27/09/2012'
 __copyright__ = 'South African National Space Agency'
 
 import logging
+logger = logging.getLogger(__name__)
 
 from django.test import TestCase
 from django.test.client import Client
@@ -62,7 +63,7 @@ class MessagingTests(TestCase):
             myRequest = sendMessageToUser(myRequest)
         except:
             myMessage = 'Probably the user session was not found'
-            logging.exception(myMessage)
+            logger.exception(myMessage)
             self.fail(myMessage)
 
         myExpectedResponse = ('Message sent successfully to %s.' %
@@ -123,7 +124,7 @@ class MessagingTests(TestCase):
             myRequest = sendMessageToAllUsers(myRequest)
         except:
             myMessage = 'Probably the user session was not found'
-            logging.exception(myMessage)
+            logger.exception(myMessage)
             self.fail(myMessage)
 
         myExpectedResponse = 'Message sent successfully to all users.'
@@ -151,7 +152,7 @@ class MessagingTests(TestCase):
             myResponse = sendMessageToUser(myRequest)
         except:
             myMessage = 'Probably the user session was not found'
-            logging.exception(myMessage)
+            logger.exception(myMessage)
             self.fail(myMessage)
 
         myExpectedResponse = ('Message sent successfully to %s.' %

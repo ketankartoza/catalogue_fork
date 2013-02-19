@@ -25,6 +25,7 @@ import re
 from email.MIMEBase import MIMEBase
 
 import logging
+logger = logging.getLogger(__name__)
 
 from django.template import RequestContext
 # for rendering template to email
@@ -268,7 +269,7 @@ def notifySalesStaff(theUser, theOrderId, theContext=None):
     """
 
     if not settings.EMAIL_NOTIFICATIONS_ENABLED:
-        logging.info('Email sending disabled, set EMAIL_NOTIFICATIONS_ENABLED '
+        logger.info('Email sending disabled, set EMAIL_NOTIFICATIONS_ENABLED '
                      'in settings')
         return
     myOrder = get_object_or_404(Order, id=theOrderId)
@@ -285,7 +286,7 @@ def notifySalesStaff(theUser, theOrderId, theContext=None):
 
     myRecipients = set()
     myRecipients.update([theUser])
-    logging.info('User recipient added: %s' % str(myRecipients))
+    logger.info('User recipient added: %s' % str(myRecipients))
     # get the list of recipients
     for myProduct in [s.product for s in myRecords]:
         myRecipients.update(
@@ -293,7 +294,7 @@ def notifySalesStaff(theUser, theOrderId, theContext=None):
 
     # Add default recipients
     if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
-        logging.info('Sending notice to default recipients : %s' %
+        logger.info('Sending notice to default recipients : %s' %
                      CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
         myRecipients.update(list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS))
 
@@ -321,7 +322,7 @@ def notifySalesStaff(theUser, theOrderId, theContext=None):
             myEmailSubject,
             myEmailMessage_txt,
             'dontreply@' + settings.DOMAIN, [myAddress])
-        logging.info('Sending notice to : %s' % myAddress)
+        logger.info('Sending notice to : %s' % myAddress)
 
         #attach alternative payload - html
         myMsg.attach_alternative(myEmailMessage_html, 'text/html')
@@ -333,7 +334,7 @@ def notifySalesStaff(theUser, theOrderId, theContext=None):
         #add message
         myMessagesList.append(myMsg)
 
-    logging.info('Sending messages: \n%s' % myMessagesList)
+    logger.info('Sending messages: \n%s' % myMessagesList)
     # initiate email connection, and send messages in bulk
     myEmailConnection = mail.get_connection()
     myEmailConnection.send_messages(myMessagesList)
@@ -369,7 +370,7 @@ def notifySalesStaffOfTaskRequest(theUser, theId, theContext=None):
         myResp.context['myObjects'] = [], but in reality it should have values
     """
     if not settings.EMAIL_NOTIFICATIONS_ENABLED:
-        logging.info('Email sending disabled, set '
+        logger.info('Email sending disabled, set '
                      'EMAIL_NOTIFICATIONS_ENABLED in settings')
         return
 
@@ -390,7 +391,7 @@ def notifySalesStaffOfTaskRequest(theUser, theId, theContext=None):
 
     # Add default recipients if no recipients
     if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
-        logging.info('Sending notice to default recipients : %s' %
+        logger.info('Sending notice to default recipients : %s' %
                      CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
         myRecipients.update(list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS))
 
@@ -415,7 +416,7 @@ def notifySalesStaffOfTaskRequest(theUser, theId, theContext=None):
         myMsg = EmailMultiRelated(myEmailSubject,
                                   myEmailMessage_txt,
                                   'dontreply@' + settings.DOMAIN, [myAddress])
-        logging.info('Sending notice to : %s' % myAddress)
+        logger.info('Sending notice to : %s' % myAddress)
 
         #attach alternative payload - html
         myMsg.attach_alternative(myEmailMessage_html, 'text/html')
@@ -426,7 +427,7 @@ def notifySalesStaffOfTaskRequest(theUser, theId, theContext=None):
         #add message
         myMessagesList.append(myMsg)
 
-    logging.info('Sending messages: \n%s' % myMessagesList)
+    logger.info('Sending messages: \n%s' % myMessagesList)
     # initiate email connection, and send messages in bulk
     myEmailConnection = mail.get_connection()
     myEmailConnection.send_messages(myMessagesList)
@@ -936,7 +937,7 @@ def genericAdd(
         theRedirectPath,
         theOptions):
     myObject = getObject(theFormClass)
-    logging.info('Generic add called')
+    logger.info('Generic add called')
     if theRequest.method == 'POST':
         # create a form instance using reflection
         # see http://stackoverflow.com/questions/452969/does-python-have-an
@@ -952,10 +953,10 @@ def genericAdd(
             myObject = myForm.save(commit=False)
             myObject.user = theRequest.user
             myObject.save()
-            logging.info('Add : data is valid')
+            logger.info('Add : data is valid')
             return HttpResponseRedirect(theRedirectPath + str(myObject.id))
         else:
-            logging.info('Add : form is NOT valid')
+            logger.info('Add : form is NOT valid')
             return render_to_response(
                 'add.html', myOptions,
                 context_instance=RequestContext(theRequest))
@@ -967,7 +968,7 @@ def genericAdd(
         }
         #shortcut to join two dicts
         myOptions.update(theOptions),
-        logging.info('Add : new object requested')
+        logger.info('Add : new object requested')
         return render_to_response(
             'add.html', myOptions,
             context_instance=RequestContext(theRequest))
@@ -1001,7 +1002,7 @@ def isStrategicPartner(theRequest):
     try:
         myProfile = theRequest.user.get_profile()
     except:
-        logging.debug('Profile does not exist')
+        logger.debug('Profile does not exist')
     myPartnerFlag = False
     if myProfile and myProfile.strategic_partner:
         myPartnerFlag = True
@@ -1030,7 +1031,7 @@ def standardLayers(theRequest):
     try:
         myProfile = theRequest.user.get_profile()
     except:
-        logging.debug('Profile does not exist')
+        logger.debug('Profile does not exist')
     if myProfile and myProfile.strategic_partner:
         myLayerDefinitions = [
             WEB_LAYERS['ZaSpot2mMosaic2010TC'],
@@ -1110,18 +1111,18 @@ def writeThumbToZip(theImagePath, theProductId, theZip):
             with open(theImagePath, 'rb') as myFile:
                 theZip.writestr('%s.jpg' % theProductId,
                                myFile.read())
-                logging.debug('Adding thumbnail image to archive.')
+                logger.debug('Adding thumbnail image to archive.')
         else:
             raise Exception('Thumbnail image not found: %s' % theImagePath)
         if os.path.isfile(myWLDFile):
             with open(myWLDFile, 'rb') as myFile:
                 theZip.writestr('%s.wld' % theProductId,
                                myFile.read())
-                logging.debug('Adding worldfile to archive.')
+                logger.debug('Adding worldfile to archive.')
         else:
             raise Exception('World file not found: %s' % myWLDFile)
     except:
-        logging.exception('Error writing thumb to zip')
+        logger.exception('Error writing thumb to zip')
         return False
     return True
 
@@ -1177,7 +1178,7 @@ def downloadISOMetadata(theSearchRecords, theName):
     myMaxMetadataRecords = getattr(settings, 'MAX_METADATA_RECORDS', 500)
     for mySearchRecord in theSearchRecords[:myMaxMetadataRecords]:
         myMetadata = mySearchRecord.product.getXML()
-        logging.info('Adding product XML to ISO Metadata archive.')
+        logger.info('Adding product XML to ISO Metadata archive.')
         myZip.writestr('%s.xml' % mySearchRecord.product.product_id,
                        myMetadata)
         writeSearchRecordThumbToZip(mySearchRecord, myZip)
@@ -1206,7 +1207,7 @@ def downloadHtmlMetadata(theSearchRecords, theName):
     for mySearchRecord in theSearchRecords[:myMaxMetadataRecords]:
         myMetadata = mySearchRecord.product.getConcreteInstance().toHtml(
             myThumbIsLocalFlag)
-        logging.info('Adding product HTML to HTML Metadata archive.')
+        logger.info('Adding product HTML to HTML Metadata archive.')
         myZip.writestr('%s.html' % mySearchRecord.product.product_id,
                        myMetadata)
         writeSearchRecordThumbToZip(mySearchRecord, myZip)

@@ -22,6 +22,7 @@ import os
 
 # python logging support to django logging middleware
 import logging
+logger = logging.getLogger(__name__)
 
 # for get feature info
 import urllib2
@@ -116,12 +117,12 @@ def logVisit(theRequest):
                     #user has no profile ...
                 return HttpResponse('/** No Profile */', mimetype='text/css')
         else:
-            logging.info(
+            logger.info(
                 'GEOIP capture failed to retrieve valid position info')
             return HttpResponse(
                 '/** No valid position */', mimetype='text/css')
     else:
-        logging.info('GEOIP capture disabled in settings')
+        logger.info('GEOIP capture disabled in settings')
         return HttpResponse(
             '/** Geoip disabled in settings */', mimetype='text/css')
     return HttpResponse('', mimetype='text/css')
@@ -131,7 +132,7 @@ def logVisit(theRequest):
 #renderWithContext is explained in renderWith.py
 @renderWithContext('map.html')
 def whereAmI(theRequest):
-    logging.info('whereAmI called...')
+    logger.info('whereAmI called...')
     myExtent = '(16,-34, 33, -22)'
     myMessages = []
     myGeoIpUtils = GeoIpUtils()
@@ -250,7 +251,7 @@ def clip(theRequest):
     try:
         myProfile = theRequest.user.get_profile()
     except:
-        logging.debug('Profile does not exist')
+        logger.debug('Profile does not exist')
     myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
         theRequest)
     if theRequest.method == 'POST':
@@ -265,18 +266,18 @@ def clip(theRequest):
                 if myGeometry:
                     myObject.geometry = myGeometry
                 else:
-                    logging.info(
+                    logger.info(
                         'Failed to set clip area from uploaded geometry file')
-                    logging.info('Or no shapefile uploaded')
+                    logger.info('Or no shapefile uploaded')
             except:
-                logging.info(
+                logger.info(
                     'An error occurred trying to set clip area from geometry '
                     'file')
-                logging.info(traceback.format_exc())
+                logger.info(traceback.format_exc())
             if not myObject.geometry:
                 myErrors = myForm._errors.setdefault('geometry', ErrorList())
                 myErrors.append(u'No valid geometry provided')
-                logging.info(
+                logger.info(
                     'Form is NOT valid - at least a file or digitised geom is '
                     'needed')
                 return render_to_response(
@@ -286,12 +287,12 @@ def clip(theRequest):
                 #BUG: this code is unreachable, will never execute
                 myObject.save()
 
-            logging.debug('Clip: ' + str(myClip))
-            logging.info('form is VALID after editing')
+            logger.debug('Clip: ' + str(myClip))
+            logger.info('form is VALID after editing')
             #test of registered user messaging system
             return HttpResponseRedirect(myRedirectPath + str(myObject.id))
         else:
-            logging.info('form is INVALID after editing')
+            logger.info('form is INVALID after editing')
             #render_to_response is done by the renderWithContext decorator
             return ({
                 'myTitle': myTitle,
@@ -429,7 +430,7 @@ def showPreview(theRequest, theId, theSize):
 @renderWithContext('thumbnail.html')
 def showThumbPage(theRequest, theId):
     """Show a segment or scene thumbnail details in a popup dialog"""
-    logging.info('showThumbPage : id ' + theId)
+    logger.info('showThumbPage : id ' + theId)
     myDetails = []
     myProduct = get_object_or_404(GenericProduct, id=theId)
     #ABP: ugly hack
@@ -444,9 +445,9 @@ def showThumbPage(theRequest, theId):
         '<tr><td><center><img src=\"/thumbnails/'
         + myImageFile + '"></center></td></tr>')
     #render_to_response is done by the renderWithContext decorator
-    logging.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
-    logging.info('Media path    :   ' + str(settings.MEDIA_ROOT))
-    logging.info('Project root path:' + str(settings.PROJECT_ROOT))
+    logger.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
+    logger.info('Media path    :   ' + str(settings.MEDIA_ROOT))
+    logger.info('Project root path:' + str(settings.PROJECT_ROOT))
     return ({'myDetails': myDetails})
 
 
@@ -456,7 +457,7 @@ def showThumb(theRequest, theId, theSize):
     Show a scene thumbnail details,
     returning the result as a scaled down image.
     """
-    logging.info('showThumb : id ' + theId)
+    logger.info('showThumb : id ' + theId)
     myProduct = get_object_or_404(GenericProduct, id=theId)
     myImage = myProduct.thumbnail(theSize)
     if (isinstance(myImage, str)):
@@ -579,7 +580,7 @@ def getFeatureInfo(theRequest,
     GET and POST requests.
     """
 
-    logging.debug(
+    logger.debug(
         'getFeatureInfo called \n Lon: %s Lat: %s BBox: %s X: %s Y: %s '
         'Height: %s Width: %s' % (
             theLon,
@@ -599,22 +600,22 @@ def getFeatureInfo(theRequest,
         myRequest = urllib2.Request(myUrl, myBody, myHeaders)
         myResponse = urllib2.urlopen(myRequest)
 
-        # logging.debug(content type header)
+        # logger.debug(content type header)
         myInfo = myResponse.info()
         if 'Content-Type' in myInfo:
-            logging.debug('Content-Type: %s' % (myInfo['Content-Type']))
+            logger.debug('Content-Type: %s' % (myInfo['Content-Type']))
         else:
-            logging.debug("Content-Type: text/plain")
+            logger.debug("Content-Type: text/plain")
 
-        logging.debug(myResponse.read())
+        logger.debug(myResponse.read())
 
         myResponse.close()
 
     except Exception, e:
-        logging.debug('Status: 500 Unexpected Error')
-        logging.debug('Content-Type: text/plain')
-        logging.debug()
-        logging.debug('Some unexpected error occurred. Error text was:', e)
+        logger.debug('Status: 500 Unexpected Error')
+        logger.debug('Content-Type: text/plain')
+        logger.debug()
+        logger.debug('Some unexpected error occurred. Error text was:', e)
 
     return HttpResponse('Hello world')
 

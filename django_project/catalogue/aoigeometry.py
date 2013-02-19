@@ -18,6 +18,7 @@ __date__ = '01/01/2011'
 __copyright__ = 'South African National Space Agency'
 
 import logging
+logger = logging.getLogger(__name__)
 
 from django import forms
 from django.contrib.gis.geos import Point, Polygon
@@ -51,83 +52,83 @@ class AOIGeometryField(forms.CharField):
                 try:
                     myFields = [float(field) for field in myFields]
                 except:
-                    logging.info(
+                    logger.info(
                         'AOI geometry: invalid input values, can\'t be '
                         'converted tu numbers: %s' % (theValue))
                     raise
 
                 #point and radius validation
                 if len(myFields) == 3:
-                    logging.info('AOI geometry: point and radius validation')
+                    logger.info('AOI geometry: point and radius validation')
                     if myFields[0] <= -180 or myFields[0] >= 180:
-                        logging.info(
+                        logger.info(
                             'AOI geometry: point longitude not in -180..180 '
                             'range: %f' % (myFields[0]))
                         raise
                     if myFields[1] <= -90 or myFields[1] >= 90:
-                        logging.info(
+                        logger.info(
                             'AOI geometry: point latitude not in -90..90 '
                             'range: %f' % (myFields[1]))
                         raise
                     if myFields[2] <= 0:
-                        logging.info(
+                        logger.info(
                             'AOI geometry: radius equal or less then Zero: %f'
                             % (myFields[2]))
                         raise
                 #bbox validation
                 elif len(myFields) == 4:
-                    logging.info('AOI geometry: bbox validation')
+                    logger.info('AOI geometry: bbox validation')
                     if myFields[0] <= -180 or myFields[0] >= 180:
-                        logging.info(
+                        logger.info(
                             'AOI geometry: west longitude not in -180..180 '
                             'range: %f' % (myFields[0]))
                         raise
                     if myFields[2] <= -180 or myFields[2] >= 180:
-                        logging.info(
+                        logger.info(
                             'AOI geometry: east longitude not in -180..180 '
                             'range: %f' % (myFields[2]))
                         raise
                     if myFields[1] <= -90 or myFields[1] >= 90:
-                        logging.info(
+                        logger.info(
                             'AOI geometry: north latitude not in -90..90 '
                             'range: %f' % (myFields[1]))
                         raise
                     if myFields[3] <= -90 or myFields[3] >= 90:
-                        logging.info(
+                        logger.info(
                             'AOI geometry: south latitude not in -90..90 '
                             'range: %f' % (myFields[3]))
                         raise
                     #check bbox
                     if myFields[0] > myFields[2]:
-                        logging.info(
+                        logger.info(
                             'AOI geometry: west edge can\'t be after east '
                             'edge: %f<%f' % (myFields[0], myFields[2]))
                         raise
 
                     if myFields[3] > myFields[1]:
-                        logging.info(
+                        logger.info(
                             'AOI geometry: south edge can\'t be after north '
                             'edge: %f<%f' % (myFields[1], myFields[3]))
                         raise
 
                     if myFields[0] == myFields[2]:
-                        logging.info(
+                        logger.info(
                             'AOI geometry: west edge and east edge are '
                             'identical: %f=%f' % (myFields[0], myFields[2]))
                         raise
                     if myFields[1] == myFields[3]:
-                        logging.info(
+                        logger.info(
                             'AOI geometry: north edge and south edge are '
                             'identical: %f=%f' % (myFields[1], myFields[3]))
                         raise
                 #unexpected number of arguments
                 else:
-                    logging.info(
+                    logger.info(
                         'AOI geometry: unexpected number of arguments: (%i),%s'
                         % (len(myFields), theValue))
                     raise
             except Exception, e:
-                logging.info(str(e))
+                logger.info(str(e))
                 raise forms.ValidationError(
                     'Area of interest geometry is not valid.')
 

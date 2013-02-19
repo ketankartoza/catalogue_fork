@@ -18,6 +18,8 @@ __date__ = '01/01/2011'
 __copyright__ = 'South African National Space Agency'
 
 import logging
+logger = logging.getLogger(__name__)
+
 import datetime
 import traceback
 
@@ -99,7 +101,7 @@ def myOrders(theRequest):
         myPage = int(theRequest.GET.get('page', '1'))
     except ValueError:
         myPage = 1
-        logging.info('Order list page request defaulting to page 1'
+        logger.info('Order list page request defaulting to page 1'
                      ' because on an error in pagination')
     # If page request (9999) is out of range, deliver last page of results.
     try:
@@ -164,8 +166,8 @@ def orderMonthlyReport(theRequest, theyear, themonth):
         try:
             myDate = datetime.date(int(theyear), int(themonth), 1)
         except:
-            logging.error('Date arguments cannot be parsed')
-            logging.info(traceback.format_exc())
+            logger.error('Date arguments cannot be parsed')
+            logger.info(traceback.format_exc())
 
     if not theRequest.user.is_staff:
         '''Non staff users can only see their own orders listed'''
@@ -218,7 +220,7 @@ def downloadOrder(theRequest, theId):
             'myThumbsFlag': True
         }, u'products_for_order_%s' % myOrder.id)
     else:
-        logging.info('Request cannot be proccesed,'
+        logger.info('Request cannot be proccesed,'
                      ' unsupported download file type')
         raise Http404
 
@@ -249,7 +251,7 @@ def downloadClipGeometry(theRequest, theId):
                 'myThumbsFlag': True
             }, u'clip_geometry_order_%s' % myOrder.id)
     else:
-        logging.info('Request cannot be processed,'
+        logger.info('Request cannot be processed,'
                      ' unsupported download file type')
         raise Http404
 
@@ -279,7 +281,7 @@ def viewOrder(theRequest, theId):
     if theRequest.is_ajax() or myAjaxFlag:
         # No page container needed, just a snippet
         myTemplatePath = 'orderPageAjax.html'
-        logging.debug('Request is ajax enabled')
+        logger.debug('Request is ajax enabled')
     myOrder = get_object_or_404(Order, id=theId)
     myRecords = SearchRecord.objects.all().filter(order=myOrder)
     myCoverage = coverageForOrder(myOrder, myRecords)
@@ -352,12 +354,12 @@ def coverageForOrder(theOrder, theSearchRecords):
         if len(myZones) > 0:
             # use the first match
             myZone = myZones[0]
-            logging.debug('Utm zones: %s' % myZones)
-            logging.debug('Before geom xform to %s: %s' % (myZone[0], myUnion))
+            logger.debug('Utm zones: %s' % myZones)
+            logger.debug('Before geom xform to %s: %s' % (myZone[0], myUnion))
             myTransform = CoordTransform(SpatialReference(4326),
                                          SpatialReference(myZone[0]))
             myUnion.transform(myTransform)
-            logging.debug('After geom xform: %s' % myUnion)
+            logger.debug('After geom xform: %s' % myUnion)
             myCoverage['ProductArea'] = myUnion.area
             myCoverage['CentroidZone'] = (
                 '%s (EPSG:%s)' % (myZone[1], myZone[0]))
@@ -387,7 +389,7 @@ def coverageForOrder(theOrder, theSearchRecords):
                 myTransform = CoordTransform(SpatialReference(4326),
                                              SpatialReference(myZone[0]))
                 myClip.transform(myTransform)
-                #logging.debug('Utm zones: %s' % myZone)
+                #logger.debug('Utm zones: %s' % myZone)
                 myCoverage['IntersectedArea'] = myClip.area
                 myCoverage['ClipZone'] = '%s (EPSG:%s)' % (
                     myZone[1], myZone[0])
@@ -395,7 +397,7 @@ def coverageForOrder(theOrder, theSearchRecords):
             myCoverage['IntersectedArea'] = 'Not applicable'
             myCoverage['ClipZone'] = 'Not applicable'
     except Exception, e:
-        logging.info('Error calculating coverage for order %s' % e.message)
+        logger.info('Error calculating coverage for order %s' % e.message)
         pass
     return myCoverage
 
@@ -410,7 +412,7 @@ def updateOrderHistory(theRequest):
     if theRequest.is_ajax():
         # No page container needed, just a snippet
         myTemplatePath = 'orderStatusHistory.html'
-        logging.debug('Request is ajax enabled')
+        logger.debug('Request is ajax enabled')
     myOrderId = theRequest.POST['order']
     myOrder = get_object_or_404(Order, id=myOrderId)
     myNewStatusId = theRequest.POST['new_order_status']
@@ -484,9 +486,9 @@ def showDeliveryDetail(theRequest, theReferenceId):
 @login_required
 @requireProfile('addorder')
 def addOrder(theRequest):
-    logging.debug('Order called')
+    logger.debug('Order called')
     myTitle = 'Create a new order'
-    logging.info('Preparing order for user ' + str(theRequest.user))
+    logger.info('Preparing order for user ' + str(theRequest.user))
     myRecords = None
     (myLayersList,
      myLayerDefinitions, myActiveBaseMap) = standardLayers(theRequest)
@@ -512,22 +514,22 @@ def addOrder(theRequest):
     myLayerDefinitions.append(myCartLayer)
 
     if str(theRequest.user) == 'AnonymousUser':
-        logging.debug('User is anonymous')
-        logging.info('Anonymous users cannot have items in their cart')
+        logger.debug('User is anonymous')
+        logger.info('Anonymous users cannot have items in their cart')
         myMessage = ('If you want to order something, you need to'
                      ' create an account and log in first.')
         return HttpResponse(myMessage)
     else:
-        logging.debug('User NOT anonymous')
+        logger.debug('User NOT anonymous')
         myRecords = SearchRecord.objects.all().filter(
             user=theRequest.user).filter(order__isnull=True)
         if myRecords.count() < 1:
-            logging.debug('Cart has no records')
-            logging.info('User has no items in their cart')
+            logger.debug('Cart has no records')
+            logger.info('User has no items in their cart')
             return HttpResponseRedirect(reverse('emptyCartHelp'))
         else:
-            logging.debug('Cart has records')
-            logging.info('Cart contains : ' +
+            logger.debug('Cart has records')
+            logger.info('Cart contains : ' +
                          str(myRecords.count()) + ' items')
     myExtraOptions = {
         # Possible flags for the record template
@@ -572,9 +574,9 @@ def addOrder(theRequest):
         'myLayersList': myLayersList,
         'myActiveBaseMap': myActiveBaseMap
     }
-    logging.info('Add Order called')
+    logger.info('Add Order called')
     if theRequest.method == 'POST':
-        logging.debug('Order posted')
+        logger.debug('Order posted')
 
         myOrderForm = OrderForm(theRequest.POST, theRequest.FILES)
         myDeliveryDetailForm = DeliveryDetailForm(
@@ -598,7 +600,7 @@ def addOrder(theRequest):
         myOptions.update(myExtraOptions)
         if (myOrderForm.is_valid() and myDeliveryDetailForm.is_valid()
                 and all([form.is_valid() for form in myProductForms])):
-            logging.debug('Order valid')
+            logger.debug('Order valid')
 
             myDeliveryDetailObject = myDeliveryDetailForm.save(commit=False)
             myDeliveryDetailObject.user = theRequest.user
@@ -609,10 +611,10 @@ def addOrder(theRequest):
                 if myGeometry:
                     myDeliveryDetailObject.geometry = myGeometry
                 else:
-                    logging.info('Failed to set search area'
+                    logger.info('Failed to set search area'
                                  ' from uploaded geometry file')
             except:
-                logging.info('An error occurred trying to set'
+                logger.info('An error occurred trying to set'
                              ' search area from uploaded geometry file')
             myDeliveryDetailObject.user = theRequest.user
             myDeliveryDetailObject.save()
@@ -621,7 +623,7 @@ def addOrder(theRequest):
             myObject.user = theRequest.user
             myObject.delivery_detail = myDeliveryDetailObject
             myObject.save()
-            logging.debug('Order saved')
+            logger.debug('Order saved')
 
             #save all of the subforms
             myDeliveryDetailsProducts = {}
@@ -643,15 +645,15 @@ def addOrder(theRequest):
                 myRecord.order = myObject
                 myRecord.save()
 
-            logging.info('Add Order : data is valid')
+            logger.info('Add Order : data is valid')
 
-            logging.debug('Search records added')
+            logger.debug('Search records added')
             #return HttpResponse('Done')
             notifySalesStaff(theRequest.user, myObject.id)
             return HttpResponseRedirect(
                 reverse('viewOrder', kwargs={'theId': myObject.id}))
         else:
-            logging.info('Add Order: form is NOT valid')
+            logger.info('Add Order: form is NOT valid')
             return render_to_response(
                 'addPage.html', myOptions,
                 context_instance=RequestContext(theRequest))
@@ -666,7 +668,7 @@ def addOrder(theRequest):
         }
         # shortcut to join two dicts
         myOptions.update(myExtraOptions),
-        logging.info('Add Order: new object requested')
+        logger.info('Add Order: new object requested')
         return render_to_response(
             'addPage.html', myOptions,
             context_instance=RequestContext(theRequest))

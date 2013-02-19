@@ -24,6 +24,8 @@ import urllib2
 
 # python logging support to django logging middleware
 import logging
+logger = logging.getLogger(__name__)
+
 import traceback
 
 
@@ -49,7 +51,7 @@ class GeoIpUtils:
                 remote_ip = matcher.search(checkip).group()
             except:
                 remote_ip = ''
-        logging.info('Remote ip is: ' + remote_ip)
+        logger.info('Remote ip is: ' + remote_ip)
         return remote_ip
 
     def getMyLatLong(self, request):
@@ -58,11 +60,11 @@ class GeoIpUtils:
         try:
             remote_location = g.city(remote_ip)
             if remote_location:
-                logging.info(remote_location)
+                logger.info(remote_location)
                 return remote_location
             else:  # ip cannot be found
-                logging.info('IP could not be looked up :-(')
+                logger.info('IP could not be looked up :-(')
                 return None
         except Exception, e:
-            logging.info(traceback.format_exc())
+            logger.info(traceback.format_exc())
             return None

@@ -24,6 +24,8 @@ import shutil
 import tempfile
 import tarfile
 import logging
+logger = logging.getLogger(__name__)
+
 from django.contrib.gis.geos import Polygon
 
 try:
@@ -131,7 +133,7 @@ class dimsReader(dimsBase):
         """
         Set the tarball file path and reads the package
         """
-        logging.info('%s initialized' % self.__class__)
+        logger.info('%s initialized' % self.__class__)
         self._path = path
         self._tar = None
         self._tar_index = None
@@ -153,7 +155,7 @@ class dimsReader(dimsBase):
                 self._tar_index):
             m = re.search('ISOMetadata/([^/]+)/([^/]+)\.xml$', product_path)
             processing_level_code, product = m.groups()
-            logging.info("reading %s" % product)
+            logger.info("reading %s" % product)
             # extracts metadata
             metadata = self._read_metadata(product_path)
             self._products[product] = {
@@ -197,12 +199,12 @@ class dimsReader(dimsBase):
         tree = etree.parse(self._read_file(product_path))
         metadata = {}
         for md_name, md_xpath in self.METADATA.items():
-            logging.info('searching for %s in path %s' % (md_name, md_xpath))
+            logger.info('searching for %s in path %s' % (md_name, md_xpath))
             try:
                 metadata[md_name] = tree.find(md_xpath.format(**self.NS)).text
             except AttributeError:
-                logging.debug('not found %s in path %s' % (md_name, md_xpath))
-        logging.info("metadata: %s" % metadata)
+                logger.debug('not found %s in path %s' % (md_name, md_xpath))
+        logger.info("metadata: %s" % metadata)
         return metadata
 
     def _read_file(self, file_path):
@@ -247,7 +249,7 @@ class dimsWriter(dimsBase):
         """
         Set the file path and reads the package
         """
-        logging.info("%s initialized" % self.__class__)
+        logger.info("%s initialized" % self.__class__)
         self._tmp = tempfile.mkdtemp()
         self._path = os.path.join(self._tmp, package_name)
         self._package_name = package_name
@@ -258,20 +260,20 @@ class dimsWriter(dimsBase):
         # makes a temporary copy of the template folder, all processing will
         # be done on the copy
         shutil.copytree(template_path, self._path)
-        logging.info("template copied to %s" % self._path)
+        logger.info("template copied to %s" % self._path)
 
     def _create_processing_level_folders(self, processing_level_code):
         """
         Creates the processing levels folders
         """
-        logging.info("Processing level code %s" % processing_level_code)
+        logger.info("Processing level code %s" % processing_level_code)
         myProcFolders = (
             os.path.join('Metadata', 'ISOMetadata'),
             os.path.join('Metadata', 'Thumbnails'))
         for p in myProcFolders:
             _p = os.path.join(self._path, p, processing_level_code)
             if not os.path.isdir(_p):
-                logging.info("creating %s" % _p)
+                logger.info("creating %s" % _p)
                 os.makedirs(_p)
 
     @staticmethod
@@ -300,18 +302,18 @@ class dimsWriter(dimsBase):
         """
         tree = etree.parse(template_xml)
         for md_name, md_xpath in dimsBase.METADATA.items():
-            logging.info('searching for %s in path %s' % (md_name, md_xpath))
+            logger.info('searching for %s in path %s' % (md_name, md_xpath))
             try:
                 try:
                     #convert any value to unicode
                     _val = unicode(metadata[md_name])
                     tree.find(md_xpath.format(**dimsBase.NS)).text = _val
-                    logging.info("adding %s = %s" % (md_name, _val))
+                    logger.info("adding %s = %s" % (md_name, _val))
                 except (KeyError, AttributeError):
-                    logging.debug(
+                    logger.debug(
                         'not found %s in path %s' % (md_name, md_xpath))
             except MetadataNotFoundException:
-                logging.debug(
+                logger.debug(
                     'searching for %s in path %s' % (md_name, md_xpath))
         return etree.tostring(tree)
 
@@ -332,7 +334,7 @@ class dimsWriter(dimsBase):
             'ISOMetadata_template.xml')
         fh.write(dimsWriter.getXML(product_data.get('metadata'), myPath))
         fh.close()
-        logging.info("adding metadata to %s" % _xml)
+        logger.info("adding metadata to %s" % _xml)
 
     def _add_product(self, product_code, product_data):
         """
@@ -362,16 +364,16 @@ class dimsWriter(dimsBase):
                 try:
                     os.makedirs(_p)
                 except OSError:
-                    logging.warning('cannot create %s' % _p)
+                    logger.warning('cannot create %s' % _p)
                 # Copy the image, rename the file to match product_code and
                 # keeps extension
                 _image_path = os.path.join(
                     _p, product_code + os.path.splitext(
                         product_data['image'])[1])
                 shutil.copy(product_data['image'], _image_path)
-                logging.info("image saved in %s" % _image_path)
+                logger.info("image saved in %s" % _image_path)
         except KeyError:
-            logging.warning('no image data for %s' % product_code)
+            logger.warning('no image data for %s' % product_code)
 
         self._add_metadata(product_code, product_data)
 
@@ -406,7 +408,7 @@ class dimsWriter(dimsBase):
             self._package_name,
             exclude=lambda x: -1 != x.find('ISOMetadata_template'))
         tar.close()
-        logging.info("writing tarball %s" % tar_path)
+        logger.info("writing tarball %s" % tar_path)
         return tar_path
 
     def write(self, tar_path=None):

@@ -38,6 +38,7 @@ __copyright__ = 'South African National Space Agency'
 import datetime
 import time
 import logging
+logger = logging.getLogger(__name__)
 from dateutil.relativedelta import relativedelta
 
 from django import forms
@@ -82,7 +83,7 @@ class DateTimeWidget(forms.DateInput):
         return mark_safe(myA)
 
     def value_from_datadict(self, theData, theFiles, theName):
-        logging.info('Getting date value from data dict')
+        logger.info('Getting date value from data dict')
         myEmptyValues = forms.fields.EMPTY_VALUES
         myValue = theData.get(theName, None)
         if myValue in myEmptyValues:
@@ -95,7 +96,7 @@ class DateTimeWidget(forms.DateInput):
             try:
                 myDate = datetime.datetime(*time.strptime(
                     myValue, myDateFormat)[:6])
-                logging.info('Parsed date is: %s' % str(myDate))
+                logger.info('Parsed date is: %s' % str(myDate))
                 return myDate
             except ValueError:
                 continue

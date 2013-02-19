@@ -20,6 +20,8 @@ __copyright__ = 'South African National Space Agency'
 # for error logging
 import traceback
 import logging
+logger = logging.getLogger(__name__)
+
 import datetime
 
 from django.template import RequestContext
@@ -77,7 +79,7 @@ def viewTaskingRequest(theRequest, theId):
     if theRequest.is_ajax() or myAjaxFlag:
         # No page container needed, just a snippet
         myTemplatePath = 'taskingRequestPageAjax.html'
-        logging.debug('Request is ajax enabled')
+        logger.debug('Request is ajax enabled')
     myTaskingRequest = get_object_or_404(TaskingRequest, id=theId)
     if not (
         (myTaskingRequest.user == theRequest.user) or
@@ -168,24 +170,24 @@ def listTaskingRequests(theRequest):
 @login_required
 def addTaskingRequest(theRequest):
     """Used to create a new tasking request"""
-    logging.debug(('Post vars:' + str(theRequest.POST)))
-    logging.debug(('Post files:' + str(theRequest.FILES)))
+    logger.debug(('Post vars:' + str(theRequest.POST)))
+    logger.debug(('Post files:' + str(theRequest.FILES)))
     myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
         theRequest)
-    logging.debug('Add tasking request called')
+    logger.debug('Add tasking request called')
     myTitle = 'Create a new tasking request'
-    logging.info('Preparing tasking request for user ' + str(theRequest.user))
+    logger.info('Preparing tasking request for user ' + str(theRequest.user))
     myRecords = None
     if str(theRequest.user) == 'AnonymousUser':
-        logging.debug('User is anonymous')
-        logging.info('Anonymous users can\'t have items in their cart')
+        logger.debug('User is anonymous')
+        logger.info('Anonymous users can\'t have items in their cart')
         myMessage = (
             'If you want to make a tasking request, you need to create an '
             'account and log in first.')
         return HttpResponse(myMessage)
 
     if theRequest.method == 'POST':
-        logging.debug('Tasking request posted')
+        logger.debug('Tasking request posted')
         #myForm = TaskingRequestForm( theRequest.POST )
         myTaskingForm = TaskingRequestForm(theRequest.POST)
         myTaskingDeliveryDetailsForm = TaskingRequestDeliveryDetailForm(
@@ -201,7 +203,7 @@ def addTaskingRequest(theRequest):
         }
         if (myTaskingForm.is_valid() and
                 myTaskingDeliveryDetailsForm.is_valid()):
-            logging.debug('Tasking Request valid')
+            logger.debug('Tasking Request valid')
             myDeliveryDetailObject = myTaskingDeliveryDetailsForm.save(
                 commit=False)
             myDeliveryDetailObject.user = theRequest.user
@@ -213,15 +215,15 @@ def addTaskingRequest(theRequest):
                 if myGeometry:
                     myDeliveryDetailObject.geometry = myGeometry
                 else:
-                    logging.info(
+                    logger.info(
                         'Failed to set tasking request from uploaded geometry '
                         'file')
-                    logging.info('Or no shapefile uploaded')
+                    logger.info('Or no shapefile uploaded')
             except:
-                logging.info(
+                logger.info(
                     'An error occurred try to set tasking area from uploaded '
                     'geometry file')
-                logging.info(traceback.format_exc())
+                logger.info(traceback.format_exc())
             if not myDeliveryDetailObject.geometry:
                 # myErrors = myTaskingDeliveryDetailsForm._errors.setdefault(
                 # "geometry", ErrorList())
@@ -229,7 +231,7 @@ def addTaskingRequest(theRequest):
                 myErrors = myTaskingDeliveryDetailsForm._errors.setdefault(
                     NON_FIELD_ERRORS, ErrorList())
                 myErrors.append(u'No valid geometry provided')
-                logging.info(
+                logger.info(
                     'Form is NOT valid - at least a file or digitised geom is '
                     'needed')
                 return render_to_response(
@@ -245,14 +247,14 @@ def addTaskingRequest(theRequest):
             myObject.delivery_detail = myDeliveryDetailObject
             myObject.save()
 
-            logging.debug("Tasking Request saved")
-            logging.info('Tasking request : data is valid')
+            logger.debug("Tasking Request saved")
+            logger.info('Tasking request : data is valid')
             # Now add the cart contents to the order
             notifySalesStaffOfTaskRequest(myObject.user, myObject.id)
             return HttpResponseRedirect(reverse(
                 'viewTaskingRequest', kwargs={'theId': myObject.id}))
         else:
-            logging.info('Add Tasking Request : form is NOT valid')
+            logger.info('Add Tasking Request : form is NOT valid')
             return render_to_response(
                 'addPage.html',
                 myOptions,
@@ -269,7 +271,7 @@ def addTaskingRequest(theRequest):
             'myLayerDefinitions': myLayerDefinitions,
             'myLayersList': myLayersList,
         }
-        logging.info('Add Tasking Request: new object requested')
+        logger.info('Add Tasking Request: new object requested')
         return render_to_response(
             'addPage.html',
             myOptions,
@@ -305,6 +307,6 @@ def downloadTaskingRequest(theRequest, theId):
             'transparentStyle': True},
             u'geometry_for_taskingrequest_%s' % myRecord.id)
     else:
-        logging.info(
+        logger.info(
             'Request cannot be proccesed, unsupported download file type')
         raise Http404

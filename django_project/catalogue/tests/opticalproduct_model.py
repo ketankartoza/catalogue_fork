@@ -20,6 +20,7 @@ __copyright__ = 'South African National Space Agency'
 import os
 import shutil
 import logging
+logger = logging.getLogger(__name__)
 from datetime import datetime
 
 from django.conf import settings
@@ -331,7 +332,7 @@ class OpticalProductCRUD_Test(TestCase):
             try:
                 os.makedirs(myThumbOutputPath)
             except OSError:
-                logging.debug(
+                logger.debug(
                     'Failed to make output directory (%s) ...quitting' % (
                         myThumbOutputPath,))
                 return 'False'

@@ -23,6 +23,7 @@ import traceback
 import datetime
 # python logging support to django logging middleware
 import logging
+logger = logging.getLogger(__name__)
 
 # Django helpers for forming html pages
 from django.shortcuts import get_object_or_404
@@ -124,8 +125,8 @@ def visitorMonthlyReport(theRequest, theYear, theMonth):
         try:
             myDate = datetime.date(int(theYear), int(theMonth), 1)
         except:
-            logging.error('Date arguments cannot be parsed')
-            logging.info(traceback.format_exc())
+            logger.error('Date arguments cannot be parsed')
+            logger.info(traceback.format_exc())
 
     myQuerySet = Visit()
     myCountryStats = myQuerySet.customSQL("""
@@ -216,8 +217,8 @@ def searchMonthlyReport(theRequest, theYear, theMonth):
         try:
             myDate = datetime.date(int(theYear), int(theMonth), 1)
         except:
-            logging.error('Date arguments cannot be parsed')
-            logging.info(traceback.format_exc())
+            logger.error('Date arguments cannot be parsed')
+            logger.info(traceback.format_exc())
 
     myQuerySet = Search()
     myCountryStats = myQuerySet.customSQL("""
@@ -257,8 +258,8 @@ def searchMonthlyReportAOI(theRequest, theYear, theMonth):
         try:
             myDate = datetime.date(int(theYear), int(theMonth), 1)
         except:
-            logging.error('Date arguments cannot be parsed')
-            logging.info(traceback.format_exc())
+            logger.error('Date arguments cannot be parsed')
+            logger.info(traceback.format_exc())
 
     myQuerySet = Search()
     myCountryStats = myQuerySet.customSQL("""

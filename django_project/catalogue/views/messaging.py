@@ -18,6 +18,7 @@ __date__ = '17/08/2012'
 __copyright__ = 'South African National Space Agency'
 
 import logging
+logger = logging.getLogger(__name__)
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -44,7 +45,7 @@ def sendMessageToUser(theRequest):
         HttpResponse: An html snippet indicating the message was successfully
             submitted
     """
-    logging.debug('sendMessageToUser called.')
+    logger.debug('sendMessageToUser called.')
     # Should not need these two lines due to decorator
     if not theRequest.user.is_staff:
         return HttpResponseBadRequest('You are not permitted to do this.')
@@ -59,13 +60,13 @@ def sendMessageToUser(theRequest):
                 myUserId = theRequest.POST['user_id']
                 myUser = User.objects.get(id=myUserId)
                 create_offline_message(myUser, myMessage, level=constants.INFO)
-                logging.debug('Offline message created:\n%s' % myMessage)
+                logger.debug('Offline message created:\n%s' % myMessage)
                 return HttpResponse('Message sent successfully to %s.' %
                                     myUser)
             except:
                 myMessage = ('Message sending failed. '
                              'Please check the logs and try again.')
-                logging.exception(myMessage)
+                logger.exception(myMessage)
                 return HttpResponse(myMessage)
         else:
             # Otherwise the form is not valid so redisplay it
@@ -121,7 +122,7 @@ def sendMessageToAllUsers(theRequest):
             except:
                 myMessage = ('Message sending failed. '
                              'Please check the logs and try again.')
-                logging.exception(myMessage)
+                logger.exception(myMessage)
                 return HttpResponse(myMessage)
         else:
             # Otherwise the form is not valid so redisplay it with
@@ -154,7 +155,7 @@ def userMessages(theRequest):
     @note login_required should not be set otherwise anonymous
           users will see spurious popups.
     '''
-    logging.debug('User messages requested')
+    logger.debug('User messages requested')
     if theRequest.user.is_anonymous():
         return HttpResponse('')
 

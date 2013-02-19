@@ -21,6 +21,7 @@ __copyright__ = 'South African National Space Agency'
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseRedirect
 import logging
+logger = logging.getLogger(__name__)
 # for error logging
 import traceback
 from functools import wraps
@@ -53,16 +54,16 @@ def requireProfile(theView):
             try:
                 myProfile = theRequest.user.get_profile()
             except ObjectDoesNotExist:
-                logging.info('User Profile exception - redirecting')
-                logging.debug('User Profile exception - redirecting')
-                logging.debug(traceback.format_exc())
+                logger.info('User Profile exception - redirecting')
+                logger.debug('User Profile exception - redirecting')
+                logger.debug(traceback.format_exc())
             finally:
                 #finally always executes, so we can safely redirect here
                 if myProfile and checkProfile(myProfile):
-                    logging.info('User Profile is populated')
+                    logger.info('User Profile is populated')
                     return theFunction(theRequest, *args, **kwargs)
                 else:
-                    logging.info('User Profile is NOT populated - redirecting')
+                    logger.info('User Profile is NOT populated - redirecting')
                     if theRequest.is_ajax():
                         #we need to tell the client to do the redirection
                         # in this case...

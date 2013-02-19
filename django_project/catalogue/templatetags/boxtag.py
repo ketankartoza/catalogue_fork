@@ -19,6 +19,7 @@ __copyright__ = 'South African National Space Agency'
 
 from django import template
 import logging
+logger = logging.getLogger(__name__)
 register = template.Library()
 
 
@@ -29,8 +30,8 @@ class BoxStartNode(template.Node):
         if self.div_classes:
             self.div_classes = (
                 self.div_classes.replace('\"', '').replace('\'', ''))
-        #logging.info("BoxStartNode init - self.div_id : %s" % self.div_id)
-        #logging.info("BoxStartNode init - self.div_classes : %s" % (
+        #logger.info("BoxStartNode init - self.div_id : %s" % self.div_id)
+        #logger.info("BoxStartNode init - self.div_classes : %s" % (
         #    self.div_classes,))
 
     def render(self, context):

@@ -18,6 +18,7 @@ __date__ = '01/01/2011'
 __copyright__ = 'South African National Space Agency'
 
 import logging
+logger = logging.getLogger(__name__)
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
@@ -74,7 +75,7 @@ def downloadCart(theRequest):
                 'myThumbsFlag': True},
             myFilename)
     else:
-        logging.info(
+        logger.info(
             'Request cannot be proccesed, unsupported download file type')
         raise Http404
 
@@ -103,7 +104,7 @@ def addToCart(theRequest, theId):
     http://www.b-list.org/weblog/2006/jul/31/django-tips-simple-ajax
         -example-part-1/
     """
-    logging.info('addToCart : id ' + theId)
+    logger.info('addToCart : id ' + theId)
     # we need to check for the xhr param because response redirect
     # does not pass along the ajax request header to the redirect url
     # The redirected url needs to check for is_ajax or xhr to
@@ -119,7 +120,7 @@ def addToCart(theRequest, theId):
     if len(myDuplicateRecords) == 0:
         myRecord = SearchRecord().create(theRequest.user, myGenericProduct)
         myRecord.save()
-        logging.info('Adding item %s Cart :' + myRecord.product.product_id)
+        logger.info('Adding item %s Cart :' + myRecord.product.product_id)
         if not myAjaxFlag:
             myResponse = HttpResponse(
                 'Successfully added %s to your myCart' % (
@@ -130,7 +131,7 @@ def addToCart(theRequest, theId):
             myResponse = HttpResponse(
                 simplejson.dumps(myDict), mimetype='application/javascript')
     else:
-        logging.info('Adding item %s Cart failed (its a duplicate):' % (
+        logger.info('Adding item %s Cart failed (its a duplicate):' % (
             myGenericProduct.product_id,))
         myResponse = HttpResponse(
             'alert("Item already exists in your cart!");',
@@ -167,7 +168,7 @@ def showCartContents(theRequest):
     myRecords = (
         SearchRecord.objects.all().filter(user=theRequest.user)
         .filter(order__isnull=True))
-    logging.info('Cart contains : %s items' % str(myRecords.count()))
+    logger.info('Cart contains : %s items' % str(myRecords.count()))
     return ({
         'myRecords': myRecords,
         # Possible flags for the record template
@@ -206,7 +207,7 @@ def showMiniCartContents(theRequest):
         myBaseTemplate = 'emptytemplate.html'
     myRecords = SearchRecord.objects.all().filter(
         user=theRequest.user).filter(order__isnull=True)
-    logging.info('Cart contains : %s items' % str(myRecords.count()))
+    logger.info('Cart contains : %s items' % str(myRecords.count()))
     return ({
         'myRecords': myRecords,
         # Possible flags for the record template

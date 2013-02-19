@@ -9,6 +9,7 @@ from django.contrib.gis.db.models.fields import GeometryField
 from django.contrib.gis.gdal import check_err, OGRGeomType
 # python logging support to django logging middleware
 import logging
+logger = logging.getLogger(__name__)
 
 try:
     from cStringIO import StringIO
@@ -379,14 +380,14 @@ class ShpResponder(object):
             for field in attributes:
                 #ABP: added getConcreteProduct and None
                 value = getattr(item.product.getConcreteInstance(),field,None)
-                logging.info("Shape writer: Setting %s to %s" % (field,value))
+                logger.info("Shape writer: Setting %s to %s" % (field,value))
                 try:
                     string_value = str(value)
                 except UnicodeEncodeError, E:
                     string_value = ''
-                    logging.info( "Unicode conversion error" )
+                    logger.info( "Unicode conversion error" )
                 #truncate field name to 10 letters to deal with shp limitations
-                logging.info("Truncated field name: %s" % str(field[0:10]))
+                logger.info("Truncated field name: %s" % str(field[0:10]))
                 feat.SetField(str(field[0:10]),string_value)
 
             geom = getattr(item.product,"spatial_coverage")
@@ -644,14 +645,14 @@ class ShpResponder(object):
             for field in attributes:
                 #ABP: added getConcreteProduct and None
                 value = getattr(item.product.getConcreteInstance(),field,None)
-                logging.info("Shape writer: Setting %s to %s" % (field,value))
+                logger.info("Shape writer: Setting %s to %s" % (field,value))
                 try:
                     string_value = str(value)
                 except UnicodeEncodeError, E:
                     string_value = ''
-                    logging.info( "Unicode conversion error" )
+                    logger.info( "Unicode conversion error" )
                 #truncate field name to 10 letters to deal with shp limitations
-                logging.info("Truncated field name: %s" % str(field[0:10]))
+                logger.info("Truncated field name: %s" % str(field[0:10]))
                 feat.SetField(str(field[0:10]),string_value)
 
             geom = getattr(item.product,"spatial_coverage")

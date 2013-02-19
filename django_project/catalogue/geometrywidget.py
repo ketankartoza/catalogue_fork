@@ -18,6 +18,7 @@ __date__ = '01/01/2011'
 __copyright__ = 'South African National Space Agency'
 
 import logging
+logger = logging.getLogger(__name__)
 
 from django import forms
 from django.utils.safestring import mark_safe
@@ -31,7 +32,7 @@ class GeometryWidget(forms.TextInput):
         attrs - the widget attributes as specified in the attrs={}
         area in the form class
         """
-        logging.info('GeometryWidget started')
+        logger.info('GeometryWidget started')
         # Make sure the field value is always valid
         if value is None:
             value = ''
