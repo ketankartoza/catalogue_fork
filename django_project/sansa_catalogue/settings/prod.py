@@ -55,13 +55,13 @@ LOGGING = {
             'propagate': False
         },
         'raven': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
+            'level': 'ERROR',
+            'handlers': ['mail_admins'],
             'propagate': False
         },
         'sentry.errors': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
+            'level': 'ERROR',
+            'handlers': ['mail_admins'],
             'propagate': False
         },
         'django.request': {
@@ -70,9 +70,9 @@ LOGGING = {
             'propagate': True
         },
         'pycsw': {
-            'handlers': ['console'],
+            'handlers': ['sentry'],
             'level': 'ERROR',
-           'propagate': True
-       }
+            'propagate': False
+        }
     }
 }
