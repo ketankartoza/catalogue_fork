@@ -46,6 +46,7 @@ class Command(BaseCommand):
             self.migrate_new_dicts()
             self.migrate_userprofiles()
             self.migrate_search()
+            self.migrate_pycsw()
 
         if 'new_dicts' in myMigrations:
             self.migrate_new_dicts()
