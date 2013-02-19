@@ -1,0 +1,9 @@
+-r REQUIREMENTS.txt
+django-debug-toolbar==0.9.4
+django-extensions==0.4.1
+werkzeug
+sqlparse
+# install 'subversion' system package
+https://guppy-pe.svn.sourceforge.net/svnroot/guppy-pe/trunk/guppy
+line_profiler
+django_devserver
