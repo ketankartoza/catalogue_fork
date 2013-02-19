@@ -613,3 +613,174 @@ class ProductIdSearchForm(forms.ModelForm):
         if not self.cleaned_data['processing_level']:
             return []
         return [self.cleaned_data['processing_level']]
+
+
+class AdvancedSearchFormv3(forms.ModelForm):
+    """
+    Let the user perform searches on sensors, by date and/or geometry
+    digitised on map.
+    """
+    # keywords = forms.CharField(widget=forms.TextInput(
+    #    attrs={'cols':'32'}),required=False)
+    # Note1: the help_text strings are duplicated from the model help text
+    #        since I didnt find a simple way to reuse it if adding custom
+    #        fields
+    # Note2: Only custom fields are added here. Fields that need no tweaking
+    #        are pulled by the form generator directly from the model
+
+    POLARISING_MODE_CHOICES = {'': 'All'}
+    POLARISING_MODE_CHOICES.update(dict(RadarProduct.POLARISING_MODE_CHOICES))
+    # ABP: the common part: will be searched on GenericProducts class only
+    start_datepicker = forms.DateField(
+        widget=DateTimeWidget(
+            attrs={
+                'title': 'Choose the start date for this date range.',
+                'data-date_focus': 'start'}),
+        required=False, label='Start date', input_formats=DATE_FORMATS,
+        error_messages={
+            'required': 'Entering a start date for your search is required.'},
+        help_text='Start date is required. DD-MM-YYYY.')
+    end_datepicker = forms.DateField(
+        widget=DateTimeWidget(
+            attrs={
+                'title': 'Choose the end date for this date range.',
+                'data-date_focus': 'end'}),
+        required=False, label='End date', input_formats=DATE_FORMATS,
+        error_messages={
+            'required': 'Entering an end date for your search is required.'},
+        help_text='End date is required. DD-MM-YYYY.')
+    geometry = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+        help_text=(
+            'Digitising an area of interest is not required but is recommended'
+            '. You can use the help tab in the map area for more information '
+            'on how to use the map. Draw an area of interest on the map to '
+            'refine the set of search results to a specific area.'))
+
+    geometry_file = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'file'}),
+        required=False,
+        help_text=(
+            'Upload a zipped shapefile or KML/KMZ file of less than 1MB. If '
+            'the shapefile contains more than one polygon, only the first will'
+            ' be used. Complex polygons will increase search time.'))
+
+    isAdvanced = forms.CharField(widget=forms.HiddenInput(), required=False)
+    polarising_mode = forms.ChoiceField(
+        choices=tuple(POLARISING_MODE_CHOICES.viewitems()), required=False)
+    geometry = forms.CharField(
+        widget=forms.HiddenInput(), required=False,
+        help_text=(
+            'Digitising an area of interest is not required but is recommended'
+            '. You can use the help tab in the map area for more information '
+            'on how to use the map. Draw an area of interest on the map to '
+            'refine the set of search results to a specific area.'))
+    aoi_geometry = AOIGeometryField(
+        widget=forms.TextInput(attrs={'title': (
+            'Enter bounding box coordinates separated by comma for Upper '
+            'left and Lower right coordinates i.e. (20,-32,22,-34), or '
+            'enter single coordinate which defines circle center and '
+            'radius in kilometers (20,-32,100). Alternatively, digitise '
+            'the clip area in the map.')
+        }),
+        required=False)
+
+    k_orbit_path = IntegersCSVIntervalsField(
+        required=False,
+        help_text=(
+            'Insert the orbit path as a list of comma separated values or '
+            'ranges (e.g. : "10,20,30" or  "20-40")'))
+    j_frame_row = IntegersCSVIntervalsField(
+        required=False,
+        help_text=(
+            'Insert the frame row as a list of comma separated values or '
+            'ranges (e.g. : "10,20,30" or "20-40")'))
+    # exclude PRODUCT_SEARCH_GENERIC from Search.PRODUCT_SEARCH_TYPES
+    search_type = forms.ChoiceField(
+        choices=Search.PRODUCT_SEARCH_TYPES[1:], required=False)
+    cloud_mean = forms.IntegerField(
+        min_value=0, max_value=100, initial=0,
+        help_text=(
+            'Select the maximum cloud cover (range 0-100) when searching for '
+            'images. Note that not all sensors support cloud cover filtering.')
+    )
+
+    class Meta:
+        model = Search
+        exclude = (
+            'ip_position', 'guid', 'keywords', 'geometry_file', 'user',
+            'deleted', 'processing_level')
+
+    # add Media class for this form, rendered specific for this form
+    class Media:
+        js = (
+            "/media/js/widget.sansa-datepicker.js",
+            "/media/js/widget.sansa-daterangecontainer.js",)
+
+    def __init__(self, *args, **kwargs):
+        """
+        We are using jquery tooltip to show a nice tooltip for each field. To
+        ensure that each field has a title set (which is used for the tooltip
+        text), this function iterates the fields of a form and sets their
+        title text to the help text for that field. If the title is already
+        set, its left as is.
+        """
+
+        self.helper = FormHelper()
+        self.helper.form_class = 'span12'
+        self.helper.form_id = 'search_form'
+        self.helper.form_method = 'post'
+        self.helper.help_text_inline = True
+        self.helper.form_action = reverse('search', kwargs={})
+
+        self.helper.layout = Layout(
+            Div(
+                Div(
+                    Div(
+                        Div(
+                            HTML(
+                                '<a class="accordion-toggle" data-toggle="col'
+                                'lapse" href="#collapsSensors">Sensors</a>')
+                        ),
+                        css_class="accordion-heading"
+                    ),
+                    Div(
+                        Div(
+                            Div(
+                                Field('sensors', template='myField.html'),
+                                Field('mission', template='myField.html'),
+                                Field('sensor_type', template='myField.html'),
+                                Field(
+                                    'acquisition_mode',
+                                    template='myField.html')
+                            ),
+                            css_class="accordion-inner"
+                        ),
+                        id="collapsSensors",
+                        css_class="accordion-body collapse in"
+                    ),
+                    css_class="accordion-group"
+                ),
+                id="accordion-search",
+                css_class="accordion"
+            ),
+            'geometry'
+        )
+        super(AdvancedSearchFormv3, self).__init__(*args, **kwargs)
+        for myFieldName, myField in self.fields.items():
+            if (not 'title' in myField.widget.attrs or
+                    myField.widget.attrs['title'] == ''):
+                myField.widget.attrs['title'] = myField.help_text
+
+        self.fields['sensors'].required = True
+        # Do not list empty dictionary items (avoid null searches)
+        qs = AcquisitionMode.objects.order_by()
+        self.fields['sensors'].queryset = (MissionSensor.objects
+            .filter(pk__in=qs.distinct().values_list(
+                'sensor_type__mission_sensor', flat=True))
+            .filter(has_data=True)
+            .order_by('name'))
+        self.fields['mission'].queryset = (Mission.objects
+            .filter(pk__in=qs.distinct().values_list(
+                'sensor_type__mission_sensor__mission', flat=True))
+            .filter(missionsensor__has_data=True))

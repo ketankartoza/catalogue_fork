@@ -85,6 +85,7 @@ from .models import (
 
 from .forms import (
     AdvancedSearchForm,
+    AdvancedSearchFormv3,
     DateRangeFormSet,
     ProductIdSearchForm,
 )
@@ -243,11 +244,11 @@ def search(theRequest):
 
     else:
         logger.info('initial search form being rendered')
-        myForm = AdvancedSearchForm()
+        myForm = AdvancedSearchFormv3()
         myFormset = DateRangeInlineFormSet()
         #render_to_response is done by the renderWithContext decorator
         return render_to_response(
-            'search.html', {
+            'searchv3.html', {
                 'myAdvancedFlag': False,
                 'mySearchType': None,
                 'myForm': myForm,
