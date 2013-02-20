@@ -71,8 +71,6 @@ class ProcessingLevel(models.Model):
     description = models.TextField(
         verbose_name='Detailed description.',
         help_text='A detailed description of the processing level.')
-    precursor_processing_level = models.ForeignKey(
-        'self', blank=True, null=True)
 
     def __unicode__(self):
         return u'{0} {1}'.format(self.abbreviation, self.name)
