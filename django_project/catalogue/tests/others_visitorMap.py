@@ -87,7 +87,7 @@ class OthersViews_visitorMap_Tests(TestCase):
                 kwargs={}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
-            len(myResp.context['myMessages']), 2)
+            len(myResp.context['myMessages']), 8)
         self.assertEqual(
             len(myResp.context['myExtents']), 16)
         self.assertEqual(

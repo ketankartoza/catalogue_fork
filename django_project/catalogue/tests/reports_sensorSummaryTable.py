@@ -42,7 +42,9 @@ class ReportsViews_sensorSummaryTable_Tests(TestCase):
         'test_acquisitionmode.json',
         'test_sensortype.json',
         'test_projection.json',
-        # new_dicts
+        # new dicts
+        'test_radarbeam.json',
+        'test_imagingmode.json',
         'test_spectralgroup.json',
         'test_spectralmode.json',
         'test_scannertype.json',
@@ -50,7 +52,8 @@ class ReportsViews_sensorSummaryTable_Tests(TestCase):
         'test_collection.json',
         'test_satellite.json',
         'test_satelliteinstrument.json',
-        'test_productprofile.json',
+        'test_radarproductprofile.json',
+        'test_opticalproductprofile.json',
 
         'test_genericsensorproduct.json',
         'test_genericimageryproduct.json',

@@ -61,6 +61,8 @@ class OpticalProductCRUD_Test(TestCase):
         'test_projection.json',
         'test_institution.json',
         # new_dicts
+        'test_radarbeam.json',
+        'test_imagingmode.json',
         'test_spectralgroup.json',
         'test_spectralmode.json',
         'test_scannertype.json',
@@ -68,7 +70,8 @@ class OpticalProductCRUD_Test(TestCase):
         'test_collection.json',
         'test_satellite.json',
         'test_satelliteinstrument.json',
-        'test_productprofile.json',
+        'test_radarproductprofile.json',
+        'test_opticalproductprofile.json',
 
         'test_genericproduct.json',
         'test_genericimageryproduct.json',

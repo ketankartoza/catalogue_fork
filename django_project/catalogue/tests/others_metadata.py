@@ -30,6 +30,9 @@ class OthersViews_metadata(TestCase):
     """
     fixtures = [
         'test_user.json',
+        # new dicts
+        'test_radarbeam.json',
+        'test_imagingmode.json',
         'test_spectralgroup.json',
         'test_spectralmode.json',
         'test_scannertype.json',
@@ -37,7 +40,9 @@ class OthersViews_metadata(TestCase):
         'test_collection.json',
         'test_satellite.json',
         'test_satelliteinstrument.json',
-        'test_productprofile.json',
+        'test_radarproductprofile.json',
+        'test_opticalproductprofile.json',
+
         'test_genericproduct.json',
         'test_processinglevel.json',
         'test_institution.json',

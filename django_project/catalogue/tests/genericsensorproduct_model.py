@@ -42,16 +42,6 @@ class GenericSensorProductCRUD_Test(TestCase):
         'test_quality.json',
         'test_projection.json',
         'test_institution.json',
-        # new_dicts
-        'test_spectralgroup.json',
-        'test_spectralmode.json',
-        'test_scannertype.json',
-        'test_instrumenttype.json',
-        'test_collection.json',
-        'test_satellite.json',
-        'test_satelliteinstrument.json',
-        'test_productprofile.json',
-
         'test_genericproduct.json',
         'test_genericimageryproduct.json',
         'test_genericsensorproduct.json',
@@ -97,7 +87,6 @@ class GenericSensorProductCRUD_Test(TestCase):
             #specific model attributes
             'product_acquisition_end': None,
             'acquisition_mode_id': 87,
-            'product_profile_id': 7,
             'path_offset': 0,
             'orbit_number': None,
             'radiometric_signal_to_noise_ratio': None,
@@ -128,7 +117,6 @@ class GenericSensorProductCRUD_Test(TestCase):
         myExpectedModelData = {
             'product_acquisition_end': None,
             'acquisition_mode_id': 87,
-            'product_profile_id': 7,
             'path_offset': 0,
             'orbit_number': None,
             'radiometric_signal_to_noise_ratio': None,
@@ -160,7 +148,6 @@ class GenericSensorProductCRUD_Test(TestCase):
         myNewModelData = {
             'product_acquisition_end': None,
             'acquisition_mode_id': 87,
-            'product_profile_id': 7,
             'path_offset': 0,
             'orbit_number': None,
             'radiometric_signal_to_noise_ratio': None,
