@@ -23,7 +23,9 @@ LOGGING = {
                 '%(thread)d %(message)s')
         },
         'simple': {
-            'format': '%(levelname)s %(name)s %(message)s'
+            'format': (
+                '%(asctime)s %(levelname)s %(filename)s L%(lineno)s: '
+                '%(message)s')
         },
     },
     'handlers': {
@@ -33,11 +35,11 @@ LOGGING = {
             'formatter': 'simple',
             'level': 'DEBUG',
         },
-        # special root_console handler, we need this so we can set level
-        'root_console': {
-            'class': 'logging.StreamHandler',
+        'logfile': {
+            'class': 'logging.FileHandler',
+            'filename': '/tmp/sansa-dev.log',
             'formatter': 'simple',
-            'level': 'INFO',
+            'level': 'DEBUG',
         }
     },
     'loggers': {
@@ -52,7 +54,7 @@ LOGGING = {
         },
         'search': {
             'level': 'INFO',
-            'handlers': ['console'],
+            'handlers': ['logfile'],
             # propagate is True by default, which proppagates logs upstream
             'propagate': False
         },
@@ -62,8 +64,8 @@ LOGGING = {
     # we can use a 'hack' and define level on handler, in this case special
     # 'root_console' handler
     'root': {
-        'handlers': ['root_console'],
-        # 'level': 'INFO'
+        'handlers': ['logfile'],
+        'level': 'DEBUG'
     }
 }
 

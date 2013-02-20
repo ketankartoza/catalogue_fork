@@ -39,7 +39,7 @@ try:
         'debug_toolbar.panels.template.TemplateDebugPanel',
         'debug_toolbar.panels.sql.SQLDebugPanel',
         'debug_toolbar.panels.signals.SignalDebugPanel',
-        'debug_toolbar.panels.logger.LoggingPanel',
+        #'debug_toolbar.panels.logger.LoggingPanel',
     )
 except ImportError:
     pass
