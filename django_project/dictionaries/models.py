@@ -19,25 +19,43 @@ __copyright__ = 'South African National Space Agency'
 from django.contrib.gis.db import models
 
 
-class ProductProfile(models.Model):
+class OpticalProductProfile(models.Model):
     """
-    An unique product profile, consists of:
-    * satellite_instrument
+    An unique product profile for optical sensor based data.
+
+    Consists of:
+        * satellite_instrument
+        * spectral_mode
+
 
     """
     satellite_instrument = models.ForeignKey('SatelliteInstrument')
-    spectral_mode = models.ManyToManyField(
-        'SpectralMode',
-        blank=True, null=True
-    )
+    spectral_mode = models.ForeignKey('SpectralMode')
 
     def __unicode__(self):
-        return u'id={2} {0} {1}'.format(
+        return u'id={0} {1}'.format(
             self.satellite_instrument,
-            [str(sm) for sm in self.spectral_mode.all()],
-            self.id
+            self.spectral_mode
         )
 
+class RadarProductProfile(models.Model):
+    """
+    An unique product profile for radar sensor based data.
+
+    Consists of:
+        * satellite_instrument
+        * imaging_mode
+
+
+    """
+    satellite_instrument = models.ForeignKey('SatelliteInstrument')
+    imaging_mode = models.ForeignKey('ImagingMode')
+
+    def __unicode__(self):
+        return u'id={0} {1}'.format(
+            self.satellite_instrument,
+            self.imaging_mode
+        )
 
 class ProcessingLevel(models.Model):
     """

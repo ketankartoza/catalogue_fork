@@ -34,7 +34,8 @@ from .models import (
     BandSpectralMode,
     InstrumentTypeProcessingLevel,
     SpectralModeProcessingCosts,
-    ProductProfile
+    OpticalProductProfile,
+    RadarProductProfile
 )
 
 
@@ -114,6 +115,11 @@ admin.site.register(
     SpectralModeProcessingCosts, SpectralModeProcessingCostsAdmin)
 
 
-class ProductProfileAdmin(admin.ModelAdmin):
+class OpticalProductProfileAdmin(admin.ModelAdmin):
     pass
-admin.site.register(ProductProfile, ProductProfileAdmin)
+admin.site.register(OpticalProductProfile, OpticalProductProfileAdmin)
+
+
+class RadarProductProfileAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(RadarProductProfile, RadarProductProfileAdmin)

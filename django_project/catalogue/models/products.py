@@ -844,13 +844,8 @@ class GenericSensorProduct(GenericImageryProduct):
     """
     Multitable inheritance class to hold common fields for satellite imagery
     """
-    # e.g. CAM1, BUMP, etc
+    # e.g. CAM1, BUMP, etc - this must die!
     acquisition_mode = models.ForeignKey(AcquisitionMode)
-    # new dicts
-    product_profile = models.ForeignKey(
-        'dictionaries.ProductProfile'
-    )
-
     product_acquisition_start = models.DateTimeField(db_index=True)
     product_acquisition_end = models.DateTimeField(
         null=True, blank=True, db_index=True)
@@ -1241,6 +1236,10 @@ class OpticalProduct(GenericSensorProduct):
     info.
     """
     ##Descriptors for optical products
+    # new dicts
+    product_profile = models.ForeignKey(
+        'dictionaries.OpticalProductProfile'
+    )
     #TODO: all cloud cover values should be normalized to percentages
     # see http://tracker.sansa.org.za/issues/475
     cloud_cover = models.IntegerField(
@@ -1336,7 +1335,7 @@ class OpticalProduct(GenericSensorProduct):
 
 class RadarProduct(GenericSensorProduct):
     """
-    We are using multitable inheritance so you can do this to get this class
+    We are using multi-table inheritance so you can do this to get this class
     instance from an GenericProduct :
     myRadarProduct = GenericProduct.objects.get(id=1).radarproduct
 
@@ -1353,6 +1352,10 @@ class RadarProduct(GenericSensorProduct):
         ('S', 'Single Pole'), ('D', 'Dual Pole'), ('Q', 'Quad Pole'))
     ORBIT_DIRECTION_CHOICES = (('A', 'Ascending'), ('D', 'Descending'))
 
+    # new dicts
+    product_profile = models.ForeignKey(
+        'dictionaries.RadarProductProfile'
+    )
     imaging_mode = models.CharField(max_length=200, null=True, blank=True)
     look_direction = models.CharField(
         max_length=1, choices=LOOK_DIRECTION_CHOICES, null=True, blank=True)
