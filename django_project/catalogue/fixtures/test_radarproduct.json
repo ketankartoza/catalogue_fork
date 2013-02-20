@@ -3,6 +3,7 @@
         "pk": 6541,
         "model": "catalogue.radarproduct",
         "fields": {
+            "product_profile": 1,
             "imaging_mode": null,
             "polarising_list": null,
             "azimuth_range_resolution": null,
@@ -19,6 +20,7 @@
         "pk": 4456,
         "model": "catalogue.radarproduct",
         "fields": {
+            "product_profile": 1,
             "imaging_mode": null,
             "polarising_list": null,
             "azimuth_range_resolution": null,
@@ -35,6 +37,7 @@
         "pk": 5595,
         "model": "catalogue.radarproduct",
         "fields": {
+            "product_profile": 1,
             "imaging_mode": null,
             "polarising_list": null,
             "azimuth_range_resolution": null,
@@ -51,6 +54,7 @@
         "pk": 7623,
         "model": "catalogue.radarproduct",
         "fields": {
+            "product_profile": 1,
             "imaging_mode": null,
             "polarising_list": null,
             "azimuth_range_resolution": null,
@@ -67,6 +71,7 @@
         "pk": 16231,
         "model": "catalogue.radarproduct",
         "fields": {
+            "product_profile": 1,
             "imaging_mode": null,
             "polarising_list": null,
             "azimuth_range_resolution": null,
@@ -83,6 +88,7 @@
         "pk": 23656,
         "model": "catalogue.radarproduct",
         "fields": {
+            "product_profile": 1,
             "imaging_mode": null,
             "polarising_list": null,
             "azimuth_range_resolution": null,

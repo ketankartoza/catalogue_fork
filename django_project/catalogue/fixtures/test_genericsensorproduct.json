@@ -5,7 +5,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 2,
-            "product_profile": 1,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -28,7 +27,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 86,
-            "product_profile": 6,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -51,7 +49,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 87,
-            "product_profile": 7,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -74,7 +71,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 41,
-            "product_profile": 5,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -97,7 +93,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 72,
-            "product_profile": 12,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -120,7 +115,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 86,
-            "product_profile": 6,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -143,7 +137,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 79,
-            "product_profile": 31,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -166,7 +159,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 87,
-            "product_profile": 7,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -189,7 +181,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 87,
-            "product_profile": 7,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -212,7 +203,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 41,
-            "product_profile": 5,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -235,7 +225,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 73,
-            "product_profile": 13,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -258,7 +247,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 2,
-            "product_profile": 1,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -281,7 +269,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 22,
-            "product_profile": 8,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -304,7 +291,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 80,
-            "product_profile": 32,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -327,7 +313,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 2,
-            "product_profile": 1,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -350,7 +335,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 2,
-            "product_profile": 1,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -373,7 +357,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 80,
-            "product_profile": 32,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -396,7 +379,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 80,
-            "product_profile": 32,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -419,7 +401,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 80,
-            "product_profile": 32,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -442,7 +423,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 22,
-            "product_profile": 8,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -465,7 +445,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 93,
-            "product_profile": 19,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -488,7 +467,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 93,
-            "product_profile": 19,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -511,7 +489,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 92,
-            "product_profile": 18,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -534,7 +511,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 92,
-            "product_profile": 18,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -557,7 +533,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 22,
-            "product_profile": 8,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -580,7 +555,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 93,
-            "product_profile": 19,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -603,7 +577,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 22,
-            "product_profile": 8,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -626,7 +599,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 92,
-            "product_profile": 18,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -649,7 +621,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 23,
-            "product_profile": 9,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -672,7 +643,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 31,
-            "product_profile": 17,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -695,7 +665,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 92,
-            "product_profile": 18,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -718,7 +687,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 22,
-            "product_profile": 8,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -741,7 +709,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 30,
-            "product_profile": 16,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -764,7 +731,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 45,
-            "product_profile": 21,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -787,7 +753,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 30,
-            "product_profile": 16,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -810,7 +775,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 93,
-            "product_profile": 19,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -833,7 +797,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 93,
-            "product_profile": 19,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -856,7 +819,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 22,
-            "product_profile": 8,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -879,7 +841,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 92,
-            "product_profile": 18,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -902,7 +863,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 52,
-            "product_profile": 26,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -925,7 +885,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 22,
-            "product_profile": 8,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -948,7 +907,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 22,
-            "product_profile": 8,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -971,7 +929,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 22,
-            "product_profile": 8,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -994,7 +951,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 23,
-            "product_profile": 9,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1017,7 +973,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 93,
-            "product_profile": 19,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1040,7 +995,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 30,
-            "product_profile": 16,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1063,7 +1017,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 31,
-            "product_profile": 17,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1086,7 +1039,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 44,
-            "product_profile": 20,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1109,7 +1061,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 30,
-            "product_profile": 16,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1132,7 +1083,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 30,
-            "product_profile": 16,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1155,7 +1105,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 31,
-            "product_profile": 17,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1178,7 +1127,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 52,
-            "product_profile": 26,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1201,7 +1149,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 80,
-            "product_profile": 32,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1224,7 +1171,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 93,
-            "product_profile": 19,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1247,7 +1193,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 93,
-            "product_profile": 19,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1270,7 +1215,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 52,
-            "product_profile": 26,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1293,7 +1237,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 46,
-            "product_profile": 22,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1316,7 +1259,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 92,
-            "product_profile": 18,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1339,7 +1281,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 30,
-            "product_profile": 16,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1362,7 +1303,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 48,
-            "product_profile": 24,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1385,7 +1325,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 47,
-            "product_profile": 23,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1408,7 +1347,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 92,
-            "product_profile": 18,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1431,7 +1369,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 31,
-            "product_profile": 17,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1454,7 +1391,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 53,
-            "product_profile": 27,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1477,7 +1413,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 46,
-            "product_profile": 22,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1500,7 +1435,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 30,
-            "product_profile": 16,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1523,7 +1457,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 44,
-            "product_profile": 20,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1546,7 +1479,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 23,
-            "product_profile": 9,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1569,7 +1501,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 48,
-            "product_profile": 24,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1592,7 +1523,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 48,
-            "product_profile": 24,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1615,7 +1545,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 22,
-            "product_profile": 8,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1638,7 +1567,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 23,
-            "product_profile": 9,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1661,7 +1589,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1684,7 +1611,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 47,
-            "product_profile": 23,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1707,7 +1633,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 52,
-            "product_profile": 26,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1730,7 +1655,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 47,
-            "product_profile": 23,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1753,7 +1677,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 22,
-            "product_profile": 8,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1776,7 +1699,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 23,
-            "product_profile": 9,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1799,7 +1721,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 47,
-            "product_profile": 23,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1822,7 +1743,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 47,
-            "product_profile": 23,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1845,7 +1765,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 45,
-            "product_profile": 21,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1868,7 +1787,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1891,7 +1809,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 45,
-            "product_profile": 21,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1914,7 +1831,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 47,
-            "product_profile": 23,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1937,7 +1853,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 30,
-            "product_profile": 16,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1960,7 +1875,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 2,
-            "product_profile": 1,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -1983,7 +1897,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 2,
-            "product_profile": 1,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2006,7 +1919,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 45,
-            "product_profile": 21,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2029,7 +1941,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 47,
-            "product_profile": 23,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2052,7 +1963,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 30,
-            "product_profile": 16,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2075,7 +1985,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2098,7 +2007,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 45,
-            "product_profile": 21,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2121,7 +2029,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2144,7 +2051,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2167,7 +2073,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 92,
-            "product_profile": 18,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2190,7 +2095,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 53,
-            "product_profile": 27,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2213,7 +2117,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 53,
-            "product_profile": 27,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2236,7 +2139,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 92,
-            "product_profile": 18,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2259,7 +2161,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 93,
-            "product_profile": 19,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2282,7 +2183,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 92,
-            "product_profile": 18,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2305,7 +2205,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 47,
-            "product_profile": 23,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2328,7 +2227,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 47,
-            "product_profile": 23,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2351,7 +2249,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 93,
-            "product_profile": 19,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2374,7 +2271,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 53,
-            "product_profile": 27,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2397,7 +2293,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2420,7 +2315,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2443,7 +2337,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2466,7 +2359,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2489,7 +2381,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2512,7 +2403,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2535,7 +2425,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2558,7 +2447,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2581,7 +2469,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,
@@ -2604,7 +2491,6 @@
         "fields": {
             "product_acquisition_end": null,
             "acquisition_mode": 49,
-            "product_profile": 25,
             "path_offset": 0,
             "orbit_number": null,
             "radiometric_signal_to_noise_ratio": null,

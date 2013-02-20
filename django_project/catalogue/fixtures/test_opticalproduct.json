@@ -1,1713 +1,1820 @@
 [
     {
-        "pk": 1934163,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 5,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 2.0,
-            "sensor_inclination_angle": 2.21492,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 1001218,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": null,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": -1,
-            "bias_per_channel": null,
-            "solar_zenith_angle": null,
-            "sensor_viewing_angle": null,
-            "sensor_inclination_angle": null,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 1936623,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 8,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -2.0,
-            "sensor_inclination_angle": -2.21492,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 90541,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 66.8600006104,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": -1,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 50.5,
-            "sensor_viewing_angle": null,
-            "sensor_inclination_angle": null,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 1973483,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 50,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -5.0,
-            "sensor_inclination_angle": -6.60238,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 1978016,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 5,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 2.0,
-            "sensor_inclination_angle": 2.21492,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2014330,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 14,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -5.0,
-            "sensor_inclination_angle": -6.60238,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2220920,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 22.0,
-            "sensor_inclination_angle": 25.46,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2276798,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 50,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -19.0,
-            "sensor_inclination_angle": -21.9995,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 63753,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 107.660003662,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 90,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 50.2700004578,
-            "sensor_viewing_angle": null,
-            "sensor_inclination_angle": null,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 142087,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 70.2699966431,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": -1,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 46.7200012207,
-            "sensor_viewing_angle": null,
-            "sensor_inclination_angle": null,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 143562,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 68.9899978638,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 90,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 52.9300003052,
-            "sensor_viewing_angle": null,
-            "sensor_inclination_angle": null,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 146547,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 53.0400009155,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 20,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 47.0900001526,
-            "sensor_viewing_angle": null,
-            "sensor_inclination_angle": null,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2462558,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 50,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 0.0,
-            "sensor_inclination_angle": -0.1808,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2605352,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 50,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 21.0,
-            "sensor_inclination_angle": 24.073,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2611758,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 14,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -17.0,
-            "sensor_inclination_angle": -19.5667,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2681162,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -9.0,
-            "sensor_inclination_angle": -10.3632,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2689917,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 4,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 9.4,
-            "sensor_inclination_angle": 10.6808,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2705046,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -11.0,
-            "sensor_inclination_angle": -12.4061,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2806398,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -16.0,
-            "sensor_inclination_angle": -18.88,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2831285,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 9.4,
-            "sensor_inclination_angle": 10.6808,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2848943,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 14,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 13.0,
-            "sensor_inclination_angle": 14.7714,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2858602,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -10.0,
-            "sensor_inclination_angle": -11.3615,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2878471,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 69,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 8.6,
-            "sensor_inclination_angle": 9.68288,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2881425,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 78,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -3.0,
-            "sensor_inclination_angle": -4.24965,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2889239,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 48,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 22.0,
-            "sensor_inclination_angle": 25.0897,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2937682,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 8.2,
-            "sensor_inclination_angle": 9.32019,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 2939962,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 26.0,
-            "sensor_inclination_angle": 30.38231,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3004449,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 9.4,
-            "sensor_inclination_angle": 10.6808,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3008576,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 22.0,
-            "sensor_inclination_angle": 25.4599,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3017068,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 59,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -16.0,
-            "sensor_inclination_angle": -18.1936,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3024228,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 50,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -3.0,
-            "sensor_inclination_angle": -4.24965,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3046380,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 19.0,
-            "sensor_inclination_angle": 21.6316,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4777289,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -2.0,
-            "sensor_inclination_angle": -3.12239,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4626140,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 1.6,
-            "sensor_inclination_angle": 1.85327,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4684200,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 25.0,
-            "sensor_inclination_angle": 29.2728,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4739310,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 25.0,
-            "sensor_inclination_angle": 28.5727,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4745758,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 50,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 26.0,
-            "sensor_inclination_angle": 29.6467,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4750646,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -1.0,
-            "sensor_inclination_angle": -1.85327,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4762143,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 13.0,
-            "sensor_inclination_angle": 15.45475,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3176219,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 21.0,
-            "sensor_inclination_angle": 24.766,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3243116,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 42,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 5.8,
-            "sensor_inclination_angle": 6.583856,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3267757,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 25.0,
-            "sensor_inclination_angle": 28.5727,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3297641,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -18.0,
-            "sensor_inclination_angle": -21.31,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3310899,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -25.0,
-            "sensor_inclination_angle": -28.5727,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3424233,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 2,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -15.0,
-            "sensor_inclination_angle": -18.0001,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 112262,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 58.37,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 70,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 52.62,
-            "sensor_viewing_angle": null,
-            "sensor_inclination_angle": null,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3505102,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -22.0,
-            "sensor_inclination_angle": -25.0897,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3507418,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 18.0,
-            "sensor_inclination_angle": 20.62126,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3761737,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 4,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -14.0,
-            "sensor_inclination_angle": -15.9988,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3513769,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 6,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 18.0,
-            "sensor_inclination_angle": 21.47438,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3533343,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 21,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -3.0,
-            "sensor_inclination_angle": -3.5713,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3541304,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 83,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 2.2,
-            "sensor_inclination_angle": 2.531379,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3563758,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 29,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 22.0,
-            "sensor_inclination_angle": 26.11203,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3564074,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 4,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 22.0,
-            "sensor_inclination_angle": 24.99969,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3594545,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 25.0,
-            "sensor_inclination_angle": 28.5727,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3601223,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -18.0,
-            "sensor_inclination_angle": -20.9426,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3808924,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 15,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 0.8,
-            "sensor_inclination_angle": 0.940263,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3735800,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -25.0,
-            "sensor_inclination_angle": -29.2258,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3821240,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 60,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -27.0,
-            "sensor_inclination_angle": -31.0522,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3832700,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 51,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -18.0,
-            "sensor_inclination_angle": -20.9245,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3858685,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 12,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -1.0,
-            "sensor_inclination_angle": -1.85327,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3885879,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 17,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 1.6,
-            "sensor_inclination_angle": 1.764648,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3888180,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 42,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -23.0,
-            "sensor_inclination_angle": -27.1156,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3892687,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 27,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -14.0,
-            "sensor_inclination_angle": -15.8194,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3896066,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 46,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 0.2,
-            "sensor_inclination_angle": 0.1808,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3913062,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -2.0,
-            "sensor_inclination_angle": -3.04118,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3925651,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 19.0,
-            "sensor_inclination_angle": 22.55026,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4069124,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -2.0,
-            "sensor_inclination_angle": -2.65276,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3958317,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 12.0,
-            "sensor_inclination_angle": 14.23402,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3980285,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 2,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 0.0,
-            "sensor_inclination_angle": -0.8588,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4002553,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 2.0,
-            "sensor_inclination_angle": 2.21492,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4022313,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 64,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -11.0,
-            "sensor_inclination_angle": -13.4268,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4096417,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 4,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 18.0,
-            "sensor_inclination_angle": 20.56712,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4110645,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 46,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 13.0,
-            "sensor_inclination_angle": 15.41878,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4127848,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 83,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -8.0,
-            "sensor_inclination_angle": -9.69936,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4137452,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 8.3,
-            "sensor_inclination_angle": 9.407833,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4145923,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 27,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 26.0,
-            "sensor_inclination_angle": 30.12198,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4146972,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 78,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -9.0,
-            "sensor_inclination_angle": -10.3631,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4184678,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 18.0,
-            "sensor_inclination_angle": 20.53578,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4185109,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 18.0,
-            "sensor_inclination_angle": 20.86882,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4266140,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 51,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -24.0,
-            "sensor_inclination_angle": -27.5481,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4289438,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 78,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 24.0,
-            "sensor_inclination_angle": 27.50497,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4306775,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 8,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -23.0,
-            "sensor_inclination_angle": -27.0197,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4327886,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 83,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -3.0,
-            "sensor_inclination_angle": -4.14713,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4392972,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -2.0,
-            "sensor_inclination_angle": -2.82928,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4407547,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 59,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -15.0,
-            "sensor_inclination_angle": -17.1882,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4484793,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 42,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -23.0,
-            "sensor_inclination_angle": -26.3122,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4493754,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 60,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 14.0,
-            "sensor_inclination_angle": 16.46202,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4445711,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 8,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 10.0,
-            "sensor_inclination_angle": 11.36154,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4448522,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 55,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 19.0,
-            "sensor_inclination_angle": 21.99946,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4465170,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 87,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 5.8,
-            "sensor_inclination_angle": 6.602381,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3454087,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 59,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -17.0,
-            "sensor_inclination_angle": -20.1231,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4519927,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 14.0,
-            "sensor_inclination_angle": 16.34518,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3467033,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 18,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": -14.0,
-            "sensor_inclination_angle": -16.1386,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4836084,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 2,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 11.0,
-            "sensor_inclination_angle": 13.42587,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 4814827,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 13.0,
-            "sensor_inclination_angle": 15.68155,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3471092,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 1.0,
-            "sensor_inclination_angle": 1.083436,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3471093,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 1.0,
-            "sensor_inclination_angle": 1.083436,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3471094,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 1.0,
-            "sensor_inclination_angle": 1.083436,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3471100,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 1.0,
-            "sensor_inclination_angle": 1.083436,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3471101,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 1.0,
-            "sensor_inclination_angle": 1.083436,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3471102,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 1.0,
-            "sensor_inclination_angle": 1.083436,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3471103,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 1.0,
-            "sensor_inclination_angle": 1.083436,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3471104,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 1.0,
-            "sensor_inclination_angle": 1.083436,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-    {
-        "pk": 3471105,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 0,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 1.0,
-            "sensor_inclination_angle": 1.083436,
-            "gain_name": null,
-            "earth_sun_distance": null
-        }
-    },
-        {
-        "pk": 2143443,
-        "model": "catalogue.opticalproduct",
-        "fields": {
-            "solar_azimuth_angle": 0.0,
-            "gain_change_per_channel": null,
-            "gain_value_per_channel": null,
-            "cloud_cover": 50,
-            "bias_per_channel": null,
-            "solar_zenith_angle": 0.0,
-            "sensor_viewing_angle": 23,
-            "sensor_inclination_angle": 26.4796,
-            "gain_name": null,
+        "pk": 1934163, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 5, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 2.0, 
+            "product_profile": 30, 
+            "sensor_inclination_angle": 2.21492, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 1001218, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": null, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": -1, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": null, 
+            "sensor_viewing_angle": null, 
+            "product_profile": 21, 
+            "sensor_inclination_angle": null, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 1936623, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 8, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -2.0, 
+            "product_profile": 29, 
+            "sensor_inclination_angle": -2.21492, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 90541, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 66.8600006104, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": -1, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 50.5, 
+            "sensor_viewing_angle": null, 
+            "product_profile": 26, 
+            "sensor_inclination_angle": null, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 1973483, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 50, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -5.0, 
+            "product_profile": 30, 
+            "sensor_inclination_angle": -6.60238, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 1978016, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 5, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 2.0, 
+            "product_profile": 30, 
+            "sensor_inclination_angle": 2.21492, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2014330, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 14, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -5.0, 
+            "product_profile": 12, 
+            "sensor_inclination_angle": -6.60238, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2220920, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 22.0, 
+            "product_profile": 22, 
+            "sensor_inclination_angle": 25.46, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2276798, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 50, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -19.0, 
+            "product_profile": 7, 
+            "sensor_inclination_angle": -21.9995, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 63753, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 107.660003662, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 90, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 50.2700004578, 
+            "sensor_viewing_angle": null, 
+            "product_profile": 27, 
+            "sensor_inclination_angle": null, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 142087, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 70.2699966431, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": -1, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 46.7200012207, 
+            "sensor_viewing_angle": null, 
+            "product_profile": 27, 
+            "sensor_inclination_angle": null, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 143562, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 68.9899978638, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 90, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 52.9300003052, 
+            "sensor_viewing_angle": null, 
+            "product_profile": 27, 
+            "sensor_inclination_angle": null, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 146547, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 53.0400009155, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 20, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 47.0900001526, 
+            "sensor_viewing_angle": null, 
+            "product_profile": 27, 
+            "sensor_inclination_angle": null, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2462558, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 50, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 0.0, 
+            "product_profile": 7, 
+            "sensor_inclination_angle": -0.1808, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2605352, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 50, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 21.0, 
+            "product_profile": 34, 
+            "sensor_inclination_angle": 24.073, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2611758, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 14, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -17.0, 
+            "product_profile": 34, 
+            "sensor_inclination_angle": -19.5667, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2681162, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -9.0, 
+            "product_profile": 33, 
+            "sensor_inclination_angle": -10.3632, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2689917, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 4, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 9.4, 
+            "product_profile": 33, 
+            "sensor_inclination_angle": 10.6808, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2705046, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -11.0, 
+            "product_profile": 7, 
+            "sensor_inclination_angle": -12.4061, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2806398, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -16.0, 
+            "product_profile": 34, 
+            "sensor_inclination_angle": -18.88, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2831285, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 9.4, 
+            "product_profile": 7, 
+            "sensor_inclination_angle": 10.6808, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2848943, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 14, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 13.0, 
+            "product_profile": 33, 
+            "sensor_inclination_angle": 14.7714, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2858602, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -10.0, 
+            "product_profile": 8, 
+            "sensor_inclination_angle": -11.3615, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2878471, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 69, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 8.6, 
+            "product_profile": 10, 
+            "sensor_inclination_angle": 9.68288, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2881425, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 78, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -3.0, 
+            "product_profile": 33, 
+            "sensor_inclination_angle": -4.24965, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2889239, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 48, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 22.0, 
+            "product_profile": 7, 
+            "sensor_inclination_angle": 25.0897, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2937682, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 8.2, 
+            "product_profile": 9, 
+            "sensor_inclination_angle": 9.32019, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2939962, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 26.0, 
+            "product_profile": 14, 
+            "sensor_inclination_angle": 30.38231, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3004449, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 9.4, 
+            "product_profile": 9, 
+            "sensor_inclination_angle": 10.6808, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3008576, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 22.0, 
+            "product_profile": 34, 
+            "sensor_inclination_angle": 25.4599, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3017068, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 59, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -16.0, 
+            "product_profile": 34, 
+            "sensor_inclination_angle": -18.1936, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3024228, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 50, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -3.0, 
+            "product_profile": 7, 
+            "sensor_inclination_angle": -4.24965, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3046380, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 19.0, 
+            "product_profile": 33, 
+            "sensor_inclination_angle": 21.6316, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4777289, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -2.0, 
+            "product_profile": 19, 
+            "sensor_inclination_angle": -3.12239, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4626140, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 1.6, 
+            "product_profile": 7, 
+            "sensor_inclination_angle": 1.85327, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4684200, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 25.0, 
+            "product_profile": 7, 
+            "sensor_inclination_angle": 29.2728, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4739310, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 25.0, 
+            "product_profile": 7, 
+            "sensor_inclination_angle": 28.5727, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4745758, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 50, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 26.0, 
+            "product_profile": 8, 
+            "sensor_inclination_angle": 29.6467, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4750646, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -1.0, 
+            "product_profile": 34, 
+            "sensor_inclination_angle": -1.85327, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4762143, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 13.0, 
+            "product_profile": 9, 
+            "sensor_inclination_angle": 15.45475, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3176219, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 21.0, 
+            "product_profile": 10, 
+            "sensor_inclination_angle": 24.766, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3243116, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 42, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 5.8, 
+            "product_profile": 13, 
+            "sensor_inclination_angle": 6.583856, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3267757, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 25.0, 
+            "product_profile": 9, 
+            "sensor_inclination_angle": 28.5727, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3297641, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -18.0, 
+            "product_profile": 9, 
+            "sensor_inclination_angle": -21.31, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3310899, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -25.0, 
+            "product_profile": 10, 
+            "sensor_inclination_angle": -28.5727, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3424233, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 2, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -15.0, 
+            "product_profile": 19, 
+            "sensor_inclination_angle": -18.0001, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 112262, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 58.37, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 70, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 52.62, 
+            "sensor_viewing_angle": null, 
+            "product_profile": 27, 
+            "sensor_inclination_angle": null, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3505102, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -22.0, 
+            "product_profile": 34, 
+            "sensor_inclination_angle": -25.0897, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3507418, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 18.0, 
+            "product_profile": 34, 
+            "sensor_inclination_angle": 20.62126, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3761737, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 4, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -14.0, 
+            "product_profile": 19, 
+            "sensor_inclination_angle": -15.9988, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3513769, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 6, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 18.0, 
+            "product_profile": 15, 
+            "sensor_inclination_angle": 21.47438, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3533343, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 21, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -3.0, 
+            "product_profile": 33, 
+            "sensor_inclination_angle": -3.5713, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3541304, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 83, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 2.2, 
+            "product_profile": 9, 
+            "sensor_inclination_angle": 2.531379, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3563758, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 29, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 22.0, 
+            "product_profile": 17, 
+            "sensor_inclination_angle": 26.11203, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3564074, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 4, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 22.0, 
+            "product_profile": 16, 
+            "sensor_inclination_angle": 24.99969, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3594545, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 25.0, 
+            "product_profile": 33, 
+            "sensor_inclination_angle": 28.5727, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3601223, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -18.0, 
+            "product_profile": 10, 
+            "sensor_inclination_angle": -20.9426, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3808924, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 15, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 0.8, 
+            "product_profile": 20, 
+            "sensor_inclination_angle": 0.940263, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3735800, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -25.0, 
+            "product_profile": 15, 
+            "sensor_inclination_angle": -29.2258, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3821240, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 60, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -27.0, 
+            "product_profile": 9, 
+            "sensor_inclination_angle": -31.0522, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3832700, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 51, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -18.0, 
+            "product_profile": 13, 
+            "sensor_inclination_angle": -20.9245, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3858685, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 12, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -1.0, 
+            "product_profile": 8, 
+            "sensor_inclination_angle": -1.85327, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3885879, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 17, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 1.6, 
+            "product_profile": 17, 
+            "sensor_inclination_angle": 1.764648, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3888180, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 42, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -23.0, 
+            "product_profile": 17, 
+            "sensor_inclination_angle": -27.1156, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3892687, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 27, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -14.0, 
+            "product_profile": 7, 
+            "sensor_inclination_angle": -15.8194, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3896066, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 46, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 0.2, 
+            "product_profile": 8, 
+            "sensor_inclination_angle": 0.1808, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3913062, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -2.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": -3.04118, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3925651, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 19.0, 
+            "product_profile": 16, 
+            "sensor_inclination_angle": 22.55026, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4069124, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -2.0, 
+            "product_profile": 19, 
+            "sensor_inclination_angle": -2.65276, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3958317, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 12.0, 
+            "product_profile": 16, 
+            "sensor_inclination_angle": 14.23402, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3980285, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 2, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 0.0, 
+            "product_profile": 7, 
+            "sensor_inclination_angle": -0.8588, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4002553, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 2.0, 
+            "product_profile": 8, 
+            "sensor_inclination_angle": 2.21492, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4022313, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 64, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -11.0, 
+            "product_profile": 16, 
+            "sensor_inclination_angle": -13.4268, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4096417, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 4, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 18.0, 
+            "product_profile": 16, 
+            "sensor_inclination_angle": 20.56712, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4110645, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 46, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 13.0, 
+            "product_profile": 14, 
+            "sensor_inclination_angle": 15.41878, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4127848, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 83, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -8.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": -9.69936, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4137452, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 8.3, 
+            "product_profile": 14, 
+            "sensor_inclination_angle": 9.407833, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4145923, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 27, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 26.0, 
+            "product_profile": 16, 
+            "sensor_inclination_angle": 30.12198, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4146972, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 78, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -9.0, 
+            "product_profile": 9, 
+            "sensor_inclination_angle": -10.3631, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4184678, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 18.0, 
+            "product_profile": 14, 
+            "sensor_inclination_angle": 20.53578, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4185109, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 18.0, 
+            "product_profile": 16, 
+            "sensor_inclination_angle": 20.86882, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4266140, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 51, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -24.0, 
+            "product_profile": 9, 
+            "sensor_inclination_angle": -27.5481, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4289438, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 78, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 24.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": 27.50497, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4306775, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 8, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -23.0, 
+            "product_profile": 14, 
+            "sensor_inclination_angle": -27.0197, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4327886, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 83, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -3.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": -4.14713, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4392972, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -2.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": -2.82928, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4407547, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 59, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -15.0, 
+            "product_profile": 33, 
+            "sensor_inclination_angle": -17.1882, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4484793, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 42, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -23.0, 
+            "product_profile": 20, 
+            "sensor_inclination_angle": -26.3122, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4493754, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 60, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 14.0, 
+            "product_profile": 20, 
+            "sensor_inclination_angle": 16.46202, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4445711, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 8, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 10.0, 
+            "product_profile": 33, 
+            "sensor_inclination_angle": 11.36154, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4448522, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 55, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 19.0, 
+            "product_profile": 34, 
+            "sensor_inclination_angle": 21.99946, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4465170, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 87, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 5.8, 
+            "product_profile": 33, 
+            "sensor_inclination_angle": 6.602381, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3454087, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 59, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -17.0, 
+            "product_profile": 16, 
+            "sensor_inclination_angle": -20.1231, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4519927, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 14.0, 
+            "product_profile": 16, 
+            "sensor_inclination_angle": 16.34518, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3467033, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 18, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": -14.0, 
+            "product_profile": 34, 
+            "sensor_inclination_angle": -16.1386, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4836084, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 2, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 11.0, 
+            "product_profile": 20, 
+            "sensor_inclination_angle": 13.42587, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 4814827, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 13.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": 15.68155, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3471092, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 1.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": 1.083436, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3471093, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 1.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": 1.083436, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3471094, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 1.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": 1.083436, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3471100, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 1.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": 1.083436, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3471101, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 1.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": 1.083436, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3471102, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 1.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": 1.083436, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3471103, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 1.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": 1.083436, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3471104, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 1.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": 1.083436, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 3471105, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 0, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 1.0, 
+            "product_profile": 18, 
+            "sensor_inclination_angle": 1.083436, 
+            "gain_name": null, 
+            "earth_sun_distance": null
+        }
+    }, 
+    {
+        "pk": 2143443, 
+        "model": "catalogue.opticalproduct", 
+        "fields": {
+            "solar_azimuth_angle": 0.0, 
+            "gain_change_per_channel": null, 
+            "gain_value_per_channel": null, 
+            "cloud_cover": 50, 
+            "bias_per_channel": null, 
+            "solar_zenith_angle": 0.0, 
+            "sensor_viewing_angle": 23, 
+            "product_profile": 29, 
+            "sensor_inclination_angle": 26.4796, 
+            "gain_name": null, 
             "earth_sun_distance": null
         }
     }
