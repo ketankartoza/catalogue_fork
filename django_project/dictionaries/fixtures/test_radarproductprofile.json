@@ -1,0 +1,10 @@
+[
+    {
+        "pk": 1,
+        "model": "dictionaries.radarproductprofile",
+        "fields": {
+            "imaging_mode": 1,
+            "satellite_instrument": 21
+        }
+    }
+]

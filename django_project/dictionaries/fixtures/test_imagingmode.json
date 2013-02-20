@@ -6,10 +6,10 @@
             "incidence_angle_min": 23.0,
             "polarization": "VV",
             "name": "ERS-1 AMI SAR Image Mode",
-            "approximate_resolution": 30.0,
             "number_of_looks": 3,
             "swath_width_km": 100.0,
             "radarbeam": 1,
+            "approximate_resolution_m": 30.0,
             "incidence_angle_max": 23.0
         }
     }
