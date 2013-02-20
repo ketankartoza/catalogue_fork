@@ -38,6 +38,7 @@ class OpticalProductProfile(models.Model):
             self.spectral_mode
         )
 
+
 class RadarProductProfile(models.Model):
     """
     An unique product profile for radar sensor based data.
@@ -56,6 +57,7 @@ class RadarProductProfile(models.Model):
             self.satellite_instrument,
             self.imaging_mode
         )
+
 
 class ProcessingLevel(models.Model):
     """
@@ -170,9 +172,10 @@ class InstrumentType(models.Model):
     scanner_type = models.ForeignKey(ScannerType)
     base_processing_level = models.ForeignKey(
         ProcessingLevel)
-    reference_system = models.CharField(
-        max_length=255, blank=True, null=True,
-        help_text='Textual information for reference system')
+    reference_system = models.ForeignKey(
+        'ReferenceSystem',
+        blank=True, null=True
+    )
     swath_optical_km = models.IntegerField(
         blank=True, null=True,
         help_text='On-ground sensor swath width')
@@ -182,10 +185,14 @@ class InstrumentType(models.Model):
     band_type = models.TextField(
         blank=True, null=True,
         help_text='Semicolon delimited list of Instrument band types')
-    spectral_range = models.CharField(
+    spectral_range_list_nm = models.CharField(
         blank=True, null=True,
         max_length=100,
-        help_text='Accumulated spectral range of the Instrument')
+        help_text='Semicolon delimited list of Instrument spectral ranges')
+    pixel_size_list_m = models.CharField(
+        blank=True, null=True,
+        max_length=100,
+        help_text='Semicolon delimited list of Instrument pixel sizes')
     spatial_resolution_range = models.CharField(
         blank=True, null=True,
         max_length=255,
@@ -219,8 +226,8 @@ class RadarBeam(models.Model):
         max_length=50,
         help_text='RadarBeam band name'
     )
-    wavelength = models.IntegerField(
-        help_text='Band wavelength in nanometres')
+    wavelength_cm = models.IntegerField(
+        help_text='Band wavelength in centimetres')
     looking_distance = models.CharField(
         max_length=50,
         help_text='REPLACE ME!'
@@ -255,8 +262,8 @@ class ImagingMode(models.Model):
     incidence_angle_max = models.FloatField(
         help_text='Maximum incidence angle'
     )
-    approximate_resolution = models.FloatField(
-        help_text='Approximate ImagingMode resolution in REPLACE ME'
+    approximate_resolution_m = models.FloatField(
+        help_text='Approximate ImagingMode resolution in meters'
     )
     swath_width_km = models.FloatField(
         help_text='Swath width in kilometres'
@@ -311,13 +318,13 @@ class Band(models.Model):
     band_abbr = models.CharField(max_length=20, blank=True)
     band_number = models.IntegerField(
         help_text='Instrument specific band number, e.g. 1,2, ...')
-    min_wavelength = models.IntegerField(
+    min_wavelength_nm = models.IntegerField(
         help_text='Lower band wavelength in nanometeres')
-    max_wavelength = models.IntegerField(
+    max_wavelength_nm = models.IntegerField(
         help_text='Upper band wavelength in nanometeres')
-    pixelsize_resampled = models.FloatField(
+    pixelsize_resampled_m = models.FloatField(
         help_text='Pixel size in m (resolution) resampled')
-    pixelsize_acquired = models.FloatField(
+    pixelsize_acquired_m = models.FloatField(
         help_text='Pixel size in m (resolution) acquired')
 
     def __unicode__(self):
@@ -421,3 +428,14 @@ class SpectralModeProcessingCosts(models.Model):
         return u'{0}{1} ({2} - {3})'.format(
             self.cost_per_scene, self.currency_abbr,
             self.spectral_mode.name, self.instrumenttypeprocessinglevel)
+
+
+class ReferenceSystem(models.Model):
+    """
+    Spatial Reference System information (SRS)
+    """
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField(
+        verbose_name='Detailed description.',
+        help_text='A detailed description of the SRS.')
+    abbreviation = models.CharField(max_length=20)
