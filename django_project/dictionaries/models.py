@@ -427,8 +427,8 @@ class SpectralModeProcessingCosts(models.Model):
     )
 
     def __unicode__(self):
-        return u'{0}{1} ({2} - {3})'.format(
-            self.cost_per_scene, self.currency_abbr,
+        return u'{0} ZAR ({1} - {2})'.format(
+            self.cost_per_scene_in_rands,
             self.spectral_mode.name, self.instrumenttypeprocessinglevel)
 
 

@@ -35,7 +35,9 @@ from .models import (
     InstrumentTypeProcessingLevel,
     SpectralModeProcessingCosts,
     OpticalProductProfile,
-    RadarProductProfile
+    RadarProductProfile,
+    ForeignCurrency,
+    ReferenceSystem
 )
 
 
@@ -123,3 +125,13 @@ admin.site.register(OpticalProductProfile, OpticalProductProfileAdmin)
 class RadarProductProfileAdmin(admin.ModelAdmin):
     pass
 admin.site.register(RadarProductProfile, RadarProductProfileAdmin)
+
+
+class ForeignCurrencyAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(ForeignCurrency, ForeignCurrencyAdmin)
+
+
+class ReferenceSystemAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(ReferenceSystem, ReferenceSystemAdmin)

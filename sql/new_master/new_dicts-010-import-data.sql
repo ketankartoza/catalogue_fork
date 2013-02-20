@@ -1,7 +1,7 @@
+BEGIN;
 --
 -- PostgreSQL database dump
 --
-BEGIN;
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -16,20 +16,28 @@ SET search_path = public, pg_catalog;
 -- Data for Name: dictionaries_processinglevel; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_processinglevel (id, abbreviation, name, description, precursor_processing_level_id) FROM stdin;
-13	L4	Level 4 Value Added	Value added products	9
-1	L1	Level 1 Systematic Corrections	Radiometric corrections of the differences in sensitivy of the detectors based on in-flight calibrations (Level 1A).  Geometric corrections take into account both internal and external orientations of the satellite in relation to the earth to account for scan line misallignment and non-uniform pixel sizes (Level 1B).  Level 1 imagery is often referred to by customers as "raw" imagery as there is still a great deal of processing required before spatial or spectral analysis can be performed.	\N
-2	L1A	Level 1A Radiometric 	Radiometric corrections of the differences in sensitivy of the detectors based on in-flight calibrations.	\N
-3	L1B	Level 1B Geometric	Geometric corrections take into account both internal and external orientations of the satellite in relation to the earth to account for scan line misallignment and non-uniform pixel sizes.	2
-4	L2	Level 2 Georeferenced	Georeferenced into a standard map projection.  Level 2A is geolocated to the satellite predicted position at the time of the acquisition and still has location errors (not recommended for spatial analysis).  Level 2B is geolocated against a georeferenced reference image and rectified using ground control points (GCPs) in both images with a positional accuracy of the spatial resolution of the original image excluding mountainous areas.	3
-5	L2A	Level 2A Projected	Geolocated to the satellite predicted position at the time of the acquisition and still has location errors (not recommended for spatial analysis).	3
-6	L2B	Level 2B GCP Geolocated	Geolocated to a georeferenced reference image and rectified using ground control points (GCPs) in both images with a positional accuracy of the spatial resolution of the original image excluding mountainous areas.	5
-7	L3	Level 3 Orthorectified	Orthorectification using GCP points, reference imagery and a digital elevation model (DEM) to accurately locate areas of high relief.  The positional accuracy is expected to be the same as the spatial resolution of the original image including mountainous areas.	\N
-8	L3Aa	Level 3Aa Orthorectified	Orthorectification using GCP points, reference imagery and 20m DEM.  Suitable for spatial analysis including digitising.	6
-9	L3Ab	Level L3Ab Reflectance at Sensor	Reflectance values at top of atmosphere (at scanner reflectance).  Suitable for visual interpretaton, spectral signature analysis, classification and derivation of indices (NDVI, EVI).	8
-10	L3B	Level 3B Mosaic	Mosaic	8
-11	L3PS	Level 3 Pansharpened	Pansharpened	8
-12	L3TC	Level 3 True Colour	Blue band creation for SPOT for natural colour visualisation	8
+COPY dictionaries_processinglevel (id, abbreviation, name, description) FROM stdin;
+13	L4	Level 4 Value Added	Value added products
+1	L1	Level 1 Systematic Corrections	Radiometric corrections of the differences in sensitivy of the detectors based on in-flight calibrations (Level 1A).  Geometric corrections take into account both internal and external orientations of the satellite in relation to the earth to account for scan line misallignment and non-uniform pixel sizes (Level 1B).  Level 1 imagery is often referred to by customers as "raw" imagery as there is still a great deal of processing required before spatial or spectral analysis can be performed.
+2	L1A	Level 1A Radiometric 	Radiometric corrections of the differences in sensitivy of the detectors based on in-flight calibrations.
+3	L1B	Level 1B Geometric	Geometric corrections take into account both internal and external orientations of the satellite in relation to the earth to account for scan line misallignment and non-uniform pixel sizes.
+4	L2	Level 2 Georeferenced	Georeferenced into a standard map projection.  Level 2A is geolocated to the satellite predicted position at the time of the acquisition and still has location errors (not recommended for spatial analysis).  Level 2B is geolocated against a georeferenced reference image and rectified using ground control points (GCPs) in both images with a positional accuracy of the spatial resolution of the original image excluding mountainous areas.
+5	L2A	Level 2A Projected	Geolocated to the satellite predicted position at the time of the acquisition and still has location errors (not recommended for spatial analysis).
+6	L2B	Level 2B GCP Geolocated	Geolocated to a georeferenced reference image and rectified using ground control points (GCPs) in both images with a positional accuracy of the spatial resolution of the original image excluding mountainous areas.
+7	L3	Level 3 Orthorectified	Orthorectification using GCP points, reference imagery and a digital elevation model (DEM) to accurately locate areas of high relief.  The positional accuracy is expected to be the same as the spatial resolution of the original image including mountainous areas.
+8	L3Aa	Level 3Aa Orthorectified	Orthorectification using GCP points, reference imagery and 20m DEM.  Suitable for spatial analysis including digitising.
+9	L3Ab	Level L3Ab Reflectance at Sensor	Reflectance values at top of atmosphere (at scanner reflectance).  Suitable for visual interpretaton, spectral signature analysis, classification and derivation of indices (NDVI, EVI).
+10	L3B	Level 3B Mosaic	Mosaic
+11	L3PS	Level 3 Pansharpened	Pansharpened
+12	L3TC	Level 3 True Colour	Blue band creation for SPOT for natural colour visualisation
+\.
+
+
+--
+-- Data for Name: dictionaries_referencesystem; Type: TABLE DATA; Schema: public; Owner: dodobas
+--
+
+COPY dictionaries_referencesystem (id, name, description, abbreviation) FROM stdin;
 \.
 
 
@@ -49,17 +57,17 @@ COPY dictionaries_scannertype (id, name, description, abbreviation) FROM stdin;
 -- Data for Name: dictionaries_instrumenttype; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_instrumenttype (id, name, description, abbreviation, operator_abbreviation, is_radar, is_taskable, scanner_type_id, base_processing_level_id, reference_system, swath_optical_km, band_number_total, band_type, spectral_range, spatial_resolution_range, quantization_bits, image_size_km, processing_software, keywords) FROM stdin;
-1	AMI	Active Microwave Instrument\r\n	AMI	AMI	t	f	1	1		\N	\N				\N			
-2	MSI	Multi-Spectral Imager\r\n	MSI	MSI	f	f	4	1		\N	\N				\N			
-3	MSS	Multi-Spectral Scanner\r\n	MSS	MSS	f	f	3	1		\N	\N				\N			
-4	TM	Thematic Mapper\r\n	TM	TM	f	f	3	1		\N	\N				\N			
-6	HRV	High Resolution Visible\r\n	HRV	HRV	f	f	2	1		\N	\N				\N			
-8	HRG	High Resolution Geometric\r\n	HRG	HRG	f	t	2	1		\N	\N				\N			
-9	HRCCD	High Resolution Couple Charged Device\r\n	HRC	HRCCD	f	f	2	1		\N	\N				\N			
-10	MMRS	Multi-Spectral Medium Resolution Scanner\r\n	MMR	MMRS	f	f	2	1		\N	\N				\N			
-7	HRVIR	High Resolution Visible and Infra-Red\r\n	HIR	HRVIR	f	f	2	1		\N	\N				\N			
-5	ETM+	Enhanced Thematic Mapper Plus\r\n	ETM+	ETM+	f	f	3	1		\N	\N				\N			
+COPY dictionaries_instrumenttype (id, name, description, abbreviation, operator_abbreviation, is_radar, is_taskable, scanner_type_id, base_processing_level_id, reference_system_id, swath_optical_km, band_number_total, band_type, spectral_range_list_nm, pixel_size_list_m, spatial_resolution_range, quantization_bits, image_size_km, processing_software, keywords) FROM stdin;
+1	AMI	Active Microwave Instrument\r\n	AMI	AMI	t	f	1	1	\N	\N	\N			\N		\N			
+2	MSI	Multi-Spectral Imager\r\n	MSI	MSI	f	f	4	1	\N	\N	\N			\N		\N			
+3	MSS	Multi-Spectral Scanner\r\n	MSS	MSS	f	f	3	1	\N	\N	\N			\N		\N			
+4	TM	Thematic Mapper\r\n	TM	TM	f	f	3	1	\N	\N	\N			\N		\N			
+6	HRV	High Resolution Visible\r\n	HRV	HRV	f	f	2	1	\N	\N	\N			\N		\N			
+8	HRG	High Resolution Geometric\r\n	HRG	HRG	f	t	2	1	\N	\N	\N			\N		\N			
+9	HRCCD	High Resolution Couple Charged Device\r\n	HRC	HRCCD	f	f	2	1	\N	\N	\N			\N		\N			
+10	MMRS	Multi-Spectral Medium Resolution Scanner\r\n	MMR	MMRS	f	f	2	1	\N	\N	\N			\N		\N			
+7	HRVIR	High Resolution Visible and Infra-Red\r\n	HIR	HRVIR	f	f	2	1	\N	\N	\N			\N		\N			
+5	ETM+	Enhanced Thematic Mapper Plus\r\n	ETM+	ETM+	f	f	3	1	\N	\N	\N			\N		\N			
 \.
 
 
@@ -67,7 +75,7 @@ COPY dictionaries_instrumenttype (id, name, description, abbreviation, operator_
 -- Data for Name: dictionaries_band; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_band (id, instrument_type_id, band_name, band_abbr, band_number, min_wavelength, max_wavelength, pixelsize_resampled, pixelsize_acquired) FROM stdin;
+COPY dictionaries_band (id, instrument_type_id, band_name, band_abbr, band_number, min_wavelength_nm, max_wavelength_nm, pixelsize_resampled_m, pixelsize_acquired_m) FROM stdin;
 1	3	Green	G	1	500	600	60	60
 2	3	Red	R	2	600	700	60	60
 3	3	Near Infrared	NIR	3	700	800	60	60
@@ -272,10 +280,25 @@ SELECT pg_catalog.setval('dictionaries_collection_id_seq', 6, true);
 
 
 --
+-- Data for Name: dictionaries_foreigncurrency; Type: TABLE DATA; Schema: public; Owner: dodobas
+--
+
+COPY dictionaries_foreigncurrency (id, abbreviation, name, conversion_rate) FROM stdin;
+\.
+
+
+--
+-- Name: dictionaries_foreigncurrency_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_foreigncurrency_id_seq', 1, false);
+
+
+--
 -- Data for Name: dictionaries_radarbeam; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_radarbeam (id, instrument_type_id, band_name, wavelength, looking_distance, azimuth_direction) FROM stdin;
+COPY dictionaries_radarbeam (id, instrument_type_id, band_name, wavelength_cm, looking_distance, azimuth_direction) FROM stdin;
 1	1	C-Band	5660	250	23
 \.
 
@@ -284,7 +307,7 @@ COPY dictionaries_radarbeam (id, instrument_type_id, band_name, wavelength, look
 -- Data for Name: dictionaries_imagingmode; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_imagingmode (id, radarbeam_id, name, incidence_angle_min, incidence_angle_max, approximate_resolution, swath_width_km, number_of_looks, polarization) FROM stdin;
+COPY dictionaries_imagingmode (id, radarbeam_id, name, incidence_angle_min, incidence_angle_max, approximate_resolution_m, swath_width_km, number_of_looks, polarization) FROM stdin;
 1	1	ERS-1 AMI SAR Image Mode	23	23	30	100	3	VV
 \.
 
@@ -304,7 +327,7 @@ SELECT pg_catalog.setval('dictionaries_instrumenttype_id_seq', 10, true);
 
 
 --
--- Data for Name: dictionaries_processinglevelforinstrumenttype; Type: TABLE DATA; Schema: public; Owner: dodobas
+-- Data for Name: dictionaries_instrumenttypeprocessinglevel; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
 COPY dictionaries_instrumenttypeprocessinglevel (id, instrument_type_id, processinglevel_id, operator_processing_level_name, operator_processing_level_abbreviation) FROM stdin;
@@ -334,54 +357,7 @@ COPY dictionaries_instrumenttypeprocessinglevel (id, instrument_type_id, process
 
 
 --
--- Data for Name: dictionaries_processingcostsforspectralmode; Type: TABLE DATA; Schema: public; Owner: dodobas
---
-
-COPY dictionaries_spectralmodeprocessingcosts (id, spectral_mode_id, instrumenttypeprocessinglevel_id, cost_per_scene, currency_abbr) FROM stdin;
-1	14	14	400	EUR
-2	16	14	400	EUR
-9	1	7	2000	ZAR
-11	4	5	2000	ZAR
-12	15	14	400	EUR
-13	13	14	800	EUR
-4	17	11	200	EUR
-3	18	11	200	EUR
-5	19	9	200	EUR
-6	20	9	200	EUR
-14	6	4	2000	ZAR
-15	4	6	1000	ZAR
-16	1	8	1000	ZAR
-17	13	15	1000	ZAR
-18	16	15	1000	ZAR
-19	16	16	2500	ZAR
-20	16	17	500	ZAR
-21	18	12	1000	ZAR
-22	18	12	1000	ZAR
-23	18	13	2500	ZAR
-24	18	18	500	ZAR
-25	20	10	1000	ZAR
-26	19	10	1000	ZAR
-27	19	22	2500	ZAR
-28	19	23	500	ZAR
-\.
-
-
---
--- Name: dictionaries_processingcostsforspectralmode_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_spectralmodeprocessingcosts_id_seq', 28, true);
-
-
---
--- Name: dictionaries_processinglevel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_processinglevel_id_seq', 13, true);
-
-
---
--- Name: dictionaries_processinglevelforinstrumenttype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+-- Name: dictionaries_instrumenttypeprocessinglevel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
 --
 
 SELECT pg_catalog.setval('dictionaries_instrumenttypeprocessinglevel_id_seq', 23, true);
@@ -443,111 +419,60 @@ COPY dictionaries_satelliteinstrument (id, name, description, abbreviation, oper
 
 
 --
--- Data for Name: dictionaries_productprofile; Type: TABLE DATA; Schema: public; Owner: dodobas
+-- Data for Name: dictionaries_opticalproductprofile; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_productprofile (id, satellite_instrument_id) FROM stdin;
-1	21
-2	19
-3	23
-4	9
-5	10
-6	9
-7	10
-8	7
-9	8
-10	7
-11	8
-12	5
-13	6
-14	5
-15	6
-16	3
-17	4
-18	3
-19	4
-20	1
-21	2
-22	1
-23	2
-24	1
-25	2
-26	1
-27	2
-28	12
-29	13
-30	14
-31	16
-32	17
-33	18
-34	20
+COPY dictionaries_opticalproductprofile (id, satellite_instrument_id, spectral_mode_id) FROM stdin;
+2	19	25
+3	20	33
+4	20	26
+5	20	34
+6	23	28
+7	7	20
+8	8	20
+9	3	17
+10	4	17
+11	9	20
+12	10	20
+13	1	14
+14	2	14
+15	1	15
+16	2	15
+17	1	16
+18	2	16
+19	1	13
+20	2	13
+21	5	20
+22	6	20
+23	12	6
+24	13	6
+25	14	6
+26	16	6
+27	17	4
+28	18	1
+29	9	19
+30	10	19
+31	5	19
+32	6	19
+33	3	18
+34	4	18
+35	7	19
+36	8	19
 \.
 
 
 --
--- Name: dictionaries_productprofile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+-- Name: dictionaries_opticalproductprofile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
 --
 
-SELECT pg_catalog.setval('dictionaries_productprofile_id_seq', 34, true);
-
-
---
--- Data for Name: dictionaries_productprofile_spectral_mode; Type: TABLE DATA; Schema: public; Owner: dodobas
---
-
-COPY dictionaries_productprofile_spectral_mode (id, productprofile_id, spectralmode_id) FROM stdin;
-1	2	25
-2	3	31
-3	4	20
-4	5	20
-5	6	19
-6	7	19
-7	8	20
-8	9	20
-9	10	19
-10	11	19
-11	12	19
-12	13	19
-13	14	20
-14	15	20
-15	16	17
-16	17	17
-17	18	18
-18	19	18
-19	20	14
-20	21	14
-21	22	15
-22	23	15
-23	24	16
-24	25	16
-25	26	13
-26	27	13
-27	28	6
-28	29	6
-29	30	6
-30	30	5
-31	30	4
-32	30	29
-33	31	5
-34	31	29
-35	32	4
-36	33	30
-37	33	3
-38	33	2
-39	33	1
-40	34	26
-41	34	27
-42	34	33
-43	34	34
-44	34	35
-\.
+SELECT pg_catalog.setval('dictionaries_opticalproductprofile_id_seq', 36, true);
 
 
 --
--- Name: dictionaries_productprofile_spectral_mode_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+-- Name: dictionaries_processinglevel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
 --
 
-SELECT pg_catalog.setval('dictionaries_productprofile_spectral_mode_id_seq', 44, true);
+SELECT pg_catalog.setval('dictionaries_processinglevel_id_seq', 13, true);
 
 
 --
@@ -555,6 +480,29 @@ SELECT pg_catalog.setval('dictionaries_productprofile_spectral_mode_id_seq', 44,
 --
 
 SELECT pg_catalog.setval('dictionaries_radarbeam_id_seq', 1, true);
+
+
+--
+-- Data for Name: dictionaries_radarproductprofile; Type: TABLE DATA; Schema: public; Owner: dodobas
+--
+
+COPY dictionaries_radarproductprofile (id, satellite_instrument_id, imaging_mode_id) FROM stdin;
+1	21	1
+\.
+
+
+--
+-- Name: dictionaries_radarproductprofile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_radarproductprofile_id_seq', 1, true);
+
+
+--
+-- Name: dictionaries_referencesystem_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_referencesystem_id_seq', 1, false);
 
 
 --
@@ -593,8 +541,47 @@ SELECT pg_catalog.setval('dictionaries_spectralmode_id_seq', 35, true);
 
 
 --
--- PostgreSQL database dump complete
+-- Data for Name: dictionaries_spectralmodeprocessingcosts; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
+COPY dictionaries_spectralmodeprocessingcosts (id, spectral_mode_id, instrumenttypeprocessinglevel_id, cost_per_scene_in_rands, foreign_currency_id, cost_per_scene_in_foreign) FROM stdin;
+1	14	14	400	\N	\N
+2	16	14	400	\N	\N
+9	1	7	2000	\N	\N
+11	4	5	2000	\N	\N
+12	15	14	400	\N	\N
+13	13	14	800	\N	\N
+4	17	11	200	\N	\N
+3	18	11	200	\N	\N
+5	19	9	200	\N	\N
+6	20	9	200	\N	\N
+14	6	4	2000	\N	\N
+15	4	6	1000	\N	\N
+16	1	8	1000	\N	\N
+17	13	15	1000	\N	\N
+18	16	15	1000	\N	\N
+19	16	16	2500	\N	\N
+20	16	17	500	\N	\N
+21	18	12	1000	\N	\N
+22	18	12	1000	\N	\N
+23	18	13	2500	\N	\N
+24	18	18	500	\N	\N
+25	20	10	1000	\N	\N
+26	19	10	1000	\N	\N
+27	19	22	2500	\N	\N
+28	19	23	500	\N	\N
+\.
+
+
+--
+-- Name: dictionaries_spectralmodeprocessingcosts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_spectralmodeprocessingcosts_id_seq', 28, true);
+
+
+--
+-- PostgreSQL database dump complete
+--
 
 COMMIT;
