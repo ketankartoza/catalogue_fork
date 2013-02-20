@@ -51,4 +51,4 @@ except ImportError:
 #GDAL_LIBRARY_PATH = '/usr/lib/libgdal1.7.0.so.1'
 
 # OSX - see readme in geoip data dir
-GEOIP_LIBRARY_PATH = '/opt/local/lib/libGeoIP.dylib'
+#GEOIP_LIBRARY_PATH = '/opt/local/lib/libGeoIP.dylib'
