@@ -1,0 +1,8 @@
+<div class="accordion-group">
+    <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" {{ fieldset.flat_attrs|safe }} href="#{{ fieldset.css_id }}">{{ legend|safe }}</a>
+    </div>
+    <div id="{{ fieldset.css_id }}" class="accordion-body collapse{% if fieldset.css_class %}{{ fieldset.css_class }}{% endif %}" >
+        <div class="accordion-inner">{{ fields|safe }}</div>
+    </div>
+</div>

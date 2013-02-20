@@ -735,34 +735,89 @@ class AdvancedSearchFormv3(forms.ModelForm):
 
         self.helper.layout = Layout(
             Div(
-                Div(
-                    Div(
-                        Div(
-                            HTML(
-                                '<a class="accordion-toggle" data-toggle="col'
-                                'lapse" href="#collapsSensors">Sensors</a>')
-                        ),
-                        css_class="accordion-heading"
-                    ),
-                    Div(
-                        Div(
-                            Div(
-                                Field('sensors', template='myField.html'),
-                                Field('mission', template='myField.html'),
-                                Field('sensor_type', template='myField.html'),
-                                Field(
-                                    'acquisition_mode',
-                                    template='myField.html')
-                            ),
-                            css_class="accordion-inner"
-                        ),
-                        id="collapsSensors",
-                        css_class="accordion-body collapse in"
-                    ),
-                    css_class="accordion-group"
+                Fieldset(
+                    'Sensors',
+                    Field('sensors', template='myField.html'),
+                    Field('mission', template='myField.html'),
+                    Field('sensor_type', template='myField.html'),
+                    Field('acquisition_mode', template='myField.html'),
+                    css_id="collapseSensors",
+                    css_class="in",
+                    data_parent="#accordion-search2",
+                    template="crispy-fieldset-accordion.html"
                 ),
-                id="accordion-search",
-                css_class="accordion"
+                Fieldset(
+                    'Product type details',
+                    Field('search_type', template='myField.html'),
+                    Field('license_type', template='myField.html'),
+                    css_id="collapseProduct",
+                    data_parent="#accordion-search2",
+                    template="crispy-fieldset-accordion.html"
+                ),
+                Fieldset(
+                    'Image details',
+                    Field('use_cloud_cover', template='myField.html'),
+                    Field(
+                        'sensor_inclination_angle_start',
+                        template='myField.html'),
+                    Field('spatial_resolution', template='myField.html'),
+                    Field('cloud_mean', template='myField.html'),
+                    Field(
+                        'sensor_inclination_angle_end',
+                        template='myField.html'),
+                    Field('band_count', template='myField.html'),
+                    css_id="collapseImage",
+                    data_parent="#accordion-search2",
+                    template="crispy-fieldset-accordion.html"
+                ),
+                Fieldset(
+                    'Row & path',
+                    Field('k_orbit_path', template='myField.html'),
+                    Field('j_frame_row', template='myField.html'),
+                    css_id="collapseRP",
+                    data_parent="#accordion-search2",
+                    template="crispy-fieldset-accordion.html"
+                ),
+                Fieldset(
+                    'Geometry',
+                    Field('aoi_geometry', template='myField.html'),
+                    Field('geometry_file', template='myField.html'),
+                    css_id="collapseGeometry",
+                    data_parent="#accordion-search2",
+                    template="crispy-fieldset-accordion.html"
+                ),
+                Fieldset(
+                    'Dates',
+                    Field('start_datepicker', template='myField.html'),
+                    Field('end_datepicker', template='myField.html'),
+                    HTML(
+                        '<a id="dr_add" title="Select the dates in the calend'
+                        'ar and click here to add to the list." href="javascri'
+                        'pt:void(0)"><img src="/media/images/selector-add.gif"'
+                        '></a>'),
+                    HTML(
+                        '<a id="dr_del" title="Select the ranges in the list '
+                        'and click here to remove." href="javascript:void(0)">'
+                        '<img src="/media/images/selector-remove.gif"></a>'),
+                    HTML(
+                        '<label for="id_searchdaterange_set">Date range *</lab'
+                        'el>'),
+                    HTML('{{ myFormset.management_form }}'),
+                    Div(
+                        HTML(
+                            '{% for form in myFormset.forms %}<div class="dr_r'
+                            'ow"><div class="dr_input">{{ form }}</div><div cl'
+                            'ass="dr_text" title="Click to select."></div></di'
+                            'v>{% endfor %}'),
+                        id="dr_container",
+                        css_class="well well-small"
+                    ),
+                    css_id="collapseDates",
+                    data_parent="#accordion-search2",
+                    template="crispy-fieldset-accordion.html"
+                ),
+                css_id="accordion-search2",
+                template="crispy-div-accordion.html"
             ),
             'geometry'
         )
