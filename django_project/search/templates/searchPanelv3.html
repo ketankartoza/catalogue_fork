@@ -3,3 +3,11 @@
 {% load crispy_forms_tags %}
 
 {% crispy myForm %}
+<button onClick="submitSearchForm();" class="btn btn-success" class="default" name="_search" title="Click here to execute your search.">Search</button>
+{{myForm.media}}
+<script>
+    $('#dr_container').sansa_daterangecontainer();
+    $('#id_start_datepicker, #id_end_datepicker').datepicker({
+      'autoclose':true
+    });
+</script>

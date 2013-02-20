@@ -551,8 +551,8 @@ function setupSearchMap( theLayers )
   addSelectControl();
   // Read WKT from the text field.
 
-  //var myWKT = document.getElementById('id_geometry').value;
-  var myWKT = false;
+  var myWKT = document.getElementById('id_geometry').value;
+  //var myWKT = false;
   if (myWKT)
   {
     // After reading into geometry, immediately write back to

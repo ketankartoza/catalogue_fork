@@ -727,7 +727,7 @@ class AdvancedSearchFormv3(forms.ModelForm):
         """
 
         self.helper = FormHelper()
-        self.helper.form_class = 'span12'
+        self.helper.form_class = 'span12 '
         self.helper.form_id = 'search_form'
         self.helper.form_method = 'post'
         self.helper.help_text_inline = True

@@ -38,6 +38,38 @@
     $("#map-container").mapResizer({'map':mMap});
   }
   /* ]]> */
+
+      function check_sensor_inclination_angles() {
+        var sv = parseInt($("#id_sensor_inclination_angle_start").val());
+        var ev = parseInt($("#id_sensor_inclination_angle_end").val());
+        if (sv && ev && (sv > ev)) {
+            alert ("The sensor inclination angle start value is greater than the end.");
+        };
+    };
+
+    function submitSearchForm(){
+    check_search_dates();
+    if (datesOk){
+      $.post('/search/', $("#search_form").serializeArray(), function(data) {
+        $('#search-results-container').load('/searchpage/' + data.guid +'/');
+      });
+      //$('#search-results-container').load('/search/', $("#search_form").serializeArray());
+      //document.forms["search_form"].submit();
+    } else {
+      alert ("The Start Date is later than the End Date.");
+    }
+  }
+
+  function check_search_dates() {
+    var datesOK;
+    var sd = $("#id_start_datepicker").val();
+    var ed = $("#id_end_datepicker").val();
+    if (sd > ed) {
+      datesOk=false;
+    } else {
+      datesOk=true;
+    }
+  }
   </script>
 
 {% endblock %}
@@ -56,7 +88,7 @@
                 </div>
             </div>
             <div class="row-fluid">
-                <div id="search-results-container" class="span12">results container
+                <div id="search-results-container" class="span12">
                 </div>
             </div>
             <div class="row-fluid">

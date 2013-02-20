@@ -135,15 +135,16 @@ def search(theRequest):
         theRequest)
     logger.debug(('Post vars:' + str(theRequest.POST)))
     logger.info('search called')
+    post_values = theRequest.POST.copy()
     if theRequest.method == 'POST':
-        myForm = AdvancedSearchForm(theRequest.POST, theRequest.FILES)
+        myForm = AdvancedSearchForm(post_values, theRequest.FILES)
         if myForm.is_valid():
             mySearch = myForm.save(commit=False)
             # ABP: save_as_new is necessary due to the fact that a new Search
             # object is always
             # created even on Search modify pages
             myFormset = DateRangeInlineFormSet(
-                theRequest.POST, theRequest.FILES, instance=mySearch,
+                post_values, theRequest.FILES, instance=mySearch,
                 save_as_new=True)
             if myFormset.is_valid():
                 logger.info('formset is VALID')
@@ -214,11 +215,17 @@ def search(theRequest):
                 logger.debug('Search: ' + str(mySearch))
                 logger.info('form is VALID after editing')
                 myFormset.save()
-
+                to_json = {
+                    "guid": mySearch.guid
+                }
+                return HttpResponse(simplejson.dumps(
+                    to_json), mimetype='application/json')
+                """
                 return HttpResponseRedirect(
                     reverse(
-                        'searchResultMap', kwargs={'theGuid': mySearch.guid})
+                        'searchResultPage', kwargs={'theGuid': mySearch.guid})
                 )
+                """
             else:
                 logger.info('formset is INVALID')
                 logger.debug('%s' % myFormset.errors)
