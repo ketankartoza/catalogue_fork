@@ -414,12 +414,16 @@ class SpectralModeProcessingCosts(models.Model):
     instrumenttypeprocessinglevel = models.ForeignKey(
         InstrumentTypeProcessingLevel
     )
-    cost_per_scene = models.IntegerField(
-        help_text='Cost per scene'
+    cost_per_scene_in_rands = models.FloatField(
+        help_text='Cost per scene in ZAR (rands)'
     )
-    currency_abbr = models.CharField(
-        max_length=12,
-        help_text='Currency abbreviation'
+    foreign_currency = models.ForeignKey(
+        'ForeignCurrency',
+        null=True, blank=True
+    )
+    cost_per_scene_in_foreign = models.FloatField(
+        null=True, blank=True,
+        help_text='Cost per scene in foreign currency'
     )
 
     def __unicode__(self):
@@ -430,10 +434,23 @@ class SpectralModeProcessingCosts(models.Model):
 
 class ReferenceSystem(models.Model):
     """
-    Spatial Reference System information (SRS)
+    Spatial Reference information
     """
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField(
         verbose_name='Detailed description.',
-        help_text='A detailed description of the SRS.')
+        help_text='A detailed description of the reference system.')
     abbreviation = models.CharField(max_length=20)
+
+
+class ForeignCurrency(models.Model):
+    """
+    Foreign currency lookup table
+
+    conversion_rate: 1.00 unit in ZAR (i.e. 1.00 USD = 8.8634 ZAR)
+    """
+    abbreviation = models.CharField(max_length=20)
+    name = models.CharField(max_length=255, unique=True)
+    conversion_rate = models.FloatField(
+        null=True, blank=True,
+        help_text='Conversion rate for 1.00 unit in ZAR')
