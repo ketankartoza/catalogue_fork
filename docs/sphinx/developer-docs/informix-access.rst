@@ -38,7 +38,7 @@ dbaccess catalogue < /tmp/tim.sql >> /tmp/tim.out
 Command line processing using echo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Handy for quickly running once off commands of from bash 
+Handy for quickly running once off commands of from bash
 scripts.
 
 ```
@@ -48,8 +48,8 @@ echo "select * from t_file_types" | dbaccess catalogue
 Changing geotype to wkt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For batch export to the django catalogue the geometries 
-need to be exported as wkt (well known text) which is not 
+For batch export to the django catalogue the geometries
+need to be exported as wkt (well known text) which is not
 the type used internally for the spot catalogue.
 
 ```
@@ -59,7 +59,7 @@ echo "update GeoParam set value = 0 where id =3;" | dbaccess catalogue
 Reverting geotype to informix format
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To set geometry output back informix representation and restoring 
+To set geometry output back informix representation and restoring
 normal catalogue functioning do:
 
 ```
@@ -82,13 +82,13 @@ And the Informix client sdk from:
 http://www14.software.ibm.com/webapp/download/preconfig.jsp?id=2007-04-19+14%3A08%3A41.173257R&S_TACT=104CBW71&S_CMP==
 ```
 
-If the above link doesnt work for you (it seems to contain a session id), go to the 
+If the above link doesnt work for you (it seems to contain a session id), go to the
 
 ```
 http://www14.software.ibm.com
 ```
 
-website and search for 
+website and search for
 
 ```
 3.50.UC4
@@ -103,7 +103,7 @@ bundle called:
 
 ```
 IBM Informix Client SDK V3.50.FC4 for Linux (x86) RHEL 4, 64bit
-clientsdk.3.50.FC4DE.LINUX.tar  (72MB) 
+clientsdk.3.50.FC4DE.LINUX.tar  (72MB)
 ```
 
 **Note 2:** Even though it says Red Hat Enterprise Editition (RHEL) you can use
@@ -117,18 +117,18 @@ Adding new group `informix' (1003) ...
 Adding new user `informix' (1003) with group `informix' ...
 Creating home directory `/home/informix' ...
 Copying files from `/etc/skel' ...
-Enter new UNIX password: 
-Retype new UNIX password: 
+Enter new UNIX password:
+Retype new UNIX password:
 passwd: password updated successfully
 Changing the user information for informix
 Enter the new value, or press ENTER for the default
 	Full Name []: Informix
-	Room Number []: 
-	Work Phone []: 
-	Home Phone []: 
-	Other []: 
+	Room Number []:
+	Work Phone []:
+	Home Phone []:
+	Other []:
 Is the information correct? [Y/n] Y
-[linfiniti:timlinux:DownloadDirector] sudo ./installclientsdk 
+[linfiniti:timlinux:DownloadDirector] sudo ./installclientsdk
 
 
 
@@ -156,26 +156,26 @@ http://www.ibm.com
 Press 1 for Next, 3 to Cancel or 4 to Redisplay [1] 1
 
 -------------------------------------------------------------------------------
-     International License Agreement for Non-Warranted Programs 
-      
-     Part 1 - General Terms 
-      
-     BY DOWNLOADING, INSTALLING, COPYING, ACCESSING, OR USING THE PROGRAM 
+     International License Agreement for Non-Warranted Programs
+
+     Part 1 - General Terms
+
+     BY DOWNLOADING, INSTALLING, COPYING, ACCESSING, OR USING THE PROGRAM
      YOU AGREE TO THE TERMS OF THIS AGREEMENT. IF YOU ARE ACCEPTING THESE
       TERMS ON BEHALF OF ANOTHER PERSON OR A COMPANY OR OTHER LEGAL
       ENTITY, YOU REPRESENT AND WARRANT THAT YOU HAVE FULL AUTHORITY TO
       BIND THAT PERSON, COMPANY, OR LEGAL ENTITY TO THESE TERMS. IF YOU DO
-      NOT AGREE TO THESE TERMS,  
-     
- 
-     
-- DO NOT DOWNLOAD, INSTALL, COPY, ACCESS, OR USE THE PROGRAM; AND 
-     
- 
-     
+      NOT AGREE TO THESE TERMS,
+
+
+
+- DO NOT DOWNLOAD, INSTALL, COPY, ACCESS, OR USE THE PROGRAM; AND
+
+
+
 - PROMPTLY RETURN THE PROGRAM AND PROOF OF ENTITLEMENT TO THE PARTY
 
-Press Enter to continue viewing the license agreement, or, Enter "1" to accept 
+Press Enter to continue viewing the license agreement, or, Enter "1" to accept
 the agreement, "2" to decline it or "99" to go back to the previous screen, "3"
  Print.
 
@@ -198,12 +198,12 @@ Choose the setup type that best suits your needs.
 [X] 1 - Typical
         The program will be installed with the suggested configuration.
         Recommended for most users.
-                                                                                 
+
 [ ] 2 - Custom
         The program will be installed with the features you choose.
         Recommended for advanced users.
 
-To select an item enter its number, or 0 when you are finished: [0] 
+To select an item enter its number, or 0 when you are finished: [0]
 
 
 Press 1 for Next, 2 for Previous, 3 to Cancel or 4 to Redisplay [1] 1
@@ -344,11 +344,11 @@ Installation of messages complete.
 The InstallShield Wizard has successfully installed IBM Informix Client-SDK
 Version 3.50. Choose Finish to exit the wizard.
 
-Press 3 to Finish or 4 to Redisplay [3] 
+Press 3 to Finish or 4 to Redisplay [3]
 ```
 
-Note that trying to install it to another directory other than /usr/informix will 
-cause the db adapter build to fail (and various other issues). So dont accept the 
+Note that trying to install it to another directory other than /usr/informix will
+cause the db adapter build to fail (and various other issues). So dont accept the
 default of /opt/IBM/informix and rather use /usr/informix
 
 
@@ -404,8 +404,8 @@ export INFORMIXSERVER=catalog2
 ```
 
 
-I found out that it is running on port 1537 by consulting the /etc/services file on the informix server. 
-Now lets try our test connection.This little script will make a quick test connection so you can see 
+I found out that it is running on port 1537 by consulting the /etc/services file on the informix server.
+Now lets try our test connection.This little script will make a quick test connection so you can see
 if its working:
 
 ```
@@ -459,10 +459,10 @@ http://publib.boulder.ibm.com/infocenter/idshelp/v10
 WKT representation of GeoObjects
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Informix uses its own representation of geometry objects. There are two extensions 
-for informix that deal with spatial data : Geodetic and Spatial. It seems we have 
-only geodetic extension at SAC and thus can't use ST_foo functions to work with 
-geometry fields. For Geodetic we need to alter a value in the GeoParam table 
+Informix uses its own representation of geometry objects. There are two extensions
+for informix that deal with spatial data : Geodetic and Spatial. It seems we have
+only geodetic extension at SAC and thus can't use ST_foo functions to work with
+geometry fields. For Geodetic we need to alter a value in the GeoParam table
 in order to change what formats are output / input. From the manual:
 
 
@@ -479,8 +479,8 @@ details, see Chapter 7 in the Informix Geodetic DataBlade Module User's Guide).
 
 
 
-You can 
-override the representation type that should be returned so that you 
+You can
+override the representation type that should be returned so that you
 get e.g. WKT  back instead. Consider this example:
 
 ```
@@ -538,8 +538,8 @@ If the client does not cleanly disconnect it can leave records locked. You may
 see a message like this from dbaccess when trying to do an interactive query:
 
 ```
-244: Could not do a physical-order read to fetch next row.  
-107: ISAM error:  record is locked.  
+244: Could not do a physical-order read to fetch next row.
+107: ISAM error:  record is locked.
 ```
 
 There are probably solutions that are better than this, but the most robust way
@@ -611,7 +611,7 @@ So now we make a little bash script:
 # -------------------------------------------------------------
 #
 # Actual script follows:
-# 
+#
 # Tim Sutton, May 2009
 #
 
@@ -652,14 +652,14 @@ Now add this:
 
 # Run informix stats update nightly to keep responsiveness good
 # Job will run 5 min after midnight
-5 0 * * * /home/informix/nightly_cron.sh 
+5 0 * * * /home/informix/nightly_cron.sh
 ```
 
 File System
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ```
-root@informix's password: 
+root@informix's password:
 Last login: Tue Sep  9 12:57:53 2008 from :0
 [root@catalog2 /root]# mount
 /dev/sda6 on / type ext2 (rw)
@@ -710,7 +710,7 @@ If you try to run a function that you know exists, but you get an error message
 like this:
 
 ```
-_informixdb.DatabaseError: SQLCODE -674 in PREPARE: 
+_informixdb.DatabaseError: SQLCODE -674 in PREPARE:
 IX000: Routine (lotofile) can not be resolved.
 ```
 
