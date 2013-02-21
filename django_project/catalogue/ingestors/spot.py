@@ -44,17 +44,17 @@ from catalogue.models import (Quality,
 
 @transaction.commit_manually
 def ingest(theShapeFile,
-           myDownloadThumbsFlag = False,
-           theTestOnlyFlag = False,
-           theVerbosityLevel = 1,
-           theLicense = 'SANSA Commercial License',
-           theOwner = 'Astrium',
-           theSoftware = 'TS5',
-           theArea = None,
-           theQuality = 'Unknown',
+           myDownloadThumbsFlag=False,
+           theTestOnlyFlag=False,
+           theVerbosityLevel=1,
+           theLicense='SANSA Commercial License',
+           theOwner='Astrium',
+           theSoftware='TS5',
+           theArea=None,
+           theQuality='Unknown',
            # We should use 1A here but we need to write migration
            # logic for all existing records and rename all existing thumbs!
-           theProcessingLevel = '1B'):
+           theProcessingLevel='1B'):
     """
     Ingest a SPOT dataset as provided by spot image
 
@@ -155,15 +155,17 @@ def ingest(theShapeFile,
         except Institution.DoesNotExist:
             #logMessage('Institution %s does not exists and '
             #         'cannot be created.' % owner, 2)
-            raise CommandError, ('Institution %s does not exist and '
-                                  'cannot create: aborting' % theOwner)
+            raise CommandError(
+                'Institution %s does not exist and '
+                'cannot create: aborting' % theOwner)
         try:
-            theQuality = Quality.objects.get_or_create(name=theQuality)[0]
+            myQuality = Quality.objects.get_or_create(name=theQuality)[0]
         except Quality.DoesNotExist:
             logMessage('Quality %s does not exists and cannot be created,'
                        ' it will be read from metadata.' % theQuality, 2)
-            raise CommandError, ('Quality %s does not exists and cannot '
-                                 ' be created: aborting' % theQuality)
+            raise CommandError(
+                'Quality %s does not exists and cannot '
+                ' be created: aborting' % theQuality)
 
         try:
             myRecordCount = 0
@@ -287,7 +289,6 @@ def ingest(theShapeFile,
                     #name                  | Panchromatic
                     #mission_sensor_id     | 10
                     #operator_abbreviation | A
-
 
                     # work out the sensor type
                     myImportFileSensorType = myFeature.get('TYPE')
@@ -447,7 +448,7 @@ def ingest(theShapeFile,
                   'owner_id': myOwner.id,
                   'license': theLicense,
                   'creating_software': theSoftware,
-                  'quality': theQuality,
+                  'quality': myQuality,
                   'sensor_inclination_angle': myFeature.get('ANG_INC'),
                   'sensor_viewing_angle': myFeature.get('ANG_ACQ'),
                   'original_product_id': myOriginalProductId,

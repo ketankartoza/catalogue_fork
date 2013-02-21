@@ -142,6 +142,6 @@ class Command(BaseCommand):
                     theOwner=owner,
                     theSoftware=software,
                     theArea=area,
-                    theQuality=quality,
+                    myQuality=quality,
                     theProcessingLevel=processing_level
         )

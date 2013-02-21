@@ -23,11 +23,17 @@ from datetime import datetime, timedelta
 from xml.dom.minidom import parse
 
 from django.db import transaction
+from django.contrib.gis.geos import WKTReader
+from django.core.management.base import CommandError
 
 from dictionaries.models import (
     SpectralMode,
     SatelliteInstrument,
     OpticalProductProfile)
+from catalogue.models import (
+    Institution,
+    Projection,
+    Quality)
 
 
 def parseDateTime(theDate):
@@ -117,8 +123,39 @@ def ingest(
         % (theTestOnlyFlag, theSourceDir, theVerbosityLevel, theLicense,
            theOwner, theSoftware, theQuality, theHaltOnErrorFlag), 2)
 
-    # Scan the source folder and look for any subfolders
-    # The subfolder names should be e.g. L519890503170076
+    # Get the owner - maybe fetch this via the OpticalProductProfile
+    # if theOwner is None? TS
+    try:
+        myOwner = Institution.objects.get_or_create(
+            name=theOwner,
+            defaults={'address1': '',
+                      'address2': '',
+                      'address3': '',
+                      'post_code': '', })[0]
+    except Institution.DoesNotExist:
+        #logMessage('Institution %s does not exists and '
+        #         'cannot be created.' % owner, 2)
+        raise CommandError(
+            'Institution %s does not exist and '
+            'cannot create: aborting' % theOwner)
+    logMessage('Owner: %s' % myOwner)
+
+    # Get the quality assessment. This can't really be determined
+    # programmaticall, so assign as unknown by default.
+    try:
+        myQuality = Quality.objects.get_or_create(name=theQuality)[0]
+    except Quality.DoesNotExist:
+        logMessage(
+            'Quality %s does not exists and cannot be created,'
+            ' it will be read from metadata.' % theQuality, 2)
+        raise CommandError(
+            'Quality %s does not exists and cannot '
+            ' be created: aborting' % theQuality)
+
+    logMessage('Quality: %s' % myQuality, 2)
+
+    # Scan the source folder and look for any sub-folders
+    # The sub-folder names should be e.g. L519890503170076
     # Which will be used as the original_product_id
     logMessage('Scanning folders in %s' % theSourceDir, 1)
     # Loop through each folder found
@@ -244,12 +281,133 @@ def ingest(
             myLowerLeftLon, myLowerLeftLat,
             myUpperLeftLon, myUpperLeftLat))
         logMessage(myWkt, 2)
+
+        # Now make a geometry object
+
+        myReader = WKTReader()
+        myGeometry = myReader.read(myWkt)
+        #logMessage('Geometry: %s' % myGeometry, 2)
+
+        # Get the projection - assume always UTM and South
+        # we just need to find the zone.
+        myElement = myDom.getElementsByTagName('ZONE')[0]
+        myZone = myElement.firstChild.nodeValue
+        logMessage('Zone: %s' % myZone, 2)
+        myProjectionName = 'UTM%sS' % myZone
+        myProjection = Projection.objects.get(name=myProjectionName)
+        logMessage('Projection: %s' % myProjection, 2)
+
+        # Get the original text file metadata
+        mySearchPath = os.path.join(str(myFolder), '*.txt')
+        logMessage(mySearchPath, 2)
+        myTxtFile = glob.glob(mySearchPath)[0]
+        logMessage(myTxtFile, 2)
+        myMedatadataFile = file(myTxtFile, 'rt')
+        myMetadata = myMedatadataFile.readlines()
+        myMedatadataFile.close()
+
         # Check if there is already a matching product based
         # on original_product_id
 
-        # If yes, update
+        # Do the ingestion here...
+        myData = {
+            'metadata': myMetadata,
+            'spatial_coverage': myGeometry,
+            'radiometric_resolution': myRadiometricResolution,
+            'band_count': myBandCount,
+            # integer percent - must be scaled to 0-100 for all ingestors
+            'cloud_cover': int(myFeature.get('CLOUD_PER')),
+            'owner_id': myOwner.id,
+            'license': theLicense,
+            'creating_software': theSoftware,
+            'quality': myQuality,
+            'sensor_inclination_angle': myFeature.get('ANG_INC'),
+            'sensor_viewing_angle': myFeature.get('ANG_ACQ'),
+            'original_product_id': myOriginalProductId,
+            'solar_zenith_angle': mySolarZenithAngle,
+            'solar_azimuth_angle': mySolarAzimuthAngle,
+            'spatial_resolution_x': myFeature.get('RESOL'),
+            'spatial_resolution_y': myFeature.get('RESOL'),
+            # temporary product_profile place holder
+            'product_profile_id': 1
+        }
+        logMessage(myData, 2)
 
-        # If no, create
+        # Check if it's already in catalogue:
+        try:
+            #original_product_id is not necessarily unique
+            #so we use product_id
+            myProduct = OpticalProduct.objects.get(
+                product_id=myProductId
+            ).getConcreteInstance()
+            logMessage(('Already in catalogue: updating %s.'
+                        % myProductId), 2)
+            myNewRecordFlag = False
+            myUpdatedRecordCount += 1
+            myProduct.__dict__.update(myData)
+        except ObjectDoesNotExist:
+            myProduct = OpticalProduct(**myData)
+            logMessage('Not in catalogue: creating.', 2)
+            myNewRecordFlag = True
+            myCreatedRecordCount += 1
+            try:
+                myProduct.productIdReverse(True)
+            except Exception, e:
+                raise CommandError('Cannot get all mandatory data '
+                                   'from product id %s (%s).' % (myProductId, e))
+        logMessage('Saving product and setting thumb', 2)
+        try:
+            myProduct.save()
+            if theTestOnlyFlag:
+                logMessage('Testing: image not saved.', 2)
+                pass
+            else:
+                if myDownloadThumbsFlag:
+                    # Store thumbnail
+                    myThumbsFolder = os.path.join(
+                        settings.THUMBS_ROOT,
+                        myProduct.thumbnailDirectory())
+                    try:
+                        os.makedirs(myThumbsFolder)
+                    except:
+                        pass
+                        # Download original jpeg thumbnail and
+                    # creates a thumbnail
+                    myDownloadedThumb = os.path.join(myThumbsFolder,
+                                                     myProduct.product_id + '.jpg')
+                    myHandle = open(myDownloadedThumb, 'wb+')
+                    myThumbnail = urllib2.urlopen(
+                        myFeature.get('URL_QL'))
+                    myHandle.write(myThumbnail.read())
+                    myThumbnail.close()
+                    myHandle.close()
+                    # Transform and store .wld file
+                    logMessage('Referencing thumb',2)
+                    try:
+                        myProduct.georeferenceThumbnail()
+                    except:
+                        traceback.print_exc(file=sys.stdout)
+                else:
+                    # user opted not to ingest thumbs immediately
+                    # only set the thumb url if it is a new product
+                    # as existing products may already have cached a
+                    # copy
+                    if myNewRecordFlag:
+                        myProduct.remote_thumbnail_url = (
+                            myFeature.get('URL_QL'))
+                        myProduct.save()
+            if myNewRecordFlag:
+                logMessage('Product %s imported.' %
+                           myRecordCount, 2)
+                pass
+            else:
+                logMessage('Product %s updated.' %
+                           myUpdatedRecordCount, 2)
+                pass
+        except Exception, e:
+            traceback.print_exc(file=sys.stdout)
+            raise CommandError('Cannot import: %s' % e)
+
         if theTestOnlyFlag:
             transaction.rollback()
             logMessage('Imported scene : %s' % myProductFolder, 1)
