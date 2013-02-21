@@ -66,7 +66,7 @@ def ingest(theShapeFile,
            will be fetched on demand as searches are made.
         theTestOnlyFlag - (Optional) Defaults to False. Whether to do a dummy
            run (database will not be updated).
-        theVerboseFlag - (Optional) Defaults to 1. How verbose the logging
+        theVerbosityLevel - (Optional) Defaults to 1. How verbose the logging
            output should be. 0-2 where 2 is very very very very verbose!
         theLicense - (Optional) Defaults to 'SANSA Commercial License', License
            holder of the product.
@@ -94,15 +94,15 @@ def ingest(theShapeFile,
         lockfile = lock.lock('/tmp/spot_harvest.lock', timeout=60)
     except error.LockHeld:
         # couldn't take the lock
-        raise CommandError, 'Could not acquire lock.'
+        raise CommandError('Could not acquire lock.')
 
     # Hardcoded
     myProjection = 'ORBIT'
-    myRadiometricResolution= 8
+    myRadiometricResolution = 8
     mySolarZenithAngle = 0
     mySolarAzimuthAngle = 0
 
-    myAreaOfInterest  = None
+    myAreaOfInterest = None
 
     logMessage('Getting verbose (level=%s)... ' % theVerbosityLevel, 2)
     if theTestOnlyFlag:
@@ -115,14 +115,17 @@ def ingest(theShapeFile,
             try:
                 myAreaOfInterest = OGRGeometry(theArea)
                 if not myAreaOfInterest.area:
-                    raise CommandError('Unable to create the area of interest'
-                                        ' polygon: invalid polygon.')
+                    raise CommandError(
+                        'Unable to create the area of interest'
+                        ' polygon: invalid polygon.')
                 if not myAreaOfInterest.geom_type.name == 'Polygon':
-                    raise CommandError('Unable to create the area of interest'
-                                        ' polygon: not a polygon.')
+                    raise CommandError(
+                        'Unable to create the area of interest'
+                        ' polygon: not a polygon.')
             except Exception, e:
-                raise CommandError('Unable to create the area of interest'
-                                    ' polygon: %s.' % e)
+                raise CommandError(
+                    'Unable to create the area of interest'
+                    ' polygon: %s.' % e)
             logMessage('Area of interest filtering activated.', 1)
 
         # Get the params

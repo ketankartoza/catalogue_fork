@@ -2,19 +2,22 @@ from optparse import make_option
 
 from django.core.management.base import BaseCommand
 
+from catalogue.ingestors import landsat
+
 
 class Command(BaseCommand):
     """
-    Tool for harvesting data from the legacy acs catalogue
-    This is a base class - you should overload it for
-    each mission that you want to support.
+    Tool for harvesting Landsat data created by LPGS.
     """
 
-    help = "Imports LPGS Landsat records into the SANSA catalogue"
+    help = 'Imports LPGS Landsat records into the SANSA catalogue'
     option_list = BaseCommand.option_list + (
         make_option('--test_only', '-t', dest='test_only', action='store_true',
                     help='Just test, nothing will be written into the DB.',
                     default=False),
+        make_option('--source_dir', '-d', dest='source_dir', action='store',
+                    help='Source directory containing L7 data to import.',
+                    default='/mnt/cataloguestorage/imagery_processing'),
         make_option('--owner', '-o', dest='owner', action='store',
                     help='Name of the Institution package owner. Defaults to:'
                          ' USGS.',
@@ -40,16 +43,21 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """ command execution """
-
-        def verblog(msg, level=1):
-            if verbose >= level:
-                print msg
-
-        start_record = options.get('start_record')
         test_only = options.get('test_only')
+        source_dir = options.get('source_dir')
         verbose = int(options.get('verbosity'))
-        license = options.get('license')
+        software_license = options.get('license')
         owner = options.get('owner')
         software = options.get('creating_software')
         quality = options.get('quality')
         halt_on_error = options.get('halt_on_error')
+        landsat.ingest(
+            theSourceDir=source_dir,
+            theTestOnlyFlag=test_only,
+            theVerbosityLevel=verbose,
+            theLicense=software_license,
+            theOwner=owner,
+            theSoftware=software,
+            theQuality=quality,
+            theHaltOnErrorFlag=halt_on_error
+        )

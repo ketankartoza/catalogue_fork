@@ -28,7 +28,7 @@ from catalogue.ingestors import landsat
 
 DATA_DIR_PATH = os.path.join(
     os.path.dirname(__file__),
-    'sample_files/landsat5')
+    'sample_files/landsat')
 
 
 class LandsatIngestorTest(TestCase):
