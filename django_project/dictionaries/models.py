@@ -17,6 +17,7 @@ __date__ = '01/11/2012'
 __copyright__ = 'South African National Space Agency'
 
 from django.contrib.gis.db import models
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class OpticalProductProfile(models.Model):
@@ -38,6 +39,27 @@ class OpticalProductProfile(models.Model):
             self.spectral_mode
         )
 
+    def baseProcessingLevel(self):
+        """Return the InstrumentType.base_processing_level for this profile.
+
+        Args:
+            None
+
+        Regards:
+            ProcessingLevel: an instance of the ProcessingLevel model
+                which represents the base processing level for the instrument
+                type.
+
+        Raises:
+            ObjectDoesNotExist
+        """
+
+        myLevel = \
+            self.satellite_instrument.instrument_type.base_processing_level
+        if myLevel is not None:
+            return myLevel
+        raise ObjectDoesNotExist(
+            'There is no processing level defined for the profile')
 
 class RadarProductProfile(models.Model):
     """
