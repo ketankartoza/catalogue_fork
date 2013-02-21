@@ -227,7 +227,11 @@ class GenericProduct(node_factory('catalogue.ProductLink',
     spatial_coverage = models.PolygonField(
         srid=4326, help_text='Image footprint')
     projection = models.ForeignKey(Projection)
-    quality = models.ForeignKey(Quality)
+    quality = models.ForeignKey(
+        Quality,
+        help_text=(
+            'A quality assessment describing the amount of dropouts etc.'
+            'and how usable the entire scene is.'))
     creating_software = models.ForeignKey(
         CreatingSoftware,
         null=False, blank=False)
