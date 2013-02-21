@@ -77,7 +77,7 @@ def get_row_path_from_polygon(poly, as_int=False, no_compass=False):
     return path, path_shift, row, row_shift
 
 class Command(BaseCommand):
-    help = "Imports RapidEye packages into the SAC catalogue"
+    help = "Imports SPOT packages into the SANSA catalogue"
     option_list = BaseCommand.option_list + (
         make_option('--file', '-f', dest='shapefile', action='store',
                     help='Shapefile containing spot coverage data.',
