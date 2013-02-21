@@ -187,8 +187,6 @@ class AdvancedSearchForm(forms.ModelForm):
     # Note2: Only custom fields are added here. Fields that need no tweaking
     #        are pulled by the form generator directly from the model
 
-    POLARISING_MODE_CHOICES = {'': 'All'}
-    POLARISING_MODE_CHOICES.update(dict(RadarProduct.POLARISING_MODE_CHOICES))
     # ABP: the common part: will be searched on GenericProducts class only
     start_datepicker = forms.DateField(
         widget=DateTimeWidget(
@@ -225,15 +223,7 @@ class AdvancedSearchForm(forms.ModelForm):
             ' be used. Complex polygons will increase search time.'))
 
     isAdvanced = forms.CharField(widget=forms.HiddenInput(), required=False)
-    polarising_mode = forms.ChoiceField(
-        choices=tuple(POLARISING_MODE_CHOICES.viewitems()), required=False)
-    geometry = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-        help_text=(
-            'Digitising an area of interest is not required but is recommended'
-            '. You can use the help tab in the map area for more information '
-            'on how to use the map. Draw an area of interest on the map to '
-            'refine the set of search results to a specific area.'))
+
     aoi_geometry = AOIGeometryField(
         widget=forms.TextInput(attrs={'title': (
             'Enter bounding box coordinates separated by comma for Upper '
@@ -254,9 +244,7 @@ class AdvancedSearchForm(forms.ModelForm):
         help_text=(
             'Insert the frame row as a list of comma separated values or '
             'ranges (e.g. : "10,20,30" or "20-40")'))
-    # exclude PRODUCT_SEARCH_GENERIC from Search.PRODUCT_SEARCH_TYPES
-    search_type = forms.ChoiceField(
-        choices=Search.PRODUCT_SEARCH_TYPES[1:], required=False)
+
     cloud_mean = forms.IntegerField(
         min_value=0, max_value=100, initial=0,
         help_text=(
@@ -307,15 +295,14 @@ class AdvancedSearchForm(forms.ModelForm):
                     data_search_type='adv'
                 ),
                 Fieldset(
-                    'Sensors:',
+                    'Instrument type:',
                     Div(
-                        Field('sensors', template='myField.html'),
+                        Field('instrumenttype', template='myField.html'),
                         css_class="span5"
                     ),
                     Div(
-                        Field('mission', template='myField.html'),
-                        Field('sensor_type', template='myField.html'),
-                        Field('acquisition_mode', template='myField.html'),
+                        Field('satellite', template='myField.html'),
+                        Field('product_profile', template='myField.html'),
                         css_class="offset1 span5"
                     )
                 ),
@@ -388,7 +375,7 @@ class AdvancedSearchForm(forms.ModelForm):
         )
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
         # define smmple search form fields
-        SIMPLE_FORM_FIELDS = ['sensors', 'start_datepicker', 'end_datepicker']
+        SIMPLE_FORM_FIELDS = ['instrumenttype', 'start_datepicker', 'end_datepicker']
         for myFieldName, myField in self.fields.items():
             # Simple way to assign css class to every field
             if myFieldName not in SIMPLE_FORM_FIELDS:
@@ -398,18 +385,18 @@ class AdvancedSearchForm(forms.ModelForm):
                     myField.widget.attrs['title'] == ''):
                 myField.widget.attrs['title'] = myField.help_text
 
-        self.fields['sensors'].required = True
+        self.fields['instrumenttype'].required = True
         # Do not list empty dictionary items (avoid null searches)
-        qs = AcquisitionMode.objects.order_by()
-        self.fields['sensors'].queryset = (MissionSensor.objects
-            .filter(pk__in=qs.distinct().values_list(
-                'sensor_type__mission_sensor', flat=True))
-            .filter(has_data=True)
-            .order_by('name'))
-        self.fields['mission'].queryset = (Mission.objects
-            .filter(pk__in=qs.distinct().values_list(
-                'sensor_type__mission_sensor__mission', flat=True))
-            .filter(missionsensor__has_data=True))
+        # qs = AcquisitionMode.objects.order_by()
+        # self.fields['sensor'].queryset = (MissionSensor.objects
+        #     .filter(pk__in=qs.distinct().values_list(
+        #         'sensor_type__mission_sensor', flat=True))
+        #     .filter(has_data=True)
+        #     .order_by('name'))
+        # self.fields['mission'].queryset = (Mission.objects
+        #     .filter(pk__in=qs.distinct().values_list(
+        #         'sensor_type__mission_sensor__mission', flat=True))
+        #     .filter(missionsensor__has_data=True))
 
     def clean_guid(self):
         """Custom validator for guid"""
