@@ -1,7 +1,6 @@
 {# included in search.html or pulled in by ajax #}
 {% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
 {% load crispy_forms_tags %}
-
 {% crispy myForm %}
 <button onClick="submitSearchForm();" class="btn btn-success" class="default" name="_search" title="Click here to execute your search.">Search</button>
 {{myForm.media}}
@@ -15,14 +14,16 @@
     };
 
     function submitSearchForm(){
+      block();
       check_search_dates();
       if (datesOk){
         $.post('/search/', $("#search_form").serializeArray(), function(data) {
-            loadSearchResults( 1, data.guid )
-          //$('#search-results-container').load('/rendersearchresultspage/' + data.guid +'/');
+            loadSearchResults( 1, data.guid );
+        }).fail(function(data) {
+            $('#search-form-container').html(data.responseText);
+            unblock();
         });
-        //$('#search-results-container').load('/search/', $("#search_form").serializeArray());
-        //document.forms["search_form"].submit();
+
       } else {
         alert ("The Start Date is later than the End Date.");
       }

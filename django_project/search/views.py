@@ -39,7 +39,7 @@ from django.http import (
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 #from django.contrib.admin.views.decorators import staff_member_required
-from django.template import RequestContext
+from django.template import RequestContext, loader, Context
 #from django.db.models import Count, Min, Max  # for aggregate queries
 from django.forms.models import inlineformset_factory
 
@@ -137,7 +137,7 @@ def search(theRequest):
     logger.info('search called')
     post_values = theRequest.POST.copy()
     if theRequest.method == 'POST':
-        myForm = AdvancedSearchForm(post_values, theRequest.FILES)
+        myForm = AdvancedSearchFormv3(post_values, theRequest.FILES)
         if myForm.is_valid():
             mySearch = myForm.save(commit=False)
             # ABP: save_as_new is necessary due to the fact that a new Search
@@ -232,11 +232,18 @@ def search(theRequest):
         else:
             myFormset = DateRangeInlineFormSet(
                 theRequest.POST, theRequest.FILES, save_as_new=True)
-
         logger.info('form is INVALID after editing')
         logger.debug('%s' % myForm.errors)
         logger.debug('%s' % myFormset.errors)
+        t = loader.get_template('searchPanelv3.html')
+        c = Context({
+            'myForm': myForm,
+            'myHost': settings.HOST,
+            'myFormset': myFormset})
+        return HttpResponseServerError(
+            t.render(c))
         #render_to_response is done by the renderWithContext decorator
+        """
         return render_to_response(
             'search.html', {
                 'myAdvancedFlag': detectAdvancedSearchForm(myForm),
@@ -248,7 +255,7 @@ def search(theRequest):
                 'myLayersList': myLayersList,
                 'myActiveBaseMap': myActiveBaseMap},
             context_instance=RequestContext(theRequest))
-
+        """
     else:
         logger.info('initial search form being rendered')
         myForm = AdvancedSearchFormv3()
