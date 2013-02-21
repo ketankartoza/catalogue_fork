@@ -63,7 +63,7 @@ $(document).ready(function()
   //setup help dialog
   setupSceneIdHelpDialog();
   //block the user interface when an ajax request is sent
-  $(".blocking-link").live('click',block);
+  //$(".blocking-link").live('click',block);
   //check for messages every 60 s
   setInterval(checkForMessages, 60000);
 });
@@ -76,12 +76,12 @@ $(document).ready(function()
 
 function unblock()
 {
-  //$.unblockUI();
+  $.unblockUI();
 }
 
 function block()
 {
-  /*
+  
   $.blockUI({ message: '<h2><img src="/media/images/ajax-loader.gif" /> Loading...</h2>',
       css: {
         border: '1px solid #000',
@@ -93,7 +93,7 @@ function block()
         color: '#000'
         }
       });
-*/
+
 }
 
 function getLayerByName( theName )
@@ -399,6 +399,12 @@ function revealTable()
   unblock();
 }
 
+function loadSearchResults( theNumber, theSearchGuid )
+{
+  block();
+  $("#search-results-container").load("/rendersearchresultspage/" + theSearchGuid + "/?page=" + theNumber,"",unblock);
+}
+
 function loadPage( theNumber, theSearchGuid )
 {
   block();
@@ -551,7 +557,8 @@ function setupSearchMap( theLayers )
   addSelectControl();
   // Read WKT from the text field.
 
-  var myWKT = document.getElementById('id_geometry').value;
+  //var myWKT = document.getElementById('id_geometry').value;
+  var myWKT = $('#id_geometry').val();
   //var myWKT = false;
   if (myWKT)
   {
@@ -761,10 +768,10 @@ function setupSceneIdHelpDialog()
     buttons: { "Close" : function() { $(this).dialog('close'); } }
   });
 
-  $('#scene-id-help').live('click', (function () {
+  $('#scene-id-help').click (function () {
     mySceneIdHelpDialog.dialog('open');
     return false;
-  }));
+  });
 }
 
 function setupMapHelpDialog()

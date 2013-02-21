@@ -1,5 +1,28 @@
 {# included in search.html or pulled in by ajax #}
 {% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
+    <script>
+    {% if myLayerDefinitions %}
+      {% for myValue in myLayerDefinitions %}
+      {{ myValue|safe }}
+      {% endfor %}
+    {% endif %}
+    var myLayersList = {{myLayersList|safe}}
+    // Here we use a predefined layer that will be kept up to date with URL changes
+    var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Open Street Map");
+    //myLayersList.unshift(layerMapnik); // add to start of array
+    myLayersList.push(layerMapnik); // add to end of array
+
+    {% if myLayersList %}
+      setupSearchMap( myLayersList );
+    {% endif %}
+    mMap.setBaseLayer( {{ myActiveBaseMap }} );
+    //setupMapHelpDialog();
+
+    $('#OpenLayers_Control_MaximizeDiv_innerImage').css({'height':'100px'}); {# //dirty hack, OL sets 'style' element which cannot be overriden by CSS #}
+    $("#map-container").mapResizer({'map':mMap});
+    var pageLoaded=true;
+    </script>
+
 <div class="accordion" id="accordion-map">
   <div class="accordion-group">
     <div class="accordion-heading">

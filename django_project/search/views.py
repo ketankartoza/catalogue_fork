@@ -509,3 +509,47 @@ def downloadSearchResultMetadata(theRequest, theGuid):
     else:
         return downloadISOMetadata(
             mySearcher.mSearchRecords, 'Search-%s' % theGuid)
+
+
+def renderSearchForm(theRequest):
+    """
+    Returns Search Form HTML used with AJAX calls
+    """
+    logger.info('initial search form being rendered')
+    myForm = AdvancedSearchFormv3()
+    myFormset = DateRangeInlineFormSet()
+    #render_to_response is done by the renderWithContext decorator
+    return render_to_response(
+        'searchPanelv3.html', {
+            'myForm': myForm,
+            'myFormset': myFormset},
+        context_instance=RequestContext(theRequest))
+
+
+def renderSearchMap(theRequest):
+    """
+    Returns Search Map HTML used with AJAX calls
+    """
+    logger.info('initial search map being rendered')
+    myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
+        theRequest)
+    #render_to_response is done by the renderWithContext decorator
+    return render_to_response(
+        'map_containerv3.html', {
+            'myLayerDefinitions': myLayerDefinitions,
+            'myLayersList': myLayersList,
+            'myActiveBaseMap': myActiveBaseMap},
+        context_instance=RequestContext(theRequest))
+
+
+#@login_required
+#renderWithContext is explained in renderWith.py
+@renderWithContext('pagev3.html')
+def renderSearchResultsPage(theRequest, theGuid):
+    """
+    Does the same as searchResultMap but renders only enough html to be
+    inserted into a div
+    """
+    mySearcher = Searcher(theRequest, theGuid)
+    mySearcher.search()
+    return(mySearcher.templateData())
