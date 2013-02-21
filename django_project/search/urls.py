@@ -2,7 +2,6 @@ from django.conf.urls import patterns, url
 
 from .views import (
     modifySearch,
-    productIdSearch,
     searchResultMap,
     searchResultPage,
     downloadSearchResult,
@@ -19,8 +18,6 @@ urlpatterns = patterns(
     '',
     url(r'^modifysearch/(?P<theGuid>[a-h0-9\-]{36})/$',
         modifySearch, name='modifySearch'),
-    url(r'^productIdSearch/(?P<theGuid>[a-h0-9\-]{36})/$',
-        productIdSearch, name='productIdSearch'),
     #show a single search map
     url(r'^searchresult/(?P<theGuid>[a-h0-9\-]{36})/$',
         searchResultMap, name='searchResultMap'),

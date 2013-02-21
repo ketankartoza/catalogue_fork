@@ -86,8 +86,7 @@ from .models import (
 from .forms import (
     AdvancedSearchForm,
     AdvancedSearchFormv3,
-    DateRangeFormSet,
-    ProductIdSearchForm,
+    DateRangeFormSet
 )
 
 
@@ -352,91 +351,6 @@ def modifySearch(theRequest, theGuid):
             'myLayersList': myLayersList,
             'myActiveBaseMap': myActiveBaseMap},
         context_instance=RequestContext(theRequest))
-
-
-@login_required
-# theRequest context decorator not used here since we have different return
-# paths
-def productIdSearch(theRequest, theGuid):
-    """
-    Display the product id builder, based on initial existing Search values,
-    the following interaction is ajax based.
-    This kind of search is only available when search_type is
-    PRODUCT_SEARCH_OPTICAL
-    """
-    myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
-        theRequest)
-    mySearch = get_object_or_404(Search, guid=theGuid)
-
-    if mySearch.search_type != Search.PRODUCT_SEARCH_OPTICAL:
-        raise Http500(
-            'productIdSearch is only available for products of type '
-            'PRODUCT_SEARCH_OPTICAL')
-
-    logger.info(
-        'productIdSearch initializing values from existing search %s' % (
-            theGuid,))
-    mySearcher = Searcher(theRequest, theGuid)
-    mySearcher.search()
-    myTemplateData = mySearcher.templateData()
-
-    if theRequest.method == 'POST':
-        myForm = ProductIdSearchForm(
-            theRequest.POST, theRequest.FILES, instance=mySearch)
-        if myForm.is_valid():
-            logger.info('productIdSearch form is VALID after editing')
-            logger.info(
-                'productIdSearch cleaned_data: %s' % myForm.cleaned_data)
-            myForm.save()
-            # Save new date ranges
-            if myForm.cleaned_data.get('date_range'):
-                mySearch.searchdaterange_set.all().delete()
-                # http://stackoverflow.com/
-                # questions/400739/what-does-mean-in-python
-                # for ** explanation below
-                mySearch.searchdaterange_set.add(
-                    SearchDateRange(**myForm.cleaned_data.get('date_range')))
-            # Save new sensors
-            if myForm.cleaned_data.get('sensors'):
-                for sensor in myForm.cleaned_data.get('sensors'):
-                    mySearch.sensors.add(sensor)
-            if theRequest.is_ajax():
-                # ABP: Returns a json object with query description.
-                # We need to instantiate the Searcher since search logic
-                # is not in the Search class :(
-                mySearcher = Searcher(theRequest, theGuid)
-                return HttpResponse(simplejson.dumps(
-                    mySearcher.describeQuery()), mimetype='application/json')
-            else:
-                return HttpResponseRedirect(
-                    reverse(
-                        'searchResultMap', kwargs={'theGuid': mySearch.guid})
-                )
-
-        else:
-            logger.info('form is INVALID after editing')
-            if theRequest.is_ajax():
-                # Sends a 500
-                return HttpResponseServerError(
-                    simplejson.dumps(myForm.errors),
-                    mimetype='application/json')
-            return render_to_response(
-                'productIdSearch.html', {
-                    'mySearch': mySearch,
-                    'myForm': myForm,
-                    'theGuid': theGuid},
-                context_instance=RequestContext(theRequest))
-    else:
-        myForm = ProductIdSearchForm(instance=mySearch)
-        logger.info('initial search form being rendered')
-        myTemplateData['mySearch'] = mySearch
-        myTemplateData['myForm'] = myForm
-        myTemplateData['theGuid'] = theGuid
-        myTemplateData['filterValues'] = simplejson.dumps(
-            mySearcher.describeQuery()['values'])
-        return render_to_response(
-            'productIdSearch.html', myTemplateData,
-            context_instance=RequestContext(theRequest))
 
 
 #@login_required
