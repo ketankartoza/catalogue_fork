@@ -4,6 +4,7 @@ from catalogue.tests import simple_tests, dims_lib_test, \
 
 #import unittest classes
 from catalogue.tests.test_spot_ingestor import SpotIngestorTest
+from catalogue.tests.test_landsat_ingestor import LandsatIngestorTest
 from catalogue.tests.simpleTest import SimpleTest
 from catalogue.tests.license_model import LicenseCRUD_Test
 from catalogue.tests.missionGroup_model import MissionGroupCRUD_Test

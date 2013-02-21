@@ -24,6 +24,7 @@ import logging
 @transaction.commit_manually
 def ingest(
         theTestOnlyFlag=False,
+        theSourceDir=None,
         theVerbosityLevel=1,
         theLicense='SANSA Commercial License',
         theOwner='USGS',
@@ -33,12 +34,13 @@ def ingest(
     print((
         'Running LGPS Landsat Importer with these options:\n'
         'Test Only Flag: %s\n'
+        'Source Dir: %s\n'
         'Verbosity Level: %s\n'
         'License: %s\n'
         'Owner: %s\n'
         'Software: %s\n'
         'Quality: %s\n'
         '------------------')
-        % (theTestOnlyFlag, theVerbosityLevel, theLicense, theOwner,
-           theSoftware, theQuality))
+        % (theTestOnlyFlag, theSourceDir, theVerbosityLevel, theLicense,
+           theOwner, theSoftware, theQuality))
     pass

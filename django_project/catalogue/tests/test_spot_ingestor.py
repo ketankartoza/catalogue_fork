@@ -19,6 +19,7 @@ __date__ = '12/07/2012'
 __copyright__ = 'South African National Space Agency'
 
 import os
+import unittest
 from django.test import TestCase
 from django.core.management import call_command
 from catalogue.models import (Institution,
@@ -27,12 +28,15 @@ from catalogue.models import (Institution,
                               SensorType)
 from catalogue.ingestors import spot
 
-SHAPEFILE_NAME = os.path.join(os.path.dirname( __file__),
-                              'sample_files/spot-ingestion/Africa_2012_subset.shp')
+
+SHAPEFILE_NAME = os.path.join(
+    os.path.dirname(__file__),
+    'sample_files/spot-ingestion/Africa_2012_subset.shp')
+
 
 class SpotIngestorTest(TestCase):
     """
-    Tests Email Notifications (see catalogue.views.helpers)
+    Tests SPOT ingestor
     """
 
     fixtures = [
@@ -78,8 +82,7 @@ class SpotIngestorTest(TestCase):
         'test_deliverymethod.json',
         'test_fileformat.json',
         'test_resamplingmethod.json',
-        'test_deliverydetail.json',
-        ]
+        'test_deliverydetail.json']
 
     def setUp(self):
         """
@@ -89,10 +92,10 @@ class SpotIngestorTest(TestCase):
 
     def testImportUsingManagementCommand(self):
         """Test that we can ingest spot using the management command"""
-        call_command('spot_harvest',
-                                verbosity=2,
-                                shapefile=SHAPEFILE_NAME)
-
+        call_command(
+            'spot_harvest',
+            verbosity=2,
+            shapefile=SHAPEFILE_NAME)
 
     def testImportDirectly(self):
         """Test that we can ingest spot using the ingestor function"""
@@ -110,16 +113,18 @@ class SpotIngestorTest(TestCase):
             myFormattedList += myProduct.product_id + '\n'
 
         # Test that 'T' Color products are not ingested
-        myExpectedProductId = ('S5-_HRG_T--_S5C2_0100_00_0368_00'
-                                '_120510_090310_1B--_ORBIT-')
+        myExpectedProductId = (
+            'S5-_HRG_T--_S5C2_0100_00_0368_00'
+            '_120510_090310_1B--_ORBIT-')
         myMessage = 'Expected:\n%s\nTo be in:\n%s\n' % (
             myExpectedProductId,
             myFormattedList)
         assert myExpectedProductId not in myList, myMessage
 
         # Test that 'T' Grayscale products ARE  ingested
-        myExpectedProductId = ('S5-_HRG_T--_S5C2_0100_00_0368_00'
-                                '_120510_090308_1B--_ORBIT-')
+        myExpectedProductId = (
+            'S5-_HRG_T--_S5C2_0100_00_0368_00'
+            '_120510_090308_1B--_ORBIT-')
         myMessage = 'Expected:\n%s\nTo be in:\n%s\n' % (
             myExpectedProductId,
             myFormattedList)
@@ -143,19 +148,20 @@ class SpotIngestorTest(TestCase):
         #
         # Test importing only recs in an area of interest
         #
-        myArea = ('POLYGON('
-                 '(16.206099 -5.592359,'
-                 '16.206099 -6.359587,'
-                 '17.293880 -6.359587,'
-                 '17.293880 -5.592359,'
-                 '16.206099 -5.592359))')
+        myArea = (
+            'POLYGON('
+            '(16.206099 -5.592359,'
+            '16.206099 -6.359587,'
+            '17.293880 -6.359587,'
+            '17.293880 -5.592359,'
+            '16.206099 -5.592359))')
         print myArea
         myProductCount = GenericProduct.objects.count()
         spot.ingest(theShapeFile=SHAPEFILE_NAME,
                     theVerbosityLevel=1,
                     theArea=myArea)
         myNewProductCount = GenericProduct.objects.count()
-        self.assertEqual(myProductCount+4, myNewProductCount)
+        self.assertEqual(myProductCount + 4, myNewProductCount)
 
     def testAcquisitionCreation(self):
         """Test that acquisistion modes are made on demand"""
