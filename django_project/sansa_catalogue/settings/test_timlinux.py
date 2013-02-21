@@ -13,4 +13,5 @@ DATABASES = {
 }
 
 # OSX - see readme in geoip data dir
-GEOIP_LIBRARY_PATH = '/opt/local/lib/libGeoIP.dylib'
+if 'Darwin' in platform.platform():
+    GEOIP_LIBRARY_PATH = '/opt/local/lib/libGeoIP.dylib'
