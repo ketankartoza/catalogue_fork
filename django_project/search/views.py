@@ -85,7 +85,6 @@ from .models import (
 
 from .forms import (
     AdvancedSearchForm,
-    AdvancedSearchFormv3,
     DateRangeFormSet
 )
 
@@ -136,7 +135,7 @@ def search(theRequest):
     logger.info('search called')
     post_values = theRequest.POST.copy()
     if theRequest.method == 'POST':
-        myForm = AdvancedSearchFormv3(post_values, theRequest.FILES)
+        myForm = AdvancedSearchForm(post_values, theRequest.FILES)
         if myForm.is_valid():
             mySearch = myForm.save(commit=False)
             # ABP: save_as_new is necessary due to the fact that a new Search
@@ -257,7 +256,7 @@ def search(theRequest):
         """
     else:
         logger.info('initial search form being rendered')
-        myForm = AdvancedSearchFormv3()
+        myForm = AdvancedSearchForm()
         myFormset = DateRangeInlineFormSet()
         #render_to_response is done by the renderWithContext decorator
         return render_to_response(
@@ -437,7 +436,7 @@ def renderSearchForm(theRequest):
     Returns Search Form HTML used with AJAX calls
     """
     logger.info('initial search form being rendered')
-    myForm = AdvancedSearchFormv3()
+    myForm = AdvancedSearchForm()
     myFormset = DateRangeInlineFormSet()
     #render_to_response is done by the renderWithContext decorator
     return render_to_response(

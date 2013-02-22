@@ -304,38 +304,6 @@ class Search(BaseSearch):
             fdicts.append(cur_row)
         return fdicts
 
-    @property
-    def isAdvanced(self):
-        """
-        Checks wether the Search is an advanced Search.
-        Condition for being an advanced search is that at least one of the
-        advanced parameter is set
-        """
-        myAdvParameterTestList = [
-            self.processing_level.count() > 0,
-            self.keywords != '',
-            self.k_orbit_path is not None and self.k_orbit_path != '',
-            self.j_frame_row is not None and self.j_frame_row != '',
-            self.use_cloud_cover is True,
-            self.acquisition_mode is not None,
-            self.spatial_resolution is not None,
-            self.band_count is not None,
-            self.sensor_inclination_angle_start is not None,
-            self.sensor_inclination_angle_end is not None,
-            self.mission is not None,
-            self.license_type is not None,
-            self.sensor_type is not None
-        ]
-        #if any of myAdvParameterTestList is True, return True
-        return any(myAdvParameterTestList)
-
-    # def sensorsAsString(self):
-    #     myList = self.sensors.values_list('operator_abbreviation', flat=True)
-
-    #     # sort returned sensor list, required for constant expeted output
-    #     myString = ', '.join(sorted(myList))
-    #     return myString
-
     def datesAsString(self):
         """
         Date ranges formatted
