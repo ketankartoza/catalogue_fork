@@ -134,7 +134,7 @@ def search(theRequest):
     logger.info('search called')
     post_values = theRequest.POST
     if theRequest.method == 'POST':
-        logger.debug('Post vars:', str(theRequest.POST))
+        logger.debug('Post vars: %s', str(theRequest.POST))
         myForm = AdvancedSearchForm(post_values, theRequest.FILES)
         if myForm.is_valid():
             logger.info('AdvancedForm is VALID')
@@ -255,7 +255,6 @@ def search(theRequest):
             context_instance=RequestContext(theRequest))
         """
     else:
-        logger.info('initial search form being rendered')
         myForm = AdvancedSearchForm()
         myFormset = DateRangeInlineFormSet()
         #render_to_response is done by the renderWithContext decorator
@@ -417,6 +416,8 @@ def renderSearchResultsPage(theRequest, theGuid):
     Does the same as searchResultMap but renders only enough html to be
     inserted into a div
     """
-    mySearcher = Searcher(theRequest, theGuid)
+    mySearch = get_object_or_404(Search, guid=theGuid)
+    logger.debug('Search found, initializing Serarcher class')
+    mySearcher = Searcher(theRequest, mySearch)
     mySearcher.search()
     return(mySearcher.templateData())
