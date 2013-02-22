@@ -24,7 +24,6 @@ from django.contrib.auth.models import User
 # ABP: unused ? from catalogue.geoiputils import *
 from catalogue.nosubclassmanager import NoSubclassManager
 from catalogue.models import (
-    ProcessingLevel,
     Projection,
     MissionSensor)
 
@@ -143,7 +142,9 @@ class DeliveryDetail(models.Model):
     """
     user = models.ForeignKey(User)
     processing_level = models.ForeignKey(
-        ProcessingLevel, verbose_name='Processing Level', default=3
+        'dictionaries.ProcessingLevel',
+        verbose_name='Processing Level',
+        default=3
     )
     projection = models.ForeignKey(
         Projection, verbose_name='Projection', default=3

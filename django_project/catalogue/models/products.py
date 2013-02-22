@@ -45,7 +45,6 @@ from catalogue.models import (
     MissionSensor,
     MissionGroup,
     SensorType,
-    ProcessingLevel,
     Institution,
     License,
     Projection,
@@ -221,7 +220,7 @@ class GenericProduct(node_factory('catalogue.ProductLink',
     """
 
     product_date = models.DateTimeField(db_index=True)
-    processing_level = models.ForeignKey(ProcessingLevel)
+    processing_level = models.ForeignKey('dictionaries.ProcessingLevel')
     owner = models.ForeignKey(Institution)
     license = models.ForeignKey(License)
     spatial_coverage = models.PolygonField(
@@ -277,9 +276,12 @@ class GenericProduct(node_factory('catalogue.ProductLink',
         #db_table = 'sample_genericproduct'
 
     def __unicode__(self):
-        if self.product_id:
-            return u"%s" % self.product_id
-        return u"Internal ID: %d" % self.pk
+        if self.original_product_id:
+            return u"%s" % self.original_product_id
+        if self.id is not None:
+            return u"Internal ID: %d" % self.id
+        else:
+            return u'Unsaved product with no id'
 
     @runconcrete
     def getAbstract(self):
@@ -469,17 +471,29 @@ class GenericProduct(node_factory('catalogue.ProductLink',
 
         return myBackground
 
-    def georeferencedThumbnail(self, theForceFlag=False):
+    def georeferencedThumbnail(self, theBBoxFlag=False, theForceFlag=False):
         """
-        Return the full path to the georeferenced thumb. Will actually do the
-        georeferencing of the thumb if needed.
+        Return the full path to the georeferenced thumb.
 
-        return thumb full path, e.g.
-        myJpg = product.georeferencing()
+        Will actually do the eoreferencing of the thumb if needed.
+
+        Args:
+            * theBBoxFlag: bool - whether to geoerference on the bounding box
+                or on the scene footprint (latter is default). For example
+                with SPOT thumbnails the image is unrotated in the thumb,
+                 so we need to use the imagery footprint so that it gets
+                 rotated. In Landsat thumbs, they are already rotated so we
+                 should use the bounding box for georeferencing.
+            * theForceFlag: bool - whether to force regeneration of the thumb
+                even if it already exists.
+
+        Returns:
+            str: thumb full path, e.g.  myJpg = product.georeferencing()
 
         To get the world file, simply add a .wld extention to the return var
-        We dont return it explicitly as we can only return a single param
+        We don't return it explicitly as we can only return a single param
         if we want to use this method in template.
+
         Be careful of using the force flag - some of the thumbs (e.g. newer
         imports from acs) are already georeferenced natively and referencing
         them again will give them an additional rotation.
@@ -517,34 +531,44 @@ class GenericProduct(node_factory('catalogue.ProductLink',
         # two vertices. Thereafter, determining which is 'top' and which is
         # bottom is a simple case of comparing the Y values in each grouping.
         #
-        # Note the above logic makes some assumptions about the oreintation of
+        # Note the above logic makes some assumptions about the orientation of
         # the swath which may not hold true for every sensor.
         #
 
         myImageXDim = myImage.size[0]
         myImageYDim = myImage.size[1]
-        myCandidates = []
-        try:
-            #should only be a single arc in our case!
-            for myArc in self.spatial_coverage.coords:
-                for myCoord in myArc[:-1]:
-                    if coordIsOnBounds(myCoord, myExtents):
-                        myCandidates.append(myCoord)
-        except:
-            raise
-            # print "Candidates Before: %s %s " % (
-        #    len(myCandidates), str(myCandidates))
-        myCentroid = self.spatial_coverage.centroid
-        try:
-            myCandidates = sortCandidates(myCandidates, myExtents, myCentroid)
-        except:
-            raise
-            # print "Candidates After: %s %s " % (
-        #    len(myCandidates), str(myCandidates))
-        myTL = myCandidates[0]
-        myTR = myCandidates[1]
-        myBR = myCandidates[2]
-        myBL = myCandidates[3]
+
+        if theBBoxFlag:
+            # Use the bounding box when georeferencing
+            myTL = myExtents[0]
+            myTR = myExtents[1]
+            myBR = myExtents[2]
+            myBL = myExtents[3]
+        else:
+            # use the imagery footprint
+            myCandidates = []
+            try:
+                #should only be a single arc in our case!
+                for myArc in self.spatial_coverage.coords:
+                    for myCoord in myArc[:-1]:
+                        if coordIsOnBounds(myCoord, myExtents):
+                            myCandidates.append(myCoord)
+            except:
+                raise
+                # print "Candidates Before: %s %s " % (
+            #    len(myCandidates), str(myCandidates))
+            myCentroid = self.spatial_coverage.centroid
+            try:
+                myCandidates = sortCandidates(
+                    myCandidates, myExtents, myCentroid)
+            except:
+                raise
+                # print "Candidates After: %s %s " % (
+            #    len(myCandidates), str(myCandidates))
+            myTL = myCandidates[0]
+            myTR = myCandidates[1]
+            myBR = myCandidates[2]
+            myBL = myCandidates[3]
 
         myString = (
             'gdal_translate -a_srs "EPSG:4326" -gcp 0 0 %s %s -gcp %s 0 %s %s '
@@ -1120,101 +1144,6 @@ class GenericSensorProduct(GenericImageryProduct):
             logger.debug("Failed to move some or all of the assets")
 
         return
-
-    def productIdReverse(self, force=False):
-        """
-        Parse a product_id and populates the following instance fields:
-
-        mission *
-        mission_sensor *
-        sensor_type *
-        acquisition_mode *
-        projection *
-        processing_level *
-        path
-        path_offset
-        row
-        row_offset
-        product_acquisition_start
-
-        [*] If "force" is set, the missing pieces are created on-the-fly if not
-            exists
-
-
-        S5-_HRG_J--_CAM2_0172_+1_0388_00_110124_070818_L1A-_ORBIT--Vers.0.01
-        #SAT_SEN_TYP_MODE_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
-
-        Where:
-        SAT    Satellite or mission          mandatory
-        SEN    Sensor                        mandatory
-        TYP    Type                          mandatory
-        MODE    Acquisition mode              mandatory
-        KKKK   Orbit path reference          optional?
-        KS     Path shift                    optional?
-        JJJJ   Orbit row reference           optional?
-        JS     Row shift                     optional?
-        YYMMDD Acquisition date              mandatory
-        HHMMSS Scene centre acquisition time mandatory
-        LEVL   Processing level              mandatory
-        PROJTN Projection                    mandatory
-        """
-        parts = self.product_id.replace('-', '').split('_')
-        # Searches for an existing acquisition_mode,
-        # raise an error if do not match
-        try:
-            self.acquisition_mode = AcquisitionMode.objects.get(
-                sensor_type__mission_sensor__mission__abbreviation=parts[0],
-                sensor_type__mission_sensor__abbreviation=parts[1],
-                abbreviation=parts[2],
-                sensor_type__abbreviation=parts[3]
-            )
-        except ObjectDoesNotExist:
-            if not force:
-                raise
-                # Create missing pieces of the chain
-            mission = Mission.objects.get_or_create(
-                abbreviation=parts[0], defaults={
-                    'name': parts[0],
-                    'mission_group': MissionGroup.objects.all()[0]
-                })[0]
-            mission_sensor = MissionSensor.objects.get_or_create(
-                abbreviation=parts[1], mission=mission)[0]
-            sensor_type = SensorType.objects.get_or_create(
-                abbreviation=parts[2], mission_sensor=mission_sensor)[0]
-            self.acquisition_mode = AcquisitionMode.objects.get_or_create(
-                abbreviation=parts[3], sensor_type=sensor_type,
-                defaults={'spatial_resolution': 0, 'band_count': 1})[0]
-
-        try:
-            self.projection = Projection.objects.get(name=parts[11][:6])
-        except Projection.DoesNotExist:
-            if not force:
-                raise
-                # Create Projection
-            self.projection = Projection.objects.get_or_create(
-                name=parts[11][:6], defaults={'epsg_code': 0})
-
-        # Skip "L"
-        self.processing_level = ProcessingLevel.objects.get_or_create(
-            abbreviation=re.sub(r'^L', '', parts[10]),
-            defaults={'name': 'Level %s' % re.sub(r'^L', '', parts[10])})[0]
-        # K Path Orbit
-        self.path = int(parts[4])
-        self.path_offset = int(parts[5])
-        # J Frame Row
-        self.row = int(parts[6])
-        self.row_offset = int(parts[7])
-        d = parts[8]
-        t = parts[9]
-        #Account for millenium split
-        myYear = 0
-        if int(d[:2]) < 70:
-            myYear = int('20' + d[:2])
-        else:
-            myYear = int('19' + d[:2])
-        self.product_acquisition_start = datetime.datetime(
-            myYear, int(d[2:4]), int(d[-2:]), int(t[:2]), int(t[2:4]),
-            int(t[-2:]))
 
     def toHtml(self, theImageIsLocal=False):
         """

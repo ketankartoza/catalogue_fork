@@ -19,7 +19,7 @@ __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
 from catalogue.tests.test_utils import simpleMessage
-from catalogue.models import ProcessingLevel
+from dictionaries.models import ProcessingLevel
 
 
 class ProcessingLevelCRUD_Test(TestCase):

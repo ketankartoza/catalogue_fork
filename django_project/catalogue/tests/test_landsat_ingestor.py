@@ -65,7 +65,8 @@ class LandsatIngestorTest(TestCase):
         'test_collection.json',
         'test_satellite.json',
         'test_satelliteinstrument.json',
-        'test_productprofile.json',
+        'test_opticalproductprofile.json',
+        'test_radarproductprofile.json',
 
         'test_genericproduct.json',
         'test_genericimageryproduct.json',
@@ -76,6 +77,8 @@ class LandsatIngestorTest(TestCase):
         'test_deliverymethod.json',
         'test_fileformat.json',
         'test_resamplingmethod.json',
+        'test_imagingmode.json',
+        'test_radarbeam.json',
         'test_deliverydetail.json']
 
     def setUp(self):

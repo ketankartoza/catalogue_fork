@@ -74,17 +74,18 @@ models.signals.pre_save.connect(
 
 def setGeometricResolution(sender, instance, **kwargs):
     """
-    Sets default spatial_resolution_x and spatial_resolution_y
-    from AcquisitionMode.spatial_resolution
+    Sets default spatial resolution to average of x and y if populated.
     Sets spatial_resolution as the average value from spatial_resolution_x and
-    spatial_resolution_y
+    spatial_resolution_y.
 
     Args:
-        theSender - The model class
-        theInstance - The actual instance being saved
-        **kwargs - other keyword arguments
+        * theSender - The model class
+        * theInstance - The actual instance being saved
+        * **kwargs - other keyword arguments
+
     Returns:
         None
+
     Exceptions:
         None
     """
@@ -93,28 +94,14 @@ def setGeometricResolution(sender, instance, **kwargs):
     #https://docs.djangoproject.com/en/1.4/ref/signals/#pre-save
     if not kwargs.get('raw', False):
         logger.info('Pre-save signal activated for %s' % instance)
-        if not instance.spatial_resolution_x:
-            instance.spatial_resolution_x = (
-                instance.acquisition_mode.spatial_resolution)
-            logger.debug('setting spatial_resolution_x to %s' % (
-                instance.spatial_resolution_x,)
+        if instance.spatial_resolution_x and not instance.spatial_resolution_y:
+            instance.spatial_resolution = (
+                instance.spatial_resolution_y +
+                instance.spatial_resolution_x) / 2.0
+            logger.debug('setting spatial_resolution to %s' % (
+                instance.spatial_resolution,)
             )
-        if not instance.spatial_resolution_y:
-            instance.spatial_resolution_y = (
-                instance.acquisition_mode.spatial_resolution)
-            logger.debug('setting spatial_resolution_y to %s' % (
-                instance.spatial_resolution_y,)
-            )
-        instance.spatial_resolution = (
-            instance.spatial_resolution_y +
-            instance.spatial_resolution_y) / 2.0
-        logger.debug('setting spatial_resolution to %s' % (
-            instance.spatial_resolution,)
-        )
 
-        if not instance.band_count:
-            instance.band_count = instance.acquisition_mode.band_count
-            logger.debug('setting band_count to %s' % instance.band_count)
 
 # Apply to all GenericImageryProduct and subclasses
 models.signals.pre_save.connect(

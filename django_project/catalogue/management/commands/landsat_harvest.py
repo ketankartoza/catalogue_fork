@@ -25,7 +25,12 @@ class Command(BaseCommand):
         make_option('--creating_software', '-s', dest='creating_software',
                     action='store',
                     help='Name of the creating software. Defaults to: Unknown.',
-                    default='LPGS 11.6.0'),
+                    default='LPGS'),
+        make_option('--creating_software_version', '-v',
+                    dest='creating_software_version',
+                    action='store',
+                    help='Version of creating software. Defaults to: 11.6.0.',
+                    default='11.6.0'),
         make_option('--license', '-l', dest='license', action='store',
                     default='SANSA Commercial License',
                     help='Name of the license. Defaults to: SANSA Commercial '
@@ -49,6 +54,7 @@ class Command(BaseCommand):
         software_license = options.get('license')
         owner = options.get('owner')
         software = options.get('creating_software')
+        software_version = options.get('creating_software_version')
         quality = options.get('quality')
         halt_on_error = options.get('halt_on_error')
         landsat.ingest(
@@ -58,6 +64,7 @@ class Command(BaseCommand):
             theLicense=software_license,
             theOwner=owner,
             theSoftware=software,
+            theSoftwareVersion=software_version,
             theQuality=quality,
             theHaltOnErrorFlag=halt_on_error
         )
