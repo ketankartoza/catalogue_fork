@@ -15,29 +15,13 @@
 
     function submitSearchForm(){
       block();
-      check_search_dates();
-      if (datesOk){
-        $.post('/search/', $("#search_form").serializeArray(), function(data) {
-            loadSearchResults( 1, data.guid );
-        }).fail(function(data) {
-            $('#search-form-container').html(data.responseText);
-            unblock();
-        });
+      $.post('/search/', $("#search_form").serializeArray(), function(data) {
+          loadSearchResults( 1, data.guid );
+      }).fail(function(data) {
+          $('#search-form-container').html(data.responseText);
+          unblock();
+      });
 
-      } else {
-        alert ("The Start Date is later than the End Date.");
-      }
-    }
-
-    function check_search_dates() {
-      var datesOK;
-      var sd = $("#id_start_datepicker").val();
-      var ed = $("#id_end_datepicker").val();
-      if (sd > ed) {
-        datesOk=false;
-      } else {
-        datesOk=true;
-      }
     }
 
     $('#dr_container').sansa_daterangecontainer();

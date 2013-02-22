@@ -24,7 +24,7 @@ LOGGING = {
         },
         'simple': {
             'format': (
-                '%(asctime)s %(levelname)s %(filename)s L%(lineno)s: '
+                '%(name)s %(levelname)s %(filename)s L%(lineno)s: '
                 '%(message)s')
         },
     },
@@ -65,7 +65,7 @@ LOGGING = {
     # 'root_console' handler
     'root': {
         'handlers': ['logfile'],
-        'level': 'DEBUG'
+        'level': 'WARNING'
     }
 }
 

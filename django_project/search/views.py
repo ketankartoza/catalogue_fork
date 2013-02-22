@@ -74,7 +74,7 @@ from catalogue.views.geoiputils import GeoIpUtils
 
 
 # modularized app dependencies
-from .searcher import (
+from .new_searcher import (
     Searcher)
 
 from .models import (
@@ -131,12 +131,13 @@ def search(theRequest):
 
     myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
         theRequest)
-    logger.debug(('Post vars:' + str(theRequest.POST)))
     logger.info('search called')
-    post_values = theRequest.POST.copy()
+    post_values = theRequest.POST
     if theRequest.method == 'POST':
+        logger.debug('Post vars:', str(theRequest.POST))
         myForm = AdvancedSearchForm(post_values, theRequest.FILES)
         if myForm.is_valid():
+            logger.info('AdvancedForm is VALID')
             mySearch = myForm.save(commit=False)
             # ABP: save_as_new is necessary due to the fact that a new Search
             # object is always
@@ -145,13 +146,12 @@ def search(theRequest):
                 post_values, theRequest.FILES, instance=mySearch,
                 save_as_new=True)
             if myFormset.is_valid():
-                logger.info('formset is VALID')
+                logger.info('Daterange formset is VALID')
                 myLatLong = {'longitude': 0, 'latitude': 0}
 
                 if settings.USE_GEOIP:
                     try:
                         myGeoIpUtils = GeoIpUtils()
-                        myIp = myGeoIpUtils.getMyIp(theRequest)
                         myLatLong = myGeoIpUtils.getMyLatLong(theRequest)
                     except:
                         # raise forms.ValidationError( "Could not get geoip for
@@ -225,8 +225,8 @@ def search(theRequest):
                 )
                 """
             else:
-                logger.info('formset is INVALID')
-                logger.debug('%s' % myFormset.errors)
+                logger.debug('Daterange formset is NOT VALID')
+                logger.debug(myFormset.errors)
         else:
             myFormset = DateRangeInlineFormSet(
                 theRequest.POST, theRequest.FILES, save_as_new=True)
@@ -270,59 +270,6 @@ def search(theRequest):
                 'myLayersList': myLayersList,
                 'myActiveBaseMap': myActiveBaseMap},
             context_instance=RequestContext(theRequest))
-
-
-@login_required
-def getSensorDictionaries(theRequest):
-    """
-    Given a set of search sensor-releated criteria, returns
-    valid options for the selects.
-    """
-    values = {}
-    if theRequest.is_ajax():
-        # ABP: Returns a json object with the dictionary possible values
-        qs = AcquisitionMode.objects.order_by()
-        if (int(theRequest.POST.get('search_type')) in
-                (Search.PRODUCT_SEARCH_RADAR, Search.PRODUCT_SEARCH_OPTICAL)):
-            is_radar = (
-                (int(theRequest.POST.get('search_type'))
-                    == Search.PRODUCT_SEARCH_RADAR))
-            qs = qs.filter(sensor_type__mission_sensor__is_radar=is_radar)
-        values['mission'] = list(qs.distinct().values_list(
-            'sensor_type__mission_sensor__mission', flat=True))
-        if theRequest.POST.get('mission'):
-            try:
-                qs = qs.filter(
-                    sensor_type__mission_sensor__mission=
-                    Mission.objects.get(pk=theRequest.POST.get('mission')))
-            except ObjectDoesNotExist:
-                raise Http500('Mission does not exists')
-        # m2m
-        values['sensors'] = list(qs.distinct().values_list(
-            'sensor_type__mission_sensor', flat=True))
-        if theRequest.POST.get('sensors'):
-            try:
-                qs = qs.filter(
-                    sensor_type__mission_sensor__in=MissionSensor.objects
-                    .filter(pk__in=theRequest.POST.getlist('sensors')))
-            except ObjectDoesNotExist:
-                raise Http500('SensorType does not exists')
-        values['sensor_type'] = list(qs.distinct().values_list(
-            'sensor_type', flat=True))
-        if theRequest.POST.get('sensor_type'):
-            try:
-                qs = qs.filter(
-                    sensor_type=SensorType.objects.get(
-                        pk=theRequest.POST.get('sensor_type')))
-            except ObjectDoesNotExist:
-                raise Http500('SensorType does not exists')
-        values['acquisition_mode'] = list(qs.distinct().values_list(
-            'pk', flat=True))
-        if  theRequest.POST.get('acquisition_mode'):
-            qs = qs.filter(pk=theRequest.POST.get('acquisition_mode'))
-        return HttpResponse(
-            simplejson.dumps(values), mimetype='application/json')
-    raise Http500('This view must be called by XHR')
 
 
 #@login_required
