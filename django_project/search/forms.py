@@ -302,7 +302,6 @@ class AdvancedSearchForm(forms.ModelForm):
                     ),
                     Div(
                         Field('satellite', template='myField.html'),
-                        Field('product_profile', template='myField.html'),
                         css_class="offset1 span5"
                     )
                 ),

@@ -122,41 +122,4 @@ WHERE sensor_type_id IN (182, 184, 187);
 UPDATE search_search SET spectral_mode_id = 18
 WHERE sensor_type_id = 185;
 
-
--- update productprofile (was acquisition mode)
-
-UPDATE search_search SET  product_profile_id = 11
-WHERE acquisition_mode_id = 40;
-
-UPDATE search_search SET  product_profile_id = 28
-WHERE acquisition_mode_id = 81;
-
-UPDATE search_search SET  product_profile_id = 17
-WHERE acquisition_mode_id = 48;
-
-UPDATE search_search SET  product_profile_id = 6
-WHERE acquisition_mode_id = 15;
-
--- this is radarproduct
--- UPDATE search_search SET  product_profile_id = 1
--- WHERE acquisition_mode_id = 2;
-
-UPDATE search_search SET  product_profile_id = 36
-WHERE acquisition_mode_id = 97;
-
-UPDATE search_search SET  product_profile_id = 24
-WHERE acquisition_mode_id = 77;
-
-UPDATE search_search SET  product_profile_id = 2
-WHERE acquisition_mode_id = 11;
-
-UPDATE search_search SET  product_profile_id = 27
-WHERE acquisition_mode_id = 80;
-
-UPDATE search_search SET  product_profile_id = 23
-WHERE acquisition_mode_id = 76;
-
-UPDATE search_search SET  product_profile_id = 18
-WHERE acquisition_mode_id = 49;
-
 COMMIT;

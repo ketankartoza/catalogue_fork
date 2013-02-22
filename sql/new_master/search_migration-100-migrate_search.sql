@@ -1,7 +1,6 @@
 BEGIN;
 
 ALTER TABLE "search_search" ADD "satellite_id" integer REFERENCES "dictionaries_satellite" ("id") DEFERRABLE INITIALLY DEFERRED;
-ALTER TABLE "search_search" ADD "product_profile_id" integer REFERENCES "dictionaries_opticalproductprofile" ("id") DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE "search_search" ADD "spectral_mode_id" integer REFERENCES "dictionaries_spectralmode" ("id") DEFERRABLE INITIALLY DEFERRED;
 
 CREATE TABLE "search_search_instrumenttype" (
@@ -22,7 +21,6 @@ ALTER TABLE "search_search_instrumenttype" ADD CONSTRAINT "search_id_refs_id_8a5
 ALTER TABLE "search_search_processing_level" ADD CONSTRAINT "search_id_refs_id_2503a17" FOREIGN KEY ("search_id") REFERENCES "search_search" ("id") DEFERRABLE INITIALLY DEFERRED;
 
 CREATE INDEX "search_search_satellite_id" ON "search_search" ("satellite_id");
-CREATE INDEX "search_search_product_profile_id" ON "search_search" ("product_profile_id");
 CREATE INDEX "search_search_spectral_mode_id" ON "search_search" ("spectral_mode_id");
 
 

@@ -25,8 +25,6 @@ from django.contrib.gis.db import models
 
 from catalogue.models import License
 
-from catalogue.fields import IntegersCSVIntervalsField
-
 ###############################################################################
 
 
@@ -216,11 +214,7 @@ class Search(BaseSearch):
         'dictionaries.Satellite', null=True, blank=True,
         help_text='Select satellite mission.'
     )  # e.g. S5
-    product_profile = models.ForeignKey(
-        'dictionaries.OpticalProductProfile',
-        blank=True, null=True,
-        help_text='Choose satellite instrument matching spectral mode'
-    )
+
     k_orbit_path = models.CharField(
         max_length=255, blank=True, null=True,
         help_text=(
