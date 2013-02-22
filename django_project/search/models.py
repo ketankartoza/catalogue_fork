@@ -23,12 +23,7 @@ from datetime import datetime
 
 from django.contrib.gis.db import models
 
-from catalogue.models import (
-    License,
-    RadarProduct
-)
-
-from catalogue.fields import IntegersCSVIntervalsField
+from catalogue.models import License
 
 ###############################################################################
 
@@ -121,7 +116,39 @@ class SearchRecord(models.Model):
 #
 ###############################################################################
 
-class Search(models.Model):
+class BaseSearch(models.Model):
+    """
+    ABC Search model, generic search fields
+    """
+    user = models.ForeignKey('auth.User', null=True, blank=True)
+    geometry = models.PolygonField(
+        srid=4326, null=True, blank=True,
+        help_text=
+        'Digitising an area of interest is not required but is recommended.')
+
+    ip_position = models.PointField(srid=4326, null=True, blank=True)
+    search_date = models.DateTimeField(
+        'Search Date', auto_now=True, auto_now_add=True,
+        help_text='When the search was made - not shown to users')
+    # e.g. 16fd2706-8baf-433b-82eb-8c7fada847da
+    guid = models.CharField(max_length=40, unique=True)
+    deleted = models.NullBooleanField(
+        'Deleted?', blank=True, null=True, default=True,
+        help_text='Mark this search as deleted so the user doesn not see it')
+
+    record_count = models.IntegerField(blank=True, null=True, editable=False)
+
+    class Meta:
+        abstract = True
+
+    def save(self):
+        #makes a random globally unique id
+        if not self.guid or self.guid == 'null':
+            self.guid = str(uuid.uuid4())
+        super(BaseSearch, self).save()
+
+
+class Search(BaseSearch):
     """
     Stores search results
     """
@@ -174,113 +201,77 @@ class Search(models.Model):
         BAND_COUNT_HYPERSPECTRAL: (41, 1000)
     }
 
-    # ABP: added to store which product to search
-    # Values for the search_type parameter
-
-    # default in case of blank/null/0 = simple search
-    PRODUCT_SEARCH_GENERIC = 0
-    PRODUCT_SEARCH_OPTICAL = 1
-    PRODUCT_SEARCH_RADAR = 2
-    PRODUCT_SEARCH_GEOSPATIAL = 3
-    PRODUCT_SEARCH_IMAGERY = 4
-
-    PRODUCT_SEARCH_TYPES = (
-        (PRODUCT_SEARCH_GENERIC, 'Generic product search'),
-        (PRODUCT_SEARCH_OPTICAL, 'Optical product search'),
-        (PRODUCT_SEARCH_RADAR, 'Radar product search'),
-        (PRODUCT_SEARCH_GEOSPATIAL, 'Geospatial product search'),
-        # ABP: has no idea if this makes sense
-        (PRODUCT_SEARCH_IMAGERY, 'Generic imagery product search'),
-    )
-
-    search_type = models.IntegerField(
-        'Search type', default=1, choices=PRODUCT_SEARCH_TYPES, db_index=True)
-    user = models.ForeignKey('auth.User', null=True, blank=True)
-    keywords = models.CharField('Keywords', max_length=255, blank=True)
     # foreign keys require the first arg to the be the relation name
     # so we explicitly have to use verbose_name for the user friendly name
-    sensors = models.ManyToManyField(
-        'catalogue.MissionSensor',
-        verbose_name='Sensors', null=True, blank=True,
+    instrumenttype = models.ManyToManyField(
+        'dictionaries.InstrumentType',
+        verbose_name=u'Instrument Types', null=True, blank=True,
         help_text=(
-            'Choosing one or more sensor is required. Use ctrl-click to '
-            'select more than one.'))
-    geometry = models.PolygonField(
-        srid=4326, null=True, blank=True,
-        help_text=
-        'Digitising an area of interest is not required but is recommended.')
+            'Choosing one or more instrument types is required. Use ctrl-click'
+            ' to select more than one.')
+    )
+    satellite = models.ForeignKey(
+        'dictionaries.Satellite', null=True, blank=True,
+        help_text='Select satellite mission.'
+    )  # e.g. S5
+
     k_orbit_path = models.CharField(
         max_length=255, blank=True, null=True,
         help_text=(
             'Path (K) value. If specified here, geometry will be ignored. '
             'Must be a value between 1 and 233. Can also be specified as a '
             'comma separated list of values or a range. Will be ignored if '
-            'sensor type does not include J/K metadata.'))
+            'sensor type does not include J/K metadata.')
+    )
     j_frame_row = models.CharField(
         max_length=255, blank=True, null=True,
         help_text=(
             'Row (J) value. If specified here, geometry will be ignored. Must '
             'be a value between 1 and 248. Can also be specified as a comma '
             'separated list of values or a range. Will be ignored if sensor '
-            'type does not include J/K metadata.'))
-
-    # let the user upload shp to define their search box
-    # uploaded files will end up in media/uploads/2008/10/12 for example
-    # geometry_file = models.FileField(null=True,blank=True,
-    #    upload_to="uploads/%Y/%m/%d")
-    ip_position = models.PointField(srid=4326, null=True, blank=True)
-    search_date = models.DateTimeField(
-        'Search Date', auto_now=True, auto_now_add=True,
-        help_text='When the search was made - not shown to users')
-    # e.g. 16fd2706-8baf-433b-82eb-8c7fada847da
-    guid = models.CharField(max_length=40, unique=True)
-    deleted = models.NullBooleanField(
-        'Deleted?', blank=True, null=True, default=True,
-        help_text='Mark this search as deleted so the user doesn not see it')
+            'type does not include J/K metadata.')
+    )
     use_cloud_cover = models.BooleanField(
         'Use cloud cover?', blank=False, null=False, default=False,
         help_text=(
             'If you want to limit searches to optical products with a certain '
-            'cloud cover, enable this.'))
+            'cloud cover, enable this.')
+    )
     cloud_mean = models.IntegerField(
-        null=True,
-        blank=True,
-        verbose_name="Max Clouds",
-        max_length=3)
-    acquisition_mode = models.ForeignKey(
-        'catalogue.AcquisitionMode', blank=True, null=True,
-        help_text='Choose the acquisition mode.')  # e.g. M X T J etc
+        null=True, blank=True, max_length=3,
+        verbose_name="Max Clouds"
+    )
     license_type = models.IntegerField(
         choices=License.LICENSE_TYPE_CHOICES, blank=True, null=True,
-        help_text='Choose a license type.')
+        help_text='Choose a license type.'
+    )
     band_count = models.IntegerField(
         choices=BAND_COUNT_CHOICES, blank=True, null=True,
-        help_text='Select the spectral resolution.')
+        help_text='Select the spectral resolution.'
+    )
     spatial_resolution = models.IntegerField(
         null=True, blank=True, verbose_name='Spatial resolution',
         choices=SPATIAL_RESOLUTION_OPTIONS,
-        help_text='Select mean spatial resolution class.')
+        help_text='Select mean spatial resolution class.'
+    )
     # sensor_inclination_angle: range
     sensor_inclination_angle_start = models.FloatField(
         null=True, blank=True,
-        help_text='Select sensor inclination angle start.')
+        help_text='Select sensor inclination angle start.'
+    )
     sensor_inclination_angle_end = models.FloatField(
         null=True, blank=True,
-        help_text='Select sensor inclination angle end.')
-    mission = models.ForeignKey(
-        'catalogue.Mission', null=True, blank=True,
-        help_text='Select satellite mission.')  # e.g. S5
+        help_text='Select sensor inclination angle end.'
+    )
     # e.g. CAM1
-    sensor_type = models.ForeignKey(
-        'catalogue.SensorType',
-        null=True, blank=True, related_name='search_sensor_type')
+    spectral_mode = models.ForeignKey(
+        'dictionaries.SpectralMode',
+        null=True, blank=True
+    )
     processing_level = models.ManyToManyField(
-        'catalogue.ProcessingLevel', null=True, blank=True,
-        help_text='Select one or more processing level.')
-    polarising_mode = models.CharField(
-        max_length=1, null=True, blank=True,
-        choices=RadarProduct.POLARISING_MODE_CHOICES)
-    record_count = models.IntegerField(blank=True, null=True, editable=False)
+        'dictionaries.ProcessingLevel', null=True, blank=True,
+        help_text='Select one or more processing level.'
+    )
     # Use the geo manager to handle geometry
     objects = models.GeoManager()
 
@@ -288,12 +279,6 @@ class Search(models.Model):
         verbose_name = 'Search'
         verbose_name_plural = 'Searches'
         ordering = ('search_date',)
-
-    def save(self):
-        #makes a random globally unique id
-        if not self.guid or self.guid == 'null':
-            self.guid = str(uuid.uuid4())
-        super(Search, self).save()
 
     def __unicode__(self):
         return "%s Guid: %s User: %s" % (
@@ -319,57 +304,6 @@ class Search(models.Model):
             fdicts.append(cur_row)
         return fdicts
 
-    @staticmethod
-    def getDictionaryMap(parm):
-        """
-        Returns the right join chain from a Product model to dictionary
-        parameter
-
-        for example:
-        getSensorDictionaryMap('mission')
-        will return
-        'acquisition_mode__sensor_type__mission_sensor__mission'
-        """
-        if parm == 'sensor_type':
-            return 'acquisition_mode__sensor_type'
-        if parm == 'mission_sensor':
-            return 'acquisition_mode__sensor_type__mission_sensor'
-        if parm == 'mission':
-            return 'acquisition_mode__sensor_type__mission_sensor__mission'
-        return parm
-
-    @property
-    def isAdvanced(self):
-        """
-        Checks wether the Search is an advanced Search.
-        Condition for being an advanced search is that at least one of the
-        advanced parameter is set
-        """
-        myAdvParameterTestList = [
-            self.processing_level.count() > 0,
-            self.keywords != '',
-            self.k_orbit_path is not None and self.k_orbit_path != '',
-            self.j_frame_row is not None and self.j_frame_row != '',
-            self.use_cloud_cover is True,
-            self.acquisition_mode is not None,
-            self.spatial_resolution is not None,
-            self.band_count is not None,
-            self.sensor_inclination_angle_start is not None,
-            self.sensor_inclination_angle_end is not None,
-            self.mission is not None,
-            self.license_type is not None,
-            self.sensor_type is not None
-        ]
-        #if any of myAdvParameterTestList is True, return True
-        return any(myAdvParameterTestList)
-
-    def sensorsAsString(self):
-        myList = self.sensors.values_list('operator_abbreviation', flat=True)
-
-        # sort returned sensor list, required for constant expeted output
-        myString = ', '.join(sorted(myList))
-        return myString
-
     def datesAsString(self):
         """
         Date ranges formatted
@@ -378,32 +312,6 @@ class Search(models.Model):
         for d in self.searchdaterange_set.all():
             result.append(d.local_format())
         return ', '.join(result)
-
-    def getRowChoices(self):
-        """
-        Returns a list of choices
-        """
-        choices = []
-        for r in IntegersCSVIntervalsField.to_tuple(self.j_frame_row):
-            if len(r) == 1:
-                choices.append(r[0])
-            else:
-                choices.extend(range(r[0], r[1] + 1))
-        choices.sort()
-        return choices
-
-    def getPathChoices(self):
-        """
-        Returns a list of choices
-        """
-        choices = []
-        for r in IntegersCSVIntervalsField.to_tuple(self.k_orbit_path):
-            if len(r) == 1:
-                choices.append(r[0])
-            else:
-                choices.extend(range(r[0], r[1] + 1))
-        choices.sort()
-        return choices
 
 ###############################################################################
 #

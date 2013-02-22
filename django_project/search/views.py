@@ -39,7 +39,7 @@ from django.http import (
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 #from django.contrib.admin.views.decorators import staff_member_required
-from django.template import RequestContext
+from django.template import RequestContext, loader, Context
 #from django.db.models import Count, Min, Max  # for aggregate queries
 from django.forms.models import inlineformset_factory
 
@@ -85,8 +85,7 @@ from .models import (
 
 from .forms import (
     AdvancedSearchForm,
-    DateRangeFormSet,
-    ProductIdSearchForm,
+    DateRangeFormSet
 )
 
 
@@ -134,15 +133,16 @@ def search(theRequest):
         theRequest)
     logger.debug(('Post vars:' + str(theRequest.POST)))
     logger.info('search called')
+    post_values = theRequest.POST.copy()
     if theRequest.method == 'POST':
-        myForm = AdvancedSearchForm(theRequest.POST, theRequest.FILES)
+        myForm = AdvancedSearchForm(post_values, theRequest.FILES)
         if myForm.is_valid():
             mySearch = myForm.save(commit=False)
             # ABP: save_as_new is necessary due to the fact that a new Search
             # object is always
             # created even on Search modify pages
             myFormset = DateRangeInlineFormSet(
-                theRequest.POST, theRequest.FILES, instance=mySearch,
+                post_values, theRequest.FILES, instance=mySearch,
                 save_as_new=True)
             if myFormset.is_valid():
                 logger.info('formset is VALID')
@@ -213,22 +213,35 @@ def search(theRequest):
                 logger.debug('Search: ' + str(mySearch))
                 logger.info('form is VALID after editing')
                 myFormset.save()
-
+                to_json = {
+                    "guid": mySearch.guid
+                }
+                return HttpResponse(simplejson.dumps(
+                    to_json), mimetype='application/json')
+                """
                 return HttpResponseRedirect(
                     reverse(
-                        'searchResultMap', kwargs={'theGuid': mySearch.guid})
+                        'searchResultPage', kwargs={'theGuid': mySearch.guid})
                 )
+                """
             else:
                 logger.info('formset is INVALID')
                 logger.debug('%s' % myFormset.errors)
         else:
             myFormset = DateRangeInlineFormSet(
                 theRequest.POST, theRequest.FILES, save_as_new=True)
-
         logger.info('form is INVALID after editing')
         logger.debug('%s' % myForm.errors)
         logger.debug('%s' % myFormset.errors)
+        t = loader.get_template('searchPanelv3.html')
+        c = Context({
+            'myForm': myForm,
+            'myHost': settings.HOST,
+            'myFormset': myFormset})
+        return HttpResponseServerError(
+            t.render(c))
         #render_to_response is done by the renderWithContext decorator
+        """
         return render_to_response(
             'search.html', {
                 'myAdvancedFlag': detectAdvancedSearchForm(myForm),
@@ -240,14 +253,14 @@ def search(theRequest):
                 'myLayersList': myLayersList,
                 'myActiveBaseMap': myActiveBaseMap},
             context_instance=RequestContext(theRequest))
-
+        """
     else:
         logger.info('initial search form being rendered')
         myForm = AdvancedSearchForm()
         myFormset = DateRangeInlineFormSet()
         #render_to_response is done by the renderWithContext decorator
         return render_to_response(
-            'search.html', {
+            'searchv3.html', {
                 'myAdvancedFlag': False,
                 'mySearchType': None,
                 'myForm': myForm,
@@ -339,91 +352,6 @@ def modifySearch(theRequest, theGuid):
         context_instance=RequestContext(theRequest))
 
 
-@login_required
-# theRequest context decorator not used here since we have different return
-# paths
-def productIdSearch(theRequest, theGuid):
-    """
-    Display the product id builder, based on initial existing Search values,
-    the following interaction is ajax based.
-    This kind of search is only available when search_type is
-    PRODUCT_SEARCH_OPTICAL
-    """
-    myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
-        theRequest)
-    mySearch = get_object_or_404(Search, guid=theGuid)
-
-    if mySearch.search_type != Search.PRODUCT_SEARCH_OPTICAL:
-        raise Http500(
-            'productIdSearch is only available for products of type '
-            'PRODUCT_SEARCH_OPTICAL')
-
-    logger.info(
-        'productIdSearch initializing values from existing search %s' % (
-            theGuid,))
-    mySearcher = Searcher(theRequest, theGuid)
-    mySearcher.search()
-    myTemplateData = mySearcher.templateData()
-
-    if theRequest.method == 'POST':
-        myForm = ProductIdSearchForm(
-            theRequest.POST, theRequest.FILES, instance=mySearch)
-        if myForm.is_valid():
-            logger.info('productIdSearch form is VALID after editing')
-            logger.info(
-                'productIdSearch cleaned_data: %s' % myForm.cleaned_data)
-            myForm.save()
-            # Save new date ranges
-            if myForm.cleaned_data.get('date_range'):
-                mySearch.searchdaterange_set.all().delete()
-                # http://stackoverflow.com/
-                # questions/400739/what-does-mean-in-python
-                # for ** explanation below
-                mySearch.searchdaterange_set.add(
-                    SearchDateRange(**myForm.cleaned_data.get('date_range')))
-            # Save new sensors
-            if myForm.cleaned_data.get('sensors'):
-                for sensor in myForm.cleaned_data.get('sensors'):
-                    mySearch.sensors.add(sensor)
-            if theRequest.is_ajax():
-                # ABP: Returns a json object with query description.
-                # We need to instantiate the Searcher since search logic
-                # is not in the Search class :(
-                mySearcher = Searcher(theRequest, theGuid)
-                return HttpResponse(simplejson.dumps(
-                    mySearcher.describeQuery()), mimetype='application/json')
-            else:
-                return HttpResponseRedirect(
-                    reverse(
-                        'searchResultMap', kwargs={'theGuid': mySearch.guid})
-                )
-
-        else:
-            logger.info('form is INVALID after editing')
-            if theRequest.is_ajax():
-                # Sends a 500
-                return HttpResponseServerError(
-                    simplejson.dumps(myForm.errors),
-                    mimetype='application/json')
-            return render_to_response(
-                'productIdSearch.html', {
-                    'mySearch': mySearch,
-                    'myForm': myForm,
-                    'theGuid': theGuid},
-                context_instance=RequestContext(theRequest))
-    else:
-        myForm = ProductIdSearchForm(instance=mySearch)
-        logger.info('initial search form being rendered')
-        myTemplateData['mySearch'] = mySearch
-        myTemplateData['myForm'] = myForm
-        myTemplateData['theGuid'] = theGuid
-        myTemplateData['filterValues'] = simplejson.dumps(
-            mySearcher.describeQuery()['values'])
-        return render_to_response(
-            'productIdSearch.html', myTemplateData,
-            context_instance=RequestContext(theRequest))
-
-
 #@login_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('map.html')
@@ -501,3 +429,47 @@ def downloadSearchResultMetadata(theRequest, theGuid):
     else:
         return downloadISOMetadata(
             mySearcher.mSearchRecords, 'Search-%s' % theGuid)
+
+
+def renderSearchForm(theRequest):
+    """
+    Returns Search Form HTML used with AJAX calls
+    """
+    logger.info('initial search form being rendered')
+    myForm = AdvancedSearchForm()
+    myFormset = DateRangeInlineFormSet()
+    #render_to_response is done by the renderWithContext decorator
+    return render_to_response(
+        'searchPanelv3.html', {
+            'myForm': myForm,
+            'myFormset': myFormset},
+        context_instance=RequestContext(theRequest))
+
+
+def renderSearchMap(theRequest):
+    """
+    Returns Search Map HTML used with AJAX calls
+    """
+    logger.info('initial search map being rendered')
+    myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
+        theRequest)
+    #render_to_response is done by the renderWithContext decorator
+    return render_to_response(
+        'map_containerv3.html', {
+            'myLayerDefinitions': myLayerDefinitions,
+            'myLayersList': myLayersList,
+            'myActiveBaseMap': myActiveBaseMap},
+        context_instance=RequestContext(theRequest))
+
+
+#@login_required
+#renderWithContext is explained in renderWith.py
+@renderWithContext('pagev3.html')
+def renderSearchResultsPage(theRequest, theGuid):
+    """
+    Does the same as searchResultMap but renders only enough html to be
+    inserted into a div
+    """
+    mySearcher = Searcher(theRequest, theGuid)
+    mySearcher.search()
+    return(mySearcher.templateData())

@@ -187,8 +187,6 @@ class AdvancedSearchForm(forms.ModelForm):
     # Note2: Only custom fields are added here. Fields that need no tweaking
     #        are pulled by the form generator directly from the model
 
-    POLARISING_MODE_CHOICES = {'': 'All'}
-    POLARISING_MODE_CHOICES.update(dict(RadarProduct.POLARISING_MODE_CHOICES))
     # ABP: the common part: will be searched on GenericProducts class only
     start_datepicker = forms.DateField(
         widget=DateTimeWidget(
@@ -224,16 +222,6 @@ class AdvancedSearchForm(forms.ModelForm):
             'the shapefile contains more than one polygon, only the first will'
             ' be used. Complex polygons will increase search time.'))
 
-    isAdvanced = forms.CharField(widget=forms.HiddenInput(), required=False)
-    polarising_mode = forms.ChoiceField(
-        choices=tuple(POLARISING_MODE_CHOICES.viewitems()), required=False)
-    geometry = forms.CharField(
-        widget=forms.HiddenInput(), required=False,
-        help_text=(
-            'Digitising an area of interest is not required but is recommended'
-            '. You can use the help tab in the map area for more information '
-            'on how to use the map. Draw an area of interest on the map to '
-            'refine the set of search results to a specific area.'))
     aoi_geometry = AOIGeometryField(
         widget=forms.TextInput(attrs={'title': (
             'Enter bounding box coordinates separated by comma for Upper '
@@ -254,9 +242,7 @@ class AdvancedSearchForm(forms.ModelForm):
         help_text=(
             'Insert the frame row as a list of comma separated values or '
             'ranges (e.g. : "10,20,30" or "20-40")'))
-    # exclude PRODUCT_SEARCH_GENERIC from Search.PRODUCT_SEARCH_TYPES
-    search_type = forms.ChoiceField(
-        choices=Search.PRODUCT_SEARCH_TYPES[1:], required=False)
+
     cloud_mean = forms.IntegerField(
         min_value=0, max_value=100, initial=0,
         help_text=(
@@ -286,7 +272,7 @@ class AdvancedSearchForm(forms.ModelForm):
         """
 
         self.helper = FormHelper()
-        self.helper.form_class = 'span12 form-horizontal gap-top'
+        self.helper.form_class = 'span12 '
         self.helper.form_id = 'search_form'
         self.helper.form_method = 'post'
         self.helper.help_text_inline = True
@@ -295,121 +281,99 @@ class AdvancedSearchForm(forms.ModelForm):
         self.helper.layout = Layout(
             Div(
                 Fieldset(
-                    'Product type details:',
-                    Div(
-                        Field('search_type', template='myField.html'),
-                        css_class="span5"
-                    ),
-                    Div(
-                        Field('license_type', template='myField.html'),
-                        css_class="offset1 span5"
-                    ),
-                    data_search_type='adv'
+                    'Instrument Type',
+                    Field('instrumenttype', template='myField.html'),
+                    Field('satellite', template='myField.html'),
+                    Field('spectral_mode', template='myField.html'),
+                    css_id="collapseSensors",  # rename this class
+                    css_class="in",
+                    data_parent="#accordion-search2",
+                    template="crispy-fieldset-accordion.html"
                 ),
                 Fieldset(
-                    'Sensors:',
-                    Div(
-                        Field('sensors', template='myField.html'),
-                        css_class="span5"
-                    ),
-                    Div(
-                        Field('mission', template='myField.html'),
-                        Field('sensor_type', template='myField.html'),
-                        Field('acquisition_mode', template='myField.html'),
-                        css_class="offset1 span5"
-                    )
+                    'Product type details',
+                    Field('license_type', template='myField.html'),
+                    css_id="collapseProduct",
+                    data_parent="#accordion-search2",
+                    template="crispy-fieldset-accordion.html"
                 ),
                 Fieldset(
-                    'Image details:',
-                    Div(
-                        Field('use_cloud_cover', template='myField.html'),
-                        Field('sensor_inclination_angle_start', template='myField.html'),
-                        Field('spatial_resolution', template='myField.html'),
-                        css_class="span5"
-                    ),
-                    Div(
-                        Field('cloud_mean', template='myField.html'),
-                        Field('sensor_inclination_angle_end', template='myField.html'),
-                        Field('band_count', template='myField.html'),
-                        css_class="offset1 span5"
-                    ),
-                    data_search_type='adv'
+                    'Image details',
+                    Field('use_cloud_cover', template='myField.html'),
+                    Field(
+                        'sensor_inclination_angle_start',
+                        template='myField.html'),
+                    Field('spatial_resolution', template='myField.html'),
+                    Field('cloud_mean', template='myField.html'),
+                    Field(
+                        'sensor_inclination_angle_end',
+                        template='myField.html'),
+                    Field('band_count', template='myField.html'),
+                    css_id="collapseImage",
+                    data_parent="#accordion-search2",
+                    template="crispy-fieldset-accordion.html"
                 ),
                 Fieldset(
-                    'Row & path:',
-                    Div(
-                        Field('k_orbit_path', template='myField.html'),
-                        css_class="span5"
-                    ),
-                    Div(
-                        Field('j_frame_row', template='myField.html'),
-                        css_class="offset1 span5"
-                    ),
-                    data_search_type='adv'
+                    'Row & path',
+                    Field('k_orbit_path', template='myField.html'),
+                    Field('j_frame_row', template='myField.html'),
+                    css_id="collapseRP",
+                    data_parent="#accordion-search2",
+                    template="crispy-fieldset-accordion.html"
                 ),
                 Fieldset(
-                    'Geometry:',
-                    Div(
-                        Field('aoi_geometry', template='myField.html'),
-                        css_class="span5"
-                    ),
-                    Div(
-                        Field('geometry_file', template='myField.html'),
-                        css_class="offset1 span5"
-                    ),
-                    data_search_type='adv'
+                    'Geometry',
+                    Field('aoi_geometry', template='myField.html'),
+                    Field('geometry_file', template='myField.html'),
+                    css_id="collapseGeometry",
+                    data_parent="#accordion-search2",
+                    template="crispy-fieldset-accordion.html"
                 ),
                 Fieldset(
-                    'Dates:',
+                    'Dates',
+                    Field('start_datepicker', template='myField.html'),
+                    Field('end_datepicker', template='myField.html'),
+                    HTML(
+                        '<a id="dr_add" title="Select the dates in the calend'
+                        'ar and click here to add to the list." href="javascri'
+                        'pt:void(0)"><img src="/media/images/selector-add.gif"'
+                        '></a>'),
+                    HTML(
+                        '<a id="dr_del" title="Select the ranges in the list '
+                        'and click here to remove." href="javascript:void(0)">'
+                        '<img src="/media/images/selector-remove.gif"></a>'),
+                    HTML(
+                        '<label for="id_searchdaterange_set">Date range *</lab'
+                        'el>'),
+                    HTML('{{ myFormset.management_form }}'),
                     Div(
-                        Field('start_datepicker', template='myField.html'),
-                        Field('end_datepicker', template='myField.html'),
-                        css_class="span5"
+                        HTML(
+                            '{% for form in myFormset.forms %}<div class="dr_r'
+                            'ow"><div class="dr_input">{{ form }}</div><div cl'
+                            'ass="dr_text" title="Click to select."></div></di'
+                            'v>{% endfor %}'),
+                        id="dr_container",
+                        css_class="well well-small"
                     ),
-                    Div(
-                        HTML('<a id="dr_add" title="Select the dates in the calendar and click here to add to the list." href="javascript:void(0)"><img src="/media/images/selector-add.gif"></a><br />'),
-                        HTML('<a id="dr_del" title="Select the ranges in the list and click here to remove." href="javascript:void(0)"><img src="/media/images/selector-remove.gif"></a>'),
-                        css_class="span1"
-                    ),
-                    Div(
-                        HTML('<label for="id_searchdaterange_set">Date range *</label>'),
-                        HTML('{{ myFormset.management_form }}'),
-                        Div(
-                            HTML('{% for form in myFormset.forms %}<div class="dr_row"><div class="dr_input">{{ form }}</div><div class="dr_text" title="Click to select."></div></div>{% endfor %}'),
-                            id="dr_container",
-                            css_class="well well-small"
-                        ),
-                        css_class="span5"
-                    )
+                    css_id="collapseDates",
+                    data_parent="#accordion-search2",
+                    template="crispy-fieldset-accordion.html"
                 ),
-                css_class="span11"
+                css_id="accordion-search2",
+                template="crispy-div-accordion.html"
             ),
             'geometry'
         )
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
-        # define smmple search form fields
-        SIMPLE_FORM_FIELDS = ['sensors', 'start_datepicker', 'end_datepicker']
+
         for myFieldName, myField in self.fields.items():
-            # Simple way to assign css class to every field
-            if myFieldName not in SIMPLE_FORM_FIELDS:
-                myField.widget.attrs['data-search-type'] = 'adv'
             myField.widget.attrs['class'] = 'ui-corner-all'
             if (not 'title' in myField.widget.attrs or
                     myField.widget.attrs['title'] == ''):
                 myField.widget.attrs['title'] = myField.help_text
 
-        self.fields['sensors'].required = True
-        # Do not list empty dictionary items (avoid null searches)
-        qs = AcquisitionMode.objects.order_by()
-        self.fields['sensors'].queryset = (MissionSensor.objects
-            .filter(pk__in=qs.distinct().values_list(
-                'sensor_type__mission_sensor', flat=True))
-            .filter(has_data=True)
-            .order_by('name'))
-        self.fields['mission'].queryset = (Mission.objects
-            .filter(pk__in=qs.distinct().values_list(
-                'sensor_type__mission_sensor__mission', flat=True))
-            .filter(missionsensor__has_data=True))
+        # we need user to select at least an instrument type
+        self.fields['instrumenttype'].required = True
 
     def clean_guid(self):
         """Custom validator for guid"""
@@ -449,167 +413,19 @@ class AdvancedSearchForm(forms.ModelForm):
     def clean(self):
         myCleanedData = self.cleaned_data
         logging.info('cleaned data: ' + str(myCleanedData))
-        # ABP: checks for advanced search only (not in cleaned_data because it
-        # does not belong to Search model)
-        if self.data.get('isAdvanced') == 'true':
-            # ABP: disabled because the DB has NULL in all rows
-            # if not myCleanedData.get('geometric_accuracy_mean'):
-                #self._errors["geometric_accuracy_mean"] = self.error_class([
-                #"Error: Spatial resolution is required for advanced search!"])
-                #raise forms.ValidationError(
-                #    'Error: One or more required values are missing!')
-            myStartSensorAngle = myCleanedData.get(
-                'sensor_inclination_angle_start')
-            myEndSensorAngle = myCleanedData.get(
-                'sensor_inclination_angle_end')
-            if ((myStartSensorAngle and myEndSensorAngle) and
-                    (myEndSensorAngle < myStartSensorAngle)):
-                self._errors['sensor_inclination_angle_start'] = (
-                    self.error_class(['Check values.']))
-                self._errors['sensor_inclination_angle_end'] = (
-                    self.error_class(['Check values.']))
-                raise forms.ValidationError(
-                    'Error: Start sensor angle can not be greater than the end'
-                    ' sensor angle!')
-        # check if user selected sensors for search
-        if (int(myCleanedData.get('search_type')) in (
-                Search.PRODUCT_SEARCH_OPTICAL, Search.PRODUCT_SEARCH_RADAR)
-                and not myCleanedData.get('sensors')):
-            self._errors['sensors'] = self.error_class([
-                'Please select one or more sensors.'])
+
+        myStartSensorAngle = myCleanedData.get(
+            'sensor_inclination_angle_start')
+        myEndSensorAngle = myCleanedData.get(
+            'sensor_inclination_angle_end')
+        if ((myStartSensorAngle and myEndSensorAngle) and
+                (myEndSensorAngle < myStartSensorAngle)):
+            self._errors['sensor_inclination_angle_start'] = (
+                self.error_class(['Check values.']))
+            self._errors['sensor_inclination_angle_end'] = (
+                self.error_class(['Check values.']))
             raise forms.ValidationError(
-                'Error: Sensors are mandatory for sensors-based products '
-                'search!')
+                'Error: Start sensor angle can not be greater than the end'
+                ' sensor angle!')
 
         return self.cleaned_data
-
-
-class ProductIdSearchForm(forms.ModelForm):
-    """
-    Form for product id search refine
-    """
-    k_orbit_path = NoValidationChoiceField((), required=False)
-    j_frame_row = NoValidationChoiceField((), required=False)
-    date_range = NoValidationChoiceField((), required=False)
-    isAdvanced = forms.CharField(
-        widget=forms.HiddenInput(), required=False, initial=True)
-
-    mission = AbbreviationModelChoiceField(
-        None, empty_label='All', required=False)
-    sensors = AbbreviationModelChoiceField(
-        None, empty_label='All', required=False)
-    acquisition_mode = AbbreviationModelChoiceField(
-        None, empty_label='All', required=False)
-    sensor_type = AbbreviationModelChoiceField(
-        None, empty_label='All', required=False)
-    processing_level = AbbreviationModelChoiceField(
-        None, empty_label='All', required=False)
-
-    class Meta:
-        model = Search
-        fields = (
-            'acquisition_mode', 'sensors', 'sensor_type', 'mission',
-            'acquisition_mode', 'sensor_type', 'k_orbit_path', 'j_frame_row',
-            'processing_level')
-
-    def __init__(self, *args, **kwargs):
-        """
-        Populate lists and set UI CSS class
-        """
-
-        # This form cannot create new objects, only edit existing instances
-        assert 'instance' in kwargs
-
-        super(ProductIdSearchForm, self).__init__(*args, **kwargs)
-        for myField in self.fields:
-            try:
-                self.fields[myField].widget.attrs['class'] = 'ui-corner-all'
-            except AttributeError:
-                pass
-
-        search_instance = self.instance
-
-        #self.fields['sensors'].queryset = search_instance.sensors.all()
-        #if search_instance.acquisition_mode:
-            #self.fields['acquisition_mode'].queryset = (
-            #    AcquisitionMode.objects.filter(
-            #    pk=search_instance.acquisition_mode.pk))
-        #else:
-            #self.fields['acquisition_mode'].queryset = (
-            #    AcquisitionMode.objects.filter(
-            #    sensor_type__mission_sensor__in=search_instance.sensors.all())
-        #if search_instance.sensor_type:
-            #self.fields['sensor_type'].queryset = (
-            #    SensorType.objects.filter(pk=search_instance.sensor_type.pk))
-        #else:
-            #self.fields['sensor_type'].queryset = (
-            #    SensorType.objects.filter(
-            #    mission_sensor__in=search_instance.sensors.all())
-        #if search_instance.mission:
-            #self.fields['mission'].queryset = Mission.objects.filter(
-            #    pk=search_instance.mission.pk)
-        #else:
-            #self.fields['mission'].queryset = Mission.objects.filter(
-            #    missionsensor__in=search_instance.sensors.all())
-        #if search_instance.processing_level:
-            #self.fields['processing_level'].queryset = (
-            #    search_instance.processing_level.all())
-        #else:
-            #self.fields['processing_level'].queryset = (
-            #    ProcessingLevel.objects.all())
-
-        self.fields['acquisition_mode'].queryset = (
-            AcquisitionMode.objects.all())
-        self.fields['sensor_type'].queryset = SensorType.objects.all()
-        self.fields['mission'].queryset = Mission.objects.all()
-        self.fields['processing_level'].queryset = (
-            ProcessingLevel.objects.all())
-        self.fields['sensors'].queryset = MissionSensor.objects.all()
-
-        choices = [('', 'All')]
-        choices.extend(
-            [(i.local_format(), i.local_format())
-                for i in search_instance.searchdaterange_set.all()])
-        self.fields['date_range'].choices = choices
-
-        row_choices = [('', 'All')]
-        row_choices.extend([(l, l) for l in search_instance.getRowChoices()])
-        path_choices = [('', 'All')]
-        path_choices.extend([(l, l) for l in search_instance.getPathChoices()])
-
-        self.fields['k_orbit_path'].choices = path_choices
-        self.fields['j_frame_row'].choices = row_choices
-
-    def clean_sensors(self):
-        """
-        Transform
-        """
-        data = self.cleaned_data['sensors']
-        if not data:
-            return MissionSensor.objects.all()
-        else:
-            return MissionSensor.objects.filter(pk=data.pk)
-
-    def clean_date_range(self):
-        """
-        Transform
-        """
-        ranges = self.cleaned_data['date_range']
-        if not ranges:
-            return None
-
-        try:
-            start_date, end_date = SearchDateRange.from_local_format(ranges)
-        except ValueError, e:
-            raise forms.ValidationError('Error: date is not valid. %s' % e)
-        if not start_date <= end_date:
-            raise forms.ValidationError('Error: date range is not valid.')
-        return {'start_date': start_date, 'end_date': end_date}
-
-    def clean_processing_level(self):
-        """
-        Transform
-        """
-        if not self.cleaned_data['processing_level']:
-            return []
-        return [self.cleaned_data['processing_level']]

@@ -86,8 +86,10 @@ class OthersViews_visitorMap_Tests(TestCase):
                 'visitorMap',
                 kwargs={}))
         self.assertEqual(myResp.status_code, 200)
-        self.assertEqual(
-            len(myResp.context['myMessages']), 8)
+        # this assertion depends on the IP of the server that runs tests
+        # ATM we can't reliably test this
+        # self.assertEqual(
+        #     len(myResp.context['myMessages']), 8)
         self.assertEqual(
             len(myResp.context['myExtents']), 16)
         self.assertEqual(

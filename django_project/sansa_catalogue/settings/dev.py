@@ -25,7 +25,7 @@ try:
         'debug_toolbar',
     )
     DEBUG_TOOLBAR_CONFIG = {
-        'INTERCEPT_REDIRECTS': True,
+        'INTERCEPT_REDIRECTS': False,
         # always show toolbar
         'SHOW_TOOLBAR_CALLBACK': lambda *args, **kwargs: True,
         'ENABLE_STACKTRACES': True
