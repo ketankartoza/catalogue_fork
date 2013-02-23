@@ -88,6 +88,11 @@ from .forms import (
     DateRangeFormSet
 )
 
+from dictionaries.models import (
+    OpticalProductProfile,
+    InstrumentType
+)
+
 
 class Http500(Exception):
     pass
@@ -414,3 +419,59 @@ def renderSearchResultsPage(theRequest, theGuid):
     mySearcher = Searcher(theRequest, mySearch)
     mySearcher.search()
     return(mySearcher.templateData())
+
+
+def updateSelectOptions(theRequest):
+    mySelInstrumentType = theRequest.GET.getlist('instrumenttypes')
+    mySelSatellite = theRequest.GET.get('satellite')
+    mySelSpectralMode = theRequest.GET.get('spectralmode')
+
+    myOPP = OpticalProductProfile.objects
+    if mySelInstrumentType != []:
+        logger.debug('setting insttype %s', mySelInstrumentType)
+        myOPP = myOPP.filter(
+            satellite_instrument__instrument_type__in=mySelInstrumentType)
+    if mySelSatellite != '':
+        logger.debug('setting satellite %s', mySelSatellite)
+        myOPP = myOPP.filter(
+            satellite_instrument__satellite=mySelSatellite)
+    if mySelSpectralMode != '':
+        logger.debug('setting spectral mode %s', mySelSpectralMode)
+        myOPP = myOPP.filter(
+            spectral_mode=mySelSpectralMode)
+    # get all
+    myData = myOPP.select_related(
+        'spectral_mode', 'satellite_instrument__satellite',
+        'satellite_instrument__instrument_type').all()
+
+    # if user selected instrument type or spectral_mode filter inst_types
+    if mySelSatellite != '' or mySelSpectralMode != '':
+        logger.debug('User selected satellite or spectral mode')
+        myInstrumentTypes = sorted(
+            set([(
+                b.satellite_instrument.instrument_type.pk,
+                unicode(b.satellite_instrument.instrument_type)
+                ) for b in myData]))
+    else:
+        logger.debug('User DID NOT select satellite or spectral mode')
+        # show all instrument types
+        tmpInstTypes = InstrumentType.objects.all().order_by('id')
+        myInstrumentTypes = [(b.pk, unicode(b)) for b in tmpInstTypes]
+    # filter and sort satellites/spectral_modes
+    mySatellites = sorted(
+        set([(
+            b.satellite_instrument.satellite.pk,
+            unicode(b.satellite_instrument.satellite)
+            ) for b in myData]))
+    mySpectralModes = sorted(
+        set([(
+            b.spectral_mode.pk,
+            unicode(b.spectral_mode)
+            ) for b in myData]))
+    myFinalData = {
+        'instrumenttypes': myInstrumentTypes,
+        'satellites': mySatellites,
+        'spectralmodes': mySpectralModes
+    }
+    return HttpResponse(
+        simplejson.dumps(myFinalData), mimetype='application/json')

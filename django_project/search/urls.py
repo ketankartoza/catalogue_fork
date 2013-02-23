@@ -9,7 +9,8 @@ from .views import (
     search,
     renderSearchForm,
     renderSearchMap,
-    renderSearchResultsPage
+    renderSearchResultsPage,
+    updateSelectOptions
 )
 
 
@@ -33,4 +34,6 @@ urlpatterns = patterns(
     url(r'^rendersearchmap/$', renderSearchMap, name='renderSearchMap'),
     url(r'^rendersearchresultspage/(?P<theGuid>[a-h0-9\-]{36})/$',
         renderSearchResultsPage, name='renderSearchResultsPage'),
+    url(r'^updateselectoptions/$', updateSelectOptions,
+        name='updateSelectOptions'),
 )

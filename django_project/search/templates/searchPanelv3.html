@@ -7,6 +7,39 @@
 
 <script>
 
+    function getSelectOptions() {
+      block();
+      var sel_insttypes = [];
+      $('#id_instrumenttype option:selected').each(function(i, selected) {
+        sel_insttypes[i] = $(selected).val();
+      });
+
+      var sel_satellite = $('#id_satellite option:selected').val();
+      var sel_spectralmode = $('#id_spectral_mode option:selected').val();
+      console.log(sel_insttypes);
+      var getData = {
+        'instrumenttypes': sel_insttypes,
+        'satellite': sel_satellite,
+        'spectralmode': sel_spectralmode
+      };
+
+      $.getJSON('{% url "updateSelectOptions" %}', $.param(getData, true)).done(function(data){
+        console.log('instrument_types');
+        $(data.instrumenttypes).each(function (i,option){
+          console.log(option);
+        });
+        console.log('satellites');
+        $(data.satellites).each(function (i,option){
+          console.log(option);
+        });
+        console.log('spectral_modes');
+        $(data.spectralmodes).each(function (i,option){
+          console.log(option);
+        });
+      })
+      unblock();
+    }
+
     function check_sensor_inclination_angles() {
         var sv = parseInt($("#id_sensor_inclination_angle_start").val());
         var ev = parseInt($("#id_sensor_inclination_angle_end").val());
@@ -33,5 +66,9 @@
     $('#dr_container').sansa_daterangecontainer();
     $('#id_start_datepicker, #id_end_datepicker').datepicker({
       'autoclose':true
+    });
+
+    $("select").change(function (){
+      getSelectOptions();
     });
 </script>
