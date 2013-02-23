@@ -21,8 +21,11 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+from datetime import timedelta
+
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.conf import settings
+from django.db.models import Q
 
 # Models and forms for our app
 from .models import (
@@ -47,6 +50,7 @@ class Searcher:
         self.mSearch = theSearch
         self.mRequest = theRequest
         self.mSearchRecords = []
+        self.mExtent = None
 
         self.filterCriteria()
 
@@ -55,11 +59,28 @@ class Searcher:
         Construct search filter
         """
 
+        # filter instrument type
         myOPP = OpticalProductProfile.objects.for_instrumenttypes(
             self.mSearch.instrumenttype)
 
         self.mQuerySet = OpticalProduct.objects.filter(
             product_profile__in=myOPP)
+
+        # filter date ranges
+        if self.mSearch.searchdaterange_set.count():
+            self.mDateQuery = Q()
+            for date_range in self.mSearch.searchdaterange_set.all():
+                # add one day to end date to search in the last day
+                # search for 01-03-2012 -> 01-03-2012 yields no results
+                # because range only compares dates
+                myEndDate = date_range.end_date + timedelta(days=1)
+                self.mDateQuery = (
+                    self.mDateQuery | Q(product_date__range=(
+                        date_range.start_date, myEndDate))
+                )
+                # TODO: format dates in dd-mm-yyyy
+
+            self.mQuerySet = self.mQuerySet.filter(self.mDateQuery)
 
     def search(self):
         """

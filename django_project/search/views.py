@@ -133,9 +133,17 @@ def search(theRequest):
         theRequest)
     logger.info('search called')
     post_values = theRequest.POST
+    # if the request.POST is not 'multipart/form-data' then QueryDict that
+    # holds POST values is not mutable, however, we need it to be mutable
+    # because 'save_as_new' on inlineformset directly changes values
+    #
+    # we need to force this behavior
+    post_values._mutable = True
+
     if theRequest.method == 'POST':
         logger.debug('Post vars: %s', str(theRequest.POST))
         myForm = AdvancedSearchForm(post_values, theRequest.FILES)
+        logger.debug('Uploaded files: %s', theRequest.FILES)
         if myForm.is_valid():
             logger.info('AdvancedForm is VALID')
             mySearch = myForm.save(commit=False)
@@ -236,24 +244,10 @@ def search(theRequest):
         t = loader.get_template('searchPanelv3.html')
         c = Context({
             'myForm': myForm,
-            'myHost': settings.HOST,
-            'myFormset': myFormset})
-        return HttpResponseServerError(
-            t.render(c))
-        #render_to_response is done by the renderWithContext decorator
-        """
-        return render_to_response(
-            'search.html', {
-                'myAdvancedFlag': detectAdvancedSearchForm(myForm),
-                'mySearchType': theRequest.POST['search_type'],
-                'myForm': myForm,
-                'myHost': settings.HOST,
-                'myFormset': myFormset,
-                'myLayerDefinitions': myLayerDefinitions,
-                'myLayersList': myLayersList,
-                'myActiveBaseMap': myActiveBaseMap},
-            context_instance=RequestContext(theRequest))
-        """
+            'myFormset': myFormset
+        })
+        # form was not valid return 404
+        return HttpResponse(t.render(c), status=404)
     else:
         myForm = AdvancedSearchForm()
         myFormset = DateRangeInlineFormSet()
@@ -262,8 +256,8 @@ def search(theRequest):
             'searchv3.html', {
                 'myAdvancedFlag': False,
                 'mySearchType': None,
-                'myForm': myForm,
-                'myFormset': myFormset,
+                # 'myForm': myForm,
+                # 'myFormset': myFormset,
                 'myHost': settings.HOST,
                 'myLayerDefinitions': myLayerDefinitions,
                 'myLayersList': myLayersList,
@@ -286,12 +280,9 @@ def modifySearch(theRequest, theGuid):
     myFormset = DateRangeInlineFormSet(instance=mySearch)
     return render_to_response(
         'search.html', {
-            'myAdvancedFlag': mySearch.isAdvanced,
-            'mySearchType': mySearch.search_type,
             'myFormset': myFormset,
             'myForm': myForm,
             'myGuid': theGuid,
-            'myHost': settings.HOST,
             'myLayerDefinitions': myLayerDefinitions,
             'myLayersList': myLayersList,
             'myActiveBaseMap': myActiveBaseMap},
@@ -306,7 +297,8 @@ def searchResultMap(theRequest, theGuid):
     Renders a search results page including the map and all attendant html
     content
     """
-    mySearcher = Searcher(theRequest, theGuid)
+    mySearch = get_object_or_404(Search, guid=theGuid)
+    mySearcher = Searcher(theRequest, mySearch)
     mySearcher.search()
     return(mySearcher.templateData())
 
@@ -319,7 +311,8 @@ def searchResultPage(theRequest, theGuid):
     Does the same as searchResultMap but renders only enough html to be
     inserted into a div
     """
-    mySearcher = Searcher(theRequest, theGuid)
+    mySearch = get_object_or_404(Search, guid=theGuid)
+    mySearcher = Searcher(theRequest, mySearch)
     mySearcher.search()
     return(mySearcher.templateData())
 

@@ -4,7 +4,9 @@
 {% crispy myForm %}
 <button onClick="submitSearchForm();" class="btn btn-success" class="default" name="_search" title="Click here to execute your search.">Search</button>
 {{myForm.media}}
+
 <script>
+
     function check_sensor_inclination_angles() {
         var sv = parseInt($("#id_sensor_inclination_angle_start").val());
         var ev = parseInt($("#id_sensor_inclination_angle_end").val());
@@ -15,13 +17,17 @@
 
     function submitSearchForm(){
       block();
-      $.post('/search/', $("#search_form").serializeArray(), function(data) {
+      $('#search_form').ajaxForm({
+        success: function(data) {
           loadSearchResults( 1, data.guid );
-      }).fail(function(data) {
+        },
+        error: function(data) {
           $('#search-form-container').html(data.responseText);
           unblock();
+        }
       });
 
+      $("#search_form").submit();
     }
 
     $('#dr_container').sansa_daterangecontainer();
