@@ -7,16 +7,41 @@
 
 <script>
 
+    function createOptions(theOptions, theSelectedOptions, addEmpty){
+      // add empty options, default true
+      addEmpty = addEmpty !== undefined ? addEmpty : true;
+      var options = '';
+      if (addEmpty === true) {
+        options += '<option value="">---------</option>';
+      }
+      $(theOptions).each(function (i,option){
+        if (typeof(theSelectedOptions) === "object") {
+          // use indexOf on complex object
+          if (theSelectedOptions.indexOf(option[0]) != -1){
+            options += '<option selected=selected value="' + option[0] + '">' + option[1] + '</option>';
+          } else {
+            options += '<option value="' + option[0] + '">' + option[1] + '</option>';
+          }
+        } else {
+          if (option[0] == theSelectedOptions) {
+            options += '<option selected=selected value="' + option[0] + '">' + option[1] + '</option>';
+          } else {
+            options += '<option value="' + option[0] + '">' + option[1] + '</option>';
+          }
+        }
+      });
+      return options
+    }
+
     function getSelectOptions() {
       block();
       var sel_insttypes = [];
       $('#id_instrumenttype option:selected').each(function(i, selected) {
-        sel_insttypes[i] = $(selected).val();
+        sel_insttypes[i] = parseInt($(selected).val());
       });
 
       var sel_satellite = $('#id_satellite option:selected').val();
       var sel_spectralmode = $('#id_spectral_mode option:selected').val();
-      console.log(sel_insttypes);
       var getData = {
         'instrumenttypes': sel_insttypes,
         'satellite': sel_satellite,
@@ -24,19 +49,12 @@
       };
 
       $.getJSON('{% url "updateSelectOptions" %}', $.param(getData, true)).done(function(data){
-        console.log('instrument_types');
-        $(data.instrumenttypes).each(function (i,option){
-          console.log(option);
-        });
-        console.log('satellites');
-        $(data.satellites).each(function (i,option){
-          console.log(option);
-        });
-        console.log('spectral_modes');
-        $(data.spectralmodes).each(function (i,option){
-          console.log(option);
-        });
-      })
+        $("#id_instrumenttype").html(createOptions(data.instrumenttypes, sel_insttypes, false));
+
+        $("#id_satellite").html(createOptions(data.satellites, sel_satellite));
+
+        $("#id_spectral_mode").html(createOptions(data.spectralmodes, sel_spectralmode));
+      });
       unblock();
     }
 
