@@ -88,10 +88,7 @@ from .forms import (
     DateRangeFormSet
 )
 
-from dictionaries.models import (
-    OpticalProductProfile,
-    InstrumentType
-)
+from .utils import prepareSelectQuerysets
 
 
 class Http500(Exception):
@@ -256,13 +253,13 @@ def search(theRequest):
     else:
         myForm = AdvancedSearchForm()
         myFormset = DateRangeInlineFormSet()
-        #render_to_response is done by the renderWithContext decorator
+        # render_to_response is done by the renderWithContext decorator
         return render_to_response(
             'searchv3.html', {
                 'myAdvancedFlag': False,
                 'mySearchType': None,
-                # 'myForm': myForm,
-                # 'myFormset': myFormset,
+                'myForm': myForm,
+                'myFormset': myFormset,
                 'myHost': settings.HOST,
                 'myLayerDefinitions': myLayerDefinitions,
                 'myLayersList': myLayersList,
@@ -270,7 +267,7 @@ def search(theRequest):
             context_instance=RequestContext(theRequest))
 
 
-#@login_required
+@login_required
 def modifySearch(theRequest, theGuid):
     """
     Given a search guid, give the user a form prepopulated with
@@ -284,7 +281,7 @@ def modifySearch(theRequest, theGuid):
     myForm = AdvancedSearchForm(instance=mySearch)
     myFormset = DateRangeInlineFormSet(instance=mySearch)
     return render_to_response(
-        'search.html', {
+        'searchv3.html', {
             'myFormset': myFormset,
             'myForm': myForm,
             'myGuid': theGuid,
@@ -422,56 +419,26 @@ def renderSearchResultsPage(theRequest, theGuid):
 
 
 def updateSelectOptions(theRequest):
+    """
+    Returns JSON encoded InstrumentTypes, Satellites and SpectralModes options
+    """
     mySelInstrumentType = theRequest.GET.getlist('instrumenttypes')
     mySelSatellite = theRequest.GET.get('satellite')
     mySelSpectralMode = theRequest.GET.get('spectralmode')
 
-    myOPP = OpticalProductProfile.objects
-    if mySelInstrumentType != []:
-        logger.debug('setting insttype %s', mySelInstrumentType)
-        myOPP = myOPP.filter(
-            satellite_instrument__instrument_type__in=mySelInstrumentType)
-    if mySelSatellite != '':
-        logger.debug('setting satellite %s', mySelSatellite)
-        myOPP = myOPP.filter(
-            satellite_instrument__satellite=mySelSatellite)
-    if mySelSpectralMode != '':
-        logger.debug('setting spectral mode %s', mySelSpectralMode)
-        myOPP = myOPP.filter(
-            spectral_mode=mySelSpectralMode)
-    # get all
-    myData = myOPP.select_related(
-        'spectral_mode', 'satellite_instrument__satellite',
-        'satellite_instrument__instrument_type').all()
+    myInstrumentTypes, mySatellites, mySpectralModes = prepareSelectQuerysets(
+        mySelInstrumentType, mySelSatellite, mySelSpectralMode)
 
-    # if user selected instrument type or spectral_mode filter inst_types
-    if mySelSatellite != '' or mySelSpectralMode != '':
-        logger.debug('User selected satellite or spectral mode')
-        myInstrumentTypes = sorted(
-            set([(
-                b.satellite_instrument.instrument_type.pk,
-                unicode(b.satellite_instrument.instrument_type)
-                ) for b in myData]))
-    else:
-        logger.debug('User DID NOT select satellite or spectral mode')
-        # show all instrument types
-        tmpInstTypes = InstrumentType.objects.all().order_by('id')
-        myInstrumentTypes = [(b.pk, unicode(b)) for b in tmpInstTypes]
-    # filter and sort satellites/spectral_modes
-    mySatellites = sorted(
-        set([(
-            b.satellite_instrument.satellite.pk,
-            unicode(b.satellite_instrument.satellite)
-            ) for b in myData]))
-    mySpectralModes = sorted(
-        set([(
-            b.spectral_mode.pk,
-            unicode(b.spectral_mode)
-            ) for b in myData]))
     myFinalData = {
-        'instrumenttypes': myInstrumentTypes,
-        'satellites': mySatellites,
-        'spectralmodes': mySpectralModes
+        'instrumenttypes': [(
+            option.pk,
+            unicode(option)) for option in myInstrumentTypes],
+        'satellites': [(
+            option.pk,
+            unicode(option)) for option in mySatellites],
+        'spectralmodes': [(
+            option.pk,
+            unicode(option)) for option in mySpectralModes],
     }
     return HttpResponse(
         simplejson.dumps(myFinalData), mimetype='application/json')

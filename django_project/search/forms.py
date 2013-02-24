@@ -46,44 +46,14 @@ from crispy_forms.bootstrap import (
     FormActions
 )
 
-from catalogue.fields import (
-    IntegersCSVIntervalsField,
-    NoValidationChoiceField,
-    AbbreviationModelChoiceField)
-
-from catalogue.models import (
-    RadarProduct,
-    AcquisitionMode,
-    MissionSensor,
-    Mission,
-    SensorType,
-    ProcessingLevel,
-)
-
-from .models import (
-    Search,
-    SearchDateRange,
-)
-# from catalogue.models import (
-#     RadarProduct,
-#     MissionSensor,
-#     Search,
-#     AcquisitionMode,
-#     Mission,
-#     SensorType,
-#     ProcessingLevel,
-#     SearchDateRange,
-#     OrderStatus,
-#     Order,
-#     Projection,
-#     DeliveryDetail,
-#     SearchRecord,
-#     TaskingRequest,
-#     OrderStatusHistory,
-#     Clip)
-
+from catalogue.fields import IntegersCSVIntervalsField
 from catalogue.datetimewidget import DateTimeWidget
 from catalogue.aoigeometry import AOIGeometryField
+
+
+from .models import Search
+from .utils import prepareSelectQuerysets
+
 
 # Support dmy formats (see
 #    http://dantallis.blogspot.com/2008/11/date-validation-in-django.html )
@@ -365,6 +335,17 @@ class AdvancedSearchForm(forms.ModelForm):
             'geometry'
         )
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
+        if self.instance.pk is not None:
+            myInstTypes, mySats, mySpecMod = prepareSelectQuerysets(
+                self.instance.instrumenttype.all().values_list('id'),
+                self.instance.satellite_id, self.instance.spectral_mode_id)
+        else:
+            myInstTypes, mySats, mySpecMod = prepareSelectQuerysets([], '', '')
+
+        # set new querysets
+        self.fields['instrumenttype'].queryset = myInstTypes
+        self.fields['satellite'].queryset = mySats
+        self.fields['spectral_mode'].queryset = mySpecMod
 
         for myFieldName, myField in self.fields.items():
             myField.widget.attrs['class'] = 'ui-corner-all'
