@@ -269,15 +269,15 @@ class AdvancedSearchForm(forms.ModelForm):
                 ),
                 Fieldset(
                     'Image details',
-                    Field('use_cloud_cover', template='myField.html'),
+                    # Field('use_cloud_cover', template='myField.html'),
                     Field(
                         'sensor_inclination_angle_start',
                         template='myField.html'),
-                    Field('spatial_resolution', template='myField.html'),
-                    Field('cloud_mean', template='myField.html'),
                     Field(
                         'sensor_inclination_angle_end',
                         template='myField.html'),
+                    Field('spatial_resolution', template='myField.html'),
+                    Field('cloud_mean', template='myField.html'),
                     Field('band_count', template='myField.html'),
                     css_id="collapseImage",
                     data_parent="#accordion-search2",

@@ -33,6 +33,13 @@ class OpticalProductProfileQuerySet(QuerySet):
         return self.filter(
             satellite_instrument__instrument_type__in=theInstrumentTypes.all())
 
+    def for_satellite(self, theSatellite):
+        return self.filter(
+            satellite_instrument__satellite__exact=theSatellite)
+
+    def for_spectralmode(self, theSpectralmode):
+        return self.filter(spectral_mode__exact=theSpectralmode)
+
 
 class OpticalProductProfile(models.Model):
     """

@@ -28,12 +28,11 @@ from django.conf import settings
 from django.db.models import Q
 
 # Models and forms for our app
-from .models import (
-    SearchRecord
-)
+from .models import SearchRecord
 
 from dictionaries.models import OpticalProductProfile
 
+from catalogue.fields import IntegersCSVIntervalsField
 from catalogue.models import OpticalProduct
 
 
@@ -62,25 +61,138 @@ class Searcher:
         # filter instrument type
         myOPP = OpticalProductProfile.objects.for_instrumenttypes(
             self.mSearch.instrumenttype)
+        logger.debug(
+            'OPP filter - instrumenttype %s',
+            self.mSearch.instrumenttype.values_list('pk'))
+
+        if self.mSearch.satellite:
+            myOPP = myOPP.for_satellite(self.mSearch.satellite)
+            logger.debug(
+                'OPP filter - satellite %s',
+                self.mSearch.satellite.pk)
+
+        if self.mSearch.spectral_mode:
+            myOPP = myOPP.for_spectralmode(self.mSearch.spectral_mode)
+            logger.debug(
+                'OPP filter - spectralmode %s',
+                self.mSearch.spectral_mode.pk)
 
         self.mQuerySet = OpticalProduct.objects.filter(
             product_profile__in=myOPP)
+        logger.debug('Selected product profiles: %s', myOPP.values_list('pk'))
 
         # filter date ranges
         if self.mSearch.searchdaterange_set.count():
-            self.mDateQuery = Q()
+            myDateQuery = Q()
             for date_range in self.mSearch.searchdaterange_set.all():
                 # add one day to end date to search in the last day
                 # search for 01-03-2012 -> 01-03-2012 yields no results
                 # because range only compares dates
                 myEndDate = date_range.end_date + timedelta(days=1)
-                self.mDateQuery = (
-                    self.mDateQuery | Q(product_date__range=(
+                myDateQuery = (
+                    myDateQuery | Q(product_date__range=(
                         date_range.start_date, myEndDate))
                 )
-                # TODO: format dates in dd-mm-yyyy
+                logger.debug(
+                    'Daterange filter %s - %s',
+                    date_range.start_date, myEndDate
+                )
+            self.mQuerySet = self.mQuerySet.filter(myDateQuery)
 
-            self.mQuerySet = self.mQuerySet.filter(self.mDateQuery)
+        # filter by licence
+        if self.mSearch.license_type:
+            self.mQuerySet = self.mQuerySet.filter(
+                license__type=self.mSearch.license_type)
+            logger.debug('Licence filter %s', self.mSearch.license_type)
+
+        # filter by sensor_inclination angle
+        if (self.mSearch.sensor_inclination_angle_start is not None and
+                self.mSearch.sensor_inclination_angle_end is not None):
+
+            mySensorInclinationAngleQuery = Q(
+                sensor_inclination_angle__range=(
+                    self.mSearch.sensor_inclination_angle_start,
+                    self.mSearch.sensor_inclination_angle_end)
+            )
+            self.mQuerySet = self.mQuerySet.filter(
+                mySensorInclinationAngleQuery
+            )
+            logger.debug(
+                'Sensor inclination angle filter %s-%s',
+                self.mSearch.sensor_inclination_angle_start,
+                self.mSearch.sensor_inclination_angle_end
+            )
+
+        # filter spatial resolution
+        if self.mSearch.spatial_resolution is not None:
+            mySpatialRes = self.mSearch.SPATIAL_RESOLUTION_RANGE.get(
+                self.mSearch.spatial_resolution
+            )
+            mySpatialResQuery = Q(spatial_resolution__range=mySpatialRes)
+            self.mQuerySet = self.mQuerySet.filter(mySpatialResQuery)
+            logger.debug('Spatial resolution filter %s', mySpatialRes)
+
+        # filter cloud cover
+        if self.mSearch.cloud_mean:
+            myCloudQuery = (
+                Q(cloud_cover__lte=self.mSearch.cloud_mean)
+                | Q(cloud_cover__isnull=True))
+            self.mQuerySet = self.mQuerySet.filter(myCloudQuery)
+            logger.debug('Cloud mean filter: %s', self.mSearch.cloud_mean)
+
+        # filter band_count
+        if self.mSearch.band_count is not None:
+            #get bandcount range
+            myBandCountRange = (
+                self.mSearch.BAND_COUNT_RANGE[self.mSearch.band_count]
+            )
+            myBandCountQuery = Q(band_count__range=myBandCountRange)
+            self.mQuerySet = self.mQuerySet.filter(myBandCountQuery)
+            logger.debug('Band count filter: %s', myBandCountRange)
+
+        # filter k_orbit_path
+        if self.mSearch.k_orbit_path:
+            myKOrbitPathQ = Q()
+            myParsedData = IntegersCSVIntervalsField.to_tuple(
+                self.mSearch.k_orbit_path)
+            for kpath in myParsedData:
+                if len(kpath) == 2:
+                    myKOrbitPathQ = (
+                        myKOrbitPathQ | Q(path__range=(kpath[0], kpath[1])))
+                else:
+                    myKOrbitPathQ = myKOrbitPathQ | Q(path=kpath[0])
+            self.mQuerySet = self.mQuerySet.filter(myKOrbitPathQ)
+            logger.debug('K Orbit Path filter: %s', myParsedData)
+
+        # filter j_frame_row
+        if self.mSearch.j_frame_row:
+            myJFrameRowQ = Q()
+            myParsedData = IntegersCSVIntervalsField.to_tuple(
+                self.mSearch.j_frame_row)
+            for jrow in myParsedData:
+                if len(jrow) == 2:
+                    myJFrameRowQ = (
+                        myJFrameRowQ | Q(path__range=(jrow[0], jrow[1])))
+                else:
+                    myJFrameRowQ = myJFrameRowQ | Q(path=jrow[0])
+            self.mQuerySet = self.mQuerySet.filter(myJFrameRowQ)
+            logger.debug('J Frame Row filter: %s', myParsedData)
+
+        # filter geometry
+        if self.mSearch.geometry:
+            myGeometryQuery = Q(
+                spatial_coverage__intersects=self.mSearch.geometry)
+            self.mQuerySet = self.mQuerySet.filter(myGeometryQuery)
+            logger.debug(
+                'Geometry filter envelope: %s',
+                self.mSearch.geometry.envelope.extent
+            )
+
+        # Updates self.mSearch with the new object count
+        myRecordCount = self.mQuerySet.count()
+        logger.debug('Total records found: %s', myRecordCount)
+        self.mSearch.record_count = myRecordCount
+        self.mSearch.save()
 
     def search(self):
         """
@@ -121,7 +233,7 @@ class Searcher:
                 # This can be done faster using cascaded union but needs
                 # geos 3.1
                 myUnion = myUnion.union(myObject.spatial_coverage.envelope)
-            logger.debug('%s added to myRecords', myObject.product_id)
+            # logger.debug('%s added to myRecords', myObject.product_id)
         if myUnion:
             self.mExtent = str(myUnion.extent)
 

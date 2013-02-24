@@ -86,7 +86,7 @@
       'autoclose':true
     });
 
-    $("select").change(function (){
+    $("#id_instrumenttype, #id_satellite, #id_spectral_mode").bind('change', function (){
       getSelectOptions();
     });
 </script>

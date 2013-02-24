@@ -53,7 +53,13 @@ LOGGING = {
             'level': 'INFO',  # switch to DEBUG to show actual SQL
         },
         'search': {
-            'level': 'INFO',
+            'level': 'ERROR',
+            'handlers': ['logfile'],
+            # propagate is True by default, which proppagates logs upstream
+            'propagate': False
+        },
+        'search.new_searcher': {
+            'level': 'DEBUG',
             'handlers': ['logfile'],
             # propagate is True by default, which proppagates logs upstream
             'propagate': False
