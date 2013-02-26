@@ -38,24 +38,15 @@ class LandsatIngestorTest(TestCase):
 
     fixtures = [
         'test_user.json',
-        'test_missiongroup.json',
-        'test_mission.json',
-        'test_missionsensor.json',
-        'test_search.json',
-        'test_searchdaterange.json',
+        'test_acquisitionmode.json',  # needed until its deprecated
+        'test_sensortype.json',  # as above
+        'test_missionsensor',  # as above
         'test_processinglevel.json',
-        'test_sensortype.json',
-        'test_acquisitionmode.json',
         'test_institution.json',
         'test_license.json',
         'test_projection.json',
         'test_quality.json',
-        'test_orderstatus.json',
-        'test_order.json',
-        'test_searchrecord.json',
         'test_sansauserprofile.json',
-        'test_orderstatus.json',
-        'test_marketsector.json',
         'test_creatingsoftware.json',
         # new_dicts
         'test_spectralgroup.json',
@@ -67,7 +58,7 @@ class LandsatIngestorTest(TestCase):
         'test_satelliteinstrument.json',
         'test_opticalproductprofile.json',
         'test_radarproductprofile.json',
-
+        # Products
         'test_genericproduct.json',
         'test_genericimageryproduct.json',
         'test_genericsensorproduct.json',
@@ -78,8 +69,7 @@ class LandsatIngestorTest(TestCase):
         'test_fileformat.json',
         'test_resamplingmethod.json',
         'test_imagingmode.json',
-        'test_radarbeam.json',
-        'test_deliverydetail.json']
+        'test_radarbeam.json']
 
     def setUp(self):
         """
