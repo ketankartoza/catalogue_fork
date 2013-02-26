@@ -6,6 +6,8 @@ delete from search_search_instrumenttype where search_id = (select id from searc
 delete from search_searchdaterange where search_id = (select id from search_search where  acquisition_mode_id = 2);
 delete from search_search where  acquisition_mode_id = 2;
 
+COMMIT;
+BEGIN;
 
 -- drop unused attributes
 
