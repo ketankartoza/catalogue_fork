@@ -7,6 +7,7 @@ Developer Manual
    coding_standards
    developer-guide
    metadata-standard
+   new_dictionaries
    search-schema
    unit-tests
    future-workpackage-items
