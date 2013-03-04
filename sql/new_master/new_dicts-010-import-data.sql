@@ -1,4 +1,3 @@
-BEGIN;
 --
 -- PostgreSQL database dump
 --
@@ -59,15 +58,15 @@ COPY dictionaries_scannertype (id, name, description, abbreviation) FROM stdin;
 
 COPY dictionaries_instrumenttype (id, name, description, abbreviation, operator_abbreviation, is_radar, is_taskable, scanner_type_id, base_processing_level_id, reference_system_id, swath_optical_km, band_number_total, band_type, spectral_range_list_nm, pixel_size_list_m, spatial_resolution_range, quantization_bits, image_size_km, processing_software, keywords) FROM stdin;
 1	AMI	Active Microwave Instrument\r\n	AMI	AMI	t	f	1	1	\N	\N	\N			\N		\N			
-2	MSI	Multi-Spectral Imager\r\n	MSI	MSI	f	f	4	1	\N	\N	\N			\N		\N			
-3	MSS	Multi-Spectral Scanner\r\n	MSS	MSS	f	f	3	1	\N	\N	\N			\N		\N			
-4	TM	Thematic Mapper\r\n	TM	TM	f	f	3	1	\N	\N	\N			\N		\N			
-6	HRV	High Resolution Visible\r\n	HRV	HRV	f	f	2	1	\N	\N	\N			\N		\N			
-8	HRG	High Resolution Geometric\r\n	HRG	HRG	f	t	2	1	\N	\N	\N			\N		\N			
-9	HRCCD	High Resolution Couple Charged Device\r\n	HRC	HRCCD	f	f	2	1	\N	\N	\N			\N		\N			
-10	MMRS	Multi-Spectral Medium Resolution Scanner\r\n	MMR	MMRS	f	f	2	1	\N	\N	\N			\N		\N			
-7	HRVIR	High Resolution Visible and Infra-Red\r\n	HIR	HRVIR	f	f	2	1	\N	\N	\N			\N		\N			
-5	ETM+	Enhanced Thematic Mapper Plus\r\n	ETM+	ETM+	f	f	3	1	\N	\N	\N			\N		\N			
+2	MSI	Multi-Spectral Imager\r\n	MSI	MSI	f	f	4	3	\N	\N	\N					\N			
+3	MSS	Multi-Spectral Scanner\r\n	MSS	MSS	f	f	3	5	\N	\N	\N					\N			
+4	TM	Thematic Mapper\r\n	TM	TM	f	f	3	5	\N	\N	\N					\N			
+5	ETM+	Enhanced Thematic Mapper Plus\r\n	ETM+	ETM+	f	f	3	5	\N	\N	\N					\N			
+6	HRV	High Resolution Visible\r\n	HRV	HRV	f	f	2	5	\N	\N	\N					\N			
+7	HRVIR	High Resolution Visible and Infra-Red\r\n	HIR	HRVIR	f	f	2	5	\N	\N	\N					\N			
+8	HRG	High Resolution Geometric\r\n	HRG	HRG	f	t	2	5	\N	\N	\N					\N			
+9	HRCCD	High Resolution Couple Charged Device\r\n	HRC	HRCCD	f	f	2	5	\N	\N	\N					\N			
+10	MMRS	Multi-Spectral Medium Resolution Scanner\r\n	MMR	MMRS	f	f	2	2	\N	\N	\N					\N			
 \.
 
 
@@ -584,4 +583,3 @@ SELECT pg_catalog.setval('dictionaries_spectralmodeprocessingcosts_id_seq', 28, 
 -- PostgreSQL database dump complete
 --
 
-COMMIT;
