@@ -108,7 +108,7 @@ UPDATE search_search SET spectral_mode_id = 13
 WHERE sensor_type_id = 44;
 
 UPDATE search_search SET spectral_mode_id = 6
-WHERE sensor_type_id IN (174, 175, 176. 177);
+WHERE sensor_type_id IN (174, 175, 176, 177);
 
 UPDATE search_search SET spectral_mode_id = 4
 WHERE sensor_type_id = 178;
