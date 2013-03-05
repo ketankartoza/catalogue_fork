@@ -45,7 +45,6 @@ from catalogue.models import (
     MissionSensor,
     MissionGroup,
     SensorType,
-    ProcessingLevel,
     Institution,
     License,
     Projection,
@@ -221,7 +220,7 @@ class GenericProduct(node_factory('catalogue.ProductLink',
     """
 
     product_date = models.DateTimeField(db_index=True)
-    processing_level = models.ForeignKey(ProcessingLevel)
+    processing_level = models.ForeignKey('dictionaries.ProcessingLevel')
     owner = models.ForeignKey(Institution)
     license = models.ForeignKey(License)
     spatial_coverage = models.PolygonField(

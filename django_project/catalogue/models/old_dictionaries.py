@@ -167,28 +167,6 @@ class AcquisitionMode(models.Model):
 
 ###############################################################################
 
-class ProcessingLevel(models.Model):
-    """
-    Processing level e.g. L3Aa
-    """
-
-    abbreviation = models.CharField(max_length=4, unique=True)
-    name = models.CharField(max_length=255)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        app_label = 'catalogue'
-        verbose_name = 'Processing Level'
-        verbose_name_plural = 'Processing Levels'
-
-    class Admin:
-        pass
-
-
-###############################################################################
-
 class Projection(models.Model):
     """
     A dictionary to define Product Projection, e.g. 32737, UTM37S
