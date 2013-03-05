@@ -1,6 +1,7 @@
 BEGIN;
 
-ALTER TABLE catalogue_deliverydetail ADD new_processing_level_id integer REFERENCES "dictionaries_processinglevel" ("id") DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE catalogue_deliverydetail
+    ADD new_processing_level_id integer REFERENCES "dictionaries_processinglevel" ("id") DEFERRABLE INITIALLY DEFERRED;
 
 COMMIT;
 
