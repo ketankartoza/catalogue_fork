@@ -37,7 +37,6 @@ from catalogue.models import (
     OrderStatus,
     FileFormat,
     ResamplingMethod,
-    ProcessingLevel,
     Datum,
     Institution,
     License,
@@ -115,10 +114,6 @@ class OrderNotificationRecipientsAdmin(admin.GeoModelAdmin):
 #################################################
 # Admin models for new generic product model
 #################################################
-
-
-class ProcessingLevelAdmin(admin.GeoModelAdmin):
-    pass
 
 
 class DatumAdmin(admin.GeoModelAdmin):
@@ -227,7 +222,6 @@ admin.site.register(DeliveryMethod, DeliveryMethodAdmin)
 admin.site.register(OrderStatus, OrderStatusAdmin)
 admin.site.register(FileFormat, FileFormatAdmin)
 admin.site.register(ResamplingMethod, ResamplingMethodAdmin)
-admin.site.register(ProcessingLevel, ProcessingLevelAdmin)
 admin.site.register(Datum, DatumAdmin)
 admin.site.register(Institution, InstitutionAdmin)
 admin.site.register(License, LicenseAdmin)
