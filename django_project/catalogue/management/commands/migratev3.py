@@ -35,7 +35,7 @@ class Command(BaseCommand):
             help=(
                 'Selectively migrate parts of the database, semicolon ";" '
                 'delimited list of migrations (new_dicts, userprofiles,'
-                'search, pycsw) defaults to "all"')),
+                'search, pycsw, processing_levels) defaults to "all"')),
     )
 
     def handle(self, *args, **options):
@@ -47,6 +47,7 @@ class Command(BaseCommand):
             self.migrate_userprofiles()
             self.migrate_search()
             self.migrate_pycsw()
+            self.migrate_proc_levels()
 
         if 'new_dicts' in myMigrations:
             self.migrate_new_dicts()
@@ -59,6 +60,9 @@ class Command(BaseCommand):
 
         if 'pycsw' in myMigrations:
             self.migrate_pycsw()
+
+        if 'processing_levels' in myMigrations:
+            self.migrate_proc_levels()
 
     def migrate_new_dicts(self):
         print '* Starting new_dicts migration...'
@@ -100,3 +104,11 @@ class Command(BaseCommand):
             'pip', 'install', 'git+git://github.com/dodobas/pycsw.git',
             'SQLAlchemy==0.8.0b2'
         ])
+
+    def migrate_proc_levels(self):
+        print '* Starting processing_levels migration...'
+        origWD = os.getcwd()
+        os.chdir(os.path.join(origWD, '..', 'sql', 'new_master'))
+        print '* Executing database migration scripts...'
+        subprocess.call(['sh', '010_processing_level.sh', self.db])
+        os.chdir(origWD)
