@@ -54,5 +54,6 @@ class SearchBandCount_Test(SearchTestCase):
             mySearcher.search()
 
             assert mySearcher.mQuerySet.count() >= myExpectedResults[idx], \
-            simpleMessage(mySearcher.mQuerySet.count(), myExpectedResults[idx],
-                message='For search pk %s expected more then:' % searchPK)
+                simpleMessage(
+                    mySearcher.mQuerySet.count(), myExpectedResults[idx],
+                    message='For search pk %s expected more then:' % searchPK)

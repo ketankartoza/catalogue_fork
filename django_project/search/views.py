@@ -74,7 +74,7 @@ from catalogue.views.geoiputils import GeoIpUtils
 
 
 # modularized app dependencies
-from .new_searcher import (
+from .searcher import (
     Searcher)
 
 from .models import (

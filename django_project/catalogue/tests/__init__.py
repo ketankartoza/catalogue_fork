@@ -11,7 +11,6 @@ from catalogue.tests.mission_model import MissionCRUD_Test
 from catalogue.tests.missionsensor_model import MissionSensorCRUD_Test
 from catalogue.tests.sensortype_model import SensorTypeCRUD_Test
 from catalogue.tests.acquisitionMode_model import AcquisitionModeCRUD_Test
-from catalogue.tests.processingLevel_model import ProcessingLevelCRUD_Test
 from catalogue.tests.projection_model import ProjectionCRUD_Test
 from catalogue.tests.institution_model import InstitutionCRUD_Test
 from catalogue.tests.quality_model import QualityCRUD_Test

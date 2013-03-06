@@ -32,7 +32,6 @@ from catalogue.models import (
     OpticalProduct,
     Projection,
     AcquisitionMode,
-    ProcessingLevel,
     Quality,
     CreatingSoftware,
     Institution,
@@ -41,6 +40,8 @@ from catalogue.models import (
     GenericSensorProduct,
     GenericProduct
 )
+
+from dictionaries.models import ProcessingLevel
 
 
 class OpticalProductCRUD_Test(TestCase):
