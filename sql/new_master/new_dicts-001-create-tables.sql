@@ -60,7 +60,7 @@ CREATE TABLE "dictionaries_instrumenttype" (
     "base_processing_level_id" integer NOT NULL REFERENCES "dictionaries_processinglevel" ("id") DEFERRABLE INITIALLY DEFERRED,
     "reference_system_id" integer,
     "swath_optical_km" integer,
-    "band_number_total" integer,
+    "band_count" integer,
     "band_type" text,
     "spectral_range_list_nm" varchar(100),
     "pixel_size_list_m" varchar(100),

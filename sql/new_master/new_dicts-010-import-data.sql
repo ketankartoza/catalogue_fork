@@ -1,15 +1,141 @@
+BEGIN;
 --
 -- PostgreSQL database dump
 --
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
-SET standard_conforming_strings = off;
+SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET escape_string_warning = off;
 
 SET search_path = public, pg_catalog;
+
+--
+-- Name: dictionaries_band_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_band_id_seq', 49, true);
+
+
+--
+-- Name: dictionaries_bandspectralmode_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_bandspectralmode_id_seq', 61, true);
+
+
+--
+-- Name: dictionaries_collection_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_collection_id_seq', 6, true);
+
+
+--
+-- Name: dictionaries_foreigncurrency_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_foreigncurrency_id_seq', 1, false);
+
+
+--
+-- Name: dictionaries_imagingmode_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_imagingmode_id_seq', 1, true);
+
+
+--
+-- Name: dictionaries_instrumenttype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_instrumenttype_id_seq', 10, true);
+
+
+--
+-- Name: dictionaries_instrumenttypeprocessinglevel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_instrumenttypeprocessinglevel_id_seq', 23, true);
+
+
+--
+-- Name: dictionaries_opticalproductprofile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_opticalproductprofile_id_seq', 36, true);
+
+
+--
+-- Name: dictionaries_processinglevel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_processinglevel_id_seq', 13, true);
+
+
+--
+-- Name: dictionaries_radarbeam_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_radarbeam_id_seq', 1, true);
+
+
+--
+-- Name: dictionaries_radarproductprofile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_radarproductprofile_id_seq', 1, true);
+
+
+--
+-- Name: dictionaries_referencesystem_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_referencesystem_id_seq', 1, false);
+
+
+--
+-- Name: dictionaries_satellite_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_satellite_id_seq', 16, true);
+
+
+--
+-- Name: dictionaries_satelliteinstrument_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_satelliteinstrument_id_seq', 23, true);
+
+
+--
+-- Name: dictionaries_scannertype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_scannertype_id_seq', 4, true);
+
+
+--
+-- Name: dictionaries_spectralgroup_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_spectralgroup_id_seq', 6, true);
+
+
+--
+-- Name: dictionaries_spectralmode_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_spectralmode_id_seq', 35, true);
+
+
+--
+-- Name: dictionaries_spectralmodeprocessingcosts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_spectralmodeprocessingcosts_id_seq', 28, true);
+
 
 --
 -- Data for Name: dictionaries_processinglevel; Type: TABLE DATA; Schema: public; Owner: dodobas
@@ -56,7 +182,7 @@ COPY dictionaries_scannertype (id, name, description, abbreviation) FROM stdin;
 -- Data for Name: dictionaries_instrumenttype; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_instrumenttype (id, name, description, abbreviation, operator_abbreviation, is_radar, is_taskable, scanner_type_id, base_processing_level_id, reference_system_id, swath_optical_km, band_number_total, band_type, spectral_range_list_nm, pixel_size_list_m, spatial_resolution_range, quantization_bits, image_size_km, processing_software, keywords) FROM stdin;
+COPY dictionaries_instrumenttype (id, name, description, abbreviation, operator_abbreviation, is_radar, is_taskable, scanner_type_id, base_processing_level_id, reference_system_id, swath_optical_km, band_count, band_type, spectral_range_list_nm, pixel_size_list_m, spatial_resolution_range, quantization_bits, image_size_km, processing_software, keywords) FROM stdin;
 1	AMI	Active Microwave Instrument\r\n	AMI	AMI	t	f	1	1	\N	\N	\N			\N		\N			
 2	MSI	Multi-Spectral Imager\r\n	MSI	MSI	f	f	4	3	\N	\N	\N					\N			
 3	MSS	Multi-Spectral Scanner\r\n	MSS	MSS	f	f	3	5	\N	\N	\N					\N			
@@ -125,13 +251,6 @@ COPY dictionaries_band (id, instrument_type_id, band_name, band_abbr, band_numbe
 49	7	Shortwave Infrared	SWIR	4	1580	1750	20	20
 35	8	Shortwave Infrared	SWIR	4	1580	1750	10	20
 \.
-
-
---
--- Name: dictionaries_band_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_band_id_seq', 49, true);
 
 
 --
@@ -251,13 +370,6 @@ COPY dictionaries_bandspectralmode (id, band_id, spectral_mode_id) FROM stdin;
 
 
 --
--- Name: dictionaries_bandspectralmode_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_bandspectralmode_id_seq', 61, true);
-
-
---
 -- Data for Name: dictionaries_collection; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
@@ -272,25 +384,11 @@ COPY dictionaries_collection (id, name, description, institution_id) FROM stdin;
 
 
 --
--- Name: dictionaries_collection_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_collection_id_seq', 6, true);
-
-
---
 -- Data for Name: dictionaries_foreigncurrency; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
 COPY dictionaries_foreigncurrency (id, abbreviation, name, conversion_rate) FROM stdin;
 \.
-
-
---
--- Name: dictionaries_foreigncurrency_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_foreigncurrency_id_seq', 1, false);
 
 
 --
@@ -309,20 +407,6 @@ COPY dictionaries_radarbeam (id, instrument_type_id, band_name, wavelength_cm, l
 COPY dictionaries_imagingmode (id, radarbeam_id, name, incidence_angle_min, incidence_angle_max, approximate_resolution_m, swath_width_km, number_of_looks, polarization) FROM stdin;
 1	1	ERS-1 AMI SAR Image Mode	23	23	30	100	3	VV
 \.
-
-
---
--- Name: dictionaries_imagingmode_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_imagingmode_id_seq', 1, true);
-
-
---
--- Name: dictionaries_instrumenttype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_instrumenttype_id_seq', 10, true);
 
 
 --
@@ -353,13 +437,6 @@ COPY dictionaries_instrumenttypeprocessinglevel (id, instrument_type_id, process
 22	6	11	Level 3 	L3
 23	6	12	Level 3	L3
 \.
-
-
---
--- Name: dictionaries_instrumenttypeprocessinglevel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_instrumenttypeprocessinglevel_id_seq', 23, true);
 
 
 --
@@ -461,82 +538,12 @@ COPY dictionaries_opticalproductprofile (id, satellite_instrument_id, spectral_m
 
 
 --
--- Name: dictionaries_opticalproductprofile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_opticalproductprofile_id_seq', 36, true);
-
-
---
--- Name: dictionaries_processinglevel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_processinglevel_id_seq', 13, true);
-
-
---
--- Name: dictionaries_radarbeam_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_radarbeam_id_seq', 1, true);
-
-
---
 -- Data for Name: dictionaries_radarproductprofile; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
 COPY dictionaries_radarproductprofile (id, satellite_instrument_id, imaging_mode_id) FROM stdin;
 1	21	1
 \.
-
-
---
--- Name: dictionaries_radarproductprofile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_radarproductprofile_id_seq', 1, true);
-
-
---
--- Name: dictionaries_referencesystem_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_referencesystem_id_seq', 1, false);
-
-
---
--- Name: dictionaries_satellite_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_satellite_id_seq', 16, true);
-
-
---
--- Name: dictionaries_satelliteinstrument_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_satelliteinstrument_id_seq', 23, true);
-
-
---
--- Name: dictionaries_scannertype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_scannertype_id_seq', 4, true);
-
-
---
--- Name: dictionaries_spectralgroup_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_spectralgroup_id_seq', 6, true);
-
-
---
--- Name: dictionaries_spectralmode_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_spectralmode_id_seq', 35, true);
 
 
 --
@@ -573,13 +580,7 @@ COPY dictionaries_spectralmodeprocessingcosts (id, spectral_mode_id, instrumentt
 
 
 --
--- Name: dictionaries_spectralmodeprocessingcosts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_spectralmodeprocessingcosts_id_seq', 28, true);
-
-
---
 -- PostgreSQL database dump complete
 --
 
+COMMIT;

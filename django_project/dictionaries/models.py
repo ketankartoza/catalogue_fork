@@ -203,7 +203,7 @@ class InstrumentType(models.Model):
     swath_optical_km = models.IntegerField(
         blank=True, null=True,
         help_text='On-ground sensor swath width')
-    band_number_total = models.IntegerField(
+    band_count = models.IntegerField(
         blank=True, null=True,
         help_text='Total number of bands for this Instrument')
     band_type = models.TextField(
