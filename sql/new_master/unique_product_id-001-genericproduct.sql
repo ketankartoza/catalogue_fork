@@ -27,7 +27,49 @@ WHERE
 
 -- update lansat5
 
--- ?
+WITH tmp_gen_prod_id AS (
+select id FROM catalogue_genericproduct
+WHERE unique_product_id IN (
+  SELECT unique_product_id
+  from catalogue_genericproduct
+  group by unique_product_id
+  having count(*)>1) AND substring(product_id from length(product_id)) = 'N'
+)
+DELETE FROM catalogue_opticalproduct USING tmp_gen_prod_id
+  WHERE genericsensorproduct_ptr_id= tmp_gen_prod_id.id;
+
+WITH tmp_gen_prod_id AS (
+select id FROM catalogue_genericproduct
+WHERE unique_product_id IN (
+  SELECT unique_product_id
+  from catalogue_genericproduct
+  group by unique_product_id
+  having count(*)>1) AND substring(product_id from length(product_id)) = 'N'
+)
+DELETE FROM catalogue_genericsensorproduct USING tmp_gen_prod_id
+  WHERE genericimageryproduct_ptr_id = tmp_gen_prod_id.id;
+
+WITH tmp_gen_prod_id AS (
+select id FROM catalogue_genericproduct
+WHERE unique_product_id IN (
+  SELECT unique_product_id
+  from catalogue_genericproduct
+  group by unique_product_id
+  having count(*)>1) AND substring(product_id from length(product_id)) = 'N'
+)
+DELETE FROM catalogue_genericimageryproduct USING tmp_gen_prod_id
+  WHERE genericproduct_ptr_id = tmp_gen_prod_id.id;
+
+WITH tmp_gen_prod_id AS (
+select id FROM catalogue_genericproduct
+WHERE unique_product_id IN (
+  SELECT unique_product_id
+  from catalogue_genericproduct
+  group by unique_product_id
+  having count(*)>1) AND substring(product_id from length(product_id)) = 'N'
+)
+DELETE FROM catalogue_genericproduct USING tmp_gen_prod_id
+  WHERE catalogue_genericproduct.id = tmp_gen_prod_id.id;
 
 COMMIT;
 
