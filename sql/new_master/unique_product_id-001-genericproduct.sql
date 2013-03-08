@@ -71,6 +71,32 @@ WHERE unique_product_id IN (
 DELETE FROM catalogue_genericproduct USING tmp_gen_prod_id
   WHERE catalogue_genericproduct.id = tmp_gen_prod_id.id;
 
+-- delete all remaining duplicate leftover L5 products
+
+WITH tmp_gen_prod_id AS (
+select id FROM catalogue_genericproduct
+WHERE unique_product_id = '534539'
+)
+DELETE FROM catalogue_opticalproduct USING tmp_gen_prod_id
+  WHERE genericsensorproduct_ptr_id= tmp_gen_prod_id.id;
+
+WITH tmp_gen_prod_id AS (
+select id FROM catalogue_genericproduct
+WHERE unique_product_id = '534539'
+)
+DELETE FROM catalogue_genericsensorproduct USING tmp_gen_prod_id
+  WHERE genericimageryproduct_ptr_id = tmp_gen_prod_id.id;
+
+WITH tmp_gen_prod_id AS (
+select id FROM catalogue_genericproduct
+WHERE unique_product_id = '534539'
+)
+DELETE FROM catalogue_genericimageryproduct USING tmp_gen_prod_id
+  WHERE genericproduct_ptr_id = tmp_gen_prod_id.id;
+
+
+DELETE FROM catalogue_genericproduct WHERE unique_product_id = '534539';
+
 COMMIT;
 
 
@@ -83,4 +109,22 @@ ALTER TABLE catalogue_genericproduct
 
 -- drop product_id column
 ALTER TABLE catalogue_genericproduct DROP product_id CASCADE;
+
+-- recreate dropped views
+drop view vw_usercart;
+create view vw_usercart as SELECT
+  search_searchrecord.id, search_searchrecord.order_id,
+  auth_user.username,
+  catalogue_genericproduct."unique_product_id",
+  catalogue_genericproduct.spatial_coverage
+FROM
+  public.catalogue_missionsensor,
+  public.search_searchrecord,
+  public.catalogue_genericproduct,
+  public.auth_user
+WHERE
+  search_searchrecord.user_id = auth_user.id AND
+  search_searchrecord.product_id = catalogue_genericproduct.id AND
+  search_searchrecord.order_id isnull;
+grant select on vw_usercart to readonly;
 COMMIT;

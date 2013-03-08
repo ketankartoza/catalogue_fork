@@ -1,20 +1,18 @@
-drop view vw_usercart; 
-create view vw_usercart as SELECT 
-  catalogue_searchrecord.id, catalogue_searchrecord.order_id, 
-  auth_user.username, 
-  catalogue_missionsensor."name", 
-  catalogue_genericproduct."product_id",
+drop view vw_usercart;
+create view vw_usercart as SELECT
+  search_searchrecord.id, search_searchrecord.order_id,
+  auth_user.username,
+  catalogue_genericproduct."unique_product_id",
   catalogue_genericproduct.spatial_coverage
-FROM 
-  public.catalogue_missionsensor, 
-  public.catalogue_searchrecord, 
-  public.catalogue_genericproduct, 
+FROM
+  public.catalogue_missionsensor,
+  public.search_searchrecord,
+  public.catalogue_genericproduct,
   public.auth_user
-WHERE 
-  catalogue_searchrecord.user_id = auth_user.id AND
-  catalogue_searchrecord.product_id = catalogue_genericproduct.id AND
-  catalogue_genericproduct.mission_sensor_id = catalogue_missionsensor.id AND
-  catalogue_searchrecord.order_id isnull;
+WHERE
+  search_searchrecord.user_id = auth_user.id AND
+  search_searchrecord.product_id = catalogue_genericproduct.id AND
+  search_searchrecord.order_id isnull;
 grant select on vw_usercart to readonly;
 grant select on catalogue_visit to readonly;
 create view vw_visitor_report as SELECT ( SELECT count(*) AS count

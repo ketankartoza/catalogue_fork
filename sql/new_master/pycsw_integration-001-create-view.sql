@@ -1,7 +1,7 @@
 BEGIN;
 CREATE OR REPLACE VIEW pycsw_catalogue AS
 SELECT
-  catalogue_genericproduct.product_id as product_id,
+  catalogue_genericproduct.unique_product_id as product_id,
   'csw:Record'::text as typename,
   'http://www.opengis.net/cat/csw/2.0.2'::text as csw_schema,
   catalogue_genericproduct.product_date as insertdate,
