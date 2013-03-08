@@ -205,12 +205,12 @@ class Search(BaseSearch):
     # so we explicitly have to use verbose_name for the user friendly name
     instrumenttype = models.ManyToManyField(
         'dictionaries.InstrumentType',
-        verbose_name=u'Instrument Types', null=True, blank=True,
+        verbose_name=u'Sensors', null=True, blank=True,
         help_text=(
             'Choosing one or more instrument types is required. Use ctrl-click'
             ' to select more than one.')
     )
-    satellite = models.ForeignKey(
+    satellite = models.ManyToManyField(
         'dictionaries.Satellite', null=True, blank=True,
         help_text='Select satellite mission.'
     )  # e.g. S5
@@ -241,8 +241,8 @@ class Search(BaseSearch):
         null=True, blank=True, max_length=3,
         verbose_name="Max Clouds"
     )
-    license_type = models.IntegerField(
-        choices=License.LICENSE_TYPE_CHOICES, blank=True, null=True,
+    license_type = models.ManyToManyField(
+        'catalogue.License', blank=True, null=True,
         help_text='Choose a license type.'
     )
     band_count = models.IntegerField(
@@ -263,14 +263,18 @@ class Search(BaseSearch):
         null=True, blank=True,
         help_text='Select sensor inclination angle end.'
     )
-    # e.g. CAM1
-    spectral_mode = models.ForeignKey(
-        'dictionaries.SpectralMode',
-        null=True, blank=True
+    spectral_group = models.ManyToManyField(
+        'dictionaries.SpectralGroup',
+        null=True, blank=True,
+        help_text='Select one or more sepectral groups.'
     )
     processing_level = models.ManyToManyField(
         'dictionaries.ProcessingLevel', null=True, blank=True,
         help_text='Select one or more processing level.'
+    )
+    collection = models.ManyToManyField(
+        'dictionaries.Collection', null=True, blank=True,
+        help_text='Select one or more satellite collections.'
     )
     # Use the geo manager to handle geometry
     objects = models.GeoManager()

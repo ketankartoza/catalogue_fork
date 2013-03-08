@@ -19,7 +19,7 @@ function loadMoreData() {
       var myFeature{{forloop.counter}} = myGJFormat.read({{myResult.product.spatial_coverage.geojson|safe}})[0];
       myFeature{{forloop.counter}}.geometry = transformGeometry(myFeature{{forloop.counter}}.geometry);
       myFeature{{forloop.counter}}.id = '{{myResult.product.id}}';
-      myFeature{{forloop.counter}}.product_id = '{{myResult.product.product_id}}';
+      myFeature{{forloop.counter}}.unique_product_id = '{{myResult.product.unique_product_id}}';
       myFeature{{forloop.counter}}.selected = 'no';
       myScenesLayer.addFeatures(myFeature{{forloop.counter}});
       {% endfor %}

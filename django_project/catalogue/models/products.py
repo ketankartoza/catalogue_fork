@@ -234,7 +234,7 @@ class GenericProduct(node_factory('catalogue.ProductLink',
     creating_software = models.ForeignKey(
         CreatingSoftware,
         null=False, blank=False)
-    original_product_id = models.CharField(
+    unique_product_id = models.CharField(
         help_text='Original id assigned to the product by the vendor/operator',
         max_length=255, null=True, blank=True)
     product_id = models.CharField(
@@ -756,6 +756,13 @@ class GenericProduct(node_factory('catalogue.ProductLink',
         return render_to_string(
             'productTypes/genericProduct.html', {
                 'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
+
+    @property
+    def product_id(self):
+        """
+        Simple product_id property, helper with unique_product_id migration
+        """
+        return self.unique_product_id
 
 
 class ProductLink(

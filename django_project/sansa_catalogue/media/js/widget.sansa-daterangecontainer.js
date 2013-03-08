@@ -60,7 +60,7 @@ $.widget( "linfinity.sansa_daterangecontainer", {
 
     _setup_events: function () {
         var self=this;
-        $('#dr_add').live('click', function() {
+        $('#dr_add').on('click', function() {
             // get the dates from datepickers and parse them
             var myStartDate = self._parse_date($("#id_start_datepicker").val(),'dd-mm-yy');
             var myEndDate = self._parse_date($("#id_end_datepicker").val(),'dd-mm-yy');
@@ -81,7 +81,6 @@ $.widget( "linfinity.sansa_daterangecontainer", {
                     } else {
                         self.element.append(self._cloneMore(myStartDate, myEndDate));
                         self.datecount++;
-                        console.log(self.datecount);
                         self._check_date_count();
                     }
                 } else {
@@ -93,7 +92,7 @@ $.widget( "linfinity.sansa_daterangecontainer", {
             return false;
         });
 
-        $('#dr_del').live('click', function(){
+        $('#dr_del').on('click', function(){
             self.element.find('.dr_row.selected').each(function(){
                 // if an row has checkbox it means it was fetched from the database
                 if ($(this).find('input[type=checkbox]').length) {

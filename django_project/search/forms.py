@@ -100,48 +100,6 @@ class DateRangeFormSet(BaseInlineFormSet):
         self.management_form.cleaned_data['TOTAL_FORMS'] = len(self.forms)
         if not len(self.forms):
             raise forms.ValidationError, 'At least one date range is required.'
-        #Next line disabled as it causes a crash
-        #logging.debug('Date range forms:', self.forms)
-
-    def is_valid(self):
-        """
-        Returns True if form.errors is empty for every form in self.forms.
-        ABP: changed the range to len(self.forms)
-        """
-        if not self.is_bound:
-            return False
-        # We loop over every form.errors here rather than short circuiting on
-        # the first failure to make sure validation gets triggered for every
-        # form.
-        forms_valid = True
-        # err = self.errors
-        for i in range(0, len(self.forms)):
-            form = self.forms[i]
-            if self.can_delete:
-                if self._should_delete_form(form):
-                    # This form is going to be deleted so any of its errors
-                    # should not cause the entire formset to be invalid.
-                    continue
-            if bool(self.errors[i]):
-                forms_valid = False
-        return forms_valid and not bool(self.non_form_errors())
-
-    def full_clean(self):
-        """
-        Cleans all of self.data and populates self._errors.
-        ABP: changed the range to len(self.forms)
-        """
-        self._errors = []
-        if not self.is_bound:  # Stop further processing.
-            return
-        for i in range(0, len(self.forms)):
-            form = self.forms[i]
-            self._errors.append(form.errors)
-        # Give self.clean() a chance to do cross-form validation.
-        try:
-            self.clean()
-        except ValidationError, e:
-            self._non_form_errors = self.error_class(e.messages)
 
 
 class AdvancedSearchForm(forms.ModelForm):
@@ -251,19 +209,14 @@ class AdvancedSearchForm(forms.ModelForm):
         self.helper.layout = Layout(
             Div(
                 Fieldset(
-                    'Instrument Type',
-                    Field('instrumenttype', template='myField.html'),
+                    'Satellite',
+                    Field('collection', template='myField.html'),
                     Field('satellite', template='myField.html'),
-                    Field('spectral_mode', template='myField.html'),
+                    Field('instrumenttype', template='myField.html'),
+                    Field('spectral_group', template='myField.html'),
+                    Field('license_type', template='myField.html'),
                     css_id="collapseSensors",  # rename this class
                     css_class="in",
-                    data_parent="#accordion-search2",
-                    template="crispy-fieldset-accordion.html"
-                ),
-                Fieldset(
-                    'Product type details',
-                    Field('license_type', template='myField.html'),
-                    css_id="collapseProduct",
                     data_parent="#accordion-search2",
                     template="crispy-fieldset-accordion.html"
                 ),
@@ -345,16 +298,13 @@ class AdvancedSearchForm(forms.ModelForm):
         # set new querysets
         self.fields['instrumenttype'].queryset = myInstTypes
         self.fields['satellite'].queryset = mySats
-        self.fields['spectral_mode'].queryset = mySpecMod
+        self.fields['spectral_group'].queryset = mySpecMod
 
         for myFieldName, myField in self.fields.items():
             myField.widget.attrs['class'] = 'ui-corner-all'
             if (not 'title' in myField.widget.attrs or
                     myField.widget.attrs['title'] == ''):
                 myField.widget.attrs['title'] = myField.help_text
-
-        # we need user to select at least an instrument type
-        self.fields['instrumenttype'].required = True
 
     def clean_guid(self):
         """Custom validator for guid"""
@@ -373,27 +323,9 @@ class AdvancedSearchForm(forms.ModelForm):
             myPoint = 'SRID=4326;POINT(0 0)'
         return myPoint
 
-    def clean_end_date(self):
-        """End date validator"""
-        #Note that required=False fields are not passed to cleaned_data but
-        #rather just to self.data
-        myData = self.data
-        myEndDate = myData.get('end_date')
-        if not myEndDate:
-            # date is empty which is ok so do nothing
-            pass
-        else:
-            try:
-                myEndDate = datetime.datetime(
-                    *time.strptime(myEndDate, "%d-%m-%Y")[:6]).date()
-            except:
-                raise forms.ValidationError('End date was not valid.')
-            #pass
-        return myEndDate
-
     def clean(self):
         myCleanedData = self.cleaned_data
-        logging.info('cleaned data: ' + str(myCleanedData))
+        logger.debug('cleaned data: ' + str(myCleanedData))
 
         myStartSensorAngle = myCleanedData.get(
             'sensor_inclination_angle_start')

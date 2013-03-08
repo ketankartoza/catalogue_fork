@@ -26,11 +26,11 @@ from dictionaries.models import (
     OpticalProductProfile,
     InstrumentType,
     Satellite,
-    SpectralMode
+    SpectralGroup
 )
 
 
-def prepareSelectQuerysets(theInstrumentType, theSatellite, theSpectralMode):
+def prepareSelectQuerysets(theInstrumentType, theSatellite, theSpectralGroup):
     """
     Prepares instrument_type, satellite and spectral_modes querysets
 
@@ -46,12 +46,12 @@ def prepareSelectQuerysets(theInstrumentType, theSatellite, theSpectralMode):
         logger.debug('setting satellite %s', theSatellite)
         myOPP = myOPP.filter(
             satellite_instrument__satellite=theSatellite)
-    if theSpectralMode != '':
-        logger.debug('setting spectral mode %s', theSpectralMode)
-        myOPP = myOPP.filter(spectral_mode=theSpectralMode)
+    if theSpectralGroup != '':
+        logger.debug('setting spectral group %s', theSpectralGroup)
+        myOPP = myOPP.filter(spectral_mode__spectral_group=theSpectralGroup)
 
     # if user selected instrument type or spectral_mode filter inst_types
-    if theSatellite != '' or theSpectralMode != '':
+    if theSatellite != '' or theSpectralGroup != '':
         logger.debug('User selected satellite or spectral mode')
         myInstType_QS = InstrumentType.objects.filter(
             satelliteinstrument__opticalproductprofile__in=myOPP).distinct(
@@ -66,7 +66,8 @@ def prepareSelectQuerysets(theInstrumentType, theSatellite, theSpectralMode):
     mySatellite_QS = Satellite.objects.filter(
         satelliteinstrument__opticalproductprofile__in=myOPP).distinct(
         ).order_by('id')
-    mySpectralMode_QS = SpectralMode.objects.filter(
-        opticalproductprofile__in=myOPP).distinct().order_by('id')
+    mySpectralGroup_QS = SpectralGroup.objects.filter(
+        spectralmode__opticalproductprofile__in=myOPP).distinct(
+        ).order_by('id')
 
-    return myInstType_QS, mySatellite_QS, mySpectralMode_QS
+    return myInstType_QS, mySatellite_QS, mySpectralGroup_QS

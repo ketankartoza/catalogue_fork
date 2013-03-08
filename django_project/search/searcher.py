@@ -58,12 +58,15 @@ class Searcher:
         Construct search filter
         """
 
+        myOPP = OpticalProductProfile.objects
+
         # filter instrument type
-        myOPP = OpticalProductProfile.objects.for_instrumenttypes(
-            self.mSearch.instrumenttype)
-        logger.debug(
-            'OPP filter - instrumenttype %s',
-            self.mSearch.instrumenttype.values_list('pk'))
+        if self.mSearch.instrumenttype.count() > 0:
+            myOPP = myOPP.for_instrumenttypes(
+                self.mSearch.instrumenttype)
+            logger.debug(
+                'OPP filter - instrumenttype %s',
+                self.mSearch.instrumenttype.values_list('pk'))
 
         if self.mSearch.satellite:
             myOPP = myOPP.for_satellite(self.mSearch.satellite)
