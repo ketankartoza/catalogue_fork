@@ -44,30 +44,30 @@ def prepareSelectQuerysets(
 
     myOPP = OpticalProductProfile.objects
 
-    if theCollection != []:
+    if len(theCollection) != 0:
         logger.debug('setting collection %s', theCollection)
         myOPP = myOPP.filter(
             satellite_instrument__satellite__collection__in=theCollection)
 
-    if theSatellite != []:
+    if len(theSatellite) != 0:
         logger.debug('setting satellite %s', theSatellite)
         myOPP = myOPP.filter(
             satellite_instrument__satellite__in=theSatellite)
 
-    if theInstrumentType != []:
+    if len(theInstrumentType) != 0:
         logger.debug('setting instrument_type %s', theInstrumentType)
         myOPP = myOPP.filter(
             satellite_instrument__instrument_type__in=theInstrumentType)
 
-    if theSpectralGroup != []:
+    if len(theSpectralGroup) != 0:
         logger.debug('setting spectral_group %s', theSpectralGroup)
         myOPP = myOPP.filter(
             spectral_mode__spectralgroup__in=theSpectralGroup)
 
-    if theLicenseTypes != []:
+    if len(theLicenseTypes) != 0:
         logger.debug('setting license_type %s', theLicenseTypes)
         myOPP = myOPP.filter(
-            satelliteinstrument__satellite__license_type__in=theLicenseTypes)
+            satellite_instrument__satellite__license_type__in=theLicenseTypes)
 
     # update querysets
     myCollection_QS = Collection.objects.filter(

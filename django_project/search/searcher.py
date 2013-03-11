@@ -61,12 +61,12 @@ class Searcher:
         myOPP = OpticalProductProfile.objects
 
         # filter instrument type
-        if self.mSearch.instrumenttype.count() > 0:
-            myOPP = myOPP.for_instrumenttypes(
-                self.mSearch.instrumenttype)
+        if self.mSearch.collection.count() > 0:
+            myOPP = myOPP.for_collection(
+                self.mSearch.collection)
             logger.debug(
-                'OPP filter - instrumenttype %s',
-                self.mSearch.instrumenttype.values_list('pk'))
+                'OPP filter - collection %s',
+                self.mSearch.collection.values_list('pk'))
 
         if self.mSearch.satellite.count() > 0:
             myOPP = myOPP.for_satellite(self.mSearch.satellite)
@@ -74,15 +74,29 @@ class Searcher:
                 'OPP filter - satellite %s',
                 self.mSearch.satellite.values_list('pk'))
 
+        # filter instrument type
+        if self.mSearch.instrumenttype.count() > 0:
+            myOPP = myOPP.for_instrumenttypes(
+                self.mSearch.instrumenttype)
+            logger.debug(
+                'OPP filter - instrumenttype %s',
+                self.mSearch.instrumenttype.values_list('pk'))
+
         if self.mSearch.spectral_group.count() > 0:
             myOPP = myOPP.for_spectralgroup(self.mSearch.spectral_group)
             logger.debug(
                 'OPP filter - spectralgroup %s',
                 self.mSearch.spectral_group.values_list('pk'))
 
+        # filter by licence
+        if self.mSearch.license_type.count() > 0:
+            self.mQuerySet = self.mQuerySet.filter(
+                license__type__in=self.mSearch.license_type.all())
+            logger.debug('Licence filter %s', self.mSearch.license_type)
+
         self.mQuerySet = OpticalProduct.objects.filter(
             product_profile__in=myOPP)
-        logger.debug('Selected product profiles: %s', myOPP.values_list('pk'))
+        logger.info('Selected product profiles: %s', myOPP.values_list('pk'))
 
         # filter date ranges
         if self.mSearch.searchdaterange_set.count():
@@ -101,12 +115,6 @@ class Searcher:
                     date_range.start_date, myEndDate
                 )
             self.mQuerySet = self.mQuerySet.filter(myDateQuery)
-
-        # filter by licence
-        if self.mSearch.license_type.count() > 0:
-            self.mQuerySet = self.mQuerySet.filter(
-                license__type__in=self.mSearch.license_type.all())
-            logger.debug('Licence filter %s', self.mSearch.license_type)
 
         # filter by sensor_inclination angle
         if (self.mSearch.sensor_inclination_angle_start is not None and

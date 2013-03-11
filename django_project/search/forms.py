@@ -289,9 +289,19 @@ class AdvancedSearchForm(forms.ModelForm):
         )
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
         if self.instance.pk is not None:
-            myInstTypes, mySats, mySpecMod = prepareSelectQuerysets(
-                self.instance.instrumenttype.all().values_list('id'),
-                self.instance.satellite_id, self.instance.spectral_mode_id)
+            myCollectionSet = self.instance.collection.all().values_list('id')
+            mySatelliteSet = self.instance.satellite.all().values_list('id')
+            myInstTypeSet = self.instance.instrumenttype.all()\
+                .values_list('id')
+            mySpecGroupSet = self.instance.spectral_group.all()\
+                .values_list('id')
+            myLicenseTypeSet = self.instance.license_type.all()\
+                .values_list('id')
+
+            myQS_data = prepareSelectQuerysets(
+                myCollectionSet, mySatelliteSet, myInstTypeSet,
+                mySpecGroupSet, myLicenseTypeSet
+            )
         else:
             myQS_data = prepareSelectQuerysets()
 
