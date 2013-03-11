@@ -18,7 +18,7 @@ SELECT
   catalogue_genericproduct.id as id,
   spatial_coverage,
   'image'::text as csw_keywords,
-  'test,test_desc,http,http://catalogue.sansa.org.za/showProduct/'||product_id::text as csw_links
+  'test,test_desc,http,http://catalogue.sansa.org.za/showProduct/'||unique_product_id::text as csw_links
 FROM
   public.catalogue_genericproduct;
 

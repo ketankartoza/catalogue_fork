@@ -34,8 +34,8 @@ class Command(BaseCommand):
             '--migrations', metavar="MIGRATION_TYPE", default='all',
             help=(
                 'Selectively migrate parts of the database, semicolon ";" '
-                'delimited list of migrations (new_dicts, userprofiles,'
-                'search, pycsw, processing_levels, unique_product_id) defaults'
+                'delimited list of migrations (new_dicts, userprofiles, '
+                'search, processing_levels, unique_product_id, pycsw) defaults'
                 ' to "all"')),
     )
 
@@ -47,9 +47,9 @@ class Command(BaseCommand):
             self.migrate_new_dicts()
             self.migrate_userprofiles()
             self.migrate_search()
-            self.migrate_pycsw()
             self.migrate_proc_levels()
             self.migrate_unique_product_ids()
+            self.migrate_pycsw()
 
         if 'new_dicts' in myMigrations:
             self.migrate_new_dicts()

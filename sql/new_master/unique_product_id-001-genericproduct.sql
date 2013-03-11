@@ -111,7 +111,6 @@ ALTER TABLE catalogue_genericproduct
 ALTER TABLE catalogue_genericproduct DROP product_id CASCADE;
 
 -- recreate dropped views
-drop view vw_usercart;
 create view vw_usercart as SELECT
   search_searchrecord.id, search_searchrecord.order_id,
   auth_user.username,
