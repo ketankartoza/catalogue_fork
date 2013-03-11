@@ -90,9 +90,11 @@ class Searcher:
 
         # filter by licence
         if self.mSearch.license_type.count() > 0:
-            self.mQuerySet = self.mQuerySet.filter(
-                license__type__in=self.mSearch.license_type.all())
-            logger.debug('Licence filter %s', self.mSearch.license_type)
+            myOPP = myOPP.for_licence_type(self.mSearch.license_type)
+            logger.debug(
+                'Licence filter %s',
+                self.mSearch.license_type.values_list('pk')
+            )
 
         self.mQuerySet = OpticalProduct.objects.filter(
             product_profile__in=myOPP)

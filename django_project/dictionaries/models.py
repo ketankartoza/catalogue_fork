@@ -30,6 +30,11 @@ class OpticalProductProfileQuerySet(QuerySet):
 
     """
 
+    def for_licence_type(self, theLicenceType):
+        return self.filter(
+            satellite_instrument__satellite__license_type__in=
+            theLicenceType.all())
+
     def for_collection(self, theCollection):
         return self.filter(
             satellite_instrument__satellite__collection__in=
