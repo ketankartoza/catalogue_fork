@@ -293,12 +293,14 @@ class AdvancedSearchForm(forms.ModelForm):
                 self.instance.instrumenttype.all().values_list('id'),
                 self.instance.satellite_id, self.instance.spectral_mode_id)
         else:
-            myInstTypes, mySats, mySpecMod = prepareSelectQuerysets([], '', '')
+            myQS_data = prepareSelectQuerysets()
 
         # set new querysets
-        self.fields['instrumenttype'].queryset = myInstTypes
-        self.fields['satellite'].queryset = mySats
-        self.fields['spectral_group'].queryset = mySpecMod
+        self.fields['collection'].queryset = myQS_data[0]
+        self.fields['satellite'].queryset = myQS_data[1]
+        self.fields['instrumenttype'].queryset = myQS_data[2]
+        self.fields['spectral_group'].queryset = myQS_data[3]
+        self.fields['license_type'].queryset = myQS_data[4]
 
         for myFieldName, myField in self.fields.items():
             myField.widget.attrs['class'] = 'ui-corner-all'
