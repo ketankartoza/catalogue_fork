@@ -153,7 +153,8 @@ class OrderNotificationRecipients(models.Model):
             listeners.update([o.user for o in (
                 OrderNotificationRecipients.objects
                 .filter(
-                    sensors=instance.acquisition_mode.sensor_type.mission_sensor)
+                    sensors=instance.
+                    product_profile.satellite_instrument.satellite)
                 .select_related()
             )])
         return listeners

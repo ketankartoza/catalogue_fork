@@ -53,8 +53,8 @@ from catalogue.models import (
     OrderStatusHistory,
     DeliveryDetail,
     OrderStatus,
-    TaskingRequest,
-    MissionSensor)
+    TaskingRequest
+)
 
 from catalogue.forms import (
     OrderStatusHistoryForm,
@@ -101,8 +101,9 @@ def myOrders(theRequest):
         myPage = int(theRequest.GET.get('page', '1'))
     except ValueError:
         myPage = 1
-        logger.info('Order list page request defaulting to page 1'
-                     ' because on an error in pagination')
+        logger.info(
+            'Order list page request defaulting to page 1 because on an error '
+            'in pagination')
     # If page request (9999) is out of range, deliver last page of results.
     try:
         myRecords = myPaginator.page(myPage)
@@ -220,8 +221,8 @@ def downloadOrder(theRequest, theId):
             'myThumbsFlag': True
         }, u'products_for_order_%s' % myOrder.id)
     else:
-        logger.info('Request cannot be proccesed,'
-                     ' unsupported download file type')
+        logger.info(
+            'Request cannot be proccesed, unsupported download file type')
         raise Http404
 
 
@@ -251,8 +252,8 @@ def downloadClipGeometry(theRequest, theId):
                 'myThumbsFlag': True
             }, u'clip_geometry_order_%s' % myOrder.id)
     else:
-        logger.info('Request cannot be processed,'
-                     ' unsupported download file type')
+        logger.info(
+            'Request cannot be processed, unsupported download file type')
         raise Http404
 
 
@@ -529,8 +530,7 @@ def addOrder(theRequest):
             return HttpResponseRedirect(reverse('emptyCartHelp'))
         else:
             logger.debug('Cart has records')
-            logger.info('Cart contains : ' +
-                         str(myRecords.count()) + ' items')
+            logger.info('Cart contains : %i items', myRecords.count())
     myExtraOptions = {
         # Possible flags for the record template
         # myShowSensorFlag
@@ -611,11 +611,13 @@ def addOrder(theRequest):
                 if myGeometry:
                     myDeliveryDetailObject.geometry = myGeometry
                 else:
-                    logger.info('Failed to set search area'
-                                 ' from uploaded geometry file')
+                    logger.info(
+                        'Failed to set search area from uploaded geometry '
+                        'file')
             except:
-                logger.info('An error occurred trying to set'
-                             ' search area from uploaded geometry file')
+                logger.info(
+                    'An error occurred trying to set search area from uploaded'
+                    ' geometry file')
             myDeliveryDetailObject.user = theRequest.user
             myDeliveryDetailObject.save()
             #save order

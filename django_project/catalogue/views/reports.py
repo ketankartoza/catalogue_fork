@@ -44,14 +44,11 @@ from django.db.models import Count  # for aggregate queries
 # Models and forms for our app
 from catalogue.models import (
     Visit,
-    Mission,
-    MissionSensor,
     TaskingRequest,
     GenericSensorProduct,
     RadarProduct,
-    OpticalProduct,
-    SensorType,
-    AcquisitionMode)
+    OpticalProduct
+)
 from catalogue.renderDecorator import renderWithContext
 
 from search.models import (

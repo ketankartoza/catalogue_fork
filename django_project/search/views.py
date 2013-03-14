@@ -43,21 +43,12 @@ from django.template import RequestContext, loader, Context
 #from django.db.models import Count, Min, Max  # for aggregate queries
 from django.forms.models import inlineformset_factory
 
-# Models and forms for our app
-from catalogue.models import (
-    AcquisitionMode,
-    Mission,
-    MissionSensor,
-    SensorType
-)
-
-
-from catalogue.renderDecorator import renderWithContext
-
 # Helper classes
 
 #Dane Springmeyer's django-shapes app for exporting results as a shpfile
 from shapes.views import ShpResponder
+
+from catalogue.renderDecorator import renderWithContext
 
 from catalogue.views.helpers import (
     standardLayers,
