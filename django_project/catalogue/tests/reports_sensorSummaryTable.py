@@ -30,17 +30,12 @@ class ReportsViews_sensorSummaryTable_Tests(TestCase):
     """
     fixtures = [
         'test_user.json',
-        'test_missionsensor.json',
         'test_processinglevel.json',
-        'test_missiongroup.json',
-        'test_mission.json',
         'test_genericproduct.json',
         'test_institution.json',
         'test_license.json',
         'test_quality.json',
         'test_creatingsoftware.json',
-        'test_acquisitionmode.json',
-        'test_sensortype.json',
         'test_projection.json',
         # new dicts
         'test_radarbeam.json',

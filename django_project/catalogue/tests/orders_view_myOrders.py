@@ -42,9 +42,6 @@ class OrdersViews_myOrders_Tests(TestCase):
         'test_datum.json',
         'test_resamplingmethod.json',
         'test_fileformat.json',
-        'test_missiongroup.json',
-        'test_mission.json',
-        'test_missionsensor.json',
     ]
 
     def setUp(self):

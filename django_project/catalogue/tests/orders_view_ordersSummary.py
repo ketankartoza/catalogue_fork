@@ -25,8 +25,7 @@ from django.test.client import Client
 from django.db.models import Count
 
 from catalogue.models import (
-    OrderStatus,
-    MissionSensor
+    OrderStatus
 )
 
 
@@ -36,9 +35,6 @@ class OrdersViews_ordersSummary_Tests(TestCase):
     """
 
     fixtures = [
-        'test_missiongroup.json',
-        'test_mission.json',
-        'test_missionsensor.json',
         'test_processinglevel.json',
         'test_projection.json',
         'test_fileformat.json',

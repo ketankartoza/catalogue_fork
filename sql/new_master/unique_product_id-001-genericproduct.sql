@@ -117,7 +117,6 @@ create view vw_usercart as SELECT
   catalogue_genericproduct."unique_product_id",
   catalogue_genericproduct.spatial_coverage
 FROM
-  public.catalogue_missionsensor,
   public.search_searchrecord,
   public.catalogue_genericproduct,
   public.auth_user

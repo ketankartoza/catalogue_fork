@@ -5,7 +5,6 @@ create view vw_usercart as SELECT
   catalogue_genericproduct."unique_product_id",
   catalogue_genericproduct.spatial_coverage
 FROM
-  public.catalogue_missionsensor,
   public.search_searchrecord,
   public.catalogue_genericproduct,
   public.auth_user
@@ -22,4 +21,4 @@ FROM catalogue_visit v
 GROUP BY v.country, v.city, v.ip_position
 ORDER BY v.country, v.city;
 grant select on vw_visitor_report to readonly;
-grant select on catalogue_search to readonly;
+grant select on search_search to readonly;
