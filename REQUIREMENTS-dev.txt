@@ -7,3 +7,6 @@ sqlparse
 https://guppy-pe.svn.sourceforge.net/svnroot/guppy-pe/trunk/guppy
 line_profiler
 django_devserver
+# Fabric related deps
+Fabric==1.5.3
+fabtools==0.12.0
