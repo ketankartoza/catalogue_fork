@@ -7,13 +7,11 @@
       <li>
         <a href="/"><i class="icon-home"></i> <span class="hidden-phone hidden-tablet custom-hide">Home</span></a>
       </li>
-      {% if not user.is_authenticated %}
       <li>
-        <a href="{% url 'about' %}"><i class="icon-question-sign"></i> <span class="hidden-phone hidden-tablet">About</span></a>
+        <a href="#"><i class="icon-share"></i> <span class="hidden-phone hidden-tablet">Archive</span></a>
       </li>
-      {% endif %}
       <li>
-        <a href="#"><i class="icon-share"></i> <span class="hidden-phone hidden-tablet">Archive Summary</span></a>
+        <a href="{% url 'search' %}"><i class="icon-search"></i> <span class="hidden-phone hidden-tablet custom-hide">Search</span></a>
       </li>
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-circle-arrow-right"></i> <span class="hidden-phone hidden-tablet">Links</span><b class="caret"></b></a>
@@ -44,9 +42,11 @@
           </li>
         </ul>
       </li>
+      {% if not user.is_authenticated %}
       <li>
-        <a href="{% url 'search' %}"><i class="icon-search"></i> <span class="hidden-phone hidden-tablet custom-hide">Search</span></a>
+        <a href="{% url 'about' %}"><i class="icon-question-sign"></i> <span class="hidden-phone hidden-tablet">About</span></a>
       </li>
+      {% endif %}
       {% if user.is_authenticated %}
       <li>
         <a href="#"><i class="icon-wrench"></i> <span class="hidden-phone hidden-tablet">Tasking Requests</span></a>
@@ -79,10 +79,6 @@
           </li>
           <li><a href="{% url 'whereAmI' %}">Where am I?</a></li>
         </ul>
-      </li>
-      {% else %}
-      <li>
-        <a href="{% url 'userena_signup' %}"><i class="icon-road"></i> <span class="hidden-phone hidden-tablet">Register</span></a>
       </li>
       {% endif %}
       <li>
@@ -124,6 +120,9 @@
       {% if user.is_authenticated %}
         {% include "useraccounts/menu_content.html" %}
       {% else %}
+      <li>
+        <a href="{% url 'userena_signup' %}"><i class="icon-group"></i> <span class="hidden-phone hidden-tablet">Register</span></a>
+      </li>
       <li>
         <a href="{% url 'userena_signin' %}"><i class="icon-user"></i> <span class="hidden-phone hidden-tablet">Login</span></a>
       </li>
