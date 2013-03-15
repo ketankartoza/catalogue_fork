@@ -50,9 +50,10 @@ class SearchBandCount_Test(SearchTestCase):
             request.user = self.user
 
             #create Searcher object
-            mySearcher = Searcher(request, mySearch.guid)
+            mySearcher = Searcher(request, mySearch)
             mySearcher.search()
 
             assert mySearcher.mQuerySet.count() >= myExpectedResults[idx], \
-            simpleMessage(mySearcher.mQuerySet.count(), myExpectedResults[idx],
-                message='For search pk %s expected more then:' % searchPK)
+                simpleMessage(
+                    mySearcher.mQuerySet.count(), myExpectedResults[idx],
+                    message='For search pk %s expected more then:' % searchPK)

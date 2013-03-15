@@ -43,21 +43,12 @@ from django.template import RequestContext, loader, Context
 #from django.db.models import Count, Min, Max  # for aggregate queries
 from django.forms.models import inlineformset_factory
 
-# Models and forms for our app
-from catalogue.models import (
-    AcquisitionMode,
-    Mission,
-    MissionSensor,
-    SensorType
-)
-
-
-from catalogue.renderDecorator import renderWithContext
-
 # Helper classes
 
 #Dane Springmeyer's django-shapes app for exporting results as a shpfile
 from shapes.views import ShpResponder
+
+from catalogue.renderDecorator import renderWithContext
 
 from catalogue.views.helpers import (
     standardLayers,
@@ -88,37 +79,14 @@ from .forms import (
     DateRangeFormSet
 )
 
+from .utils import prepareSelectQuerysets
+
 
 class Http500(Exception):
     pass
 
 DateRangeInlineFormSet = inlineformset_factory(
     Search, SearchDateRange, extra=0, max_num=0, formset=DateRangeFormSet)
-
-
-def detectAdvancedSearchForm(theSearchForm):
-    """
-    Based on search form input determine if the form is advanced
-    """
-    if theSearchForm.data.get('isAdvanced') == 'true':
-        return True
-    myFormIsAdvancedTest = [
-        theSearchForm.data.get('sensor_inclination_angle_start') != '',
-        theSearchForm.data.get('sensor_inclination_angle_end') != '',
-        theSearchForm.data.get('j_frame_row') != '',
-        theSearchForm.data.get('aoi_geometry') != '',
-        theSearchForm.data.get('spatial_resolution') != '',
-        theSearchForm.data.get('acquisition_mode') != '',
-        theSearchForm.data.get('geometry_file') != '',
-        theSearchForm.data.get('k_orbit_path') != '',
-        theSearchForm.data.get('band_count') != '',
-        theSearchForm.data.get('license_type') != '',
-        theSearchForm.data.get('geometry') != '',
-        theSearchForm.data.get('sensor_type') != '',
-        (theSearchForm.data.get('cloud_mean') != '' and
-            theSearchForm.data.get('cloud_mean') != '0')
-    ]
-    return any(myFormIsAdvancedTest)
 
 
 #@login_required
@@ -131,12 +99,21 @@ def search(theRequest):
 
     myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
         theRequest)
-    logger.debug(('Post vars:' + str(theRequest.POST)))
     logger.info('search called')
-    post_values = theRequest.POST.copy()
+    post_values = theRequest.POST
+    # if the request.POST is not 'multipart/form-data' then QueryDict that
+    # holds POST values is not mutable, however, we need it to be mutable
+    # because 'save_as_new' on inlineformset directly changes values
+    #
+    # we need to force this behavior
+    post_values._mutable = True
+
     if theRequest.method == 'POST':
+        logger.debug('Post vars: %s', str(theRequest.POST))
         myForm = AdvancedSearchForm(post_values, theRequest.FILES)
+        logger.debug('Uploaded files: %s', theRequest.FILES)
         if myForm.is_valid():
+            logger.info('AdvancedForm is VALID')
             mySearch = myForm.save(commit=False)
             # ABP: save_as_new is necessary due to the fact that a new Search
             # object is always
@@ -145,13 +122,12 @@ def search(theRequest):
                 post_values, theRequest.FILES, instance=mySearch,
                 save_as_new=True)
             if myFormset.is_valid():
-                logger.info('formset is VALID')
+                logger.info('Daterange formset is VALID')
                 myLatLong = {'longitude': 0, 'latitude': 0}
 
                 if settings.USE_GEOIP:
                     try:
                         myGeoIpUtils = GeoIpUtils()
-                        myIp = myGeoIpUtils.getMyIp(theRequest)
                         myLatLong = myGeoIpUtils.getMyLatLong(theRequest)
                     except:
                         # raise forms.ValidationError( "Could not get geoip for
@@ -225,8 +201,8 @@ def search(theRequest):
                 )
                 """
             else:
-                logger.info('formset is INVALID')
-                logger.debug('%s' % myFormset.errors)
+                logger.debug('Daterange formset is NOT VALID')
+                logger.debug(myFormset.errors)
         else:
             myFormset = DateRangeInlineFormSet(
                 theRequest.POST, theRequest.FILES, save_as_new=True)
@@ -236,29 +212,14 @@ def search(theRequest):
         t = loader.get_template('searchPanelv3.html')
         c = Context({
             'myForm': myForm,
-            'myHost': settings.HOST,
-            'myFormset': myFormset})
-        return HttpResponseServerError(
-            t.render(c))
-        #render_to_response is done by the renderWithContext decorator
-        """
-        return render_to_response(
-            'search.html', {
-                'myAdvancedFlag': detectAdvancedSearchForm(myForm),
-                'mySearchType': theRequest.POST['search_type'],
-                'myForm': myForm,
-                'myHost': settings.HOST,
-                'myFormset': myFormset,
-                'myLayerDefinitions': myLayerDefinitions,
-                'myLayersList': myLayersList,
-                'myActiveBaseMap': myActiveBaseMap},
-            context_instance=RequestContext(theRequest))
-        """
+            'myFormset': myFormset
+        })
+        # form was not valid return 404
+        return HttpResponse(t.render(c), status=404)
     else:
-        logger.info('initial search form being rendered')
         myForm = AdvancedSearchForm()
         myFormset = DateRangeInlineFormSet()
-        #render_to_response is done by the renderWithContext decorator
+        # render_to_response is done by the renderWithContext decorator
         return render_to_response(
             'searchv3.html', {
                 'myAdvancedFlag': False,
@@ -273,59 +234,6 @@ def search(theRequest):
 
 
 @login_required
-def getSensorDictionaries(theRequest):
-    """
-    Given a set of search sensor-releated criteria, returns
-    valid options for the selects.
-    """
-    values = {}
-    if theRequest.is_ajax():
-        # ABP: Returns a json object with the dictionary possible values
-        qs = AcquisitionMode.objects.order_by()
-        if (int(theRequest.POST.get('search_type')) in
-                (Search.PRODUCT_SEARCH_RADAR, Search.PRODUCT_SEARCH_OPTICAL)):
-            is_radar = (
-                (int(theRequest.POST.get('search_type'))
-                    == Search.PRODUCT_SEARCH_RADAR))
-            qs = qs.filter(sensor_type__mission_sensor__is_radar=is_radar)
-        values['mission'] = list(qs.distinct().values_list(
-            'sensor_type__mission_sensor__mission', flat=True))
-        if theRequest.POST.get('mission'):
-            try:
-                qs = qs.filter(
-                    sensor_type__mission_sensor__mission=
-                    Mission.objects.get(pk=theRequest.POST.get('mission')))
-            except ObjectDoesNotExist:
-                raise Http500('Mission does not exists')
-        # m2m
-        values['sensors'] = list(qs.distinct().values_list(
-            'sensor_type__mission_sensor', flat=True))
-        if theRequest.POST.get('sensors'):
-            try:
-                qs = qs.filter(
-                    sensor_type__mission_sensor__in=MissionSensor.objects
-                    .filter(pk__in=theRequest.POST.getlist('sensors')))
-            except ObjectDoesNotExist:
-                raise Http500('SensorType does not exists')
-        values['sensor_type'] = list(qs.distinct().values_list(
-            'sensor_type', flat=True))
-        if theRequest.POST.get('sensor_type'):
-            try:
-                qs = qs.filter(
-                    sensor_type=SensorType.objects.get(
-                        pk=theRequest.POST.get('sensor_type')))
-            except ObjectDoesNotExist:
-                raise Http500('SensorType does not exists')
-        values['acquisition_mode'] = list(qs.distinct().values_list(
-            'pk', flat=True))
-        if  theRequest.POST.get('acquisition_mode'):
-            qs = qs.filter(pk=theRequest.POST.get('acquisition_mode'))
-        return HttpResponse(
-            simplejson.dumps(values), mimetype='application/json')
-    raise Http500('This view must be called by XHR')
-
-
-#@login_required
 def modifySearch(theRequest, theGuid):
     """
     Given a search guid, give the user a form prepopulated with
@@ -339,13 +247,10 @@ def modifySearch(theRequest, theGuid):
     myForm = AdvancedSearchForm(instance=mySearch)
     myFormset = DateRangeInlineFormSet(instance=mySearch)
     return render_to_response(
-        'search.html', {
-            'myAdvancedFlag': mySearch.isAdvanced,
-            'mySearchType': mySearch.search_type,
+        'searchv3.html', {
             'myFormset': myFormset,
             'myForm': myForm,
             'myGuid': theGuid,
-            'myHost': settings.HOST,
             'myLayerDefinitions': myLayerDefinitions,
             'myLayersList': myLayersList,
             'myActiveBaseMap': myActiveBaseMap},
@@ -360,7 +265,8 @@ def searchResultMap(theRequest, theGuid):
     Renders a search results page including the map and all attendant html
     content
     """
-    mySearcher = Searcher(theRequest, theGuid)
+    mySearch = get_object_or_404(Search, guid=theGuid)
+    mySearcher = Searcher(theRequest, mySearch)
     mySearcher.search()
     return(mySearcher.templateData())
 
@@ -373,7 +279,8 @@ def searchResultPage(theRequest, theGuid):
     Does the same as searchResultMap but renders only enough html to be
     inserted into a div
     """
-    mySearcher = Searcher(theRequest, theGuid)
+    mySearch = get_object_or_404(Search, guid=theGuid)
+    mySearcher = Searcher(theRequest, mySearch)
     mySearcher.search()
     return(mySearcher.templateData())
 
@@ -470,6 +377,43 @@ def renderSearchResultsPage(theRequest, theGuid):
     Does the same as searchResultMap but renders only enough html to be
     inserted into a div
     """
-    mySearcher = Searcher(theRequest, theGuid)
+    mySearch = get_object_or_404(Search, guid=theGuid)
+    logger.debug('Search found, initializing Searcher class')
+    mySearcher = Searcher(theRequest, mySearch)
     mySearcher.search()
     return(mySearcher.templateData())
+
+
+def updateSelectOptions(theRequest):
+    """
+    Returns JSON encoded InstrumentTypes, Satellites and SpectralModes options
+    """
+    mySelCollections = theRequest.GET.getlist('collections')
+    mySelSatellite = theRequest.GET.getlist('satellites')
+    mySelInstrumentType = theRequest.GET.getlist('instrumenttypes')
+    mySelSpectralGroups = theRequest.GET.getlist('spectralgroups')
+    mySelLicenseTypes = theRequest.GET.getlist('licencetypes')
+
+    myQS_data = prepareSelectQuerysets(
+        mySelCollections, mySelSatellite, mySelInstrumentType,
+        mySelSpectralGroups, mySelLicenseTypes)
+
+    myFinalData = {
+        'collections': [(
+            option.pk,
+            unicode(option)) for option in myQS_data[0]],
+        'satellites': [(
+            option.pk,
+            unicode(option)) for option in myQS_data[1]],
+        'instrumenttypes': [(
+            option.pk,
+            unicode(option)) for option in myQS_data[2]],
+        'spectralgroups': [(
+            option.pk,
+            unicode(option)) for option in myQS_data[3]],
+        'licensetypes': [(
+            option.pk,
+            unicode(option)) for option in myQS_data[4]]
+    }
+    return HttpResponse(
+        simplejson.dumps(myFinalData), mimetype='application/json')

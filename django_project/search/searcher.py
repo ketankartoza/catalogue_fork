@@ -14,7 +14,7 @@ Contact : lkleyn@sansa.org.za
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.1'
-__date__ = '01/01/2011'
+__date__ = '16/02/2013'
 __copyright__ = 'South African National Space Agency'
 
 import logging
@@ -23,31 +23,17 @@ logger = logging.getLogger(__name__)
 
 from datetime import timedelta
 
-from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from django.db.models import Q
 from django.conf import settings
+from django.db.models import Q
 
 # Models and forms for our app
-from catalogue.models import (
-    GenericSensorProduct,
-    GeospatialProduct,
-    RadarProduct,
-    OpticalProduct,
-    License)
+from .models import SearchRecord
+
+from dictionaries.models import OpticalProductProfile
 
 from catalogue.fields import IntegersCSVIntervalsField
-# for using django Q() query defs
-from catalogue.views.helpers import standardLayersWithCart
-
-# Models and forms for our app
-from .models import (
-    Search,
-    SearchRecord,
-)
-
-DEFAULT_EXTENT = (
-    '(-61.773122863038, -74.531249997024, 128.32031249488, 70.612614236677)')
+from catalogue.models import OpticalProduct
 
 
 class Searcher:
@@ -58,426 +44,191 @@ class Searcher:
     change.
     """
 
-    def clearTemplateData(self):
-        """Clear the searcher data"""
-        self.mMessages = []
-        self.mThumbnails = []
-        self.mRequest = None
-        self.mSearch = None
+    def __init__(self, theRequest, theSearch):
+
+        self.mSearch = theSearch
+        self.mRequest = theRequest
         self.mSearchRecords = []
-        self.mQuerySet = None
-        self.mSearchPage = None
-        self.mExtent = DEFAULT_EXTENT
-        self.mPageNo = 1
-        self.mSqlString = ''
-        self.mLayerDefinitions = []
-        self.mLayersList = ''
-        self.mRecordCount = 0
+        self.mExtent = None
 
-    def templateData(self):
+        self.filterCriteria()
+
+    def filterCriteria(self):
         """
-        Return data from the searcher suitable for passing along to the
-        map.html template
+        Construct search filter
         """
-        return ({
-            'mySearchGuid': self.mSearch.guid,
-            'myMessages': self.mMessages,
-            'myLayerDefinitions': self.mLayerDefinitions,
-            'myThumbnails': self.mThumbnails,
-            'myLayersList': self.mLayersList,
-            'mySensor': self.mSearch.sensorsAsString(),
-            'myRecords': self.mSearchRecords,
-            'myQuerySet': self.mQuerySet,
-            'myPage': self.mSearchPage,
-            'myExtent': self.mExtent,
-            'myPageNo': self.mPageNo,
-            'mySqlString': self.mSqlString,
-            # Possible flags for the record template
-            # myShowSensorFlag
-            # myShowSceneIdFlag
-            # myShowDateFlag
-            # myShowCartFlag
-            # myRemoveFlag
-            # myShowHighlightFlag
-            # myThumbFlag
-            # myLegendFlag
-            'myDetailFlag': True,
-            'myShowSceneIdFlag': True,
-            'myShowDateFlag': True,
-            # used in cart contents listing context only
-            'myShowRemoveIconFlag': False,
-            'myShowHighlightFlag': True,
-            'myShowRowFlag': False,
-            'myShowPathFlag': False,
-            'myShowCloudCoverFlag': True,
-            'myShowMetadataFlag': True,
-            'myShowCartFlag': True,
-            'myShowPreviewFlag': True,
-            'myLegendFlag': True,  # used to show the legend in the accordion
-            'mySearchFlag': True,
-            'myPaginator': self.mPaginator
-        })
 
-    def __del__(self):
-        logger.info('Searcher destroyed')
-        return
+        myOPP = OpticalProductProfile.objects
 
-    def initQuery(self):
-        """
-        Setup the querySet configuring the filters
-        """
-        # -----------------------------------------------------
-        # First fallback extent, will be overwritten by search geom extents if
-        # there is a search geom
-        self.mExtent = DEFAULT_EXTENT
-        if self.mSearch.geometry:
-            # Add the geometry of the search to the layers list for openlayers
-            # to render
-            self.mLayerDefinitions.append('''
-var mySearchAreaLayer = new OpenLayers.Layer.Vector("Search Area");
-var myGeojsonFormat = new OpenLayers.Format.GeoJSON();
-var mySearchFeature = myGeojsonFormat.read(%s)[0];
-mySearchFeature.geometry = transformGeometry( mySearchFeature.geometry );
-mySearchAreaLayer.addFeatures(mySearchFeature);
-mMap.addLayer(mySearchAreaLayer);''' % self.mSearch.geometry.geojson)
-            # This will get overwritten by the extents of the page further
-            # down here but its a good fallback in case there were no records
-            self.mExtent = str(self.mSearch.geometry.envelope.extent)
+        # filter instrument type
+        if self.mSearch.collection.count() > 0:
+            myOPP = myOPP.for_collection(
+                self.mSearch.collection)
+            logger.debug(
+                'OPP filter - collection %s',
+                self.mSearch.collection.values_list('pk'))
 
-        # ABP: Create the query set based on the type of class we're going to
-        # search in
-        assert (
-            self.mSearch.search_type in
-            dict(Search.PRODUCT_SEARCH_TYPES).keys())
+        if self.mSearch.satellite.count() > 0:
+            myOPP = myOPP.for_satellite(self.mSearch.satellite)
+            logger.debug(
+                'OPP filter - satellite %s',
+                self.mSearch.satellite.values_list('pk'))
 
-        if (not self.mSearch.isAdvanced or
-                self.mSearch.search_type == Search.PRODUCT_SEARCH_GENERIC):
-            logger.info('Search type is PRODUCT_SEARCH_GENERIC')
-            self.mSearch.search_type = Search.PRODUCT_SEARCH_GENERIC
-            # ABP: changed simple search to GenericSensorProduct
-            #      because sensors are now mandatory
-            self.mQuerySet = GenericSensorProduct.objects.all()
-        elif self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL:
-            logger.info('Search type is PRODUCT_SEARCH_OPTICAL')
-            self.mQuerySet = OpticalProduct.objects.all()
-        elif self.mSearch.search_type == Search.PRODUCT_SEARCH_RADAR:
-            logger.info('Search type is PRODUCT_SEARCH_RADAR')
-            self.mQuerySet = RadarProduct.objects.all()
-        elif self.mSearch.search_type == Search.PRODUCT_SEARCH_GEOSPATIAL:
-            logger.info('Search type is PRODUCT_SEARCH_GEOSPATIAL')
-            self.mQuerySet = GeospatialProduct.objects.all()
-        elif self.mSearch.search_type == Search.PRODUCT_SEARCH_IMAGERY:
-            logger.info('Search type is PRODUCT_SEARCH_IMAGERY')
-            self.mQuerySet = GeospatialProduct.objects.all()
+        # filter instrument type
+        if self.mSearch.instrumenttype.count() > 0:
+            myOPP = myOPP.for_instrumenttypes(
+                self.mSearch.instrumenttype)
+            logger.debug(
+                'OPP filter - instrumenttype %s',
+                self.mSearch.instrumenttype.values_list('pk'))
 
-        # -----------------------------------------------------
-        logger.info('filtering by search criteria ...')
-        #
-        # ABP: new logic is to get directly from the request which kind of
-        # product to search on
-        # ABP: common "simple search" parameters
+        if self.mSearch.spectral_group.count() > 0:
+            myOPP = myOPP.for_spectralgroup(self.mSearch.spectral_group)
+            logger.debug(
+                'OPP filter - spectralgroup %s',
+                self.mSearch.spectral_group.values_list('pk'))
+
+        # filter by licence
+        if self.mSearch.license_type.count() > 0:
+            myOPP = myOPP.for_licence_type(self.mSearch.license_type)
+            logger.debug(
+                'Licence filter %s',
+                self.mSearch.license_type.values_list('pk')
+            )
+
+        self.mQuerySet = OpticalProduct.objects.filter(
+            product_profile__in=myOPP)
+        logger.info('Selected product profiles: %s', myOPP.values_list('pk'))
+
+        # filter date ranges
         if self.mSearch.searchdaterange_set.count():
-            self.mDateQuery = Q()
+            myDateQuery = Q()
             for date_range in self.mSearch.searchdaterange_set.all():
                 # add one day to end date to search in the last day
                 # search for 01-03-2012 -> 01-03-2012 yields no results
                 # because range only compares dates
                 myEndDate = date_range.end_date + timedelta(days=1)
-                self.mDateQuery = (
-                    self.mDateQuery | Q(
-                        product_date__range=(
-                            date_range.start_date, myEndDate)))
-                # TODO: format dates in dd-mm-yyyy
-                self.mMessages.append(
-                    'date range <b>%s</b>' % date_range.local_format())
-            self.mQuerySet = self.mQuerySet.filter(self.mDateQuery)
+                myDateQuery = (
+                    myDateQuery | Q(product_date__range=(
+                        date_range.start_date, myEndDate))
+                )
+                logger.debug(
+                    'Daterange filter %s - %s',
+                    date_range.start_date, myEndDate
+                )
+            self.mQuerySet = self.mQuerySet.filter(myDateQuery)
 
-        if self.mSearch.geometry:
-            self.mGeometryQuery = Q(
-                spatial_coverage__intersects=self.mSearch.geometry)
-            self.mQuerySet = self.mQuerySet.filter(self.mGeometryQuery)
+        # filter by sensor_inclination angle
+        if (self.mSearch.sensor_inclination_angle_start is not None and
+                self.mSearch.sensor_inclination_angle_end is not None):
 
-        # ABP: sensors is mandatory ? Better if not enforced here: too bad in
-        # product_id search!
-        # assert self.mSearch.sensors.count() > 0,
-        # "Search contains no sensors informations"
-        if self.mSearch.sensors.count() > 0:
-            try:
-                #__in = match to one or more sensors
-                self.mSensorQuery = Q(
-                    acquisition_mode__sensor_type__mission_sensor__in=
-                    self.mSearch.sensors.all())
-                self.mQuerySet = self.mQuerySet.filter(self.mSensorQuery)
-                self.mMessages.append(
-                    'sensors <b>%s</b>' % self.mSearch.sensorsAsString())
-                logger.info(
-                    'Sensor in use is:' + str(
-                        self.mSearch.sensors.values_list('name', flat=True)))
-            except Exception, e:
-                logger.error(
-                    'QuerySet modification failed \n %s' % e.message)
-                # This exception handler was added to prevent crashes here like
-                # this:
-                # FieldError: Cannot resolve keyword 'acquisition_mode' into
-                # field. Choices are: GenericProduct_child,
-                # GenericProduct_parent, children, creating_software,
-                # data_type, description, equivalent_scale, genericproduct,
-                # genericproduct_ptr, id, license, local_storage_path, metadata
-                # name, original_product_id, owner, place, place_type,
-                # primary_topic, processing_level, processing_notes,
-                # product_date, product_id, product_revision, projection,
-                # quality, remote_thumbnail_url, searchrecord,
-                # spatial_coverage, temporal_extent_end, temporal_extent_start
-                #
-                # Somewhere generic product is being used for the search but
-                # the form is allowing the selection of sensors.
-                # This should be fixed.
-                # Tim Nov 27 2011
+            mySensorInclinationAngleQuery = Q(
+                sensor_inclination_angle__range=(
+                    self.mSearch.sensor_inclination_angle_start,
+                    self.mSearch.sensor_inclination_angle_end)
+            )
+            self.mQuerySet = self.mQuerySet.filter(
+                mySensorInclinationAngleQuery
+            )
+            logger.debug(
+                'Sensor inclination angle filter %s-%s',
+                self.mSearch.sensor_inclination_angle_start,
+                self.mSearch.sensor_inclination_angle_end
+            )
 
-        # ABP: paramters for "advanced search" only
-        if self.mAdvancedFlag:
-            logger.info('Search is advanced')
-            # ABP: adds informations about search_type
-            self.mMessages.append('search type <b>%s</b>' % dict(
-                self.mSearch.PRODUCT_SEARCH_TYPES)[self.mSearch.search_type])
-            # ABP: advanced search parameters, not sensor-specific
-            if self.mSearch.license_type:
-                self.mMessages.append(
-                    'license type <b>%s</b>' % dict(
-                        License.LICENSE_TYPE_CHOICES).get(
-                            self.mSearch.license_type))
-                # ABP: int dictionary
-                self.mLicenseQuery = Q(
-                    license__type=self.mSearch.license_type)
-                self.mQuerySet = self.mQuerySet.filter(self.mLicenseQuery)
+        # filter spatial resolution
+        if self.mSearch.spatial_resolution is not None:
+            mySpatialRes = self.mSearch.SPATIAL_RESOLUTION_RANGE.get(
+                self.mSearch.spatial_resolution
+            )
+            mySpatialResQuery = Q(spatial_resolution__range=mySpatialRes)
+            self.mQuerySet = self.mQuerySet.filter(mySpatialResQuery)
+            logger.debug('Spatial resolution filter %s', mySpatialRes)
 
-            # ABP: sensor only (advanced  query for Radar and Optical)
-            # I don't really like this kind of checks... bad OOP ...
-            # this should be sooner or later heavily refactored
+        # filter cloud cover
+        if self.mSearch.cloud_mean:
+            myCloudQuery = (
+                Q(cloud_cover__lte=self.mSearch.cloud_mean)
+                | Q(cloud_cover__isnull=True))
+            self.mQuerySet = self.mQuerySet.filter(myCloudQuery)
+            logger.debug('Cloud mean filter: %s', self.mSearch.cloud_mean)
 
-            ##
-            # radar and optical (genericsensor)
-            #
-            if self.mSearch.search_type in (
-                    Search.PRODUCT_SEARCH_OPTICAL,
-                    Search.PRODUCT_SEARCH_RADAR):
-                logger.info('GenericSensorProduct advanced search activated')
-                if self.mSearch.acquisition_mode:
-                    self.mMessages.append(
-                        'acquisition mode <b>%s</b>' % (
-                            self.mSearch.acquisition_mode,))
-                    self.mAcquisitionModeQuery = Q(
-                        acquisition_mode=self.mSearch.acquisition_mode)
-                    self.mQuerySet = self.mQuerySet.filter(
-                        self.mAcquisitionModeQuery)
-                if self.mSearch.mission:
-                    self.mMessages.append(
-                        'mission <b>%s</b>' % self.mSearch.mission)
-                    self.mMissionQuery = Q(
-                        acquisition_mode__sensor_type__mission_sensor__mission=
-                        self.mSearch.mission)
-                    self.mQuerySet = self.mQuerySet.filter(self.mMissionQuery)
-                if self.mSearch.sensor_type:
-                    self.mMessages.append(
-                        'sensor type <b>%s</b>' % self.mSearch.sensor_type)
-                    self.mSensorTypeQuery = Q(
-                        acquisition_mode__sensor_type=self.mSearch.sensor_type)
-                    self.mQuerySet = self.mQuerySet.filter(
-                        self.mSensorTypeQuery)
-                # Check for none since it can be 0
-                if self.mSearch.spatial_resolution is not None:
-                    # ABP: this needs special handling to map from classes to
-                    # floats
-                    self.mMessages.append(
-                        'spatial resolution between <b>%sm and %sm</b>' % (
-                            Search.SPATIAL_RESOLUTION_RANGE.get(
-                                self.mSearch.spatial_resolution)),)
-                    self.mSpatialResolutionQuery = Q(
-                        spatial_resolution__range=
-                        Search.SPATIAL_RESOLUTION_RANGE.get(
-                            self.mSearch.spatial_resolution))
-                    self.mQuerySet = self.mQuerySet.filter(
-                        self.mSpatialResolutionQuery)
-                # Check for none since it can be 0
-                if self.mSearch.band_count is not None:
-                    #get bandcount range
-                    myBandcountRange = (
-                        self.mSearch.BAND_COUNT_RANGE[self.mSearch.band_count])
-                    self.mMessages.append(
-                        'spectral resolution <b>%s->%s</b>' % myBandcountRange)
-                    #create a range (BETWEEN) query
-                    self.mSpectralResolutionQuery = Q(
-                        band_count__range=myBandcountRange)
-                    self.mQuerySet = self.mQuerySet.filter(
-                        self.mSpectralResolutionQuery)
-                logger.info(
-                    'checking if we should use landsat path / row filtering..')
-                if self.mSearch.k_orbit_path or self.mSearch.j_frame_row:
-                    logger.info('path row filtering is enabled')
-                    # used for scene searches only (landsat only)
-                    if self.mSearch.k_orbit_path:
-                        self.mKOrbitPathQuery = Q()
-                        self.mMessages.append(
-                            'Path: <b>%s</b>' % self.mSearch.k_orbit_path)
-                        for _k in IntegersCSVIntervalsField.to_tuple(
-                                self.mSearch.k_orbit_path):
-                            if len(_k) == 2:
-                                self.mKOrbitPathQuery = (
-                                    self.mKOrbitPathQuery | Q(
-                                        path__range=(_k[0], _k[1])))
-                            else:
-                                self.mKOrbitPathQuery = (
-                                    self.mKOrbitPathQuery | Q(path=_k[0]))
-                        self.mQuerySet = self.mQuerySet.filter(
-                            self.mKOrbitPathQuery)
-                    if self.mSearch.j_frame_row:
-                        self.mJFrameRowQuery = Q()
-                        self.mMessages.append(
-                            'Row: <b>%s</b>' % self.mSearch.j_frame_row)
-                        for _j in IntegersCSVIntervalsField.to_tuple(
-                                self.mSearch.j_frame_row):
-                            if len(_j) == 2:
-                                self.mJFrameRowQuery = (
-                                    self.mJFrameRowQuery | Q(
-                                        row__range=(_j[0], _j[1])))
-                            else:
-                                self.mJFrameRowQuery = (
-                                    self.mJFrameRowQuery | Q(row=_j[0]))
-                        self.mQuerySet = self.mQuerySet.filter(
-                            self.mJFrameRowQuery)
+        # filter band_count
+        if self.mSearch.band_count is not None:
+            #get bandcount range
+            myBandCountRange = (
+                self.mSearch.BAND_COUNT_RANGE[self.mSearch.band_count]
+            )
+            myBandCountQuery = Q(band_count__range=myBandCountRange)
+            self.mQuerySet = self.mQuerySet.filter(myBandCountQuery)
+            logger.debug('Band count filter: %s', myBandCountRange)
+
+        # filter k_orbit_path
+        if self.mSearch.k_orbit_path:
+            myKOrbitPathQ = Q()
+            myParsedData = IntegersCSVIntervalsField.to_tuple(
+                self.mSearch.k_orbit_path)
+            for kpath in myParsedData:
+                if len(kpath) == 2:
+                    myKOrbitPathQ = (
+                        myKOrbitPathQ | Q(path__range=(kpath[0], kpath[1])))
                 else:
-                    logger.info('path row filtering is DISABLED')
+                    myKOrbitPathQ = myKOrbitPathQ | Q(path=kpath[0])
+            self.mQuerySet = self.mQuerySet.filter(myKOrbitPathQ)
+            logger.debug('K Orbit Path filter: %s', myParsedData)
 
-            ##
-            # radar only
-            #
-            if self.mSearch.search_type == Search.PRODUCT_SEARCH_RADAR:
-                logger.info('RadarProduct advanced search activated')
-                if self.mSearch.polarising_mode:
-                    self.mMessages.append(
-                        'polarisation mode <b>%s</b>' % (
-                            self.mSearch.polarising_mode,))
-                    self.mPolarisingModeQuery = Q(
-                        polarising_mode=self.mSearch.polarising_mode)
-                    self.mQuerySet = self.mQuerySet.filter(
-                        self.mPolarisingModeQuery)
-            ##
-            # optical only
-            #
-            if self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL:
-                logger.info('OpticalProduct advanced search activated')
-                if self.mSearch.use_cloud_cover and self.mSearch.cloud_mean:
-                    self.mCloudQuery = (
-                        Q(cloud_cover__lte=self.mSearch.cloud_mean)
-                        | Q(cloud_cover__isnull=True))
-                    self.mQuerySet = self.mQuerySet.filter(self.mCloudQuery)
-                    self.mMessages.append(self.meanCloudString())
+        # filter j_frame_row
+        if self.mSearch.j_frame_row:
+            myJFrameRowQ = Q()
+            myParsedData = IntegersCSVIntervalsField.to_tuple(
+                self.mSearch.j_frame_row)
+            for jrow in myParsedData:
+                if len(jrow) == 2:
+                    myJFrameRowQ = (
+                        myJFrameRowQ | Q(path__range=(jrow[0], jrow[1])))
+                else:
+                    myJFrameRowQ = myJFrameRowQ | Q(path=jrow[0])
+            self.mQuerySet = self.mQuerySet.filter(myJFrameRowQ)
+            logger.debug('J Frame Row filter: %s', myParsedData)
 
-                if (self.mSearch.sensor_inclination_angle_start is not None and
-                        self.mSearch.sensor_inclination_angle_end is not None):
+        # filter geometry
+        if self.mSearch.geometry:
+            myGeometryQuery = Q(
+                spatial_coverage__intersects=self.mSearch.geometry)
+            self.mQuerySet = self.mQuerySet.filter(myGeometryQuery)
+            logger.debug(
+                'Geometry filter envelope: %s',
+                self.mSearch.geometry.envelope.extent
+            )
 
-                    assert (
-                        (self.mSearch.sensor_inclination_angle_start <
-                            self.mSearch.sensor_inclination_angle_end) or not
-                        (self.mSearch.sensor_inclination_angle_start or
-                            self.mSearch.sensor_inclination_angle_end),
-                        'Search sensor_inclination_angle_start is not < '
-                        'sensor_inclination_angle_end')
-
-                    self.mSensorInclinationAngleQuery = Q(
-                        sensor_inclination_angle__range=(
-                            self.mSearch.sensor_inclination_angle_start,
-                            self.mSearch.sensor_inclination_angle_end)
-                    )
-                    self.mQuerySet = self.mQuerySet.filter(
-                        self.mSensorInclinationAngleQuery
-                    )
-                    self.mMessages.append(
-                        'sensor inclination angle between <b> %s and %s</b>'
-                        % (
-                            self.mSearch.sensor_inclination_angle_start,
-                            self.mSearch.sensor_inclination_angle_end))
-
-            ##
-            # geospatial only
-            #
-            if self.mSearch.search_type == Search.PRODUCT_SEARCH_GEOSPATIAL:
-                logger.info('GeospatialProduct advanced search activated')
-
-        else:
-            logger.info('Search is simple (advanced flag is not set)')
-
-        self.mSqlString = self.mQuerySet.query
-        self.mRecordCount = self.mQuerySet.count()
-        # Updates self.mSearch with the new count
-        self.mSearch.record_count = self.mRecordCount
+        # Updates self.mSearch with the new object count
+        myRecordCount = self.mQuerySet.count()
+        logger.debug('Total records found: %s', myRecordCount)
+        self.mSearch.record_count = myRecordCount
         self.mSearch.save()
 
-    def __init__(self, theRequest, theGuid):
+    def search(self):
+        """
+        Perform actual search, and paginate results
+        """
+        logger.debug('Starting search')
 
-        self.mSearch = get_object_or_404(Search, guid=theGuid)
+        # Paginate the results
+        self.mPaginator = Paginator(self.mQuerySet, settings.PAGE_SIZE)
 
-        # Queries
-        self.mPageNo = 1
-
-        # items that are passed back with templateData
-        self.mMessages = []
-        self.mThumbnails = []
-        self.mSearchRecords = []
-        self.mExtent = DEFAULT_EXTENT
-        self.mRequest = theRequest
-        self.mRecordCount = 0
-
-        # ABP: is advanced ?
-        self.mAdvancedFlag = self.mSearch.isAdvanced
-
-        self.mSqlString = ""
-        self.mLayersList, self.mLayerDefinitions, myActiveBaseMap = (
-            standardLayersWithCart(theRequest))
-        self.mSearchPage = None
-        self.mPaginator = None
-        self.initQuery()
-        logger.info('Searcher initialised')
-
-    def logResults(self):
-        logger.info('New results: ')
-        for myResult in self.mSearchRecords:
-            logger.info('Result product: ' + str(myResult.product.product_id))
-        return
-
-    def search(self, thePaginateFlag=True):
-        """Performs a search and shows a map of a single search for scenes"""
-        logger.info('search by Scene paginating...')
-        # Can also write the query like this:
-        # mQuerySet = Localization.objects.filter(sensor=mSearch.sensor)
-        # .filter(timeStamp__range=(mSearch.start_date,mSearch.end_date))
-        # .filter(geometry__intersects=mSearch.geometry)
-        #
-
-        if thePaginateFlag:
-            # only use this next line for serious debugging - its a performance
-            # killer
-            # logger.info(
-            #    'search by scene pre-paginator count...' + str(
-            #        self.mQuerySet.count()))
-            # Paginate the results
-            self.mPaginator = Paginator(self.mQuerySet, settings.PAGE_SIZE)
-            # Make sure page request is an int. If not, deliver first page.
-        else:
-            self.mPaginator = Paginator(self.mQuerySet, self.mQuerySet.count())
         try:
             self.mPageNo = int(self.mRequest.GET.get('page', '1'))
         except ValueError:
             self.mPageNo = 1
-        logger.info(
-            'search by scene using paginator page...' + str(self.mPageNo))
+        logger.debug(
+            'search by scene using paginator page... %s', str(self.mPageNo))
         # If page request (9999) is out of range, deliver last page of results.
         try:
-            logger.info('search by scene - getting page')
+            logger.debug('search by scene - getting page')
             self.mSearchPage = self.mPaginator.page(self.mPageNo)
-            logger.info('search by scene - search results paginated')
+            logger.debug('search by scene - search results paginated')
         except (EmptyPage, InvalidPage):
-            logger.info(
+            logger.debug(
                 'search by scene - paginator page requested is out of range')
             self.mSearchPage = self.mPaginator.page(self.mPaginator.num_pages)
 
@@ -495,72 +246,47 @@ mMap.addLayer(mySearchAreaLayer);''' % self.mSearch.geometry.geojson)
                 # This can be done faster using cascaded union but needs
                 # geos 3.1
                 myUnion = myUnion.union(myObject.spatial_coverage.envelope)
-            logger.info('%s added to myRecords' % myObject.product_id)
+            # logger.debug('%s added to myRecords', myObject.product_id)
         if myUnion:
             self.mExtent = str(myUnion.extent)
 
         # -----------------------------------------------------
         # Wrap up now ...
         # -----------------------------------------------------
-        logger.info('search : wrapping up search result presentation')
-        logger.info('extent of search results page...' + str(self.mExtent))
-        self.logResults()
+        logger.debug('search : wrapping up search result presentation')
+        logger.debug('extent of search results page... %s', str(self.mExtent))
         return ()
 
-    def meanCloudString(self):
-        myCloudAsPercent = None
-        if self.mSearch.cloud_mean:
-            myCloudAsPercent = int(self.mSearch.cloud_mean) * 10
-        else:
-            myCloudAsPercent = 0
-        # %% is to escape the percent symbol so we get a % literal
-        myString = 'with a maximum cloud cover of %s%%' % myCloudAsPercent
-        return myString
-
-    def describeQuery(self, unset_only=False):
+    def templateData(self):
         """
-        Returns a struct with messages and SQL of mSearch query
-
-        unset_only parameter, define if the list of values should be returned
-        only when the corresponding search values is not set
+        Return template data
         """
-        # Get option for all related fields, exclude users
+        return ({
+            'mySearchGuid': self.mSearch.guid,
+            # 'myMessages': self.mMessages,
+            # 'myLayerDefinitions': self.mLayerDefinitions,
+            # 'myThumbnails': self.mThumbnails,
+            # 'myLayersList': self.mLayersList,
+            # 'mySensor': self.mSearch.sensorsAsString(),
+            'myRecords': self.mSearchRecords,
+            'myQuerySet': self.mQuerySet,
+            'myPage': self.mSearchPage,
+            'myExtent': self.mExtent,
+            'myPageNo': self.mPageNo,
 
-        assert (
-            self.mSearch.search_type == Search.PRODUCT_SEARCH_OPTICAL or
-            self.mSearch.search_type == Search.PRODUCT_SEARCH_RADAR,
-            'Search type is GENERIC')
-
-        values = {}
-        mySearchFields = [
-            f.name for f in self.mSearch._meta.fields
-            if f.rel and f.name != 'user']
-
-        for field_name in mySearchFields:
-            if not unset_only or not getattr(self.mSearch, field_name, None):
-                values[field_name] = self.getOption(field_name)
-        # m2m
-        if not unset_only or not getattr(self.mSearch, 'sensors').count():
-            values['sensors'] = self.getOption('mission_sensor')
-        if not unset_only or not getattr(self.mSearch, 'license').count():
-            values['license'] = self.getOption('license')
-
-        if settings.DEBUG:
-            query = '%s' % self.mSqlString
-        else:
-            query = ''
-        return {
-            'messages': self.mMessages,
-            'query': query,
-            'count': self.mRecordCount,
-            'values': values}
-
-    def getOption(self, field_name):
-        """
-        Returns a list of possible values that selected search parameters can
-        assume for a given field
-        """
-        return list(
-            self.mQuerySet.distinct().values_list(
-                self.mSearch.getDictionaryMap(field_name), flat=True)
-            .order_by())
+            'myDetailFlag': True,
+            'myShowSceneIdFlag': True,
+            'myShowDateFlag': True,
+            # used in cart contents listing context only
+            'myShowRemoveIconFlag': False,
+            'myShowHighlightFlag': True,
+            'myShowRowFlag': False,
+            'myShowPathFlag': False,
+            'myShowCloudCoverFlag': True,
+            'myShowMetadataFlag': True,
+            'myShowCartFlag': True,
+            'myShowPreviewFlag': True,
+            'myLegendFlag': True,  # used to show the legend in the accordion
+            'mySearchFlag': True,
+            'myPaginator': self.mPaginator
+        })

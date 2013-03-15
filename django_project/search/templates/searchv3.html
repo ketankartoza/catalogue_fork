@@ -4,11 +4,12 @@
 {% block extrajs %}
 
   {{ block.super }}
+  <script type="text/javascript" charset="utf-8" src="/media/js/jquery.form.js"></script>
 
   <script type="text/javascript">
     $(document).ready(function() {
-      block();
-      $('#search-form-container').load('/rendersearchform/',"",unblock);
+      // block();
+      // $('#search-form-container').load('/rendersearchform/',"",unblock);
       $('#map-container').load('/rendersearchmap/');
     });
   </script>
@@ -21,7 +22,11 @@
     <div class="row-fluid">
         <div id="search-panel" class="span3">
             <div><h3>Search</h3></div>
-            <div id="search-form-container"></div>
+            <div id="search-form-container">
+              {% if myForm %}
+                {% include "searchPanelv3.html" %}
+              {% endif %}
+            </div>
         </div>
         <div class="span9">
             <div class="row-fluid">

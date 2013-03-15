@@ -38,9 +38,6 @@ class LandsatIngestorTest(TestCase):
 
     fixtures = [
         'test_user.json',
-        'test_acquisitionmode.json',  # needed until its deprecated
-        'test_sensortype.json',  # as above
-        'test_missionsensor',  # as above
         'test_processinglevel.json',
         'test_institution.json',
         'test_license.json',

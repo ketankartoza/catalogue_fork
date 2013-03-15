@@ -4,7 +4,163 @@
 {% crispy myForm %}
 <button onClick="submitSearchForm();" class="btn btn-success" class="default" name="_search" title="Click here to execute your search.">Search</button>
 {{myForm.media}}
+
 <script>
+
+    function createOptions(theOptions, theSelectedOptions, addEmpty){
+      // add empty options, default true
+      addEmpty = addEmpty !== undefined ? addEmpty : false;
+      var options = '';
+      if (addEmpty === true) {
+        options += '<option value="">---------</option>';
+      }
+      $(theOptions).each(function (i,option){
+        if (typeof(theSelectedOptions) === "object") {
+          // use indexOf on complex object
+          if (theSelectedOptions.indexOf(option[0]) != -1){
+            options += '<option selected=selected value="' + option[0] + '">' + option[1] + '</option>';
+          } else {
+            options += '<option value="' + option[0] + '">' + option[1] + '</option>';
+          }
+        } else {
+          if (option[0] == theSelectedOptions) {
+            options += '<option selected=selected value="' + option[0] + '">' + option[1] + '</option>';
+          } else {
+            options += '<option value="' + option[0] + '">' + option[1] + '</option>';
+          }
+        }
+      });
+      return options
+    }
+
+    function getSelectedOptions(){
+      var sel_collections = [];
+      $('#id_collection option:selected').each(function(i, selected) {
+        sel_collections[i] = parseInt($(selected).val());
+      });
+
+      var sel_satellite = [];
+      $('#id_satellite option:selected').each(function(i, selected) {
+        sel_satellite[i] = parseInt($(selected).val());
+      });
+
+      var sel_insttypes = [];
+      $('#id_instrumenttype option:selected').each(function(i, selected) {
+        sel_insttypes[i] = parseInt($(selected).val());
+      });
+
+      var sel_specgroups = [];
+      $('#id_spectral_group option:selected').each(function(i, selected) {
+        sel_specgroups[i] = parseInt($(selected).val());
+      });
+
+      var sel_licensetypes = [];
+      $('#id_license_type option:selected').each(function(i, selected) {
+        sel_licensetypes[i] = parseInt($(selected).val());
+      });
+
+      return [sel_collections, sel_satellite, sel_insttypes, sel_specgroups, sel_licensetypes]
+    }
+
+
+    function getSelectOptionsForCollection() {
+      block();
+
+      var selected_options = getSelectedOptions()
+
+      var getData = {
+        'collections': selected_options[0]
+      };
+
+      $.getJSON('{% url "updateSelectOptions" %}', $.param(getData, true)).done(function(data){
+        $("#id_satellite").html(createOptions(data.satellites, selected_options[1]));
+
+        $("#id_instrumenttype").html(createOptions(data.instrumenttypes, selected_options[2]));
+
+        $("#id_spectral_group").html(createOptions(data.spectralgroups, selected_options[3]));
+
+        $("#id_license_type").html(createOptions(data.licensetypes, selected_options[4]));
+      });
+      unblock();
+    }
+
+    function getSelectOptionsForSatellite() {
+      block();
+
+      var selected_options = getSelectedOptions()
+
+      var getData = {
+        'collections': selected_options[0],
+        'satellites': selected_options[1]
+      };
+
+      $.getJSON('{% url "updateSelectOptions" %}', $.param(getData, true)).done(function(data){
+
+        // $("#id_collection").html(createOptions(data.collections, selected_options[0]));
+
+        // $("#id_satellite").html(createOptions(data.satellites, selected_options[1]));
+
+        $("#id_instrumenttype").html(createOptions(data.instrumenttypes, selected_options[2]));
+
+        $("#id_spectral_group").html(createOptions(data.spectralgroups, selected_options[3]));
+
+        $("#id_license_type").html(createOptions(data.licensetypes, selected_options[4]));
+      });
+      unblock();
+    }
+
+    function getSelectOptionsForInstrumentType() {
+      block();
+
+      var selected_options = getSelectedOptions()
+
+      var getData = {
+        'collections': selected_options[0],
+        'satellites': selected_options[1],
+        'instrumenttypes': selected_options[2]
+      };
+
+      $.getJSON('{% url "updateSelectOptions" %}', $.param(getData, true)).done(function(data){
+
+        // $("#id_collection").html(createOptions(data.collections, selected_options[0]));
+
+        // $("#id_satellite").html(createOptions(data.satellites, selected_options[1]));
+
+        // $("#id_instrumenttype").html(createOptions(data.instrumenttypes, selected_options[2]));
+
+        $("#id_spectral_group").html(createOptions(data.spectralgroups, selected_options[3]));
+
+        $("#id_license_type").html(createOptions(data.licensetypes, selected_options[4]));
+      });
+      unblock();
+    }
+
+    function getSelectOptionsForSpectralGroup() {
+      block();
+
+      var selected_options = getSelectedOptions()
+
+      var getData = {
+        'collections': selected_options[0],
+        'satellites': selected_options[1],
+        'instrumenttypes': selected_options[2],
+        'spectralgroups': selected_options[3]
+      };
+
+      $.getJSON('{% url "updateSelectOptions" %}', $.param(getData, true)).done(function(data){
+        // $("#id_collection").html(createOptions(data.collections, selected_options[0]));
+
+        // $("#id_satellite").html(createOptions(data.satellites, selected_options[1]));
+
+        // $("#id_instrumenttype").html(createOptions(data.instrumenttypes, selected_options[2]));
+
+        //$("#id_spectral_group").html(createOptions(data.spectralgroups, selected_options[3]));
+
+        $("#id_license_type").html(createOptions(data.licensetypes, selected_options[4]));
+      });
+      unblock();
+    }
+
     function check_sensor_inclination_angles() {
         var sv = parseInt($("#id_sensor_inclination_angle_start").val());
         var ev = parseInt($("#id_sensor_inclination_angle_end").val());
@@ -15,33 +171,38 @@
 
     function submitSearchForm(){
       block();
-      check_search_dates();
-      if (datesOk){
-        $.post('/search/', $("#search_form").serializeArray(), function(data) {
-            loadSearchResults( 1, data.guid );
-        }).fail(function(data) {
-            $('#search-form-container').html(data.responseText);
-            unblock();
-        });
+      $('#search_form').ajaxForm({
+        success: function(data) {
+          loadSearchResults( 1, data.guid );
+        },
+        error: function(data) {
+          $('#search-form-container').html(data.responseText);
+          unblock();
+        }
+      });
 
-      } else {
-        alert ("The Start Date is later than the End Date.");
-      }
-    }
-
-    function check_search_dates() {
-      var datesOK;
-      var sd = $("#id_start_datepicker").val();
-      var ed = $("#id_end_datepicker").val();
-      if (sd > ed) {
-        datesOk=false;
-      } else {
-        datesOk=true;
-      }
+      $("#search_form").submit();
     }
 
     $('#dr_container').sansa_daterangecontainer();
     $('#id_start_datepicker, #id_end_datepicker').datepicker({
       'autoclose':true
+    });
+
+    //$("#id_instrumenttype, #id_satellite, #id_spectral_mode").bind('change', function (){
+    $("#id_collection").bind('change', function (){
+      getSelectOptionsForCollection();
+    });
+
+    $("#id_satellite").bind('change', function (){
+      getSelectOptionsForSatellite();
+    });
+
+    $("#id_instrumenttype").bind('change', function (){
+      getSelectOptionsForInstrumentType();
+    });
+
+    $("#id_spectral_group").bind('change', function (){
+      getSelectOptionsForSpectralGroup();
     });
 </script>

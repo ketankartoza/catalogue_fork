@@ -28,14 +28,9 @@ class ContinuousProductCRUD_Test(TestCase):
     """
     fixtures = [
         'test_user.json',
-        'test_missiongroup.json',
         'test_license.json',
         'test_creatingsoftware.json',
-        'test_mission.json',
-        'test_missionsensor.json',
         'test_processinglevel.json',
-        'test_sensortype.json',
-        'test_acquisitionmode.json',
         'test_quality.json',
         'test_projection.json',
         'test_institution.json',

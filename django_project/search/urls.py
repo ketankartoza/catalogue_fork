@@ -6,11 +6,11 @@ from .views import (
     searchResultPage,
     downloadSearchResult,
     downloadSearchResultMetadata,
-    getSensorDictionaries,
     search,
     renderSearchForm,
     renderSearchMap,
-    renderSearchResultsPage
+    renderSearchResultsPage,
+    updateSelectOptions
 )
 
 
@@ -29,11 +29,11 @@ urlpatterns = patterns(
         downloadSearchResult, name='downloadSearchResult'),
     url(r'^downloadsearchmetadata/(?P<theGuid>[a-h0-9\-]{36})/$',
         downloadSearchResultMetadata, name='downloadSearchResultMetadata'),
-    url(r'^sensordictionaries/$',
-        getSensorDictionaries, name='getSensorDictionaries'),
     url(r'^search/$', search, name='search'),
     url(r'^rendersearchform/$', renderSearchForm, name='renderSearchForm'),
     url(r'^rendersearchmap/$', renderSearchMap, name='renderSearchMap'),
     url(r'^rendersearchresultspage/(?P<theGuid>[a-h0-9\-]{36})/$',
         renderSearchResultsPage, name='renderSearchResultsPage'),
+    url(r'^updateselectoptions/$', updateSelectOptions,
+        name='updateSelectOptions'),
 )

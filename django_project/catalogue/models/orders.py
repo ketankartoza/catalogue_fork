@@ -24,8 +24,7 @@ from django.contrib.auth.models import User
 # ABP: unused ? from catalogue.geoiputils import *
 from catalogue.nosubclassmanager import NoSubclassManager
 from catalogue.models import (
-    Projection,
-    MissionSensor)
+    Projection)
 
 
 ###############################################################################
@@ -143,8 +142,7 @@ class DeliveryDetail(models.Model):
     user = models.ForeignKey(User)
     processing_level = models.ForeignKey(
         'dictionaries.ProcessingLevel',
-        verbose_name='Processing Level',
-        default=3
+        verbose_name='Processing Level', default=3
     )
     projection = models.ForeignKey(
         Projection, verbose_name='Projection', default=3
@@ -277,7 +275,8 @@ class TaskingRequest(Order):
             'When the image should be acquired (as close as possible '
             'to this date).')
     )
-    mission_sensor = models.ForeignKey(MissionSensor)  # e.g. Spot5
+    satellite = models.ForeignKey('dictionaries.Satellite')
+    instrument_type = models.ForeignKey('dictionaries.InstrumentType')
     objects = models.GeoManager()
 
     class Meta:

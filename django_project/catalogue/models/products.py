@@ -41,16 +41,11 @@ from django_dag.models import node_factory, edge_factory
 from catalogue.utmzonecalc import utmZoneFromLatLon
 from catalogue.dims_lib import dimsWriter
 from catalogue.models import (
-    Mission,
-    MissionSensor,
-    MissionGroup,
-    SensorType,
     Institution,
     License,
     Projection,
     Quality,
     CreatingSoftware,
-    AcquisitionMode,
     PlaceType,
     Place,
     Topic,
@@ -234,7 +229,7 @@ class GenericProduct(node_factory('catalogue.ProductLink',
     creating_software = models.ForeignKey(
         CreatingSoftware,
         null=False, blank=False)
-    original_product_id = models.CharField(
+    unique_product_id = models.CharField(
         help_text='Original id assigned to the product by the vendor/operator',
         max_length=255, null=True, blank=True)
     product_id = models.CharField(
@@ -276,12 +271,9 @@ class GenericProduct(node_factory('catalogue.ProductLink',
         #db_table = 'sample_genericproduct'
 
     def __unicode__(self):
-        if self.original_product_id:
-            return u"%s" % self.original_product_id
-        if self.id is not None:
-            return u"Internal ID: %d" % self.id
-        else:
-            return u'Unsaved product with no id'
+        if self.product_id:
+            return u"%s" % self.product_id
+        return u"Internal ID: %d" % self.pk
 
     @runconcrete
     def getAbstract(self):
@@ -471,29 +463,17 @@ class GenericProduct(node_factory('catalogue.ProductLink',
 
         return myBackground
 
-    def georeferencedThumbnail(self, theBBoxFlag=False, theForceFlag=False):
+    def georeferencedThumbnail(self, theForceFlag=False):
         """
-        Return the full path to the georeferenced thumb.
+        Return the full path to the georeferenced thumb. Will actually do the
+        georeferencing of the thumb if needed.
 
-        Will actually do the eoreferencing of the thumb if needed.
-
-        Args:
-            * theBBoxFlag: bool - whether to geoerference on the bounding box
-                or on the scene footprint (latter is default). For example
-                with SPOT thumbnails the image is unrotated in the thumb,
-                 so we need to use the imagery footprint so that it gets
-                 rotated. In Landsat thumbs, they are already rotated so we
-                 should use the bounding box for georeferencing.
-            * theForceFlag: bool - whether to force regeneration of the thumb
-                even if it already exists.
-
-        Returns:
-            str: thumb full path, e.g.  myJpg = product.georeferencing()
+        return thumb full path, e.g.
+        myJpg = product.georeferencing()
 
         To get the world file, simply add a .wld extention to the return var
-        We don't return it explicitly as we can only return a single param
+        We dont return it explicitly as we can only return a single param
         if we want to use this method in template.
-
         Be careful of using the force flag - some of the thumbs (e.g. newer
         imports from acs) are already georeferenced natively and referencing
         them again will give them an additional rotation.
@@ -531,44 +511,34 @@ class GenericProduct(node_factory('catalogue.ProductLink',
         # two vertices. Thereafter, determining which is 'top' and which is
         # bottom is a simple case of comparing the Y values in each grouping.
         #
-        # Note the above logic makes some assumptions about the orientation of
+        # Note the above logic makes some assumptions about the oreintation of
         # the swath which may not hold true for every sensor.
         #
 
         myImageXDim = myImage.size[0]
         myImageYDim = myImage.size[1]
-
-        if theBBoxFlag:
-            # Use the bounding box when georeferencing
-            myTL = myExtents[0]
-            myTR = myExtents[1]
-            myBR = myExtents[2]
-            myBL = myExtents[3]
-        else:
-            # use the imagery footprint
-            myCandidates = []
-            try:
-                #should only be a single arc in our case!
-                for myArc in self.spatial_coverage.coords:
-                    for myCoord in myArc[:-1]:
-                        if coordIsOnBounds(myCoord, myExtents):
-                            myCandidates.append(myCoord)
-            except:
-                raise
-                # print "Candidates Before: %s %s " % (
-            #    len(myCandidates), str(myCandidates))
-            myCentroid = self.spatial_coverage.centroid
-            try:
-                myCandidates = sortCandidates(
-                    myCandidates, myExtents, myCentroid)
-            except:
-                raise
-                # print "Candidates After: %s %s " % (
-            #    len(myCandidates), str(myCandidates))
-            myTL = myCandidates[0]
-            myTR = myCandidates[1]
-            myBR = myCandidates[2]
-            myBL = myCandidates[3]
+        myCandidates = []
+        try:
+            #should only be a single arc in our case!
+            for myArc in self.spatial_coverage.coords:
+                for myCoord in myArc[:-1]:
+                    if coordIsOnBounds(myCoord, myExtents):
+                        myCandidates.append(myCoord)
+        except:
+            raise
+            # print "Candidates Before: %s %s " % (
+        #    len(myCandidates), str(myCandidates))
+        myCentroid = self.spatial_coverage.centroid
+        try:
+            myCandidates = sortCandidates(myCandidates, myExtents, myCentroid)
+        except:
+            raise
+            # print "Candidates After: %s %s " % (
+        #    len(myCandidates), str(myCandidates))
+        myTL = myCandidates[0]
+        myTR = myCandidates[1]
+        myBR = myCandidates[2]
+        myBL = myCandidates[3]
 
         myString = (
             'gdal_translate -a_srs "EPSG:4326" -gcp 0 0 %s %s -gcp %s 0 %s %s '
@@ -782,6 +752,13 @@ class GenericProduct(node_factory('catalogue.ProductLink',
             'productTypes/genericProduct.html', {
                 'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
 
+    @property
+    def product_id(self):
+        """
+        Simple product_id property, helper with unique_product_id migration
+        """
+        return self.unique_product_id
+
 
 class ProductLink(
     edge_factory(
@@ -837,7 +814,7 @@ class GenericImageryProduct(GenericProduct):
             file_identifier=self.product_id,
             vertical_cs=self.projection.name,
             processing_level_code=self.processing_level.abbreviation,
-            md_data_identification=unicode(self.acquisition_mode),
+            md_data_identification=unicode(self.product_profile),
             md_product_date=self.product_date.isoformat(),
             md_abstract=self.getAbstract(),
             bbox_west=self.spatial_coverage.extent[0],
@@ -873,7 +850,6 @@ class GenericSensorProduct(GenericImageryProduct):
     Multitable inheritance class to hold common fields for satellite imagery
     """
     # e.g. CAM1, BUMP, etc - this must die!
-    acquisition_mode = models.ForeignKey(AcquisitionMode)
     product_acquisition_start = models.DateTimeField(db_index=True)
     product_acquisition_end = models.DateTimeField(
         null=True, blank=True, db_index=True)
@@ -923,112 +899,38 @@ class GenericSensorProduct(GenericImageryProduct):
         """
         Returns the path (relative to whatever parent dir it is in) for the
         product / image itself following the scheme
-            <Mission>/<processinglevel>/<YYYY>/<MM>/<DD>/
+            <Satellite>/<processinglevel>/<YYYY>/<MM>/<DD>/
         The image itself will exist under this dir as <product_id>.tif.bz2
 
         @note the filename itself is excluded, only the directory path is
             returned
         """
-        return os.path.join(
-            self.acquisition_mode.sensor_type.
-            mission_sensor.mission.abbreviation,
+        myPath = os.path.join(
+            self.product_profile.satellite_instrument.satellite.abbreviation,
             str(self.processing_level.abbreviation),
             str(self.product_acquisition_start.year),
             str(self.product_acquisition_start.month),
             str(self.product_acquisition_start.day))
+        logger.debug('Product directory path: %s', myPath)
+        return myPath
 
     def _thumbnailDirectory(self):
         """
         Returns the path (relative to whatever parent dir it is in defined by
         THUMBS_ROOT) for the thumb for this file following the scheme
-            <Mission>/<YYYY>/<MM>/<DD>/
+            <Satellite>/<YYYY>/<MM>/<DD>/
         The thumb itself will exist under this dir as <product_id>.jpg
 
         @note the filename itself is excluded, only the directory path is
         returned
         """
-        return os.path.join(
-            self.acquisition_mode.sensor_type.
-            mission_sensor.mission.abbreviation,
+        myPath = os.path.join(
+            self.product_profile.satellite_instrument.satellite.abbreviation,
             str(self.product_acquisition_start.year),
             str(self.product_acquisition_start.month),
             str(self.product_acquisition_start.day))
-
-    def setSacProductId(self, theMoveDataFlag=False):
-        """
-          Set the product_id, renaming / moving associated
-          resources on the file system if theMoveDataFlag is
-          set to True. By default nothing is moved.
-          #A sac product id adheres to the following format:
-
-          #SAT_SEN_TYP_MODE_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL
-
-          Where:
-          SAT    Satellite or mission          mandatory
-          SEN    Sensor                        mandatory
-          TYP    Type                          mandatory
-          MODE   Acquisition mode              mandatory
-          KKKK   Orbit path reference          optional?
-          KS     Path shift                    optional?
-          JJJJ   Orbit row reference           optional?
-          JS     Row shift                     optional?
-          YYMMDD Acquisition date              mandatory
-          HHMMSS Scene centre acquisition time mandatory
-          LEVL   Processing level              mandatory
-          PROJTN Projection                    mandatory
-
-          Examples:
-
-          S5-_HRG_J--_CAM2_0118-_00_0418-_00_090403_085811_L1A-_ORBIT-
-          S5-_HRG_J--_CAM2_0118-_00_0418-_00_090403_085811_L3Aa_UTM34S
-
-          When this function is called it will also check if there is
-          data and a thumbnail for this scene and rename it from the old
-          prefix to the new one.
-          """
-        myPreviousId = self.product_id  # store for asset renaming just now
-        myPreviousImageryPath = self.productDirectory()
-        myPreviousThumbPath = self.thumbnailDirectory()
-        myList = []
-        # TODO: deprecate the pad function and use string.ljust(3, '-')
-        myMode = self.acquisition_mode
-        # Add the mission to the list
-        myList.append(
-            self.pad(
-                myMode.sensor_type.mission_sensor.mission.abbreviation, 3))
-        # Add the mission sensor
-        myList.append(
-            self.pad(myMode.sensor_type.mission_sensor.abbreviation, 3))
-        # Add the sensor type to the list
-        myList.append(self.pad(myMode.sensor_type.abbreviation, 3))
-        # Add the Acuisistion mode to the list
-        myList.append(self.pad(myMode.abbreviation, 4))
-        # Add path / row/ path offset / row offset to the list
-        # TODO: deprecate the zeropad function and use string.ljust(3, '0')
-        myList.append(self.zeroPad(str(self.path), 4))
-        myList.append(self.zeroPad(str(self.path_offset), 2))
-        myList.append(self.zeroPad(str(self.row), 4))
-        myList.append(self.zeroPad(str(self.row_offset), 2))
-        # Add the date parts to the list
-        myDate = str(self.product_acquisition_start.year)[2:4]
-        myDate += self.zeroPad(str(self.product_acquisition_start.month), 2)
-        myDate += self.zeroPad(str(self.product_acquisition_start.day), 2)
-        myList.append(myDate)
-        myTime = self.zeroPad(str(self.product_acquisition_start.hour), 2)
-        myTime += self.zeroPad(str(self.product_acquisition_start.minute), 2)
-        myTime += self.zeroPad(str(self.product_acquisition_start.second), 2)
-        myList.append(myTime)
-        # Add the processing level to the list
-        myList.append("L" + self.pad(self.processing_level.abbreviation, 3))
-        # Add the projection name to the list
-        myList.append(self.pad(self.projection.name, 6))
-        #print "Product SAC ID %s" % "_".join(myList)
-        myNewId = "_".join(myList)
-        self.product_id = myNewId
-        if theMoveDataFlag:
-            self.refileProductAssets(
-                myPreviousId, myPreviousImageryPath, myPreviousThumbPath)
-        return
+        logger.debug('Thumbnail directory path: %s', myPath)
+        return myPath
 
     def refileProductAssets(
             self, theOldId, theOldImageryPath, theOldThumbPath):
@@ -1219,7 +1121,7 @@ class OpticalProduct(GenericSensorProduct):
             vertical_cs=self.projection.name,
             processing_level_code=self.processing_level.abbreviation,
             cloud_cover_percentage=self.cloud_cover,  # OpticalProduct only
-            md_data_identification=unicode(self.acquisition_mode),
+            md_data_identification=unicode(self.product_profile),
             md_product_date=self.product_date.isoformat(),
             md_abstract=self.getAbstract(),
             bbox_west=self.spatial_coverage.extent[0],

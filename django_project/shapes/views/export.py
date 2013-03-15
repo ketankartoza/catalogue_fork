@@ -20,25 +20,29 @@ try:
     # a mysterious bug with ctypes and python26 causes crashes
     # when calling lgdal.OGR_DS_CreateLayer, so we default to
     # using the native python bindings to ogr/gdal if they exist
-    # thanks Jared K, for reporting this bug and submitting an alternative approach
+    # thanks Jared K, for reporting this bug and submitting an alternative
+    # approach
     from osgeo import ogr, osr
     HAS_NATIVE_BINDINGS = True
 except ImportError:
     HAS_NATIVE_BINDINGS = False
     from django.contrib.gis.gdal.libgdal import lgdal
-    from django.contrib.gis.gdal import Driver, OGRGeometry, OGRGeomType, SpatialReference, check_err, CoordTransform
-
+    from django.contrib.gis.gdal import (
+        Driver, OGRGeometry, OGRGeomType, SpatialReference, check_err,
+        CoordTransform
+    )
 
 
 class ShpResponder(object):
-    def __init__(self, queryset, readme=None, geo_field=None, proj_transform=None, mimetype='application/zip',file_name='shp_download'):
+    def __init__(
+            self, queryset, readme=None, geo_field=None, proj_transform=None,
+            mimetype='application/zip', file_name='shp_download'):
         self.queryset = queryset
         self.readme = readme
         self.geo_field = geo_field
         self.proj_transform = proj_transform
         self.mimetype = mimetype
         self.file_name = smart_str(file_name)
-
 
     def __call__(self, *args, **kwargs):
         """
@@ -49,7 +53,8 @@ class ShpResponder(object):
 
         from shapes import ShpResponder
 
-        shp_response = ShpResponder(Model.objects.all(),proj_transform=900913,file_name=u"fo\xf6.txt")
+        shp_response = ShpResponder(
+            Model.objects.all(),proj_transform=900913,file_name=u"fo\xf6.txt")
 
         urlpatterns = patterns('',
             (r'^export_shp/$', shp_response),
@@ -58,7 +63,8 @@ class ShpResponder(object):
         """
 
         tmp = self.write_shapefile_to_tmp_file(self.queryset)
-        return self.zip_response(tmp,self.file_name,self.mimetype,self.readme)
+        return self.zip_response(
+            tmp, self.file_name, self.mimetype, self.readme)
 
     def get_attributes(self):
         # Todo: control field order as param
@@ -71,26 +77,32 @@ class ShpResponder(object):
         geo_fields = [f for f in fields if isinstance(f, GeometryField)]
         geo_fields_names = ', '.join([f.name for f in geo_fields])
 
-
         if len(geo_fields) > 1:
             if not self.geo_field:
-                raise ValueError("More than one geodjango geometry field found, please specify which to use by name using the 'geo_field' keyword. Available fields are: '%s'" % geo_fields_names)
+                raise ValueError(
+                    "More than one geodjango geometry field found, please "
+                    "specify which to use by name using the 'geo_field' "
+                    "keyword. Available fields are: '%s'" % geo_fields_names)
             else:
-                geo_field_by_name = [fld for fld in geo_fields if fld.name == self.geo_field]
+                geo_field_by_name = [
+                    fld for fld in geo_fields if fld.name == self.geo_field]
                 if not geo_field_by_name:
-                    raise ValueError("Geodjango geometry field not found with the name '%s', fields available are: '%s'" % (self.geo_field,geo_fields_names))
+                    raise ValueError(
+                        "Geodjango geometry field not found with the name '%s'"
+                        ", fields available are: '%s'" % (
+                            self.geo_field, geo_fields_names))
                 else:
                     geo_field = geo_field_by_name[0]
         elif geo_fields:
             geo_field = geo_fields[0]
         else:
-            raise ValueError('No geodjango geometry fields found in this model queryset')
+            raise ValueError(
+                'No geodjango geometry fields found in this model queryset')
 
         return geo_field
 
-
-    def write_shapefile_to_tmp_file(self,queryset):
-        tmp = tempfile.NamedTemporaryFile(suffix='.shp', mode = 'w+b')
+    def write_shapefile_to_tmp_file(self, queryset):
+        tmp = tempfile.NamedTemporaryFile(suffix='.shp', mode='w+b')
         # we must close the file for GDAL to be able to open and write to it
         tmp.close()
         args = tmp.name, queryset, self.get_geo_field()
@@ -102,29 +114,33 @@ class ShpResponder(object):
 
         return tmp.name
 
-    def zip_response(self,shapefile_path,file_name,mimetype,readme=None):
+    def zip_response(self, shapefile_path, file_name, mimetype, readme=None):
         buffer = StringIO()
         zip = zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED)
-        files = ['shp','shx','prj','dbf']
+        files = ['shp', 'shx', 'prj', 'dbf']
         for item in files:
-            filename = '%s.%s' % (shapefile_path.replace('.shp',''), item)
-            zip.write(filename, arcname='%s.%s' % (file_name.replace('.shp',''), item))
+            filename = '%s.%s' % (shapefile_path.replace('.shp', ''), item)
+            zip.write(
+                filename,
+                arcname='%s.%s' % (file_name.replace('.shp', ''), item))
         if readme:
-            zip.writestr('README.txt',readme)
+            zip.writestr('README.txt', readme)
         zip.close()
         buffer.flush()
         zip_stream = buffer.getvalue()
         buffer.close()
 
         # Stick it all in a django HttpResponse
-        response = HttpResponse('',mimetype)
-        response['Content-Disposition'] = 'attachment; filename=%s.zip' % file_name.replace('.shp','')
+        response = HttpResponse('', mimetype)
+        response['Content-Disposition'] = (
+            'attachment; filename=%s.zip' % file_name.replace('.shp', '')
+        )
         response['Content-length'] = str(len(zip_stream))
         response['Content-Type'] = mimetype
         response.write(zip_stream)
         return response
 
-    def write_with_native_bindings(self,tmp_name,queryset,geo_field):
+    def write_with_native_bindings(self, tmp_name, queryset, geo_field):
         """ Write a shapefile out to a file from a geoqueryset.
 
         Written by Jared Kibele and Dane Springmeyer.
@@ -140,13 +156,13 @@ class ShpResponder(object):
         if ds is None:
             raise Exception('Could not create file!')
 
-        if hasattr(geo_field,'geom_type'):
+        if hasattr(geo_field, 'geom_type'):
             ogr_type = OGRGeomType(geo_field.geom_type).num
         else:
             ogr_type = OGRGeomType(geo_field._geom).num
 
         native_srs = osr.SpatialReference()
-        if hasattr(geo_field,'srid'):
+        if hasattr(geo_field, 'srid'):
             native_srs.ImportFromEPSG(geo_field.srid)
         else:
             native_srs.ImportFromEPSG(geo_field._srid)
@@ -157,30 +173,30 @@ class ShpResponder(object):
         else:
             output_srs = native_srs
 
-        layer = ds.CreateLayer('lyr',srs=output_srs,geom_type=ogr_type)
+        layer = ds.CreateLayer('lyr', srs=output_srs, geom_type=ogr_type)
 
         attributes = self.get_attributes()
 
         for field in attributes:
-            field_defn = ogr.FieldDefn(str(field.name),ogr.OFTString)
-            field_defn.SetWidth( 255 )
+            field_defn = ogr.FieldDefn(str(field.name), ogr.OFTString)
+            field_defn.SetWidth(255)
             if layer.CreateField(field_defn) != 0:
                 raise Exception('Faild to create field')
 
         feature_def = layer.GetLayerDefn()
 
         for item in queryset:
-            feat = ogr.Feature( feature_def )
+            feat = ogr.Feature(feature_def)
 
             for field in attributes:
-                value = getattr(item,field.name)
+                value = getattr(item, field.name)
                 try:
                     string_value = str(value)
                 except UnicodeEncodeError, E:
                     string_value = ''
-                feat.SetField(str(field.name),string_value)
+                feat.SetField(str(field.name), string_value)
 
-            geom = getattr(item,geo_field.name)
+            geom = getattr(item, geo_field.name)
 
             if geom:
                 ogr_geom = ogr.CreateGeometryFromWkt(geom.wkt)
@@ -195,7 +211,7 @@ class ShpResponder(object):
 
         ds.Destroy()
 
-    def write_with_ctypes_bindings(self,tmp_name,queryset,geo_field):
+    def write_with_ctypes_bindings(self, tmp_name, queryset, geo_field):
         """ Write a shapefile out to a file from a geoqueryset.
 
         Uses GeoDjangos ctypes wrapper to ogr in libgdal.
@@ -211,13 +227,14 @@ class ShpResponder(object):
             raise Exception('Could not create file!')
 
         # Get the right geometry type number for ogr
-        if hasattr(geo_field,'geom_type'):
+        if hasattr(geo_field, 'geom_type'):
             ogr_type = OGRGeomType(geo_field.geom_type).num
         else:
             ogr_type = OGRGeomType(geo_field._geom).num
 
-        # Set up the native spatial reference of the geometry field using the srid
-        if hasattr(geo_field,'srid'):
+        # Set up the native spatial reference of the geometry field using the
+        # srid
+        if hasattr(geo_field, 'srid'):
             native_srs = SpatialReference(geo_field.srid)
         else:
             native_srs = SpatialReference(geo_field._srid)
@@ -229,7 +246,8 @@ class ShpResponder(object):
 
         # create the layer
         # this is crashing python26 on osx and ubuntu
-        layer = lgdal.OGR_DS_CreateLayer(ds, 'lyr', output_srs._ptr, ogr_type, None)
+        layer = lgdal.OGR_DS_CreateLayer(
+            ds, 'lyr', output_srs._ptr, ogr_type, None)
 
         # Create the fields
         attributes = self.get_attributes()
@@ -259,14 +277,13 @@ class ShpResponder(object):
             #OGR_F_SetFieldStrin
             #OFTString => CharField
 
-
             # OGR_F_SetFieldDateTime()
             #OFTDateTime => DateTimeField
             #OFTDate => TimeField
             #OFTDate => DateField
 
-            for idx,field in enumerate(attributes):
-                value = getattr(item,field.name)
+            for idx, field in enumerate(attributes):
+                value = getattr(item, field.name)
                 try:
                     string_value = str(value)
                 except UnicodeEncodeError, E:
@@ -276,22 +293,22 @@ class ShpResponder(object):
                 lgdal.OGR_F_SetFieldString(feat, idx, string_value)
 
             # Transforming & setting the geometry
-            geom = getattr(item,geo_field.name)
+            geom = getattr(item, geo_field.name)
 
             # if requested we transform the input geometry
             # to match the shapefiles projection 'to-be'
             if geom:
-                ogr_geom = OGRGeometry(geom.wkt,output_srs)
+                ogr_geom = OGRGeometry(geom.wkt, output_srs)
                 if self.proj_transform:
                     ct = CoordTransform(native_srs, output_srs)
                     ogr_geom.transform(ct)
                 # create the geometry
                 check_err(lgdal.OGR_F_SetGeometry(feat, ogr_geom._ptr))
             else:
-                # Case where geometry object is not found because of null value for field
-                # effectively looses whole record in shapefile if geometry does not exist
+                # Case where geometry object is not found because of null value
+                # for field effectively looses whole record in shapefile if
+                # geometry does not exist
                 pass
-
 
             # creat the feature in the layer.
             check_err(lgdal.OGR_L_SetFeature(layer, feat))
@@ -301,7 +318,7 @@ class ShpResponder(object):
         lgdal.OGR_DS_Destroy(ds)
         lgdal.OGRCleanupAll()
 
-    def write_search_records(self,recordsArray):
+    def write_search_records(self, recordsArray):
         """
           Write a shapefile out to a file from a geoqueryset.
           Added by Tim based on code written by Kibele and Dane Springmeyer.
@@ -310,10 +327,11 @@ class ShpResponder(object):
         of gdal when compiled with --with-python, instead of the ctypes-based
         bindings that GeoDjango provides.
 
-        Also in this case we dont need a model but a searcher array of search objects
+        Also in this case we dont need a model but a searcher array of search
+        objects
         @return an HttpResponse with shp payload
         """
-        tmp = tempfile.NamedTemporaryFile(suffix='.shp', mode = 'w+b')
+        tmp = tempfile.NamedTemporaryFile(suffix='.shp', mode='w+b')
         # we must close the file for GDAL to be able to open and write to it
         tmp.close()
 
@@ -323,7 +341,7 @@ class ShpResponder(object):
             raise Exception('Could not create file!')
 
         native_srs = osr.SpatialReference()
-        native_srs.ImportFromEPSG(4326) # latlong wgs84
+        native_srs.ImportFromEPSG(4326)  # latlong wgs84
 
         if self.proj_transform:
             output_srs = osr.SpatialReference()
@@ -332,14 +350,13 @@ class ShpResponder(object):
             output_srs = native_srs
 
         ogr_type = OGRGeomType('POLYGON').num
-        layer = ds.CreateLayer('lyr',srs=output_srs,geom_type=ogr_type)
+        layer = ds.CreateLayer('lyr', srs=output_srs, geom_type=ogr_type)
 
         attributes = []
         attributes.append("product_id")
-        attributes.append("mission")
-        attributes.append("mission_sensor")
-        attributes.append("sensor_type")
-        attributes.append("acquisition_mode")
+        attributes.append("satellite")
+        attributes.append("instrument_type")
+        attributes.append("product_profile")
         attributes.append("processing_level")
         attributes.append("owner")
         attributes.append("license")
@@ -367,30 +384,31 @@ class ShpResponder(object):
         attributes.append("row_offset")
 
         for field in attributes:
-            field_defn = ogr.FieldDefn(str(field),ogr.OFTString)
-            field_defn.SetWidth( 255 )
+            field_defn = ogr.FieldDefn(str(field), ogr.OFTString)
+            field_defn.SetWidth(255)
             if layer.CreateField(field_defn) != 0:
                 raise Exception('Faild to create field')
 
         feature_def = layer.GetLayerDefn()
 
         for item in recordsArray:
-            feat = ogr.Feature( feature_def )
+            feat = ogr.Feature(feature_def)
 
             for field in attributes:
                 #ABP: added getConcreteProduct and None
-                value = getattr(item.product.getConcreteInstance(),field,None)
-                logger.info("Shape writer: Setting %s to %s" % (field,value))
+                value = getattr(
+                    item.product.getConcreteInstance(), field, None)
+                logger.info("Shape writer: Setting %s to %s" % (field, value))
                 try:
                     string_value = str(value)
                 except UnicodeEncodeError, E:
                     string_value = ''
-                    logger.info( "Unicode conversion error" )
+                    logger.info("Unicode conversion error")
                 #truncate field name to 10 letters to deal with shp limitations
                 logger.info("Truncated field name: %s" % str(field[0:10]))
-                feat.SetField(str(field[0:10]),string_value)
+                feat.SetField(str(field[0:10]), string_value)
 
-            geom = getattr(item.product,"spatial_coverage")
+            geom = getattr(item.product, "spatial_coverage")
 
             if geom:
                 ogr_geom = ogr.CreateGeometryFromWkt(geom.wkt)
@@ -404,13 +422,13 @@ class ShpResponder(object):
             check_err(layer.CreateFeature(feat))
 
         ds.Destroy()
-        #Next line for debugging only if you want to see log info in debugtoolbar
+        # Next line for debugging only if you want to see log info in
+        # debugtoolbar
         #return HttpResponse("<html><head></head><body>Done</body></html>")
-        mimetype='application/zip'
-        return self.zip_response(tmp.name,self.file_name,mimetype)
+        mimetype = 'application/zip'
+        return self.zip_response(tmp.name, self.file_name, mimetype)
 
-
-    def write_request_records(self,recordsArray):
+    def write_request_records(self, recordsArray):
         """
           Write a shapefile out to a file from a tasking request.
           Added by Tim based on code written by Kibele and Dane Springmeyer.
@@ -419,10 +437,12 @@ class ShpResponder(object):
         of gdal when compiled with --with-python, instead of the ctypes-based
         bindings that GeoDjango provides.
 
-        Also in this case we dont need a model but a searcher array of search objects
+        Also in this case we dont need a model but a searcher array of search
+        objects
+
         @return an HttpResponse with shp payload
         """
-        tmp = tempfile.NamedTemporaryFile(suffix='.shp', mode = 'w+b')
+        tmp = tempfile.NamedTemporaryFile(suffix='.shp', mode='w+b')
         # we must close the file for GDAL to be able to open and write to it
         tmp.close()
 
@@ -432,7 +452,7 @@ class ShpResponder(object):
             raise Exception('Could not create file!')
 
         native_srs = osr.SpatialReference()
-        native_srs.ImportFromEPSG(4326) # latlong wgs84
+        native_srs.ImportFromEPSG(4326)  # latlong wgs84
 
         if self.proj_transform:
             output_srs = osr.SpatialReference()
@@ -441,33 +461,34 @@ class ShpResponder(object):
             output_srs = native_srs
 
         ogr_type = OGRGeomType('POLYGON').num
-        layer = ds.CreateLayer('lyr',srs=output_srs,geom_type=ogr_type)
+        layer = ds.CreateLayer('lyr', srs=output_srs, geom_type=ogr_type)
 
         attributes = []
         attributes.append("id")
-        attributes.append("mission_sensor")
+        attributes.append("instrument_type")
+        attributes.append("satellite")
         attributes.append("target_date")
 
         for field in attributes:
-            field_defn = ogr.FieldDefn(str(field),ogr.OFTString)
-            field_defn.SetWidth( 255 )
+            field_defn = ogr.FieldDefn(str(field), ogr.OFTString)
+            field_defn.SetWidth(255)
             if layer.CreateField(field_defn) != 0:
                 raise Exception('Faild to create field')
 
         feature_def = layer.GetLayerDefn()
 
         for item in recordsArray:
-            feat = ogr.Feature( feature_def )
+            feat = ogr.Feature(feature_def)
 
             for field in attributes:
-                value = getattr(item,field)
+                value = getattr(item, field)
                 try:
                     string_value = str(value)
                 except UnicodeEncodeError, E:
                     string_value = ''
-                feat.SetField(str(field),string_value)
+                feat.SetField(str(field), string_value)
 
-            geom = getattr(item.delivery_detail,"geometry")
+            geom = getattr(item.delivery_detail, "geometry")
 
             if geom:
                 ogr_geom = ogr.CreateGeometryFromWkt(geom.wkt)
@@ -481,14 +502,14 @@ class ShpResponder(object):
             check_err(layer.CreateFeature(feat))
 
         ds.Destroy()
-        mimetype='application/zip'
-        return self.zip_response(tmp.name,self.file_name,mimetype)
+        mimetype = 'application/zip'
+        return self.zip_response(tmp.name, self.file_name, mimetype)
 
-    def write_delivery_details(self,theOrder):
+    def write_delivery_details(self, theOrder):
         """
           Write a shapefile out to a file from a delivery details clip geometry
         """
-        tmp = tempfile.NamedTemporaryFile(suffix='.shp', mode = 'w+b')
+        tmp = tempfile.NamedTemporaryFile(suffix='.shp', mode='w+b')
         # we must close the file for GDAL to be able to open and write to it
         tmp.close()
 
@@ -498,7 +519,7 @@ class ShpResponder(object):
             raise Exception('Could not create file!')
 
         native_srs = osr.SpatialReference()
-        native_srs.ImportFromEPSG(4326) # latlong wgs84
+        native_srs.ImportFromEPSG(4326)  # latlong wgs84
 
         if self.proj_transform:
             output_srs = osr.SpatialReference()
@@ -507,7 +528,7 @@ class ShpResponder(object):
             output_srs = native_srs
 
         ogr_type = OGRGeomType('POLYGON').num
-        layer = ds.CreateLayer('lyr',srs=output_srs,geom_type=ogr_type)
+        layer = ds.CreateLayer('lyr', srs=output_srs, geom_type=ogr_type)
 
         #order attributes
         attributes = []
@@ -525,39 +546,38 @@ class ShpResponder(object):
         dd_attributes.append("file_format")
 
         for field in attributes:
-            field_defn = ogr.FieldDefn(str(field[0:10]),ogr.OFTString)
-            field_defn.SetWidth( 255 )
+            field_defn = ogr.FieldDefn(str(field[0:10]), ogr.OFTString)
+            field_defn.SetWidth(255)
             if layer.CreateField(field_defn) != 0:
                 raise Exception('Faild to create field')
 
         for field in dd_attributes:
-            field_defn = ogr.FieldDefn(str(field[0:10]),ogr.OFTString)
-            field_defn.SetWidth( 255 )
+            field_defn = ogr.FieldDefn(str(field[0:10]), ogr.OFTString)
+            field_defn.SetWidth(255)
             if layer.CreateField(field_defn) != 0:
                 raise Exception('Faild to create field')
-
 
         feature_def = layer.GetLayerDefn()
 
-        feat = ogr.Feature( feature_def )
+        feat = ogr.Feature(feature_def)
 
         for field in attributes:
-            value = getattr(theOrder,field)
+            value = getattr(theOrder, field)
             try:
                 string_value = str(value)
             except UnicodeEncodeError, E:
                 string_value = ''
-            feat.SetField(str(field[0:10]),string_value)
+            feat.SetField(str(field[0:10]), string_value)
 
         for field in dd_attributes:
-            value = getattr(theOrder.delivery_detail,field)
+            value = getattr(theOrder.delivery_detail, field)
             try:
                 string_value = str(value)
             except UnicodeEncodeError, E:
                 string_value = ''
-            feat.SetField(str(field[0:10]),string_value)
+            feat.SetField(str(field[0:10]), string_value)
 
-        geom = getattr(theOrder.delivery_detail,"geometry")
+        geom = getattr(theOrder.delivery_detail, "geometry")
 
         if geom:
             ogr_geom = ogr.CreateGeometryFromWkt(geom.wkt)
@@ -571,14 +591,14 @@ class ShpResponder(object):
         check_err(layer.CreateFeature(feat))
 
         ds.Destroy()
-        mimetype='application/zip'
-        return self.zip_response(tmp.name,self.file_name,mimetype)
+        mimetype = 'application/zip'
+        return self.zip_response(tmp.name, self.file_name, mimetype)
 
-    def write_order_products(self,theRecordsArray):
+    def write_order_products(self, theRecordsArray):
         """
           Write a shapefile out to a file from a ordered products geometry
         """
-        tmp = tempfile.NamedTemporaryFile(suffix='.shp', mode = 'w+b')
+        tmp = tempfile.NamedTemporaryFile(suffix='.shp', mode='w+b')
         # we must close the file for GDAL to be able to open and write to it
         tmp.close()
 
@@ -588,7 +608,7 @@ class ShpResponder(object):
             raise Exception('Could not create file!')
 
         native_srs = osr.SpatialReference()
-        native_srs.ImportFromEPSG(4326) # latlong wgs84
+        native_srs.ImportFromEPSG(4326)  # latlong wgs84
 
         if self.proj_transform:
             output_srs = osr.SpatialReference()
@@ -597,14 +617,13 @@ class ShpResponder(object):
             output_srs = native_srs
 
         ogr_type = OGRGeomType('POLYGON').num
-        layer = ds.CreateLayer('lyr',srs=output_srs,geom_type=ogr_type)
+        layer = ds.CreateLayer('lyr', srs=output_srs, geom_type=ogr_type)
 
         attributes = []
         attributes.append("product_id")
-        attributes.append("mission")
-        attributes.append("mission_sensor")
-        attributes.append("sensor_type")
-        attributes.append("acquisition_mode")
+        attributes.append("satellite")
+        attributes.append("instrument_type")
+        attributes.append("product_profile")
         attributes.append("processing_level")
         attributes.append("owner")
         attributes.append("license")
@@ -632,30 +651,31 @@ class ShpResponder(object):
         attributes.append("row_offset")
 
         for field in attributes:
-            field_defn = ogr.FieldDefn(str(field),ogr.OFTString)
-            field_defn.SetWidth( 255 )
+            field_defn = ogr.FieldDefn(str(field), ogr.OFTString)
+            field_defn.SetWidth(255)
             if layer.CreateField(field_defn) != 0:
                 raise Exception('Faild to create field')
 
         feature_def = layer.GetLayerDefn()
 
         for item in theRecordsArray:
-            feat = ogr.Feature( feature_def )
+            feat = ogr.Feature(feature_def)
 
             for field in attributes:
                 #ABP: added getConcreteProduct and None
-                value = getattr(item.product.getConcreteInstance(),field,None)
-                logger.info("Shape writer: Setting %s to %s" % (field,value))
+                value = getattr(
+                    item.product.getConcreteInstance(), field, None)
+                logger.info("Shape writer: Setting %s to %s" % (field, value))
                 try:
                     string_value = str(value)
                 except UnicodeEncodeError, E:
                     string_value = ''
-                    logger.info( "Unicode conversion error" )
+                    logger.info("Unicode conversion error")
                 #truncate field name to 10 letters to deal with shp limitations
                 logger.info("Truncated field name: %s" % str(field[0:10]))
-                feat.SetField(str(field[0:10]),string_value)
+                feat.SetField(str(field[0:10]), string_value)
 
-            geom = getattr(item.product,"spatial_coverage")
+            geom = getattr(item.product, "spatial_coverage")
 
             if geom:
                 ogr_geom = ogr.CreateGeometryFromWkt(geom.wkt)
@@ -669,7 +689,8 @@ class ShpResponder(object):
             check_err(layer.CreateFeature(feat))
 
         ds.Destroy()
-        #Next line for debugging only if you want to see log info in debugtoolbar
-        #return HttpResponse("<html><head></head><body>Done</body></html>")
-        mimetype='application/zip'
-        return self.zip_response(tmp.name,self.file_name,mimetype)
+        # Next line for debugging only if you want to see log info in
+        # debugtoolbar
+        # return HttpResponse("<html><head></head><body>Done</body></html>")
+        mimetype = 'application/zip'
+        return self.zip_response(tmp.name, self.file_name, mimetype)

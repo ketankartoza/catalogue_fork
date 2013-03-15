@@ -20,18 +20,18 @@ Migration procedure
 
       pip install --upgrade django==1.4.2 django-debug-toolbar==0.9.4
 
-  #. move ``settings_local.py`` to ``sansa_catalogue``::
+  #. move ``settings_local.py`` to ``core``::
 
-      mv settings_local.py sansa_catalogue/
+      mv settings_local.py core/
 
   #. update ``settings_local.py`` according to ``settings_local.py.templ``
 
   * Optionally:
 
     * regenerate documentation: ``cd docs/sphinx; make clean; make html; cd -``
-    * move non-tracked ``geoip_data`` to ``sansa_catalogue/geoip_data``::
+    * move non-tracked ``geoip_data`` to ``core/geoip_data``::
 
-        mv geoip_data/* sansa_catalogue/geoip_data/
+        mv geoip_data/* core/geoip_data/
 
 
 Run tests and development server
@@ -39,7 +39,7 @@ Run tests and development server
 
   * to run full test suite execute::
 
-     python manage.py test --settings=sansa_catalogue.settings_test catalogue.tests
+     python manage.py test --settings=core.settings_test catalogue.tests
 
   * to run development server execute ``python manage.py runserver``
 

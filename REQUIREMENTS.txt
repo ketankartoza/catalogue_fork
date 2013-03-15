@@ -31,4 +31,4 @@ django-userena==1.1.2
 django-crispy-forms==1.2.3
 git+git://github.com/dodobas/pycsw.git
 SQLAlchemy==0.8.0b2
-
+django-model-utils==1.2.0

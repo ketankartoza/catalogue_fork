@@ -16,7 +16,42 @@ __author__ = 'tim@linfiniti.com, lkleyn@sansa.org.za'
 __date__ = '01/11/2012'
 __copyright__ = 'South African National Space Agency'
 
+from model_utils.managers import PassThroughManager
+from django.db.models.query import QuerySet
+
 from django.contrib.gis.db import models
+
+
+class OpticalProductProfileQuerySet(QuerySet):
+    """
+    Optical Product Profile extended query manager
+
+    for_instrumenttypes - filters product profile by instrument types
+
+    """
+
+    def for_licence_type(self, theLicenceType):
+        return self.filter(
+            satellite_instrument__satellite__license_type__in=
+            theLicenceType.all())
+
+    def for_collection(self, theCollection):
+        return self.filter(
+            satellite_instrument__satellite__collection__in=
+            theCollection.all()
+        )
+
+    def for_instrumenttypes(self, theInstrumentTypes):
+        return self.filter(
+            satellite_instrument__instrument_type__in=theInstrumentTypes.all())
+
+    def for_satellite(self, theSatellite):
+        return self.filter(
+            satellite_instrument__satellite__in=theSatellite.all())
+
+    def for_spectralgroup(self, theSpectralgroup):
+        return self.filter(
+            spectral_mode__spectralgroup__in=theSpectralgroup.all())
 
 
 class OpticalProductProfile(models.Model):
@@ -31,6 +66,10 @@ class OpticalProductProfile(models.Model):
     """
     satellite_instrument = models.ForeignKey('SatelliteInstrument')
     spectral_mode = models.ForeignKey('SpectralMode')
+
+    # define model passthrough manager
+    objects = PassThroughManager.for_queryset_class(
+        OpticalProductProfileQuerySet)()
 
     def __unicode__(self):
         return u'id={0} {1}'.format(
@@ -211,7 +250,7 @@ class InstrumentType(models.Model):
     swath_optical_km = models.IntegerField(
         blank=True, null=True,
         help_text='On-ground sensor swath width')
-    band_number_total = models.IntegerField(
+    band_count = models.IntegerField(
         blank=True, null=True,
         help_text='Total number of bands for this Instrument')
     band_type = models.TextField(

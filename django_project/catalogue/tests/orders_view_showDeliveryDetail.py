@@ -31,7 +31,6 @@ class OrdersViews_showDeliveryDetail_Tests(TestCase):
     """
 
     fixtures = [
-        'test_missiongroup.json',
         'test_institution.json',
         'test_license.json',
         'test_projection.json',
@@ -40,13 +39,9 @@ class OrdersViews_showDeliveryDetail_Tests(TestCase):
         'test_resamplingmethod.json',
         'test_fileformat.json',
         'test_quality.json',
-        'test_mission.json',
-        'test_missionsensor.json',
         'test_search.json',
         'test_searchdaterange.json',
         'test_processinglevel.json',
-        'test_sensortype.json',
-        'test_acquisitionmode.json',
         # new_dicts
         'test_radarbeam.json',
         'test_imagingmode.json',

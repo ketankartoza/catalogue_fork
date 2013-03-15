@@ -24,7 +24,6 @@ from django.contrib.contenttypes.models import ContentType
 from offline_messages.models import OfflineMessage
 from offline_messages.utils import create_offline_message, constants
 #for translation
-from catalogue.models import MissionSensor
 from catalogue.models.products import GenericSensorProduct
 
 
@@ -105,9 +104,9 @@ class OrderNotificationRecipients(models.Model):
     individuals
     """
     user = models.ForeignKey(User)
-    sensors = models.ManyToManyField(
-        MissionSensor,
-        verbose_name='Sensors', null=True, blank=True,
+    satellite = models.ManyToManyField(
+        'dictionaries.Satellite',
+        verbose_name='Satelite', null=True, blank=True,
         help_text=('Please choose one or more sensor. Use ctrl-click'
                    'to select more than one.')
     )
@@ -124,7 +123,7 @@ class OrderNotificationRecipients(models.Model):
         verbose_name = 'Order Notification Recipient'
         verbose_name_plural = 'Order Notification Recipients'
 
-    def __unicode(self):
+    def __unicode__(self):
         return str(self.user.name)
 
     @staticmethod
@@ -154,7 +153,8 @@ class OrderNotificationRecipients(models.Model):
             listeners.update([o.user for o in (
                 OrderNotificationRecipients.objects
                 .filter(
-                    sensors=instance.acquisition_mode.sensor_type.mission_sensor)
+                    sensors=instance.
+                    product_profile.satellite_instrument.satellite)
                 .select_related()
             )])
         return listeners

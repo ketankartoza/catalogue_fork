@@ -30,16 +30,13 @@ from django.db import transaction
 from django.contrib.gis.gdal import OGRGeometry
 from django.contrib.gis.gdal import DataSource
 
-from catalogue.models import (Quality,
-                              License,
-                              CreatingSoftware,
-                              Institution,
-                              OpticalProduct,
-                              Mission,
-                              MissionSensor,
-                              SensorType,
-                              AcquisitionMode,
-                              )
+from catalogue.models import (
+    Quality,
+    License,
+    CreatingSoftware,
+    Institution,
+    OpticalProduct,
+)
 
 
 @transaction.commit_manually

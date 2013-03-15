@@ -43,7 +43,7 @@ def getGeometryFromUploadedFile(theRequest, theForm, theFileField):
     <form enctype="multipart/form-data" action="/search/" method="post"
         id="search_form">
     """
-    logger.info('Form cleaned data: ' + str(theForm.cleaned_data))
+    logger.debug('Form cleaned data: ' + str(theForm.cleaned_data))
     if theRequest.FILES.get(theFileField):
         logger.debug('Using geometry from file.')
 
