@@ -49,7 +49,7 @@ LOCAL_JQUERY = True
 USE_GEOIP = True
 
 # This is the path to MaxMinds Datasets, can be relative or absolute
-GEOIP_PATH = ABS_PATH('sansa_catalogue', 'geoip_data')
+GEOIP_PATH = ABS_PATH('core', 'geoip_data')
 # Hack to make geoip work on OSX
 # See https://code.djangoproject.com/ticket/19168
 GEOIP_COUNTRY = 'GeoIP.dat'

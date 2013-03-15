@@ -37,7 +37,7 @@ LANGUAGE_CODE = 'en-ZA'
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: '/home/media/media.lawrence.com/media/'
-MEDIA_ROOT = ABS_PATH('sansa_catalogue', 'media')
+MEDIA_ROOT = ABS_PATH('core', 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -92,14 +92,14 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'sansa_catalogue.urls'
+ROOT_URLCONF = 'core.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'sansa_catalogue.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 TEMPLATE_DIRS = (
-    ABS_PATH('sansa_catalogue', 'templates'),
+    ABS_PATH('core', 'templates'),
 )
 
 # Django specific apps

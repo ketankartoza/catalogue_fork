@@ -7,9 +7,9 @@ source ../python-dev/bin/activate
 cd django_project
 if [ $# -ne 0 ] 
 then
-  python manage.py migratev3 --migrations=$1 --settings=sansa_catalogue.settings.dev_${USER}
+  python manage.py migratev3 --migrations=$1 --settings=core.settings.dev_${USER}
 else
-  python manage.py migratev3 --settings=sansa_catalogue.settings.dev_${USER}
+  python manage.py migratev3 --settings=core.settings.dev_${USER}
 fi
 cd ..
 

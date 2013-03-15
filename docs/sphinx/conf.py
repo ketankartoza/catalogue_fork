@@ -18,7 +18,7 @@ import os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.append(os.path.abspath('.'))
-from django_project.sansa_catalogue import settings
+from django_project.core import settings
 
 sys.path.append(os.path.abspath('../../'))
 sys.path.append(os.path.abspath('../../catalogue'))
