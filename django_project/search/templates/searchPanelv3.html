@@ -9,7 +9,7 @@
 
     function createOptions(theOptions, theSelectedOptions, addEmpty){
       // add empty options, default true
-      addEmpty = addEmpty !== undefined ? addEmpty : true;
+      addEmpty = addEmpty !== undefined ? addEmpty : false;
       var options = '';
       if (addEmpty === true) {
         options += '<option value="">---------</option>';
@@ -33,27 +33,130 @@
       return options
     }
 
-    function getSelectOptions() {
-      block();
+    function getSelectedOptions(){
+      var sel_collections = [];
+      $('#id_collection option:selected').each(function(i, selected) {
+        sel_collections[i] = parseInt($(selected).val());
+      });
+
+      var sel_satellite = [];
+      $('#id_satellite option:selected').each(function(i, selected) {
+        sel_satellite[i] = parseInt($(selected).val());
+      });
+
       var sel_insttypes = [];
       $('#id_instrumenttype option:selected').each(function(i, selected) {
         sel_insttypes[i] = parseInt($(selected).val());
       });
 
-      var sel_satellite = $('#id_satellite option:selected').val();
-      var sel_spectralmode = $('#id_spectral_mode option:selected').val();
+      var sel_specgroups = [];
+      $('#id_spectral_group option:selected').each(function(i, selected) {
+        sel_specgroups[i] = parseInt($(selected).val());
+      });
+
+      var sel_licensetypes = [];
+      $('#id_license_type option:selected').each(function(i, selected) {
+        sel_licensetypes[i] = parseInt($(selected).val());
+      });
+
+      return [sel_collections, sel_satellite, sel_insttypes, sel_specgroups, sel_licensetypes]
+    }
+
+
+    function getSelectOptionsForCollection() {
+      block();
+
+      var selected_options = getSelectedOptions()
+
       var getData = {
-        'instrumenttypes': sel_insttypes,
-        'satellite': sel_satellite,
-        'spectralmode': sel_spectralmode
+        'collections': selected_options[0]
       };
 
       $.getJSON('{% url "updateSelectOptions" %}', $.param(getData, true)).done(function(data){
-        $("#id_instrumenttype").html(createOptions(data.instrumenttypes, sel_insttypes, false));
+        $("#id_satellite").html(createOptions(data.satellites, selected_options[1]));
 
-        $("#id_satellite").html(createOptions(data.satellites, sel_satellite));
+        $("#id_instrumenttype").html(createOptions(data.instrumenttypes, selected_options[2]));
 
-        $("#id_spectral_mode").html(createOptions(data.spectralmodes, sel_spectralmode));
+        $("#id_spectral_group").html(createOptions(data.spectralgroups, selected_options[3]));
+
+        $("#id_license_type").html(createOptions(data.licensetypes, selected_options[4]));
+      });
+      unblock();
+    }
+
+    function getSelectOptionsForSatellite() {
+      block();
+
+      var selected_options = getSelectedOptions()
+
+      var getData = {
+        'collections': selected_options[0],
+        'satellites': selected_options[1]
+      };
+
+      $.getJSON('{% url "updateSelectOptions" %}', $.param(getData, true)).done(function(data){
+
+        // $("#id_collection").html(createOptions(data.collections, selected_options[0]));
+
+        // $("#id_satellite").html(createOptions(data.satellites, selected_options[1]));
+
+        $("#id_instrumenttype").html(createOptions(data.instrumenttypes, selected_options[2]));
+
+        $("#id_spectral_group").html(createOptions(data.spectralgroups, selected_options[3]));
+
+        $("#id_license_type").html(createOptions(data.licensetypes, selected_options[4]));
+      });
+      unblock();
+    }
+
+    function getSelectOptionsForInstrumentType() {
+      block();
+
+      var selected_options = getSelectedOptions()
+
+      var getData = {
+        'collections': selected_options[0],
+        'satellites': selected_options[1],
+        'instrumenttypes': selected_options[2]
+      };
+
+      $.getJSON('{% url "updateSelectOptions" %}', $.param(getData, true)).done(function(data){
+
+        // $("#id_collection").html(createOptions(data.collections, selected_options[0]));
+
+        // $("#id_satellite").html(createOptions(data.satellites, selected_options[1]));
+
+        // $("#id_instrumenttype").html(createOptions(data.instrumenttypes, selected_options[2]));
+
+        $("#id_spectral_group").html(createOptions(data.spectralgroups, selected_options[3]));
+
+        $("#id_license_type").html(createOptions(data.licensetypes, selected_options[4]));
+      });
+      unblock();
+    }
+
+    function getSelectOptionsForSpectralGroup() {
+      block();
+
+      var selected_options = getSelectedOptions()
+
+      var getData = {
+        'collections': selected_options[0],
+        'satellites': selected_options[1],
+        'instrumenttypes': selected_options[2],
+        'spectralgroups': selected_options[3]
+      };
+
+      $.getJSON('{% url "updateSelectOptions" %}', $.param(getData, true)).done(function(data){
+        // $("#id_collection").html(createOptions(data.collections, selected_options[0]));
+
+        // $("#id_satellite").html(createOptions(data.satellites, selected_options[1]));
+
+        // $("#id_instrumenttype").html(createOptions(data.instrumenttypes, selected_options[2]));
+
+        //$("#id_spectral_group").html(createOptions(data.spectralgroups, selected_options[3]));
+
+        $("#id_license_type").html(createOptions(data.licensetypes, selected_options[4]));
       });
       unblock();
     }
@@ -86,7 +189,20 @@
       'autoclose':true
     });
 
-    $("#id_instrumenttype, #id_satellite, #id_spectral_mode").bind('change', function (){
-      getSelectOptions();
+    //$("#id_instrumenttype, #id_satellite, #id_spectral_mode").bind('change', function (){
+    $("#id_collection").bind('change', function (){
+      getSelectOptionsForCollection();
+    });
+
+    $("#id_satellite").bind('change', function (){
+      getSelectOptionsForSatellite();
+    });
+
+    $("#id_instrumenttype").bind('change', function (){
+      getSelectOptionsForInstrumentType();
+    });
+
+    $("#id_spectral_group").bind('change', function (){
+      getSelectOptionsForSpectralGroup();
     });
 </script>

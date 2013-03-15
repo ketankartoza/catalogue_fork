@@ -269,4 +269,8 @@ ALTER TABLE "catalogue_opticalproduct"
 
 ALTER TABLE "catalogue_radarproduct"
     ALTER "product_profile_id" SET NOT NULL;
+
+-- drop acquisition_mode column
+
+ALTER TABLE catalogue_genericsensorproduct DROP COLUMN acquisition_mode_id;
 COMMIT;

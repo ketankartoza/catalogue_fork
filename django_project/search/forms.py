@@ -289,16 +289,28 @@ class AdvancedSearchForm(forms.ModelForm):
         )
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
         if self.instance.pk is not None:
-            myInstTypes, mySats, mySpecMod = prepareSelectQuerysets(
-                self.instance.instrumenttype.all().values_list('id'),
-                self.instance.satellite_id, self.instance.spectral_mode_id)
+            myCollectionSet = self.instance.collection.all().values_list('id')
+            mySatelliteSet = self.instance.satellite.all().values_list('id')
+            myInstTypeSet = self.instance.instrumenttype.all()\
+                .values_list('id')
+            mySpecGroupSet = self.instance.spectral_group.all()\
+                .values_list('id')
+            myLicenseTypeSet = self.instance.license_type.all()\
+                .values_list('id')
+
+            myQS_data = prepareSelectQuerysets(
+                myCollectionSet, mySatelliteSet, myInstTypeSet,
+                mySpecGroupSet, myLicenseTypeSet
+            )
         else:
-            myInstTypes, mySats, mySpecMod = prepareSelectQuerysets([], '', '')
+            myQS_data = prepareSelectQuerysets()
 
         # set new querysets
-        self.fields['instrumenttype'].queryset = myInstTypes
-        self.fields['satellite'].queryset = mySats
-        self.fields['spectral_group'].queryset = mySpecMod
+        self.fields['collection'].queryset = myQS_data[0]
+        self.fields['satellite'].queryset = myQS_data[1]
+        self.fields['instrumenttype'].queryset = myQS_data[2]
+        self.fields['spectral_group'].queryset = myQS_data[3]
+        self.fields['license_type'].queryset = myQS_data[4]
 
         for myFieldName, myField in self.fields.items():
             myField.widget.attrs['class'] = 'ui-corner-all'

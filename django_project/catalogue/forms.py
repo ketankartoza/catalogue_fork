@@ -25,7 +25,6 @@ from django.contrib.auth.models import User
 
 
 from catalogue.models import (
-    MissionSensor,
     OrderStatus,
     Order,
     Projection,
@@ -218,32 +217,34 @@ class MessageForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(MessageForm, self).__init__(*args, **kwargs)
-        self.fields['user_id'].choices = [('', '----------')] + [
-        (myUser.id, myUser
-            ) for myUser in User.objects.all().order_by(
-            'username')
-        ]
+        self.fields['user_id'].choices = [
+            ('', '----------')] + [
+                (myUser.id, myUser) for myUser in User.objects.all().order_by(
+                    'username')
+            ]
 
     user_id = forms.ChoiceField(choices=(), widget=forms.Select())
 
-    message = forms.CharField(label='Message:',
-                              # <-- specify the textarea widget!
-                              widget=forms.Textarea,
-                              required=True,
-                              help_text='Enter a message here',
-                              error_messages={'required':
-                                                  'A message is required!'}
+    message = forms.CharField(
+        label='Message:',
+        # <-- specify the textarea widget!
+        widget=forms.Textarea,
+        required=True,
+        help_text='Enter a message here',
+        error_messages={
+            'required': 'A message is required!'}
     )
 
 
 class AllUsersMessageForm(forms.Form):
     """An unbound form that creates a Message submission form """
 
-    message = forms.CharField(label='Message:',
-                              widget=forms.Textarea,
-                              # <-- specify the textarea widget!
-                              required=True,
-                              help_text='Enter a message here',
-                              error_messages={'required':
-                                                  'A message is required!'}
+    message = forms.CharField(
+        label='Message:',
+        widget=forms.Textarea,
+        # <-- specify the textarea widget!
+        required=True,
+        help_text='Enter a message here',
+        error_messages={
+            'required': 'A message is required!'}
     )

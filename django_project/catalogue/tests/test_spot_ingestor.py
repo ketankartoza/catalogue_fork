@@ -21,10 +21,10 @@ __copyright__ = 'South African National Space Agency'
 import os
 from django.test import TestCase
 from django.core.management import call_command
-from catalogue.models import (Institution,
-                              GenericProduct,
-                              AcquisitionMode,
-                              SensorType)
+from catalogue.models import (
+    Institution,
+    GenericProduct
+)
 from catalogue.ingestors import spot
 
 SHAPEFILE_NAME = os.path.join(os.path.dirname( __file__),
@@ -37,14 +37,9 @@ class SpotIngestorTest(TestCase):
 
     fixtures = [
         'test_user.json',
-        'test_missiongroup.json',
-        'test_mission.json',
-        'test_missionsensor.json',
         'test_search.json',
         'test_searchdaterange.json',
         'test_processinglevel.json',
-        'test_sensortype.json',
-        'test_acquisitionmode.json',
         'test_institution.json',
         'test_license.json',
         'test_projection.json',

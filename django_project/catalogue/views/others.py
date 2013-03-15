@@ -46,8 +46,8 @@ from django.contrib.gis.geos import Point
 from catalogue.models import (
     GenericProduct,
     Visit,
-    VisitorReport,
-    Mission)
+    VisitorReport
+)
 from catalogue.forms import (
     ClipForm)
 from catalogue.renderDecorator import renderWithContext
@@ -629,11 +629,9 @@ def getFeatureInfo(theRequest,
 #renderWithContext is explained in renderWith.py
 @renderWithContext('index.html')
 def index(theRequest):
-    myMissions = Mission.objects.all()
     #render_to_response is done by the renderWithContext decorator
     return ({
-        'myPartnerFlag': isStrategicPartner(theRequest),
-        'myMissions': myMissions,
+        'myPartnerFlag': isStrategicPartner(theRequest)
     })
 
 

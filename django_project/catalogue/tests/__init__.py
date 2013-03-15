@@ -6,11 +6,6 @@ from catalogue.tests import simple_tests, dims_lib_test, \
 from catalogue.tests.test_spot_ingestor import SpotIngestorTest
 from catalogue.tests.simpleTest import SimpleTest
 from catalogue.tests.license_model import LicenseCRUD_Test
-from catalogue.tests.missionGroup_model import MissionGroupCRUD_Test
-from catalogue.tests.mission_model import MissionCRUD_Test
-from catalogue.tests.missionsensor_model import MissionSensorCRUD_Test
-from catalogue.tests.sensortype_model import SensorTypeCRUD_Test
-from catalogue.tests.acquisitionMode_model import AcquisitionModeCRUD_Test
 from catalogue.tests.projection_model import ProjectionCRUD_Test
 from catalogue.tests.institution_model import InstitutionCRUD_Test
 from catalogue.tests.quality_model import QualityCRUD_Test

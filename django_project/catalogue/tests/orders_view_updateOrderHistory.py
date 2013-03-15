@@ -38,14 +38,9 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
     """
 
     fixtures = [
-        'test_mission.json',
-        'test_missionsensor.json',
-        'test_missiongroup.json',
         'test_search.json',
         'test_searchdaterange.json',
         'test_processinglevel.json',
-        'test_sensortype.json',
-        'test_acquisitionmode.json',
         # new_dicts
         'test_radarbeam.json',
         'test_imagingmode.json',

@@ -33,9 +33,6 @@ class ShoppingCart_showMiniCartContents_Tests(TestCase):
 
     fixtures = [
         'test_user.json',
-        'test_mission.json',
-        'test_missionsensor.json',
-        'test_missiongroup.json',
         'test_creatingsoftware.json',
         'test_license.json',
         'test_quality.json',
@@ -48,8 +45,6 @@ class ShoppingCart_showMiniCartContents_Tests(TestCase):
         'test_search.json',
         'test_searchdaterange.json',
         'test_processinglevel.json',
-        'test_sensortype.json',
-        'test_acquisitionmode.json',
         # new dicts
         'test_radarbeam.json',
         'test_imagingmode.json',

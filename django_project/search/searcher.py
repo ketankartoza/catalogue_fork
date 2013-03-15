@@ -61,6 +61,20 @@ class Searcher:
         myOPP = OpticalProductProfile.objects
 
         # filter instrument type
+        if self.mSearch.collection.count() > 0:
+            myOPP = myOPP.for_collection(
+                self.mSearch.collection)
+            logger.debug(
+                'OPP filter - collection %s',
+                self.mSearch.collection.values_list('pk'))
+
+        if self.mSearch.satellite.count() > 0:
+            myOPP = myOPP.for_satellite(self.mSearch.satellite)
+            logger.debug(
+                'OPP filter - satellite %s',
+                self.mSearch.satellite.values_list('pk'))
+
+        # filter instrument type
         if self.mSearch.instrumenttype.count() > 0:
             myOPP = myOPP.for_instrumenttypes(
                 self.mSearch.instrumenttype)
@@ -68,21 +82,23 @@ class Searcher:
                 'OPP filter - instrumenttype %s',
                 self.mSearch.instrumenttype.values_list('pk'))
 
-        if self.mSearch.satellite:
-            myOPP = myOPP.for_satellite(self.mSearch.satellite)
+        if self.mSearch.spectral_group.count() > 0:
+            myOPP = myOPP.for_spectralgroup(self.mSearch.spectral_group)
             logger.debug(
-                'OPP filter - satellite %s',
-                self.mSearch.satellite.pk)
+                'OPP filter - spectralgroup %s',
+                self.mSearch.spectral_group.values_list('pk'))
 
-        if self.mSearch.spectral_mode:
-            myOPP = myOPP.for_spectralmode(self.mSearch.spectral_mode)
+        # filter by licence
+        if self.mSearch.license_type.count() > 0:
+            myOPP = myOPP.for_licence_type(self.mSearch.license_type)
             logger.debug(
-                'OPP filter - spectralmode %s',
-                self.mSearch.spectral_mode.pk)
+                'Licence filter %s',
+                self.mSearch.license_type.values_list('pk')
+            )
 
         self.mQuerySet = OpticalProduct.objects.filter(
             product_profile__in=myOPP)
-        logger.debug('Selected product profiles: %s', myOPP.values_list('pk'))
+        logger.info('Selected product profiles: %s', myOPP.values_list('pk'))
 
         # filter date ranges
         if self.mSearch.searchdaterange_set.count():
@@ -101,12 +117,6 @@ class Searcher:
                     date_range.start_date, myEndDate
                 )
             self.mQuerySet = self.mQuerySet.filter(myDateQuery)
-
-        # filter by licence
-        if self.mSearch.license_type:
-            self.mQuerySet = self.mQuerySet.filter(
-                license__type=self.mSearch.license_type)
-            logger.debug('Licence filter %s', self.mSearch.license_type)
 
         # filter by sensor_inclination angle
         if (self.mSearch.sensor_inclination_angle_start is not None and

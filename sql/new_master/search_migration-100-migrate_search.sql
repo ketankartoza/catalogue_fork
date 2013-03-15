@@ -1,7 +1,6 @@
 BEGIN;
 
-ALTER TABLE "search_search" ADD "satellite_id" integer REFERENCES "dictionaries_satellite" ("id") DEFERRABLE INITIALLY DEFERRED;
-ALTER TABLE "search_search" ADD "spectral_mode_id" integer REFERENCES "dictionaries_spectralmode" ("id") DEFERRABLE INITIALLY DEFERRED;
+DROP TABLE search_search_processing_level CASCADE;
 
 CREATE TABLE "search_search_instrumenttype" (
     "id" serial NOT NULL PRIMARY KEY,
@@ -10,18 +9,48 @@ CREATE TABLE "search_search_instrumenttype" (
     UNIQUE ("search_id", "instrumenttype_id")
 )
 ;
-
-
--- alter FK constraint on search_search_processing_level
-ALTER TABLE "search_search_processing_level" DROP CONSTRAINT "catalogue_search_processing_level_processinglevel_id_fkey";
-ALTER TABLE "search_search_processing_level" ADD FOREIGN KEY ("processinglevel_id") REFERENCES catalogue_processinglevel(id) DEFERRABLE INITIALLY DEFERRED;
+CREATE TABLE "search_search_spectral_group" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "search_id" integer NOT NULL,
+    "spectralgroup_id" integer NOT NULL REFERENCES "dictionaries_spectralgroup" ("id") DEFERRABLE INITIALLY DEFERRED,
+    UNIQUE ("search_id", "spectralgroup_id")
+)
+;
+CREATE TABLE "search_search_processing_level" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "search_id" integer NOT NULL,
+    "processinglevel_id" integer NOT NULL REFERENCES "dictionaries_processinglevel" ("id") DEFERRABLE INITIALLY DEFERRED,
+    UNIQUE ("search_id", "processinglevel_id")
+)
+;
+CREATE TABLE "search_search_satellite" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "search_id" integer NOT NULL,
+    "satellite_id" integer NOT NULL REFERENCES "dictionaries_satellite" ("id") DEFERRABLE INITIALLY DEFERRED,
+    UNIQUE ("search_id", "satellite_id")
+)
+;
+CREATE TABLE "search_search_collection" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "search_id" integer NOT NULL,
+    "collection_id" integer NOT NULL REFERENCES "dictionaries_collection" ("id") DEFERRABLE INITIALLY DEFERRED,
+    UNIQUE ("search_id", "collection_id")
+)
+;
+CREATE TABLE "search_search_license_type" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "search_id" integer NOT NULL,
+    "license_id" integer NOT NULL REFERENCES "catalogue_license" ("id") DEFERRABLE INITIALLY DEFERRED,
+    UNIQUE ("search_id", "license_id")
+)
+;
 
 
 ALTER TABLE "search_search_instrumenttype" ADD CONSTRAINT "search_id_refs_id_8a552118" FOREIGN KEY ("search_id") REFERENCES "search_search" ("id") DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE "search_search_spectral_group" ADD CONSTRAINT "search_id_refs_id_9f61c8db" FOREIGN KEY ("search_id") REFERENCES "search_search" ("id") DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE "search_search_processing_level" ADD CONSTRAINT "search_id_refs_id_2503a17" FOREIGN KEY ("search_id") REFERENCES "search_search" ("id") DEFERRABLE INITIALLY DEFERRED;
-
-CREATE INDEX "search_search_satellite_id" ON "search_search" ("satellite_id");
-CREATE INDEX "search_search_spectral_mode_id" ON "search_search" ("spectral_mode_id");
-
+ALTER TABLE "search_search_satellite" ADD CONSTRAINT "search_id_refs_id_d04b6631" FOREIGN KEY ("search_id") REFERENCES "search_search" ("id") DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE "search_search_collection" ADD CONSTRAINT "search_id_refs_id_69cf5df7" FOREIGN KEY ("search_id") REFERENCES "search_search" ("id") DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE "search_search_license_type" ADD CONSTRAINT "search_id_refs_id_a2233b6f" FOREIGN KEY ("search_id") REFERENCES "search_search" ("id") DEFERRABLE INITIALLY DEFERRED;
 
 COMMIT;

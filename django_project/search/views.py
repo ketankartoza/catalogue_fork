@@ -43,21 +43,12 @@ from django.template import RequestContext, loader, Context
 #from django.db.models import Count, Min, Max  # for aggregate queries
 from django.forms.models import inlineformset_factory
 
-# Models and forms for our app
-from catalogue.models import (
-    AcquisitionMode,
-    Mission,
-    MissionSensor,
-    SensorType
-)
-
-
-from catalogue.renderDecorator import renderWithContext
-
 # Helper classes
 
 #Dane Springmeyer's django-shapes app for exporting results as a shpfile
 from shapes.views import ShpResponder
+
+from catalogue.renderDecorator import renderWithContext
 
 from catalogue.views.helpers import (
     standardLayers,
@@ -96,31 +87,6 @@ class Http500(Exception):
 
 DateRangeInlineFormSet = inlineformset_factory(
     Search, SearchDateRange, extra=0, max_num=0, formset=DateRangeFormSet)
-
-
-def detectAdvancedSearchForm(theSearchForm):
-    """
-    Based on search form input determine if the form is advanced
-    """
-    if theSearchForm.data.get('isAdvanced') == 'true':
-        return True
-    myFormIsAdvancedTest = [
-        theSearchForm.data.get('sensor_inclination_angle_start') != '',
-        theSearchForm.data.get('sensor_inclination_angle_end') != '',
-        theSearchForm.data.get('j_frame_row') != '',
-        theSearchForm.data.get('aoi_geometry') != '',
-        theSearchForm.data.get('spatial_resolution') != '',
-        theSearchForm.data.get('acquisition_mode') != '',
-        theSearchForm.data.get('geometry_file') != '',
-        theSearchForm.data.get('k_orbit_path') != '',
-        theSearchForm.data.get('band_count') != '',
-        theSearchForm.data.get('license_type') != '',
-        theSearchForm.data.get('geometry') != '',
-        theSearchForm.data.get('sensor_type') != '',
-        (theSearchForm.data.get('cloud_mean') != '' and
-            theSearchForm.data.get('cloud_mean') != '0')
-    ]
-    return any(myFormIsAdvancedTest)
 
 
 #@login_required
@@ -412,7 +378,7 @@ def renderSearchResultsPage(theRequest, theGuid):
     inserted into a div
     """
     mySearch = get_object_or_404(Search, guid=theGuid)
-    logger.debug('Search found, initializing Serarcher class')
+    logger.debug('Search found, initializing Searcher class')
     mySearcher = Searcher(theRequest, mySearch)
     mySearcher.search()
     return(mySearcher.templateData())
@@ -422,23 +388,32 @@ def updateSelectOptions(theRequest):
     """
     Returns JSON encoded InstrumentTypes, Satellites and SpectralModes options
     """
+    mySelCollections = theRequest.GET.getlist('collections')
+    mySelSatellite = theRequest.GET.getlist('satellites')
     mySelInstrumentType = theRequest.GET.getlist('instrumenttypes')
-    mySelSatellite = theRequest.GET.get('satellite')
-    mySelSpectralMode = theRequest.GET.get('spectralmode')
+    mySelSpectralGroups = theRequest.GET.getlist('spectralgroups')
+    mySelLicenseTypes = theRequest.GET.getlist('licencetypes')
 
-    myInstrumentTypes, mySatellites, mySpectralModes = prepareSelectQuerysets(
-        mySelInstrumentType, mySelSatellite, mySelSpectralMode)
+    myQS_data = prepareSelectQuerysets(
+        mySelCollections, mySelSatellite, mySelInstrumentType,
+        mySelSpectralGroups, mySelLicenseTypes)
 
     myFinalData = {
-        'instrumenttypes': [(
+        'collections': [(
             option.pk,
-            unicode(option)) for option in myInstrumentTypes],
+            unicode(option)) for option in myQS_data[0]],
         'satellites': [(
             option.pk,
-            unicode(option)) for option in mySatellites],
-        'spectralmodes': [(
+            unicode(option)) for option in myQS_data[1]],
+        'instrumenttypes': [(
             option.pk,
-            unicode(option)) for option in mySpectralModes],
+            unicode(option)) for option in myQS_data[2]],
+        'spectralgroups': [(
+            option.pk,
+            unicode(option)) for option in myQS_data[3]],
+        'licensetypes': [(
+            option.pk,
+            unicode(option)) for option in myQS_data[4]]
     }
     return HttpResponse(
         simplejson.dumps(myFinalData), mimetype='application/json')

@@ -34,7 +34,6 @@ class DeliveryDetailCRUD_Test(TestCase):
         'test_datum.json',
         'test_resamplingmethod.json',
         'test_fileformat.json',
-        'test_missiongroup.json',
         ]
 
     def setUp(self):

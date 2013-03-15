@@ -29,16 +29,29 @@ class OpticalProductProfileQuerySet(QuerySet):
     for_instrumenttypes - filters product profile by instrument types
 
     """
+
+    def for_licence_type(self, theLicenceType):
+        return self.filter(
+            satellite_instrument__satellite__license_type__in=
+            theLicenceType.all())
+
+    def for_collection(self, theCollection):
+        return self.filter(
+            satellite_instrument__satellite__collection__in=
+            theCollection.all()
+        )
+
     def for_instrumenttypes(self, theInstrumentTypes):
         return self.filter(
             satellite_instrument__instrument_type__in=theInstrumentTypes.all())
 
     def for_satellite(self, theSatellite):
         return self.filter(
-            satellite_instrument__satellite__exact=theSatellite)
+            satellite_instrument__satellite__in=theSatellite.all())
 
-    def for_spectralmode(self, theSpectralmode):
-        return self.filter(spectral_mode__exact=theSpectralmode)
+    def for_spectralgroup(self, theSpectralgroup):
+        return self.filter(
+            spectral_mode__spectralgroup__in=theSpectralgroup.all())
 
 
 class OpticalProductProfile(models.Model):

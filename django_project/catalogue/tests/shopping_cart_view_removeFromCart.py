@@ -33,11 +33,8 @@ class ShoppingCart_removeFromCart_Tests(TestCase):
 
     fixtures = [
         'test_user.json',
-        'test_mission.json',
         'test_creatingsoftware.json',
         'test_deliverydetail.json',
-        'test_missiongroup.json',
-        'test_missionsensor.json',
         'test_institution.json',
         'test_search.json',
         'test_datum.json',
@@ -45,8 +42,6 @@ class ShoppingCart_removeFromCart_Tests(TestCase):
         'test_fileformat.json',
         'test_searchdaterange.json',
         'test_processinglevel.json',
-        'test_sensortype.json',
-        'test_acquisitionmode.json',
         # new dicts
         'test_radarbeam.json',
         'test_imagingmode.json',

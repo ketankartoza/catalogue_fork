@@ -41,16 +41,11 @@ from django_dag.models import node_factory, edge_factory
 from catalogue.utmzonecalc import utmZoneFromLatLon
 from catalogue.dims_lib import dimsWriter
 from catalogue.models import (
-    Mission,
-    MissionSensor,
-    MissionGroup,
-    SensorType,
     Institution,
     License,
     Projection,
     Quality,
     CreatingSoftware,
-    AcquisitionMode,
     PlaceType,
     Place,
     Topic,
@@ -819,7 +814,7 @@ class GenericImageryProduct(GenericProduct):
             file_identifier=self.product_id,
             vertical_cs=self.projection.name,
             processing_level_code=self.processing_level.abbreviation,
-            md_data_identification=unicode(self.acquisition_mode),
+            md_data_identification=unicode(self.product_profile),
             md_product_date=self.product_date.isoformat(),
             md_abstract=self.getAbstract(),
             bbox_west=self.spatial_coverage.extent[0],
@@ -855,7 +850,6 @@ class GenericSensorProduct(GenericImageryProduct):
     Multitable inheritance class to hold common fields for satellite imagery
     """
     # e.g. CAM1, BUMP, etc - this must die!
-    acquisition_mode = models.ForeignKey(AcquisitionMode)
     product_acquisition_start = models.DateTimeField(db_index=True)
     product_acquisition_end = models.DateTimeField(
         null=True, blank=True, db_index=True)
@@ -905,112 +899,38 @@ class GenericSensorProduct(GenericImageryProduct):
         """
         Returns the path (relative to whatever parent dir it is in) for the
         product / image itself following the scheme
-            <Mission>/<processinglevel>/<YYYY>/<MM>/<DD>/
+            <Satellite>/<processinglevel>/<YYYY>/<MM>/<DD>/
         The image itself will exist under this dir as <product_id>.tif.bz2
 
         @note the filename itself is excluded, only the directory path is
             returned
         """
-        return os.path.join(
-            self.acquisition_mode.sensor_type.
-            mission_sensor.mission.abbreviation,
+        myPath = os.path.join(
+            self.product_profile.satellite_instrument.satellite.abbreviation,
             str(self.processing_level.abbreviation),
             str(self.product_acquisition_start.year),
             str(self.product_acquisition_start.month),
             str(self.product_acquisition_start.day))
+        logger.debug('Product directory path: %s', myPath)
+        return myPath
 
     def _thumbnailDirectory(self):
         """
         Returns the path (relative to whatever parent dir it is in defined by
         THUMBS_ROOT) for the thumb for this file following the scheme
-            <Mission>/<YYYY>/<MM>/<DD>/
+            <Satellite>/<YYYY>/<MM>/<DD>/
         The thumb itself will exist under this dir as <product_id>.jpg
 
         @note the filename itself is excluded, only the directory path is
         returned
         """
-        return os.path.join(
-            self.acquisition_mode.sensor_type.
-            mission_sensor.mission.abbreviation,
+        myPath = os.path.join(
+            self.product_profile.satellite_instrument.satellite.abbreviation,
             str(self.product_acquisition_start.year),
             str(self.product_acquisition_start.month),
             str(self.product_acquisition_start.day))
-
-    def setSacProductId(self, theMoveDataFlag=False):
-        """
-          Set the product_id, renaming / moving associated
-          resources on the file system if theMoveDataFlag is
-          set to True. By default nothing is moved.
-          #A sac product id adheres to the following format:
-
-          #SAT_SEN_TYP_MODE_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL
-
-          Where:
-          SAT    Satellite or mission          mandatory
-          SEN    Sensor                        mandatory
-          TYP    Type                          mandatory
-          MODE   Acquisition mode              mandatory
-          KKKK   Orbit path reference          optional?
-          KS     Path shift                    optional?
-          JJJJ   Orbit row reference           optional?
-          JS     Row shift                     optional?
-          YYMMDD Acquisition date              mandatory
-          HHMMSS Scene centre acquisition time mandatory
-          LEVL   Processing level              mandatory
-          PROJTN Projection                    mandatory
-
-          Examples:
-
-          S5-_HRG_J--_CAM2_0118-_00_0418-_00_090403_085811_L1A-_ORBIT-
-          S5-_HRG_J--_CAM2_0118-_00_0418-_00_090403_085811_L3Aa_UTM34S
-
-          When this function is called it will also check if there is
-          data and a thumbnail for this scene and rename it from the old
-          prefix to the new one.
-          """
-        myPreviousId = self.product_id  # store for asset renaming just now
-        myPreviousImageryPath = self.productDirectory()
-        myPreviousThumbPath = self.thumbnailDirectory()
-        myList = []
-        # TODO: deprecate the pad function and use string.ljust(3, '-')
-        myMode = self.acquisition_mode
-        # Add the mission to the list
-        myList.append(
-            self.pad(
-                myMode.sensor_type.mission_sensor.mission.abbreviation, 3))
-        # Add the mission sensor
-        myList.append(
-            self.pad(myMode.sensor_type.mission_sensor.abbreviation, 3))
-        # Add the sensor type to the list
-        myList.append(self.pad(myMode.sensor_type.abbreviation, 3))
-        # Add the Acuisistion mode to the list
-        myList.append(self.pad(myMode.abbreviation, 4))
-        # Add path / row/ path offset / row offset to the list
-        # TODO: deprecate the zeropad function and use string.ljust(3, '0')
-        myList.append(self.zeroPad(str(self.path), 4))
-        myList.append(self.zeroPad(str(self.path_offset), 2))
-        myList.append(self.zeroPad(str(self.row), 4))
-        myList.append(self.zeroPad(str(self.row_offset), 2))
-        # Add the date parts to the list
-        myDate = str(self.product_acquisition_start.year)[2:4]
-        myDate += self.zeroPad(str(self.product_acquisition_start.month), 2)
-        myDate += self.zeroPad(str(self.product_acquisition_start.day), 2)
-        myList.append(myDate)
-        myTime = self.zeroPad(str(self.product_acquisition_start.hour), 2)
-        myTime += self.zeroPad(str(self.product_acquisition_start.minute), 2)
-        myTime += self.zeroPad(str(self.product_acquisition_start.second), 2)
-        myList.append(myTime)
-        # Add the processing level to the list
-        myList.append("L" + self.pad(self.processing_level.abbreviation, 3))
-        # Add the projection name to the list
-        myList.append(self.pad(self.projection.name, 6))
-        #print "Product SAC ID %s" % "_".join(myList)
-        myNewId = "_".join(myList)
-        self.product_id = myNewId
-        if theMoveDataFlag:
-            self.refileProductAssets(
-                myPreviousId, myPreviousImageryPath, myPreviousThumbPath)
-        return
+        logger.debug('Thumbnail directory path: %s', myPath)
+        return myPath
 
     def refileProductAssets(
             self, theOldId, theOldImageryPath, theOldThumbPath):
@@ -1127,101 +1047,6 @@ class GenericSensorProduct(GenericImageryProduct):
 
         return
 
-    def productIdReverse(self, force=False):
-        """
-        Parse a product_id and populates the following instance fields:
-
-        mission *
-        mission_sensor *
-        sensor_type *
-        acquisition_mode *
-        projection *
-        processing_level *
-        path
-        path_offset
-        row
-        row_offset
-        product_acquisition_start
-
-        [*] If "force" is set, the missing pieces are created on-the-fly if not
-            exists
-
-
-        S5-_HRG_J--_CAM2_0172_+1_0388_00_110124_070818_L1A-_ORBIT--Vers.0.01
-        #SAT_SEN_TYP_MODE_KKKK_KS_JJJJ_JS_YYMMDD_HHMMSS_LEVL_PROJTN
-
-        Where:
-        SAT    Satellite or mission          mandatory
-        SEN    Sensor                        mandatory
-        TYP    Type                          mandatory
-        MODE    Acquisition mode              mandatory
-        KKKK   Orbit path reference          optional?
-        KS     Path shift                    optional?
-        JJJJ   Orbit row reference           optional?
-        JS     Row shift                     optional?
-        YYMMDD Acquisition date              mandatory
-        HHMMSS Scene centre acquisition time mandatory
-        LEVL   Processing level              mandatory
-        PROJTN Projection                    mandatory
-        """
-        parts = self.product_id.replace('-', '').split('_')
-        # Searches for an existing acquisition_mode,
-        # raise an error if do not match
-        try:
-            self.acquisition_mode = AcquisitionMode.objects.get(
-                sensor_type__mission_sensor__mission__abbreviation=parts[0],
-                sensor_type__mission_sensor__abbreviation=parts[1],
-                abbreviation=parts[2],
-                sensor_type__abbreviation=parts[3]
-            )
-        except ObjectDoesNotExist:
-            if not force:
-                raise
-                # Create missing pieces of the chain
-            mission = Mission.objects.get_or_create(
-                abbreviation=parts[0], defaults={
-                    'name': parts[0],
-                    'mission_group': MissionGroup.objects.all()[0]
-                })[0]
-            mission_sensor = MissionSensor.objects.get_or_create(
-                abbreviation=parts[1], mission=mission)[0]
-            sensor_type = SensorType.objects.get_or_create(
-                abbreviation=parts[2], mission_sensor=mission_sensor)[0]
-            self.acquisition_mode = AcquisitionMode.objects.get_or_create(
-                abbreviation=parts[3], sensor_type=sensor_type,
-                defaults={'spatial_resolution': 0, 'band_count': 1})[0]
-
-        try:
-            self.projection = Projection.objects.get(name=parts[11][:6])
-        except Projection.DoesNotExist:
-            if not force:
-                raise
-                # Create Projection
-            self.projection = Projection.objects.get_or_create(
-                name=parts[11][:6], defaults={'epsg_code': 0})
-
-        # Skip "L"
-        self.processing_level = ProcessingLevel.objects.get_or_create(
-            abbreviation=re.sub(r'^L', '', parts[10]),
-            defaults={'name': 'Level %s' % re.sub(r'^L', '', parts[10])})[0]
-        # K Path Orbit
-        self.path = int(parts[4])
-        self.path_offset = int(parts[5])
-        # J Frame Row
-        self.row = int(parts[6])
-        self.row_offset = int(parts[7])
-        d = parts[8]
-        t = parts[9]
-        #Account for millenium split
-        myYear = 0
-        if int(d[:2]) < 70:
-            myYear = int('20' + d[:2])
-        else:
-            myYear = int('19' + d[:2])
-        self.product_acquisition_start = datetime.datetime(
-            myYear, int(d[2:4]), int(d[-2:]), int(t[:2]), int(t[2:4]),
-            int(t[-2:]))
-
     def toHtml(self, theImageIsLocal=False):
         """
         Return an html snippet that describes the properties of this product.
@@ -1296,7 +1121,7 @@ class OpticalProduct(GenericSensorProduct):
             vertical_cs=self.projection.name,
             processing_level_code=self.processing_level.abbreviation,
             cloud_cover_percentage=self.cloud_cover,  # OpticalProduct only
-            md_data_identification=unicode(self.acquisition_mode),
+            md_data_identification=unicode(self.product_profile),
             md_product_date=self.product_date.isoformat(),
             md_abstract=self.getAbstract(),
             bbox_west=self.spatial_coverage.extent[0],
