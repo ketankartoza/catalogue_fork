@@ -72,7 +72,7 @@ class Command(BaseCommand):
     def migrate_new_dicts(self):
         print '* Starting new_dicts migration...'
         origWD = os.getcwd()
-        os.chdir(os.path.join(origWD, '..', 'sql', 'new_master'))
+        os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '001_new_dicts.sh', self.db])
         os.chdir(origWD)
