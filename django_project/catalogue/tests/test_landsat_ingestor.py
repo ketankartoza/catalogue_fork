@@ -102,7 +102,7 @@ class LandsatIngestorTest(TestCase):
             myFormattedList)
         assert myExpectedProductId in myList, myMessage
 
-        # Reingesst and make sure that overridden owner sticks
+        # Reingest and make sure that overridden owner sticks
 
         landsat.ingest(
             theSourceDir=DATA_DIR_PATH,
