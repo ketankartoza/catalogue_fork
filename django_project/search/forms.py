@@ -210,6 +210,10 @@ class AdvancedSearchForm(forms.ModelForm):
             Div(
                 Fieldset(
                     'Satellite',
+                    HTML(
+                        '<div id="reset_dict_selections" '
+                        'class="btn btn-info">Reset selection</div>'
+                    ),
                     Field('collection', template='myField.html'),
                     Field('satellite', template='myField.html'),
                     Field('instrumenttype', template='myField.html'),
