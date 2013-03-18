@@ -151,6 +151,7 @@ class AdvancedSearchForm(forms.ModelForm):
             ' be used. Complex polygons will increase search time.'))
 
     aoi_geometry = AOIGeometryField(
+        label=u'Bounding Box/Circle',
         widget=forms.TextInput(attrs={'title': (
             'Enter bounding box coordinates separated by comma for Upper '
             'left and Lower right coordinates i.e. (20,-32,22,-34), or '
@@ -251,7 +252,7 @@ class AdvancedSearchForm(forms.ModelForm):
                     template="crispy-fieldset-accordion.html"
                 ),
                 Fieldset(
-                    'Geometry',
+                    'Area of Interest',
                     Field('aoi_geometry', template='myField.html'),
                     Field('geometry_file', template='myField.html'),
                     css_id="collapseGeometry",
