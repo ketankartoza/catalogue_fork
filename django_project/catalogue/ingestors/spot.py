@@ -30,31 +30,28 @@ from django.db import transaction
 from django.contrib.gis.gdal import OGRGeometry
 from django.contrib.gis.gdal import DataSource
 
-from catalogue.models import (Quality,
-                              License,
-                              CreatingSoftware,
-                              Institution,
-                              OpticalProduct,
-                              Mission,
-                              MissionSensor,
-                              SensorType,
-                              AcquisitionMode,
-                              )
+from catalogue.models import (
+    Quality,
+    License,
+    CreatingSoftware,
+    Institution,
+    OpticalProduct,
+)
 
 
 @transaction.commit_manually
 def ingest(theShapeFile,
-           myDownloadThumbsFlag = False,
-           theTestOnlyFlag = False,
-           theVerbosityLevel = 1,
-           theLicense = 'SANSA Commercial License',
-           theOwner = 'Astrium',
-           theSoftware = 'TS5',
-           theArea = None,
-           theQuality = 'Unknown',
+           myDownloadThumbsFlag=False,
+           theTestOnlyFlag=False,
+           theVerbosityLevel=1,
+           theLicense='SANSA Commercial License',
+           theOwner='Astrium',
+           theSoftware='TS5',
+           theArea=None,
+           theQuality='Unknown',
            # We should use 1A here but we need to write migration
            # logic for all existing records and rename all existing thumbs!
-           theProcessingLevel = '1B'):
+           theProcessingLevel='1B'):
     """
     Ingest a SPOT dataset as provided by spot image
 
@@ -66,7 +63,7 @@ def ingest(theShapeFile,
            will be fetched on demand as searches are made.
         theTestOnlyFlag - (Optional) Defaults to False. Whether to do a dummy
            run (database will not be updated).
-        theVerboseFlag - (Optional) Defaults to 1. How verbose the logging
+        theVerbosityLevel - (Optional) Defaults to 1. How verbose the logging
            output should be. 0-2 where 2 is very very very very verbose!
         theLicense - (Optional) Defaults to 'SANSA Commercial License', License
            holder of the product.
@@ -94,15 +91,15 @@ def ingest(theShapeFile,
         lockfile = lock.lock('/tmp/spot_harvest.lock', timeout=60)
     except error.LockHeld:
         # couldn't take the lock
-        raise CommandError, 'Could not acquire lock.'
+        raise CommandError('Could not acquire lock.')
 
     # Hardcoded
     myProjection = 'ORBIT'
-    myRadiometricResolution= 8
+    myRadiometricResolution = 8
     mySolarZenithAngle = 0
     mySolarAzimuthAngle = 0
 
-    myAreaOfInterest  = None
+    myAreaOfInterest = None
 
     logMessage('Getting verbose (level=%s)... ' % theVerbosityLevel, 2)
     if theTestOnlyFlag:
@@ -115,14 +112,17 @@ def ingest(theShapeFile,
             try:
                 myAreaOfInterest = OGRGeometry(theArea)
                 if not myAreaOfInterest.area:
-                    raise CommandError('Unable to create the area of interest'
-                                        ' polygon: invalid polygon.')
+                    raise CommandError(
+                        'Unable to create the area of interest'
+                        ' polygon: invalid polygon.')
                 if not myAreaOfInterest.geom_type.name == 'Polygon':
-                    raise CommandError('Unable to create the area of interest'
-                                        ' polygon: not a polygon.')
+                    raise CommandError(
+                        'Unable to create the area of interest'
+                        ' polygon: not a polygon.')
             except Exception, e:
-                raise CommandError('Unable to create the area of interest'
-                                    ' polygon: %s.' % e)
+                raise CommandError(
+                    'Unable to create the area of interest'
+                    ' polygon: %s.' % e)
             logMessage('Area of interest filtering activated.', 1)
 
         # Get the params
@@ -152,15 +152,17 @@ def ingest(theShapeFile,
         except Institution.DoesNotExist:
             #logMessage('Institution %s does not exists and '
             #         'cannot be created.' % owner, 2)
-            raise CommandError, ('Institution %s does not exist and '
-                                  'cannot create: aborting' % theOwner)
+            raise CommandError(
+                'Institution %s does not exist and '
+                'cannot create: aborting' % theOwner)
         try:
-            theQuality = Quality.objects.get_or_create(name=theQuality)[0]
+            myQuality = Quality.objects.get_or_create(name=theQuality)[0]
         except Quality.DoesNotExist:
             logMessage('Quality %s does not exists and cannot be created,'
                        ' it will be read from metadata.' % theQuality, 2)
-            raise CommandError, ('Quality %s does not exists and cannot '
-                                 ' be created: aborting' % theQuality)
+            raise CommandError(
+                'Quality %s does not exists and cannot '
+                ' be created: aborting' % theQuality)
 
         try:
             myRecordCount = 0
@@ -284,7 +286,6 @@ def ingest(theShapeFile,
                     #name                  | Panchromatic
                     #mission_sensor_id     | 10
                     #operator_abbreviation | A
-
 
                     # work out the sensor type
                     myImportFileSensorType = myFeature.get('TYPE')
@@ -444,7 +445,7 @@ def ingest(theShapeFile,
                   'owner_id': myOwner.id,
                   'license': theLicense,
                   'creating_software': theSoftware,
-                  'quality': theQuality,
+                  'quality': myQuality,
                   'sensor_inclination_angle': myFeature.get('ANG_INC'),
                   'sensor_viewing_angle': myFeature.get('ANG_ACQ'),
                   'original_product_id': myOriginalProductId,

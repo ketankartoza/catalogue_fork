@@ -416,19 +416,14 @@ class SeleniumSearch(SansaLiverServerTestCase):
         'test_projection.json',
         'test_quality.json',
         'test_creatingsoftware.json',
-        'test_mission.json',
-        'test_missionsensor.json',
         'test_search.json',
         'test_searchdaterange.json',
         'test_processinglevel.json',
-        'test_sensortype.json',
-        'test_acquisitionmode.json',
         'test_genericproduct.json',
         'test_genericimageryproduct.json',
         'test_genericsensorproduct.json',
         'test_opticalproduct.json',
         'test_radarproduct.json',
-        'test_missiongroup.json',
     ]
 
     def Xtest_search_staff(self):

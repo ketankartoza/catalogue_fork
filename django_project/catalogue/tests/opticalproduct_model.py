@@ -31,8 +31,6 @@ from catalogue.tests.test_utils import simpleMessage
 from catalogue.models import (
     OpticalProduct,
     Projection,
-    AcquisitionMode,
-    ProcessingLevel,
     Quality,
     CreatingSoftware,
     Institution,
@@ -41,6 +39,8 @@ from catalogue.models import (
     GenericSensorProduct,
     GenericProduct
 )
+
+from dictionaries.models import ProcessingLevel
 
 
 class OpticalProductCRUD_Test(TestCase):
@@ -51,12 +51,7 @@ class OpticalProductCRUD_Test(TestCase):
         'test_user.json',
         'test_license.json',
         'test_creatingsoftware.json',
-        'test_missiongroup.json',
-        'test_mission.json',
-        'test_missionsensor.json',
         'test_processinglevel.json',
-        'test_sensortype.json',
-        'test_acquisitionmode.json',
         'test_quality.json',
         'test_projection.json',
         'test_institution.json',

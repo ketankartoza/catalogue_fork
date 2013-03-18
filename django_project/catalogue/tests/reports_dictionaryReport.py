@@ -30,11 +30,6 @@ class ReportsViews_dictionaryReport_Tests(TestCase):
     """
     fixtures = [
         'test_user.json',
-        'test_mission.json',
-        'test_missionsensor.json',
-        'test_sensortype.json',
-        'test_acquisitionmode.json',
-        'test_missiongroup.json'
     ]
 
     def setUp(self):

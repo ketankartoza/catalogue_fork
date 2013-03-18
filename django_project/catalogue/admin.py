@@ -28,11 +28,7 @@ from offline_messages.models import OfflineMessage
 
 from catalogue.models import (
     OrderNotificationRecipients,
-    Mission,
-    MissionSensor,
-    SensorType,
     DeliveryMethod,
-    AcquisitionMode,
     TaskingRequest,
     OrderStatus,
     FileFormat,
@@ -60,7 +56,6 @@ class VisitAdmin(admin.GeoModelAdmin):
     pass
 
 
-
 class OrderStatusAdmin(admin.GeoModelAdmin):
     pass
 
@@ -74,7 +69,7 @@ class OrderNotificationRecipientsAdminForm(forms.ModelForm):
         Validates that at least one of the m2m has values
         """
         if (not self.cleaned_data['classes'] and
-            not self.cleaned_data['sensors']):
+                not self.cleaned_data['satellites']):
             raise ValidationError(
                 u'Classes and sensors cannot be simultaneously blank')
         return self.cleaned_data
@@ -102,10 +97,10 @@ class OrderNotificationRecipientsAdmin(admin.GeoModelAdmin):
                 super(OrderNotificationRecipientsAdmin, self)
                 .formfield_for_manytomany(db_field, request, **kwargs))
             form_field.choices = [
-            c for c in form_field.choices
-            if getattr(
-                ContentType.objects.get(
-                    pk=c[0]).model_class(), 'concrete', False)]
+                c for c in form_field.choices
+                if getattr(
+                    ContentType.objects.get(
+                        pk=c[0]).model_class(), 'concrete', False)]
             return form_field
         return (
             super(OrderNotificationRecipientsAdmin, self)
@@ -149,7 +144,7 @@ class GeospatialProductAdmin(admin.GeoModelAdmin):
 
 
 class OpticalProductAdmin(admin.GeoModelAdmin):
-    list_filter = ('acquisition_mode',)
+    list_filter = ('product_profile',)
 
 
 class ResamplingMethodAdmin(admin.GeoModelAdmin):
@@ -164,27 +159,7 @@ class DeliveryMethodAdmin(admin.GeoModelAdmin):
     pass
 
 
-class OrderStatusAdmin(admin.GeoModelAdmin):
-    pass
-
-
-class MissionAdmin(admin.GeoModelAdmin):
-    pass
-
-
-class MissionSensorAdmin(admin.GeoModelAdmin):
-    pass
-
-
 class TaskingRequestAdmin(admin.GeoModelAdmin):
-    pass
-
-
-class SensorTypeAdmin(admin.GeoModelAdmin):
-    pass
-
-
-class AcquisitionModeAdmin(admin.GeoModelAdmin):
     pass
 
 
@@ -193,11 +168,11 @@ class OfflineMessageAdmin(admin.ModelAdmin):
     ordering = ('message',)
     exclude = ('level',)
     field_options = {
-        'fields' : ('message', 'user',),
+        'fields': ('message', 'user',),
     }
     formfield_overrides = {
         models.CharField: {'widget': widgets.AdminTextareaWidget},
-        }
+    }
     list_filter = ('user', 'created')
 
     # This next method will filter the users list in the admin form
@@ -209,14 +184,11 @@ class OfflineMessageAdmin(admin.ModelAdmin):
             super(OfflineMessageAdmin, self)
             .render_change_form(request, context, args, kwargs))
 
+
 class AllUsersMessageAdmin(admin.ModelAdmin):
     list_display = [f.name for f in AllUsersMessage._meta.fields]
     ordering = ('created', 'message')
 
-admin.site.register(Mission, MissionAdmin)
-admin.site.register(MissionSensor, MissionSensorAdmin)
-admin.site.register(SensorType, SensorTypeAdmin)
-admin.site.register(AcquisitionMode, AcquisitionModeAdmin)
 admin.site.register(TaskingRequest, TaskingRequestAdmin)
 admin.site.register(DeliveryMethod, DeliveryMethodAdmin)
 admin.site.register(OrderStatus, OrderStatusAdmin)
@@ -233,8 +205,6 @@ admin.site.register(OpticalProduct, OpticalProductAdmin)
 admin.site.register(GeospatialProduct, GeospatialProductAdmin)
 admin.site.register(
     OrderNotificationRecipients, OrderNotificationRecipientsAdmin)
-
-
 
 #################################################
 # End of admin models for new generic product model

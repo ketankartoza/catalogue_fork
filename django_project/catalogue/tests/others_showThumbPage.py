@@ -55,11 +55,6 @@ class OthersViews_showThumbPage_Tests(TestCase):
         'test_creatingsoftware.json',
         'test_genericimageryproduct.json',
         'test_genericsensorproduct.json',
-        'test_acquisitionmode.json',
-        'test_sensortype.json',
-        'test_missionsensor.json',
-        'test_mission.json',
-        'test_missiongroup.json',
     ]
 
     def setUp(self):

@@ -23,13 +23,15 @@ function showOrder(theId) {
 </div>
 <div class="row-fluid center gap-bottom">
   <div id="order-list-buttonset" class="btn-group">
-    <button id="download-btn" class="btn btn-small" onclick='location="{{ myUrl }}?page={{ myRecords.number}}&pdf"'><i class="icon-download"></i></button>
+    <button id="download-btn" class="btn btn-small" onclick='location="{{ myUrl }}?page={{ myRecords.number}}&pdf"'><i class="icon-download"></i> Download as PDF</button>
     {% if myUrl = '/listorders/' %} {# can't use url template tag for if evaluation #}
     <button class="btn btn-small monthly-btn" onclick='location="{% url 'orderMonthlyReport' myCurrentMonth|date:'Y'  myCurrentMonth|date:'m' %}"'><i class="icon-calendar"></i></button>
     <button class="btn btn-small summary-btn" onclick='location="{% url 'ordersSummary' %}"'><i class="icon-tasks"></i></button>
     {% endif %}
-    <button id="tasking-view-btn" class="btn btn-small" onclick='location="{% url 'listTaskingRequests' %}"'><i class="icon-refresh"></i></button>
+    <button id="tasking-view-btn" class="btn btn-small" onclick='location="{% url 'listTaskingRequests' %}"'><i class="icon-refresh"></i> Switch to Tasking Request View</button>
   </div>
+</div>
+<div class="row-fluid center">
   <span class="step-links btn-group">
     <a class="btn btn-small {% if not myRecords.has_previous %}disabled{% endif %}" href="{{myUrl}}?page={{ myRecords.previous_page_number }}"><i class="icon-backward"></i></a>
     <span class="current btn btn-small disabled btn-success">
@@ -74,18 +76,6 @@ function showOrder(theId) {
   </span>
 </div>
 <script>
-$('#download-btn').popover({
-  placement:'left',
-  trigger:'hover',
-  content:'Click to download the entire list of your orders in PDF format',
-  title:'Download as PDF'
-});
-$('#tasking-view-btn').popover({
-  placement:'right',
-  trigger:'hover',
-  content:'Click to switch to the Tasking Request View',
-  title:'Tasking Request View'
-});
 {% if myRecords.has_previous %}
 $('.previous-btn').tooltip({
   placement:'top',

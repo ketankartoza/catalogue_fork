@@ -9,7 +9,7 @@ find . -iname '*.pyc' -exec rm {} \;
 if [ $# -ne 1 ] 
 then
   echo "Running using runserver_plus"
-  python manage.py runserver_plus --settings=sansa_catalogue.settings.dev_${USER}
+  python manage.py runserver_plus --settings=core.settings.dev_${USER}
 else
   echo "Running using runserver --pdb"
   echo "Note: does not currently work with django 1.3 static_files app"

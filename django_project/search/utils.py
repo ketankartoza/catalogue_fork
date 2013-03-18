@@ -24,13 +24,18 @@ logger = logging.getLogger(__name__)
 
 from dictionaries.models import (
     OpticalProductProfile,
+    Collection,
     InstrumentType,
     Satellite,
-    SpectralMode
+    SpectralGroup
 )
 
+from catalogue.models import License
 
-def prepareSelectQuerysets(theInstrumentType, theSatellite, theSpectralMode):
+
+def prepareSelectQuerysets(
+        theCollection=[], theSatellite=[], theInstrumentType=[],
+        theSpectralGroup=[], theLicenseTypes=[]):
     """
     Prepares instrument_type, satellite and spectral_modes querysets
 
@@ -38,35 +43,54 @@ def prepareSelectQuerysets(theInstrumentType, theSatellite, theSpectralMode):
     """
 
     myOPP = OpticalProductProfile.objects
-    if theInstrumentType != []:
-        logger.debug('setting insttype %s', theInstrumentType)
+
+    if len(theCollection) != 0:
+        logger.debug('setting collection %s', theCollection)
         myOPP = myOPP.filter(
-            satellite_instrument__instrument_type__in=theInstrumentType)
-    if theSatellite != '':
+            satellite_instrument__satellite__collection__in=theCollection)
+
+    if len(theSatellite) != 0:
         logger.debug('setting satellite %s', theSatellite)
         myOPP = myOPP.filter(
-            satellite_instrument__satellite=theSatellite)
-    if theSpectralMode != '':
-        logger.debug('setting spectral mode %s', theSpectralMode)
-        myOPP = myOPP.filter(spectral_mode=theSpectralMode)
+            satellite_instrument__satellite__in=theSatellite)
 
-    # if user selected instrument type or spectral_mode filter inst_types
-    if theSatellite != '' or theSpectralMode != '':
-        logger.debug('User selected satellite or spectral mode')
-        myInstType_QS = InstrumentType.objects.filter(
-            satelliteinstrument__opticalproductprofile__in=myOPP).distinct(
-            ).order_by('id')
-    else:
-        logger.debug('User DID NOT select satellite or spectral mode')
-        # show all instrument types
-        myInstType_QS = InstrumentType.objects.filter(
-            satelliteinstrument__opticalproductprofile__in=
-            OpticalProductProfile.objects).distinct().order_by('id')
+    if len(theInstrumentType) != 0:
+        logger.debug('setting instrument_type %s', theInstrumentType)
+        myOPP = myOPP.filter(
+            satellite_instrument__instrument_type__in=theInstrumentType)
+
+    if len(theSpectralGroup) != 0:
+        logger.debug('setting spectral_group %s', theSpectralGroup)
+        myOPP = myOPP.filter(
+            spectral_mode__spectralgroup__in=theSpectralGroup)
+
+    if len(theLicenseTypes) != 0:
+        logger.debug('setting license_type %s', theLicenseTypes)
+        myOPP = myOPP.filter(
+            satellite_instrument__satellite__license_type__in=theLicenseTypes)
+
+    # update querysets
+    myCollection_QS = Collection.objects.filter(
+        satellite__satelliteinstrument__opticalproductprofile__in=myOPP)\
+        .distinct().order_by('name')
 
     mySatellite_QS = Satellite.objects.filter(
-        satelliteinstrument__opticalproductprofile__in=myOPP).distinct(
-        ).order_by('id')
-    mySpectralMode_QS = SpectralMode.objects.filter(
-        opticalproductprofile__in=myOPP).distinct().order_by('id')
+        satelliteinstrument__opticalproductprofile__in=myOPP)\
+        .distinct().order_by('name')
 
-    return myInstType_QS, mySatellite_QS, mySpectralMode_QS
+    myInstType_QS = InstrumentType.objects.filter(
+        satelliteinstrument__opticalproductprofile__in=myOPP)\
+        .distinct().order_by('name')
+
+    mySpectralGroup_QS = SpectralGroup.objects.filter(
+        spectralmode__opticalproductprofile__in=myOPP)\
+        .distinct().order_by('name')
+
+    myLicense_QS = License.objects.filter(
+        satellite__satelliteinstrument__opticalproductprofile__in=myOPP)\
+        .distinct().order_by('name')
+
+    return (
+        myCollection_QS, mySatellite_QS, myInstType_QS, mySpectralGroup_QS,
+        myLicense_QS
+    )

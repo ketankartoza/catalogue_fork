@@ -29,16 +29,29 @@ class OpticalProductProfileQuerySet(QuerySet):
     for_instrumenttypes - filters product profile by instrument types
 
     """
+
+    def for_licence_type(self, theLicenceType):
+        return self.filter(
+            satellite_instrument__satellite__license_type__in=
+            theLicenceType.all())
+
+    def for_collection(self, theCollection):
+        return self.filter(
+            satellite_instrument__satellite__collection__in=
+            theCollection.all()
+        )
+
     def for_instrumenttypes(self, theInstrumentTypes):
         return self.filter(
             satellite_instrument__instrument_type__in=theInstrumentTypes.all())
 
     def for_satellite(self, theSatellite):
         return self.filter(
-            satellite_instrument__satellite__exact=theSatellite)
+            satellite_instrument__satellite__in=theSatellite.all())
 
-    def for_spectralmode(self, theSpectralmode):
-        return self.filter(spectral_mode__exact=theSpectralmode)
+    def for_spectralgroup(self, theSpectralgroup):
+        return self.filter(
+            spectral_mode__spectralgroup__in=theSpectralgroup.all())
 
 
 class OpticalProductProfile(models.Model):
@@ -63,6 +76,40 @@ class OpticalProductProfile(models.Model):
             self.satellite_instrument,
             self.spectral_mode
         )
+
+    def baseProcessingLevel(self):
+        """Return the InstrumentType.base_processing_level for this profile.
+
+        Args:
+            None
+
+        Returns:
+            ProcessingLevel: an instance of the ProcessingLevel model
+                which represents the base processing level for the instrument
+                type.
+
+        Raises:
+            None
+        """
+
+        myLevel = \
+            self.satellite_instrument.instrument_type.base_processing_level
+        return myLevel
+
+    def bandCount(self):
+        """Get the band count for this profile.
+
+        Args:
+            None
+
+        Returns:
+            The number of bands associated with this profile.
+
+        Raises:
+            None
+        """
+        myCount = self.satellite_instrument.instrument_type.band_number_total
+        return myCount
 
 
 class RadarProductProfile(models.Model):
@@ -203,7 +250,7 @@ class InstrumentType(models.Model):
     swath_optical_km = models.IntegerField(
         blank=True, null=True,
         help_text='On-ground sensor swath width')
-    band_number_total = models.IntegerField(
+    band_count = models.IntegerField(
         blank=True, null=True,
         help_text='Total number of bands for this Instrument')
     band_type = models.TextField(

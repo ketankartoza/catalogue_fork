@@ -29,7 +29,6 @@ class AOIGeometryField(forms.CharField):
 
     def __init__(self, *args, **kwargs):
         super(AOIGeometryField, self).__init__(*args, **kwargs)
-        self.label = 'Area of interest'
         #if we dont supply help_text use this as default
         if not('help_text' in kwargs):
             self.help_text = (

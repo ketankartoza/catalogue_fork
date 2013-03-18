@@ -100,48 +100,6 @@ class DateRangeFormSet(BaseInlineFormSet):
         self.management_form.cleaned_data['TOTAL_FORMS'] = len(self.forms)
         if not len(self.forms):
             raise forms.ValidationError, 'At least one date range is required.'
-        #Next line disabled as it causes a crash
-        #logging.debug('Date range forms:', self.forms)
-
-    def is_valid(self):
-        """
-        Returns True if form.errors is empty for every form in self.forms.
-        ABP: changed the range to len(self.forms)
-        """
-        if not self.is_bound:
-            return False
-        # We loop over every form.errors here rather than short circuiting on
-        # the first failure to make sure validation gets triggered for every
-        # form.
-        forms_valid = True
-        # err = self.errors
-        for i in range(0, len(self.forms)):
-            form = self.forms[i]
-            if self.can_delete:
-                if self._should_delete_form(form):
-                    # This form is going to be deleted so any of its errors
-                    # should not cause the entire formset to be invalid.
-                    continue
-            if bool(self.errors[i]):
-                forms_valid = False
-        return forms_valid and not bool(self.non_form_errors())
-
-    def full_clean(self):
-        """
-        Cleans all of self.data and populates self._errors.
-        ABP: changed the range to len(self.forms)
-        """
-        self._errors = []
-        if not self.is_bound:  # Stop further processing.
-            return
-        for i in range(0, len(self.forms)):
-            form = self.forms[i]
-            self._errors.append(form.errors)
-        # Give self.clean() a chance to do cross-form validation.
-        try:
-            self.clean()
-        except ValidationError, e:
-            self._non_form_errors = self.error_class(e.messages)
 
 
 class AdvancedSearchForm(forms.ModelForm):
@@ -193,6 +151,7 @@ class AdvancedSearchForm(forms.ModelForm):
             ' be used. Complex polygons will increase search time.'))
 
     aoi_geometry = AOIGeometryField(
+        label=u'Bounding Box/Circle',
         widget=forms.TextInput(attrs={'title': (
             'Enter bounding box coordinates separated by comma for Upper '
             'left and Lower right coordinates i.e. (20,-32,22,-34), or '
@@ -203,18 +162,21 @@ class AdvancedSearchForm(forms.ModelForm):
         required=False)
 
     k_orbit_path = IntegersCSVIntervalsField(
+        label=u'Path (K/orbit)',
         required=False,
         help_text=(
             'Insert the orbit path as a list of comma separated values or '
             'ranges (e.g. : "10,20,30" or  "20-40")'))
     j_frame_row = IntegersCSVIntervalsField(
+        label=u'Row (J/frame)',
         required=False,
         help_text=(
             'Insert the frame row as a list of comma separated values or '
             'ranges (e.g. : "10,20,30" or "20-40")'))
 
     cloud_mean = forms.IntegerField(
-        min_value=0, max_value=100, initial=0,
+        label=u'Cloud Percentage',
+        min_value=0, max_value=100, initial=100,
         help_text=(
             'Select the maximum cloud cover (range 0-100) when searching for '
             'images. Note that not all sensors support cloud cover filtering.')
@@ -251,40 +213,30 @@ class AdvancedSearchForm(forms.ModelForm):
         self.helper.layout = Layout(
             Div(
                 Fieldset(
-                    'Instrument Type',
-                    Field('instrumenttype', template='myField.html'),
+                    'Satellite',
+                    HTML(
+                        '<div id="reset_dict_selections" '
+                        'class="btn btn-info">Reset selection</div>'
+                    ),
+                    Field('collection', template='myField.html'),
                     Field('satellite', template='myField.html'),
-                    Field('spectral_mode', template='myField.html'),
+                    Field('instrumenttype', template='myField.html'),
+                    Field('spectral_group', template='myField.html'),
+                    Field('license_type', template='myField.html'),
                     css_id="collapseSensors",  # rename this class
                     css_class="in",
                     data_parent="#accordion-search2",
                     template="crispy-fieldset-accordion.html"
                 ),
                 Fieldset(
-                    'Product type details',
-                    Field('license_type', template='myField.html'),
-                    css_id="collapseProduct",
-                    data_parent="#accordion-search2",
-                    template="crispy-fieldset-accordion.html"
-                ),
-                Fieldset(
-                    'Image details',
-                    # Field('use_cloud_cover', template='myField.html'),
-                    Field(
-                        'sensor_inclination_angle_start',
-                        template='myField.html'),
-                    Field(
-                        'sensor_inclination_angle_end',
-                        template='myField.html'),
-                    Field('spatial_resolution', template='myField.html'),
+                    'Cloud Cover',
                     Field('cloud_mean', template='myField.html'),
-                    Field('band_count', template='myField.html'),
-                    css_id="collapseImage",
+                    css_id="collapseCloudCover",
                     data_parent="#accordion-search2",
                     template="crispy-fieldset-accordion.html"
                 ),
                 Fieldset(
-                    'Row & path',
+                    'Path & Row',
                     Field('k_orbit_path', template='myField.html'),
                     Field('j_frame_row', template='myField.html'),
                     css_id="collapseRP",
@@ -292,7 +244,7 @@ class AdvancedSearchForm(forms.ModelForm):
                     template="crispy-fieldset-accordion.html"
                 ),
                 Fieldset(
-                    'Geometry',
+                    'Area of Interest',
                     Field('aoi_geometry', template='myField.html'),
                     Field('geometry_file', template='myField.html'),
                     css_id="collapseGeometry",
@@ -329,6 +281,20 @@ class AdvancedSearchForm(forms.ModelForm):
                     data_parent="#accordion-search2",
                     template="crispy-fieldset-accordion.html"
                 ),
+                Fieldset(
+                    'More options...',
+                    Field(
+                        'sensor_inclination_angle_start',
+                        template='myField.html'),
+                    Field(
+                        'sensor_inclination_angle_end',
+                        template='myField.html'),
+                    Field('spatial_resolution', template='myField.html'),
+                    Field('band_count', template='myField.html'),
+                    css_id="collapseImage",
+                    data_parent="#accordion-search2",
+                    template="crispy-fieldset-accordion.html"
+                ),
                 css_id="accordion-search2",
                 template="crispy-div-accordion.html"
             ),
@@ -336,25 +302,34 @@ class AdvancedSearchForm(forms.ModelForm):
         )
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
         if self.instance.pk is not None:
-            myInstTypes, mySats, mySpecMod = prepareSelectQuerysets(
-                self.instance.instrumenttype.all().values_list('id'),
-                self.instance.satellite_id, self.instance.spectral_mode_id)
+            myCollectionSet = self.instance.collection.all().values_list('id')
+            mySatelliteSet = self.instance.satellite.all().values_list('id')
+            myInstTypeSet = self.instance.instrumenttype.all()\
+                .values_list('id')
+            mySpecGroupSet = self.instance.spectral_group.all()\
+                .values_list('id')
+            myLicenseTypeSet = self.instance.license_type.all()\
+                .values_list('id')
+
+            myQS_data = prepareSelectQuerysets(
+                myCollectionSet, mySatelliteSet, myInstTypeSet,
+                mySpecGroupSet, myLicenseTypeSet
+            )
         else:
-            myInstTypes, mySats, mySpecMod = prepareSelectQuerysets([], '', '')
+            myQS_data = prepareSelectQuerysets()
 
         # set new querysets
-        self.fields['instrumenttype'].queryset = myInstTypes
-        self.fields['satellite'].queryset = mySats
-        self.fields['spectral_mode'].queryset = mySpecMod
+        self.fields['collection'].queryset = myQS_data[0]
+        self.fields['satellite'].queryset = myQS_data[1]
+        self.fields['instrumenttype'].queryset = myQS_data[2]
+        self.fields['spectral_group'].queryset = myQS_data[3]
+        self.fields['license_type'].queryset = myQS_data[4]
 
         for myFieldName, myField in self.fields.items():
             myField.widget.attrs['class'] = 'ui-corner-all'
             if (not 'title' in myField.widget.attrs or
                     myField.widget.attrs['title'] == ''):
                 myField.widget.attrs['title'] = myField.help_text
-
-        # we need user to select at least an instrument type
-        self.fields['instrumenttype'].required = True
 
     def clean_guid(self):
         """Custom validator for guid"""
@@ -373,27 +348,9 @@ class AdvancedSearchForm(forms.ModelForm):
             myPoint = 'SRID=4326;POINT(0 0)'
         return myPoint
 
-    def clean_end_date(self):
-        """End date validator"""
-        #Note that required=False fields are not passed to cleaned_data but
-        #rather just to self.data
-        myData = self.data
-        myEndDate = myData.get('end_date')
-        if not myEndDate:
-            # date is empty which is ok so do nothing
-            pass
-        else:
-            try:
-                myEndDate = datetime.datetime(
-                    *time.strptime(myEndDate, "%d-%m-%Y")[:6]).date()
-            except:
-                raise forms.ValidationError('End date was not valid.')
-            #pass
-        return myEndDate
-
     def clean(self):
         myCleanedData = self.cleaned_data
-        logging.info('cleaned data: ' + str(myCleanedData))
+        logger.debug('cleaned data: ' + str(myCleanedData))
 
         myStartSensorAngle = myCleanedData.get(
             'sensor_inclination_angle_start')
