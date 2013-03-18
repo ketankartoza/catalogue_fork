@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Run $0 -d to run standard runserver in debugger mode"
-source python-dev/bin/activate
+source venv/bin/activate
 #python manage.py collectstatic --noinput
 cd django_project
 #clean away any pyc files...
