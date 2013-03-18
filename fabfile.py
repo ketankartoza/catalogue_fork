@@ -79,7 +79,7 @@ def vagrant():
     env.settings = 'vagrant'
     # get vagrant ssh setup
     vagrant_config = _get_vagrant_config()
-    print vagrant_config
+    #print vagrant_config
     env.key_filename = vagrant_config['IdentityFile']
     env.hosts = ['%s:%s' % (vagrant_config['HostName'], vagrant_config['Port'])]
     env.host_string = env.hosts[0]
@@ -348,9 +348,12 @@ def update_git_checkout(branch='master'):
         fab remote update_git_checkout
 
     """
-    if not exists(env.code_path):
+    fabtools.require.deb.package('git')
+    if not exists(env.webdir):
         fastprint('Repo checkout does not exist, creating.')
-        env.run('mkdir -p %s' % env.webdir)
+        user = env.run('whoami')
+        sudo('sudo mkdir %s' % env.webdir)
+        sudo('chown %s.%s %s' % (user, user, env.webdir))
         with cd(env.webdir):
             env.run('git clone %s %s' % (env.git_url, env.repo_alias))
     else:
