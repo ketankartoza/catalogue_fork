@@ -175,7 +175,8 @@ class AdvancedSearchForm(forms.ModelForm):
             'ranges (e.g. : "10,20,30" or "20-40")'))
 
     cloud_mean = forms.IntegerField(
-        min_value=0, max_value=100, initial=0,
+        label=u'Cloud Percentage',
+        min_value=0, max_value=100, initial=100,
         help_text=(
             'Select the maximum cloud cover (range 0-100) when searching for '
             'images. Note that not all sensors support cloud cover filtering.')
@@ -228,18 +229,9 @@ class AdvancedSearchForm(forms.ModelForm):
                     template="crispy-fieldset-accordion.html"
                 ),
                 Fieldset(
-                    'Image details',
-                    # Field('use_cloud_cover', template='myField.html'),
-                    Field(
-                        'sensor_inclination_angle_start',
-                        template='myField.html'),
-                    Field(
-                        'sensor_inclination_angle_end',
-                        template='myField.html'),
-                    Field('spatial_resolution', template='myField.html'),
+                    'Cloud Cover',
                     Field('cloud_mean', template='myField.html'),
-                    Field('band_count', template='myField.html'),
-                    css_id="collapseImage",
+                    css_id="collapseCloudCover",
                     data_parent="#accordion-search2",
                     template="crispy-fieldset-accordion.html"
                 ),
@@ -286,6 +278,20 @@ class AdvancedSearchForm(forms.ModelForm):
                         css_class="well well-small"
                     ),
                     css_id="collapseDates",
+                    data_parent="#accordion-search2",
+                    template="crispy-fieldset-accordion.html"
+                ),
+                Fieldset(
+                    'More options...',
+                    Field(
+                        'sensor_inclination_angle_start',
+                        template='myField.html'),
+                    Field(
+                        'sensor_inclination_angle_end',
+                        template='myField.html'),
+                    Field('spatial_resolution', template='myField.html'),
+                    Field('band_count', template='myField.html'),
+                    css_id="collapseImage",
                     data_parent="#accordion-search2",
                     template="crispy-fieldset-accordion.html"
                 ),

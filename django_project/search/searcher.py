@@ -146,7 +146,7 @@ class Searcher:
             logger.debug('Spatial resolution filter %s', mySpatialRes)
 
         # filter cloud cover
-        if self.mSearch.cloud_mean:
+        if self.mSearch.cloud_mean is not None:
             myCloudQuery = (
                 Q(cloud_cover__lte=self.mSearch.cloud_mean)
                 | Q(cloud_cover__isnull=True))
