@@ -161,11 +161,13 @@ class AdvancedSearchForm(forms.ModelForm):
         required=False)
 
     k_orbit_path = IntegersCSVIntervalsField(
+        label=u'Path (K/orbit)',
         required=False,
         help_text=(
             'Insert the orbit path as a list of comma separated values or '
             'ranges (e.g. : "10,20,30" or  "20-40")'))
     j_frame_row = IntegersCSVIntervalsField(
+        label=u'Row (J/frame)',
         required=False,
         help_text=(
             'Insert the frame row as a list of comma separated values or '
@@ -241,7 +243,7 @@ class AdvancedSearchForm(forms.ModelForm):
                     template="crispy-fieldset-accordion.html"
                 ),
                 Fieldset(
-                    'Row & path',
+                    'Path & Row',
                     Field('k_orbit_path', template='myField.html'),
                     Field('j_frame_row', template='myField.html'),
                     css_id="collapseRP",
