@@ -4,7 +4,7 @@ import platform
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'sac-master',
+        'NAME': 'catalogue',
         'USER': 'timlinux',
         'PASSWORD': '',
         'HOST': '',

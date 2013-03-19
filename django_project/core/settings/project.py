@@ -3,7 +3,7 @@ from .contrib import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'sac',
+        'NAME': 'catalogue',
         'USER': '',
         'PASSWORD': '',
         'HOST': 'localhost',
