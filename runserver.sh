@@ -4,8 +4,8 @@ source venv/bin/activate
 #python manage.py collectstatic --noinput
 cd django_project
 #clean away any pyc files...
-
 find . -iname '*.pyc' -exec rm {} \;
+
 if [ $# -ne 1 ] 
 then
   echo "Running using runserver_plus"
