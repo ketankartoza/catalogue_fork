@@ -56,3 +56,5 @@ GeoLiteCity.dat
 python-dev
 resources/server_config/mapserver/mapfiles/*.map
 resources/server_config/mapserver/apache-include/*.map
+venv
+.vagrant
