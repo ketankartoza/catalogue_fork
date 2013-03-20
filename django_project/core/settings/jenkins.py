@@ -27,7 +27,8 @@ NOSE_ARGS += (
     'catalogue.tests',
     'dictionaries.tests',
     'useraccounts.tests',
-    'search.tests'
+    'search.tests',
+    'reports.tests'
 )
 
 #

@@ -19,6 +19,7 @@ INSTALLED_APPS += (
     'useraccounts',
     'search',
     'pycsw_integration',
+    'reports'
 )
 
 # Set debug to false for production

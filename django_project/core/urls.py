@@ -44,21 +44,14 @@ urlpatterns = patterns('',
     url(r'^clip/$', clip),
     # is this used?
     url(r'^myclips/$', clipHistory),
-    url(r'^mysearches/$', searchHistory, name='searchHistory'),
-    url(r'^recentsearches/$', recentSearches, name='recentSearches'),
-    url(r'^searchmonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReport, name='searchMonthlyReport'),
-    url(r'^searchmonthlyreportaoi/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', searchMonthlyReportAOI, name='searchMonthlyReportAOI'),
     url(r'^visit/$', logVisit, name='logVisit'),
     url(r'^visitormap/$', visitorMap, name='visitorMap'),
     url(r'^whereami/$', whereAmI, name='whereAmI'),
 
     #show all searches that were made
     url(r'^searchesmap/$', searchesMap, name='searchesMap'),
-    url(r'^visitorlist/$', visitorList, name='visitorList'),
-    url(r'^visitorreport/$', visitorReport, name='visitorReport'),
-    url(r'^visitormonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$', visitorMonthlyReport, name='visitorMonthlyReport'),
 
-   # show segment thumb for a segment by #
+    # show segment thumb for a segment by #
     # thumbnailpage is called only by itself?
     url(r'^thumbnailpage/(?P<theId>[0-9]+)/$', showThumbPage, name='showThumbPage'),
 
@@ -102,9 +95,6 @@ urlpatterns = patterns('',
 
     url(r'^getFeatureInfo/(?P<theLon>[-]*\d+.\d+)/(?P<theLat>[-]*\d+.\d+)/(?P<theBoundingBox>[0-9\-,.]*)/(?P<thePixelX>\d+)/(?P<thePixelY>\d+)/(?P<theMapWidth>\d+)/(?P<theMapHeight>\d+)/$', getFeatureInfo),
 
-    url( r'^dataSummaryTable/$', dataSummaryTable, name='dataSummaryTable'),
-    url( r'^dictionaryReport/$', dictionaryReport, name='dictionaryReport'),
-    url( r'^sensorSummaryTable/(?P<theSensorId>[0-9]+)/$', sensorSummaryTable, name='sensorSummaryTable'),
     url(r'^getUserMessages/$', messaging.userMessages),
     #need to be staff to use this
     url(r'^sendMessageToUser/$', messaging.sendMessageToUser),
@@ -119,4 +109,6 @@ urlpatterns = patterns('',
     url(r'', include('search.urls')),
     # pycsw integration
     url(r'', include('pycsw_integration.urls')),
+    # new reports app
+    url(r'', include('reports.urls')),
 )
