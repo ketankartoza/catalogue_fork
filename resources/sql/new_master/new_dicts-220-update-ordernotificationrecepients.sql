@@ -3,8 +3,7 @@ BEGIN;
 CREATE TABLE "catalogue_ordernotificationrecipients_satellite" (
     "id" serial NOT NULL PRIMARY KEY,
     "ordernotificationrecipients_id" integer NOT NULL,
-    "satellite_id" integer NOT NULL REFERENCES "dictionaries_satellite" ("id") DEFERRABLE INITIALLY DEFERRED,
-    UNIQUE ("ordernotificationrecipients_id", "satellite_id")
+    "satellite_id" integer NOT NULL REFERENCES "dictionaries_satellite" ("id") DEFERRABLE INITIALLY DEFERRED
 )
 ;
 
@@ -75,10 +74,22 @@ INSERT INTO catalogue_ordernotificationrecipients_satellite (ordernotificationre
     SELECT ordernotificationrecipients_id, 11
     FROM catalogue_ordernotificationrecipients_sensors WHERE missionsensor_id=24;
 
+-- delete duplicate entires
+DELETE FROM catalogue_ordernotificationrecipients_satellite
+    WHERE id in (
+        select max(id) from catalogue_ordernotificationrecipients_satellite
+        group by ordernotificationrecipients_id, satellite_id
+        HAVING count(*)>1
+    );
+
 COMMIT;
 
 
 BEGIN;
 -- remove old table
 DROP TABLE catalogue_ordernotificationrecipients_sensors ;
+
+-- add unique constraint
+ALTER TABLE "catalogue_ordernotificationrecipients_satellite" ADD CONSTRAINT
+    "catalogue_ordernotificationre_ordernotificationrecipients_i_key" UNIQUE ("ordernotificationrecipients_id", "satellite_id");
 COMMIT;

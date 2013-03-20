@@ -80,7 +80,7 @@ class Command(BaseCommand):
     def migrate_userprofiles(self):
         print '* Starting profile migration...'
         origWD = os.getcwd()
-        os.chdir(os.path.join(origWD, '..', 'sql', 'new_master'))
+        os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '002_profile_migration.sh', self.db])
         os.chdir(origWD)
@@ -92,7 +92,7 @@ class Command(BaseCommand):
     def migrate_search(self):
         print '* Starting search app migration...'
         origWD = os.getcwd()
-        os.chdir(os.path.join(origWD, '..', 'sql', 'new_master'))
+        os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '003_search_migration.sh', self.db])
         os.chdir(origWD)
@@ -100,7 +100,7 @@ class Command(BaseCommand):
     def migrate_pycsw(self):
         print '* Starting pycsw app migration...'
         origWD = os.getcwd()
-        os.chdir(os.path.join(origWD, '..', 'sql', 'new_master'))
+        os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '100_pycsw_integration.sh', self.db])
         os.chdir(origWD)
@@ -113,7 +113,7 @@ class Command(BaseCommand):
     def migrate_proc_levels(self):
         print '* Starting processing_levels migration...'
         origWD = os.getcwd()
-        os.chdir(os.path.join(origWD, '..', 'sql', 'new_master'))
+        os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '010_processing_level.sh', self.db])
         os.chdir(origWD)
@@ -121,7 +121,7 @@ class Command(BaseCommand):
     def migrate_unique_product_ids(self):
         print '* Starting unique_product_id migration...'
         origWD = os.getcwd()
-        os.chdir(os.path.join(origWD, '..', 'sql', 'new_master'))
+        os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '015_unique_product_id.sh', self.db])
         os.chdir(origWD)
