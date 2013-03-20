@@ -46,7 +46,6 @@ from catalogue.models import (
     Visit,
     TaskingRequest,
     GenericSensorProduct,
-    RadarProduct,
     OpticalProduct
 )
 from catalogue.renderDecorator import renderWithContext
@@ -55,6 +54,8 @@ from search.models import (
     Search,
     SearchRecord,
 )
+
+from dictionaries.models import SatelliteInstrument
 
 
 # in case you need to slice ResultSet (paginate) for display
@@ -290,15 +291,10 @@ def dataSummaryTable(theRequest):
     """
     Summary of available records
     """
-    #myResultSet = GenericProduct.objects.values("mission_sensor")
-    # .annotate(Count("id")).order_by().aggregate(
-    #    Min('product_acquisition_start'),Max('product_acquisition_end'))
-    #ABP: changed to GenericSensorProduct
-    #ABP: changed to MissionSensor
     myResultSet = (
-        MissionSensor.objects
+        SatelliteInstrument.objects
         .annotate(id__count=Count(
-            'sensortype__acquisitionmode__genericsensorproduct'))
+            'opticalproductprofile__opticalproduct'))
         .order_by('name'))
 
     myTotal = 0
@@ -318,19 +314,17 @@ def sensorSummaryTable(theRequest, theSensorId):
     # Note: don't use len() to count recs - its very inefficient
     #       use count() rather
     #
-    mySensor = get_object_or_404(MissionSensor, id=theSensorId)
+    mySensor = get_object_or_404(SatelliteInstrument, id=theSensorId)
     myTaskingSensorCount = TaskingRequest.objects.filter(
-        mission_sensor=mySensor).count()
+        satellite__satelliteinstrument=mySensor).count()
     myTaskingTotalCount = TaskingRequest.objects.count()
     mySearchCount = Search.objects.all().count()
-    mySearchForSensorCount = Search.objects.filter(sensors=mySensor).count()
+    mySearchForSensorCount = Search.objects.filter(
+        satellite__satelliteinstrument=mySensor).count()
     myProductForSensorCount = None
-    if (mySensor.is_radar):
-        myProductForSensorCount = RadarProduct.objects.filter(
-            acquisition_mode__sensor_type__mission_sensor=mySensor).count()
-    else:
-        myProductForSensorCount = OpticalProduct.objects.filter(
-            acquisition_mode__sensor_type__mission_sensor=mySensor).count()
+
+    myProductForSensorCount = OpticalProduct.objects.filter(
+        product_profile__satellite_instrument=mySensor).count()
     myProductTotalCount = GenericSensorProduct.objects.count()
 
     myRecords = SearchRecord.objects.filter(
@@ -339,7 +333,7 @@ def sensorSummaryTable(theRequest, theSensorId):
     myProductOrdersForSensorCount = (
         SearchRecord.objects.filter(user__isnull=False)
         .filter(order__isnull=False)
-        .filter(product__genericimageryproduct__genericsensorproduct__acquisition_mode__sensor_type__mission_sensor__exact=mySensor)
+        .filter(product__genericimageryproduct__genericsensorproduct__opticalproduct__product_profile__satellite_instrument__exact=mySensor)
         .count())
 
     myResults = SortedDict()
@@ -352,29 +346,24 @@ def sensorSummaryTable(theRequest, theSensorId):
     myResults['Total products for this sensor'] = myProductForSensorCount
     myResults['Total products for all sensors'] = myProductTotalCount
 
-    mySensorYearlyStats = Search().customSQL("""
-    SELECT count(*) as count,
-        extract(YEAR from catalogue_genericproduct.product_date)::int as year
-    FROM
-      public.catalogue_genericproduct,
-      public.catalogue_genericimageryproduct,
-      public.catalogue_genericsensorproduct,
-      public.catalogue_acquisitionmode,
-      public.catalogue_sensortype,
-      public.catalogue_missionsensor
-    WHERE
-      catalogue_genericproduct.id =
-        catalogue_genericimageryproduct.genericproduct_ptr_id AND
-      catalogue_genericimageryproduct.genericproduct_ptr_id =
-        catalogue_genericsensorproduct.genericimageryproduct_ptr_id AND
-      catalogue_genericsensorproduct.acquisition_mode_id =
-        catalogue_acquisitionmode.id AND
-      catalogue_acquisitionmode.sensor_type_id = catalogue_sensortype.id AND
-      catalogue_sensortype.mission_sensor_id = catalogue_missionsensor.id
-      AND catalogue_missionsensor.id = %(sensor_id)s
-    GROUP BY extract(YEAR from catalogue_genericproduct.product_date)
-    -- order by year ASC, month ASC
-    ORDER BY year ASC;""", ['count', 'year'], {'sensor_id': mySensor.pk})
+    mySensorYearlyStats = Search().customSQL('''
+SELECT count(*) as count,
+extract(YEAR from catalogue_genericproduct.product_date)::int as year
+FROM
+  catalogue_genericproduct,
+  catalogue_genericimageryproduct,
+  catalogue_genericsensorproduct,
+  catalogue_opticalproduct,
+  dictionaries_opticalproductprofile
+WHERE
+  catalogue_genericimageryproduct.genericproduct_ptr_id = catalogue_genericproduct.id AND
+  catalogue_genericsensorproduct.genericimageryproduct_ptr_id = catalogue_genericimageryproduct.genericproduct_ptr_id AND
+  catalogue_opticalproduct.genericsensorproduct_ptr_id = catalogue_genericsensorproduct.genericimageryproduct_ptr_id AND
+  dictionaries_opticalproductprofile.id = catalogue_opticalproduct.product_profile_id
+  AND dictionaries_opticalproductprofile.satellite_instrument_id=%(sensor_id)s
+
+GROUP BY extract(YEAR from catalogue_genericproduct.product_date)
+ORDER BY year ASC;''', ['count', 'year'], {'sensor_id': mySensor.pk})
 
     #define beginning year for yearly product summary
     myStartYear = 1981
@@ -404,22 +393,6 @@ def dictionaryReport(theRequest):
     proc level too
     """
 
-    myReport = []
-    myTypeReport = []
-    myMissions = Mission.objects.all().order_by('name')
-    for myMission in myMissions:
-        mySensors = MissionSensor.objects.filter(
-            mission=myMission).order_by('name')
-        for mySensor in mySensors:
-            myTypes = SensorType.objects.filter(
-                mission_sensor=mySensor).order_by('name')
-            for myType in myTypes:
-                myModes = AcquisitionMode.objects.filter(
-                    sensor_type=myType).order_by('name')
-                myTypeRow = [myMission, mySensor, myType]
-                myTypeReport.append(myTypeRow)
-                for myMode in myModes:
-                    myRow = [myMission, mySensor, myType, myMode]
-                    myReport.append(myRow)
+    myReport = SatelliteInstrument.objects.all().select_related()
 
-    return({"myTypeResults": myTypeReport, "myResults": myReport})
+    return({"myResults": myReport})

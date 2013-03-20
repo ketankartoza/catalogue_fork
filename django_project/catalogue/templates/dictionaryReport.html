@@ -6,27 +6,11 @@
   <thead>
   </thead>
   <tbody>
-    <tr><th>Mission</th><th>Sensor</th><th>Type</th></tr>
-    {% for myRecord in myTypeResults %}
-    <tr>
-    {% for myObject in myRecord %}
-    <td>{{myObject}}</td>
-    {% endfor %}
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-<h3>This report is for mission - sensor - type - mode</h3>
-<table>
-  <thead>
-  </thead>
-  <tbody>
-    <tr><th>Mission</th><th>Sensor</th><th>Type</th><th>Mode</th></tr>
+    <tr><th>Satellite Instrument</th><th>Instrument Type</th></tr>
     {% for myRecord in myResults %}
     <tr>
-    {% for myObject in myRecord %}
-    <td>{{myObject}}</td>
-    {% endfor %}
+    <td>{{myRecord.name}}</td>
+    <td>{{myRecord.instrument_type.name}}</td>
     </tr>
     {% endfor %}
   </tbody>
