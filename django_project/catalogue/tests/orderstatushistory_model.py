@@ -83,7 +83,6 @@ class OrderStatusHistoryCRUD_Test(TestCase):
             'old_order_status_id': 1,
             'new_order_status_id': 2
         }
-        #import ipdb;ipdb.set_trace()
         myModel = OrderStatusHistory.objects.get(pk=myModelPK)
         #check if data is correct
         for key, val in myExpectedModelData.items():

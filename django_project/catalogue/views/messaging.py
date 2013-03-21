@@ -103,7 +103,6 @@ def sendMessageToAllUsers(theRequest):
     if not theRequest.user.is_staff:
         return HttpResponseBadRequest('You are not permitted to do this.')
     if theRequest.method == 'POST':
-        #import pdb; pdb.set_trace()
         myForm = AllUsersMessageForm(theRequest.POST)
         if myForm.is_valid():
             if 'message' not in theRequest.POST:

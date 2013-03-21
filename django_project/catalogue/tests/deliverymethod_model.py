@@ -58,7 +58,6 @@ class DeliveryMethodCRUD_Test(TestCase):
         myExpectedModelData = {
             'name': 'Courier + External Hard Disk'
         }
-        #import ipdb;ipdb.set_trace()
         myModel = DeliveryMethod.objects.get(pk=myModelPK)
         #check if data is correct
         for key, val in myExpectedModelData.items():

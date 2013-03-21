@@ -58,7 +58,6 @@ class FileFormatCRUD_Test(TestCase):
         myExpectedModelData = {
             'name': 'GeoTiff'
         }
-        #import ipdb;ipdb.set_trace()
         myModel = FileFormat.objects.get(pk=myModelPK)
         #check if data is correct
         for key, val in myExpectedModelData.items():

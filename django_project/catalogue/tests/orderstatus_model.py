@@ -58,7 +58,6 @@ class OrderStatusCRUD_Test(TestCase):
         myExpectedModelData = {
             'name': 'Placed'
         }
-        #import ipdb;ipdb.set_trace()
         myModel = OrderStatus.objects.get(pk=myModelPK)
         #check if data is correct
         for key, val in myExpectedModelData.items():

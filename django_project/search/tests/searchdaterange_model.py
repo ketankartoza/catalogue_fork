@@ -66,7 +66,6 @@ class SearchDateRangeCRUD_Test(TestCase):
             'start_date': date(1901, 01, 01),
             'end_date': date(2100, 12, 31)
         }
-        #import ipdb;ipdb.set_trace()
         myModel = SearchDateRange.objects.get(pk=myModelPK)
         #check if data is correct
         for key, val in myExpectedModelData.items():

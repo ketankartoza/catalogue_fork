@@ -73,7 +73,6 @@ class ClipCRUD_Test(TestCase):
             'status': 'submitted',
             'result_url': 'http://example.com/unittest'
         }
-        #import ipdb;ipdb.set_trace()
         myModel = Clip.objects.get(pk=myModelPK)
         #check if data is correct
         for key, val in myExpectedModelData.items():

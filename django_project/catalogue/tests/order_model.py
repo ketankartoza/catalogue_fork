@@ -84,7 +84,6 @@ class OrderCRUD_Test(TestCase):
             'market_sector_id': 1,
             'order_date':  datetime.strptime('2010-11-10 10:23:37', '%Y-%m-%d %H:%M:%S'),
         }
-        #import ipdb;ipdb.set_trace()
         myModel = Order.objects.get(pk=myModelPK)
         #check if data is correct
         for key, val in myExpectedModelData.items():

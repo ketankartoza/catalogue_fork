@@ -90,7 +90,6 @@ class OrdinalProductCRUD_Test(TestCase):
             'confusion_matrix': '1,2,3,4,5',
             'kappa_score': None
         }
-        #import ipdb;ipdb.set_trace()
         myModel = OrdinalProduct.objects.get(pk=myModelPK)
         #check if data is correct
         for key, val in myExpectedModelData.items():

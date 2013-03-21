@@ -58,7 +58,6 @@ class ResamplingMethodCRUD_Test(TestCase):
         myExpectedModelData = {
             'name': 'Nearest Neighbour'
         }
-        #import ipdb;ipdb.set_trace()
         myModel = ResamplingMethod.objects.get(pk=myModelPK)
         #check if data is correct
         for key, val in myExpectedModelData.items():

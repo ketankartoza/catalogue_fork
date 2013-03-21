@@ -58,7 +58,6 @@ class DatumCRUD_Test(TestCase):
         myExpectedModelData = {
             'name': 'WGS84'
         }
-        #import ipdb;ipdb.set_trace()
         myModel = Datum.objects.get(pk=myModelPK)
         #check if data is correct
         for key, val in myExpectedModelData.items():

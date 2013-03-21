@@ -58,7 +58,6 @@ class MarketSectorCRUD_Test(TestCase):
         myExpectedModelData = {
             'name': 'Decline to say'
         }
-        #import ipdb;ipdb.set_trace()
         myModel = MarketSector.objects.get(pk=myModelPK)
         #check if data is correct
         for key, val in myExpectedModelData.items():

@@ -110,7 +110,6 @@ class GeospatialProductCRUD_Test(TestCase):
             'place_id': 1,
             'primary_topic_id': 1
         }
-        #import ipdb;ipdb.set_trace()
         myModel = GeospatialProduct.objects.get(pk=myModelPK)
         #check if data is correct
         for key, val in myExpectedModelData.items():

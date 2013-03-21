@@ -91,7 +91,6 @@ class ContinuousProductCRUD_Test(TestCase):
             'range_max': 99.9,
             'unit_id': 1
         }
-        #import ipdb;ipdb.set_trace()
         myModel = ContinuousProduct.objects.get(pk=myModelPK)
         #check if data is correct
         for key, val in myExpectedModelData.items():
