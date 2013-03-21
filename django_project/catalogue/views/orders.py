@@ -77,6 +77,7 @@ from catalogue.profileRequiredDecorator import requireProfile
 from catalogue.renderDecorator import renderWithContext
 
 from search.models import SearchRecord
+from dictionaries.models import InstrumentType, Satellite
 ###########################################################
 #
 # Ordering related views
@@ -684,9 +685,11 @@ def ordersSummary(theRequest):
     #count orders by status
     myOrderStatus = OrderStatus.objects.annotate(num_orders=Count('order__id'))
     #count orders by product type (misson sensor)
-    myOrderProductType = MissionSensor.objects.annotate(
-        num_orders=Count('taskingrequest__order_ptr__id'))
-
+    myOrderInstrumentType = InstrumentType.objects.annotate(
+        num_orders=Count('taskingrequest__order_ptr__id')).order_by('name')
+    myOrderSatellite = Satellite.objects.annotate(
+        num_orders=Count('taskingrequest__order_ptr__id')).order_by('name')
     return dict(
         myOrderStatus=myOrderStatus,
-        myOrderProductType=myOrderProductType)
+        myOrderInstrumentType=myOrderInstrumentType,
+        myOrderSatellite=myOrderSatellite)

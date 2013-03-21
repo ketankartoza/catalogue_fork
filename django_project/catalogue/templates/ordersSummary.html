@@ -22,16 +22,34 @@
   </tbody>
 </table>
 
-<h2 class="centered">Order product type summary report</h2>
+<h2 class="centered">Order instrument type summary report</h2>
 <table>
   <thead>
   </thead>
   <tbody>
     <tr>
-      <th>Product type</th>
+      <th>Insturment type</th>
       <th>Count</th>
     </tr>
-    {% for record in myOrderProductType %}
+    {% for record in myOrderInstrumentType %}
+    <tr>
+      <td>{{ record.name }}</td>
+      <td>{{ record.num_orders }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2 class="centered">Order satellite summary report</h2>
+<table>
+  <thead>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Satellite</th>
+      <th>Count</th>
+    </tr>
+    {% for record in myOrderSatellite %}
     <tr>
       <td>{{ record.name }}</td>
       <td>{{ record.num_orders }}</td>
