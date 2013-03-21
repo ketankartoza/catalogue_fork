@@ -79,35 +79,12 @@ def sliceForDisplay(theList, thePageSize=10):
 #renderWithContext is explained in renderWith.py
 @renderWithContext('visitorReport.html')
 def visitorReport(theRequest):
-    myQuerySet = Visit()
-    myCountryStats = myQuerySet.customSQL("""
-    SELECT LOWER(country), COUNT(*) AS count, (SELECT COUNT(*)
-    FROM catalogue_visit) AS total
-    FROM catalogue_visit
-    GROUP BY LOWER(country)
-    ORDER BY count DESC;""", ['country', 'count', 'total'])
-
-    myMaximum = 1
-    myScores = []
-    for myRec in myCountryStats:
-        myValue = myRec['count']
-        myTotal = myRec['total']
-        myPercent = (myValue / myTotal) * 100
-        myScores.append({
-            'country': myRec['country'], 'count': myRec['count'],
-            'total': myRec['total'], 'percent': myPercent})
-    myTopCountries = myScores[0:10]
-    #by_date = query_set.customSQL("""
-    #SELECT EXTRACT( year FROM added_date ) AS year, MIN( to_char(
-    #   added_date, 'Mon' ) ), COUNT( * ) FROM users_qgisuser
-    #GROUP BY EXTRACT( year FROM added_date ), EXTRACT(month FROM added_date)
-    #ORDER BY EXTRACT( year FROM added_date );""", ['year', 'month', 'count'])
+    myCountryStats = Visit.helpers.countryStats()
 
     #render_to_response is done by the renderWithContext decorator
     return ({
         'myGraphLabel': ({'Country': 'country'}),
-        'myTopCountries': myTopCountries,
-        'myScores': myScores,
+        'myScores': myCountryStats,
         'myCurrentMonth': datetime.date.today()
     })
 
@@ -126,28 +103,11 @@ def visitorMonthlyReport(theRequest, theYear, theMonth):
             logger.error('Date arguments cannot be parsed')
             logger.info(traceback.format_exc())
 
-    myQuerySet = Visit()
-    myCountryStats = myQuerySet.customSQL("""
-    SELECT LOWER(country),count(*) as count, DATE_TRUNC('month',
-    visit_date) as month
-    FROM catalogue_visit
-    WHERE visit_date BETWEEN to_date(%(date)s,'MM-YYYY')
-        AND to_date(%(date)s,'MM-YYYY')+ interval '1 month'
-    GROUP BY LOWER(country),DATE_TRUNC('month',visit_date)
-    ORDER BY month DESC""", ['country', 'count', 'month'], {
-        'date': myDate.strftime('%m-%Y')
-    })
-    myMaximum = 1
-    myScores = []
-    for myRec in myCountryStats:
-        myScores.append({
-            'country': myRec['country'], 'count': myRec['count']})
-    myTopCountries = myScores[0:10]
+    myCountryStats = Visit.helpers.monthlyReport(myDate)
 
     return ({
         'myGraphLabel': ({'Country': 'country'}),
-        'myTopCountries': myTopCountries,
-        'myScores': myScores,
+        'myScores': myCountryStats,
         'myCurrentDate': myDate,
         'myPrevDate': myDate - datetime.timedelta(days=1),
         'myNextDate': myDate + datetime.timedelta(days=31),
@@ -218,27 +178,11 @@ def searchMonthlyReport(theRequest, theYear, theMonth):
             logger.error('Date arguments cannot be parsed')
             logger.info(traceback.format_exc())
 
-    myQuerySet = Search()
-    myCountryStats = myQuerySet.customSQL("""
-    SELECT name,date_trunc('month',search_date) as date_of_search,
-        count(*) as searches
-    FROM (SELECT a.name, b.search_date FROM catalogue_worldborders a
-        INNER JOIN search_search b ON
-        st_intersects(a.geometry,b.ip_position) OFFSET 0) ss
-    WHERE search_date BETWEEN to_date(%(date)s,'MM-YYYY') AND
-        to_date(%(date)s,'MM-YYYY') + interval '1 month'
-    GROUP BY name,date_trunc('month',search_date)
-    ORDER BY searches DESC""", [
-        'country', 'month', 'count'], {'date': myDate.strftime('%m-%Y')})
-
-    myScores = []
-    for myRec in myCountryStats:
-        myScores.append({
-            'country': myRec['country'], 'count': myRec['count']})
+    myCountryStats = Search.helpers.monthlyReport(theDate=myDate)
 
     return ({
         'myGraphLabel': ({'Country': 'country'}),
-        'myScores': myScores,
+        'myScores': myCountryStats,
         'myCurrentDate': myDate,
         'myPrevDate': myDate - datetime.timedelta(days=1),
         'myNextDate': myDate + datetime.timedelta(days=31),
@@ -259,25 +203,11 @@ def searchMonthlyReportAOI(theRequest, theYear, theMonth):
             logger.error('Date arguments cannot be parsed')
             logger.info(traceback.format_exc())
 
-    myQuerySet = Search()
-    myCountryStats = myQuerySet.customSQL("""
-    SELECT a.name, date_trunc('month',b.search_date) as date_of_search,
-        count(*) as searches
-    FROM catalogue_worldborders a INNER JOIN search_search b
-        ON st_intersects(a.geometry,b.geometry)
-    WHERE search_date between to_date(%(date)s,'MM-YYYY') AND
-        to_date(%(date)s,'MM-YYYY') + interval '1 month'
-    GROUP BY  a.name,date_trunc('month',b.search_date)
-    ORDER BY searches desc;""", [
-        'country', 'month', 'count'], {'date': myDate.strftime('%m-%Y')})
-
-    myScores = []
-    for myRec in myCountryStats:
-        myScores.append({'country': myRec['country'], 'count': myRec['count']})
+    myCountryStats = Search.helpers.monthlyReportAOI(theDate=myDate)
 
     return ({
         'myGraphLabel': ({'Country': 'country'}),
-        'myScores': myScores,
+        'myScores': myCountryStats,
         'myCurrentDate': myDate,
         'myPrevDate': myDate - datetime.timedelta(days=1),
         'myNextDate': myDate + datetime.timedelta(days=31),
@@ -346,24 +276,7 @@ def sensorSummaryTable(theRequest, theSensorId):
     myResults['Total products for this sensor'] = myProductForSensorCount
     myResults['Total products for all sensors'] = myProductTotalCount
 
-    mySensorYearlyStats = Search().customSQL('''
-SELECT count(*) as count,
-extract(YEAR from catalogue_genericproduct.product_date)::int as year
-FROM
-  catalogue_genericproduct,
-  catalogue_genericimageryproduct,
-  catalogue_genericsensorproduct,
-  catalogue_opticalproduct,
-  dictionaries_opticalproductprofile
-WHERE
-  catalogue_genericimageryproduct.genericproduct_ptr_id = catalogue_genericproduct.id AND
-  catalogue_genericsensorproduct.genericimageryproduct_ptr_id = catalogue_genericimageryproduct.genericproduct_ptr_id AND
-  catalogue_opticalproduct.genericsensorproduct_ptr_id = catalogue_genericsensorproduct.genericimageryproduct_ptr_id AND
-  dictionaries_opticalproductprofile.id = catalogue_opticalproduct.product_profile_id
-  AND dictionaries_opticalproductprofile.satellite_instrument_id=%(sensor_id)s
-
-GROUP BY extract(YEAR from catalogue_genericproduct.product_date)
-ORDER BY year ASC;''', ['count', 'year'], {'sensor_id': mySensor.pk})
+    mySensorYearlyStats = mySensor.products_per_year()
 
     #define beginning year for yearly product summary
     myStartYear = 1981

@@ -44,7 +44,7 @@
     <button onclick='location="{% url 'visitorMonthlyReport' myNextDate|date:'Y' myNextDate|date:'m' %}"'>Next month</button>
   </div>
 </div>
-    {% if myTopCountries and myScores %}
+    {% if myScores %}
       <!--Load the AJAX API-->
       <h2 class="centered chartTitle"><img class="icon" src="/media/images/diagram_32.png"> Visits by country excluding SA for {{ myCurrentDate|date:'M, Y' }}</h2>
       <!--Div that will hold the pie chart-->

@@ -18,16 +18,54 @@ __date__ = '09/08/2012'
 __copyright__ = 'South African National Space Agency'
 
 from django.contrib.gis.db import models
+
 #for user id foreign keys
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
+
 from offline_messages.models import OfflineMessage
 from offline_messages.utils import create_offline_message, constants
-#for translation
+
+
+from catalogue.dbhelpers import executeRAWSQL
 from catalogue.models.products import GenericSensorProduct
 
 
 ###############################################################################
+
+class VisitHelpersManager(models.GeoManager):
+    """
+    Visit model helper methods
+    """
+    def countryStats(self):
+        """
+        Count visits per country
+
+        NOTE: We need to use executeRAWSQL as manager.raw method requires
+        PrimaryKey to be returned which is then used to map objects back to the
+        model
+        """
+        myResults = executeRAWSQL("""
+SELECT LOWER(country) as country, COUNT(*) AS count
+FROM catalogue_visit
+GROUP BY LOWER(country)
+ORDER BY count DESC;""")
+
+        return myResults
+
+    def monthlyReport(self, theDate):
+        """
+        Count visits per country for each month
+        """
+        myResults = executeRAWSQL("""
+SELECT LOWER(country) as country ,count(*) as count, DATE_TRUNC('month',
+visit_date) as month
+FROM catalogue_visit
+WHERE visit_date BETWEEN to_date(%(date)s,'MM-YYYY')
+    AND to_date(%(date)s,'MM-YYYY')+ interval '1 month'
+GROUP BY LOWER(country),DATE_TRUNC('month',visit_date)
+ORDER BY count DESC;""", {'date': theDate.strftime('%m-%Y')})
+        return myResults
 
 
 class Visit(models.Model):
@@ -45,26 +83,7 @@ class Visit(models.Model):
     )
     user = models.ForeignKey(User, null=True, blank=True)
     objects = models.GeoManager()
-
-    def customSQL(self, sql_string, qkeys, args=None):
-        from django.db import connection
-        cursor = connection.cursor()
-        #args MUST be parsed in case of SQL injection attempt
-        #execute() does this automatically for us
-        if args:
-            cursor.execute(sql_string, args)
-        else:
-            cursor.execute(sql_string)
-        rows = cursor.fetchall()
-        fdicts = []
-        for row in rows:
-            i = 0
-            cur_row = {}
-            for key in qkeys:
-                cur_row[key] = row[i]
-                i = i + 1
-            fdicts.append(cur_row)
-        return fdicts
+    helpers = VisitHelpersManager()
 
     class Meta:
         app_label = 'catalogue'

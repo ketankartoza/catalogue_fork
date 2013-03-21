@@ -23,7 +23,7 @@ from datetime import datetime
 
 from django.contrib.gis.db import models
 
-from catalogue.models import License
+from catalogue.dbhelpers import executeRAWSQL
 
 ###############################################################################
 
@@ -146,6 +146,45 @@ class BaseSearch(models.Model):
         if not self.guid or self.guid == 'null':
             self.guid = str(uuid.uuid4())
         super(BaseSearch, self).save()
+
+
+class SearchHelpersManager(models.GeoManager):
+    """
+    Search model helper methods
+    """
+    def monthlyReport(self, theDate):
+        """
+        Count searches per country for user each month
+        """
+        myResults = executeRAWSQL("""
+WITH search_geom AS (SELECT a.name, b.search_date FROM catalogue_worldborders a
+    INNER JOIN search_search b ON
+    st_intersects(a.geometry,b.ip_position))
+SELECT name as country, date_trunc('month',search_date) as month,
+    count(*) as count
+FROM search_geom
+WHERE search_date BETWEEN to_date(%(date)s,'MM-YYYY') AND
+    to_date(%(date)s,'MM-YYYY') + interval '1 month'
+GROUP BY name,date_trunc('month',search_date)
+ORDER BY count DESC;""", {'date': theDate.strftime('%m-%Y')})
+
+        return myResults
+
+    def monthlyReportAOI(self, theDate):
+        """
+        Count AOI searches per country per each month
+        """
+        myResults = executeRAWSQL("""
+SELECT a.name as country, date_trunc('month',b.search_date) as month,
+    count(*) as count
+FROM catalogue_worldborders a INNER JOIN search_search b ON
+    st_intersects(a.geometry,b.geometry)
+WHERE search_date between to_date(%(date)s,'MM-YYYY') AND
+        to_date(%(date)s,'MM-YYYY') + interval '1 month'
+GROUP BY  a.name,date_trunc('month',b.search_date)
+ORDER BY count desc;""", {'date': theDate.strftime('%m-%Y')})
+
+        return myResults
 
 
 class Search(BaseSearch):
@@ -278,6 +317,7 @@ class Search(BaseSearch):
     )
     # Use the geo manager to handle geometry
     objects = models.GeoManager()
+    helpers = SearchHelpersManager()
 
     class Meta:
         verbose_name = 'Search'
@@ -287,26 +327,6 @@ class Search(BaseSearch):
     def __unicode__(self):
         return "%s Guid: %s User: %s" % (
             self.search_date, self.guid, self.user)
-
-    def customSQL(self, sql_string, qkeys, args=None):
-        from django.db import connection
-        cursor = connection.cursor()
-        #args MUST be parsed in case of SQL injection attempt
-        #execute() does this automatically for us
-        if args:
-            cursor.execute(sql_string, args)
-        else:
-            cursor.execute(sql_string)
-        rows = cursor.fetchall()
-        fdicts = []
-        for row in rows:
-            i = 0
-            cur_row = {}
-            for key in qkeys:
-                cur_row[key] = row[i]
-                i = i + 1
-            fdicts.append(cur_row)
-        return fdicts
 
     def datesAsString(self):
         """
