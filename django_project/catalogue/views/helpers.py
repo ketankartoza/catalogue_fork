@@ -383,7 +383,7 @@ def notifySalesStaffOfTaskRequest(theUser, theId, theContext=None):
     myMessagesList = []
     # get the list of recipients
     myTaskingRecipients = OrderNotificationRecipients.objects.filter(
-        sensors=myTaskingRequest.mission_sensor)
+        satellite=myTaskingRequest.satellite)
     myRecipients = set()
     myRecipients.update([theUser])
     for recepient in myTaskingRecipients:

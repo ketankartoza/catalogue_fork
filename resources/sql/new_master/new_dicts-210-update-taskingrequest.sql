@@ -66,4 +66,6 @@ ALTER TABLE "catalogue_taskingrequest"
 ALTER TABLE "catalogue_taskingrequest"
     ALTER "instrument_type_id" SET NOT NULL;
 
+ALTER TABLE "catalogue_taskingrequest" DROP mission_sensor_id CASCADE;
+
 COMMIT;
