@@ -96,9 +96,9 @@
 
       $.getJSON('{% url "updateSelectOptions" %}', $.param(getData, true)).done(function(data){
 
-        $("#id_collection").html(createOptions(data.collections, selected_options[0]));
+        // $("#id_collection").html(createOptions(data.collections, selected_options[0]));
 
-        $("#id_satellite").html(createOptions(data.satellites, selected_options[1]));
+        // $("#id_satellite").html(createOptions(data.satellites, selected_options[1]));
 
         $("#id_instrumenttype").html(createOptions(data.instrumenttypes, selected_options[2]));
 
@@ -122,11 +122,11 @@
 
       $.getJSON('{% url "updateSelectOptions" %}', $.param(getData, true)).done(function(data){
 
-        $("#id_collection").html(createOptions(data.collections, selected_options[0]));
+        // $("#id_collection").html(createOptions(data.collections, selected_options[0]));
 
-        $("#id_satellite").html(createOptions(data.satellites, selected_options[1]));
+        // $("#id_satellite").html(createOptions(data.satellites, selected_options[1]));
 
-        $("#id_instrumenttype").html(createOptions(data.instrumenttypes, selected_options[2]));
+        // $("#id_instrumenttype").html(createOptions(data.instrumenttypes, selected_options[2]));
 
         $("#id_spectral_group").html(createOptions(data.spectralgroups, selected_options[3]));
 
@@ -148,13 +148,13 @@
       };
 
       $.getJSON('{% url "updateSelectOptions" %}', $.param(getData, true)).done(function(data){
-        $("#id_collection").html(createOptions(data.collections, selected_options[0]));
+        // $("#id_collection").html(createOptions(data.collections, selected_options[0]));
 
-        $("#id_satellite").html(createOptions(data.satellites, selected_options[1]));
+        // $("#id_satellite").html(createOptions(data.satellites, selected_options[1]));
 
-        $("#id_instrumenttype").html(createOptions(data.instrumenttypes, selected_options[2]));
+        // $("#id_instrumenttype").html(createOptions(data.instrumenttypes, selected_options[2]));
 
-        $("#id_spectral_group").html(createOptions(data.spectralgroups, selected_options[3]));
+        // $("#id_spectral_group").html(createOptions(data.spectralgroups, selected_options[3]));
 
         $("#id_license_type").html(createOptions(data.licensetypes, selected_options[4]));
       });
@@ -215,7 +215,7 @@
       $("#id_spectral_group option").removeAttr('selected');
       $("#id_license_type option").removeAttr('selected');
       // repopulate selection boxes
-      getSelectOptionsForSpectralGroup();
+      getSelectOptionsForCollection();
 
       evt.preventDefault();
       return null;
