@@ -60,8 +60,6 @@ var mLastSelectedRecordId = null;
  -------------------------------------------------------- */
 $(document).ready(function()
 {
-  //setup help dialog
-  setupSceneIdHelpDialog();
   //block the user interface when an ajax request is sent
   //$(".blocking-link").live('click',block);
   //check for messages every 60 s
@@ -891,7 +889,7 @@ function setupMiniIconClickCallback()
  * and loaded in the preview accordion panel. */
 function setupRowClickCallback()
 {
-  $('.result-row').live('click', (function () {
+  $('#search-results-container').delegate('.result-row', 'click', (function () {
     var myRecordId = $(this).attr('id').replace("record-","");
     hightlightRecord(myRecordId, true);
   }));

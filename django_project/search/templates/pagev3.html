@@ -66,10 +66,10 @@ function loadMoreData() {
       </div>
       <div class="span10">
         <table id="results" class="table table-striped">
-          {% include "recordHeader.html" %}
+          {% include "searchRecordHeader.html" %}
           <tbody>
             {% for myRecord in myRecords %}
-            {% include "record.html" %}
+            {% include "searchRecord.html" %}
             {% empty %}
             <h2>No records found.</h2>
             {% endfor %}
