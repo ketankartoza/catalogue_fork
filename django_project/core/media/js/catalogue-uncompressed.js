@@ -402,6 +402,8 @@ function revealTable()
 function loadSearchResults( theNumber, theSearchGuid )
 {
   block();
+  $('#search-results-text').show();
+  $('#search-results').show();
   $("#search-results-container").load("/rendersearchresultspage/" + theSearchGuid + "/?page=" + theNumber,"",unblock);
 }
 
