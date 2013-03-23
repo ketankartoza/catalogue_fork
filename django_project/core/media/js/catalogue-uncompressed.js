@@ -260,8 +260,10 @@ function prepareFancy()
     });
 */
 }
-function showMiniCart( )
+
+function showMiniCart()
 {
+  /*
   myShowAccordionFlag = true; //true unless specified otherwise by fn args
   if ( arguments.length == 1 ) //check of a flag was passed to indicate whether to activate the accordion
   {
@@ -277,19 +279,26 @@ function showMiniCart( )
   //See: http://openlayers.org/pipermail/users/2006-October/000064.html
   myLayer.mergeNewParams({'seed':Math.random()});
   myLayer.redraw();
+  */
   // refresh the cart table
-  $("#cart").load("/showminicartcontents/","", zebraTables);
+  $("#cart_tab").load("/showminicartcontents/");
+
+  /*
   if ( myShowAccordionFlag )
   {
     $("#accordion").accordion("activate", 2);
   }
+  */
   unblock();
 }
+
 function addToCart( theId )
 {
   // Show a wait image before we hit our ajax call
   block();
-  $.get("/addtocart/" + theId + "/?xhr","", showMiniCart);
+  $.get("/addtocart/" + theId + "/?xhr");
+  showMiniCart();
+  $('#myTab a[href="#cart_tab"]').tab('show');
   // prevent page jumping around on empty hyperlink clicks
   return false;
 }
