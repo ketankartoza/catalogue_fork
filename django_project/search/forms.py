@@ -256,14 +256,15 @@ class AdvancedSearchForm(forms.ModelForm):
                     Field('start_datepicker', template='myField.html'),
                     Field('end_datepicker', template='myField.html'),
                     HTML(
-                        '<a id="dr_add" title="Select the dates in the calend'
+                        '<div class="btn-group" style="margin-left: 50px;">'
+                        '<a class="btn btn-info btn-small" id="dr_add" title="Select the dates in the calend'
                         'ar and click here to add to the list." href="javascri'
-                        'pt:void(0)"><img src="/media/images/selector-add.gif"'
-                        '></a>'),
+                        'pt:void(0)"><i class="icon-arrow-down"></i></a>'),
                     HTML(
-                        '<a id="dr_del" title="Select the ranges in the list '
+                        '<a class="btn btn-info btn-small" id="dr_del" title="Select the ranges in the list '
                         'and click here to remove." href="javascript:void(0)">'
-                        '<img src="/media/images/selector-remove.gif"></a>'),
+                        '<i class="icon-arrow-up"></i></a>'
+                        '</div>'),
                     HTML(
                         '<label for="id_searchdaterange_set">Date range *</lab'
                         'el>'),
