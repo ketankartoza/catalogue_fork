@@ -1,4 +1,4 @@
-{% extends "basev3.html" %}
+{% extends "base-fluid.html" %}
 {% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
 
 {% block extrajs %}
@@ -20,15 +20,19 @@
 
 {% block content%}
     <div class="row-fluid">
-        <div id="search-panel" class="span3">
-            <div><h3>Search</h3></div>
+        <div id="search-panel" class="span3" style="min-width: 238px;">
+            <div>
+              <h3>Search
+              <button onClick="submitSearchForm();" class="btn btn-success" class="default" name="_search" title="Click here to execute your search.">Go</button>
+              </h3>
+            </div>
             <div id="search-form-container">
               {% if myForm %}
                 {% include "searchPanelv3.html" %}
               {% endif %}
             </div>
         </div>
-        <div class="span9">
+        <div class="span9" style="margin-left: 5px; margin-right:0px;">
             <div class="row-fluid">
                 <div id="map-container" class="span12">
                 </div>
