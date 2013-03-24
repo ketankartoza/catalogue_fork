@@ -184,6 +184,11 @@
       $("#search_form").submit();
     }
 
+    function resetSearchForm() {
+      block();
+      $('#search-form-container').load('/rendersearchform/', "", unblock);
+    }
+
     $('#dr_container').sansa_daterangecontainer();
     $('#id_start_datepicker, #id_end_datepicker').datepicker({
       'autoclose':true
