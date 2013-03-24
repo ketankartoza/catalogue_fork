@@ -5,6 +5,7 @@
 
   {{ block.super }}
   <script type="text/javascript" charset="utf-8" src="/media/js/jquery.form.js"></script>
+  <script type="text/javascript" charset="utf-8" src="/media/js/widget.searchcriteria.js"></script>
 
   <script type="text/javascript">
     $(document).ready(function() {
@@ -13,7 +14,6 @@
 
       $('#map-container').load('/rendersearchmap/');
       $('#myTab  a:first').tab('show');
-      $('#search-results-text').hide();
       $('#search-results').hide();
       $("#cart_tab").load("/showminicartcontents/");
 
@@ -22,6 +22,9 @@
 
       // initialize showMetadata Dialog
       setupMetadataDialog();
+
+      // initialize search criteria display
+      $('#search_criteria_display').searchcriteria();
     });
   </script>
 
@@ -70,7 +73,7 @@
                       </a>
                     </div>
                     <div id="collapsesearch-text" class="accordion-body collapse in">
-                      <div class="accordion-inner">
+                      <div id="search_criteria_display" class="accordion-inner">
                         22 record found for date range 01-01-2002 : 31-12-2002, sensors HRG-5.
                       </div>
                     </div>
@@ -85,7 +88,7 @@
                     <div class="accordion-heading">
                       <div style="position:relative; float:left;">
                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-search-results" href="#collapsesearch-results">
-                          Search results 
+                          Search results
                         </a>
                       </div>
                       <div class="btn-group" style="position:relative; float:left; padding: 4px 5px;">
