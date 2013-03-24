@@ -202,8 +202,8 @@ function setupEditingPanel(theLayer)
       'layer': theLayer
       }
     );
-  mMapControls = [myDrawingControl, myModifyFeatureControl, myDestroyFeaturesControl];
-  mNavigationPanel.addControls(mMapControls);
+  //mMapControls = [myDrawingControl, myModifyFeatureControl, myDestroyFeaturesControl];
+  mNavigationPanel.addControls([myDrawingControl, myModifyFeatureControl, myDestroyFeaturesControl]);
 }
 
 //A little jquery to colour alternate table rows
@@ -302,7 +302,8 @@ function showErrorAddToCart(request) {
     title: 'Error',
     text: request.responseText,
     type: 'error'
-  });unblock();
+  });
+  unblock();
 }
 
 function addToCart( theId )
@@ -579,9 +580,9 @@ function setupSearchMap( theLayers )
   mWKTFormat = new OpenLayers.Format.WKT();
   setupBaseMap();
   mVectorLayer = new OpenLayers.Layer.Vector("search_geometry");
+  setupEditingPanel(mVectorLayer);
   mMap.addLayer(mVectorLayer);
   // Add geometry specific panel of toolbar controls
-  setupEditingPanel(mVectorLayer);
   mMap.addLayers( theLayers );
   addSelectControl();
   // Read WKT from the text field.
@@ -1123,4 +1124,18 @@ function checkForMessages()
       });
     }
   });
+}
+
+function displaySearchFormErrors() {
+  var errors = '';
+  $("[id^='error']").each(function() {
+    //console.log($(this).parent().parent().parent().parent());
+    //errors = errors + '<p onclick="$(\'#' +$(this).attr('id')+'\').parent().parent().parent().parent().collapse(\'show\');">' + $(this).text() + '</p>';
+    errors = errors + '<a data-toggle="collapse" data-parent="#accordion-search2" href="#' + $(this).parent().parent().parent().parent().attr('id') + '" ><i class="icon-edit"></i> ' + $(this).text() + '</a><br />';
+  });
+  $.pnotify({
+    title: 'Error on search form',
+    text: errors,
+    type: 'error',
+});
 }

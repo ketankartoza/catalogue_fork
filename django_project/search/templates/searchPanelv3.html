@@ -177,6 +177,7 @@
         },
         error: function(data) {
           $('#search-form-container').html(data.responseText);
+          displaySearchFormErrors();
           unblock();
         }
       });
