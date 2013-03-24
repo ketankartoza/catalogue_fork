@@ -129,13 +129,18 @@ def addToCart(theRequest, theId):
         else:
             myDict = {'Item': theId, 'Status': 'Added'}
             myResponse = HttpResponse(
-                simplejson.dumps(myDict), mimetype='application/javascript')
+                simplejson.dumps(myDict), mimetype='application/json')
     else:
         logger.info('Adding item %s Cart failed (its a duplicate):' % (
             myGenericProduct.product_id,))
-        myResponse = HttpResponse(
-            'alert("Item already exists in your cart!");',
-            mimetype='application/javascript')
+        if not myAjaxFlag:
+            myResponse = HttpResponse(
+                'alert("Item already exists in your cart!");',
+                mimetype='application/javascript')
+        else:
+            myResponse = HttpResponse(
+                'Item already exists in your cart!',
+                mimetype='application/json', status='480')
     return myResponse
 
 

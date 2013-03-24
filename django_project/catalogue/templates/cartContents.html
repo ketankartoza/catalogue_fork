@@ -65,6 +65,8 @@ $(document).ready(function(){
   {% if myShowDeliveryDetailsFormFlag %}
   $('a.show_form').deliveryDetails();
   {% endif %}
+
+  $('#cart_title').html('Cart (' + {{ myRecords.count }} + ')');
 });
 </script>
 

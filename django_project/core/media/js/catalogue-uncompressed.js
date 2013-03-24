@@ -261,7 +261,7 @@ function prepareFancy()
 */
 }
 
-function showMiniCart()
+function showMiniCart(request)
 {
   /*
   myShowAccordionFlag = true; //true unless specified otherwise by fn args
@@ -289,15 +289,34 @@ function showMiniCart()
     $("#accordion").accordion("activate", 2);
   }
   */
+  $.pnotify({
+    title: 'Success',
+    text: 'Item ' + request.Item + ' successfully added to your cart!',
+    type: 'success'
+  });
   unblock();
+}
+
+function showErrorAddToCart(request) {
+  $.pnotify({
+    title: 'Error',
+    text: request.responseText,
+    type: 'error'
+  });unblock();
 }
 
 function addToCart( theId )
 {
   // Show a wait image before we hit our ajax call
   block();
-  $.get("/addtocart/" + theId + "/?xhr");
-  showMiniCart();
+  //$.get("/addtocart/" + theId + "/?xhr");
+  $.ajax({
+    url: "/addtocart/" + theId + "/?xhr",
+    dataType: "json",
+    success: showMiniCart,
+    error: showErrorAddToCart
+  });
+  //showMiniCart();
   $('#myTab a[href="#cart_tab"]').tab('show');
   // prevent page jumping around on empty hyperlink clicks
   return false;
