@@ -1133,9 +1133,11 @@ function displaySearchFormErrors() {
     //errors = errors + '<p onclick="$(\'#' +$(this).attr('id')+'\').parent().parent().parent().parent().collapse(\'show\');">' + $(this).text() + '</p>';
     errors = errors + '<a data-toggle="collapse" data-parent="#accordion-search2" href="#' + $(this).parent().parent().parent().parent().attr('id') + '" ><i class="icon-edit"></i> ' + $(this).text() + '</a><br />';
   });
-  $.pnotify({
-    title: 'Error on search form',
-    text: errors,
-    type: 'error',
-});
+  if (errors != '') {
+    $.pnotify({
+      title: 'Error on search form',
+      text: errors,
+      type: 'error',
+    });
+  }
 }

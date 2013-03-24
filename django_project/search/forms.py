@@ -254,6 +254,7 @@ class AdvancedSearchForm(forms.ModelForm):
                 ),
                 Fieldset(
                     'Dates',
+                    HTML('<div><div class="control-group error">{% for error in myFormset.non_form_errors %}<p id="error_date" class="help-block"><strong>{{ error }}</strong></p>{% endfor %}</div></div>'),
                     Field('start_datepicker', template='myField.html'),
                     Field('end_datepicker', template='myField.html'),
                     HTML(
