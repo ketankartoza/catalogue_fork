@@ -356,6 +356,7 @@ function removeFromCart(theId, theObject)
   theObject.parent().parent().remove();
   //-1 for the header row
   var myRowCount = $("#cart-contents-table tr").length - 1;
+  $("#cart_title").html( 'Cart (' + myRowCount + ')');
   $("#cart-item-count").html( myRowCount );
   if ((myRowCount < 1) && ($("#id_processing_level").length != 0))
   {
