@@ -500,7 +500,7 @@ def addOrder(theRequest):
         '/cgi-bin/mapserv?map='
         + settings.CART_LAYER +
         '&user='
-        + str(theRequest.user.username) + ''',
+        + str(theRequest.user.username) + '"' + ''',
             {
                version: '1.1.1',
                layers: 'Cart',
