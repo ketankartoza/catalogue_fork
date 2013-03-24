@@ -152,13 +152,13 @@ $.widget( "linfinity.sansa_daterangecontainer", {
         if (theFormat===undefined) {
             theFormat = this.options.dateFormat;
         }
-        return $.datepicker.formatDate(theFormat, theDate);
+        return sansa_dateutils.formatDate(theFormat, theDate);
     },
     _parse_date: function(theDate, theFormat) {
         if (theFormat===undefined) {
             theFormat = this.options.dateFormat;
         }
-        return $.datepicker.parseDate(theFormat, theDate);
+        return sansa_dateutils.parseDate(theFormat, theDate);
     },
     _format_output: function(theStartDate, theEndDate){
         //format date container date output

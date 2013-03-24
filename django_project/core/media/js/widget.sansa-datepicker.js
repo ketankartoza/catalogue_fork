@@ -96,10 +96,10 @@ $.widget( "linfinity.sansa_datepicker", {
     },
 
     _format_date: function(theDate) {
-        return $.datepicker.formatDate(this.options.dateFormat, theDate);
+        return sansa_dateutils.formatDate(this.options.dateFormat, theDate);
     },
     _parse_date: function(theDate) {
-        return $.datepicker.parseDate(this.options.dateFormat, theDate);
+        return sansa_dateutils.parseDate(this.options.dateFormat, theDate);
     },
 
     _get_first_day_of_month:function (year, month) {
