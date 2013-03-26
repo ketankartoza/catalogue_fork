@@ -6,7 +6,11 @@
 {{myForm.media}}
 
 <script>
-
+    $('#id_collection').multiselect();
+    $('#id_satellite').multiselect();
+    $('#id_instrumenttype').multiselect();
+    $('#id_spectral_group').multiselect();
+    $('#id_license_type').multiselect();
     function createOptions(theOptions, theSelectedOptions, addEmpty){
       // add empty options, default true
       addEmpty = addEmpty !== undefined ? addEmpty : false;

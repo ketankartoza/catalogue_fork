@@ -217,7 +217,7 @@ class AdvancedSearchForm(forms.ModelForm):
                     'Satellite',
                     HTML(
                         '<div id="reset_dict_selections" '
-                        'class="btn btn-info">Reset selection</div>'
+                        'class="btn btn-info btn-small">Reset selection</div>'
                     ),
                     Field('collection', template='myField.html'),
                     Field('satellite', template='myField.html'),
