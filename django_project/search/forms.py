@@ -124,7 +124,11 @@ class AdvancedSearchForm(forms.ModelForm):
         required=False, label='Start date', input_formats=DATE_FORMATS,
         error_messages={
             'required': 'Entering a start date for your search is required.'},
-        help_text='Start date is required. DD-MM-YYYY.')
+        help_text='Start date is required. DD-MM-YYYY.',
+        initial=datetime.date(
+            day=datetime.date.today().day,
+            month=datetime.date.today().month - 1,
+            year=datetime.date.today().year))
     end_datepicker = forms.DateField(
         widget=DateTimeWidget(
             attrs={
@@ -133,7 +137,8 @@ class AdvancedSearchForm(forms.ModelForm):
         required=False, label='End date', input_formats=DATE_FORMATS,
         error_messages={
             'required': 'Entering an end date for your search is required.'},
-        help_text='End date is required. DD-MM-YYYY.')
+        help_text='End date is required. DD-MM-YYYY.',
+        initial=datetime.date.today)
     geometry = forms.CharField(
         widget=forms.HiddenInput(), required=False,
         help_text=(
@@ -254,16 +259,22 @@ class AdvancedSearchForm(forms.ModelForm):
                 ),
                 Fieldset(
                     'Dates',
-                    HTML('<div><div class="control-group error">{% for error in myFormset.non_form_errors %}<p id="error_date" class="help-block"><strong>{{ error }}</strong></p>{% endfor %}</div></div>'),
+                    HTML(
+                        '<div><div class="control-group error">{% for error i'
+                        'n myFormset.non_form_errors %}<p id="error_date" cla'
+                        'ss="help-block"><strong>{{ error }}</strong></p>{% e'
+                        'ndfor %}</div></div>'),
                     Field('start_datepicker', template='myField.html'),
                     Field('end_datepicker', template='myField.html'),
                     HTML(
                         '<div class="btn-group" style="margin-left: 50px;">'
-                        '<a class="btn btn-info btn-small" id="dr_add" title="Select the dates in the calend'
+                        '<a class="btn btn-info btn-small" id="dr_add" title'
+                        '="Select the dates in the calend'
                         'ar and click here to add to the list." href="javascri'
                         'pt:void(0)"><i class="icon-arrow-down"></i></a>'),
                     HTML(
-                        '<a class="btn btn-info btn-small" id="dr_del" title="Select the ranges in the list '
+                        '<a class="btn btn-info btn-small" id="dr_del" title'
+                        '="Select the ranges in the list '
                         'and click here to remove." href="javascript:void(0)">'
                         '<i class="icon-arrow-up"></i></a>'
                         '</div>'),
