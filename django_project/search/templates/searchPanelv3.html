@@ -187,6 +187,7 @@
       block();
       $('#search_form').ajaxForm({
         success: function(data) {
+          search_guid = data.guid;
           loadSearchResults( 1, data.guid );
         },
         error: function(data) {

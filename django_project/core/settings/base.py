@@ -4,6 +4,7 @@ from os.path import join, abspath, dirname
 
 LOCAL_PATH = lambda *x: join(abspath(dirname(__file__)), *x)
 PROJECT_ROOT = LOCAL_PATH("..", "..")
+print PROJECT_ROOT
 ABS_PATH = lambda *x: join(abspath(PROJECT_ROOT), *x)
 
 SERVER_EMAIL = 'error@catalogue.sansa.org.za'
