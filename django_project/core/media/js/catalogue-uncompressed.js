@@ -888,7 +888,10 @@ function hightlightRecord( theRecordId, theZoomFlag )
   mLastSelectedRecordId = theRecordId;
   $("#record-"+ theRecordId + " td" ).css("font-weight", "bold");
   // use ajax to load the thumb preview and then call the prepareFancy callback
-  $("#preview-accordion-div").load("/showpreview/" + theRecordId + "/medium/","",prepareFancy);
+  //$("#preview-accordion-div").load("/showpreview/" + theRecordId + "/medium/","",prepareFancy);
+  $("#preview_tab").load("/showpreview/" + theRecordId + "/medium/");
+  $('#modalContainer').load("/thumbnailpage/" + theRecordId + "/");
+  $('#myTab a[href="#preview_tab"]').tab('show');
   resetSceneZIndices();
   var myLayer = getLayerByName("scenes");
   var myIndex = getFeatureIndexByRecordId( theRecordId );
@@ -899,7 +902,6 @@ function hightlightRecord( theRecordId, theZoomFlag )
     mMap.zoomToExtent(myLayer.features[myIndex].geometry.bounds);
   }
   myLayer.redraw();
-  $('#modalContainer').load("/thumbnailpage/" + theRecordId + "/");
 }
 
 /* Setup a callback so that when a mini preview icon is
@@ -907,11 +909,11 @@ function hightlightRecord( theRecordId, theZoomFlag )
  * and loaded in the preview accordion panel. */
 function setupMiniIconClickCallback()
 {
-  $('.mini-icon').live('click', (function () {
+  $('#main-content').on('click', '.mini-icon', function () {
     //$(this).css("border", "1px").css("border-color","red");
     var myRecordId = $(this).attr('longdesc');
     hightlightRecord(myRecordId, true);
-  }));
+  });
 }
 
 /* Setup a callback so that when a search result table row is

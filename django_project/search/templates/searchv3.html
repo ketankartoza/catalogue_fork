@@ -23,6 +23,9 @@
       // initialize showMetadata Dialog
       setupMetadataDialog();
 
+      // initialize show preview on cart
+      setupMiniIconClickCallback();
+
       // initialize search criteria display
       $('#search_criteria_display').searchcriteria();
     });
@@ -38,6 +41,7 @@
             <ul class="nav nav-tabs" id="myTab">
               <li class="active"><a href="#search_tab" data-toggle="tab">Search</a></li>
               <li><a id="cart_title" href="#cart_tab" data-toggle="tab">Cart (0)</a></li>
+              <li><a id="preview" href="#preview_tab" data-toggle="tab">Preview</a></li>
             </ul>
             <div class="tab-content">
               <div id="search_tab" class="tab-pane active">
@@ -54,7 +58,8 @@
                 </div>
               </div>
               <div id="cart_tab" class="tab-pane">
-                Cart
+              </div>
+              <div id="preview_tab" class="tab-pane">
               </div>
             </div>
         </div>
