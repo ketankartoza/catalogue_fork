@@ -58,7 +58,7 @@
         <a href="#"><i class="icon-wrench"></i> <span class="hidden-phone hidden-tablet">Tasking Requests</span></a>
       </li>
       <li>
-        <a href="{% url 'showCartContents' %}" onclick='loadContent("{% url 'showCartContents' %}"); return false;'><i class="icon-shopping-cart"></i> <span class="hidden-phone hidden-tablet custom-hide">My Cart</span></a>
+        <a href="{% url 'showCartContents' %}"><i class="icon-shopping-cart"></i> <span class="hidden-phone hidden-tablet custom-hide">My Cart</span></a>
       </li>
       <li>
         <a href="{% url 'addOrder' %}"><i class="icon-plane"></i> <span class="hidden-phone hidden-tablet">Order Now!</span></a>
@@ -69,19 +69,19 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-thumbs-up"></i> <span class="hidden-phone hidden-tablet">Popular Links</span><b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li>
-            <a href="{% url 'mapHelp' %}" onclick='loadContent("{% url 'mapHelp' %}"); return false;'>Using the map</a>
+            <a href="{% url 'mapHelp' %}">Using the map</a>
           </li>
           <li>
-            <a href="{% url 'searchHistory' %}" onclick='loadContent("{% url 'searchHistory' %}"); return false;'>My Search History</a>
+            <a href="{% url 'searchHistory' %}">My Search History</a>
           </li>
           <li>
-            <a href="{% url 'myOrders' %}" onclick='loadContent("{% url 'myOrders' %}"); return false;'>My Orders</a>
+            <a href="{% url 'myOrders' %}">My Orders</a>
           </li>
           <li>
             <a href="{% url 'addTaskingRequest' %}">New Tasking Request</a>
           </li>
           <li>
-            <a href="{% url 'myTaskingRequests' %}" onclick='loadContent("{% url 'myTaskingRequests' %}"); return false;'>My Tasking Requests</a>
+            <a href="{% url 'myTaskingRequests' %}">My Tasking Requests</a>
           </li>
           <li><a href="{% url 'whereAmI' %}">Where am I?</a></li>
         </ul>
@@ -110,13 +110,13 @@
         <ul class="dropdown-menu">
           <li><a href="{% url 'visitorMap' %}">Vistor Map</a></li>
           <li><a href="{% url 'visitorsKml' %}">Visitor KML</a></li>
-          <li><a href="{% url 'visitorList' %}" onclick='loadContent("{% url 'visitorList' %}"); return false;'>Visitor List</a>
+          <li><a href="{% url 'visitorList' %}">Visitor List</a>
           </li>
           <li><a href="{% url 'visitorReport' %}">Visitor Stats</a></li>
           <li><a href="{% url 'searchesMap' %}">Searches Map</a></li>
-          <li><a href="{% url 'recentSearches' %}" onclick='loadContent("{% url 'recentSearches' %}"); return false;'>Searches Table</a>
+          <li><a href="{% url 'recentSearches' %}">Searches Table</a>
           </li>
-          <li><a href="{% url 'listOrders' %}" onclick='loadContent("{% url 'listOrders' %}"); return false;'>Orders List</a>
+          <li><a href="{% url 'listOrders' %}">Orders List</a>
           </li>
           <li><a href="{% url 'dataSummaryTable' %}">Data Summary</a></li>
           <li><a href="/admin/">Admin</a></li>
