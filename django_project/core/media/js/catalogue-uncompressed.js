@@ -836,6 +836,14 @@ function setupMetadataDialog( )
   });
 }
 
+function setupPreviewDialogCart( )
+{
+  $('#main-content').on('click','.mini-icon', function () {
+    var myRecordId = $(this).attr('longdesc');
+    $('#modalContainer').load("/thumbnailpage/" + myRecordId + "/");
+    $('#myModal').modal('show');
+  });
+}
 
 /* Mark all scenes as selected no and
  * give them all an equal zIndex.
@@ -962,6 +970,7 @@ function loadContent( theUrl )
   block();
   $("#content").load( theUrl ,"",unblock);
 }
+
 function loadSummaryTable(theId)
 {
   block();
