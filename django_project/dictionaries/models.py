@@ -371,6 +371,23 @@ class SatelliteInstrumentGroup(models.Model):
             self.instrument_type.operator_abbreviation
         )
 
+    def products_per_year(self):
+        myStats = executeRAWSQL("""
+SELECT count(*) as count, extract(YEAR from gp.product_date)::int as year
+FROM
+  catalogue_genericproduct gp, catalogue_genericimageryproduct gip,
+  catalogue_genericsensorproduct gsp, catalogue_opticalproduct op,
+  dictionaries_opticalproductprofile opp, dictionaries_satelliteinstrument si
+WHERE
+  gip.genericproduct_ptr_id = gp.id AND
+  gsp.genericimageryproduct_ptr_id = gip.genericproduct_ptr_id AND
+  op.genericsensorproduct_ptr_id = gsp.genericimageryproduct_ptr_id AND
+  opp.id = op.product_profile_id AND opp.satellite_instrument_id = si.id
+  AND si.satellite_instrument_group_id=%(sensor_pk)s
+GROUP BY extract(YEAR from gp.product_date)
+ORDER BY year ASC;""", {'sensor_pk': self.pk})
+        return myStats
+
 
 class SatelliteInstrument(models.Model):
     """Satellite instrument - a specific instrument as deployed on a satellite.
@@ -391,24 +408,6 @@ class SatelliteInstrument(models.Model):
     def __unicode__(self):
         """Return 'operator_abbreviation' as model representation."""
         return u'{0} (si={1})'.format(self.operator_abbreviation, self.id)
-
-    def products_per_year(self):
-
-        myStats = executeRAWSQL("""
-SELECT count(*) as count, extract(YEAR from gp.product_date)::int as year
-FROM
-  catalogue_genericproduct gp, catalogue_genericimageryproduct gip,
-  catalogue_genericsensorproduct gsp, catalogue_opticalproduct op,
-  dictionaries_opticalproductprofile opp
-WHERE
-  gip.genericproduct_ptr_id = gp.id AND
-  gsp.genericimageryproduct_ptr_id = gip.genericproduct_ptr_id AND
-  op.genericsensorproduct_ptr_id = gsp.genericimageryproduct_ptr_id AND
-  opp.id = op.product_profile_id
-  AND opp.satellite_instrument_id=%(sensor_pk)s
-GROUP BY extract(YEAR from gp.product_date)
-ORDER BY year ASC;""", {'sensor_pk': self.pk})
-        return myStats
 
 
 class Band(models.Model):
