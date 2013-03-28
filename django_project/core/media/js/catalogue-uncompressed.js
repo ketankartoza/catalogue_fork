@@ -823,17 +823,17 @@ function setupMapHelpDialog()
  * @note also used from withing image preview panel */
 function showMetadata( theRecordId )
 {
-    console.log('FIX ME!');
+    //console.log('FIX ME!');
     $('#modalContainer').load("/metadata/" + theRecordId + "/");
     $('#myModal').modal('show');
 }
 
 function setupMetadataDialog( )
 {
-  $('#search-results-container').delegate('.metadata-icon', 'click', (function () {
+  $('#main-content').on('click','.metadata-icon', function () {
     var myRecordId = $(this).attr('longdesc');
     showMetadata(myRecordId);
-  }));
+  });
 }
 
 
