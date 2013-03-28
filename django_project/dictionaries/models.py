@@ -353,8 +353,27 @@ class ImagingMode(models.Model):
         return u'{0} ({1})'.format(self.name, self.polarization)
 
 
+class SatelliteInstrumentGroup(models.Model):
+    """Satellite instrument group - an instrument as deployed on a satellite.
+    """
+    satellite = models.ForeignKey('Satellite')
+    instrument_type = models.ForeignKey('InstrumentType')
+
+    class Meta:
+        unique_together = (
+            'satellite',
+            'instrument_type'
+        )
+
+    def __unicode__(self):
+        return u'{0} - {1}'.format(
+            self.satellite.operator_abbreviation,
+            self.instrument_type.operator_abbreviation
+        )
+
+
 class SatelliteInstrument(models.Model):
-    """Satellite instrument - an instrument as deployed on a satellite.
+    """Satellite instrument - a specific instrument as deployed on a satellite.
     Note that there may be more than one instrument of the same type per
     satellite e.g. SPOT 5 HRG (camera 1 and 2).
     """
@@ -367,13 +386,7 @@ class SatelliteInstrument(models.Model):
     operator_abbreviation = models.CharField(
         max_length=255, unique=True,
         help_text='Satellite abbreviation as named by operator.')
-    satellite = models.ForeignKey(Satellite)
-    instrument_type = models.ForeignKey(InstrumentType)
-
-    class Meta:
-        unique_together = ('operator_abbreviation',
-                           'satellite',
-                           'instrument_type')
+    satellite_instrument_group = models.ForeignKey('SatelliteInstrumentGroup')
 
     def __unicode__(self):
         """Return 'operator_abbreviation' as model representation."""
@@ -394,7 +407,7 @@ WHERE
   opp.id = op.product_profile_id
   AND opp.satellite_instrument_id=%(sensor_pk)s
 GROUP BY extract(YEAR from gp.product_date)
-ORDER BY year ASC;""", {'sensor_pk':self.pk})
+ORDER BY year ASC;""", {'sensor_pk': self.pk})
         return myStats
 
 

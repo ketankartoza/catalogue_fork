@@ -275,8 +275,9 @@ class TaskingRequest(Order):
             'When the image should be acquired (as close as possible '
             'to this date).')
     )
-    satellite = models.ForeignKey('dictionaries.Satellite')
-    instrument_type = models.ForeignKey('dictionaries.InstrumentType')
+    satellite_instrument_group = models.ForeignKey(
+        'dictionaries.SatelliteInstrumentGroup')
+
     objects = models.GeoManager()
 
     class Meta:

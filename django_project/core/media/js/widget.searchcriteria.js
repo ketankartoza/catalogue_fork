@@ -250,7 +250,6 @@ $.widget("linfinity.searchcriteria", {
     },
 
     _render_string: function () {
-        console.log('kok');
         this.element.html(_.template(this._template, {
             'collections_text': this.collections_text,
             'satellite_text': this.satellite_text,

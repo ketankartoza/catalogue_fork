@@ -27,6 +27,7 @@ from .models import (
     InstrumentType,
     RadarBeam,
     ImagingMode,
+    SatelliteInstrumentGroup,
     SatelliteInstrument,
     Band,
     SpectralGroup,
@@ -83,6 +84,11 @@ admin.site.register(ImagingMode, ImagingModeAdmin)
 class SatelliteInstrumentAdmin(admin.ModelAdmin):
     pass
 admin.site.register(SatelliteInstrument, SatelliteInstrumentAdmin)
+
+
+class SatelliteInstrumentGroupAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(SatelliteInstrumentGroup, SatelliteInstrumentGroupAdmin)
 
 
 class BandAdmin(admin.ModelAdmin):
