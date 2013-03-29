@@ -124,11 +124,8 @@ class AdvancedSearchForm(forms.ModelForm):
         required=False, label='Start date', input_formats=DATE_FORMATS,
         error_messages={
             'required': 'Entering a start date for your search is required.'},
-        help_text='Start date is required. DD-MM-YYYY.',
-        initial=datetime.date(
-            day=datetime.date.today().day,
-            month=datetime.date.today().month - 1,
-            year=datetime.date.today().year))
+        help_text='Start date is required. DD-MM-YYYY.')
+
     end_datepicker = forms.DateField(
         widget=DateTimeWidget(
             attrs={
@@ -314,6 +311,7 @@ class AdvancedSearchForm(forms.ModelForm):
             ),
             'geometry'
         )
+
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
         if self.instance.pk is not None:
             myCollectionSet = self.instance.collection.all().values_list('id')
@@ -344,6 +342,12 @@ class AdvancedSearchForm(forms.ModelForm):
             if (not 'title' in myField.widget.attrs or
                     myField.widget.attrs['title'] == ''):
                 myField.widget.attrs['title'] = myField.help_text
+
+        # calculate initial search_date (today - 1 month)
+        # we use a constant -> 1 month = 31 days
+        myPrevoiusMonthDate = (
+            datetime.date.today() - datetime.timedelta(days=31))
+        self.fields['start_datepicker'].initial = myPrevoiusMonthDate
 
     def clean_guid(self):
         """Custom validator for guid"""
