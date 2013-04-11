@@ -34,22 +34,22 @@ class OpticalProductProfileQuerySet(QuerySet):
 
     def for_licence_type(self, theLicenceType):
         return self.filter(
-            satellite_instrument__satellite__license_type__in=
+            satellite_instrument__satellite_instrument_group__satellite__license_type__in=
             theLicenceType.all())
 
     def for_collection(self, theCollection):
         return self.filter(
-            satellite_instrument__satellite__collection__in=
+            satellite_instrument__satellite_instrument_group__satellite__collection__in=
             theCollection.all()
         )
 
     def for_instrumenttypes(self, theInstrumentTypes):
         return self.filter(
-            satellite_instrument__instrument_type__in=theInstrumentTypes.all())
+            satellite_instrument__satellite_instrument_group__instrument_type__in=theInstrumentTypes.all())
 
     def for_satellite(self, theSatellite):
         return self.filter(
-            satellite_instrument__satellite__in=theSatellite.all())
+            satellite_instrument__satellite_instrument_group__satellite__in=theSatellite.all())
 
     def for_spectralgroup(self, theSpectralgroup):
         return self.filter(
