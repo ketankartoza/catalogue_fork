@@ -49,7 +49,7 @@ def _all():
             # where to check the repo out to
             env.webdir = '/home/web'
             # repo uri
-            env.git_url = 'git@github.com:timlinux/%s.git' % PROJECT_NAME
+            env.git_url = 'https://github.com/timlinux/%s.git' % PROJECT_NAME
             # checkout name for repo
             env.repo_alias = PROJECT_NAME
             # user wsgi should run as (will be created if needed)
@@ -265,27 +265,6 @@ def update_git_checkout(branch='master'):
         wsgi_file = 'django_project/core/wsgi.py'
         run('touch %s' % wsgi_file)
 
-
-def install_server():
-    """Ensure that the target system has a usable apache etc. installation.
-
-    Args:
-        None
-
-    Returns:
-        None
-
-    Raises:
-        None
-    """
-
-    #### NOTE THIS IS INCOMPLETE STILL ####
-
-    clone = run('which pdflatex')
-    if '' == clone:
-        run('sudo apt-get install git cgi-mapserver texlive-latex-extra'
-                'python-sphinx texinfo dvi2png')
-
 ###############################################################################
 # Next section contains actual tasks
 ###############################################################################
@@ -321,47 +300,6 @@ def deploy(branch='master'):
     fabgis.setup_postgis()
     setup_website()
     setup_mapserver()
-
-
-def build_documentation(branch='master'):
-    """Create a pdf and html doc tree and publish them online.
-
-    Args:
-        branch: str - a string representing the name of the branch to build
-            from. Defaults to 'master'.
-
-    To run e.g.::
-
-        fab -H 188.40.123.80:8697 remote build_documentation
-
-    or to package up a specific branch (in this case minimum_needs)
-
-        fab -H 88.198.36.154:8697 remote build_documentation:version-1_1
-
-    or if you have configured env.hosts, simply
-
-        fab remote build_documentation
-
-    .. note:: Using the branch option will not work for branches older than 1.1
-    """
-
-    ### Still needs to be tested ###
-
-    update_git_checkout(branch)
-    install_server()
-
-    dir_name = os.path.join(env.webdir, env.repo_alias, 'docs')
-    with cd(dir_name):
-        # build the tex file
-        run('make latex')
-
-    dir_name = os.path.join(env.webdir, env.repo_alias,
-                            'docs', 'build', 'latex')
-    with cd(dir_name):
-        # Now compile it to pdf
-        run('pdflatex -interaction=nonstopmode %s.tex' % env.repo_alias)
-        # run 2x to ensure indices are generated?
-        run('pdflatex -interaction=nonstopmode %s.tex' % env.repo_alias)
 
 
 def show_environment():
