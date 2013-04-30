@@ -201,6 +201,9 @@ class Searcher:
                 self.mSearch.geometry.envelope.extent
             )
 
+        # we could use select_related here, however we also need to test this
+        # self.mQuerySet = self.mQuerySet.select_related()
+
         # Updates self.mSearch with the new object count
         myRecordCount = self.mQuerySet.count()
         logger.debug('Total records found: %s', myRecordCount)

@@ -93,15 +93,20 @@ CREATE TABLE "dictionaries_imagingmode" (
 )
 ;
 ALTER TABLE "dictionaries_radarproductprofile" ADD CONSTRAINT "imaging_mode_id_refs_id_394aa8f8" FOREIGN KEY ("imaging_mode_id") REFERENCES "dictionaries_imagingmode" ("id") DEFERRABLE INITIALLY DEFERRED;
+CREATE TABLE "dictionaries_satelliteinstrumentgroup" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "satellite_id" integer NOT NULL REFERENCES "dictionaries_satellite" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "instrument_type_id" integer NOT NULL REFERENCES "dictionaries_instrumenttype" ("id") DEFERRABLE INITIALLY DEFERRED,
+    UNIQUE ("satellite_id", "instrument_type_id")
+)
+;
 CREATE TABLE "dictionaries_satelliteinstrument" (
     "id" serial NOT NULL PRIMARY KEY,
     "name" varchar(255) NOT NULL UNIQUE,
     "description" text NOT NULL,
     "abbreviation" varchar(20) NOT NULL UNIQUE,
     "operator_abbreviation" varchar(255) NOT NULL UNIQUE,
-    "satellite_id" integer NOT NULL REFERENCES "dictionaries_satellite" ("id") DEFERRABLE INITIALLY DEFERRED,
-    "instrument_type_id" integer NOT NULL REFERENCES "dictionaries_instrumenttype" ("id") DEFERRABLE INITIALLY DEFERRED,
-    UNIQUE ("operator_abbreviation", "satellite_id", "instrument_type_id")
+    "satellite_instrument_group_id" integer NOT NULL REFERENCES "dictionaries_satelliteinstrumentgroup" ("id") DEFERRABLE INITIALLY DEFERRED
 )
 ;
 ALTER TABLE "dictionaries_opticalproductprofile" ADD CONSTRAINT "satellite_instrument_id_refs_id_908e1651" FOREIGN KEY ("satellite_instrument_id") REFERENCES "dictionaries_satelliteinstrument" ("id") DEFERRABLE INITIALLY DEFERRED;
@@ -186,8 +191,9 @@ CREATE INDEX "dictionaries_instrumenttype_scanner_type_id" ON "dictionaries_inst
 CREATE INDEX "dictionaries_instrumenttype_base_processing_level_id" ON "dictionaries_instrumenttype" ("base_processing_level_id");
 CREATE INDEX "dictionaries_instrumenttype_reference_system_id" ON "dictionaries_instrumenttype" ("reference_system_id");
 CREATE INDEX "dictionaries_imagingmode_radarbeam_id" ON "dictionaries_imagingmode" ("radarbeam_id");
-CREATE INDEX "dictionaries_satelliteinstrument_satellite_id" ON "dictionaries_satelliteinstrument" ("satellite_id");
-CREATE INDEX "dictionaries_satelliteinstrument_instrument_type_id" ON "dictionaries_satelliteinstrument" ("instrument_type_id");
+CREATE INDEX "dictionaries_satelliteinstrumentgroup_satellite_id" ON "dictionaries_satelliteinstrumentgroup" ("satellite_id");
+CREATE INDEX "dictionaries_satelliteinstrumentgroup_instrument_type_id" ON "dictionaries_satelliteinstrumentgroup" ("instrument_type_id");
+CREATE INDEX "dictionaries_satelliteinstrument_satellite_instrument_group_id" ON "dictionaries_satelliteinstrument" ("satellite_instrument_group_id");
 CREATE INDEX "dictionaries_band_instrument_type_id" ON "dictionaries_band" ("instrument_type_id");
 CREATE INDEX "dictionaries_spectralmode_instrument_type_id" ON "dictionaries_spectralmode" ("instrument_type_id");
 CREATE INDEX "dictionaries_spectralmode_spectralgroup_id" ON "dictionaries_spectralmode" ("spectralgroup_id");

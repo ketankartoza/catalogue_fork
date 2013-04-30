@@ -6,7 +6,21 @@
 {{myForm.media}}
 
 <script>
-
+    $('#id_collection').multiselect({
+            buttonClass: 'btn btn-small'
+        });
+    $('#id_satellite').multiselect({
+            buttonClass: 'btn btn-small'
+        });
+    $('#id_instrumenttype').multiselect({
+            buttonClass: 'btn btn-small'
+        });
+    $('#id_spectral_group').multiselect({
+            buttonClass: 'btn btn-small'
+        });
+    $('#id_license_type').multiselect({
+            buttonClass: 'btn btn-small'
+        });
     function createOptions(theOptions, theSelectedOptions, addEmpty){
       // add empty options, default true
       addEmpty = addEmpty !== undefined ? addEmpty : false;
@@ -173,6 +187,7 @@
       block();
       $('#search_form').ajaxForm({
         success: function(data) {
+          search_guid = data.guid;
           loadSearchResults( 1, data.guid );
         },
         error: function(data) {

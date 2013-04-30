@@ -35,8 +35,8 @@ class Command(BaseCommand):
             help=(
                 'Selectively migrate parts of the database, semicolon ";" '
                 'delimited list of migrations (new_dicts, userprofiles, '
-                'search, processing_levels, unique_product_id, pycsw) defaults'
-                ' to "all"')),
+                'search, processing_levels, unique_product_id, pycsw, cleanup)'
+                'defaults to "all"')),
     )
 
     def handle(self, *args, **options):
@@ -50,6 +50,7 @@ class Command(BaseCommand):
             self.migrate_proc_levels()
             self.migrate_unique_product_ids()
             self.migrate_pycsw()
+            self.migrate_cleanup()
 
         if 'new_dicts' in myMigrations:
             self.migrate_new_dicts()
@@ -68,6 +69,9 @@ class Command(BaseCommand):
 
         if 'unique_product_id' in myMigrations:
             self.migrate_unique_product_ids()
+
+        if 'cleanup':
+            self.migrate_cleanup()
 
     def migrate_new_dicts(self):
         print '* Starting new_dicts migration...'
@@ -124,4 +128,12 @@ class Command(BaseCommand):
         os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '015_unique_product_id.sh', self.db])
+        os.chdir(origWD)
+
+    def migrate_cleanup(self):
+        print '* Starting general cleanup migration...'
+        origWD = os.getcwd()
+        os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
+        print '* Executing database migration scripts...'
+        subprocess.call(['sh', '999_cleanup.sh', self.db])
         os.chdir(origWD)

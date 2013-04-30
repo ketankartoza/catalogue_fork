@@ -41,7 +41,7 @@ from search.models import (
     Clip,
 )
 
-from dictionaries.models import InstrumentType, Satellite
+from dictionaries.models import SatelliteInstrumentGroup
 
 # Support dmy formats (see
 #    http://dantallis.blogspot.com/2008/11/date-validation-in-django.html )
@@ -170,12 +170,9 @@ class TaskingRequestForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TaskingRequestForm, self).__init__(*args, **kwargs)
-        self.fields['instrument_type'].queryset = (
-            InstrumentType.objects.filter(is_taskable=True))
-        self.fields['satellite'].queryset = (
-            Satellite.objects.filter(
-                satelliteinstrument__instrument_type__is_taskable=True)
-            .distinct()
+        self.fields['satellite_instrument_group'].queryset = (
+            SatelliteInstrumentGroup.objects.filter(
+                instrument_type__is_taskable=True)
         )
 
 

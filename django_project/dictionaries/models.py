@@ -34,22 +34,22 @@ class OpticalProductProfileQuerySet(QuerySet):
 
     def for_licence_type(self, theLicenceType):
         return self.filter(
-            satellite_instrument__satellite__license_type__in=
+            satellite_instrument__satellite_instrument_group__satellite__license_type__in=
             theLicenceType.all())
 
     def for_collection(self, theCollection):
         return self.filter(
-            satellite_instrument__satellite__collection__in=
+            satellite_instrument__satellite_instrument_group__satellite__collection__in=
             theCollection.all()
         )
 
     def for_instrumenttypes(self, theInstrumentTypes):
         return self.filter(
-            satellite_instrument__instrument_type__in=theInstrumentTypes.all())
+            satellite_instrument__satellite_instrument_group__instrument_type__in=theInstrumentTypes.all())
 
     def for_satellite(self, theSatellite):
         return self.filter(
-            satellite_instrument__satellite__in=theSatellite.all())
+            satellite_instrument__satellite_instrument_group__satellite__in=theSatellite.all())
 
     def for_spectralgroup(self, theSpectralgroup):
         return self.filter(
@@ -353,8 +353,44 @@ class ImagingMode(models.Model):
         return u'{0} ({1})'.format(self.name, self.polarization)
 
 
+class SatelliteInstrumentGroup(models.Model):
+    """Satellite instrument group - an instrument as deployed on a satellite.
+    """
+    satellite = models.ForeignKey('Satellite')
+    instrument_type = models.ForeignKey('InstrumentType')
+
+    class Meta:
+        unique_together = (
+            'satellite',
+            'instrument_type'
+        )
+
+    def __unicode__(self):
+        return u'{0} - {1}'.format(
+            self.satellite.operator_abbreviation,
+            self.instrument_type.operator_abbreviation
+        )
+
+    def products_per_year(self):
+        myStats = executeRAWSQL("""
+SELECT count(*) as count, extract(YEAR from gp.product_date)::int as year
+FROM
+  catalogue_genericproduct gp, catalogue_genericimageryproduct gip,
+  catalogue_genericsensorproduct gsp, catalogue_opticalproduct op,
+  dictionaries_opticalproductprofile opp, dictionaries_satelliteinstrument si
+WHERE
+  gip.genericproduct_ptr_id = gp.id AND
+  gsp.genericimageryproduct_ptr_id = gip.genericproduct_ptr_id AND
+  op.genericsensorproduct_ptr_id = gsp.genericimageryproduct_ptr_id AND
+  opp.id = op.product_profile_id AND opp.satellite_instrument_id = si.id
+  AND si.satellite_instrument_group_id=%(sensor_pk)s
+GROUP BY extract(YEAR from gp.product_date)
+ORDER BY year ASC;""", {'sensor_pk': self.pk})
+        return myStats
+
+
 class SatelliteInstrument(models.Model):
-    """Satellite instrument - an instrument as deployed on a satellite.
+    """Satellite instrument - a specific instrument as deployed on a satellite.
     Note that there may be more than one instrument of the same type per
     satellite e.g. SPOT 5 HRG (camera 1 and 2).
     """
@@ -367,35 +403,11 @@ class SatelliteInstrument(models.Model):
     operator_abbreviation = models.CharField(
         max_length=255, unique=True,
         help_text='Satellite abbreviation as named by operator.')
-    satellite = models.ForeignKey(Satellite)
-    instrument_type = models.ForeignKey(InstrumentType)
-
-    class Meta:
-        unique_together = ('operator_abbreviation',
-                           'satellite',
-                           'instrument_type')
+    satellite_instrument_group = models.ForeignKey('SatelliteInstrumentGroup')
 
     def __unicode__(self):
         """Return 'operator_abbreviation' as model representation."""
         return u'{0} (si={1})'.format(self.operator_abbreviation, self.id)
-
-    def products_per_year(self):
-
-        myStats = executeRAWSQL("""
-SELECT count(*) as count, extract(YEAR from gp.product_date)::int as year
-FROM
-  catalogue_genericproduct gp, catalogue_genericimageryproduct gip,
-  catalogue_genericsensorproduct gsp, catalogue_opticalproduct op,
-  dictionaries_opticalproductprofile opp
-WHERE
-  gip.genericproduct_ptr_id = gp.id AND
-  gsp.genericimageryproduct_ptr_id = gip.genericproduct_ptr_id AND
-  op.genericsensorproduct_ptr_id = gsp.genericimageryproduct_ptr_id AND
-  opp.id = op.product_profile_id
-  AND opp.satellite_instrument_id=%(sensor_pk)s
-GROUP BY extract(YEAR from gp.product_date)
-ORDER BY year ASC;""", {'sensor_pk':self.pk})
-        return myStats
 
 
 class Band(models.Model):

@@ -55,7 +55,7 @@ from search.models import (
     SearchRecord,
 )
 
-from dictionaries.models import SatelliteInstrument
+from dictionaries.models import SatelliteInstrumentGroup
 
 
 # in case you need to slice ResultSet (paginate) for display
@@ -222,10 +222,10 @@ def dataSummaryTable(theRequest):
     Summary of available records
     """
     myResultSet = (
-        SatelliteInstrument.objects
+        SatelliteInstrumentGroup.objects
         .annotate(id__count=Count(
-            'opticalproductprofile__opticalproduct'))
-        .order_by('name'))
+            'satelliteinstrument__opticalproductprofile__opticalproduct'))
+        .order_by('satellite__name'))
 
     myTotal = 0
     for myResult in myResultSet:
@@ -244,17 +244,17 @@ def sensorSummaryTable(theRequest, theSensorId):
     # Note: don't use len() to count recs - its very inefficient
     #       use count() rather
     #
-    mySensor = get_object_or_404(SatelliteInstrument, id=theSensorId)
+    mySensor = get_object_or_404(SatelliteInstrumentGroup, id=theSensorId)
     myTaskingSensorCount = TaskingRequest.objects.filter(
-        satellite__satelliteinstrument=mySensor).count()
+        satellite_instrument_group=mySensor).count()
     myTaskingTotalCount = TaskingRequest.objects.count()
     mySearchCount = Search.objects.all().count()
     mySearchForSensorCount = Search.objects.filter(
-        satellite__satelliteinstrument=mySensor).count()
+        satellite__satelliteinstrumentgroup=mySensor).count()
     myProductForSensorCount = None
 
     myProductForSensorCount = OpticalProduct.objects.filter(
-        product_profile__satellite_instrument=mySensor).count()
+        product_profile__satellite_instrument__satellite_instrument_group=mySensor).count()
     myProductTotalCount = GenericSensorProduct.objects.count()
 
     myRecords = SearchRecord.objects.filter(
@@ -263,7 +263,7 @@ def sensorSummaryTable(theRequest, theSensorId):
     myProductOrdersForSensorCount = (
         SearchRecord.objects.filter(user__isnull=False)
         .filter(order__isnull=False)
-        .filter(product__genericimageryproduct__genericsensorproduct__opticalproduct__product_profile__satellite_instrument__exact=mySensor)
+        .filter(product__genericimageryproduct__genericsensorproduct__opticalproduct__product_profile__satellite_instrument__satellite_instrument_group__exact=mySensor)
         .count())
 
     myResults = SortedDict()
@@ -306,6 +306,9 @@ def dictionaryReport(theRequest):
     proc level too
     """
 
-    myReport = SatelliteInstrument.objects.all().select_related()
+    myReport = (
+        SatelliteInstrumentGroup.objects.all().select_related()
+        .order_by('satellite__name')
+    )
 
     return({"myResults": myReport})

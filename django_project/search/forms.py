@@ -125,6 +125,7 @@ class AdvancedSearchForm(forms.ModelForm):
         error_messages={
             'required': 'Entering a start date for your search is required.'},
         help_text='Start date is required. DD-MM-YYYY.')
+
     end_datepicker = forms.DateField(
         widget=DateTimeWidget(
             attrs={
@@ -133,7 +134,8 @@ class AdvancedSearchForm(forms.ModelForm):
         required=False, label='End date', input_formats=DATE_FORMATS,
         error_messages={
             'required': 'Entering an end date for your search is required.'},
-        help_text='End date is required. DD-MM-YYYY.')
+        help_text='End date is required. DD-MM-YYYY.',
+        initial=datetime.date.today)
     geometry = forms.CharField(
         widget=forms.HiddenInput(), required=False,
         help_text=(
@@ -217,7 +219,7 @@ class AdvancedSearchForm(forms.ModelForm):
                     'Satellite',
                     HTML(
                         '<div id="reset_dict_selections" '
-                        'class="btn btn-info">Reset selection</div>'
+                        'class="btn btn-info btn-small">Reset selection</div>'
                     ),
                     Field('collection', template='myField.html'),
                     Field('satellite', template='myField.html'),
@@ -254,16 +256,22 @@ class AdvancedSearchForm(forms.ModelForm):
                 ),
                 Fieldset(
                     'Dates',
-                    HTML('<div><div class="control-group error">{% for error in myFormset.non_form_errors %}<p id="error_date" class="help-block"><strong>{{ error }}</strong></p>{% endfor %}</div></div>'),
+                    HTML(
+                        '<div><div class="control-group error">{% for error i'
+                        'n myFormset.non_form_errors %}<p id="error_date" cla'
+                        'ss="help-block"><strong>{{ error }}</strong></p>{% e'
+                        'ndfor %}</div></div>'),
                     Field('start_datepicker', template='myField.html'),
                     Field('end_datepicker', template='myField.html'),
                     HTML(
                         '<div class="btn-group" style="margin-left: 50px;">'
-                        '<a class="btn btn-info btn-small" id="dr_add" title="Select the dates in the calend'
+                        '<a class="btn btn-info btn-small" id="dr_add" title'
+                        '="Select the dates in the calend'
                         'ar and click here to add to the list." href="javascri'
                         'pt:void(0)"><i class="icon-arrow-down"></i></a>'),
                     HTML(
-                        '<a class="btn btn-info btn-small" id="dr_del" title="Select the ranges in the list '
+                        '<a class="btn btn-info btn-small" id="dr_del" title'
+                        '="Select the ranges in the list '
                         'and click here to remove." href="javascript:void(0)">'
                         '<i class="icon-arrow-up"></i></a>'
                         '</div>'),
@@ -303,6 +311,7 @@ class AdvancedSearchForm(forms.ModelForm):
             ),
             'geometry'
         )
+
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
         if self.instance.pk is not None:
             myCollectionSet = self.instance.collection.all().values_list('id')
@@ -333,6 +342,12 @@ class AdvancedSearchForm(forms.ModelForm):
             if (not 'title' in myField.widget.attrs or
                     myField.widget.attrs['title'] == ''):
                 myField.widget.attrs['title'] = myField.help_text
+
+        # calculate initial search_date (today - 1 month)
+        # we use a constant -> 1 month = 31 days
+        myPrevoiusMonthDate = (
+            datetime.date.today() - datetime.timedelta(days=31))
+        self.fields['start_datepicker'].initial = myPrevoiusMonthDate
 
     def clean_guid(self):
         """Custom validator for guid"""

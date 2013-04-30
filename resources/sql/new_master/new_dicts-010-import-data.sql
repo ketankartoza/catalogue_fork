@@ -110,6 +110,13 @@ SELECT pg_catalog.setval('dictionaries_satelliteinstrument_id_seq', 23, true);
 
 
 --
+-- Name: dictionaries_satelliteinstrumentgroup_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_satelliteinstrumentgroup_id_seq', 21, true);
+
+
+--
 -- Name: dictionaries_scannertype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
 --
 
@@ -464,33 +471,61 @@ COPY dictionaries_satellite (id, name, description, abbreviation, operator_abbre
 
 
 --
+-- Data for Name: dictionaries_satelliteinstrumentgroup; Type: TABLE DATA; Schema: public; Owner: dodobas
+--
+
+COPY dictionaries_satelliteinstrumentgroup (id, satellite_id, instrument_type_id) FROM stdin;
+1	7	5
+2	14	10
+3	15	1
+4	12	8
+5	10	3
+6	9	3
+7	6	4
+8	9	6
+9	5	4
+10	16	1
+11	13	9
+12	11	7
+13	5	3
+14	6	3
+15	8	6
+16	2	3
+17	1	2
+18	10	6
+20	4	3
+21	3	3
+\.
+
+
+--
 -- Data for Name: dictionaries_satelliteinstrument; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_satelliteinstrument (id, name, description, abbreviation, operator_abbreviation, satellite_id, instrument_type_id) FROM stdin;
-1	SPOT 5 HRG 1	HRG Camera 1 on the SPOT 5 Satellite\r\n	S5-HRG1	S5-HRG1	12	8
-2	SPOT 5 HRG 2	HRG Camera 2 on the SPOT 5 Satellite\r\n	S5-HRG2	S5-HRG2	12	8
-3	SPOT 4 HRVIR 1	HRVIR Camera 1 on the SPOT 4 Satellite\r\n	S4-HIR1	S4-HIR1	11	7
-4	SPOT 4 HRVIR 2	HRVIR Camera 2 on the SPOT 4 Satellite\r\n	S4-HIR2	S4-HIR2	11	7
-5	SPOT 3 HRV 1	HRV Camera 1 on the SPOT 3 Satellite\r\n	S3-HRV1	S3-HRV1	10	6
-6	SPOT 3 HRV 2	HRV Camera 2 on the SPOT 3 Satellite\r\n	S3-HRV2	S3-HRV2	10	6
-7	SPOT 2 HRV 1	HRV Camera 1 on the SPOT 2 Satellite\r\n	S2-HRV1	S2-HRV1	9	6
-8	SPOT 2 HRV 2	HRV Camera 2 on the SPOT 2 Satellite\r\n	S2-HRV2	S2-HRV2	9	6
-9	SPOT 1 HRV 1	HRV Camera 1 on the SPOT 1 Satellite\r\n	S1-HRV1	S1-HRV1	9	6
-10	SPOT 1 HRV 2	HRV Camera 2 on the SPOT 1 Satellite\r\n	S1-HRV2	S1-HRV2	8	6
-11	Landsat 1 MSS	Landsat 1 MSS\r\n	L1-MSS	L1-MSS	2	3
-12	Landsat 2 MSS	Landsat 2 MSS\r\n	L2-MSS	L2-MSS	9	3
-13	Landsat 3 MSS	Landsat 3 MSS	L3-MSS	L3-MSS	10	3
-14	Landsat 4 MSS	Landsat 4 MSS\r\n	L4-MSS	L4-MSS	5	3
-15	Landsat 4 TM	Landsat 4 TM\r\n	L4-TM	L4-TM	5	4
-16	Landsat 5 MSS	Landsat 5 MSS\r\n	L5-MSS	L5-MSS	6	3
-17	Landsat 5 TM	Landsat 5 TM\r\n	L5-TM	L5-TM	6	4
-18	Landsat 7 ETM+	Landsat 7 ETM Plus\r\n	L7-ETM+	L7-ETM+	7	5
-19	ZA-2 SumbandilaSat MSI	ZA-2 SumbandilaSat MSI\r\n	ZA2-MSI	ZA2-MSI	1	2
-20	CBERS-2B HRCCD	CBERS-2B HRCCD\r\n	C2B-CCD	C2B-CCD	13	9
-21	ERS-1 AMI	ERS-1 AMI\r\n	E1-AMI	E1-AMI	15	1
-22	ERS-2 SMI	ERS-2 SMI\r\n	E2-AMI	E2-AMI	16	1
-23	SAC-C MMRS	SAC-C MMRS	SCC-MMRS	SCC-MMRS	14	10
+COPY dictionaries_satelliteinstrument (id, name, description, abbreviation, operator_abbreviation, satellite_instrument_group_id) FROM stdin;
+23	SAC-C MMRS	SAC-C MMRS	SCC-MMRS	SCC-MMRS	2
+22	ERS-2 SMI	ERS-2 SMI\r\n	E2-AMI	E2-AMI	10
+21	ERS-1 AMI	ERS-1 AMI\r\n	E1-AMI	E1-AMI	3
+20	CBERS-2B HRCCD	CBERS-2B HRCCD\r\n	C2B-CCD	C2B-CCD	11
+19	ZA-2 SumbandilaSat MSI	ZA-2 SumbandilaSat MSI\r\n	ZA2-MSI	ZA2-MSI	17
+18	Landsat 7 ETM+	Landsat 7 ETM Plus\r\n	L7-ETM+	L7-ETM+	1
+17	Landsat 5 TM	Landsat 5 TM\r\n	L5-TM	L5-TM	7
+16	Landsat 5 MSS	Landsat 5 MSS\r\n	L5-MSS	L5-MSS	14
+15	Landsat 4 TM	Landsat 4 TM\r\n	L4-TM	L4-TM	9
+14	Landsat 4 MSS	Landsat 4 MSS\r\n	L4-MSS	L4-MSS	13
+13	Landsat 3 MSS	Landsat 3 MSS	L3-MSS	L3-MSS	20
+12	Landsat 2 MSS	Landsat 2 MSS\r\n	L2-MSS	L2-MSS	21
+11	Landsat 1 MSS	Landsat 1 MSS\r\n	L1-MSS	L1-MSS	16
+10	SPOT 1 HRV 2	HRV Camera 2 on the SPOT 1 Satellite\r\n	S1-HRV2	S1-HRV2	15
+9	SPOT 1 HRV 1	HRV Camera 1 on the SPOT 1 Satellite\r\n	S1-HRV1	S1-HRV1	15
+8	SPOT 2 HRV 2	HRV Camera 2 on the SPOT 2 Satellite\r\n	S2-HRV2	S2-HRV2	8
+7	SPOT 2 HRV 1	HRV Camera 1 on the SPOT 2 Satellite\r\n	S2-HRV1	S2-HRV1	8
+6	SPOT 3 HRV 2	HRV Camera 2 on the SPOT 3 Satellite\r\n	S3-HRV2	S3-HRV2	18
+5	SPOT 3 HRV 1	HRV Camera 1 on the SPOT 3 Satellite\r\n	S3-HRV1	S3-HRV1	18
+4	SPOT 4 HRVIR 2	HRVIR Camera 2 on the SPOT 4 Satellite\r\n	S4-HIR2	S4-HIR2	12
+3	SPOT 4 HRVIR 1	HRVIR Camera 1 on the SPOT 4 Satellite\r\n	S4-HIR1	S4-HIR1	12
+2	SPOT 5 HRG 2	HRG Camera 2 on the SPOT 5 Satellite\r\n	S5-HRG2	S5-HRG2	4
+1	SPOT 5 HRG 1	HRG Camera 1 on the SPOT 5 Satellite\r\n	S5-HRG1	S5-HRG1	4
 \.
 
 

@@ -1,7 +1,7 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 {% box_start "box-sensor-summary" %}
 <h2 class="centered"><img src="/media/images/statistics_32.png" /> Summary of catalogue activity for</h2>
-<h3 class="centered">{{mySensor.name}}</h3>
+<h3 class="centered">{{mySensor}}</h3>
 <table>
   <thead>
   </thead>
@@ -18,7 +18,7 @@
   </tbody>
 </table>
 <p>
-  <h3>Yearly catalogue product overview for {{mySensor.name}}</h3>
+  <h3>Yearly catalogue product overview for {{mySensor}}</h3>
 <table >
   <thead>
   </thead>

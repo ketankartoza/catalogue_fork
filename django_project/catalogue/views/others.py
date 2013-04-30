@@ -412,16 +412,15 @@ def showPreview(theRequest, theId, theSize):
         + "/"
         + str(theSize)
         + """/"><center>"""
-        + """<img src="/media/images/info_32.png" onclick='showMetadata("""
+        + """<div class="btn-group"><button class="btn btn-info" onclick='showMetadata("""
         + str(theId) + """);'  alt="Click to view metadata for this image"
-            title="Click to view metadata for this image" />&nbsp;"""
-        + """<img src="/media/images/buy_32.png" onclick='addToCart("""
+            title="Click to view metadata for this image"><i class=" icon-list"></i></button>"""
+        + """<button class="btn btn-success" onclick='addToCart("""
         + str(theId) + """);'  alt="Click to add to your cart" title="Click
-            to add this image to your cart" />&nbsp;"""
-        + """<a data-toggle="modal" data-target="#myModal" id="large_preview" href="/thumbnailpage/"""
+            to add this image to your cart" ><i class="icon-shopping-cart"></i></button>"""
+        + """<button class="btn btn-success" data-toggle="modal" data-target="#myModal" id="large_preview" href="/thumbnailpage/"""
         + str(theId)
-        + """/"><img src="/media/images/search_32.png" alt="Click for larger
-            view" title="Click for larger preview"/></a>"""
+        + """/"><i class="icon-zoom-in"></i></button></div>"""
         + """</center>""", mimetype="text/html")
 
 

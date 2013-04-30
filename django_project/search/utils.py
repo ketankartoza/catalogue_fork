@@ -71,15 +71,15 @@ def prepareSelectQuerysets(
 
     # update querysets
     myCollection_QS = Collection.objects.filter(
-        satellite__satelliteinstrument__opticalproductprofile__in=myOPP)\
+        satellite__satelliteinstrumentgroup__satelliteinstrument__opticalproductprofile__in=myOPP)\
         .distinct().order_by('name')
 
     mySatellite_QS = Satellite.objects.filter(
-        satelliteinstrument__opticalproductprofile__in=myOPP)\
+        satelliteinstrumentgroup__satelliteinstrument__opticalproductprofile__in=myOPP)\
         .distinct().order_by('name')
 
     myInstType_QS = InstrumentType.objects.filter(
-        satelliteinstrument__opticalproductprofile__in=myOPP)\
+        satelliteinstrumentgroup__satelliteinstrument__opticalproductprofile__in=myOPP)\
         .distinct().order_by('name')
 
     mySpectralGroup_QS = SpectralGroup.objects.filter(
@@ -87,7 +87,7 @@ def prepareSelectQuerysets(
         .distinct().order_by('name')
 
     myLicense_QS = License.objects.filter(
-        satellite__satelliteinstrument__opticalproductprofile__in=myOPP)\
+        satellite__satelliteinstrumentgroup__satelliteinstrument__opticalproductprofile__in=myOPP)\
         .distinct().order_by('name')
 
     return (

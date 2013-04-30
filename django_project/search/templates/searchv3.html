@@ -5,6 +5,7 @@
 
   {{ block.super }}
   <script type="text/javascript" charset="utf-8" src="/media/js/jquery.form.js"></script>
+  <script type="text/javascript" charset="utf-8" src="/media/js/widget.searchcriteria.js"></script>
 
   <script type="text/javascript">
     $(document).ready(function() {
@@ -13,7 +14,6 @@
 
       $('#map-container').load('/rendersearchmap/');
       $('#myTab  a:first').tab('show');
-      $('#search-results-text').hide();
       $('#search-results').hide();
       $("#cart_tab").load("/showminicartcontents/");
 
@@ -22,6 +22,12 @@
 
       // initialize showMetadata Dialog
       setupMetadataDialog();
+
+      // initialize show preview on cart
+      setupMiniIconClickCallback();
+
+      // initialize search criteria display
+      $('#search_criteria_display').searchcriteria();
     });
   </script>
 
@@ -35,6 +41,7 @@
             <ul class="nav nav-tabs" id="myTab">
               <li class="active"><a href="#search_tab" data-toggle="tab">Search</a></li>
               <li><a id="cart_title" href="#cart_tab" data-toggle="tab">Cart (0)</a></li>
+              <li><a id="preview" href="#preview_tab" data-toggle="tab">Preview</a></li>
             </ul>
             <div class="tab-content">
               <div id="search_tab" class="tab-pane active">
@@ -51,7 +58,8 @@
                 </div>
               </div>
               <div id="cart_tab" class="tab-pane">
-                Cart
+              </div>
+              <div id="preview_tab" class="tab-pane">
               </div>
             </div>
         </div>
@@ -70,8 +78,7 @@
                       </a>
                     </div>
                     <div id="collapsesearch-text" class="accordion-body collapse in">
-                      <div class="accordion-inner">
-                        22 record found for date range 01-01-2002 : 31-12-2002, sensors HRG-5.
+                      <div id="search_criteria_display" class="accordion-inner">
                       </div>
                     </div>
                   </div>
@@ -85,7 +92,7 @@
                     <div class="accordion-heading">
                       <div style="position:relative; float:left;">
                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-search-results" href="#collapsesearch-results">
-                          Search results 
+                          Search results
                         </a>
                       </div>
                       <div class="btn-group" style="position:relative; float:left; padding: 4px 5px;">
@@ -94,12 +101,12 @@
                           <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                          <li><a href="#">SHP</a></li>
-                          <li><a href="#">KML</a></li>
-                          <li><a href="#">KMZ</a></li>
-                          <li><a href="#">XML</a></li>
+                          <li><a href="javascript: location='/downloadsearchresults/' + search_guid + '/?shp'">SHP</a></li>
+                          <li><a href="javascript: location='/downloadsearchresults/' + search_guid + '/?kml'">KML</a></li>
+                          <li><a href="javascript: location='/downloadsearchresults/' + search_guid + '/?kmz'">KMZ</a></li>
                           <li class="divider"></li>
-                          <li><a href="#">HTML</a></li>
+                          <li><a href="javascript: location='/downloadsearchmetadata/' + search_guid + '/'">XML</a></li>
+                          <li><a href="javascript: location='/downloadsearchmetadata/' + search_guid + '/?html'">HTML</a></li>
                         </ul>
                       </div>
                     </div>
@@ -115,4 +122,15 @@
             </div>
         </div>
     </div>
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="myModalLabel">Metadata</h3>
+        </div>
+        <div class="modal-body" id="modalContainer">
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+      </div>
 {% endblock%}

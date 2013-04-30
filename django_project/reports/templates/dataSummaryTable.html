@@ -22,7 +22,7 @@
           data.addRows([
             {% for myRecord in myResultSet %}
             {% if myRecord.id__count > 0 %}
-            ['{{myRecord.name}}', {{ myRecord.id__count }}],
+            ['{{myRecord}}', {{ myRecord.id__count }}],
             {% endif %}
             {% endfor %}
           [null,null]]);
@@ -51,7 +51,7 @@ You may also be interested in our sensor dictionary report <a href="#" onclick='
     <tr>
       <td>
         <a href="#" onclick="loadSummaryTable({{myRecord.id}});">
-          {{myRecord.name}}</a>
+          {{myRecord}}</a>
       </td>
       <td>{{myRecord.id__count}}</td>
     </tr>

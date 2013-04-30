@@ -465,8 +465,7 @@ class ShpResponder(object):
 
         attributes = []
         attributes.append("id")
-        attributes.append("instrument_type")
-        attributes.append("satellite")
+        attributes.append("satellite_instrument_group")
         attributes.append("target_date")
 
         for field in attributes:

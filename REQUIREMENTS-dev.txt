@@ -8,5 +8,5 @@ https://guppy-pe.svn.sourceforge.net/svnroot/guppy-pe/trunk/guppy
 line_profiler
 django_devserver
 # Fabric related deps
-Fabric==1.5.3
-fabtools==0.12.0
+git+git://github.com/timlinux/fabtools.git
+fabgis==0.3.0

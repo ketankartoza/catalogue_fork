@@ -288,8 +288,9 @@ def searchResultPage(theRequest, theGuid):
 #@login_required
 def downloadSearchResult(theRequest, theGuid):
     """Dispaches request and returns searchresults in desired file format"""
-    mySearcher = Searcher(theRequest, theGuid)
-    mySearcher.search(False)  # dont paginate
+    mySearch = get_object_or_404(Search, guid=theGuid)
+    mySearcher = Searcher(theRequest, mySearch)
+    mySearcher.search()  # dont paginate
 
     myFilename = u'%s-imagebounds' % theGuid
     if 'shp' in theRequest.GET:
@@ -328,8 +329,9 @@ def downloadSearchResultMetadata(theRequest, theGuid):
     unless a ?html is appended to the url
     """
 
-    mySearcher = Searcher(theRequest, theGuid)
-    mySearcher.search(False)  # dont paginate
+    mySearch = get_object_or_404(Search, guid=theGuid)
+    mySearcher = Searcher(theRequest, mySearch)
+    mySearcher.search()  # dont paginate
     if 'html' in theRequest.GET:
         return downloadHtmlMetadata(
             mySearcher.mSearchRecords, 'Search-%s' % theGuid)

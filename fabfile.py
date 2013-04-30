@@ -10,6 +10,9 @@ import os
 from fabric.api import *
 from fabric.contrib.files import contains, exists, append, sed
 import fabtools
+from fabgis import fabgis
+# Don't remove even though its unused
+from fabtools.vagrant import vagrant
 
 # Usage fab localhost [command]
 #    or fab remote [command]
@@ -18,74 +21,6 @@ import fabtools
 # This will get replaced in various places, for a generic site, it may be
 # all you need to change...
 PROJECT_NAME = 'catalogue'
-
-def captured_local(command):
-    """A wrapper around local that always returns output."""
-    return local(command, capture=True)
-
-
-def localhost():
-    """Set up things so that commands run locally.
-
-    To run locally do e.g.::
-
-        fab localhost show_environment
-
-    """
-    env.run = captured_local
-    env.hosts = ['localhost']
-    _all()
-
-
-def remote():
-    """Set up things so that commands run remotely.
-    To run remotely do e.g.::
-
-        fab -H 188.40.123.80:8697 remote show_environment
-
-        or if you have configured env.hosts, simply
-
-        fab remote show_environment
-
-    """
-    env.hosts = ['foo.bar:8697']
-    env.run = run
-    _all()
-
-
-# You are supposed to be able to run stuff using fabtools.vagrant
-# but it didnt work for me when I tested it. This is an alternative approach
-# from fabtools.vagrant import vagrant
-
-def _get_vagrant_config():
-    """
-    Parses vagrant configuration and returns it as dict of ssh parameters
-    and their values
-    """
-    result = local('vagrant ssh-config', capture=True)
-    conf = {}
-    for line in iter(result.splitlines()):
-        parts = line.split()
-        conf[parts[0]] = ' '.join(parts[1:])
-
-    return conf
-
-
-def vagrant():
-    """
-    Set up things so that commands run on vagrant vm.
-    """
-
-    env.settings = 'vagrant'
-    # get vagrant ssh setup
-    vagrant_config = _get_vagrant_config()
-    #print vagrant_config
-    env.key_filename = vagrant_config['IdentityFile']
-    env.hosts = ['%s:%s' % (vagrant_config['HostName'], vagrant_config['Port'])]
-    env.host_string = env.hosts[0]
-    env.user = vagrant_config['User']
-    env.run = run
-    _all()
 
 
 def _all():
@@ -98,13 +33,13 @@ def _all():
         'spur': '%s.localhost' % PROJECT_NAME,
         'waterfall': '%s.localhost' % PROJECT_NAME,
         'maps.linfiniti.com': '%s.linfiniti.com' % PROJECT_NAME,
-        'owl': 'test.catalogue.sansa.org.za',
+        'testcatalogue': 'test.catalogue.sansa.org.za',
         # vagrant vm
-        'precise64': '%s.localhost' % PROJECT_NAME}
+        'catalogue': '%s.localhost' % PROJECT_NAME}
 
     with hide('output'):
-        env.user = env.run('whoami')
-        env.hostname = env.run('hostname')
+        env.user = run('whoami')
+        env.hostname = run('hostname')
         if env.hostname not in repo_site_names:
             print 'Error: %s not in: \n%s' % (env.hostname, repo_site_names)
             exit()
@@ -114,7 +49,7 @@ def _all():
             # where to check the repo out to
             env.webdir = '/home/web'
             # repo uri
-            env.git_url = 'git@github.com:timlinux/%s.git' % PROJECT_NAME
+            env.git_url = 'https://github.com/timlinux/%s.git' % PROJECT_NAME
             # checkout name for repo
             env.repo_alias = PROJECT_NAME
             # user wsgi should run as (will be created if needed)
@@ -129,7 +64,7 @@ def _all():
 
 
 def replace_tokens(conf_file):
-    env.run(
+    run(
         'cp %(conf_file)s.templ %(conf_file)s' % {
             'conf_file': conf_file})
     # We need to replace these 3 things in the conf file:
@@ -149,30 +84,10 @@ def replace_tokens(conf_file):
     sed('%s' % conf_file, '\[CODEBASE\]', env.code_path)
 
 
-#
-# We should get rid of this its not needed
-#
-
-def setup_vagrant():
-    """We use vagrant for deploying virtual machines easily."""
-    #http://files.vagrantup.com/precise64.box
-    fabtools.require.deb.package('vagrant')
-    env.run(
-        'vagrant box add "Ubuntu precise 64" '
-        'http://files.vagrantup.com/precise64.box')
-    env.run('vagrant box init "Ubuntu precise 64"')
-
-#
-# We should get rid of this its not needed
-#
-
-def start_vagrant():
-    env.run('vagrant box up')
-    fastprint('You can ssh in to your vagrant box using "vagrant ssh"')
-
-
 def setup_mapserver():
     # Clone and replace tokens in mapserver map file
+    # Clone and replace tokens in mapserver conf
+    fabtools.require.deb.package('cgi-mapserver')
     conf_dirs = [
         '%s/resources/server_config/mapserver/mapfiles/' % (env.code_path),
         '%s/resources/server_config/mapserver/apache-include/' % (
@@ -193,17 +108,6 @@ def setup_mapserver():
     epsg_id = '900913'
     if not contains(epsg_path, epsg_id):
         append(epsg_path, epsg_code, use_sudo=True)
-
-
-def setup_postgres():
-    # Ensure we have ubuntu-gis repos
-    fabtools.require.deb.ppa('ppa:ubuntugis/ubuntugis-unstable')
-    # Ensure we have a mailserver setup for our domain
-    # Note that you may have problems if you intend to run more than one
-    # site from the same server
-    fabtools.require.postfix.server(env.repo_site_name)
-    # Note - no postgis installation
-    fabtools.require.postgres.server()
 
 
 def setup_website():
@@ -235,7 +139,7 @@ def setup_website():
         '%s/resources/server_config/apache/%s.apache.conf' % (
             env.code_path, env.repo_alias))
 
-    env.run(
+    run(
         'cp %(conf_file)s.templ %(conf_file)s' % {
             'conf_file': conf_file})
 
@@ -250,28 +154,22 @@ def setup_website():
         sudo('ln -s %s .' % conf_file)
 
     # wsgi user needs pg access to the db
-    if not fabtools.postgres.user_exists(env.wsgi_user):
-        fabtools.postgres.create_user(
-            env.wsgi_user,
-            password='',
-            createdb=False,
-            createrole=False,
-            connection_limit=20)
+    fabgis.require_postgres_user(env.wsgi_user)
 
     grant_sql = 'grant all on schema public to %s;' % env.wsgi_user
     # assumption is env.repo_alias is also database name
-    env.run('psql %s -c "%s"' % (env.repo_alias, grant_sql))
+    run('psql %s -c "%s"' % (env.repo_alias, grant_sql))
     grant_sql = (
         'GRANT ALL ON ALL TABLES IN schema public to %s;' % env.wsgi_user)
     # assumption is env.repo_alias is also database name
-    env.run('psql %s -c "%s"' % (env.repo_alias, grant_sql))
+    run('psql %s -c "%s"' % (env.repo_alias, grant_sql))
     grant_sql = (
         'GRANT ALL ON ALL SEQUENCES IN schema public to %s;' % env.wsgi_user)
-    env.run('psql %s -c "%s"' % (env.repo_alias, grant_sql))
+    run('psql %s -c "%s"' % (env.repo_alias, grant_sql))
 
     #with cd(env.code_path):
         # run the script to create the sites view
-        #env.run('psql -f sql/3-site-view.sql %s' % env.repo_alias)
+        #run('psql -f sql/3-site-view.sql %s' % env.repo_alias)
 
     # Add a hosts entry for local testing - only really useful for localhost
     hosts = '/etc/hosts'
@@ -298,21 +196,6 @@ def setup_website():
         sudo('chown %s.%s %s' % (env.wsgi_user, env.wsgi_user, env.code_path))
 
 
-def tail_errors():
-    """Tail the apache error log ot see if anything is failing.
-
-
-    To run e.g.::
-
-        fab -H 188.40.123.80:8697 remote tail_errors
-
-    or if you have configured env.hosts, simply
-
-        fab remote tail_errors
-    """
-    sudo('tail /var/log/apache2/%s.error.log' % PROJECT_NAME)
-
-
 def setup_venv():
     """Initialise or update the virtual environmnet.
 
@@ -329,7 +212,7 @@ def setup_venv():
     with cd(env.code_path):
         # Ensure we have a venv set up
         fabtools.require.python.virtualenv('venv')
-        env.run('venv/bin/pip install -r requirements-prod.txt')
+        run('venv/bin/pip install -r requirements-prod.txt')
 
 
 def update_git_checkout(branch='master'):
@@ -348,65 +231,46 @@ def update_git_checkout(branch='master'):
         fab remote update_git_checkout
 
     """
+    _all()
     fabtools.require.deb.package('git')
-    if not exists(env.webdir):
+    if not exists(env.code_path):
         fastprint('Repo checkout does not exist, creating.')
-        user = env.run('whoami')
-        sudo('sudo mkdir %s' % env.webdir)
+        user = run('whoami')
+        sudo('sudo mkdir -p %s' % env.webdir)
         sudo('chown %s.%s %s' % (user, user, env.webdir))
         with cd(env.webdir):
-            env.run('git clone %s %s' % (env.git_url, env.repo_alias))
+            run('git clone %s %s' % (env.git_url, env.repo_alias))
     else:
         fastprint('Repo checkout does exist, updating.')
         with cd(env.code_path):
             # Get any updates first
-            env.run('git fetch')
+            run('git fetch')
             # Get rid of any local changes
-            env.run('git reset --hard')
+            run('git reset --hard')
             # Get back onto master branch
-            env.run('git checkout master')
+            run('git checkout master')
             # Remove any local changes in master
-            env.run('git reset --hard')
+            run('git reset --hard')
             # Delete all local branches
-            env.run('git branch | grep -v \* | xargs git branch -D')
+            run('git branch | grep -v \* | xargs git branch -D')
 
     with cd(env.code_path):
         if branch != 'master':
-            env.run('git branch --track %s origin/%s' % (branch, branch))
-            env.run('git checkout %s' % branch)
+            run('git branch --track %s origin/%s' % (branch, branch))
+            run('git checkout %s' % branch)
         else:
-            env.run('git checkout master')
-        env.run('git pull')
-        env.run('./runcollectstatic.sh')
+            run('git checkout master')
+        run('git pull')
+        #run('./runcollectstatic.sh')
         wsgi_file = 'django_project/core/wsgi.py'
-        env.run('touch %s' % wsgi_file)
-
-
-def install_server():
-    """Ensure that the target system has a usable apache etc. installation.
-
-    Args:
-        None
-
-    Returns:
-        None
-
-    Raises:
-        None
-    """
-
-    #### NOTE THIS IS INCOMPLETE STILL ####
-
-    clone = env.run('which pdflatex')
-    if '' == clone:
-        env.run('sudo apt-get install git cgi-mapserver texlive-latex-extra'
-                'python-sphinx texinfo dvi2png')
+        run('touch %s' % wsgi_file)
 
 ###############################################################################
 # Next section contains actual tasks
 ###############################################################################
 
 
+@task
 def deploy(branch='master'):
     """Do a fresh deployment of the site to a server.
 
@@ -433,51 +297,9 @@ def deploy(branch='master'):
 
     update_git_checkout(branch)
     setup_venv()
-    setup_postgres()
+    fabgis.setup_postgis()
     setup_website()
     setup_mapserver()
-
-
-
-def build_documentation(branch='master'):
-    """Create a pdf and html doc tree and publish them online.
-
-    Args:
-        branch: str - a string representing the name of the branch to build
-            from. Defaults to 'master'.
-
-    To run e.g.::
-
-        fab -H 188.40.123.80:8697 remote build_documentation
-
-    or to package up a specific branch (in this case minimum_needs)
-
-        fab -H 88.198.36.154:8697 remote build_documentation:version-1_1
-
-    or if you have configured env.hosts, simply
-
-        fab remote build_documentation
-
-    .. note:: Using the branch option will not work for branches older than 1.1
-    """
-
-    ### Still needs to be tested ###
-
-    update_git_checkout(branch)
-    install_server()
-
-    dir_name = os.path.join(env.webdir, env.repo_alias, 'docs')
-    with cd(dir_name):
-        # build the tex file
-        env.run('make latex')
-
-    dir_name = os.path.join(env.webdir, env.repo_alias,
-                            'docs', 'build', 'latex')
-    with cd(dir_name):
-        # Now compile it to pdf
-        env.run('pdflatex -interaction=nonstopmode %s.tex' % env.repo_alias)
-        # run 2x to ensure indices are generated?
-        env.run('pdflatex -interaction=nonstopmode %s.tex' % env.repo_alias)
 
 
 def show_environment():

@@ -6,11 +6,10 @@
   <thead>
   </thead>
   <tbody>
-    <tr><th>Satellite Instrument</th><th>Instrument Type</th></tr>
+    <tr><th>Satellite Instrument</th></tr>
     {% for myRecord in myResults %}
     <tr>
-    <td>{{myRecord.name}}</td>
-    <td>{{myRecord.instrument_type.name}}</td>
+    <td>{{myRecord}}</td>
     </tr>
     {% endfor %}
   </tbody>
