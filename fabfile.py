@@ -261,7 +261,7 @@ def update_git_checkout(branch='master'):
         else:
             run('git checkout master')
         run('git pull')
-        run('./runcollectstatic.sh')
+        #run('./runcollectstatic.sh')
         wsgi_file = 'django_project/core/wsgi.py'
         run('touch %s' % wsgi_file)
 
