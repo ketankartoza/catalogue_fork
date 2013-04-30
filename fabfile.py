@@ -212,7 +212,7 @@ def setup_venv():
     with cd(env.code_path):
         # Ensure we have a venv set up
         fabtools.require.python.virtualenv('venv')
-        run('venv/bin/pip install -r requirements-prod.txt')
+        run('venv/bin/pip install -r REQUIREMENTS.txt')
 
 
 def update_git_checkout(branch='master'):
@@ -295,6 +295,13 @@ def deploy(branch='master'):
         fab remote deploy
     """
 
+    fabtools.require.deb.package('subversion')
+    fabtools.require.deb.package('python-pip')
+    fabtools.require.deb.package('libxml2-dev')
+    fabtools.require.deb.package('libxslt1-dev')
+    fabtools.require.deb.package('python-dev')
+    
+    fabtools.require.deb.package('build-essential')
     update_git_checkout(branch)
     setup_venv()
     fabgis.setup_postgis()
