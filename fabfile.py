@@ -295,6 +295,7 @@ def deploy(branch='master'):
         fab remote deploy
     """
 
+    fabgis.setup_postgis()
     fabtools.require.deb.package('subversion')
     fabtools.require.deb.package('python-pip')
     fabtools.require.deb.package('libxml2-dev')
@@ -304,7 +305,6 @@ def deploy(branch='master'):
     fabtools.require.deb.package('build-essential')
     update_git_checkout(branch)
     setup_venv()
-    fabgis.setup_postgis()
     setup_website()
     setup_mapserver()
 
