@@ -122,6 +122,8 @@ def setup_website():
     fab remote setup_website
     """
 
+    fabtools.require.postfix.server(env.repo_alias)
+    fabtools.require.deb.package('libapache2-mod-wsgi')
     # Find out if the wsgi user exists and create it if needed e.g.
     fabtools.require.user(
         env.wsgi_user,
