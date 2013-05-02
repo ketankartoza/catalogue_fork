@@ -215,16 +215,16 @@ def setup_venv():
         # Ensure we have a venv set up
         fabtools.require.python.virtualenv('venv')
 
-    
-    # Gdal does not build cleanly from requirements so we follow advice 
+    # Gdal does not build cleanly from requirements so we follow advice
     # from http://ubuntuforums.org/showthread.php?t=1769445
     pip_path = os.path.join(env.code_path, 'venv', 'bin', 'pip')
     gdal_build_path = os.path.join(env.code_path, 'venv', 'build', 'GDAL')
-        
-    run('%s install --no-install GDAL' % pip_path)
-    with cd(gdal_build_path):
-        run('python setup.py build_ext --include-dirs=/usr/include/gdal')
-        run('%s install --no-download GDAL' % pip_path)
+
+    result = run('%s install --no-install GDAL' % pip_path)
+    if 'Requirement already satisfied ' not in result:
+        with cd(gdal_build_path):
+            run('python setup.py build_ext --include-dirs=/usr/include/gdal')
+            run('%s install --no-download GDAL' % pip_path)
 
     with cd(env.code_path):
         run('venv/bin/pip install -r REQUIREMENTS.txt')
@@ -320,7 +320,7 @@ def deploy(branch='master'):
     fabtools.require.deb.package('build-essential')
     fabtools.require.deb.package('libgdal1-dev')
     fabtools.require.deb.package('gdal-bin')
-    
+
     update_git_checkout(branch)
     setup_venv()
     setup_website()
