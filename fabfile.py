@@ -295,14 +295,17 @@ def deploy(branch='master'):
         fab remote deploy
     """
 
+    fabgis.add_ubuntugis_ppa()
     fabgis.setup_postgis()
     fabtools.require.deb.package('subversion')
     fabtools.require.deb.package('python-pip')
     fabtools.require.deb.package('libxml2-dev')
     fabtools.require.deb.package('libxslt1-dev')
     fabtools.require.deb.package('python-dev')
-    
     fabtools.require.deb.package('build-essential')
+    fabtools.require.deb.package('libgdal1-dev')
+    fabtools.require.deb.package('gdal-bin')
+    
     update_git_checkout(branch)
     setup_venv()
     setup_website()
