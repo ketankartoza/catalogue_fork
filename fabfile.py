@@ -157,7 +157,8 @@ def setup_website():
 
     # wsgi user needs pg access to the db
     fabgis.require_postgres_user(env.wsgi_user)
-
+    fabgis.require_postgres_user('readonly', 'readonly')
+    fabgis.create_postgis_1_5_db('catalogue', env.wsgi_user)
     grant_sql = 'grant all on schema public to %s;' % env.wsgi_user
     # assumption is env.repo_alias is also database name
     run('psql %s -c "%s"' % (env.repo_alias, grant_sql))
@@ -283,6 +284,20 @@ def update_git_checkout(branch='master'):
 ###############################################################################
 # Next section contains actual tasks
 ###############################################################################
+
+
+@hosts('5.9.140.151:8697')
+def get_dump():
+    """Get a dump of the database from the server."""
+    _all()
+    fabgis.get_postgres_dump(env.repo_alias)
+
+
+@task
+def restore_dump():
+    """Upload dump to host, remove existing db, recreate then restore dump."""
+    _all()
+    fabgis.restore_postgres_dump(env.repo_alias)
 
 
 @task
