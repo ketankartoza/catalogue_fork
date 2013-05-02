@@ -172,7 +172,8 @@ def setup_website():
     grant_sql = (
         'GRANT ALL ON ALL SEQUENCES IN schema public to %s;' % env.wsgi_user)
     run('psql %s -c "%s"' % (env.repo_alias, grant_sql))
-
+    pwd_sql = 'ALTER USER timlinux WITH PASSWORD \'timlinux\';'
+    run('psql %s -c "%s"' % (env.repo_alias, pwd_sql))
     #with cd(env.code_path):
         # run the script to create the sites view
         #run('psql -f sql/3-site-view.sql %s' % env.repo_alias)
@@ -192,7 +193,7 @@ def setup_website():
 
     # Check if apache configs are ok - script will abort if not ok
     sudo('/usr/sbin/apache2ctl configtest')
-
+    sudo('a2dissite default')
     fabtools.require.service.restarted('apache2')
 
     #Setup a writable media dir for apache
