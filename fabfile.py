@@ -212,7 +212,7 @@ def setup_venv():
     with cd(env.code_path):
         # Ensure we have a venv set up
         fabtools.require.python.virtualenv('venv')
-        run('venv/bin/pip install -r requirements-prod.txt')
+        run('venv/bin/pip install -r REQUIREMENTS.txt')
 
 
 def update_git_checkout(branch='master'):
