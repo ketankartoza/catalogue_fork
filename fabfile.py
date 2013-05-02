@@ -64,6 +64,9 @@ def _all():
 
 
 def replace_tokens(conf_file):
+    if '.templ' == conf_file[-6:]:
+        conf_file = conf_file.replace('.templ', '')
+
     run(
         'cp %(conf_file)s.templ %(conf_file)s' % {
             'conf_file': conf_file})
