@@ -21,6 +21,7 @@ from fabtools.vagrant import vagrant
 # This will get replaced in various places, for a generic site, it may be
 # all you need to change...
 PROJECT_NAME = 'catalogue'
+env.user = 'vagrant'
 
 
 def _all():
@@ -172,7 +173,7 @@ def setup_website():
     grant_sql = (
         'GRANT ALL ON ALL SEQUENCES IN schema public to %s;' % env.wsgi_user)
     run('psql %s -c "%s"' % (env.repo_alias, grant_sql))
-    pwd_sql = 'ALTER USER timlinux WITH PASSWORD \'timlinux\';'
+    pwd_sql = 'ALTER USER %s WITH PASSWORD \'%s\';' % (env.user, env.user)
     run('psql %s -c "%s"' % (env.repo_alias, pwd_sql))
     #with cd(env.code_path):
         # run the script to create the sites view
@@ -330,7 +331,8 @@ def deploy(branch='master'):
     """
 
     fabgis.add_ubuntugis_ppa()
-    fabgis.setup_postgis()
+    ## fabgis.setup_postgis()
+    fabgis.setup_postgis_1_5()
     fabtools.require.deb.package('subversion')
     fabtools.require.deb.package('python-pip')
     fabtools.require.deb.package('libxml2-dev')
@@ -346,6 +348,7 @@ def deploy(branch='master'):
     setup_mapserver()
 
 
+@task
 def show_environment():
     """For diagnostics - show any pertinent info about server."""
     fastprint('\n-------------------------------------------------\n')
