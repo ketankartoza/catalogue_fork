@@ -97,7 +97,9 @@ def setup_mapserver():
         '%s/resources/server_config/mapserver/apache-include/' % (
             env.code_path)]
     for conf_dir in conf_dirs:
-        for myFile in os.listdir(conf_dir):
+        output = run('ls %s' % conf_dir)
+        files = output.split()
+        for myFile in files:
             myExt = os.path.splitext(myFile)[1]
             conf_file = os.path.join(conf_dir, myFile)
 
@@ -161,6 +163,7 @@ def setup_website():
 
     # wsgi user needs pg access to the db
     fabgis.require_postgres_user(env.wsgi_user)
+    fabgis.require_postgres_user('timlinux', 'timlinux')
     fabgis.require_postgres_user('readonly', 'readonly')
     fabgis.create_postgis_1_5_db('catalogue', env.wsgi_user)
     grant_sql = 'grant all on schema public to %s;' % env.wsgi_user
@@ -173,7 +176,7 @@ def setup_website():
     grant_sql = (
         'GRANT ALL ON ALL SEQUENCES IN schema public to %s;' % env.wsgi_user)
     run('psql %s -c "%s"' % (env.repo_alias, grant_sql))
-    pwd_sql = 'ALTER USER %s WITH PASSWORD \'%s\';' % (env.user, env.user)
+    pwd_sql = 'ALTER USER timlinux WITH PASSWORD \'timlinux\';'
     run('psql %s -c "%s"' % (env.repo_alias, pwd_sql))
     #with cd(env.code_path):
         # run the script to create the sites view
