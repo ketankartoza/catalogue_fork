@@ -23,7 +23,7 @@ INSTALLED_APPS += (
 )
 
 # Set debug to false for production
-DEBUG = TEMPLATE_DEBUG = False
+DEBUG = TEMPLATE_DEBUG = True
 
 # External site URL, used in KML data generation and elsewhere
 # No terminating slash
