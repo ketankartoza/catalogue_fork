@@ -4,14 +4,14 @@
     <facet type="django" name="Django">
       <configuration>
         <option name="rootFolder" value="$MODULE_DIR$/django_project" />
-        <option name="settingsModule" value="sansa_catalogue/settings/dev_timlinux.py" />
+        <option name="settingsModule" value="core/settings/dev_george.py" />
         <option name="manageScript" value="manage.py" />
       </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="SANSA Catalogue Dev" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 2.7.2 virtualenv at ~/Desktop/sites/sansa/venv" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings">
