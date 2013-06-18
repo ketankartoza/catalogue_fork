@@ -64,6 +64,24 @@ def _all():
 ###############################################################################
 
 
+@task
+def rsync_local():
+    _all()
+    with cd('/home/web/'):
+        run('rsync -va /vagrant/ %s/' % PROJECT_NAME)
+    collect_static()
+
+
+@task
+def collect_static():
+    _all()
+    with cd('%s/django_project' % env.code_path):
+        # run('venv/bin/python manage.py collectstatic --noinput')
+        wsgi_file = 'core/wsgi.py'
+        sudo('find . -iname \'*.pyc\' -exec rm {} \;')
+        run('touch %s' % wsgi_file)
+
+
 def replace_tokens(conf_file):
     if '.templ' == conf_file[-6:]:
         conf_file = conf_file.replace('.templ', '')
@@ -294,7 +312,7 @@ def update_git_checkout(branch='master'):
 ###############################################################################
 
 
-@hosts('5.9.140.151:8697')
+@task
 def get_dump():
     """Get a dump of the database from the server."""
     _all()
