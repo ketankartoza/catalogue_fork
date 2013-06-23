@@ -328,6 +328,13 @@ def restore_dump(file_name=None):
 
 
 @task
+def run_migrations():
+    _all()
+    with cd('/home/web/catalogue/django_project/'):
+        run('../venv/bin/python manage.py migratev3 '
+            '--settings=core.settings.project')
+
+@task
 def deploy(branch='master'):
     """Do a fresh deployment of the site to a server.
 
