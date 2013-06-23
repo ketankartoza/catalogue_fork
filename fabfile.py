@@ -10,7 +10,7 @@ import os
 from fabric.api import *
 from fabric.contrib.files import contains, exists, append, sed
 import fabtools
-from fabgis import fabgis
+from fabgis import postgres
 # Don't remove even though its unused
 from fabtools.vagrant import vagrant
 
@@ -316,14 +316,15 @@ def update_git_checkout(branch='master'):
 def get_dump():
     """Get a dump of the database from the server."""
     _all()
-    fabgis.get_postgres_dump(env.repo_alias)
+    postgres.get_postgres_dump(env.repo_alias, ignore_permissions=True)
 
 
 @task
-def restore_dump():
+def restore_dump(file_name=None):
     """Upload dump to host, remove existing db, recreate then restore dump."""
     _all()
-    fabgis.restore_postgres_dump(env.repo_alias)
+    postgres.restore_postgres_dump(
+        env.repo_alias, ignore_permissions=True, file_name=file_name)
 
 
 @task
