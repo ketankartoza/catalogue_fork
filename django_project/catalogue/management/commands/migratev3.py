@@ -89,7 +89,8 @@ class Command(BaseCommand):
         subprocess.call(['sh', '002_profile_migration.sh', self.db])
         os.chdir(origWD)
         print '* Trying to install required python modules (it might fail)'
-        subprocess.call(['pip', 'install', 'django-userena==1.1.2'])
+        subprocess.call(['../venv/bin/pip', 'install',
+                         'django-userena==1.1.2'])
         print '* Checking user permission (might take awhile)...'
         call_command('check_permissions')
 
@@ -110,7 +111,8 @@ class Command(BaseCommand):
         os.chdir(origWD)
         print '* Trying to install required python modules (it might fail)'
         subprocess.call([
-            'pip', 'install', 'git+git://github.com/dodobas/pycsw.git',
+            '../venv/bin/pip', 'install',
+            'git+git://github.com/dodobas/pycsw.git',
             'SQLAlchemy==0.8.0b2'
         ])
 
