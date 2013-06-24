@@ -327,7 +327,8 @@ def restore_dump(file_name=None, migrations=True):
         env.repo_alias,
         ignore_permissions=True,
         file_name=file_name,
-        user=env.wsgi_user)
+        user=env.wsgi_user,
+        password=env.wsgi_user)
     if migrations:
         run_migrations()
 

@@ -92,7 +92,12 @@ class Command(BaseCommand):
         subprocess.call(['../venv/bin/pip', 'install',
                          'django-userena==1.1.2'])
         print '* Checking user permission (might take awhile)...'
-        call_command('check_permissions')
+        try:
+            call_command('check_permissions')
+        except:
+            # we can expect failure when running as a fabric script as
+            # the call command doesnt seem to get passed the settings
+            pass
 
     def migrate_search(self):
         print '* Starting search app migration...'
