@@ -104,6 +104,7 @@ $.widget( "linfinity.sansa_daterangecontainer", {
                     $('#id_searchdaterange_set-INITIAL_FORMS').val(self.datecount-1);
                     $(this).hide('slow', function(){
                         $(this).remove();
+                        self._resliver_dateranges();
                     });
                 }
                 //decrease datecount
@@ -112,6 +113,25 @@ $.widget( "linfinity.sansa_daterangecontainer", {
             });
             self._check_date_count();
         });
+    },
+
+    _resliver_dateranges: function() {
+        // resilver all of the date ranges
+        // this is needed because Django expects to have all of the forms in
+        // a continuous sequence 0,1,2,3...
+        var self = this;
+        var total = 0;
+        this.element.find('.dr_row').each(function(){
+            $(this).find('.dr_input').remove();
+            var tmpDates = $(this).find('.dr_text').text().split(':');
+            $(this).append(
+                self._dr_input_template(
+                    total, self._parse_date(tmpDates[0].trim(),'dd-mm-yy'), self._parse_date(tmpDates[1].trim(),'dd-mm-yy'))
+                );
+            total++;
+        });
+        $('#id_searchdaterange_set-TOTAL_FORMS').val(total);
+        $('#id_searchdaterange_set-INITIAL_FORMS').val(total);
     },
 
     _check_date_count: function () {
@@ -132,12 +152,7 @@ $.widget( "linfinity.sansa_daterangecontainer", {
         // prepare template
         var tpl = [
         '<div class="dr_row">',
-        '<div class="dr_input">',
-            '<label for="id_searchdaterange_set-'+total+'-start_date">Start date:</label>',
-            '<input type="text" id="id_searchdaterange_set-'+total+'-start_date" name="searchdaterange_set-'+total+'-start_date" value="'+this._format_date(theStartDate)+'">',
-            '<label for="id_searchdaterange_set-'+total+'-end_date">End date:</label>',
-            '<input type="text" id="id_searchdaterange_set-'+total+'-end_date" name="searchdaterange_set-'+total+'-end_date" value="'+this._format_date(theEndDate)+'">',
-        '</div>',
+        this._dr_input_template(total, theStartDate, theEndDate),
         '<div class="dr_text" title="Click to select.">'+this._format_output(theStartDate, theEndDate)+'</div>',
         '</div>'].join('');
 
@@ -145,6 +160,17 @@ $.widget( "linfinity.sansa_daterangecontainer", {
         total++;
         $('#id_searchdaterange_set-TOTAL_FORMS').val(total);
         $('#id_searchdaterange_set-INITIAL_FORMS').val(total);
+        return tpl;
+    },
+
+    _dr_input_template: function (total, theStartDate, theEndDate) {
+        var tpl=[
+        '<div class="dr_input">',
+            '<label for="id_searchdaterange_set-'+total+'-start_date">Start date:</label>',
+            '<input type="text" id="id_searchdaterange_set-'+total+'-start_date" name="searchdaterange_set-'+total+'-start_date" value="'+this._format_date(theStartDate)+'">',
+            '<label for="id_searchdaterange_set-'+total+'-end_date">End date:</label>',
+            '<input type="text" id="id_searchdaterange_set-'+total+'-end_date" name="searchdaterange_set-'+total+'-end_date" value="'+this._format_date(theEndDate)+'">',
+        '</div>'].join('');
         return tpl;
     },
 
