@@ -10,7 +10,7 @@ import os
 from fabric.api import *
 from fabric.contrib.files import contains, exists, append, sed
 import fabtools
-from fabgis import postgres
+from fabgis import postgres, common
 # Don't remove even though its unused
 from fabtools.vagrant import vagrant
 
@@ -180,10 +180,10 @@ def setup_website():
         sudo('ln -s %s .' % conf_file)
 
     # wsgi user needs pg access to the db
-    fabgis.require_postgres_user(env.wsgi_user)
-    fabgis.require_postgres_user('timlinux', 'timlinux')
-    fabgis.require_postgres_user('readonly', 'readonly')
-    fabgis.create_postgis_1_5_db('catalogue', env.wsgi_user)
+    postgres.require_postgres_user(env.wsgi_user)
+    postgres.require_postgres_user('timlinux', 'timlinux')
+    postgres.require_postgres_user('readonly', 'readonly')
+    postgres.create_postgis_1_5_db('catalogue', env.wsgi_user)
     grant_sql = 'grant all on schema public to %s;' % env.wsgi_user
     # assumption is env.repo_alias is also database name
     run('psql %s -c "%s"' % (env.repo_alias, grant_sql))
@@ -332,9 +332,14 @@ def restore_dump(file_name=None, migrations=True):
 @task
 def run_migrations():
     _all()
+    grant_sql = ('GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO %s;'
+                 % env.wsgi_user)
+    # assumption is env.repo_alias is also database name
+    run('psql %s -c "%s"' % (env.repo_alias, grant_sql))
     with cd('/home/web/catalogue/django_project/'):
         run('../venv/bin/python manage.py migratev3 '
             '--settings=core.settings.project')
+
 
 @task
 def deploy(branch='master'):
@@ -361,9 +366,9 @@ def deploy(branch='master'):
         fab remote deploy
     """
 
-    fabgis.add_ubuntugis_ppa()
+    common.add_ubuntugis_ppa()
     ## fabgis.setup_postgis()
-    fabgis.setup_postgis_1_5()
+    postgres.setup_postgis_1_5()
     fabtools.require.deb.package('subversion')
     fabtools.require.deb.package('python-pip')
     fabtools.require.deb.package('libxml2-dev')
