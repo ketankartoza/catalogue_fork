@@ -1112,26 +1112,28 @@ function postMessage( theAllFlag )
 function checkForMessages()
 {
   $.get("/getUserMessages/" , function(data) {
-    if ( data != "\n" )
+    if ( data !== "\n" && data.length !== 0)
     {
-      var myDialog = $(data).dialog({
-        autoOpen: true,
-        title: 'You have messages',
-        closeOnEscape: true,
-        dialogClass: 'scrollable',
-        position: 'center',
-        width: 480,
-        modal: true,
-        buttons:
-        [
-          {
-            text: "Close",
-            click : function() {
-              $(this).dialog("close");
-            }
-          }
-        ]
-      });
+      // TODO: reimplement with Boostrap MODAL window, or some messaging framework
+      console.log(data);
+      // var myDialog = $(data).dialog({
+      //   autoOpen: true,
+      //   title: 'You have messages',
+      //   closeOnEscape: true,
+      //   dialogClass: 'scrollable',
+      //   position: 'center',
+      //   width: 480,
+      //   modal: true,
+      //   buttons:
+      //   [
+      //     {
+      //       text: "Close",
+      //       click : function() {
+      //         $(this).dialog("close");
+      //       }
+      //     }
+      //   ]
+      // });
     }
   });
 }

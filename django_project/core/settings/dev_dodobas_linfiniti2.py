@@ -116,3 +116,10 @@ except ImportError:
 # unknown
 # GEOS_LIBRARY_PATH = '/usr/lib/libgeos_c.so.1'
 # GDAL_LIBRARY_PATH = '/usr/lib/libgdal1.7.0.so.1'
+
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False,
+    # always show toolbar
+    'SHOW_TOOLBAR_CALLBACK': lambda *args, **kwargs: False,
+    'ENABLE_STACKTRACES': True
+}
