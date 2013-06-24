@@ -15,7 +15,11 @@
           <img src="/media/images/info_16.png" alt="View Metadata" style="cursor: pointer;" class="metadata-icon" longdesc="{{ myRecord.product.id }}"/>
         </td>
         <td>
-          <img src='/media/images/buy_16.png' alt="Add to Cart" style='cursor: pointer;' onclick='addToCart("{{ myRecord.product.id }}");' />
+          {% if user.is_anonymous %}
+            <img src='/media/images/buy_16.png' alt="Add to Cart" style='cursor: not-allowed;' title="Login required"/>
+          {% else %}
+            <img src='/media/images/buy_16.png' alt="Add to Cart" style='cursor: pointer;' onclick='addToCart("{{ myRecord.product.id }}");' />
+          {% endif %}
         </td>
         <td class="center">
           <img src="/thumbnail/{{ myRecord.product.id }}/small/" class='mini-icon' alt="Thumbnail" id="miniPreview{{ myRecord.product.id }}" style="cursor: pointer;" longdesc="{{ myRecord.product.id }}" />

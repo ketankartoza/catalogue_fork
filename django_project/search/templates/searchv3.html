@@ -15,7 +15,9 @@
       $('#map-container').load('/rendersearchmap/');
       $('#myTab  a:first').tab('show');
       $('#search-results').hide();
-      $("#cart_tab").load("/showminicartcontents/");
+      {% if not user.is_anonymous %}
+        $("#cart_tab").load("/showminicartcontents/");
+      {% endif %}
 
       // initialize row click callback
       setupRowClickCallback();
@@ -58,6 +60,7 @@
                 </div>
               </div>
               <div id="cart_tab" class="tab-pane">
+                You must login to order products!
               </div>
               <div id="preview_tab" class="tab-pane">
               </div>

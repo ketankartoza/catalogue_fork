@@ -311,7 +311,7 @@ def clip(theRequest):
     else:
         myForm = ClipForm()
         #render_to_response is done by the renderWithContext decorator
-        return  ({
+        return ({
             'myTitle': myTitle,
             'mySubmitLabel': 'Submit Clip Request',
             'myTaskingRequestFlag': True,
@@ -398,6 +398,7 @@ def showProduct(theRequest, theProductId):
 
 
 #@login_required
+@renderWithContext('productPreview.html')
 def showPreview(theRequest, theId, theSize):
     """Show a segment or scene thumbnail details,
       returning the result as a scaled down image.
@@ -406,22 +407,7 @@ def showPreview(theRequest, theId, theSize):
       method but it returns a html document instead of an image
       mime type. And adds a link to the larger image.
       """
-    return HttpResponse(
-        """<center><img src="/thumbnail/"""
-        + str(theId)
-        + "/"
-        + str(theSize)
-        + """/"><center>"""
-        + """<div class="btn-group"><button class="btn btn-info" onclick='showMetadata("""
-        + str(theId) + """);'  alt="Click to view metadata for this image"
-            title="Click to view metadata for this image"><i class=" icon-list"></i></button>"""
-        + """<button class="btn btn-success" onclick='addToCart("""
-        + str(theId) + """);'  alt="Click to add to your cart" title="Click
-            to add this image to your cart" ><i class="icon-shopping-cart"></i></button>"""
-        + """<button class="btn btn-success" data-toggle="modal" data-target="#myModal" id="large_preview" href="/thumbnailpage/"""
-        + str(theId)
-        + """/"><i class="icon-zoom-in"></i></button></div>"""
-        + """</center>""", mimetype="text/html")
+    return {'theId': theId, 'theSize': theSize}
 
 
 #@login_required
