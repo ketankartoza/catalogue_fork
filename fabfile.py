@@ -180,7 +180,7 @@ def setup_website():
         sudo('ln -s %s .' % conf_file)
 
     # wsgi user needs pg access to the db
-    postgres.require_postgres_user(env.wsgi_user)
+    postgres.require_postgres_user(env.wsgi_user, env.wsgi_user)
     postgres.require_postgres_user('timlinux', 'timlinux')
     postgres.require_postgres_user('readonly', 'readonly')
     postgres.create_postgis_1_5_db('catalogue', env.wsgi_user)
@@ -324,7 +324,10 @@ def restore_dump(file_name=None, migrations=True):
     """Upload dump to host, remove existing db, recreate then restore dump."""
     _all()
     postgres.restore_postgres_dump(
-        env.repo_alias, ignore_permissions=True, file_name=file_name)
+        env.repo_alias,
+        ignore_permissions=True,
+        file_name=file_name,
+        user=env.wsgi_user)
     if migrations:
         run_migrations()
 
