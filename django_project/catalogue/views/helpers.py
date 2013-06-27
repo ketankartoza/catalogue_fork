@@ -48,6 +48,7 @@ from catalogue.models import (
 )
 
 from search.models import SearchRecord
+from reports.pdf_reports import generateOrderPDF
 
 # Read default notification recipients from settings
 CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS = getattr(
@@ -273,6 +274,8 @@ def notifySalesStaff(theUser, theOrderId, theContext=None):
                      'in settings')
         return
     myOrder = get_object_or_404(Order, id=theOrderId)
+    # TODO: Attach the returned PDF to the email sent to staff
+    # theOrderPDF = generateOrderPDF(theUser, theOrderId)
     myRecords = SearchRecord.objects.filter(user=theUser,
                                             order=myOrder).select_related()
     myHistory = OrderStatusHistory.objects.filter(order=myOrder)
