@@ -13,13 +13,12 @@ def generateOrderPDF(theUser, theOrderID):
     """
     myOrderID: The ID of the order requesting a PDF
     return: Should return a file object which can be attached to an email in
-    catalogue.views.orders.notifySalesStaff
+    catalogue.views.helpers.notifySalesStaff
     """
     logger.info('PDF Order Summary requested for order ID: %s' % theOrderID)
     try:
         myOrder = Order.objects.get(Order, id=theOrderID)
     except Order.DoesNotExist:
-        myOrder = None
         logger.info('PDF Order Summary failed. Order ID (%s) not found' %
                     theOrderID)
         return TypeError('The provided order ID could not be found')

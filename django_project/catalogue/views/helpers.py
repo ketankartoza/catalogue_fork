@@ -275,7 +275,7 @@ def notifySalesStaff(theUser, theOrderId, theContext=None):
         return
     myOrder = get_object_or_404(Order, id=theOrderId)
     # TODO: Attach the returned PDF to the email sent to staff
-    # theOrderPDF = generateOrderPDF(theUser, theOrderId)
+    theOrderPDF = generateOrderPDF(theUser, theOrderId)
     myRecords = SearchRecord.objects.filter(user=theUser,
                                             order=myOrder).select_related()
     myHistory = OrderStatusHistory.objects.filter(order=myOrder)
@@ -334,6 +334,7 @@ def notifySalesStaff(theUser, theOrderId, theContext=None):
         myMsg.attach_related_file(
             os.path.join(
                 settings.MEDIA_ROOT, 'images', 'sac_header_email.jpg'))
+        myMsg.attach_related_file(theOrderPDF)
         #add message
         myMessagesList.append(myMsg)
 
