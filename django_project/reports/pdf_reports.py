@@ -17,7 +17,7 @@ def generateOrderPDF(theUser, theOrderID):
     """
     logger.info('PDF Order Summary requested for order ID: %s' % theOrderID)
     try:
-        myOrder = Order.objects.get(Order, id=theOrderID)
+        myOrder = Order.objects.get(id=theOrderID)
     except Order.DoesNotExist:
         logger.info('PDF Order Summary failed. Order ID (%s) not found' %
                     theOrderID)
