@@ -9,7 +9,7 @@ from catalogue.models import (
 from search.models import SearchRecord
 
 
-def generateOrderPDF(theUser, theOrderID):
+def generateOrderPDF(theUser=None, theOrderID=None):
     """
     myOrderID: The ID of the order requesting a PDF
     return: Should return a file object which can be attached to an email in
