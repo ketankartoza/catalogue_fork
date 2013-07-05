@@ -21,7 +21,7 @@ from fabtools.vagrant import vagrant
 # This will get replaced in various places, for a generic site, it may be
 # all you need to change...
 PROJECT_NAME = 'catalogue'
-env.user = 'vagrant'
+#env.user = 'vagrant'
 
 
 def _all():
@@ -257,6 +257,7 @@ def setup_venv():
         run('venv/bin/pip install -r REQUIREMENTS.txt')
 
 
+@task
 def update_git_checkout(branch='master'):
     """Make sure there is a read only git checkout.
 
@@ -320,7 +321,7 @@ def get_dump():
 
 
 @task
-def restore_dump(file_name=None, migrations=True):
+def restore_dump(file_name=None, migrations=False):
     """Upload dump to host, remove existing db, recreate then restore dump."""
     _all()
     postgres.restore_postgres_dump(
