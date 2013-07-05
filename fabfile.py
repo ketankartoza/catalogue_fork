@@ -321,7 +321,7 @@ def get_dump():
 
 
 @task
-def restore_dump(file_name=None, migrations=True):
+def restore_dump(file_name=None, migrations=False):
     """Upload dump to host, remove existing db, recreate then restore dump."""
     _all()
     postgres.restore_postgres_dump(
