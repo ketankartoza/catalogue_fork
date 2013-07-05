@@ -21,7 +21,7 @@ from fabtools.vagrant import vagrant
 # This will get replaced in various places, for a generic site, it may be
 # all you need to change...
 PROJECT_NAME = 'catalogue'
-env.user = 'vagrant'
+#env.user = 'vagrant'
 
 
 def _all():
