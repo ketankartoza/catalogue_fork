@@ -257,6 +257,7 @@ def setup_venv():
         run('venv/bin/pip install -r REQUIREMENTS.txt')
 
 
+@task
 def update_git_checkout(branch='master'):
     """Make sure there is a read only git checkout.
 
