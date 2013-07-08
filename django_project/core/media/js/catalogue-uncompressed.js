@@ -64,6 +64,10 @@ $(document).ready(function()
   //$(".blocking-link").live('click',block);
   //check for messages every 60 s
   setInterval(checkForMessages, 60000);
+  $(".btn-group").click(function() {
+    item = $(this).parent().parent().parent();
+    item.animate({scrollTop: item[0].scrollHeight});
+  });''
 });
 
 
@@ -1141,3 +1145,4 @@ function displaySearchFormErrors() {
     });
   }
 }
+
