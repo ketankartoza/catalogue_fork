@@ -79,7 +79,6 @@ function unblock()
 
 function block()
 {
-  
   $.blockUI({ message: '<h2><img src="/media/images/ajax-loader.gif" /> Loading...</h2>',
       css: {
         border: '1px solid #000',
@@ -1114,26 +1113,15 @@ function checkForMessages()
   $.get("/getUserMessages/" , function(data) {
     if ( data !== "\n" && data.length !== 0)
     {
-      // TODO: reimplement with Boostrap MODAL window, or some messaging framework
-      console.log(data);
-      // var myDialog = $(data).dialog({
-      //   autoOpen: true,
-      //   title: 'You have messages',
-      //   closeOnEscape: true,
-      //   dialogClass: 'scrollable',
-      //   position: 'center',
-      //   width: 480,
-      //   modal: true,
-      //   buttons:
-      //   [
-      //     {
-      //       text: "Close",
-      //       click : function() {
-      //         $(this).dialog("close");
-      //       }
-      //     }
-      //   ]
-      // });
+      $.each(data, function(key, val) {
+        console.log(val);
+        $.pnotify({
+          title: 'New message',
+          text: val.message,
+          type: 'info',
+          hide: false
+        });
+      });
     }
   });
 }
