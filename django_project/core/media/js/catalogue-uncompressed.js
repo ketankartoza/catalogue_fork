@@ -207,6 +207,8 @@ function setupEditingPanel(theLayer)
     );
   //mMapControls = [myDrawingControl, myModifyFeatureControl, myDestroyFeaturesControl];
   mNavigationPanel.addControls([myDrawingControl, myModifyFeatureControl, myDestroyFeaturesControl]);
+  //dirty hack to hide icons on map
+  $(".olControlNoSelect").hide();
 }
 
 //A little jquery to colour alternate table rows
@@ -521,20 +523,22 @@ function setupBaseMap()
   mMap = new OpenLayers.Map('map', options);
   // NOTE: Since we are putting the controls into a panel outside the map (in an external div),
   // we need to explicitly define the styles for the icons etc.
-  mNavigationPanel = new OpenLayers.Control.Panel({'div' : document.getElementById("map-navigation-panel")});
+  mNavigationPanel = new OpenLayers.Control.Panel({div : OpenLayers.Util.getElement('map-navigation-panel')});
+  mMap.addControl(mNavigationPanel);
   var myZoomInControl = new OpenLayers.Control.ZoomBox({
         title: "Zoom In Box: draw a box on the map, to see the area at a larger scale.",
         displayClass:'right icon-zoom-in icon-2x olControlZoomBoxIn',
+        div : OpenLayers.Util.getElement('map-navigation-panel'),
         out: false
       });
-  mMap.addControl(myZoomInControl);
+  //mMap.addControl(myZoomInControl);
 
   var myZoomOutControl = new OpenLayers.Control.ZoomBox({
         title: "Zoom Out Box: draw a box on the map, to see the area at a smaller scale.",
         displayClass:'right icon-zoom-out icon-2x olControlZoomBoxOut', 
         out: true
       });
-  mMap.addControl(myZoomOutControl);
+  //mMap.addControl(myZoomOutControl);
 
     var myNavigationControl = new OpenLayers.Control.Navigation({
     title : "Pan map: click and drag map to move the map in the direction of the mouse.",
@@ -542,7 +546,7 @@ function setupBaseMap()
     displayClass:'right icon-move icon-2x olControlNavigation',
     }
   );
-  mMap.addControl(myNavigationControl);
+  //mMap.addControl(myNavigationControl);
 
     var myHistoryControl = new OpenLayers.Control.NavigationHistory({
   nextOptions: {
@@ -554,11 +558,12 @@ function setupBaseMap()
       displayClass:'right icon-chevron-left icon-2x olControlNavigationHistoryPrevious',
     }
   });
-  mMap.addControl(myHistoryControl);
+  //mMap.addControl(myHistoryControl);
   // add map help button
-  mMap.addControl(map_help_button);
+  //mMap.addControl(myZoomInControl);
   // now add these controls all to our toolbar / panel
   mNavigationPanel.addControls([map_help_button, myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.previous, myHistoryControl.next]);
+  //mNavigationPanel.addControls([map_help_button]);
   mMap.addControl(new OpenLayers.Control.ScaleBar({
       align: "left",
       minWidth: 150,
@@ -568,7 +573,6 @@ function setupBaseMap()
 
   //show cursor location
   mMap.addControl(new OpenLayers.Control.MousePosition({'div': document.getElementById("map-location")}));
-  mMap.addControl(mNavigationPanel);
   mMap.addControl(new OpenLayers.Control.LayerSwitcher());
 }
 
