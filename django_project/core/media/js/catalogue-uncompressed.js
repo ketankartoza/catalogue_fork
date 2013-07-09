@@ -497,10 +497,12 @@ Create a custom map control to show map help dialog
 // this is a global variable which is intialized by setupMapHelpDialog()
 var myMapHelpDialog = null;
 var map_help_button = new OpenLayers.Control.Button({
-        displayClass: 'olControlMapHelp',
+        displayClass: 'right icon-question-sign icon-2x olControlMapHelp',
         trigger: function () {
           //show maphelp dialog
-          myMapHelpDialog.dialog('open')}
+          $('#modalContainer').load("/mapHelp/");
+          $('#myModal').modal('show');
+      }
     });
 
 function setupBaseMap()
@@ -554,12 +556,9 @@ function setupBaseMap()
   });
   mMap.addControl(myHistoryControl);
   // add map help button
-  var myHelpButton = new OpenLayers.Control({
-    title: "Help",
-  })
-  mMap.addControl(myHelpButton);
+  mMap.addControl(map_help_button);
   // now add these controls all to our toolbar / panel
-  mNavigationPanel.addControls([myHelpButton, myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.previous, myHistoryControl.next]);
+  mNavigationPanel.addControls([map_help_button, myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.previous, myHistoryControl.next]);
   mMap.addControl(new OpenLayers.Control.ScaleBar({
       align: "left",
       minWidth: 150,
