@@ -11,6 +11,7 @@
     $(document).ready(function() {
       // block();
       // $('#search-form-container').load('/rendersearchform/',"",unblock);
+      var theguid = '{{ theGuid }}';
 
       $('#map-container').load('/rendersearchmap/');
       $('#myTab  a:first').tab('show');
@@ -30,6 +31,11 @@
 
       // initialize search criteria display
       $('#search_criteria_display').searchcriteria();
+      if (theguid != '') {
+        block();
+        search_guid = theguid;
+        loadSearchResults( 1, theguid );
+      }
     });
   </script>
 

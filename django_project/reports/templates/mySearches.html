@@ -39,7 +39,7 @@
         {% firstof mySearch.record_count 'N/D' %}
       </td>
       <td>
-        <a href="{% url 'searchResultMap' mySearch.guid %}"><i class="icon-search"></i></a>{# blocking link class used to trap clicks and show block ui while page redirect runs #}
+        <a href="{% url 'searchGuid' mySearch.guid %}"><i class="icon-search"></i></a>{# blocking link class used to trap clicks and show block ui while page redirect runs #}
       </td>
       <td>
         <a href="{% url 'deleteSearch' mySearch.id %}"

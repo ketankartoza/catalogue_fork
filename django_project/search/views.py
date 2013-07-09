@@ -229,7 +229,8 @@ def search(theRequest):
                 'myHost': settings.HOST,
                 'myLayerDefinitions': myLayerDefinitions,
                 'myLayersList': myLayersList,
-                'myActiveBaseMap': myActiveBaseMap},
+                'myActiveBaseMap': myActiveBaseMap,
+                'theGuid': ''},
             context_instance=RequestContext(theRequest))
 
 
@@ -419,3 +420,30 @@ def updateSelectOptions(theRequest):
     }
     return HttpResponse(
         simplejson.dumps(myFinalData), mimetype='application/json')
+
+
+@login_required
+def searchguid(theRequest, theGuid):
+    """
+    Given a search guid, give the user a form prepopulated with
+    that search's criteria so they can modify their search easily.
+    A new search will be created from the modified one.
+    """
+    myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
+        theRequest)
+    logger.info('initial search form being rendered')
+    myForm = AdvancedSearchForm()
+    myFormset = DateRangeInlineFormSet()
+    # render_to_response is done by the renderWithContext decorator
+    return render_to_response(
+        'searchv3.html', {
+            'myAdvancedFlag': False,
+            'mySearchType': None,
+            'myForm': myForm,
+            'myFormset': myFormset,
+            'myHost': settings.HOST,
+            'myLayerDefinitions': myLayerDefinitions,
+            'myLayersList': myLayersList,
+            'myActiveBaseMap': myActiveBaseMap,
+            'theGuid': theGuid},
+        context_instance=RequestContext(theRequest))
