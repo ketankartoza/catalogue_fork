@@ -64,6 +64,10 @@ $(document).ready(function()
   //$(".blocking-link").live('click',block);
   //check for messages every 60 s
   setInterval(checkForMessages, 60000);
+  $(".btn-group").click(function() {
+    item = $(this).parent().parent().parent();
+    item.animate({scrollTop: item[0].scrollHeight});
+  });''
 });
 
 
@@ -79,7 +83,6 @@ function unblock()
 
 function block()
 {
-  
   $.blockUI({ message: '<h2><img src="/media/images/ajax-loader.gif" /> Loading...</h2>',
       css: {
         border: '1px solid #000',
@@ -204,6 +207,8 @@ function setupEditingPanel(theLayer)
     );
   //mMapControls = [myDrawingControl, myModifyFeatureControl, myDestroyFeaturesControl];
   mNavigationPanel.addControls([myDrawingControl, myModifyFeatureControl, myDestroyFeaturesControl]);
+  //dirty hack to hide icons on map
+  $(".olControlNoSelect").hide();
 }
 
 //A little jquery to colour alternate table rows
@@ -494,10 +499,12 @@ Create a custom map control to show map help dialog
 // this is a global variable which is intialized by setupMapHelpDialog()
 var myMapHelpDialog = null;
 var map_help_button = new OpenLayers.Control.Button({
-        displayClass: 'olControlMapHelp',
+        displayClass: 'right icon-question-sign icon-2x olControlMapHelp',
         trigger: function () {
           //show maphelp dialog
-          myMapHelpDialog.dialog('open')}
+          $('#modalContainer').load("/mapHelp/");
+          $('#myModal').modal('show');
+      }
     });
 
 function setupBaseMap()
@@ -516,20 +523,22 @@ function setupBaseMap()
   mMap = new OpenLayers.Map('map', options);
   // NOTE: Since we are putting the controls into a panel outside the map (in an external div),
   // we need to explicitly define the styles for the icons etc.
-  mNavigationPanel = new OpenLayers.Control.Panel({'div' : document.getElementById("map-navigation-panel")});
+  mNavigationPanel = new OpenLayers.Control.Panel({div : OpenLayers.Util.getElement('map-navigation-panel')});
+  mMap.addControl(mNavigationPanel);
   var myZoomInControl = new OpenLayers.Control.ZoomBox({
         title: "Zoom In Box: draw a box on the map, to see the area at a larger scale.",
         displayClass:'right icon-zoom-in icon-2x olControlZoomBoxIn',
+        div : OpenLayers.Util.getElement('map-navigation-panel'),
         out: false
       });
-  mMap.addControl(myZoomInControl);
+  //mMap.addControl(myZoomInControl);
 
   var myZoomOutControl = new OpenLayers.Control.ZoomBox({
         title: "Zoom Out Box: draw a box on the map, to see the area at a smaller scale.",
         displayClass:'right icon-zoom-out icon-2x olControlZoomBoxOut', 
         out: true
       });
-  mMap.addControl(myZoomOutControl);
+  //mMap.addControl(myZoomOutControl);
 
     var myNavigationControl = new OpenLayers.Control.Navigation({
     title : "Pan map: click and drag map to move the map in the direction of the mouse.",
@@ -537,7 +546,7 @@ function setupBaseMap()
     displayClass:'right icon-move icon-2x olControlNavigation',
     }
   );
-  mMap.addControl(myNavigationControl);
+  //mMap.addControl(myNavigationControl);
 
     var myHistoryControl = new OpenLayers.Control.NavigationHistory({
   nextOptions: {
@@ -549,14 +558,12 @@ function setupBaseMap()
       displayClass:'right icon-chevron-left icon-2x olControlNavigationHistoryPrevious',
     }
   });
-  mMap.addControl(myHistoryControl);
+  //mMap.addControl(myHistoryControl);
   // add map help button
-  var myHelpButton = new OpenLayers.Control({
-    title: "Help",
-  })
-  mMap.addControl(myHelpButton);
+  //mMap.addControl(myZoomInControl);
   // now add these controls all to our toolbar / panel
-  mNavigationPanel.addControls([myHelpButton, myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.previous, myHistoryControl.next]);
+  mNavigationPanel.addControls([map_help_button, myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.previous, myHistoryControl.next]);
+  //mNavigationPanel.addControls([map_help_button]);
   mMap.addControl(new OpenLayers.Control.ScaleBar({
       align: "left",
       minWidth: 150,
@@ -566,7 +573,6 @@ function setupBaseMap()
 
   //show cursor location
   mMap.addControl(new OpenLayers.Control.MousePosition({'div': document.getElementById("map-location")}));
-  mMap.addControl(mNavigationPanel);
   mMap.addControl(new OpenLayers.Control.LayerSwitcher());
 }
 
@@ -1114,26 +1120,15 @@ function checkForMessages()
   $.get("/getUserMessages/" , function(data) {
     if ( data !== "\n" && data.length !== 0)
     {
-      // TODO: reimplement with Boostrap MODAL window, or some messaging framework
-      console.log(data);
-      // var myDialog = $(data).dialog({
-      //   autoOpen: true,
-      //   title: 'You have messages',
-      //   closeOnEscape: true,
-      //   dialogClass: 'scrollable',
-      //   position: 'center',
-      //   width: 480,
-      //   modal: true,
-      //   buttons:
-      //   [
-      //     {
-      //       text: "Close",
-      //       click : function() {
-      //         $(this).dialog("close");
-      //       }
-      //     }
-      //   ]
-      // });
+      $.each(data, function(key, val) {
+        console.log(val);
+        $.pnotify({
+          title: 'New message',
+          text: val.message,
+          type: 'info',
+          hide: false
+        });
+      });
     }
   });
 }
@@ -1153,3 +1148,4 @@ function displaySearchFormErrors() {
     });
   }
 }
+

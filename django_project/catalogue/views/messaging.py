@@ -24,6 +24,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import (HttpResponseBadRequest,
                          HttpResponse)
+from django.utils import simplejson
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
@@ -159,12 +160,21 @@ def userMessages(theRequest):
         return HttpResponse('')
 
     myMessages = OfflineMessage.objects.filter(user=theRequest.user)
-    myResponse = render_to_response(
+    '''myResponse = render_to_response(
         'messages.html',
         {
             'messages': myMessages
         },
         context_instance=RequestContext(theRequest))
+    '''
+    messages = []
+    if myMessages:
+        for messg in myMessages:
+            msg = {}
+            msg['message'] = messg.message
+            messages.append(msg)
+    myResponse = HttpResponse(
+        simplejson.dumps(messages), mimetype='application/json')
     for myMessage in myMessages:
         myMessage.delete()
 

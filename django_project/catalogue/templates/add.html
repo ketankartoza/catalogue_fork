@@ -1,6 +1,6 @@
   <script type="text/javascript">
     // <![CDATA[
-    $.ui.dialog.prototype.options.bgiframe = true;
+    //$.ui.dialog.prototype.options.bgiframe = true;
   function check_search_dates() { /* do nothing */ };
   function init() {
     if (OpenLayers.Util.getBrowserName() == "msie" && !window.ieLoaded) {
@@ -54,7 +54,7 @@
       {% endfor %}
       */
 {# // add tooltip #}
-$("#map-navigation-panel div[title]").tooltip('#maptooltip');
+//$("#map-navigation-panel div[title]").tooltip('#maptooltip');
     $('#OpenLayers_Control_MaximizeDiv_innerImage').css({'height':'100px'}); {# //dirty hack, OL sets 'style' element which cannot be overriden by CSS #}
   };
   //]]>
@@ -195,6 +195,17 @@ $("#map-navigation-panel div[title]").tooltip('#maptooltip');
     {# popup ends #}
   {% endfor %}
 -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="myModalLabel">Help</h3>
+        </div>
+        <div class="modal-body" id="modalContainer">
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+      </div>
 <script>
 $('select, input, textarea, .help-inline ').addClass('span8');
 </script>
