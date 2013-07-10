@@ -21,7 +21,7 @@ from fabtools.vagrant import vagrant
 # This will get replaced in various places, for a generic site, it may be
 # all you need to change...
 PROJECT_NAME = 'catalogue'
-#env.user = 'vagrant'
+env.user = 'vagrant'
 
 
 def _all():
@@ -375,6 +375,7 @@ def deploy(branch='master'):
     ## fabgis.setup_postgis()
     postgres.setup_postgis_1_5()
     fabtools.require.deb.package('subversion')
+    fabtools.require.deb.package('libreoffice-common')
     fabtools.require.deb.package('python-pip')
     fabtools.require.deb.package('libxml2-dev')
     fabtools.require.deb.package('libxslt1-dev')
