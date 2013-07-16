@@ -15,7 +15,6 @@ NOSE_ARGS = (
     '--cover-html-dir=xmlrunner/html',
     '--cover-inclusive',
     '--cover-package=catalogue',
-    '--cover-package',
     '--cover-package=useraccounts',
     '--cover-package=search',
     '--nocapture',
