@@ -23,7 +23,7 @@ from catalogue.tests.test_utils import simpleMessage
 # from search.models import Search
 
 from dictionaries.tests.model_factories import CollectionF
-from .model_factories import SearchF
+from .model_factories import SearchF, SearchDateRangeF
 
 
 class TestSearchCRUD(TestCase):
@@ -157,20 +157,38 @@ class TestSearchCRUD(TestCase):
                 message='Model PK should equal None')
         )
 
-    def test_Search_datesAsString(self):
+    def test_Search_datesAsString_single(self):
         """
         Tests Search model datesAsString method
         """
-        myModelPKs = [1, 2, 4, 7]
-        myExpResults = [
-            '01-01-1901 : 31-12-2100', '01-01-2009 : 31-12-2012',
-            '01-01-2000 : 31-12-2005', '01-01-1900 : 31-12-2100']
+        mySearch = SearchF.create()
+        SearchDateRangeF.create(search=mySearch)
 
-        for idx, PK in enumerate(myModelPKs):
-            myModel = Search.objects.get(pk=PK)
-            myRes = myModel.datesAsString()
-            self.assertEqual(
-                myRes, myExpResults[idx], simpleMessage(
-                    myRes, myExpResults[idx],
-                    message='Model PK %s datesAsString:' % PK)
-            )
+        myExpResults = '15-07-2010 : 15-07-2012'
+
+        myRes = mySearch.datesAsString()
+        self.assertEqual(
+            myRes, myExpResults,
+            simpleMessage(myRes, myExpResults)
+        )
+
+    def test_Search_datesAsString_multiple(self):
+        """
+        Tests Search model datesAsString method
+        """
+        mySearch = SearchF.create()
+        # add date ranges
+        SearchDateRangeF.create(search=mySearch)
+        SearchDateRangeF.create(search=mySearch, end_date='2013-07-16')
+        SearchDateRangeF.create(search=mySearch, end_date='2012-07-16')
+
+        myExpResults = (
+            '15-07-2010 : 15-07-2012, 15-07-2010 : 16-07-2013, '
+            '15-07-2010 : 16-07-2012'
+        )
+
+        myRes = mySearch.datesAsString()
+        self.assertEqual(
+            myRes, myExpResults,
+            simpleMessage(myRes, myExpResults)
+        )

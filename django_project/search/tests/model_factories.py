@@ -2,7 +2,7 @@ import factory
 
 from core.model_factories import UserF
 
-from ..models import Search
+from ..models import Search, SearchDateRange
 
 
 class SearchF(factory.django.DjangoModelFactory):
@@ -95,3 +95,14 @@ class SearchF(factory.django.DjangoModelFactory):
             # A list of groups were passed in, use them
             for collection in extracted:
                 self.collection.add(collection)
+
+
+class SearchDateRangeF(factory.django.DjangoModelFactory):
+    """
+    SearchDateRange model factory
+    """
+    FACTORY_FOR = SearchDateRange
+
+    search = factory.SubFactory(SearchF)
+    start_date = '2010-07-15'
+    end_date = '2012-07-15'
