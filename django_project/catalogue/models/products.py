@@ -36,8 +36,6 @@ from django.core.exceptions import ObjectDoesNotExist
 # PIL and os needed for making small thumbs
 from PIL import Image, ImageFilter, ImageOps
 
-from django_dag.models import node_factory, edge_factory
-
 from catalogue.utmzonecalc import utmZoneFromLatLon
 from catalogue.dims_lib import dimsWriter
 from catalogue.models import (
@@ -200,8 +198,7 @@ def runconcrete(func):
     return wrapper
 
 
-class GenericProduct(node_factory('catalogue.ProductLink',
-                                  base_model=models.Model)):
+class GenericProduct(models.Model):
 
     """
     A generic model (following R-5.1-160 of DIMS system architecture document).
@@ -748,17 +745,6 @@ class GenericProduct(node_factory('catalogue.ProductLink',
         Simple product_id property, helper with unique_product_id migration
         """
         return self.unique_product_id
-
-
-class ProductLink(
-    edge_factory(
-        'catalogue.GenericProduct', concrete=False, base_model=models.Model)):
-    """
-    Links between products
-    """
-
-    class Meta:
-        app_label = 'catalogue'
 
 
 ###############################################################################
