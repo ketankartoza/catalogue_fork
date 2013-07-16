@@ -31,14 +31,16 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 #from django.core.validators import EMPTY_VALUES
 from crispy_forms.helper import FormHelper
+from crispy_forms.bootstrap import (
+    Tab,
+    TabHolder,
+)
 from crispy_forms.layout import (
     Layout,
     Fieldset,
     Submit,
     Button,
     Div,
-    Tab,
-    TabHolder,
     HTML,
     Field
 )
