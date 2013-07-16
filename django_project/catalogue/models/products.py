@@ -67,7 +67,7 @@ def exceptionToString(e):
     """
     import traceback
     info = "".join(traceback.format_tb(sys.exc_info()[2]))
-    return  str(e) + "\n\n" + info
+    return str(e) + "\n\n" + info
 
 
 ##################################################################
@@ -721,16 +721,6 @@ class GenericProduct(node_factory('catalogue.ProductLink',
         myUsedTokens = myTokens[0:9]
         myNewString = " ".join(myUsedTokens).replace("-", "")
         return myNewString
-
-    def pad(self, theString, theLength):
-        myLength = len(theString)
-        myString = theString + "-" * (theLength - myLength)
-        return myString
-
-    def zeroPad(self, theString, theLength):
-        myLength = len(theString)
-        myString = "0" * (theLength - myLength) + theString
-        return myString
 
     def getUTMZones(self, theBuffer=0):
         """ return UTM zones which overlap this product
