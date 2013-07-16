@@ -13,8 +13,8 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'dodobasic@gmail.com'
-__version__ = '0.1'
-__date__ = '29/06/2012'
+__version__ = '0.2'
+__date__ = '16/07/2013'
 __copyright__ = 'South African National Space Agency'
 
 from datetime import datetime
@@ -22,6 +22,7 @@ from django.test import TestCase
 from catalogue.tests.test_utils import simpleMessage
 # from search.models import Search
 
+from dictionaries.tests.model_factories import CollectionF
 from .model_factories import SearchF
 
 
@@ -29,27 +30,6 @@ class TestSearchCRUD(TestCase):
     """
     Tests search models.
     """
-    # fixtures = [
-    #     # 'test_user.json',
-    #     # 'test_institution.json',
-    #     # 'test_license.json',
-    #     # # new_dicts
-    #     # 'test_radarbeam.json',
-    #     # 'test_imagingmode.json',
-    #     # 'test_spectralgroup.json',
-    #     # 'test_spectralmode.json',
-    #     # 'test_scannertype.json',
-    #     # 'test_instrumenttype.json',
-    #     # 'test_collection.json',
-    #     # 'test_satellite.json',
-    #     # 'test_satelliteinstrument.json',
-    #     # 'test_radarproductprofile.json',
-    #     # 'test_opticalproductprofile.json',
-
-    #     # 'test_processinglevel.json',
-    #     # 'test_searchdaterange.json',
-    #     # 'test_search.json'
-    # ]
 
     def setUp(self):
         """
@@ -61,58 +41,21 @@ class TestSearchCRUD(TestCase):
         """
         Tests Search model creation
         """
-        myNewData = {
-            'record_count': None,
-            'use_cloud_cover': False,
-            'sensor_inclination_angle_end': None,
-            'search_date': '2010-07-15 09:21:38',
-            'satellite_id': None,
-            'spectral_mode_id': None,
-            'guid': '69d814b7-TEST-42b9-9530-50ae77806da9',
-            'sensor_inclination_angle_start': None,
-            'ip_position': None,
-            'deleted': False,
-            'spatial_resolution': None,
-            'k_orbit_path': None,
-            'band_count': None,
-            'user_id': 1,
-            'geometry': (
-                'POLYGON ((17.54 -32.05, 20.83 -32.41, 20.30 -35.17, 17.84 '
-                    '-34.65, 17.54 -32.05))'),
-            'j_frame_row': None,
-            'cloud_mean': 5,
-            'license_type': None
-        }
-
-        myModel = SearchF(**myNewData)
-        # myModel.save()
+        myCollections = [CollectionF.create(), CollectionF.create()]
+        myModel = SearchF.create(collections=myCollections)
 
         #check if PK exists
         self.assertTrue(
-            myModel.pk is not None, simpleMessage(
+            myModel.pk is not None,
+            simpleMessage(
                 myModel.pk, 'not None',
                 message='Model PK should NOT equal None')
         )
 
-        #we need to create manyTomany field separatly
-        myNewDataM2M = {
-            'processing_level': [],
-            'instrumenttype': [4]
-        }
-        #add M2M fields
-        for field, vals in myNewDataM2M.iteritems():
-            for value in vals:
-                myModel.__getattribute__(field).add(value)
-
-        #check if M2M models were added
-        for field in myNewDataM2M:
-            myRes = myModel.__getattribute__(field).count()
-            myExpRes = len(myNewDataM2M.get(field))
-            self.assertTrue(
-                myRes == myExpRes, simpleMessage(
-                    myRes, myExpRes,
-                    message='Model M2M field "%s" count:' % field)
-            )
+        self.assertTrue(
+            myModel.collection.count() == 2,
+            simpleMessage(myModel.collection.count(), 2)
+        )
 
     def test_Search_read(self):
         """

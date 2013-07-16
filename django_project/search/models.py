@@ -141,11 +141,11 @@ class BaseSearch(models.Model):
     class Meta:
         abstract = True
 
-    def save(self):
+    def save(self, *args, **kwargs):
         #makes a random globally unique id
         if not self.guid or self.guid == 'null':
             self.guid = str(uuid.uuid4())
-        super(BaseSearch, self).save()
+        super(BaseSearch, self).save(*args, **kwargs)
 
 
 class SearchHelpersManager(models.GeoManager):
@@ -415,11 +415,11 @@ class Clip(models.Model):
     # to the user
     result_url = models.URLField(max_length=1024)
 
-    def save(self):
+    def save(self, *args, **kwargs):
         #makes a random globally unique id
         if not self.guid or self.guid == 'null':
             self.guid = str(uuid.uuid4())
-        super(Clip, self).save()
+        super(Clip, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Clip'
