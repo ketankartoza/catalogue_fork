@@ -20,34 +20,36 @@ __copyright__ = 'South African National Space Agency'
 from datetime import datetime
 from django.test import TestCase
 from catalogue.tests.test_utils import simpleMessage
-from search.models import Search
+# from search.models import Search
+
+from .model_factories import SearchF
 
 
-class SearchCRUD_Test(TestCase):
+class TestSearchCRUD(TestCase):
     """
-    Tests models.
+    Tests search models.
     """
-    fixtures = [
-        'test_user.json',
-        'test_institution.json',
-        'test_license.json',
-        # new_dicts
-        'test_radarbeam.json',
-        'test_imagingmode.json',
-        'test_spectralgroup.json',
-        'test_spectralmode.json',
-        'test_scannertype.json',
-        'test_instrumenttype.json',
-        'test_collection.json',
-        'test_satellite.json',
-        'test_satelliteinstrument.json',
-        'test_radarproductprofile.json',
-        'test_opticalproductprofile.json',
+    # fixtures = [
+    #     # 'test_user.json',
+    #     # 'test_institution.json',
+    #     # 'test_license.json',
+    #     # # new_dicts
+    #     # 'test_radarbeam.json',
+    #     # 'test_imagingmode.json',
+    #     # 'test_spectralgroup.json',
+    #     # 'test_spectralmode.json',
+    #     # 'test_scannertype.json',
+    #     # 'test_instrumenttype.json',
+    #     # 'test_collection.json',
+    #     # 'test_satellite.json',
+    #     # 'test_satelliteinstrument.json',
+    #     # 'test_radarproductprofile.json',
+    #     # 'test_opticalproductprofile.json',
 
-        'test_processinglevel.json',
-        'test_searchdaterange.json',
-        'test_search.json'
-    ]
+    #     # 'test_processinglevel.json',
+    #     # 'test_searchdaterange.json',
+    #     # 'test_search.json'
+    # ]
 
     def setUp(self):
         """
@@ -82,8 +84,8 @@ class SearchCRUD_Test(TestCase):
             'license_type': None
         }
 
-        myModel = Search(**myNewData)
-        myModel.save()
+        myModel = SearchF(**myNewData)
+        # myModel.save()
 
         #check if PK exists
         self.assertTrue(

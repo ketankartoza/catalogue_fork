@@ -33,3 +33,4 @@ git+https://github.com/dodobas/pycsw.git
 SQLAlchemy==0.8.0b2
 django-model-utils==1.2.0
 django-extensions==0.4.1
+factory-boy==2.1.1
