@@ -76,3 +76,8 @@ LOGGING = {
         }
     }
 }
+
+# django 1.5 ALLOWED_HOSTS - protects against host-poisoning attacks
+# change to the real service name
+# https://docs.djangoproject.com/en/1.5/ref/settings/#std:setting-ALLOWED_HOSTS
+ALLOWED_HOSTS = []

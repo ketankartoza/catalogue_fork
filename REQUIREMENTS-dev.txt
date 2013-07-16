@@ -5,7 +5,7 @@ sqlparse
 # install 'subversion' system package
 https://guppy-pe.svn.sourceforge.net/svnroot/guppy-pe/trunk/guppy
 line_profiler
-django_devserver
+django_devserver==0.6.2
 # Fabric related deps
 git+git://github.com/timlinux/fabtools.git
 fabgis==0.10.0

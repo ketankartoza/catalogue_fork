@@ -413,7 +413,7 @@ class Clip(models.Model):
             (2, 'completed')])
     # the result of the clipping operation is available via a URL that is sent
     # to the user
-    result_url = models.URLField(max_length=1024, verify_exists=True)
+    result_url = models.URLField(max_length=1024)
 
     def save(self):
         #makes a random globally unique id

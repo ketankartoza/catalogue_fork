@@ -4,10 +4,10 @@
       <ul class="dropdown-menu">
       {% if user.is_authenticated %}
         <li>
-          <a href="{% url userena_profile_detail user %}">{% trans "Personal information" %}</a>
+          <a href="{% url "userena_profile_detail" user %}">{% trans "Personal information" %}</a>
         </li>
         <li>
-          <a href="{% url userena_profile_edit user %}">{% trans "Edit profile" %}</a>
+          <a href="{% url "userena_profile_edit" user %}">{% trans "Edit profile" %}</a>
         </li>
         {% comment %}
         <li>
@@ -15,23 +15,23 @@
         </li>
         {% endcomment %}
         <li>
-          <a href="{% url userena_password_change user %}">{% trans "Change password" %}</a>
+          <a href="{% url "userena_password_change" user %}">{% trans "Change password" %}</a>
         </li>
         <li>
-          <a href="{% url userena_email_change user %}">
+          <a href="{% url "userena_email_change" user %}">
           {% if email %}{% trans "Change your e-mail address" %}{% else %}{% trans "Change your e-mail address" %}{% endif %}</a>
         </li>
         {% if not validated and email %}
         <li>
-          <a href="{% url userena_email_confirm %}">{% trans "Resend validation e-mail" %}</a>
+          <a href="{% url "userena_email_confirm" %}">{% trans "Resend validation e-mail" %}</a>
         </li>
         {% endif %}
         <li>
-          <a href="{% url userena_signout %}">Logout</a>
+          <a href="{% url "userena_signout" %}">Logout</a>
         </li>
       {% else %}
         <li>
-          <a href="{% url userena_sigin %}">Login</a>
+          <a href="{% url "userena_sigin" %}">Login</a>
         </li>
       {% endif %}
       </ul>
