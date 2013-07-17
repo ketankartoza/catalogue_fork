@@ -404,7 +404,6 @@ class Clip(models.Model):
             (2, 'zaSpot2mMosaic2007')])
     # polygon is the one from the shapefile
     geometry = models.PolygonField(srid=4326)
-    objects = models.GeoManager()
     status = models.CharField(
         max_length=20,
         choices=[
@@ -414,6 +413,8 @@ class Clip(models.Model):
     # the result of the clipping operation is available via a URL that is sent
     # to the user
     result_url = models.URLField(max_length=1024)
+
+    objects = models.GeoManager()
 
     def save(self, *args, **kwargs):
         #makes a random globally unique id

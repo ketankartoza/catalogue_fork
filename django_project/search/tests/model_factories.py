@@ -3,7 +3,7 @@ import factory
 
 from core.model_factories import UserF
 
-from ..models import Search, SearchDateRange
+from ..models import Search, SearchDateRange, Clip
 
 
 class SearchF(factory.django.DjangoModelFactory):
@@ -107,3 +107,22 @@ class SearchDateRangeF(factory.django.DjangoModelFactory):
     search = factory.SubFactory(SearchF)
     start_date = date(2010, 07, 15)
     end_date = date(2012, 07, 15)
+
+
+class ClipF(factory.django.DjangoModelFactory):
+    """
+    Clip model factory
+    """
+    FACTORY_FOR = Clip
+
+    guid = None
+    owner = factory.SubFactory(UserF)
+    image = 'zaSpot2mMosaic2009'
+    geometry = (
+        'POLYGON ((17.5400390625000000 -32.0595703125000000, '
+        '20.8359375000000000 -32.4111328125000000, 20.3085937500000000 '
+        '-35.1796875000000000, 17.8476562500000000 -34.6523437500000000, '
+        '17.5400390625000000 -32.0595703125000000))'
+    )
+    status = 'submitted'
+    result_url = 'http://example.com/unittest'

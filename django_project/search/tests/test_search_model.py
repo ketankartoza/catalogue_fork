@@ -185,10 +185,11 @@ class TestSearchCRUD(TestCase):
         """
         myUser = UserF(username='test user')
         mySearch = SearchF.build(
+            search_date='15-07-2010',
             user=myUser,
             guid='69d814b7-3164-42b9-9530-50ae77806da9'
         )
 
         self.assertEqual(
             unicode(mySearch),
-            u'None Guid: 69d814b7-3164-42b9-9530-50ae77806da9 User: test user')
+            u'15-07-2010 Guid: 69d814b7-3164-42b9-9530-50ae77806da9 User: test user')
