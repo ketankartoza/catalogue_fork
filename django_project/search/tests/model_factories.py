@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 import factory
 
 from core.model_factories import UserF
@@ -105,5 +105,5 @@ class SearchDateRangeF(factory.django.DjangoModelFactory):
     FACTORY_FOR = SearchDateRange
 
     search = factory.SubFactory(SearchF)
-    start_date = '2010-07-15'
-    end_date = '2012-07-15'
+    start_date = date(2010, 07, 15)
+    end_date = date(2012, 07, 15)
