@@ -17,11 +17,10 @@ __version__ = '0.2'
 __date__ = '16/07/2013'
 __copyright__ = 'South African National Space Agency'
 
-from datetime import datetime
 from django.test import TestCase
 from catalogue.tests.test_utils import simpleMessage
-# from search.models import Search
 
+from core.model_factories import UserF
 from dictionaries.tests.model_factories import CollectionF
 from .model_factories import SearchF, SearchDateRangeF
 
@@ -35,7 +34,6 @@ class TestSearchCRUD(TestCase):
         """
         Sets up before each test
         """
-        pass
 
     def test_Search_create(self):
         """
@@ -61,34 +59,27 @@ class TestSearchCRUD(TestCase):
         """
         Tests Search model read
         """
-        myModelPK = 1
         myExpectedModelData = {
             'record_count': None,
             'use_cloud_cover': False,
             'sensor_inclination_angle_end': None,
-            'search_date': datetime.strptime(
-                '2010-07-15 09:21:38', '%Y-%m-%d %H:%M:%S'),
             'satellite_id': None,
             'spectral_mode_id': None,
             'guid': '69d814b7-3164-42b9-9530-50ae77806da9',
             'sensor_inclination_angle_start': None,
-            'ip_position': (
-                '0101000020E6100000A01A2FDD246632C0BC749318043E5040'),
+            'ip_position': None,
             'deleted': False,
             'spatial_resolution': None,
             'k_orbit_path': None,
             'band_count': None,
-            'user_id': 1,
-            'geometry': (
-                '0103000020E6100000010000000500000000000000408A314000000000A0'
-                '0740C00000000000D6344000000000A03440C000000000004F3440000000'
-                '00009741C00000000000D9314000000000805341C000000000408A314000'
-                '000000A00740C0'),
             'j_frame_row': None,
             'cloud_mean': 5,
             'license_type': None
         }
-        myModel = Search.objects.get(pk=myModelPK)
+        myModel = SearchF.create(
+            guid='69d814b7-3164-42b9-9530-50ae77806da9',
+            collections=[CollectionF.create(), CollectionF.create()]
+        )
         #check if data is correct
         for key, val in myExpectedModelData.items():
             self.assertEqual(
@@ -97,31 +88,27 @@ class TestSearchCRUD(TestCase):
                     message='For key "%s"' % key)
             )
 
-        #check m2m
-        myExpectedModelDataM2M = {
-            'processing_level': [],
-            'instrumenttype': [
-                4
-            ]
-        }
-        #add M2M fields
-        for field in myExpectedModelDataM2M:
-            myRes = len(myModel.__getattribute__(field).all())
-            myExpRes = len(myExpectedModelDataM2M.get(field))
-            self.assertEqual(
-                myRes, myExpRes, simpleMessage(
-                    myRes, myExpRes,
-                    message='For field "%s"' % field)
-            )
+        self.assertEqual(
+            myModel.geometry.hex,
+            '010300000001000000050000000AD7A3703D8A314066666666660640C014AE47E'
+            '17AD4344014AE47E17A3440C0CDCCCCCCCC4C3440F6285C8FC29541C0D7A3703D'
+            '0AD7314033333333335341C00AD7A3703D8A314066666666660640C0')
+
+        self.assertEqual(
+            myModel.processing_level.count(), 0)
+
+        self.assertEqual(
+            myModel.collection.count(), 2)
+
+        self.assertTrue(
+            myModel.user.pk is not None)
 
     def test_Search_update(self):
         """
         Tests Search model update
         """
-        myModelPK = 1
-        myModel = Search.objects.get(pk=myModelPK)
+        myModel = SearchF.create()
         myNewModelData = {
-            'user_id': 1,
             'order_id': 1,
             'product_id': 1960810,
             'delivery_detail_id': None,
@@ -145,8 +132,7 @@ class TestSearchCRUD(TestCase):
         """
         Tests Search model delete
         """
-        myModelPK = 1
-        myModel = Search.objects.get(pk=myModelPK)
+        myModel = SearchF.create(guid=None)
 
         myModel.delete()
 
@@ -192,3 +178,17 @@ class TestSearchCRUD(TestCase):
             myRes, myExpResults,
             simpleMessage(myRes, myExpResults)
         )
+
+    def test_Search_model_repr(self):
+        """
+        Tests Search model repr
+        """
+        myUser = UserF(username='test user')
+        mySearch = SearchF.build(
+            user=myUser,
+            guid='69d814b7-3164-42b9-9530-50ae77806da9'
+        )
+
+        self.assertEqual(
+            unicode(mySearch),
+            u'None Guid: 69d814b7-3164-42b9-9530-50ae77806da9 User: test user')

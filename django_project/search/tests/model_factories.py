@@ -1,3 +1,4 @@
+from datetime import datetime
 import factory
 
 from core.model_factories import UserF
@@ -16,10 +17,10 @@ class SearchF(factory.django.DjangoModelFactory):
         'POLYGON ((17.54 -32.05, 20.83 -32.41, 20.30 -35.17, 17.84 '
         '-34.65, 17.54 -32.05))')
     ip_position = None
-    search_date = '2010-07-15 09:21:38'
-    guid = '69d814b7-TEST-42b9-9530-50ae77806da9'
+    guid = None
     record_count = None
     deleted = False
+    search_date = None
 
     k_orbit_path = None
     j_frame_row = None
