@@ -1,5 +1,5 @@
 """
-SANSA-EO Catalogue - Dictionaries ProcessingLevel - basic CRUD unittests
+SANSA-EO Catalogue - Dictionaries Collection - basic CRUD unittests
 
 Contact : lkleyn@sansa.org.za
 
