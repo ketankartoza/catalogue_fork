@@ -19,13 +19,14 @@ __copyright__ = 'South African National Space Agency'
 from django.test import TestCase
 from catalogue.tests.test_utils import simpleMessage
 
+from catalogue.tests.model_factories import InstitutionF
 
-from .model_factories import ProcessingLevelF
+from .model_factories import CollectionF
 
 
-class TestProcessingLevelCRUD(TestCase):
+class TestCollectionCRUD(TestCase):
     """
-    Tests ProcessingLevel model
+    Tests Collection model
     """
 
     def setUp(self):
@@ -33,11 +34,11 @@ class TestProcessingLevelCRUD(TestCase):
         Sets up before each test
         """
 
-    def test_processingLevel_create(self):
+    def test_Collection_create(self):
         """
-        Tests ProcessingLevel model creation
+        Tests Collection model creation
         """
-        myModel = ProcessingLevelF.create()
+        myModel = CollectionF.create()
 
         self.assertTrue(
             myModel.pk is not None,
@@ -46,11 +47,11 @@ class TestProcessingLevelCRUD(TestCase):
                 message='Model PK should NOT equal None')
         )
 
-    def test_processingLevel_delete(self):
+    def test_Collection_delete(self):
         """
-        Tests ProcessingLevel model delete
+        Tests Collection model delete
         """
-        myModel = ProcessingLevelF.create()
+        myModel = CollectionF.create()
 
         myModel.delete()
 
@@ -61,53 +62,50 @@ class TestProcessingLevelCRUD(TestCase):
                 message='Model PK should equal None')
         )
 
-    def test_processingLevel_read(self):
+    def test_Collection_read(self):
         """
-        Tests processingLevel model read
+        Tests Collection model read
         """
-
-        myModel = ProcessingLevelF.create(**{
-            'abbreviation': 'TST1',
-            'name': 'Test Processing Level 1',
-            'description': 'No description'
+        myInstitution = InstitutionF.create(name='New Institution')
+        myModel = CollectionF.create(**{
+            'name': 'Collection 1',
+            'description': 'No description',
+            'institution': myInstitution
         })
 
-        self.assertEqual(myModel.abbreviation, 'TST1')
-
-        self.assertEqual(myModel.name, 'Test Processing Level 1')
+        self.assertEqual(myModel.name, 'Collection 1')
 
         self.assertEqual(myModel.description, 'No description')
 
-    def test_processingLevel_update(self):
-        """
-        Tests processingLevel model update
-        """
+        self.assertEqual(myModel.institution.name, 'New Institution')
 
-        myModel = ProcessingLevelF.create()
+    def test_Collection_update(self):
+        """
+        Tests Collection model update
+        """
+        myModel = CollectionF.create()
+
+        myInstitution = InstitutionF.create(**{'name': 'New Institution'})
 
         myModel.__dict__.update(**{
-            'abbreviation': 'TST1',
-            'name': 'Test Processing Level 1',
+            'name': 'Collection 1',
             'description': 'No description'
         })
+        myModel.institution = myInstitution
         myModel.save()
 
-        self.assertEqual(myModel.abbreviation, 'TST1')
-
-        self.assertEqual(myModel.name, 'Test Processing Level 1')
+        self.assertEqual(myModel.name, 'Collection 1')
 
         self.assertEqual(myModel.description, 'No description')
 
-    def test_processingLevel_repr(self):
+        self.assertEqual(myModel.institution.name, 'New Institution')
+
+    def test_Collection_repr(self):
         """
-        Tests processingLevel model repr
+        Tests Collection model repr
         """
-        myModel = ProcessingLevelF.create(**{
-            'abbreviation': 'TST1',
-            'name': 'Test Processing Level 1',
-            'description': 'No description'
+        myModel = CollectionF.create(**{
+            'name': 'Collection 1',
         })
 
-        self.assertEqual(
-            unicode(myModel),
-            u'TST1 Test Processing Level 1')
+        self.assertEqual(unicode(myModel), u'Collection 1')
