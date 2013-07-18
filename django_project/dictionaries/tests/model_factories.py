@@ -18,7 +18,7 @@ __copyright__ = 'South African National Space Agency'
 
 import factory
 
-from ..models import Collection, ProcessingLevel, Satellite
+from ..models import Collection, ProcessingLevel, Satellite, ScannerType
 
 
 class CollectionF(factory.django.DjangoModelFactory):
@@ -55,7 +55,8 @@ class SatelliteF(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'Satellite {0}'.format(n))
     description = ''
     abbreviation = factory.Sequence(lambda n: 'SatABBR {0}'.format(n))
-    operator_abbreviation = factory.Sequence(lambda n: 'SAT Operator ABBR {0}'.format(n))
+    operator_abbreviation = factory.Sequence(
+        lambda n: 'SAT Operator ABBR {0}'.format(n))
     collection = factory.SubFactory(CollectionF)
     launch_date = None
     status = None
@@ -66,3 +67,14 @@ class SatelliteF(factory.django.DjangoModelFactory):
     license_type = factory.SubFactory(
         'catalogue.tests.model_factories.LicenseF'
     )
+
+
+class ScannerTypeF(factory.django.DjangoModelFactory):
+    """
+    ScannerType factory
+    """
+    FACTORY_FOR = ScannerType
+
+    name = factory.Sequence(lambda n: 'ScannerType {0}'.format(n))
+    description = ''
+    abbreviation = factory.Sequence(lambda n: 'ScanTypeABBR {0}'.format(n))
