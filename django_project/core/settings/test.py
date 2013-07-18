@@ -17,6 +17,7 @@ NOSE_ARGS = (
     '--cover-package=catalogue',
     '--cover-package=useraccounts',
     '--cover-package=search',
+    '--cover-package=dictionaries',
     '--nocapture',
     '--nologcapture',
     #  default test settings don't include any specific tests (see jenkins.py)

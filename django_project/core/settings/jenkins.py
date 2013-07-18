@@ -28,6 +28,7 @@ NOSE_ARGS = [
     'dictionaries',
     'useraccounts',
     'search',
+    'dictionaries',
 ]
 
 #
