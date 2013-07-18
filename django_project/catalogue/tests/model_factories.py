@@ -23,7 +23,7 @@ from datetime import datetime
 from ..models import (
     Institution, Order, OrderStatus, DeliveryMethod, DeliveryDetail,
     Projection, Datum, ResamplingMethod, FileFormat, MarketSector,
-    GenericProduct, License, Quality, CreatingSoftware
+    GenericProduct, License, Quality, CreatingSoftware, GenericImageryProduct
 )
 
 
@@ -191,3 +191,16 @@ class GenericProductF(factory.django.DjangoModelFactory):
     local_storage_path = ''
     metadata = ''
     remote_thumbnail_url = ''
+
+
+class GenericImageryProductF(factory.django.DjangoModelFactory):
+    """
+    GenericImageryProduct model factory
+    """
+    FACTORY_FOR = GenericImageryProduct
+
+    spatial_resolution = 0.0
+    spatial_resolution_x = 0.0
+    spatial_resolution_y = 0.0
+    radiometric_resolution = 0.0
+    band_count = 0

@@ -14,29 +14,42 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'dodobasic@gmail.com'
-__version__ = '0.1'
-__date__ = '18/06/2012'
+__version__ = '0.2'
+__date__ = '18/07/2013'
 __copyright__ = 'South African National Space Agency'
 
-from catalogue.tests.test_utils import simpleMessage, SearchTestCase
+from django.test import TestCase
+from django.test.client import RequestFactory
+
+from catalogue.tests.test_utils import simpleMessage
+
+from core.model_factories import UserF
+
 from search.searcher import Searcher
 from search.models import Search
 
 
-class SearchBandCount_Test(SearchTestCase):
+class SearchBandCount_Test(TestCase):
+    user = UserF.create()
     """
     Tests Search Band Count
     """
+    def setUp(self):
+        """
+        Set up before each test
+        """
+        self.factory = RequestFactory(enforce_csrf_checks=True)
 
     def test_Search_bandcount(self):
         """
         Test band count searches:
-        - Panchromatic band count, range 0-2 (search 5)
-        - Truecolor band count, range 3 (search 6)
-        - Multispectral band count, range 4-8 (search 7)
-        - Superspectral band count, range 9-40 (search 8)
-        - Hyperspectral band count, range 41-1000 (search 9)
+        - Panchromatic band count, range 0-2
+        - Truecolor band count, range 3
+        - Multispectral band count, range 4-8
+        - Superspectral band count, range 9-40
+        - Hyperspectral band count, range 41-1000
         """
+
         myTestSearches = [5, 6, 7, 8, 9]
         myExpectedResults = [8, 10, 15, 1, 1]
 
