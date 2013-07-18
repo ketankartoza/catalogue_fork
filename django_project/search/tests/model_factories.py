@@ -1,9 +1,7 @@
-from datetime import datetime, date
+from datetime import date
 import factory
 
-from core.model_factories import UserF
-
-from ..models import Search, SearchDateRange, Clip
+from ..models import Search, SearchDateRange, Clip, SearchRecord
 
 
 class SearchF(factory.django.DjangoModelFactory):
@@ -12,7 +10,7 @@ class SearchF(factory.django.DjangoModelFactory):
     """
     FACTORY_FOR = Search
 
-    user = factory.SubFactory(UserF)
+    user = factory.SubFactory('core.model_factories.UserF')
     geometry = (
         'POLYGON ((17.54 -32.05, 20.83 -32.41, 20.30 -35.17, 17.84 '
         '-34.65, 17.54 -32.05))')
@@ -116,7 +114,7 @@ class ClipF(factory.django.DjangoModelFactory):
     FACTORY_FOR = Clip
 
     guid = None
-    owner = factory.SubFactory(UserF)
+    owner = factory.SubFactory('core.model_factories.UserF')
     image = 'zaSpot2mMosaic2009'
     geometry = (
         'POLYGON ((17.5400390625000000 -32.0595703125000000, '
@@ -126,3 +124,20 @@ class ClipF(factory.django.DjangoModelFactory):
     )
     status = 'submitted'
     result_url = 'http://example.com/unittest'
+
+
+class SearchRecordF(factory.django.DjangoModelFactory):
+    """
+    SearchRecord model factory
+    """
+    FACTORY_FOR = SearchRecord
+
+    user = factory.SubFactory('core.model_factories.UserF')
+    order = factory.SubFactory('catalogue.tests.model_factories.OrderF')
+    product = factory.SubFactory(
+        'catalogue.tests.model_factories.GenericProductF')
+    delivery_detail = factory.SubFactory(
+        'catalogue.tests.model_factories.DeliveryDetailF')
+    internal_order_id = None
+    download_path = factory.Sequence(lambda n: "Download path // {}".format(n))
+    product_ready = False

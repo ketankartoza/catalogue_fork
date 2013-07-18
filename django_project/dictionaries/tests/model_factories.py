@@ -19,9 +19,7 @@ __copyright__ = 'South African National Space Agency'
 
 import factory
 
-from catalogue.tests.model_factories import InstitutionF
-
-from ..models import Collection
+from ..models import Collection, ProcessingLevel
 
 
 class CollectionF(factory.django.DjangoModelFactory):
@@ -32,4 +30,18 @@ class CollectionF(factory.django.DjangoModelFactory):
 
     name = factory.Sequence(lambda n: 'Collection {0}'.format(n))
     description = 'None'
-    institution = factory.SubFactory(InstitutionF)
+    institution = factory.SubFactory(
+        'catalogue.tests.model_factories.InstitutionF'
+    )
+
+
+class ProcessingLevelF(factory.django.DjangoModelFactory):
+    """
+    Processing level factory
+    """
+    FACTORY_FOR = ProcessingLevel
+
+    abbreviation = factory.Sequence(lambda n: 'AB{0}'.format(n))
+    name = factory.Sequence(lambda n: 'Processing level {0}'.format(n))
+    description = factory.Sequence(
+        lambda n: 'Description of processing level {0}'.format(n))
