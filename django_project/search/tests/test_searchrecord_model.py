@@ -20,6 +20,9 @@ __copyright__ = 'South African National Space Agency'
 from django.test import TestCase
 from catalogue.tests.test_utils import simpleMessage
 
+from core.model_factories import UserF
+from catalogue.tests.model_factories import OrderF, GenericProductF
+
 from .model_factories import SearchRecordF
 
 
@@ -51,38 +54,23 @@ class SearchRecordCRUD_Test(TestCase):
         """
         Tests SearchRecord model read
         """
-        myModelPK = 1
-        myExpectedModelData = {
-            'user_id': 1,
-            'order_id': 1,
-            'product_id': 1934163,
-            'delivery_detail_id': None,
-            'internal_order_id': None,
-            'download_path': '',
-            'product_ready': False
-        }
-        myModel = SearchRecord.objects.get(pk=myModelPK)
-        #check if data is correct
-        for key, val in myExpectedModelData.items():
-            self.assertEqual(
-                myModel.__dict__.get(key), val,
-                simpleMessage(
-                    myModel.__dict__.get(key), val,
-                    message='For key "%s"' % key)
-            )
+        myOrder = OrderF.create(notes='New Order')
+        myModel = SearchRecordF.create(order=myOrder)
+
+        self.assertTrue(myModel.pk is not None)
+        self.assertTrue(myModel.order.notes == 'New Order')
+        self.assertTrue(myModel.product_ready is True)
+        self.assertTrue(myModel.internal_order_id is None)
 
     def test_SearchRecord_update(self):
         """
         Tests SearchRecord model update
         """
-        myModelPK = 1
-        myModel = SearchRecord.objects.get(pk=myModelPK)
+        myModel = SearchRecordF.create()
+        myNewOrder = OrderF()
+
         myNewModelData = {
-            'user_id': 1,
-            'order_id': 1,
-            'product_id': 1960810,
-            'delivery_detail_id': None,
-            'internal_order_id': None,
+            'order': myNewOrder,
             'download_path': 'Some path',
             'product_ready': True
         }
@@ -103,8 +91,7 @@ class SearchRecordCRUD_Test(TestCase):
         """
         Tests SearchRecord model delete
         """
-        myModelPK = 1
-        myModel = SearchRecord.objects.get(pk=myModelPK)
+        myModel = SearchRecordF.create()
 
         myModel.delete()
 
@@ -120,18 +107,37 @@ class SearchRecordCRUD_Test(TestCase):
         """
         Tests SearchRecord model kmlExtents method
         """
-        myModelPKs = [1]
-        myExpResults = ["""<north>-26.6753</north>
-          <south>-27.2927</south>
-          <east>22.0914</east>
-          <west>21.3566</west>"""]
+        myExpResult = """<north>-32.05</north>
+          <south>-35.17</south>
+          <east>20.83</east>
+          <west>17.54</west>"""
 
-        for idx, PK in enumerate(myModelPKs):
-            myModel = SearchRecord.objects.get(pk=PK)
-            myRes = myModel.kmlExtents()
-            self.assertEqual(
-                myRes, myExpResults[idx],
-                simpleMessage(
-                    myRes, myExpResults[idx],
-                    message='Model PK %s kmlExtents:' % PK)
-            )
+        myModel = SearchRecordF.create()
+        myRes = myModel.kmlExtents()
+        self.assertEqual(
+            myRes, myExpResult,
+            simpleMessage(myRes, myExpResult)
+        )
+
+    def test_SearchRecord_repr(self):
+        """
+        Tests SearchRecord model repr method
+        """
+        myProduct = GenericProductF.create(unique_product_id='123qwe')
+        myModel = SearchRecordF.create(product=myProduct)
+
+        myExpResult = '123qwe'
+        self.assertEqual(unicode(myModel), myExpResult)
+
+    def test_SearchRecord_create_method(self):
+        """
+        Tests SearchRecord model repr method
+        """
+        myProduct = GenericProductF.create(unique_product_id='123qwe')
+        myUser = UserF.create(username='testuser')
+        myModel = SearchRecordF.create()
+
+        myNewModel = myModel.create(myUser, myProduct)
+
+        self.assertEqual(unicode(myNewModel), '123qwe')
+        self.assertEqual(myNewModel.user.username, 'testuser')
