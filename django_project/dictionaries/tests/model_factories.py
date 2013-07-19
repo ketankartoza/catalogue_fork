@@ -18,7 +18,10 @@ __copyright__ = 'South African National Space Agency'
 
 import factory
 
-from ..models import Collection, ProcessingLevel, Satellite, ScannerType
+from ..models import (
+    Collection, ProcessingLevel, Satellite, ScannerType, InstrumentType,
+    ReferenceSystem
+)
 
 
 class CollectionF(factory.django.DjangoModelFactory):
@@ -78,3 +81,42 @@ class ScannerTypeF(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'ScannerType {0}'.format(n))
     description = ''
     abbreviation = factory.Sequence(lambda n: 'ScanTypeABBR {0}'.format(n))
+
+
+class ReferenceSystemF(factory.django.DjangoModelFactory):
+    """
+    ReferenceSystem factory
+    """
+    FACTORY_FOR = ReferenceSystem
+
+    name = factory.Sequence(lambda n: 'ReferenceSystem {0}'.format(n))
+    description = ''
+    abbreviation = factory.Sequence(lambda n: 'RefSys {0}'.format(n))
+
+
+class InstrumentTypeF(factory.django.DjangoModelFactory):
+    """
+    InstrumentType factory
+    """
+    FACTORY_FOR = InstrumentType
+
+    name = factory.Sequence(lambda n: 'InstrumentType {0}'.format(n))
+    description = ''
+    abbreviation = factory.Sequence(lambda n: 'InsType {0}'.format(n))
+    operator_abbreviation = factory.Sequence(
+        lambda n: 'OperatorAbbr {0}'.format(n))
+    is_radar = False
+    is_taskable = False
+    scanner_type = factory.SubFactory(ScannerTypeF)
+    base_processing_level = factory.SubFactory(ProcessingLevelF)
+    reference_system = factory.SubFactory(ReferenceSystemF)
+    swath_optical_km = 0
+    band_count = 0
+    band_type = ''
+    spectral_range_list_nm = ''
+    pixel_size_list_m = ''
+    spatial_resolution_range = ''
+    quantization_bits = 0
+    image_size_km = 0
+    processing_software = ''
+    keywords = ''
