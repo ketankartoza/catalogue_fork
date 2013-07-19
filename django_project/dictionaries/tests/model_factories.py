@@ -20,7 +20,7 @@ import factory
 
 from ..models import (
     Collection, ProcessingLevel, Satellite, ScannerType, InstrumentType,
-    ReferenceSystem, RadarBeam
+    ReferenceSystem, RadarBeam, ImagingMode
 )
 
 
@@ -133,3 +133,20 @@ class RadarBeamF(factory.django.DjangoModelFactory):
     wavelength_cm = 0
     looking_distance = ''
     azimuth_direction = ''
+
+
+class ImagingModeF(factory.django.DjangoModelFactory):
+    """
+    ImagingMode factory
+    """
+    FACTORY_FOR = ImagingMode
+
+    radarbeam = factory.SubFactory(RadarBeamF)
+    name = factory.Sequence(lambda n: 'ImagingMode {0}'.format(n))
+    incidence_angle_min = 0.0
+    incidence_angle_max = 0.0
+    approximate_resolution_m = 0.0
+    swath_width_km = 0.0
+    number_of_looks = 0
+    polarization = factory.Iterator(
+        ImagingMode.POLARIZATION_SET, getter=lambda c: c[0])
