@@ -123,7 +123,8 @@ class TestInstrumentTypeCRUD(TestCase):
             'name': 'Test Processing Level 1',
         })
         myRefSystem = ReferenceSystemF.create(name='NewRefSystem')
-        myModel = InstrumentTypeF.create(**{
+
+        myModel.__dict__.update(**{
             'name': 'New Instrument Type',
             'description': 'No description',
             'abbreviation': 'NTY 1',
@@ -133,6 +134,7 @@ class TestInstrumentTypeCRUD(TestCase):
             'swath_optical_km': 20,
             'band_count': 3
         })
+
         myModel.scanner_type = myScannerType
         myModel.base_processing_level = myProcLevel
         myModel.reference_system = myRefSystem

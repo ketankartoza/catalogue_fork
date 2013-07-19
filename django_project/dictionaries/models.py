@@ -317,7 +317,7 @@ class RadarBeam(models.Model):
     )
 
     def __unicode__(self):
-        return u'{0} ({1})'.format(self.band_name, self.wavelength)
+        return u'{0} ({1})'.format(self.band_name, self.wavelength_cm)
 
 
 class ImagingMode(models.Model):

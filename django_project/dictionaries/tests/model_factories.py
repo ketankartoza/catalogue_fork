@@ -20,7 +20,7 @@ import factory
 
 from ..models import (
     Collection, ProcessingLevel, Satellite, ScannerType, InstrumentType,
-    ReferenceSystem
+    ReferenceSystem, RadarBeam
 )
 
 
@@ -120,3 +120,16 @@ class InstrumentTypeF(factory.django.DjangoModelFactory):
     image_size_km = 0
     processing_software = ''
     keywords = ''
+
+
+class RadarBeamF(factory.django.DjangoModelFactory):
+    """
+    RadarBeam factory
+    """
+    FACTORY_FOR = RadarBeam
+
+    instrument_type = factory.SubFactory(InstrumentTypeF)
+    band_name = factory.Sequence(lambda n: 'Band name {0}'.format(n))
+    wavelength_cm = 0
+    looking_distance = ''
+    azimuth_direction = ''
