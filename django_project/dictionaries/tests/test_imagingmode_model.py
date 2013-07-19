@@ -97,9 +97,9 @@ class TestImagingModeCRUD(TestCase):
 
         self.assertEqual(myModel.radarbeam.band_name, 'New Band')
 
-    def test_RadarBeam_update(self):
+    def test_ImagingMode_update(self):
         """
-        Tests RadarBeam model update
+        Tests ImagingMode model update
         """
 
         myModel = ImagingModeF.create()

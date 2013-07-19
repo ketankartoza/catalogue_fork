@@ -20,7 +20,7 @@ import factory
 
 from ..models import (
     Collection, ProcessingLevel, Satellite, ScannerType, InstrumentType,
-    ReferenceSystem, RadarBeam, ImagingMode
+    ReferenceSystem, RadarBeam, ImagingMode, SatelliteInstrumentGroup
 )
 
 
@@ -150,3 +150,13 @@ class ImagingModeF(factory.django.DjangoModelFactory):
     number_of_looks = 0
     polarization = factory.Iterator(
         ImagingMode.POLARIZATION_SET, getter=lambda c: c[0])
+
+
+class SatelliteInstrumentGroupF(factory.django.DjangoModelFactory):
+    """
+    SatelliteInstrumentGroup factory
+    """
+    FACTORY_FOR = SatelliteInstrumentGroup
+
+    satellite = factory.SubFactory(SatelliteF)
+    instrument_type = factory.SubFactory(InstrumentTypeF)
