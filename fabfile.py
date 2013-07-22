@@ -10,7 +10,7 @@ import os
 from fabric.api import *
 from fabric.contrib.files import contains, exists, append, sed
 import fabtools
-from fabgis import postgres, common
+# from fabgis import postgres, common
 # Don't remove even though its unused
 from fabtools.vagrant import vagrant
 

@@ -4,8 +4,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'catalogue',
-        'USER': 'catalogue',
-        'PASSWORD': 'catalogue',
+        'USER': 'vagrant',
+        'PASSWORD': 'vagrant',
         'HOST': 'localhost',
         'PORT': '5432',
         'TEST_NAME': 'sac_unittest_master',

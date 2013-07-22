@@ -3,9 +3,9 @@ from .dev import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'sac',
-        'USER': 'catalogue',
-        'PASSWORD': 'catalogue',
+        'NAME': 'catalogue',
+        'USER': 'vagrant',
+        'PASSWORD': 'vagrant',
         'HOST': '',
         'PORT': '5432',
         'TEST_NAME': 'sac_unittest_master',
