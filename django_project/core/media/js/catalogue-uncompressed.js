@@ -154,7 +154,9 @@ function modifyWKT(event)
 {
   writeWKT(event.feature.geometry);
 }
-
+function removeWKT(event) {
+  document.getElementById('id_geometry').value = '';
+}
 /* ------------------------------------------------------
  * Other OpenLayers Helpers
  * -------------------------------------------------------- */
@@ -615,6 +617,7 @@ function setupSearchMap( theLayers )
   // to transform back to original SRID).
   mVectorLayer.events.on({"featuremodified" : modifyWKT});
   mVectorLayer.events.on({"featureadded" : addWKT});
+  mVectorLayer.events.on({"featureremoved": removeWKT});
   // Then add optional behavior controls
 
   /*
@@ -668,6 +671,7 @@ function setupTaskingMap( theLayers )
   // to transform back to original SRID).
   mVectorLayer.events.on({"featuremodified" : modifyWKT});
   mVectorLayer.events.on({"featureadded" : addWKT});
+  mVectorLayer.events.on({"featureremoved": removeWKT});
   // Then add optional behavior controls
 
   if (myWKT){

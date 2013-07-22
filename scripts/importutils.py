@@ -7,19 +7,11 @@ import osgeo.gdal
 from django_project.catalogue.models import *
 from acscatalogue.models import *
 
+from django_project.core.utils import zeroPad
 
 #################################################################
 # Helper methods for computing various properties and creating objects
 #################################################################
-def pad( theString, theLength ):
-    myLength = len ( theString )
-    myString = theString + "-"*( theLength-myLength )
-    return myString
-
-def zeroPad( theString, theLength ):
-    myLength = len ( theString )
-    myString = "0"*( theLength-myLength ) + theString
-    return myString
 
 def utmZoneFromLatLon( thePoint ):
     """Return the name of the UTM zone given a latitude and longitude.

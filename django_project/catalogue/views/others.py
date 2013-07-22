@@ -501,6 +501,7 @@ def searchesMap(theRequest):
 # Visitor related views. Visits are recordings of site hits by
 # IP and LatLong
 #
+@login_required
 def visitorsKml(theRequest):
     myVisits = VisitorReport.objects.kml()
     return render_to_kml("kml/visitorreport.kml", {
