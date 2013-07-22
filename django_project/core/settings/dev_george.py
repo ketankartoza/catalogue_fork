@@ -6,7 +6,7 @@ DATABASES = {
         'NAME': 'catalogue',
         'USER': 'vagrant',
         'PASSWORD': 'vagrant',
-        'HOST': '',
+        'HOST': 'localhost',
         'PORT': '5432',
         'TEST_NAME': 'sac_unittest_master',
     }
