@@ -48,7 +48,7 @@ from catalogue.models import (
 )
 
 from search.models import SearchRecord
-from reports.pdf_reports import generateOrderPDF
+from reports.pdf_reports import generatePDF
 
 # Read default notification recipients from settings
 CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS = getattr(
@@ -274,12 +274,15 @@ def notifySalesStaff(theUser, theOrderId, theContext=None):
                      'in settings')
         return
     myOrder = get_object_or_404(Order, id=theOrderId)
-    # TODO: Attach the returned PDF to the email sent to staff
-    theOrderPDF = generateOrderPDF(theUser=theUser, theOrderID=theOrderId)
     myRecords = SearchRecord.objects.filter(user=theUser,
                                             order=myOrder).select_related()
     myHistory = OrderStatusHistory.objects.filter(order=myOrder)
-
+    theOrderPDF = generatePDF(template='order-summary.odt',
+                              theOrderID=theOrderId,
+                              context={'myOrder': myOrder,
+                                       'myRecords': myRecords,
+                                       'myHistory': myHistory},
+                              pdfType='Order Summary')
     myEmailSubject = ('SANSA Order ' + str(myOrder.id) + ' status update (' +
                       myOrder.order_status.name + ')')
 
