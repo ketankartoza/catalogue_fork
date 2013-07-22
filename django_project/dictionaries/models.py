@@ -413,7 +413,7 @@ class SatelliteInstrument(models.Model):
 
     def __unicode__(self):
         """Return 'operator_abbreviation' as model representation."""
-        return u'{0} (si={1})'.format(self.operator_abbreviation, self.id)
+        return u'{0}'.format(self.operator_abbreviation)
 
 
 class Band(models.Model):

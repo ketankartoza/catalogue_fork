@@ -20,7 +20,8 @@ import factory
 
 from ..models import (
     Collection, ProcessingLevel, Satellite, ScannerType, InstrumentType,
-    ReferenceSystem, RadarBeam, ImagingMode, SatelliteInstrumentGroup
+    ReferenceSystem, RadarBeam, ImagingMode, SatelliteInstrumentGroup,
+    SatelliteInstrument
 )
 
 
@@ -160,3 +161,17 @@ class SatelliteInstrumentGroupF(factory.django.DjangoModelFactory):
 
     satellite = factory.SubFactory(SatelliteF)
     instrument_type = factory.SubFactory(InstrumentTypeF)
+
+
+class SatelliteInstrumentF(factory.django.DjangoModelFactory):
+    """
+    SatelliteInstrument factory
+    """
+    FACTORY_FOR = SatelliteInstrument
+
+    name = factory.Sequence(lambda n: 'SatelliteInstrument {0}'.format(n))
+    description = ''
+    abbreviation = factory.Sequence(lambda n: 'STINS {0}'.format(n))
+    operator_abbreviation = factory.Sequence(
+        lambda n: 'OPSATINST {0}'.format(n))
+    satellite_instrument_group = factory.SubFactory(SatelliteInstrumentGroupF)
