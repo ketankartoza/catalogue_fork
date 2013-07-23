@@ -21,7 +21,8 @@ import factory
 from ..models import (
     Collection, ProcessingLevel, Satellite, ScannerType, InstrumentType,
     ReferenceSystem, RadarBeam, ImagingMode, SatelliteInstrumentGroup,
-    SatelliteInstrument, Band, SpectralGroup, SpectralMode, BandSpectralMode
+    SatelliteInstrument, Band, SpectralGroup, SpectralMode, BandSpectralMode,
+    InstrumentTypeProcessingLevel
 )
 
 
@@ -225,3 +226,15 @@ class BandSpectralModeF(factory.django.DjangoModelFactory):
 
     band = factory.SubFactory(BandF)
     spectral_mode = factory.SubFactory(SpectralModeF)
+
+
+class InstrumentTypeProcessingLevelF(factory.django.DjangoModelFactory):
+    """
+    InstrumentTypeProcessingLevel factory
+    """
+    FACTORY_FOR = InstrumentTypeProcessingLevel
+
+    instrument_type = factory.SubFactory(InstrumentTypeF)
+    processinglevel = factory.SubFactory(ProcessingLevelF)
+    operator_processing_level_name = ''
+    operator_processing_level_abbreviation = ''
