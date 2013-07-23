@@ -21,7 +21,7 @@ import factory
 from ..models import (
     Collection, ProcessingLevel, Satellite, ScannerType, InstrumentType,
     ReferenceSystem, RadarBeam, ImagingMode, SatelliteInstrumentGroup,
-    SatelliteInstrument, Band
+    SatelliteInstrument, Band, SpectralGroup
 )
 
 
@@ -191,3 +191,14 @@ class BandF(factory.django.DjangoModelFactory):
     max_wavelength_nm = 0
     pixelsize_resampled_m = 0
     pixelsize_acquired_m = 0
+
+
+class SpectralGroupF(factory.django.DjangoModelFactory):
+    """
+    SpectralGroup factory
+    """
+    FACTORY_FOR = SpectralGroup
+
+    name = factory.Sequence(lambda n: 'SpectralGroup {0}'.format(n))
+    description = ''
+    abbreviation = factory.Sequence(lambda n: 'SG {0}'.format(n))
