@@ -484,15 +484,14 @@ class BandSpectralMode(models.Model):
     Band to SpectralMode relation
     """
     band = models.ForeignKey(Band)
-    spectral_mode = models.ForeignKey(
-        SpectralMode)
+    spectral_mode = models.ForeignKey(SpectralMode)
 
     class Meta:
         unique_together = (('band', 'spectral_mode'),)
 
     def __unicode__(self):
         return u'{0} ({1})'.format(
-            self.band.band_name, 'spectral mode name')
+            self.band.band_name, self.spectral_mode.name)
 
 
 class InstrumentTypeProcessingLevel(models.Model):
