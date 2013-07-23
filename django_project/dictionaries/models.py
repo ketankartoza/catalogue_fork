@@ -74,7 +74,7 @@ class OpticalProductProfile(models.Model):
         OpticalProductProfileQuerySet)()
 
     def __unicode__(self):
-        return u'id={0} {1}'.format(
+        return u'{0} -- {1}'.format(
             self.satellite_instrument,
             self.spectral_mode
         )
@@ -128,7 +128,7 @@ class RadarProductProfile(models.Model):
     imaging_mode = models.ForeignKey('ImagingMode')
 
     def __unicode__(self):
-        return u'id={0} {1}'.format(
+        return u'{0} -- {1}'.format(
             self.satellite_instrument,
             self.imaging_mode
         )

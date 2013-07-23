@@ -23,7 +23,7 @@ from ..models import (
     ReferenceSystem, RadarBeam, ImagingMode, SatelliteInstrumentGroup,
     SatelliteInstrument, Band, SpectralGroup, SpectralMode, BandSpectralMode,
     InstrumentTypeProcessingLevel, SpectralModeProcessingCosts,
-    ForeignCurrency, RadarProductProfile
+    ForeignCurrency, RadarProductProfile, OpticalProductProfile
 )
 
 
@@ -46,7 +46,7 @@ class ProcessingLevelF(factory.django.DjangoModelFactory):
     """
     FACTORY_FOR = ProcessingLevel
 
-    abbreviation = factory.Sequence(lambda n: 'AB{0}'.format(n))
+    abbreviation = factory.Sequence(lambda n: 'A{0}'.format(n))
     name = factory.Sequence(lambda n: 'Processing level {0}'.format(n))
     description = factory.Sequence(
         lambda n: 'Description of processing level {0}'.format(n))
@@ -274,3 +274,13 @@ class RadarProductProfileF(factory.django.DjangoModelFactory):
 
     satellite_instrument = factory.SubFactory(SatelliteInstrumentF)
     imaging_mode = factory.SubFactory(ImagingModeF)
+
+
+class OpticalProductProfileF(factory.django.DjangoModelFactory):
+    """
+    OpticalProductProfile factory
+    """
+    FACTORY_FOR = OpticalProductProfile
+
+    satellite_instrument = factory.SubFactory(SatelliteInstrumentF)
+    spectral_mode = factory.SubFactory(SpectralModeF)

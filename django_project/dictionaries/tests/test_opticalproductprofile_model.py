@@ -1,5 +1,5 @@
 """
-SANSA-EO Catalogue - Dictionaries RadarProductProfile - basic CRUD
+SANSA-EO Catalogue - Dictionaries OpticalProductProfile - basic CRUD
 unittests
 
 Contact : lkleyn@sansa.org.za
@@ -22,13 +22,14 @@ from catalogue.tests.test_utils import simpleMessage
 
 
 from .model_factories import (
-    RadarProductProfileF, SatelliteInstrumentF, ImagingModeF
+    OpticalProductProfileF, SatelliteInstrumentF, SpectralModeF,
+    InstrumentTypeF
 )
 
 
-class TestRadarProductProfileCRUD(TestCase):
+class TestOpticalProductProfileCRUD(TestCase):
     """
-    Tests RadarProductProfile model
+    Tests OpticalProductProfile model
     """
 
     def setUp(self):
@@ -36,11 +37,11 @@ class TestRadarProductProfileCRUD(TestCase):
         Sets up before each test
         """
 
-    def test_RadarProductProfile_create(self):
+    def test_OpticalProductProfile_create(self):
         """
-        Tests RadarProductProfile model creation
+        Tests OpticalProductProfile model creation
         """
-        myModel = RadarProductProfileF.create()
+        myModel = OpticalProductProfileF.create()
 
         self.assertTrue(
             myModel.pk is not None,
@@ -49,11 +50,11 @@ class TestRadarProductProfileCRUD(TestCase):
                 message='Model PK should NOT equal None')
         )
 
-    def test_RadarProductProfile_delete(self):
+    def test_OpticalProductProfile_delete(self):
         """
-        Tests RadarProductProfile model delete
+        Tests OpticalProductProfile model delete
         """
-        myModel = RadarProductProfileF.create()
+        myModel = OpticalProductProfileF.create()
 
         myModel.delete()
 
@@ -64,68 +65,75 @@ class TestRadarProductProfileCRUD(TestCase):
                 message='Model PK should equal None')
         )
 
-    def test_RadarProductProfile_read(self):
+    def test_OpticalProductProfile_read(self):
         """
-        Tests RadarProductProfile model read
+        Tests OpticalProductProfile model read
         """
 
         mySatInst = SatelliteInstrumentF.create(**{
             'operator_abbreviation': 'SATIN 1'
         })
-        myImgMode = ImagingModeF.create(**{
-            'name': 'Temp Imaging mode'
+
+        mySpecMode = SpectralModeF.create(**{
+            'name': 'Temp Spectral mode'
         })
 
-        myModel = RadarProductProfileF.create(**{
+        myModel = OpticalProductProfileF.create(**{
             'satellite_instrument': mySatInst,
-            'imaging_mode': myImgMode
+            'spectral_mode': mySpecMode
         })
 
         self.assertEqual(
             myModel.satellite_instrument.operator_abbreviation, 'SATIN 1')
 
-        self.assertEqual(myModel.imaging_mode.name, 'Temp Imaging mode')
+        self.assertEqual(myModel.spectral_mode.name, 'Temp Spectral mode')
 
-    def test_RadarProductProfile_update(self):
+    def test_OpticalProductProfile_update(self):
         """
-        Tests RadarProductProfile model update
+        Tests OpticalProductProfile model update
         """
 
-        myModel = RadarProductProfileF.create()
+        myModel = OpticalProductProfileF.create()
 
         mySatInst = SatelliteInstrumentF.create(**{
             'operator_abbreviation': 'SATIN 1'
         })
-        myImgMode = ImagingModeF.create(**{
-            'name': 'Temp Imaging mode'
+        mySpecMode = SpectralModeF.create(**{
+            'name': 'Temp Spectral mode'
         })
 
         myModel.satellite_instrument = mySatInst
-        myModel.imaging_mode = myImgMode
+        myModel.spectral_mode = mySpecMode
 
         myModel.save()
 
         self.assertEqual(
             myModel.satellite_instrument.operator_abbreviation, 'SATIN 1')
 
-        self.assertEqual(myModel.imaging_mode.name, 'Temp Imaging mode')
+        self.assertEqual(myModel.spectral_mode.name, 'Temp Spectral mode')
 
-    def test_RadarProductProfile_repr(self):
+    def test_OpticalProductProfile_repr(self):
         """
-        Tests RadarProductProfile model repr
+        Tests OpticalProductProfile model repr
         """
 
         mySatInst = SatelliteInstrumentF.create(**{
             'operator_abbreviation': 'SATIN 1'
         })
-        myImgMode = ImagingModeF.create(**{
-            'name': 'Temp Imaging mode',
-            'polarization': 'VV'
+
+        myInstType = InstrumentTypeF.create(**{
+            'name': 'INSTYPE1'
         })
 
-        myModel = RadarProductProfileF.create(**{
+        mySpecMode = SpectralModeF.create(**{
+            'name': 'Temp Spectral mode',
+            'instrument_type': myInstType
+        })
+
+        myModel = OpticalProductProfileF.create(**{
             'satellite_instrument': mySatInst,
-            'imaging_mode': myImgMode
+            'spectral_mode': mySpecMode
         })
 
-        self.assertEqual(unicode(myModel), u'SATIN 1 -- Temp Imaging mode (VV)')
+        self.assertEqual(
+            unicode(myModel), u'SATIN 1 -- Temp Spectral mode - INSTYPE1')
