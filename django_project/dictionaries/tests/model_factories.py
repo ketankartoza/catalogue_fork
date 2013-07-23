@@ -22,7 +22,7 @@ from ..models import (
     Collection, ProcessingLevel, Satellite, ScannerType, InstrumentType,
     ReferenceSystem, RadarBeam, ImagingMode, SatelliteInstrumentGroup,
     SatelliteInstrument, Band, SpectralGroup, SpectralMode, BandSpectralMode,
-    InstrumentTypeProcessingLevel
+    InstrumentTypeProcessingLevel, SpectralModeProcessingCosts, ForeignCurrency
 )
 
 
@@ -238,3 +238,28 @@ class InstrumentTypeProcessingLevelF(factory.django.DjangoModelFactory):
     processinglevel = factory.SubFactory(ProcessingLevelF)
     operator_processing_level_name = ''
     operator_processing_level_abbreviation = ''
+
+
+class ForeignCurrencyF(factory.django.DjangoModelFactory):
+    """
+    ForeignCurrency factory
+    """
+    FACTORY_FOR = ForeignCurrency
+
+    abbreviation = ''
+    name = factory.Sequence(lambda n: 'Foreign Currency {0}'.format(n))
+    conversion_rate = 0.0
+
+
+class SpectralModeProcessingCostsF(factory.django.DjangoModelFactory):
+    """
+    SpectralModeProcessingCosts factory
+    """
+    FACTORY_FOR = SpectralModeProcessingCosts
+
+    spectral_mode = factory.SubFactory(SpectralModeF)
+    instrumenttypeprocessinglevel = factory.SubFactory(
+        InstrumentTypeProcessingLevelF)
+    cost_per_scene_in_rands = 0.0
+    foreign_currency = factory.SubFactory(ForeignCurrencyF)
+    cost_per_scene_in_foreign = 0.0

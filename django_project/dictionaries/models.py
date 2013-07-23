@@ -550,6 +550,9 @@ class ReferenceSystem(models.Model):
         help_text='A detailed description of the reference system.')
     abbreviation = models.CharField(max_length=20)
 
+    def __unicode__(self):
+        return self.name
+
 
 class ForeignCurrency(models.Model):
     """
@@ -562,3 +565,6 @@ class ForeignCurrency(models.Model):
     conversion_rate = models.FloatField(
         null=True, blank=True,
         help_text='Conversion rate for 1.00 unit in ZAR')
+
+    def __unicode__(self):
+        return self.name
