@@ -22,7 +22,8 @@ from ..models import (
     Collection, ProcessingLevel, Satellite, ScannerType, InstrumentType,
     ReferenceSystem, RadarBeam, ImagingMode, SatelliteInstrumentGroup,
     SatelliteInstrument, Band, SpectralGroup, SpectralMode, BandSpectralMode,
-    InstrumentTypeProcessingLevel, SpectralModeProcessingCosts, ForeignCurrency
+    InstrumentTypeProcessingLevel, SpectralModeProcessingCosts,
+    ForeignCurrency, RadarProductProfile
 )
 
 
@@ -263,3 +264,13 @@ class SpectralModeProcessingCostsF(factory.django.DjangoModelFactory):
     cost_per_scene_in_rands = 0.0
     foreign_currency = factory.SubFactory(ForeignCurrencyF)
     cost_per_scene_in_foreign = 0.0
+
+
+class RadarProductProfileF(factory.django.DjangoModelFactory):
+    """
+    RadarProductProfile factory
+    """
+    FACTORY_FOR = RadarProductProfile
+
+    satellite_instrument = factory.SubFactory(SatelliteInstrumentF)
+    imaging_mode = factory.SubFactory(ImagingModeF)
