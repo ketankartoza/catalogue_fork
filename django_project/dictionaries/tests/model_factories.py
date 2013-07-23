@@ -21,7 +21,7 @@ import factory
 from ..models import (
     Collection, ProcessingLevel, Satellite, ScannerType, InstrumentType,
     ReferenceSystem, RadarBeam, ImagingMode, SatelliteInstrumentGroup,
-    SatelliteInstrument, Band, SpectralGroup
+    SatelliteInstrument, Band, SpectralGroup, SpectralMode
 )
 
 
@@ -202,3 +202,16 @@ class SpectralGroupF(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'SpectralGroup {0}'.format(n))
     description = ''
     abbreviation = factory.Sequence(lambda n: 'SG {0}'.format(n))
+
+
+class SpectralModeF(factory.django.DjangoModelFactory):
+    """
+    SpectralModefactory
+    """
+    FACTORY_FOR = SpectralMode
+
+    name = factory.Sequence(lambda n: 'SpectralMode {0}'.format(n))
+    description = ''
+    abbreviation = factory.Sequence(lambda n: 'SM {0}'.format(n))
+    instrument_type = factory.SubFactory(InstrumentTypeF)
+    spectralgroup = factory.SubFactory(SpectralGroupF)

@@ -473,12 +473,10 @@ class SpectralMode(models.Model):
         help_text='A detailed description of the spectral mode.')
     abbreviation = models.CharField(max_length=20)
     instrument_type = models.ForeignKey(InstrumentType)
-    spectralgroup = models.ForeignKey(
-        SpectralGroup)
+    spectralgroup = models.ForeignKey(SpectralGroup)
 
     def __unicode__(self):
-        return u'(sm={2}) {0} - {1}'.format(
-            self.name, self.instrument_type.name, self.id)
+        return u'{0} - {1}'.format(self.name, self.instrument_type.name)
 
 
 class BandSpectralMode(models.Model):
