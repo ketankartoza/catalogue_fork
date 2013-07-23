@@ -438,8 +438,8 @@ class Band(models.Model):
 
     def __unicode__(self):
         return u'{0} ({1} {2}) {3}'.format(
-            self.band_name, self.min_wavelength, self.max_wavelength,
-            self.pixelsize_resampled)
+            self.band_name, self.min_wavelength_nm, self.max_wavelength_nm,
+            self.pixelsize_resampled_m)
 
 
 class SpectralGroup(models.Model):

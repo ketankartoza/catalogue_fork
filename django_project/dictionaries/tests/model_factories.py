@@ -21,7 +21,7 @@ import factory
 from ..models import (
     Collection, ProcessingLevel, Satellite, ScannerType, InstrumentType,
     ReferenceSystem, RadarBeam, ImagingMode, SatelliteInstrumentGroup,
-    SatelliteInstrument
+    SatelliteInstrument, Band
 )
 
 
@@ -175,3 +175,19 @@ class SatelliteInstrumentF(factory.django.DjangoModelFactory):
     operator_abbreviation = factory.Sequence(
         lambda n: 'OPSATINST {0}'.format(n))
     satellite_instrument_group = factory.SubFactory(SatelliteInstrumentGroupF)
+
+
+class BandF(factory.django.DjangoModelFactory):
+    """
+    Band factory
+    """
+    FACTORY_FOR = Band
+
+    instrument_type = factory.SubFactory(InstrumentTypeF)
+    band_name = factory.Sequence(lambda n: 'Band {0}'.format(n))
+    band_abbr = ''
+    band_number = 0
+    min_wavelength_nm = 0
+    max_wavelength_nm = 0
+    pixelsize_resampled_m = 0
+    pixelsize_acquired_m = 0
