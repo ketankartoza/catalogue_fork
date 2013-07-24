@@ -65,8 +65,7 @@ from catalogue.views.geoiputils import GeoIpUtils
 
 
 # modularized app dependencies
-from .searcher import (
-    Searcher)
+from .searcher import Searcher
 
 from .models import (
     Search,
@@ -79,7 +78,7 @@ from .forms import (
     DateRangeFormSet
 )
 
-from .utils import prepareSelectQuerysets
+from .utils import prepareSelectQuerysets, SearchView
 
 
 class Http500(Exception):
@@ -267,9 +266,11 @@ def searchResultMap(theRequest, theGuid):
     content
     """
     mySearch = get_object_or_404(Search, guid=theGuid)
-    mySearcher = Searcher(theRequest, mySearch)
-    mySearcher.search()
-    return(mySearcher.templateData())
+
+    mySearcher = Searcher(mySearch)
+    mySearchView = SearchView(theRequest, mySearcher)
+
+    return(mySearchView.templateData())
 
 
 #@login_required
@@ -281,27 +282,28 @@ def searchResultPage(theRequest, theGuid):
     inserted into a div
     """
     mySearch = get_object_or_404(Search, guid=theGuid)
-    mySearcher = Searcher(theRequest, mySearch)
-    mySearcher.search()
-    return(mySearcher.templateData())
+    mySearcher = Searcher(mySearch)
+    mySearchView = SearchView(theRequest, mySearcher)
+
+    return(mySearchView.templateData())
 
 
 #@login_required
 def downloadSearchResult(theRequest, theGuid):
     """Dispaches request and returns searchresults in desired file format"""
     mySearch = get_object_or_404(Search, guid=theGuid)
-    mySearcher = Searcher(theRequest, mySearch)
-    mySearcher.search()  # dont paginate
+    mySearcher = Searcher(mySearch)
+    mySearchView = SearchView(theRequest, mySearcher)
 
     myFilename = u'%s-imagebounds' % theGuid
     if 'shp' in theRequest.GET:
         myResponder = ShpResponder(SearchRecord)
         myResponder.file_name = myFilename
-        return myResponder.write_search_records(mySearcher.mSearchRecords)
+        return myResponder.write_search_records(mySearchView.mSearchRecords)
     elif 'kml' in theRequest.GET:
         return render_to_kml(
             'kml/searchRecords.kml', {
-                'mySearchRecords': mySearcher.mSearchRecords,
+                'mySearchRecords': mySearchView.mSearchRecords,
                 'external_site_url': settings.DOMAIN,
                 'transparentStyle': True},
             myFilename)
@@ -312,7 +314,7 @@ def downloadSearchResult(theRequest, theGuid):
         #mySearcher.mSearchRecords[0].product.georeferencedThumbnail()
         return render_to_kmz(
             'kml/searchRecords.kml', {
-                'mySearchRecords': mySearcher.mSearchRecords,
+                'mySearchRecords': mySearchView.mSearchRecords,
                 'external_site_url': settings.DOMAIN,
                 'transparentStyle': True,
                 'myThumbsFlag': True},
@@ -332,13 +334,14 @@ def downloadSearchResultMetadata(theRequest, theGuid):
 
     mySearch = get_object_or_404(Search, guid=theGuid)
     mySearcher = Searcher(theRequest, mySearch)
-    mySearcher.search()  # dont paginate
+    mySearchView = SearchView(theRequest, mySearcher)
+
     if 'html' in theRequest.GET:
         return downloadHtmlMetadata(
-            mySearcher.mSearchRecords, 'Search-%s' % theGuid)
+            mySearchView.mSearchRecords, 'Search-%s' % theGuid)
     else:
         return downloadISOMetadata(
-            mySearcher.mSearchRecords, 'Search-%s' % theGuid)
+            mySearchView.mSearchRecords, 'Search-%s' % theGuid)
 
 
 def renderSearchForm(theRequest):
@@ -381,10 +384,10 @@ def renderSearchResultsPage(theRequest, theGuid):
     inserted into a div
     """
     mySearch = get_object_or_404(Search, guid=theGuid)
-    logger.debug('Search found, initializing Searcher class')
-    mySearcher = Searcher(theRequest, mySearch)
-    mySearcher.search()
-    return(mySearcher.templateData())
+
+    mySearcher = Searcher(mySearch)
+    mySearchView = SearchView(theRequest, mySearcher)
+    return(mySearchView.templateData())
 
 
 def updateSelectOptions(theRequest):
