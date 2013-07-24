@@ -23,7 +23,7 @@ from catalogue.tests.test_utils import simpleMessage
 
 from .model_factories import (
     OpticalProductProfileF, SatelliteInstrumentF, SpectralModeF,
-    InstrumentTypeF
+    InstrumentTypeF, ProcessingLevelF, SatelliteInstrumentGroupF
 )
 
 
@@ -137,3 +137,71 @@ class TestOpticalProductProfileCRUD(TestCase):
 
         self.assertEqual(
             unicode(myModel), u'SATIN 1 -- Temp Spectral mode - INSTYPE1')
+
+    def test_OpticalProductProfile_baseProcessingLevel(self):
+        """
+        Tests OpticalProductProfile model baseProcessingLevel
+        """
+
+        myProcLevel = ProcessingLevelF.create(**{
+            'abbreviation': 'BPL1',
+            'name': 'BaseProcLevel 1'
+        })
+
+        myInstType = InstrumentTypeF.create(**{
+            'name': 'INSTYPE1',
+            'base_processing_level': myProcLevel
+        })
+
+        mySatInstGroup = SatelliteInstrumentGroupF.create(**{
+            'instrument_type': myInstType
+        })
+
+        mySatInst = SatelliteInstrumentF.create(**{
+            'operator_abbreviation': 'SATIN 1',
+            'satellite_instrument_group': mySatInstGroup
+        })
+
+        mySpecMode = SpectralModeF.create(**{
+            'name': 'Temp Spectral mode',
+            'instrument_type': myInstType
+        })
+
+        myModel = OpticalProductProfileF.create(**{
+            'satellite_instrument': mySatInst,
+            'spectral_mode': mySpecMode
+        })
+
+        self.assertEqual(
+            myModel.baseProcessingLevel(), myProcLevel)
+
+    def test_OpticalProductProfile_bandCount(self):
+        """
+        Tests OpticalProductProfile model bandCount
+        """
+
+        myInstType = InstrumentTypeF.create(**{
+            'name': 'INSTYPE1',
+            'band_count': 10
+        })
+
+        mySatInstGroup = SatelliteInstrumentGroupF.create(**{
+            'instrument_type': myInstType
+        })
+
+        mySatInst = SatelliteInstrumentF.create(**{
+            'operator_abbreviation': 'SATIN 1',
+            'satellite_instrument_group': mySatInstGroup
+        })
+
+        mySpecMode = SpectralModeF.create(**{
+            'name': 'Temp Spectral mode',
+            'instrument_type': myInstType
+        })
+
+        myModel = OpticalProductProfileF.create(**{
+            'satellite_instrument': mySatInst,
+            'spectral_mode': mySpecMode
+        })
+
+        self.assertEqual(myModel.bandCount(), 10)

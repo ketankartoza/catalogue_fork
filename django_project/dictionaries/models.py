@@ -94,9 +94,10 @@ class OpticalProductProfile(models.Model):
             None
         """
 
-        myLevel = \
-            self.satellite_instrument.instrument_type.base_processing_level
-        return myLevel
+        return (
+            self.satellite_instrument.satellite_instrument_group
+            .instrument_type.base_processing_level
+        )
 
     def bandCount(self):
         """Get the band count for this profile.
@@ -110,8 +111,10 @@ class OpticalProductProfile(models.Model):
         Raises:
             None
         """
-        myCount = self.satellite_instrument.instrument_type.band_number_total
-        return myCount
+        return (
+            self.satellite_instrument.satellite_instrument_group
+            .instrument_type.band_count
+        )
 
 
 class RadarProductProfile(models.Model):
