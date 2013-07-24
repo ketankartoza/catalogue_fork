@@ -20,6 +20,13 @@ __copyright__ = 'South African National Space Agency'
 from django.test import TestCase
 from catalogue.tests.test_utils import simpleMessage
 
+from catalogue.models import License
+from ..models import (
+    OpticalProductProfile, Collection, InstrumentType, Satellite,
+    SpectralGroup
+)
+
+from .data_factories import create_dictionaries
 
 from .model_factories import (
     OpticalProductProfileF, SatelliteInstrumentF, SpectralModeF,
@@ -205,3 +212,63 @@ class TestOpticalProductProfileCRUD(TestCase):
         })
 
         self.assertEqual(myModel.bandCount(), 10)
+
+    def test_OpticalProductProfile_QuerySet_for_license_type(self):
+        """
+        Tests OpticalProductProfile model QuerySet for_license_type
+        """
+        create_dictionaries()
+
+        myLicense = License.objects.filter(pk=1)
+
+        myResult = OpticalProductProfile.objects.for_licence_type(myLicense)
+
+        self.assertEqual(myResult.count(), 30)
+
+    def test_OpticalProductProfile_QuerySet_for_collection(self):
+        """
+        Tests OpticalProductProfile model QuerySet for_collection
+        """
+        create_dictionaries()
+
+        myCollection = Collection.objects.filter(pk=1)
+
+        myResult = OpticalProductProfile.objects.for_collection(myCollection)
+
+        self.assertEqual(myResult.count(), 24)
+
+    def test_OpticalProductProfile_QuerySet_for_instrumenttypes(self):
+        """
+        Tests OpticalProductProfile model QuerySet for_instrumenttypes
+        """
+        create_dictionaries()
+
+        myInsType = InstrumentType.objects.filter(pk=10)
+
+        myResult = OpticalProductProfile.objects.for_instrumenttypes(myInsType)
+
+        self.assertEqual(myResult.count(), 1)
+
+    def test_OpticalProductProfile_QuerySet_for_satellite(self):
+        """
+        Tests OpticalProductProfile model QuerySet for_satellite
+        """
+        create_dictionaries()
+
+        mySatellite = Satellite.objects.filter(pk=1)
+
+        myResult = OpticalProductProfile.objects.for_satellite(mySatellite)
+
+        self.assertEqual(myResult.count(), 1)
+
+    def test_OpticalProductProfile_QuerySet_for_spectralgroup(self):
+        """
+        Tests OpticalProductProfile model QuerySet for_spectralgroup
+        """
+        create_dictionaries()
+
+        mySpecGroup = SpectralGroup.objects.filter(pk=1)
+
+        myResult = OpticalProductProfile.objects.for_spectralgroup(mySpecGroup)
+
+        self.assertEqual(myResult.count(), 21)
