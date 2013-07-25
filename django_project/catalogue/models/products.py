@@ -226,10 +226,10 @@ class GenericProduct(models.Model):
     creating_software = models.ForeignKey(
         CreatingSoftware,
         null=False, blank=False)
-    unique_product_id = models.CharField(
+    original_product_id = models.CharField(
         help_text='Original id assigned to the product by the vendor/operator',
         max_length=255, null=True, blank=True)
-    product_id = models.CharField(
+    unique_product_id = models.CharField(
         help_text='SAC Formatted product ID',
         max_length=255, db_index=True, unique=True)
     product_revision = models.CharField(
@@ -268,9 +268,7 @@ class GenericProduct(models.Model):
         #db_table = 'sample_genericproduct'
 
     def __unicode__(self):
-        if self.product_id:
-            return u"%s" % self.product_id
-        return u"Internal ID: %d" % self.pk
+        return u'{}'.format(self.unique_product_id)
 
     @runconcrete
     def getAbstract(self):

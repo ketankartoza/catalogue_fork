@@ -185,8 +185,8 @@ class GenericProductF(factory.django.DjangoModelFactory):
     creating_software = factory.SubFactory(CreatingSoftwareF)
     unique_product_id = factory.Sequence(
         lambda n: "unique_product_id_{}".format(n))
-    product_id = factory.Sequence(
-        lambda n: "SAC_formated_product_id_{}".format(n))
+    original_product_id = factory.Sequence(
+        lambda n: "Original_product_id_{}".format(n))
     product_revision = ''
     local_storage_path = ''
     metadata = ''
