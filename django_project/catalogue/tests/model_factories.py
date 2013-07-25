@@ -23,7 +23,8 @@ from datetime import datetime
 from ..models import (
     Institution, Order, OrderStatus, DeliveryMethod, DeliveryDetail,
     Projection, Datum, ResamplingMethod, FileFormat, MarketSector,
-    GenericProduct, License, Quality, CreatingSoftware, GenericImageryProduct
+    GenericProduct, License, Quality, CreatingSoftware, GenericImageryProduct,
+    GenericSensorProduct
 )
 
 
@@ -204,3 +205,26 @@ class GenericImageryProductF(GenericProductF):
     spatial_resolution_y = 0.0
     radiometric_resolution = 0.0
     band_count = 0
+
+
+class GenericSensorProductF(GenericImageryProductF):
+    """
+    GenericSensorProduct model factory
+    """
+    FACTORY_FOR = GenericSensorProduct
+
+    product_acquisition_start = datetime(2008, 1, 1, 12, 00)
+    product_acquisition_end = datetime(2008, 1, 1, 13, 00)
+    geometric_accuracy_mean = 5.0
+    geometric_accuracy_1sigma = 2.0
+    geometric_accuracy_2sigma = 3.0
+    radiometric_signal_to_noise_ratio = 0.0
+    radiometric_percentage_error = 0.0
+    spectral_accuracy = 20.0
+    orbit_number = 1
+    path = 123
+    path_offset = 0
+    row = 321
+    row_offset = 0
+    offline_storage_medium_id = ''
+    online_storage_medium_id = ''
