@@ -20,11 +20,7 @@ INSTALLED_APPS += (
     'search',
     'pycsw_integration',
     'reports',
-    'webodt'
 )
-
-WEBODT_CONVERTER = 'webodt.converters.abiword.OpenOfficeBinODFConverter'
-WEBODT_TEMPLATE_PATH = '/home/web/catalogue/django_project/report-templates/'
 
 # Set debug to false for production
 DEBUG = TEMPLATE_DEBUG = False
