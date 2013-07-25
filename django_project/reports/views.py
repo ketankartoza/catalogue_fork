@@ -118,8 +118,8 @@ def visitorMonthlyReport(theRequest, theYear, theMonth):
 
 @staff_member_required
 def renderVisitorListPDF(theRequest):
-    myRecords = Visit.objects.all().order_by('-visit_date')
-    return renderPDF('visitor-list2.odt',
+    myRecords = Visit.objects.order_by('-visit_date')[:20]
+    return renderPDF('visitor-list3.odt',
                      context_instance=RequestContext(theRequest),
                      format='pdf',
                      filename='visitor-list.pdf',
