@@ -193,7 +193,7 @@ class GenericProductF(factory.django.DjangoModelFactory):
     remote_thumbnail_url = ''
 
 
-class GenericImageryProductF(factory.django.DjangoModelFactory):
+class GenericImageryProductF(GenericProductF):
     """
     GenericImageryProduct model factory
     """
