@@ -25,7 +25,7 @@ from ..models import (
     Projection, Datum, ResamplingMethod, FileFormat, MarketSector,
     GenericProduct, License, Quality, CreatingSoftware, GenericImageryProduct,
     GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
-    PlaceType, Place, Topic, OrdinalProduct
+    PlaceType, Place, Topic, OrdinalProduct, ContinuousProduct, Unit
 )
 
 
@@ -335,3 +335,24 @@ class OrdinalProductF(GenericProductF):
     class_count = 0
     confusion_matrix = '1,2,3'
     kappa_score = 0.0
+
+
+class UnitF(factory.django.DjangoModelFactory):
+    """
+    Unit model factory
+    """
+    FACTORY_FOR = Unit
+
+    abbreviation = factory.Sequence(lambda n: "U{}".format(n))
+    name = factory.Sequence(lambda n: "Unit {}".format(n))
+
+
+class ContinuousProductF(GenericProductF):
+    """
+    ContinuousProduct model factory
+    """
+    FACTORY_FOR = ContinuousProduct
+
+    range_min = 0.0
+    range_max = 0.0
+    unit = factory.SubFactory(UnitF)
