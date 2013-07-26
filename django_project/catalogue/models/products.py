@@ -880,7 +880,8 @@ class GenericSensorProduct(GenericImageryProduct):
             returned
         """
         myPath = os.path.join(
-            self.product_profile.satellite_instrument.satellite.abbreviation,
+            self.product_profile.satellite_instrument
+            .satellite_instrument_group.satellite.abbreviation,
             str(self.processing_level.abbreviation),
             str(self.product_acquisition_start.year),
             str(self.product_acquisition_start.month),
@@ -1076,7 +1077,7 @@ class OpticalProduct(GenericSensorProduct):
     solar_zenith_angle = models.FloatField(null=True, blank=True)
     solar_azimuth_angle = models.FloatField(null=True, blank=True)
     earth_sun_distance = models.FloatField(null=True, blank=True)
-    objects = models.GeoManager()
+
     # We need a flag to tell if this Product class can have instances (if it is
     # not abstract)
     concrete = True

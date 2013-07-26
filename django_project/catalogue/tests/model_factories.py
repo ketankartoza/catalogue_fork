@@ -24,7 +24,7 @@ from ..models import (
     Institution, Order, OrderStatus, DeliveryMethod, DeliveryDetail,
     Projection, Datum, ResamplingMethod, FileFormat, MarketSector,
     GenericProduct, License, Quality, CreatingSoftware, GenericImageryProduct,
-    GenericSensorProduct
+    GenericSensorProduct, OpticalProduct
 )
 
 
@@ -228,3 +228,23 @@ class GenericSensorProductF(GenericImageryProductF):
     row_offset = 0
     offline_storage_medium_id = ''
     online_storage_medium_id = ''
+
+
+class OpticalProductF(GenericSensorProductF):
+    """
+    OpticalProduct model factory
+    """
+    FACTORY_FOR = OpticalProduct
+
+    product_profile = factory.SubFactory(
+        'dictionaries.tests.model_factories.OpticalProductProfileF')
+    cloud_cover = 0
+    sensor_inclination_angle = 0.0
+    sensor_viewing_angle = 0.0
+    gain_name = ''
+    gain_value_per_channel = ''
+    gain_change_per_channel = ''
+    bias_per_channel = ''
+    solar_zenith_angle = 0.0
+    solar_azimuth_angle = 0.0
+    earth_sun_distance = 0.0
