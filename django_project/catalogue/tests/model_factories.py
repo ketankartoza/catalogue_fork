@@ -24,7 +24,7 @@ from ..models import (
     Institution, Order, OrderStatus, DeliveryMethod, DeliveryDetail,
     Projection, Datum, ResamplingMethod, FileFormat, MarketSector,
     GenericProduct, License, Quality, CreatingSoftware, GenericImageryProduct,
-    GenericSensorProduct, OpticalProduct
+    GenericSensorProduct, OpticalProduct, RadarProduct
 )
 
 
@@ -248,3 +248,28 @@ class OpticalProductF(GenericSensorProductF):
     solar_zenith_angle = 0.0
     solar_azimuth_angle = 0.0
     earth_sun_distance = 0.0
+
+
+class RadarProductF(GenericSensorProductF):
+    """
+    RadarProduct model factory
+    """
+    FACTORY_FOR = RadarProduct
+
+    product_profile = factory.SubFactory(
+        'dictionaries.tests.model_factories.RadarProductProfileF'
+    )
+    imaging_mode = ''
+    look_direction = factory.Iterator(
+        RadarProduct.LOOK_DIRECTION_CHOICES, getter=lambda c: c[0])
+    antenna_receive_configuration = factory.Iterator(
+        RadarProduct.RECEIVE_CONFIGURATION_CHOICES, getter=lambda c: c[0])
+    polarising_mode = factory.Iterator(
+        RadarProduct.POLARISING_MODE_CHOICES, getter=lambda c: c[0])
+    polarising_list = ''
+    slant_range_resolution = 0.0
+    azimuth_range_resolution = 0.0
+    orbit_direction = factory.Iterator(
+        RadarProduct.ORBIT_DIRECTION_CHOICES, getter=lambda c: c[0])
+    calibration = ''
+    incidence_angle = 0.0
