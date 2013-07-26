@@ -1186,7 +1186,7 @@ class RadarProduct(GenericSensorProduct):
         max_length=1, choices=ORBIT_DIRECTION_CHOICES, null=True, blank=True)
     calibration = models.CharField(max_length=255, null=True, blank=True)
     incidence_angle = models.FloatField(null=True, blank=True)
-    objects = models.GeoManager()
+
     # We need a flag to tell if this Product class can have instances (if it is
     # not abstract)
     concrete = True
@@ -1246,7 +1246,7 @@ class GeospatialProduct(GenericProduct):
             'For example enter "50000" if it should not be used at scales '
             'larger that 1:50 000'),)
     data_type = models.CharField(
-        max_length=1, choices=GEOSPATIAL_GEOMETRY_TYPE_CHOICES, null=True,
+        max_length=2, choices=GEOSPATIAL_GEOMETRY_TYPE_CHOICES, null=True,
         blank=True, help_text='Is this a vector or raster dataset?')
     temporal_extent_start = models.DateTimeField(
         db_index=True,

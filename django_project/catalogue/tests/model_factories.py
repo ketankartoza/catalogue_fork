@@ -24,7 +24,8 @@ from ..models import (
     Institution, Order, OrderStatus, DeliveryMethod, DeliveryDetail,
     Projection, Datum, ResamplingMethod, FileFormat, MarketSector,
     GenericProduct, License, Quality, CreatingSoftware, GenericImageryProduct,
-    GenericSensorProduct, OpticalProduct, RadarProduct
+    GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
+    PlaceType, Place, Topic
 )
 
 
@@ -273,3 +274,53 @@ class RadarProductF(GenericSensorProductF):
         RadarProduct.ORBIT_DIRECTION_CHOICES, getter=lambda c: c[0])
     calibration = ''
     incidence_angle = 0.0
+
+
+class PlaceTypeF(factory.django.DjangoModelFactory):
+    """
+    PlaceType model factory
+    """
+    FACTORY_FOR = PlaceType
+
+    name = factory.Sequence(lambda n: "PlaceType {}".format(n))
+
+
+class PlaceF(factory.django.DjangoModelFactory):
+    """
+    Place model factory
+    """
+    FACTORY_FOR = Place
+
+    name = factory.Sequence(lambda n: "Place {}".format(n))
+    place_type = factory.SubFactory(PlaceTypeF)
+    geometry = 'POINT(17.54 -32.05)'
+
+
+class TopicF(factory.django.DjangoModelFactory):
+    """
+    Topic model factory
+    """
+    FACTORY_FOR = Topic
+
+    abbreviation = factory.Sequence(lambda n: "T{}".format(n))
+    name = factory.Sequence(lambda n: "Topic {}".format(n))
+
+
+class GeospatialProductF(GenericProductF):
+    """
+    GeospatialProduct model factory
+    """
+    FACTORY_FOR = GeospatialProduct
+
+    name = factory.Sequence(lambda n: "GeospatialProduct {}".format(n))
+    description = ''
+    processing_notes = ''
+    equivalent_scale = 1000000
+    data_type = factory.Iterator(
+        GeospatialProduct.GEOSPATIAL_GEOMETRY_TYPE_CHOICES,
+        getter=lambda c: c[0])
+    temporal_extent_start = datetime(2008, 1, 1, 12, 00)
+    temporal_extent_end = datetime(2008, 1, 1, 13, 00)
+    place_type = factory.SubFactory(PlaceTypeF)
+    place = factory.SubFactory(PlaceF)
+    primary_topic = factory.SubFactory(TopicF)
