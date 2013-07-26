@@ -25,7 +25,7 @@ from ..models import (
     Projection, Datum, ResamplingMethod, FileFormat, MarketSector,
     GenericProduct, License, Quality, CreatingSoftware, GenericImageryProduct,
     GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
-    PlaceType, Place, Topic
+    PlaceType, Place, Topic, OrdinalProduct
 )
 
 
@@ -324,3 +324,14 @@ class GeospatialProductF(GenericProductF):
     place_type = factory.SubFactory(PlaceTypeF)
     place = factory.SubFactory(PlaceF)
     primary_topic = factory.SubFactory(TopicF)
+
+
+class OrdinalProductF(GenericProductF):
+    """
+    OrdinalProduct model factory
+    """
+    FACTORY_FOR = OrdinalProduct
+
+    class_count = 0
+    confusion_matrix = '1,2,3'
+    kappa_score = 0.0
