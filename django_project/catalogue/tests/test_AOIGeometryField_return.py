@@ -14,8 +14,8 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'dodobasic@gmail.com'
-__version__ = '0.1'
-__date__ = '13/09/2012'
+__version__ = '0.2'
+__date__ = '31/07/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
@@ -29,7 +29,7 @@ class AOIGeometryFieldForm(forms.Form):
     aoigeometryField = AOIGeometryField()
 
 
-class AOIGeometryField_Test(TestCase):
+class TestAOIGeometryField(TestCase):
     """
     Tests AOIGeometryField output
     """
