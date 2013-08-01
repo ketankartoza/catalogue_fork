@@ -14,13 +14,14 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'dodobasic@gmail.com'
-__version__ = '0.1'
-__date__ = '1/10/2012'
+__version__ = '0.2'
+__date__ = '01/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
-from catalogue.tests.test_utils import simpleMessage
-from catalogue.models import (
+
+
+from ..models import (
     coordIsOnBounds,
     sortCandidates,
     SortCandidateException)
@@ -50,11 +51,7 @@ class Product_HelperMethods_Test(TestCase):
         #check if PK exists
         for idx, myCoord in enumerate(myTestCoords):
             myTestResult = coordIsOnBounds(myCoord, myTestExtents)
-            self.assertEquals(
-                myTestResult, myExpectedResults[idx],
-                simpleMessage(
-                    myTestResult, myExpectedResults[idx],
-                    message='coordIsOnBounds incorrect for test %i' % idx))
+            self.assertEquals(myTestResult, myExpectedResults[idx])
 
     def test_product_helpermethod_sortCandidates(self):
         """
@@ -74,11 +71,7 @@ class Product_HelperMethods_Test(TestCase):
         for idx, myCoord in enumerate(myTestCandidates):
             myTestResult = sortCandidates(
                 myCoord, myTestExtents, myTestCentorid)
-            self.assertEquals(
-                myTestResult, myExpectedResults[idx],
-                simpleMessage(
-                    myTestResult, myExpectedResults[idx],
-                    message='sortCandidates incorrect for test %i' % idx))
+            self.assertEquals(myTestResult, myExpectedResults[idx])
 
     def test_product_helpermethod_sortCandidates_exception(self):
         """
