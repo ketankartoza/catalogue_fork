@@ -31,7 +31,6 @@ class Product_HelperMethods_Test(TestCase):
     """
     Test Product model helper methods
     """
-    fixtures = []
 
     def setUp(self):
         """
