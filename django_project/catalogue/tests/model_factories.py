@@ -25,7 +25,7 @@ from ..models import (
     Projection, Datum, ResamplingMethod, FileFormat, MarketSector,
     GenericProduct, License, Quality, CreatingSoftware, GenericImageryProduct,
     GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
-    PlaceType, Place, Topic, OrdinalProduct, ContinuousProduct, Unit
+    PlaceType, Place, Topic, OrdinalProduct, ContinuousProduct, Unit, Visit
 )
 
 
@@ -356,3 +356,16 @@ class ContinuousProductF(GenericProductF):
     range_min = 0.0
     range_max = 0.0
     unit = factory.SubFactory(UnitF)
+
+
+class VisitF(factory.django.DjangoModelFactory):
+    """
+    Visit model factory
+    """
+    FACTORY_FOR = Visit
+
+    city = ''
+    country = ''
+    ip_address = '0.0.0.0'
+    ip_position = 'POINT(0.0 0.0)'
+    user = factory.SubFactory('core.model_factories.UserF')
