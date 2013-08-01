@@ -26,7 +26,7 @@ from ..models import (
     GenericProduct, License, Quality, CreatingSoftware, GenericImageryProduct,
     GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
     PlaceType, Place, Topic, OrdinalProduct, ContinuousProduct, Unit, Visit,
-    OrderStatusHistory, OrderNotificationRecipients
+    OrderStatusHistory, OrderNotificationRecipients, TaskingRequest
 )
 
 
@@ -148,6 +148,17 @@ class OrderF(factory.django.DjangoModelFactory):
     delivery_detail = factory.SubFactory(DeliveryDetailF)
     market_sector = factory.SubFactory(MarketSectorF)
     order_date = None
+
+
+class TaskingRequestF(OrderF):
+    """
+    TaskingRequest model factory
+    """
+    FACTORY_FOR = TaskingRequest
+
+    target_date = datetime(2008, 1, 1)
+    satellite_instrument_group = factory.SubFactory(
+        'dictionaries.tests.model_factories.SatelliteInstrumentGroupF')
 
 
 class QualityF(factory.django.DjangoModelFactory):
