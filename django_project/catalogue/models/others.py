@@ -146,7 +146,7 @@ class OrderNotificationRecipients(models.Model):
         verbose_name_plural = 'Order Notification Recipients'
 
     def __unicode__(self):
-        return str(self.user.name)
+        return str(self.user.username)
 
     @staticmethod
     def getUsersForProduct(theProduct):
@@ -175,8 +175,8 @@ class OrderNotificationRecipients(models.Model):
             listeners.update([o.user for o in (
                 OrderNotificationRecipients.objects
                 .filter(
-                    sensors=instance.
-                    product_profile.satellite_instrument.satellite)
+                    satellite_instrument_group=instance.product_profile
+                    .satellite_instrument.satellite_instrument_group)
                 .select_related()
             )])
         return listeners

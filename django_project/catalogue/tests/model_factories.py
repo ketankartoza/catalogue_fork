@@ -26,7 +26,7 @@ from ..models import (
     GenericProduct, License, Quality, CreatingSoftware, GenericImageryProduct,
     GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
     PlaceType, Place, Topic, OrdinalProduct, ContinuousProduct, Unit, Visit,
-    OrderStatusHistory
+    OrderStatusHistory, OrderNotificationRecipients
 )
 
 
@@ -383,3 +383,34 @@ class OrderStatusHistoryF(factory.django.DjangoModelFactory):
     notes = ''
     old_order_status = factory.SubFactory(OrderStatusF)
     new_order_status = factory.SubFactory(OrderStatusF)
+
+
+class OrderNotificationRecipientsF(factory.django.DjangoModelFactory):
+    """
+    OrderNotificationRecipients model factory
+    """
+    FACTORY_FOR = OrderNotificationRecipients
+
+    user = factory.SubFactory('core.model_factories.UserF')
+
+    @factory.post_generation
+    def add_satellite_instrument_groups(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of groups were passed in, use them
+            for sat_inst_group in extracted:
+                self.satellite_instrument_group.add(sat_inst_group)
+
+    @factory.post_generation
+    def add_classes(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of groups were passed in, use them
+            for klass in extracted:
+                self.classes.add(klass)
