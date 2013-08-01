@@ -25,7 +25,8 @@ from ..models import (
     Projection, Datum, ResamplingMethod, FileFormat, MarketSector,
     GenericProduct, License, Quality, CreatingSoftware, GenericImageryProduct,
     GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
-    PlaceType, Place, Topic, OrdinalProduct, ContinuousProduct, Unit, Visit
+    PlaceType, Place, Topic, OrdinalProduct, ContinuousProduct, Unit, Visit,
+    OrderStatusHistory
 )
 
 
@@ -369,3 +370,16 @@ class VisitF(factory.django.DjangoModelFactory):
     ip_address = '0.0.0.0'
     ip_position = 'POINT(0.0 0.0)'
     user = factory.SubFactory('core.model_factories.UserF')
+
+
+class OrderStatusHistoryF(factory.django.DjangoModelFactory):
+    """
+    OrderStatusHistory model factory
+    """
+    FACTORY_FOR = OrderStatusHistory
+
+    user = factory.SubFactory('core.model_factories.UserF')
+    order = factory.SubFactory(OrderF)
+    notes = ''
+    old_order_status = factory.SubFactory(OrderStatusF)
+    new_order_status = factory.SubFactory(OrderStatusF)
