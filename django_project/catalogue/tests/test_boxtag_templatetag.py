@@ -14,14 +14,12 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'dodobasic@gmail.com'
-__version__ = '0.1'
-__date__ = '11/07/2012'
+__version__ = '0.2'
+__date__ = '01/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
 from django.template import Template, Context
-
-from catalogue.tests.test_utils import simpleMessage
 
 
 class BoxTag_Test(TestCase):
@@ -41,13 +39,12 @@ class BoxTag_Test(TestCase):
         myRes = Template(
             '{% load boxtag %}'
             '{% box_start "box-welcome" %}'
-            ).render(Context())
+        ).render(Context())
         myExpRes = """
           <div class="ui-widget append-bottom">
             <div class="ui-helper-reset ui-widget-content ui-state-highlight ui-corner-all"  style="min-height: 100px;" id="box-welcome" >"""
 
-        self.assertEqual(myRes, myExpRes, simpleMessage(myRes, myExpRes,
-            enclose_in='#'))
+        self.assertEqual(myRes, myExpRes)
 
     def test_box_start_output_with_classes(self):
         """
@@ -56,13 +53,12 @@ class BoxTag_Test(TestCase):
         myRes = Template(
             '{% load boxtag %}'
             '{% box_start "box-welcome" "span-22" %}'
-            ).render(Context())
+        ).render(Context())
         myExpRes = """
           <div class="ui-widget append-bottom">
             <div class="ui-helper-reset ui-widget-content ui-state-highlight ui-corner-all span-22"  style="min-height: 100px;" id="box-welcome" >"""
 
-        self.assertEqual(myRes, myExpRes, simpleMessage(myRes, myExpRes,
-            enclose_in='#'))
+        self.assertEqual(myRes, myExpRes)
 
     def test_box_end_output(self):
         """
@@ -71,13 +67,12 @@ class BoxTag_Test(TestCase):
         myRes = Template(
             '{% load boxtag %}'
             '{% box_end %}'
-            ).render(Context())
+        ).render(Context())
         myExpRes = """
         </div>
       </div>
     """
-        self.assertEqual(myRes, myExpRes, simpleMessage(myRes, myExpRes,
-            enclose_in='#'))
+        self.assertEqual(myRes, myExpRes)
 
     def test_error_message_start_output(self):
         """
@@ -86,7 +81,7 @@ class BoxTag_Test(TestCase):
         myRes = Template(
             '{% load boxtag %}'
             '{% error_message_start "Test message" %}'
-            ).render(Context())
+        ).render(Context())
         myExpRes = """
       <div class="ui-widget">
         <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
@@ -96,8 +91,7 @@ class BoxTag_Test(TestCase):
           <div>
           """
 
-        self.assertEqual(myRes, myExpRes, simpleMessage(myRes, myExpRes,
-            enclose_in='#'))
+        self.assertEqual(myRes, myExpRes)
 
     def test_error_message_end_output(self):
         """
@@ -106,12 +100,11 @@ class BoxTag_Test(TestCase):
         myRes = Template(
             '{% load boxtag %}'
             '{% error_message_end %}'
-            ).render(Context())
+        ).render(Context())
         myExpRes = """
           </div>
         </div>
       </div>
       """
 
-        self.assertEqual(myRes, myExpRes, simpleMessage(myRes, myExpRes,
-            enclose_in='#'))
+        self.assertEqual(myRes, myExpRes)
