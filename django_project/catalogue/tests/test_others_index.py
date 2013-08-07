@@ -14,28 +14,31 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '22/11/2012'
+__version__ = '0.2'
+__date__ = '07/08/2013'
 __copyright__ = 'South African National Space Agency'
 
-import datetime
+
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
+
+from core.model_factories import UserF
 
 
 class OthersViews_index(TestCase):
     """
     Tests others.py index method/view
     """
-    fixtures = [
-        'test_user.json',
-    ]
 
     def setUp(self):
         """
         Set up before each test
         """
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
 
     def test_metadata_badURL(self):
         """
@@ -78,3 +81,6 @@ class OthersViews_index(TestCase):
             myResp.context['myPartnerFlag'], False)
         # check used templates
         myExpTemplates = ['index.html', u'base.html', u'menu.html']
+
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
+        self.assertEqual(myUsedTemplates, myExpTemplates)
