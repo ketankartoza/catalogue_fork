@@ -58,8 +58,6 @@ class OthersViews_index(TestCase):
         myClient = Client()
         myResp = myClient.get(reverse('index', kwargs={}))
         self.assertEqual(myResp.status_code, 200)
-        self.assertEqual(
-            len(myResp.context['myMissions']), 49)
         # check used templates
         myExpTemplates = ['index.html', u'base.html', u'menu.html']
 
@@ -76,11 +74,12 @@ class OthersViews_index(TestCase):
             reverse('index', kwargs={}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
-            len(myResp.context['myMissions']), 49)
-        self.assertEqual(
             myResp.context['myPartnerFlag'], False)
         # check used templates
-        myExpTemplates = ['index.html', u'base.html', u'menu.html']
+        myExpTemplates = [
+            'index.html', u'base.html', u'menu.html',
+            u'useraccounts/menu_content.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

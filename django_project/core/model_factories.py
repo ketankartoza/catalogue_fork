@@ -55,7 +55,7 @@ class UserF(factory.django.DjangoModelFactory):
     first_name = factory.Sequence(lambda n: "first_name%s" % n)
     last_name = factory.Sequence(lambda n: "last_name%s" % n)
     email = factory.Sequence(lambda n: "email%s@example.com" % n)
-    password = 'sha1$caffc$30d78063d8f2a5725f60bae2aca64e48804272c3'
+    password = ''
     is_staff = False
     is_active = True
     is_superuser = False
@@ -66,3 +66,13 @@ class UserF(factory.django.DjangoModelFactory):
     else:
         last_login = datetime.datetime(2000, 1, 1)
         date_joined = datetime.datetime(1999, 1, 1)
+
+    @classmethod
+    def _prepare(cls, create, **kwargs):
+        password = kwargs.pop('password', None)
+        user = super(UserF, cls)._prepare(create, **kwargs)
+        if password:
+            user.set_password(password)
+            if create:
+                user.save()
+        return user
