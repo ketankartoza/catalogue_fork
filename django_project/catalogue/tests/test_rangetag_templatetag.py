@@ -14,14 +14,12 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'dodobasic@gmail.com'
-__version__ = '0.1'
-__date__ = '11/07/2012'
+__version__ = '0.2'
+__date__ = '07/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
 from django.template import Template, Context
-
-from catalogue.tests.test_utils import simpleMessage
 
 
 class RangeTag_Test(TestCase):
@@ -43,6 +41,10 @@ class RangeTag_Test(TestCase):
             "<ul>{% for i in 3|get_range %}"
             "<li>{{ i }}. Do something</li>"
             "{% endfor %}</ul>"
-            ).render(Context())
-        myExpRes = "<ul><li>1. Do something</li><li>2. Do something</li><li>3. Do something</li></ul>"
-        self.assertEqual(myRes, myExpRes, simpleMessage(myRes, myExpRes))
+        ).render(Context())
+
+        myExpRes = (
+            '<ul><li>1. Do something</li><li>2. Do something</li><li>3. Do som'
+            'ething</li></ul>'
+        )
+        self.assertEqual(myRes, myExpRes)

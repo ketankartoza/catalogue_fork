@@ -14,14 +14,15 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'dodobasic@gmail.com'
-__version__ = '0.1'
-__date__ = '13/06/2012'
+__version__ = '0.2'
+__date__ = '07/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
-from catalogue.tests.test_utils import simpleMessage
-from catalogue.featureReaders import getFeaturesFromZipFile, \
-    processGeometriesType
+
+from catalogue.featureReaders import (
+    getFeaturesFromZipFile, processGeometriesType
+)
 
 
 class FeatureReaders_Test(TestCase):
@@ -41,7 +42,8 @@ class FeatureReaders_Test(TestCase):
         """
         myExpGeomType = 'Polygon'
         myExpNumPoints = 7
-        myExpExtent = (28.69104367281659, -22.34292118429061,
+        myExpExtent = (
+            28.69104367281659, -22.34292118429061,
             28.70027636054984, -22.336069729032527)
 
         myFile = 'catalogue/fixtures/search-area.zip'
@@ -49,14 +51,11 @@ class FeatureReaders_Test(TestCase):
         myResult = processGeometriesType(myFeatures)
 
         #test common geometry attributes
-        self.assertEqual(myResult.geom_type, myExpGeomType,
-            simpleMessage(myResult.geom_type, myExpGeomType))
+        self.assertEqual(myResult.geom_type, myExpGeomType)
 
-        self.assertEqual(myResult.num_points, myExpNumPoints,
-            simpleMessage(myResult.num_points, myExpNumPoints))
+        self.assertEqual(myResult.num_points, myExpNumPoints)
 
-        self.assertEqual(myResult.extent, myExpExtent,
-            simpleMessage(myResult.extent, myExpExtent))
+        self.assertEqual(myResult.extent, myExpExtent)
 
     def test_read_multi_shape(self):
         """
@@ -64,7 +63,8 @@ class FeatureReaders_Test(TestCase):
         """
         myExpGeomType = 'Polygon'
         myExpNumPoints = 5
-        myExpExtent = (28.681750340899242, -22.34292118429061,
+        myExpExtent = (
+            28.681750340899242, -22.34292118429061,
             28.70027636054984, -22.33066577657862)
 
         myFile = 'catalogue/fixtures/multipart-search-area.zip'
@@ -72,14 +72,11 @@ class FeatureReaders_Test(TestCase):
         myResult = processGeometriesType(myFeatures)
 
         #test common geometry attributes
-        self.assertEqual(myResult.geom_type, myExpGeomType,
-            simpleMessage(myResult.geom_type, myExpGeomType))
+        self.assertEqual(myResult.geom_type, myExpGeomType)
 
-        self.assertEqual(myResult.num_points, myExpNumPoints,
-            simpleMessage(myResult.num_points, myExpNumPoints))
+        self.assertEqual(myResult.num_points, myExpNumPoints)
 
-        self.assertEqual(myResult.extent, myExpExtent,
-            simpleMessage(myResult.extent, myExpExtent))
+        self.assertEqual(myResult.extent, myExpExtent)
 
     def test_fix_for_story137(self):
         """
@@ -87,7 +84,8 @@ class FeatureReaders_Test(TestCase):
         """
         myExpGeomType = 'Polygon'
         myExpNumPoints = 8
-        myExpExtent = (34.33069277482281, -24.657561281028393,
+        myExpExtent = (
+            34.33069277482281, -24.657561281028393,
             35.557607225177264, -23.759412256205678)
 
         myFile = 'catalogue/fixtures/Ala_Minaar_Hatch.zip'
@@ -95,11 +93,8 @@ class FeatureReaders_Test(TestCase):
         myResult = processGeometriesType(myFeatures)
 
         #test common geometry attributes
-        self.assertEqual(myResult.geom_type, myExpGeomType,
-            simpleMessage(myResult.geom_type, myExpGeomType))
+        self.assertEqual(myResult.geom_type, myExpGeomType)
 
-        self.assertEqual(myResult.num_points, myExpNumPoints,
-            simpleMessage(myResult.num_points, myExpNumPoints))
+        self.assertEqual(myResult.num_points, myExpNumPoints)
 
-        self.assertEqual(myResult.extent, myExpExtent,
-            simpleMessage(myResult.extent, myExpExtent))
+        self.assertEqual(myResult.extent, myExpExtent)
