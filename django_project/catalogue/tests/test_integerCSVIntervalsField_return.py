@@ -14,14 +14,13 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'dodobasic@gmail.com'
-__version__ = '0.3'
-__date__ = '30/07/2012'
+__version__ = '0.4'
+__date__ = '07/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
 from django import forms
 
-from catalogue.tests.test_utils import simpleMessage
 from catalogue.fields import IntegersCSVIntervalsField, validateIntegerRange
 
 
@@ -50,8 +49,7 @@ class IntegersCSVIntervalsField_Test(TestCase):
         for idx, testVal in enumerate(myTestValues):
             myField = IntegersCSVIntervalsField()
             myResult = myField.to_tuple(testVal)
-            self.assertEqual(myResult, myExpResults[idx],
-                simpleMessage(myResult, myExpResults[idx]))
+            self.assertEqual(myResult, myExpResults[idx])
 
     def test_rangeValueInput(self):
         """
@@ -63,8 +61,7 @@ class IntegersCSVIntervalsField_Test(TestCase):
         for idx, testVal in enumerate(myTestValues):
             myField = IntegersCSVIntervalsField()
             myResult = myField.to_tuple(testVal)
-            self.assertEqual(myResult, myExpResults[idx],
-                simpleMessage(myResult, myExpResults[idx]))
+            self.assertEqual(myResult, myExpResults[idx])
 
     def test_mixedValueInput(self):
         """
@@ -76,23 +73,24 @@ class IntegersCSVIntervalsField_Test(TestCase):
         for idx, testVal in enumerate(myTestValues):
             myField = IntegersCSVIntervalsField()
             myResult = myField.to_tuple(testVal)
-            self.assertEqual(myResult, myExpResults[idx],
-                simpleMessage(myResult, myExpResults[idx]))
+            self.assertEqual(myResult, myExpResults[idx])
 
     def test_formValidation_true(self):
         """
         Tests validation of IntegersCSVIntervalsField input successes
         """
         #test searches pk
-        myTestValues = [{'integerfield': '1-2'}, {'integerfield': '1,2,4-10'},
-        {'integerfield': '1-5, 0, 6-10'}]
+        myTestValues = [
+            {'integerfield': '1-2'}, {'integerfield': '1,2,4-10'},
+            {'integerfield': '1-5, 0, 6-10'}
+        ]
 
         for myTestVal in myTestValues:
             myForm = IntegersCSVIntervalsForm(myTestVal)
 
             myRes = myForm.is_valid()
             myExpRes = True
-            self.assertEqual(myRes, myExpRes, simpleMessage(myRes, myExpRes))
+            self.assertEqual(myRes, myExpRes)
 
     def test_formValidation_false(self):
         """
@@ -106,10 +104,7 @@ class IntegersCSVIntervalsField_Test(TestCase):
             myForm = IntegersCSVIntervalsForm(myTestVal)
             myResult = myForm.is_valid()
             myExpectedResult = False
-            self.assertEqual(myResult,
-                             myExpectedResult,
-                             simpleMessage(myResult, myExpectedResult,
-                             message="For testVal %s:" % myTestVal))
+            self.assertEqual(myResult, myExpectedResult)
 
     def test_formValidation_Exception(self):
         """
@@ -119,4 +114,5 @@ class IntegersCSVIntervalsField_Test(TestCase):
         myTestValues = [(10, 4), (99, 1)]
 
         for myTestVal in myTestValues:
-            self.assertRaises(forms.ValidationError, validateIntegerRange, myTestVal)
+            self.assertRaises(
+                forms.ValidationError, validateIntegerRange, myTestVal)
