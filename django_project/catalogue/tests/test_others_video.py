@@ -14,11 +14,11 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '22/11/2012'
+__version__ = '0.2'
+__date__ = '08/08/2013'
 __copyright__ = 'South African National Space Agency'
 
-import datetime
+
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
@@ -28,9 +28,6 @@ class OthersViews_video(TestCase):
     """
     Tests others.py video method/view
     """
-    fixtures = [
-        'test_user.json',
-    ]
 
     def setUp(self):
         """
