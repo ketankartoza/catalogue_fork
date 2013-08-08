@@ -14,52 +14,33 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '22/11/2012'
+__version__ = '0.2'
+__date__ = '08/08/2012'
 __copyright__ = 'South African National Space Agency'
 
-import datetime
+
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from catalogue.models import GenericProduct
+from core.model_factories import UserF
+
+from .model_factories import OpticalProductF
 
 
 class OthersViews_showProduct_Tests(TestCase):
     """
     Tests others.py showProduct method/view
     """
-    fixtures = [
-        'test_user.json',
-        # new dicts
-        'test_radarbeam.json',
-        'test_imagingmode.json',
-        'test_spectralgroup.json',
-        'test_spectralmode.json',
-        'test_scannertype.json',
-        'test_instrumenttype.json',
-        'test_collection.json',
-        'test_satellite.json',
-        'test_satelliteinstrument.json',
-        'test_radarproductprofile.json',
-        'test_opticalproductprofile.json',
-
-        'test_genericproduct.json',
-        'test_processinglevel.json',
-        'test_institution.json',
-        'test_license.json',
-        'test_projection.json',
-        'test_quality.json',
-        'test_creatingsoftware.json',
-        'test_genericimageryproduct.json',
-        'test_genericsensorproduct.json',
-    ]
 
     def setUp(self):
         """
         Set up before each test
         """
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
 
     def test_showProduct_badURL(self):
         """
@@ -80,35 +61,61 @@ class OthersViews_showProduct_Tests(TestCase):
         myResp = myClient.get(
             reverse(
                 'showProduct',
-                kwargs={'theProductId': 'S1-_HRV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_ORBIT-'}))
+                kwargs={
+                    'theProductId': (
+                        'S1-_RVV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_'
+                        'ORBIT-')
+                }
+            )
+        )
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
-            myResp['Location'],
-            'http://testserver/accounts/signin/?next=/showProduct/S1-_HRV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_ORBIT-/')
+            myResp['Location'], (
+                'http://testserver/accounts/signin/?next=/showProduct/S1-_RVV_'
+                'X--_S1C2_0120_00_0404_00_860619_084632_1B--_ORBIT-/'
+            )
+        )
 
     def test_showProduct_userlogin(self):
         """
         Test view if user is logged as user and product id is found
         """
+
+        OpticalProductF.create(**{
+            'unique_product_id': (
+                'S1-_RVV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_ORBIT-')
+        })
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
             reverse(
                 'showProduct',
-                kwargs={'theProductId': 'S1-_HRV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_ORBIT-'}))
+                kwargs={
+                    'theProductId': (
+                        'S1-_RVV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_'
+                        'ORBIT-')
+                }
+            )
+        )
         self.assertEqual(myResp.status_code, 200)
 
+        self.assertEqual(myResp.context['messages'], ['Product found'])
+
         self.assertEqual(
-            myResp.context['messages'], ['Product found'])
-        myExpProducts, myExpProdType = GenericProduct.objects.filter(product_id='S1-_HRV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_ORBIT-').get().getConcreteProduct()
-        self.assertEqual(
-            myResp.context['myProduct'], myExpProducts)
+            myResp.context['myProduct'].unique_product_id,
+            'S1-_RVV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_ORBIT-'
+        )
+
         # check used templates
         myExpTemplates = [
             'productView.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html',
-            'productTypes/genericImageryProduct.html',
-            u'productTypes/genericProduct.html']
+            'productTypes/opticalProduct.html',
+            u'productTypes/genericSensorProduct.html',
+            u'productTypes/genericImageryProduct.html',
+            u'productTypes/genericProduct.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -119,7 +126,18 @@ class OthersViews_showProduct_Tests(TestCase):
         """
         myClient = Client()
         myClient.login(username='pompies', password='password')
-        myReqs = reverse(
-            'showProduct',
-            kwargs={'theProductId': 'S1-_RVV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_ORBIT-'})
-        self.assertRaises(UnboundLocalError, myClient.get, myReqs)
+        myResp = myClient.get(
+            reverse(
+                'showProduct',
+                kwargs={
+                    'theProductId': (
+                        'S1-_RVV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_'
+                        'ORBIT-')
+                }
+            )
+        )
+
+        self.assertEqual(
+            myResp.context['messages'], ['No matching product found'])
+
+        self.assertEqual(myResp.context['myProduct'], None)

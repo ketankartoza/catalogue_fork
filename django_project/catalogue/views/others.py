@@ -384,13 +384,15 @@ def showProduct(theRequest, theProductId):
     """
     myProduct = None
     myMessages = []
-    myProducts = GenericProduct.objects.filter(product_id=theProductId)
+    myObject = None
+    myProducts = GenericProduct.objects.filter(
+        unique_product_id=theProductId)
     if len(myProducts) > 0:
         myProduct = myProducts[0]
         myObject, myType = myProduct.getConcreteProduct()
         myMessages.append('Product found')
     else:
-        myMessages.append("No matching product found")
+        myMessages.append('No matching product found')
     return ({
         'messages': myMessages,
         'myProduct': myObject,
