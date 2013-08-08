@@ -158,10 +158,6 @@ class OthersViews_metadata(TestCase):
         expString = open(
             'catalogue/tests/others_metadata_output.txt', 'rb+').read()
 
-        dataA = open('resp.txt', 'wb+')
-        dataA.write(myResp.content)
-        dataA.close()
-
         self.assertEqual(
             ''.join(difflib.unified_diff(
                 myResp.content, expString, lineterm='')),
