@@ -13,25 +13,20 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '30/09/2012'
+__version__ = '0.2'
+__date__ = '09/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 import os
-import logging
-logger = logging.getLogger(__name__)
 import zipfile
 from django.test import TestCase
 from catalogue.views.helpers import writeThumbToZip
 
+
 class ViewHelperTests(TestCase):
-
-
-    fixtures = []
 
     def testWriteThumbToZip(self):
         """Test that we can write a thumb to a zip."""
-        logger.debug('testWriteThumbToZip')
         myZipPath = '/tmp/testWriteThumbToZip.zip'
         if os.path.exists(myZipPath):
             os.remove(myZipPath)
