@@ -420,10 +420,13 @@ def showThumbPage(theRequest, theId):
     logger.info('showThumbPage : id ' + theId)
     myDetails = []
     myProduct = get_object_or_404(GenericProduct, id=theId)
+    myProduct = myProduct.getConcreteProduct()[0]
     #ABP: ugly hack
     try:
         myDetails.append(
-            '<tr><th>Sensor: ' + myProduct.mission_sensor.name + '</th></tr>')
+            '<tr><th>Sensor:{}</th></tr>'.format(
+                myProduct.product_profile.spectral_mode.name)
+        )
     except AttributeError:
         pass
     myImageFile = os.path.join(
