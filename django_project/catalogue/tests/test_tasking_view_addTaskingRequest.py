@@ -32,31 +32,13 @@ from catalogue.models import (
     DeliveryDetail
 )
 
+from core.model_factories import UserF
+
 
 class TaskingViews_addTaskingRequest_Tests(TestCase):
     """
     Tests tasking.py addTaskingRequest method/view
     """
-    fixtures = [
-        'test_user.json',
-        'test_sansauserprofile.json',
-        'test_orderstatus.json',
-        'test_deliverymethod.json',
-        'test_deliverydetail.json',
-        'test_marketsector.json',
-        'test_order.json',
-        'test_taskingrequest.json',
-        'test_resamplingmethod.json',
-        'test_projection.json',
-        'test_processinglevel.json',
-        'test_creatingsoftware.json',
-        'test_license.json',
-        'test_quality.json',
-        'test_institution.json',
-        'test_projection.json',
-        'test_datum.json',
-        'test_fileformat.json',
-    ]
 
     def setUp(self):
         """
@@ -91,6 +73,12 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         """
         Test view if user is logged in, and has valid profile
         """
+        UserF.create(**{
+            'username': 'timelinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -128,6 +116,11 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         """
         Test view if user is logged in, and has invalid profile
         """
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password',
+        })
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
