@@ -14,48 +14,24 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '22/11/2012'
+__version__ = '0.2'
+__date__ = '09/08/2013'
 __copyright__ = 'South African National Space Agency'
 
-import datetime
+
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from django.shortcuts import get_object_or_404
-from catalogue.models import GenericProduct
+from core.model_factories import UserF
+
+from .model_factories import OpticalProductF
 
 
 class OthersViews_showThumbPage_Tests(TestCase):
     """
     Tests others.py showThumbPage method/view
     """
-    fixtures = [
-        'test_user.json',
-        # new dicts
-        'test_radarbeam.json',
-        'test_imagingmode.json',
-        'test_spectralgroup.json',
-        'test_spectralmode.json',
-        'test_scannertype.json',
-        'test_instrumenttype.json',
-        'test_collection.json',
-        'test_satellite.json',
-        'test_satelliteinstrument.json',
-        'test_radarproductprofile.json',
-        'test_opticalproductprofile.json',
-
-        'test_genericproduct.json',
-        'test_processinglevel.json',
-        'test_institution.json',
-        'test_license.json',
-        'test_projection.json',
-        'test_quality.json',
-        'test_creatingsoftware.json',
-        'test_genericimageryproduct.json',
-        'test_genericsensorproduct.json',
-    ]
 
     def setUp(self):
         """
@@ -77,19 +53,26 @@ class OthersViews_showThumbPage_Tests(TestCase):
         """
         Test view if user is not logged in
         """
+        OpticalProductF.create(**{'id':123})
         myClient = Client()
-        myResp = reverse(
-            'showThumbPage',
-            kwargs={'theId': '1934163'})
+        myResp = reverse('showThumbPage', kwargs={'theId': '123'})
+
         self.assertRaises(NotImplementedError, myClient.get, myResp)
 
     def test_showThumbPage_userlogin(self):
         """
         Test view if user is logged as user
         """
+
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
+
+        OpticalProductF.create(**{'id':123})
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
-        myResp = reverse(
-            'showThumbPage',
-            kwargs={'theId': '90541'})
+        myResp = reverse('showThumbPage', kwargs={'theId': '123'})
+
         self.assertRaises(NotImplementedError, myClient.get, myResp)
