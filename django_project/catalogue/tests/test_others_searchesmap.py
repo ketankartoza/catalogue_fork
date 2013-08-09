@@ -14,23 +14,21 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '22/11/2012'
+__version__ = '0.2'
+__date__ = '09/08/2013'
 __copyright__ = 'South African National Space Agency'
 
-import datetime
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
+
+from core.model_factories import UserF
 
 
 class OthersViews_searchesMap(TestCase):
     """
     Tests others.py searchesMap method/view
     """
-    fixtures = [
-        'test_user.json',
-    ]
 
     def setUp(self):
         """
@@ -65,6 +63,11 @@ class OthersViews_searchesMap(TestCase):
         """
         Test view if user is logged as user
         """
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
@@ -79,6 +82,12 @@ class OthersViews_searchesMap(TestCase):
         """
         Test view if user is logged as staff
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -87,7 +96,8 @@ class OthersViews_searchesMap(TestCase):
                 kwargs={}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
-            myResp.context['myMessages'], ['<h3>All searches</h3>', 'Total Searches: 0'])
+            myResp.context['myMessages'],
+            ['<h3>All searches</h3>', 'Total Searches: 0'])
         self.assertEqual(
             myResp.context['myExtent'], '(-90.0,-45.0, 90.0, 45.0)')
         self.assertEqual(
