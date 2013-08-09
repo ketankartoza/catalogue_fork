@@ -58,21 +58,21 @@ class OthersViews_showPreview_Tests(TestCase):
                 kwargs={'theId': '1', 'theSize': 'a'}))
         self.assertEqual(myResp.status_code, 200)
         expString = (
-            '<center><img src="/thumbnail/1/a/"><center><img src="/media/image'
-            's/info_32.png" onclick=\'showMetadata(1);\'  alt="Click to view m'
-            'etadata for this image"\n            title="Click to view metadat'
-            'a for this image" />&nbsp;<img src="/media/images/buy_32.png" onc'
-            'lick=\'addToCart(1);\'  alt="Click to add to your cart" title="Cl'
-            'ick\n            to add this image to your cart" />&nbsp;<a data-'
-            'toggle="modal" data-target="#myModal" id="large_preview" href="/t'
-            'humbnailpage/1/"><img src="/media/images/search_32.png" alt="Clic'
-            'k for larger\n            view" title="Click for larger preview"/'
-            '></a></center>'
+            '<center>\n<img src="/thumbnail/1/a/">\n<div class="btn-group">\n '
+            '   <button class="btn btn-info" onclick=\'showMetadata(1);\' alt='
+            '"Click to view metadata for this image"\n        title="Click to '
+            'view metadata for this image"><i class=" icon-list"></i>\n    </b'
+            'utton>\n    <button class="btn btn-success disabled" alt="Click t'
+            'o add to your cart"\n        title="You must be logged in to acce'
+            'ss cart" ><i class="icon-shopping-cart"></i></button>\n    <butto'
+            'n class="btn btn-success" data-toggle="modal" data-target="#myMod'
+            'al" id="large_preview" href="/thumbnailpage/1/">\n    <i class="i'
+            'con-zoom-in"></i></button></div>\n</center>'
         )
         self.assertEqual(
             myResp.content, expString)
         # check used templates
-        myExpTemplates = []
+        myExpTemplates = ['productPreview.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -94,21 +94,21 @@ class OthersViews_showPreview_Tests(TestCase):
                 kwargs={'theId': '1', 'theSize': 'a'}))
         self.assertEqual(myResp.status_code, 200)
         expString = (
-            '<center><img src="/thumbnail/1/a/"><center><img src="/media/image'
-            's/info_32.png" onclick=\'showMetadata(1);\'  alt="Click to view m'
-            'etadata for this image"\n            title="Click to view metadat'
-            'a for this image" />&nbsp;<img src="/media/images/buy_32.png" onc'
-            'lick=\'addToCart(1);\'  alt="Click to add to your cart" title="Cl'
-            'ick\n            to add this image to your cart" />&nbsp;<a data-'
-            'toggle="modal" data-target="#myModal" id="large_preview" href="/t'
-            'humbnailpage/1/"><img src="/media/images/search_32.png" alt="Clic'
-            'k for larger\n            view" title="Click for larger preview"/'
-            '></a></center>'
+            '<center>\n<img src="/thumbnail/1/a/">\n<div class="btn-group">\n '
+            '   <button class="btn btn-info" onclick=\'showMetadata(1);\' alt='
+            '"Click to view metadata for this image"\n        title="Click to '
+            'view metadata for this image"><i class=" icon-list"></i>\n    </b'
+            'utton>\n    <button class="btn btn-success" onclick=\'addToCart(1'
+            ');\' alt="Click to add to your cart"\n        title="Click to add'
+            ' this image to your cart" ><i class="icon-shopping-cart"></i></bu'
+            'tton>\n    <button class="btn btn-success" data-toggle="modal" da'
+            'ta-target="#myModal" id="large_preview" href="/thumbnailpage/1/">'
+            '\n    <i class="icon-zoom-in"></i></button></div>\n</center>'
         )
         self.assertEqual(
             myResp.content, expString)
         # check used templates
-        myExpTemplates = []
+        myExpTemplates = ['productPreview.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
