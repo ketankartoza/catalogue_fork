@@ -18,6 +18,8 @@ __version__ = '0.1'
 __date__ = '14/10/2012'
 __copyright__ = 'South African National Space Agency'
 
+import re
+
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
@@ -33,6 +35,14 @@ from catalogue.models import (
 )
 
 from core.model_factories import UserF
+from useraccounts.tests.model_factories import SansaUserProfileF
+from dictionaries.tests.model_factories import (
+    SatelliteInstrumentGroupF, InstrumentTypeF
+)
+from .model_factories import (
+    ProjectionF, ResamplingMethodF, DeliveryMethodF, MarketSectorF,
+    OrderStatusF
+)
 
 
 class TaskingViews_addTaskingRequest_Tests(TestCase):
@@ -73,10 +83,14 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         """
         Test view if user is logged in, and has valid profile
         """
-        UserF.create(**{
-            'username': 'timelinux',
+        myUser = UserF.create(**{
+            'username': 'timlinux',
             'password': 'password',
             'is_staff': True
+        })
+
+        SansaUserProfileF.create(**{
+            'user': myUser
         })
 
         myClient = Client()
@@ -106,10 +120,10 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'addPage.html', u'base.html', u'menu.html',
+            'addPage.html', u'basev3.html', u'menu.html',
             u'useraccounts/menu_content.html', u'add.html']
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
     def test_addTaskingRequest_login_user_without_profile(self):
@@ -137,6 +151,32 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         Test view if user is logged in, and has valid profile
         and has posted valid form data
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        SansaUserProfileF.create(**{
+            'user': myUser,
+            'address1': '12321 kjk',
+            'address2': 'kjkj',
+            'post_code': '123',
+            'organisation': 'None',
+            'contact_no': '123123'
+        })
+
+        ProjectionF.create(**{'id': 3})
+        ResamplingMethodF.create(**{'id': 2})
+        DeliveryMethodF.create(**{'id': 1})
+        MarketSectorF.create(**{'id': 1})
+        OrderStatusF.create(**{'id': 1})
+        myIT = InstrumentTypeF.create(**{'is_taskable': True})
+        SatelliteInstrumentGroupF.create(**{
+            'id': 10,
+            'instrument_type': myIT
+        })
+
         # get initial counts
         myTaskingRequests_count = len(TaskingRequest.objects.all())
         myDeliveryDetail_count = len(DeliveryDetail.objects.all())
@@ -151,16 +191,19 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
             '2583 -32.186801708128))')],
             u'target_date': [u'01-10-2012'], u'notes': [u''], u'ref_id': [u''],
             u'resampling_method': [u'2'],
-            u'baseLayers': [u'2m Mosaic 2010 TC'], u'mission_sensor': [u'10'],
-            u'delivery_method': [u'1'], u'market_sector': [u'1'],
-            u'task_geometry': [u'task_geometry']
+            u'baseLayers': [u'2m Mosaic 2010 TC'],
+            u'satellite_instrument_group': [u'10'], u'delivery_method': [u'1'],
+            u'market_sector': [u'1'], u'task_geometry': [u'task_geometry']
         }
         myResp = myClient.post(
             reverse('addTaskingRequest', kwargs={}), myPostData)
 
         self.assertEqual(myResp.status_code, 302)
-        self.assertEqual(
-            myResp['Location'], 'http://testserver/viewtaskingrequest/4/')
+        self.assertTrue(
+            re.match(
+                'http://testserver/viewtaskingrequest/[\d+]/',
+                myResp['Location']) is not None
+        )
 
         # check if tasking request is in the database
         myNewTaskingRequests_count = len(TaskingRequest.objects.all())
@@ -176,6 +219,20 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         Test view if user is logged in, and has valid profile
         and has posted invalid form data
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        SansaUserProfileF.create(**{
+            'user': myUser,
+            'address1': '12321 kjk',
+            'address2': 'kjkj',
+            'post_code': '123',
+            'organisation': 'None',
+            'contact_no': '123123'
+        })
 
         # create the request
         myClient = Client()
@@ -209,10 +266,10 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'addPage.html', u'base.html', u'menu.html',
+            'addPage.html', u'basev3.html', u'menu.html',
             u'useraccounts/menu_content.html', u'add.html']
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
     def test_addTaskingRequest_login_user_post_valid_geomfile(self):
@@ -220,9 +277,34 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         Test view if user is logged in, and has valid profile
         and has posted valid form data, with geomfile
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        SansaUserProfileF.create(**{
+            'user': myUser,
+            'address1': '12321 kjk',
+            'address2': 'kjkj',
+            'post_code': '123',
+            'organisation': 'None',
+            'contact_no': '123123'
+        })
         # get initial counts
         myTaskingRequests_count = len(TaskingRequest.objects.all())
         myDeliveryDetail_count = len(DeliveryDetail.objects.all())
+
+        ProjectionF.create(**{'id': 3})
+        ResamplingMethodF.create(**{'id': 2})
+        DeliveryMethodF.create(**{'id': 1})
+        MarketSectorF.create(**{'id': 1})
+        OrderStatusF.create(**{'id': 1})
+        myIT = InstrumentTypeF.create(**{'is_taskable': True})
+        SatelliteInstrumentGroupF.create(**{
+            'id': 10,
+            'instrument_type': myIT
+        })
 
         # prepare file for upload
         myUploadFile = open('catalogue/fixtures/search-area.zip', 'rb')
@@ -235,7 +317,8 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
             u'geometry': [],
             u'target_date': [u'01-10-2012'], u'notes': [u''], u'ref_id': [u''],
             u'resampling_method': [u'2'],
-            u'baseLayers': [u'2m Mosaic 2010 TC'], u'mission_sensor': [u'10'],
+            u'baseLayers': [u'2m Mosaic 2010 TC'],
+            u'satellite_instrument_group': [u'10'],
             u'delivery_method': [u'1'], u'market_sector': [u'1'],
             u'task_geometry': [u'task_geometry']
         }
@@ -243,8 +326,11 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
             reverse('addTaskingRequest', kwargs={}), myPostData)
 
         self.assertEqual(myResp.status_code, 302)
-        self.assertEqual(
-            myResp['Location'], 'http://testserver/viewtaskingrequest/4/')
+        self.assertTrue(
+            re.match(
+                'http://testserver/viewtaskingrequest/[\d+]/',
+                myResp['Location']) is not None
+        )
 
         # check if tasking request is in the database
         myNewTaskingRequests_count = len(TaskingRequest.objects.all())
@@ -260,6 +346,20 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         Test view if user is logged in, and has valid profile
         and has posted valid form data, with invalid geomfile
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        SansaUserProfileF.create(**{
+            'user': myUser,
+            'address1': '12321 kjk',
+            'address2': 'kjkj',
+            'post_code': '123',
+            'organisation': 'None',
+            'contact_no': '123123'
+        })
         # get initial counts
         # myTaskingRequests_count = len(TaskingRequest.objects.all())
         # myDeliveryDetail_count = len(DeliveryDetail.objects.all())
@@ -275,7 +375,8 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
             u'geometry': [],
             u'target_date': [u'01-10-2012'], u'notes': [u''], u'ref_id': [u''],
             u'resampling_method': [u'2'],
-            u'baseLayers': [u'2m Mosaic 2010 TC'], u'mission_sensor': [u'10'],
+            u'baseLayers': [u'2m Mosaic 2010 TC'],
+            u'satellite_instrument_group': [u'10'],
             u'delivery_method': [u'1'], u'market_sector': [u'1'],
             u'task_geometry': [u'task_geometry']
         }
@@ -305,8 +406,8 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'addPage.html', u'base.html', u'menu.html',
+            'addPage.html', u'basev3.html', u'menu.html',
             u'useraccounts/menu_content.html', u'add.html']
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
