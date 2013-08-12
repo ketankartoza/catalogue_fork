@@ -13,8 +13,8 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '14/10/2012'
+__version__ = '0.2'
+__date__ = '12/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 
@@ -24,31 +24,14 @@ from django.test.client import Client
 
 from catalogue.forms import OrderStatusHistoryForm
 
+from core.model_factories import UserF
+from .model_factories import TaskingRequestF
+
 
 class TaskingViews_viewTaskingRequest_Tests(TestCase):
     """
     Tests tasking.py viewTaskingRequest method/view
     """
-
-    fixtures = [
-        'test_user.json',
-        'test_orderstatus.json',
-        'test_deliverymethod.json',
-        'test_deliverydetail.json',
-        'test_marketsector.json',
-        'test_order.json',
-        'test_taskingrequest.json',
-        'test_projection.json',
-        'test_creatingsoftware.json',
-        'test_license.json',
-        'test_quality.json',
-        'test_institution.json',
-        'test_projection.json',
-        'test_datum.json',
-        'test_processinglevel.json',
-        'test_resamplingmethod.json',
-        'test_fileformat.json',
-    ]
 
     def setUp(self):
         """
@@ -84,6 +67,17 @@ class TaskingViews_viewTaskingRequest_Tests(TestCase):
         """
         Test view if user is staff
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        TaskingRequestF.create(**{
+            'id': 1,
+            'user': myUser
+        })
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -98,7 +92,7 @@ class TaskingViews_viewTaskingRequest_Tests(TestCase):
         myExpTemplates = [
             'taskingRequestPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'taskingRequest.html']
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
         #check taskingrequest object
@@ -109,6 +103,16 @@ class TaskingViews_viewTaskingRequest_Tests(TestCase):
         """
         Test view if user is not staff
         """
+        myUser = UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
+
+        TaskingRequestF.create(**{
+            'id': 2,
+            'user': myUser
+        })
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
@@ -123,7 +127,7 @@ class TaskingViews_viewTaskingRequest_Tests(TestCase):
         myExpTemplates = [
             'taskingRequestPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'taskingRequest.html']
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
         #check taskingrequest object
@@ -133,12 +137,25 @@ class TaskingViews_viewTaskingRequest_Tests(TestCase):
     def test_viewTaskingRequest_staff_access(self):
         """
         Test staff user object access
-        Staff users can access every tasking request
+        Staf
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        TaskingRequestF.create(**{
+            'id': 1,
+            'user': myUser
+        })
+        # add another TR, owned by some user
+        TaskingRequestF.create(**{'id': 1234})
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
-            reverse('viewTaskingRequest', kwargs={'theId': 2}))
+            reverse('viewTaskingRequest', kwargs={'theId': 1234}))
 
         self.assertEqual(myResp.status_code, 200)
         # is OrderStatusHistoryForm initialized
@@ -149,18 +166,34 @@ class TaskingViews_viewTaskingRequest_Tests(TestCase):
         myExpTemplates = [
             'taskingRequestPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'taskingRequest.html']
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
         #check taskingrequest object
         myTaskingRequest = myResp.context['myTaskingRequest']
-        self.assertEqual(myTaskingRequest.pk, 2)
+        self.assertEqual(myTaskingRequest.pk, 1234)
 
     def test_viewTaskingRequest_user_access(self):
         """
         Test regular user object access
         Regular users can only access owned tasking requests
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
+
+        TaskingRequestF.create(**{
+            'id': 1,
+            'user': myUser
+        })
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
@@ -172,6 +205,10 @@ class TaskingViews_viewTaskingRequest_Tests(TestCase):
         """
         Ensure that non-existent Requests throw a 404.
         """
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
@@ -183,6 +220,17 @@ class TaskingViews_viewTaskingRequest_Tests(TestCase):
         """
         Test view if the request is an AJAX request
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        TaskingRequestF.create(**{
+            'id': 1,
+            'user': myUser
+        })
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -198,5 +246,5 @@ class TaskingViews_viewTaskingRequest_Tests(TestCase):
         myExpTemplates = [
             'taskingRequestPageAjax.html', u'emptytemplate.html',
             u'taskingRequest.html']
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
