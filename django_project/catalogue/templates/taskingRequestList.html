@@ -24,9 +24,13 @@ function showTask(theId) {
 <div class="row-fluid center gap-bottom">
   <button id="product-orders-view-btn" onclick='location="{% url 'listOrders' %}"' class="btn btn-small"><i class="icon-refresh"></i></button>
   <div class="btn-group">
-    <button href="{{myUrl}}?page={{ myRecords.previous_page_number }}" class="btn btn-small"><i class="icon-backward"></i></button>
+    {% if myRecords.has_previous %}
+      <button href="{{myUrl}}?page={{ myRecords.previous_page_number }}" class="btn btn-small"><i class="icon-backward"></i></button>
+    {% endif %}
     <button class="btn btn-small disabled btn-success">{{ myRecords.number }} of {{ myRecords.paginator.num_pages }}</button>
-    <button href="{{myUrl}}?page={{ myRecords.next_page_number }}" class="btn btn-small"><i class="icon-forward"></i></button>
+    {% if myRecords.has_next %}
+      <button href="{{myUrl}}?page={{ myRecords.next_page_number }}" class="btn btn-small"><i class="icon-forward"></i></button>
+    {% endif %}
   </div>
 </div>
 
@@ -59,9 +63,13 @@ function showTask(theId) {
   </table>
   <div class="row-fluid center gap-bottom">
     <div class="btn-group">
-      <button href="{{myUrl}}?page={{ myRecords.previous_page_number }}" class="btn btn-small"><i class="icon-backward"></i></button>
+      {% if myRecords.has_previous %}
+        <button href="{{myUrl}}?page={{ myRecords.previous_page_number }}" class="btn btn-small"><i class="icon-backward"></i></button>
+      {% endif %}
       <button class="btn btn-small disabled btn-success">{{ myRecords.number }} of {{ myRecords.paginator.num_pages }}</button>
-      <button href="{{myUrl}}?page={{ myRecords.next_page_number }}" class="btn btn-small"><i class="icon-forward"></i></button>
+      {% if myRecords.has_next %}
+        <button href="{{myUrl}}?page={{ myRecords.next_page_number }}" class="btn btn-small"><i class="icon-forward"></i></button>
+      {% endif %}
     </div>
   </div>
 </div>

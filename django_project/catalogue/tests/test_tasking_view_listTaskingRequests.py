@@ -13,8 +13,8 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '14/10/2012'
+__version__ = '0.2'
+__date__ = '12/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 from datetime import date
@@ -24,29 +24,15 @@ from django.template import TemplateDoesNotExist
 from django.test import TestCase
 from django.test.client import Client
 
+from core.model_factories import UserF
+
+from .model_factories import TaskingRequestF
+
 
 class TaskingViews_listTaskingRequests_Tests(TestCase):
     """
     Tests tasking.py listTaskingRequests method/view
     """
-    fixtures = [
-        'test_user.json',
-        'test_orderstatus.json',
-        'test_deliverymethod.json',
-        'test_deliverydetail.json',
-        'test_marketsector.json',
-        'test_order.json',
-        'test_taskingrequest.json',
-        'test_processinglevel.json',
-        'test_creatingsoftware.json',
-        'test_license.json',
-        'test_quality.json',
-        'test_institution.json',
-        'test_projection.json',
-        'test_datum.json',
-        'test_fileformat.json',
-        'test_resamplingmethod.json',
-    ]
 
     def setUp(self):
         """
@@ -80,6 +66,14 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         """
         Test view if staff user is logged in
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        TaskingRequestF.create()
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -93,12 +87,12 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         myExpTemplates = [
             'taskingRequestListPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'taskingRequestList.html']
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
         #check taskingrequest object
         myTaskingRequests = myResp.context['myRecords']
-        self.assertEqual(len(myTaskingRequests.object_list), 2)
+        self.assertEqual(len(myTaskingRequests.object_list), 1)
 
         myCurrentMonth = myResp.context['myCurrentMonth']
         self.assertEqual(myCurrentMonth, date.today())
@@ -107,6 +101,16 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         """
         Test view if regular user is logged in
         """
+
+        myUser = UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
+
+        TaskingRequestF.create(**{
+            'user': myUser
+        })
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
@@ -120,7 +124,7 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         myExpTemplates = [
             'taskingRequestListPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'taskingRequestList.html']
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
         #check taskingrequest object
@@ -137,6 +141,14 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         WARNING: PDF report for this view is not fully implemented
         Rasies -> TemplateDoesNotExist
         """
+
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+        TaskingRequestF.create()
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
 
@@ -148,6 +160,15 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         """
         Test view if staff user is logged in, specifying page param
         """
+
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        TaskingRequestF.create()
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -162,12 +183,12 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         myExpTemplates = [
             'taskingRequestListPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'taskingRequestList.html']
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
         #check taskingrequest object
         myTaskingRequests = myResp.context['myRecords']
-        self.assertEqual(len(myTaskingRequests.object_list), 2)
+        self.assertEqual(len(myTaskingRequests.object_list), 1)
 
         myCurrentMonth = myResp.context['myCurrentMonth']
         self.assertEqual(myCurrentMonth, date.today())
@@ -178,6 +199,15 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         not exist
         View will default to page 1
         """
+
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        TaskingRequestF.create()
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -192,12 +222,12 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         myExpTemplates = [
             'taskingRequestListPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'taskingRequestList.html']
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
         #check taskingrequest object
         myTaskingRequests = myResp.context['myRecords']
-        self.assertEqual(len(myTaskingRequests.object_list), 2)
+        self.assertEqual(len(myTaskingRequests.object_list), 1)
 
         myCurrentMonth = myResp.context['myCurrentMonth']
         self.assertEqual(myCurrentMonth, date.today())
@@ -207,6 +237,15 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         Test view if staff user is logged in, specifying invalid page param
         View will default to page 1
         """
+
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        TaskingRequestF.create()
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -221,12 +260,12 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         myExpTemplates = [
             'taskingRequestListPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'taskingRequestList.html']
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
         #check taskingrequest object
         myTaskingRequests = myResp.context['myRecords']
-        self.assertEqual(len(myTaskingRequests.object_list), 2)
+        self.assertEqual(len(myTaskingRequests.object_list), 1)
 
         myCurrentMonth = myResp.context['myCurrentMonth']
         self.assertEqual(myCurrentMonth, date.today())
