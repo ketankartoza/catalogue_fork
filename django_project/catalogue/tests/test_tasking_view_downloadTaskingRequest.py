@@ -14,38 +14,23 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '14/10/2012'
+__version__ = '0.2'
+__date__ = '12/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
+from core.model_factories import UserF
+
+from model_factories import TaskingRequestF
+
 
 class TaskingViews_downloadTaskingRequest_Tests(TestCase):
     """
     Tests tasking.py downloadTaskingRequest method/view
     """
-    fixtures = [
-        'test_user.json',
-        'test_orderstatus.json',
-        'test_deliverymethod.json',
-        'test_deliverydetail.json',
-        'test_marketsector.json',
-        'test_order.json',
-        'test_taskingrequest.json',
-        'test_processinglevel.json',
-        'test_creatingsoftware.json',
-        'test_license.json',
-        'test_quality.json',
-        'test_institution.json',
-        'test_projection.json',
-        'test_datum.json',
-        'test_fileformat.json',
-        'test_resamplingmethod.json',
-    ]
-
     def setUp(self):
         """
         Set up before each test
@@ -80,6 +65,14 @@ class TaskingViews_downloadTaskingRequest_Tests(TestCase):
         """
         Test view if staff user is logged in
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        TaskingRequestF.create(**{'id': 1})
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -98,6 +91,14 @@ class TaskingViews_downloadTaskingRequest_Tests(TestCase):
         """
         Test view if staff user is logged in
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        TaskingRequestF.create(**{'id': 1})
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -117,6 +118,14 @@ class TaskingViews_downloadTaskingRequest_Tests(TestCase):
         """
         Test view if staff user is logged in
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        TaskingRequestF.create(**{'id': 1})
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -136,6 +145,14 @@ class TaskingViews_downloadTaskingRequest_Tests(TestCase):
         """
         Test view if regular user is logged in
         """
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        TaskingRequestF.create(**{'id': 2})
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
@@ -154,6 +171,13 @@ class TaskingViews_downloadTaskingRequest_Tests(TestCase):
         """
         Test view if regular user is logged in, but not owner of target object
         """
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
+
+        TaskingRequestF.create(**{'id': 1})
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
@@ -169,6 +193,14 @@ class TaskingViews_downloadTaskingRequest_Tests(TestCase):
         """
         Test view if staff user is logged in, but not owner of target object
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        TaskingRequestF.create(**{'id': 2})
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -187,6 +219,15 @@ class TaskingViews_downloadTaskingRequest_Tests(TestCase):
         """
         Test view if staff user is logged in, but using invalid request params
         """
+
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        TaskingRequestF.create(**{'id': 1})
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
 

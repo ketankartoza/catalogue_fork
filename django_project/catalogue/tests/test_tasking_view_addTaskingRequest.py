@@ -201,7 +201,7 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertTrue(
             re.match(
-                'http://testserver/viewtaskingrequest/[\d+]/',
+                'http://testserver/viewtaskingrequest/(\d+)/',
                 myResp['Location']) is not None
         )
 
@@ -328,7 +328,7 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertTrue(
             re.match(
-                'http://testserver/viewtaskingrequest/[\d+]/',
+                'http://testserver/viewtaskingrequest/(\d+)/',
                 myResp['Location']) is not None
         )
 
