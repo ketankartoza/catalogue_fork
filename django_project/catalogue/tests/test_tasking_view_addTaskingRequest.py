@@ -24,12 +24,12 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from catalogue.forms import (
+from ..forms import (
     TaskingRequestForm,
     TaskingRequestDeliveryDetailForm,
 )
 
-from catalogue.models import (
+from ..models import (
     TaskingRequest,
     DeliveryDetail
 )

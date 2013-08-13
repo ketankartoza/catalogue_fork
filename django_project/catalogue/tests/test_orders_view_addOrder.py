@@ -14,70 +14,37 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '23/10/2012'
+__version__ = '0.2'
+__date__ = '13/08/2013'
 __copyright__ = 'South African National Space Agency'
+
+import re
 
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from catalogue.forms import (
+from ..forms import (
     OrderForm,
     DeliveryDetailForm
 )
 
-from catalogue.models import Order
+from ..models import Order
 
-from search.models import SearchRecord
+from core.model_factories import UserF
+from useraccounts.tests.model_factories import SansaUserProfileF
+from search.tests.model_factories import SearchRecordF
+
+from .model_factories import (
+    DeliveryMethodF, ProjectionF, FileFormatF, ResamplingMethodF, DatumF,
+    MarketSectorF, OpticalProductF, OrderStatusF
+)
 
 
 class OrdersViews_addOrder_Tests(TestCase):
     """
     Tests orders.py addOrder method/view
     """
-
-    fixtures = [
-        'test_creatingsoftware.json',
-        'test_license.json',
-        'test_quality.json',
-        'test_institution.json',
-        'test_projection.json',
-        'test_datum.json',
-        'test_fileformat.json',
-        'test_processinglevel.json',
-        'test_resamplingmethod.json',
-        'test_search.json',
-        'test_searchdaterange.json',
-        'test_processinglevel.json',
-        # new_dicts
-        'test_radarbeam.json',
-        'test_imagingmode.json',
-        'test_spectralgroup.json',
-        'test_spectralmode.json',
-        'test_scannertype.json',
-        'test_instrumenttype.json',
-        'test_collection.json',
-        'test_satellite.json',
-        'test_satelliteinstrument.json',
-        'test_radarproductprofile.json',
-        'test_opticalproductprofile.json',
-
-        'test_genericproduct.json',
-        'test_genericimageryproduct.json',
-        'test_genericsensorproduct.json',
-        'test_radarproduct.json',
-        'test_opticalproduct.json',
-        'test_user.json',
-        'test_sansauserprofile.json',
-        'test_orderstatus.json',
-        'test_orderstatushistory.json',
-        'test_marketsector.json',
-        'test_deliverymethod.json',
-        'test_deliverydetail.json',
-        'test_order.json',
-        'test_searchrecord.json'
-    ]
 
     def setUp(self):
         """
@@ -112,6 +79,11 @@ class OrdersViews_addOrder_Tests(TestCase):
         Test view if user has no profile
         """
 
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(reverse('addOrder', kwargs={}))
@@ -126,8 +98,25 @@ class OrdersViews_addOrder_Tests(TestCase):
         """
         Test view if user is staff
         """
-        myRecords = SearchRecord.objects.all().filter(
-            user__username='timlinux').filter(order__isnull=True)
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        SansaUserProfileF.create(**{
+            'user': myUser,
+            'address1': '12321 kjk',
+            'address2': 'kjkj',
+            'post_code': '123',
+            'organisation': 'None',
+            'contact_no': '123123'
+        })
+
+        SearchRecordF.create(**{
+            'user': myUser,
+            'order': None
+        })
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
@@ -150,7 +139,7 @@ class OrdersViews_addOrder_Tests(TestCase):
         self.assertEqual(
             myResp.context['myShowDeliveryDetailsFormFlag'], True)
         self.assertEqual(myResp.context['myCartTitle'], 'Order Product List')
-        self.assertEqual(len(myResp.context['myRecords']), len(myRecords))
+        self.assertEqual(len(myResp.context['myRecords']), 1)
         self.assertEqual(
             myResp.context['myBaseTemplate'], 'emptytemplate.html')
         self.assertEqual(myResp.context['mySubmitLabel'], 'Submit Order')
@@ -176,25 +165,32 @@ class OrdersViews_addOrder_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'addPage.html', u'base.html', u'menu.html',
+            'addPage.html', u'basev3.html', u'menu.html',
             u'useraccounts/menu_content.html', u'add.html',
-            u'cartContents.html', u'recordHeader.html', u'record.html',
-            u'record.html', u'record.html']
+            u'cartContents.html', u'recordHeader.html', u'record.html'
+        ]
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
     def test_addOrder_login_staff_emptyCart(self):
         """
         Test view if user is staff, and cart is empty
         """
-        # update all records, empty the cart
-        myRecords = SearchRecord.objects.all().filter(
-            user__username='timlinux').filter(order__isnull=True)
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
 
-        for record in myRecords:
-            record.order_id = 1
-            record.save()
+        SansaUserProfileF.create(**{
+            'user': myUser,
+            'address1': '12321 kjk',
+            'address2': 'kjkj',
+            'post_code': '123',
+            'organisation': 'None',
+            'contact_no': '123123'
+        })
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
@@ -208,6 +204,44 @@ class OrdersViews_addOrder_Tests(TestCase):
         """
         Test view if user is staff, and post is valid
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        SansaUserProfileF.create(**{
+            'user': myUser,
+            'address1': '12321 kjk',
+            'address2': 'kjkj',
+            'post_code': '123',
+            'organisation': 'None',
+            'contact_no': '123123'
+        })
+        myProjection = ProjectionF.create(**{
+            'id': 86,
+            'epsg_code': '4326'
+        })
+        FileFormatF.create(**{'id': 1})
+
+        DatumF.create(**{'id': 1})
+        ResamplingMethodF.create(**{'id': 1})
+        MarketSectorF.create(**{'id': 1})
+        DeliveryMethodF.create(**{'id': 1})
+
+        myOProduct = OpticalProductF.create(**{
+            'projection': myProjection
+        })
+
+        SearchRecordF.create(**{
+            'id': 6,
+            'user': myUser,
+            'order': None,
+            'product': myOProduct
+        })
+
+        OrderStatusF.create(**{'id': 1})
+
         myOrdersCount = len(Order.objects.all())
 
         myClient = Client()
@@ -216,18 +250,21 @@ class OrdersViews_addOrder_Tests(TestCase):
         myPostData = {
             u'aoi_geometry': [u''], u'projection': [u'86'],
             u'file_format': [u'1'], u'geometry': [u''], u'notes': [u''],
-            u'datum': [u'1'], u'resampling_method': [u'2'],
+            u'datum': [u'1'], u'resampling_method': [u'1'],
             u'market_sector': [u'1'], u'geometry_file': [u''],
             u'delivery_method': [u'1'], u'ref_id': [u'6'],
             u'6-file_format': [u'1'],
             u'6-datum': [u'1'], u'6-ref_id': [u'6'],
-            u'6-resampling_method': [u'2'], u'6-projection': [u'86']}
+            u'6-resampling_method': [u'1'], u'6-projection': [u'86']}
 
         myResp = myClient.post(reverse('addOrder', kwargs={}), myPostData)
 
         self.assertEqual(myResp.status_code, 302)
-        self.assertEqual(
-            myResp['Location'], 'http://testserver/vieworder/4/')
+        self.assertTrue(
+            re.match(
+                'http://testserver/vieworder/(\d+)/',
+                myResp['Location']) is not None
+        )
 
         myOrdersCount_new = len(Order.objects.all())
         self.assertEqual(myOrdersCount_new, myOrdersCount + 1)
@@ -236,8 +273,44 @@ class OrdersViews_addOrder_Tests(TestCase):
         """
         Test view if user is staff, and post is invalid (projection)
         """
-        myRecords = SearchRecord.objects.all().filter(
-            user__username='timlinux').filter(order__isnull=True)
+
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        SansaUserProfileF.create(**{
+            'user': myUser,
+            'address1': '12321 kjk',
+            'address2': 'kjkj',
+            'post_code': '123',
+            'organisation': 'None',
+            'contact_no': '123123'
+        })
+        myProjection = ProjectionF.create(**{
+            'id': 86,
+            'epsg_code': '4326'
+        })
+        FileFormatF.create(**{'id': 1})
+
+        DatumF.create(**{'id': 1})
+        ResamplingMethodF.create(**{'id': 1})
+        MarketSectorF.create(**{'id': 1})
+        DeliveryMethodF.create(**{'id': 1})
+
+        myOProduct = OpticalProductF.create(**{
+            'projection': myProjection
+        })
+
+        SearchRecordF.create(**{
+            'id': 6,
+            'user': myUser,
+            'order': None,
+            'product': myOProduct
+        })
+
+        OrderStatusF.create(**{'id': 1})
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
@@ -245,12 +318,12 @@ class OrdersViews_addOrder_Tests(TestCase):
         myPostData = {
             u'aoi_geometry': [u''], u'projection': [u'100'],
             u'file_format': [u'1'], u'geometry': [u''], u'notes': [u''],
-            u'datum': [u'1'], u'resampling_method': [u'2'],
+            u'datum': [u'1'], u'resampling_method': [u'1'],
             u'market_sector': [u'1'], u'geometry_file': [u''],
             u'delivery_method': [u'1'], u'ref_id': [u'6'],
             u'6-file_format': [u'1'],
             u'6-datum': [u'1'], u'6-ref_id': [u'6'],
-            u'6-resampling_method': [u'2'], u'6-projection': [u'100']}
+            u'6-resampling_method': [u'1'], u'6-projection': [u'100']}
 
         myResp = myClient.post(reverse('addOrder', kwargs={}), myPostData)
 
@@ -271,7 +344,7 @@ class OrdersViews_addOrder_Tests(TestCase):
         self.assertEqual(
             myResp.context['myShowDeliveryDetailsFormFlag'], True)
         self.assertEqual(myResp.context['myCartTitle'], 'Order Product List')
-        self.assertEqual(len(myResp.context['myRecords']), len(myRecords))
+        self.assertEqual(len(myResp.context['myRecords']), 1)
         self.assertEqual(
             myResp.context['myBaseTemplate'], 'emptytemplate.html')
         self.assertEqual(myResp.context['mySubmitLabel'], 'Submit Order')
@@ -297,19 +370,55 @@ class OrdersViews_addOrder_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'addPage.html', u'base.html', u'menu.html',
+            'addPage.html', u'basev3.html', u'menu.html',
             u'useraccounts/menu_content.html', u'add.html',
-            u'cartContents.html', u'recordHeader.html', u'record.html',
-            u'record.html', u'record.html']
+            u'cartContents.html', u'recordHeader.html', u'record.html'
+        ]
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
     def test_addOrder_login_staff_valid_post_geometryfile(self):
         """
         Test view if user is staff, and post is valid, valid geometry_file
         """
-        myOrdersCount = len(Order.objects.all())
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        SansaUserProfileF.create(**{
+            'user': myUser,
+            'address1': '12321 kjk',
+            'address2': 'kjkj',
+            'post_code': '123',
+            'organisation': 'None',
+            'contact_no': '123123'
+        })
+        myProjection = ProjectionF.create(**{
+            'id': 86,
+            'epsg_code': '4326'
+        })
+        FileFormatF.create(**{'id': 1})
+
+        DatumF.create(**{'id': 1})
+        ResamplingMethodF.create(**{'id': 1})
+        MarketSectorF.create(**{'id': 1})
+        DeliveryMethodF.create(**{'id': 1})
+
+        myOProduct = OpticalProductF.create(**{
+            'projection': myProjection
+        })
+
+        SearchRecordF.create(**{
+            'id': 6,
+            'user': myUser,
+            'order': None,
+            'product': myOProduct
+        })
+
+        OrderStatusF.create(**{'id': 1})
 
         # prepare file for upload
         myUploadFile = open('catalogue/fixtures/search-area.zip', 'rb')
@@ -320,27 +429,65 @@ class OrdersViews_addOrder_Tests(TestCase):
         myPostData = {
             u'aoi_geometry': [u''], u'projection': [u'86'],
             u'file_format': [u'1'], u'geometry': [u''], u'notes': [u''],
-            u'datum': [u'1'], u'resampling_method': [u'2'],
+            u'datum': [u'1'], u'resampling_method': [u'1'],
             u'market_sector': [u'1'], u'geometry_file': myUploadFile,
             u'delivery_method': [u'1'], u'ref_id': [u'6'],
             u'6-file_format': [u'1'],
             u'6-datum': [u'1'], u'6-ref_id': [u'6'],
-            u'6-resampling_method': [u'2'], u'6-projection': [u'86']}
+            u'6-resampling_method': [u'1'], u'6-projection': [u'86']}
 
         myResp = myClient.post(reverse('addOrder', kwargs={}), myPostData)
 
         self.assertEqual(myResp.status_code, 302)
-        self.assertEqual(
-            myResp['Location'], 'http://testserver/vieworder/4/')
+        self.assertTrue(
+            re.match(
+                'http://testserver/vieworder/(\d+)/',
+                myResp['Location']) is not None
+        )
 
-        myOrdersCount_new = len(Order.objects.all())
-        self.assertEqual(myOrdersCount_new, myOrdersCount + 1)
+        self.assertEqual(len(Order.objects.all()), 1)
 
     def test_addOrder_login_staff_valid_post_invalid_geometryfile(self):
         """
         Test view if user is staff, and post is valid, invalid geometry_file
         """
-        myOrdersCount = len(Order.objects.all())
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        SansaUserProfileF.create(**{
+            'user': myUser,
+            'address1': '12321 kjk',
+            'address2': 'kjkj',
+            'post_code': '123',
+            'organisation': 'None',
+            'contact_no': '123123'
+        })
+        myProjection = ProjectionF.create(**{
+            'id': 86,
+            'epsg_code': '4326'
+        })
+        FileFormatF.create(**{'id': 1})
+
+        DatumF.create(**{'id': 1})
+        ResamplingMethodF.create(**{'id': 1})
+        MarketSectorF.create(**{'id': 1})
+        DeliveryMethodF.create(**{'id': 1})
+
+        myOProduct = OpticalProductF.create(**{
+            'projection': myProjection
+        })
+
+        SearchRecordF.create(**{
+            'id': 6,
+            'user': myUser,
+            'order': None,
+            'product': myOProduct
+        })
+
+        OrderStatusF.create(**{'id': 1})
 
         # prepare file for upload
         myUploadFile = open('catalogue/fixtures/search-area-invalid.zip', 'rb')
@@ -351,18 +498,20 @@ class OrdersViews_addOrder_Tests(TestCase):
         myPostData = {
             u'aoi_geometry': [u''], u'projection': [u'86'],
             u'file_format': [u'1'], u'geometry': [u''], u'notes': [u''],
-            u'datum': [u'1'], u'resampling_method': [u'2'],
+            u'datum': [u'1'], u'resampling_method': [u'1'],
             u'market_sector': [u'1'], u'geometry_file': myUploadFile,
             u'delivery_method': [u'1'], u'ref_id': [u'6'],
             u'6-file_format': [u'1'],
             u'6-datum': [u'1'], u'6-ref_id': [u'6'],
-            u'6-resampling_method': [u'2'], u'6-projection': [u'86']}
+            u'6-resampling_method': [u'1'], u'6-projection': [u'86']}
 
         myResp = myClient.post(reverse('addOrder', kwargs={}), myPostData)
 
         self.assertEqual(myResp.status_code, 302)
-        self.assertEqual(
-            myResp['Location'], 'http://testserver/vieworder/4/')
+        self.assertTrue(
+            re.match(
+                'http://testserver/vieworder/(\d+)/',
+                myResp['Location']) is not None
+        )
 
-        myOrdersCount_new = len(Order.objects.all())
-        self.assertEqual(myOrdersCount_new, myOrdersCount + 1)
+        self.assertEqual(len(Order.objects.all()), 1)
