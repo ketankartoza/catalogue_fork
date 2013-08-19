@@ -14,35 +14,22 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '19/10/2012'
+__version__ = '0.2'
+__date__ = '19/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from catalogue.models import Order
+from core.model_factories import UserF
+from .model_factories import OrderF
 
 
 class OrdersViews_myOrders_Tests(TestCase):
     """
     Tests orders.py myOrders method/view
     """
-    fixtures = [
-        'test_user.json',
-        'test_orderstatus.json',
-        'test_deliverymethod.json',
-        'test_deliverydetail.json',
-        'test_marketsector.json',
-        'test_order.json',
-        'test_taskingrequest.json',
-        'test_processinglevel.json',
-        'test_projection.json',
-        'test_datum.json',
-        'test_resamplingmethod.json',
-        'test_fileformat.json',
-    ]
 
     def setUp(self):
         """
@@ -76,44 +63,51 @@ class OrdersViews_myOrders_Tests(TestCase):
         """
         Test view if user is logged in
         """
-        # get initial counts
-        myOrderCount = len(Order.base_objects.filter(
-            user__username='timlinux').order_by('-order_date').all())
+
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        OrderF.create(**{'user':myUser})
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(
-            reverse('myOrders', kwargs={}))
+        myResp = myClient.get(reverse('myOrders', kwargs={}))
         self.assertEqual(myResp.status_code, 200)
 
         # check response object
-        self.assertEqual(
-            myResp.context['myUrl'], '/myorders/')
+        self.assertEqual(myResp.context['myUrl'], '/myorders/')
 
         # check used templates
         myExpTemplates = [
             'orderListPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html']
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
-        self.assertEqual(
-            len(myResp.context['myRecords'].object_list), myOrderCount)
+        self.assertEqual(len(myResp.context['myRecords'].object_list), 1)
 
     def test_myOrders_login_user_page_param_existant(self):
         """
         Test view if user is logged in, specifying page param
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
 
-        myOrderCount = len(Order.base_objects.filter(
-            user__username='timlinux').order_by('-order_date').all())
+        OrderF.create(**{'user':myUser})
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
             reverse('myOrders', kwargs={}),
-            {'page': '1'})
+            {'page': '1'}
+        )
 
         self.assertEqual(myResp.status_code, 200)
         # check response
@@ -126,19 +120,24 @@ class OrdersViews_myOrders_Tests(TestCase):
             'orderListPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html']
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
         self.assertEqual(
-            len(myResp.context['myRecords'].object_list), myOrderCount)
+            len(myResp.context['myRecords'].object_list), 1)
 
     def test_myOrders_login_user_page_param_nonexistant(self):
         """
         Test view if user is logged in, specifying page that does not exist
         View will default to page 1
         """
-        myOrderCount = len(Order.base_objects.filter(
-            user__username='timlinux').order_by('-order_date').all())
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        OrderF.create(**{'user':myUser})
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
@@ -157,19 +156,24 @@ class OrdersViews_myOrders_Tests(TestCase):
             'orderListPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html']
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
         self.assertEqual(
-            len(myResp.context['myRecords'].object_list), myOrderCount)
+            len(myResp.context['myRecords'].object_list), 1)
 
     def test_myOrders_login_page_param_invalid_input(self):
         """
         Test view if user is logged in, specifying invalid page parameter
         View will default to page 1
         """
-        myOrderCount = len(Order.base_objects.filter(
-            user__username='timlinux').order_by('-order_date').all())
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        OrderF.create(**{'user':myUser})
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
@@ -187,18 +191,23 @@ class OrdersViews_myOrders_Tests(TestCase):
             'orderListPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html']
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
         self.assertEqual(
-            len(myResp.context['myRecords'].object_list), myOrderCount)
+            len(myResp.context['myRecords'].object_list), 1)
 
     def test_myOrders_pdf_pageSize(self):
         """
         Test view if pdf is requested
         """
-        myOrderCount = len(Order.base_objects.filter(
-            user__username='timlinux').order_by('-order_date').all())
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        OrderF.create(**{'user':myUser})
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
@@ -215,11 +224,11 @@ class OrdersViews_myOrders_Tests(TestCase):
         # check used templates
         myExpTemplates = ['pdf/orderListPage.html', u'pdfpage.html']
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
         self.assertEqual(
-            len(myResp.context['myRecords'].object_list), myOrderCount)
+            len(myResp.context['myRecords'].object_list), 1)
 
         self.assertEqual(myResp['content-type'], 'application/pdf')
         self.assertEqual(
