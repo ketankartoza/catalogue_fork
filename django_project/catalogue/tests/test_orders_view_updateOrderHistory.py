@@ -14,67 +14,29 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '23/10/2012'
+__version__ = '0.2'
+__date__ = '19/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from catalogue.models import (
-    Order,
-    OrderStatusHistory
-)
-
-from search.models import SearchRecord
 
 from catalogue.forms import OrderStatusHistoryForm
+
+from core.model_factories import UserF
+from .model_factories import (
+    OrderF, OrderStatusHistoryF, OrderStatusF
+)
+
+from search.tests.model_factories import SearchRecordF
 
 
 class OrdersViews_updateOrderHistory_Tests(TestCase):
     """
     Tests orders.py updateOrderHistory method/view
     """
-
-    fixtures = [
-        'test_search.json',
-        'test_searchdaterange.json',
-        'test_processinglevel.json',
-        # new_dicts
-        'test_radarbeam.json',
-        'test_imagingmode.json',
-        'test_spectralgroup.json',
-        'test_spectralmode.json',
-        'test_scannertype.json',
-        'test_instrumenttype.json',
-        'test_collection.json',
-        'test_satellite.json',
-        'test_satelliteinstrument.json',
-        'test_radarproductprofile.json',
-        'test_opticalproductprofile.json',
-
-        'test_genericproduct.json',
-        'test_genericimageryproduct.json',
-        'test_genericsensorproduct.json',
-        'test_opticalproduct.json',
-        'test_user.json',
-        'test_orderstatus.json',
-        'test_orderstatushistory.json',
-        'test_order.json',
-        'test_searchrecord.json',
-        'test_creatingsoftware.json',
-        'test_license.json',
-        'test_quality.json',
-        'test_institution.json',
-        'test_projection.json',
-        'test_datum.json',
-        'test_resamplingmethod.json',
-        'test_deliverymethod.json',
-        'test_deliverydetail.json',
-        'test_marketsector.json',
-        'test_fileformat.json',
-    ]
 
     def setUp(self):
         """
@@ -109,6 +71,12 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
         Test view if user is staff
         """
 
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -124,6 +92,11 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
         """
         Test view if user is normal user
         """
+
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password',
+        })
 
         myClient = Client()
         myClient.login(username='pompies', password='password')
@@ -141,28 +114,43 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
         Test view if user is staff, and has valid post
         """
 
-        myOrderId = 1
-        # get initial objects
-        myOrderObj = Order.objects.get(pk=myOrderId)
-        mySearchRecords = SearchRecord.objects.all().filter(order=myOrderObj)
-        myFormObj = OrderStatusHistoryForm()
-        myHistoryObj = OrderStatusHistory.objects.all().filter(
-            order=myOrderObj)
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        myOrderStatus_old = OrderStatusF.create(**{
+            'id':2, 'name':'An Old Order Status'
+        })
+
+        OrderStatusF.create(**{
+            'id':1, 'name':'A New Orrder Status'
+        })
+
+        myOrder = OrderF.create(**{
+            'id': 1,
+            'user': myUser,
+            'order_status': myOrderStatus_old
+        })
+
+        SearchRecordF.create(**{'order': myOrder})
+
         # create the request
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myPostData = {
-            u'new_order_status': [u'4'], u'notes': [u'simple notes'],
-            u'order': [myOrderId]
+            u'new_order_status': [u'1'], u'notes': [u'simple notes'],
+            u'order': [1]
         }
         myResp = myClient.post(
             reverse('updateOrderHistory', kwargs={}), myPostData)
 
         self.assertEqual(myResp.status_code, 200)
 
-        self.assertEqual(myResp.context['myOrder'], myOrderObj)
-        self.assertEqual(
-            len(myResp.context['myRecords']), len(mySearchRecords))
+        self.assertEqual(myResp.context['myOrder'], myOrder)
+        # hack ... manually pick latest context on the stack
+        self.assertEqual(len(myResp.context[-1]['myRecords']), 1)
         self.assertEqual(myResp.context['myShowSensorFlag'], True)
         self.assertEqual(myResp.context['myShowSceneIdFlag'], True)
         self.assertEqual(myResp.context['myShowDateFlag'], True)
@@ -174,8 +162,8 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
         self.assertEqual(myResp.context['myCartFlag'], False)
         self.assertEqual(myResp.context['myPreviewFlag'], False)
         self.assertEqual(
-            myResp.context['myForm'].__class__, myFormObj.__class__)
-        self.assertEqual(len(myResp.context['myHistory']), len(myHistoryObj))
+            myResp.context['myForm'].__class__, OrderStatusHistoryForm)
+        self.assertEqual(len(myResp.context['myHistory']), 1)
         self.assertEqual(myResp.context['myCartTitle'], 'Product List')
 
         # check used templates
@@ -184,29 +172,45 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
             u'mail/base.html', 'orderPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'order.html',
             u'cartContents.html', u'recordHeader.html', u'record.html',
-            u'record.html', u'record.html', u'orderStatusHistory.html']
+            u'orderStatusHistory.html'
+        ]
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
     def test_updateOrderHistory_login_staff_post_ajax(self):
         """
         Test view if user is staff, and has valid post
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
 
-        myOrderId = 1
-        # get initial objects
-        myOrderObj = Order.objects.get(pk=myOrderId)
-        mySearchRecords = SearchRecord.objects.all().filter(order=myOrderObj)
-        myFormObj = OrderStatusHistoryForm()
-        myHistoryObj = OrderStatusHistory.objects.all().filter(
-            order=myOrderObj)
+        myOrderStatus_old = OrderStatusF.create(**{
+            'id':2, 'name':'An Old Order Status'
+        })
+
+        OrderStatusF.create(**{
+            'id':1, 'name':'A New Orrder Status'
+        })
+
+        myOrder = OrderF.create(**{
+            'id': 1,
+            'user': myUser,
+            'order_status': myOrderStatus_old
+        })
+
+        SearchRecordF.create(**{'order': myOrder})
+
         # create the request
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myPostData = {
-            u'new_order_status': [u'4'], u'notes': [u'simple notes'],
-            u'order': [myOrderId]
+            u'new_order_status': [u'1'], u'notes': [u'simple notes'],
+            u'order': [1]
         }
         myResp = myClient.post(
             reverse('updateOrderHistory', kwargs={}), myPostData,
@@ -214,9 +218,9 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
 
         self.assertEqual(myResp.status_code, 200)
 
-        self.assertEqual(myResp.context['myOrder'], myOrderObj)
-        self.assertEqual(
-            len(myResp.context['myRecords']), len(mySearchRecords))
+        self.assertEqual(myResp.context['myOrder'], myOrder)
+        # hack ... manually pick latest context on the stack
+        self.assertEqual(len(myResp.context[-1]['myRecords']), 1)
         self.assertEqual(myResp.context['myShowSensorFlag'], True)
         self.assertEqual(myResp.context['myShowSceneIdFlag'], True)
         self.assertEqual(myResp.context['myShowDateFlag'], True)
@@ -228,8 +232,8 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
         self.assertEqual(myResp.context['myCartFlag'], False)
         self.assertEqual(myResp.context['myPreviewFlag'], False)
         self.assertEqual(
-            myResp.context['myForm'].__class__, myFormObj.__class__)
-        self.assertEqual(len(myResp.context['myHistory']), len(myHistoryObj))
+            myResp.context['myForm'].__class__, OrderStatusHistoryForm)
+        self.assertEqual(len(myResp.context['myHistory']), 1)
         self.assertEqual(myResp.context['myCartTitle'], 'Product List')
 
         # check used templates
@@ -237,22 +241,27 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
             'mail/order.txt', u'mail/base.txt', 'mail/order.html',
             u'mail/base.html', 'orderStatusHistory.html']
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
     def test_updateOrderHistory_login_staff_post_invalid_order(self):
         """
         Test view if user is staff, and has invalid post (mismatched order)
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
 
-        myOrderId = 1331
-        # get initial objects
+        OrderF.create(**{'id': 1, 'user': myUser})
+
         # create the request
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myPostData = {
-            u'new_order_status': [u'4'], u'notes': [u'simple notes'],
-            u'order': [myOrderId]
+            u'new_order_status': [u'1'], u'notes': [u'simple notes'],
+            u'order': [1331]
         }
         myResp = myClient.post(
             reverse('updateOrderHistory', kwargs={}), myPostData)
@@ -264,16 +273,22 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
         Test view if user is staff, and has invalid post (mismatched
             orderstatus)
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
 
-        myOrderId = 1
-        myOrderStatus = 1331
-        # get initial objects
+        myOrder = OrderF.create(**{'id': 1, 'user': myUser})
+        OrderStatusHistoryF.create(**{'order': myOrder})
+        SearchRecordF.create(**{'order': myOrder})
+
         # create the request
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myPostData = {
-            u'new_order_status': [myOrderStatus], u'notes': [u'simple notes'],
-            u'order': [myOrderId]
+            u'new_order_status': [-1], u'notes': [u'simple notes'],
+            u'order': [1331]
         }
         myResp = myClient.post(
             reverse('updateOrderHistory', kwargs={}), myPostData)
