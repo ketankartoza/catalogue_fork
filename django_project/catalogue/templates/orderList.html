@@ -33,11 +33,19 @@ function showOrder(theId) {
 </div>
 <div class="row-fluid center">
   <span class="step-links btn-group">
-    <a class="btn btn-small {% if not myRecords.has_previous %}disabled{% endif %}" href="{{myUrl}}?page={{ myRecords.previous_page_number }}"><i class="icon-backward"></i></a>
+    {% if myRecords.has_previous %}
+      <a class="btn btn-small" href="{{myUrl}}?page={{ myRecords.previous_page_number }}"><i class="icon-backward"></i></a>
+    {% else %}
+      <a class="btn btn-small disabled" href="#"><i class="icon-backward"></i></a>
+    {% endif %}
     <span class="current btn btn-small disabled btn-success">
       {{ myRecords.number }} of {{ myRecords.paginator.num_pages }}
     </span>
-    <a class="btn btn-small {% if not myRecords.has_next %}disabled{% endif %}" href="{{myUrl}}?page={{ myRecords.next_page_number }}"><i class="icon-forward"></i></a>
+    {% if myRecords.has_next %}
+      <a class="btn btn-small" href="{{myUrl}}?page={{ myRecords.next_page_number }}"><i class="icon-forward"></i></a>
+    {% else %}
+      <a class="btn btn-small disabled" href="#"><i class="icon-forward"></i></a>
+    {% endif %}
   </span>
 </div>
 <div class="row-fluid">
@@ -68,11 +76,20 @@ function showOrder(theId) {
 </div>
 <div class="row-fluid center">
   <span class="step-links btn-group">
-    <a class="btn btn-small {% if not myRecords.has_previous %}disabled{% endif %}" href="{{myUrl}}?page={{ myRecords.previous_page_number }}"><i class="icon-backward"></i></a>
+    {% if myRecords.has_previous %}
+      <a class="btn btn-small" href="{{myUrl}}?page={{ myRecords.previous_page_number }}"><i class="icon-backward"></i></a>
+    {% else %}
+      <a class="btn btn-small disabled" href="#"><i class="icon-backward"></i></a>
+    {% endif %}
     <span class="current btn btn-small disabled btn-success">
       {{ myRecords.number }} of {{ myRecords.paginator.num_pages }}
     </span>
-    <a class="btn btn-small {% if not myRecords.has_next %}disabled{% endif %}" href="{{myUrl}}?page={{ myRecords.next_page_number }}"><i class="icon-forward"></i></a>
+    {% if myRecords.has_next %}
+      <a class="btn btn-small" href="{{myUrl}}?page={{ myRecords.next_page_number }}"><i class="icon-forward"></i></a>
+    {% else %}
+      <a class="btn btn-small disabled" href="#"><i class="icon-forward"></i></a>
+    {% endif %}
+
   </span>
 </div>
 <script>
