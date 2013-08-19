@@ -686,9 +686,9 @@ def ordersSummary(theRequest):
     myOrderStatus = OrderStatus.objects.annotate(num_orders=Count('order__id'))
     #count orders by product type (misson sensor)
     myOrderInstrumentType = InstrumentType.objects.annotate(
-        num_orders=Count('taskingrequest__order_ptr__id')).order_by('name')
+        num_orders=Count('satelliteinstrumentgroup__taskingrequest__order_ptr__id')).order_by('name')
     myOrderSatellite = Satellite.objects.annotate(
-        num_orders=Count('taskingrequest__order_ptr__id')).order_by('name')
+        num_orders=Count('satelliteinstrumentgroup__taskingrequest__order_ptr__id')).order_by('name')
     return dict(
         myOrderStatus=myOrderStatus,
         myOrderInstrumentType=myOrderInstrumentType,

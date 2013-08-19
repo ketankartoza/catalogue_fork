@@ -14,47 +14,22 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '23/10/2012'
+__version__ = '0.2'
+__date__ = '19/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from django.db.models import Count
 
-from catalogue.models import (
-    OrderStatus
-)
-
+from core.model_factories import UserF
+from .model_factories import TaskingRequestF
 
 class OrdersViews_ordersSummary_Tests(TestCase):
     """
     Tests orders.py ordersSummary method/view
     """
-
-    fixtures = [
-        'test_processinglevel.json',
-        'test_projection.json',
-        'test_fileformat.json',
-        'test_datum.json',
-        'test_resamplingmethod.json',
-        'test_user.json',
-        'test_orderstatus.json',
-        'test_orderstatushistory.json',
-        'test_marketsector.json',
-        'test_deliverymethod.json',
-        'test_deliverydetail.json',
-        'test_order.json',
-        'test_searchrecord.json',
-        'test_genericproduct.json',
-        'test_institution.json',
-        'test_license.json',
-        'test_quality.json',
-        'test_creatingsoftware.json',
-
-    ]
 
     def setUp(self):
         """
@@ -88,11 +63,13 @@ class OrdersViews_ordersSummary_Tests(TestCase):
         """
         Test view if user is staff
         """
-        myOrderStatusObj = OrderStatus.objects.annotate(
-            num_orders=Count('order__id'))
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
 
-        myOrderProductTypeObj = MissionSensor.objects.annotate(
-            num_orders=Count('taskingrequest__order_ptr__id'))
+        TaskingRequestF.create(**{'id':1})
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
@@ -100,16 +77,14 @@ class OrdersViews_ordersSummary_Tests(TestCase):
 
         self.assertEqual(myResp.status_code, 200)
 
-        self.assertEqual(
-            len(myResp.context['myOrderStatus']), len(myOrderStatusObj))
-        self.assertEqual(
-            len(myResp.context['myOrderProductType']),
-            len(myOrderProductTypeObj))
+        self.assertEqual(len(myResp.context['myOrderStatus']), 1)
+        self.assertEqual(len(myResp.context['myOrderInstrumentType']), 1)
+        self.assertEqual(len(myResp.context['myOrderSatellite']), 1)
 
         # check used templates
         myExpTemplates = [
             'ordersSummary.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html']
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
