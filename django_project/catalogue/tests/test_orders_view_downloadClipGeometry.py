@@ -14,33 +14,21 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '19/10/2012'
+__version__ = '0.2'
+__date__ = '19/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
+from core.model_factories import UserF
+from .model_factories import OrderF
 
 class OrdersViews_downloadClipGeometry_Tests(TestCase):
     """
     Tests orders.py downloadClipGeometry method/view
     """
-    fixtures = [
-        'test_user.json',
-        'test_orderstatus.json',
-        'test_deliverymethod.json',
-        'test_deliverydetail.json',
-        'test_marketsector.json',
-        'test_order.json',
-        'test_taskingrequest.json',
-        'test_projection.json',
-        'test_datum.json',
-        'test_fileformat.json',
-        'test_processinglevel.json',
-        'test_resamplingmethod.json',
-    ]
 
     def setUp(self):
         """
@@ -75,6 +63,14 @@ class OrdersViews_downloadClipGeometry_Tests(TestCase):
         """
         Test view if staff user is logged in
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        OrderF.create(**{'id': 1})
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -93,6 +89,14 @@ class OrdersViews_downloadClipGeometry_Tests(TestCase):
         """
         Test view if staff user is logged in
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        OrderF.create(**{'id': 1})
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -112,6 +116,14 @@ class OrdersViews_downloadClipGeometry_Tests(TestCase):
         """
         Test view if staff user is logged in
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        OrderF.create(**{'id': 1})
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -131,6 +143,14 @@ class OrdersViews_downloadClipGeometry_Tests(TestCase):
         """
         Test view if staff user is logged in
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        OrderF.create(**{'id': 1})
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
