@@ -26,7 +26,8 @@ from ..models import (
     GenericProduct, License, Quality, CreatingSoftware, GenericImageryProduct,
     GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
     PlaceType, Place, Topic, OrdinalProduct, ContinuousProduct, Unit, Visit,
-    OrderStatusHistory, OrderNotificationRecipients, TaskingRequest
+    OrderStatusHistory, OrderNotificationRecipients, TaskingRequest,
+    WorldBorders
 )
 
 
@@ -425,3 +426,15 @@ class OrderNotificationRecipientsF(factory.django.DjangoModelFactory):
             # A list of groups were passed in, use them
             for klass in extracted:
                 self.classes.add(klass)
+
+
+class WorldBordersF(factory.django.DjangoModelFactory):
+    """
+    OrderNotificationRecipients model factory
+    """
+    FACTORY_FOR = WorldBorders
+
+    iso2 = 'ZA'
+    iso3 = 'ZAF'
+    name = 'South Africa'
+    geometry = 'MULTIPOLYGON(((-180 90, 180 90, 180 -90, -180 -90, -180 90)))'

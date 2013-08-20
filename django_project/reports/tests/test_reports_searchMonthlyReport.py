@@ -14,8 +14,8 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '22/11/2012'
+__version__ = '0.2'
+__date__ = '20/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 import datetime
@@ -23,35 +23,15 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
+from core.model_factories import UserF
+from search.tests.model_factories import SearchF
+from catalogue.tests.model_factories import WorldBordersF
+
 
 class ReportsViews_searchMonthlyReport_Tests(TestCase):
     """
     Tests reports.py visitorReport method/view
     """
-    fixtures = [
-        'test_user.json',
-        'test_search.json',
-        'test_searchdatarange.json',
-        'test_searchrecord.json',
-        'test_orderstatus.json',
-        'test_deliverymethod.json',
-        'test_deliverydetail.json',
-        'test_marketsector.json',
-        'test_order.json',
-        #'test_taskingrequest.json',
-        'test_processinglevel.json',
-        'test_fileformat.json',
-        'test_projection.json',
-        'test_datum.json',
-        'test_resamplingmethod.json',
-        #'test_fileformat.json',
-        'test_genericproduct.json',
-        'test_institution.json',
-        'test_license.json',
-        'test_quality.json',
-        'test_creatingsoftware.json',
-        'test_worldborders.json'
-    ]
 
     def setUp(self):
         """
@@ -62,7 +42,7 @@ class ReportsViews_searchMonthlyReport_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -85,6 +65,11 @@ class ReportsViews_searchMonthlyReport_Tests(TestCase):
         """
         Test view if user is logged as user
         """
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
@@ -98,11 +83,26 @@ class ReportsViews_searchMonthlyReport_Tests(TestCase):
         """
         Test view if user is logged as staff
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+        WorldBordersF.create()
+
+        SearchF.create(**{
+            'user': myUser,
+            'ip_position': 'POINT(0 0)'
+        })
+
+        today = datetime.date.today()
+        myDate = datetime.date(today.year, today.month, 1)
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
             reverse('searchMonthlyReport',
-                    kwargs={'theYear': '2010', 'theMonth': '7'}))
+                    kwargs={'theYear': myDate.year, 'theMonth': myDate.month}))
         self.assertEqual(myResp.status_code, 200)
 
         self.assertEqual(
@@ -110,13 +110,13 @@ class ReportsViews_searchMonthlyReport_Tests(TestCase):
         self.assertEqual(
             len(myResp.context['myScores']), 1)
         self.assertEqual(
-            myResp.context['myCurrentDate'], datetime.date(2010, 7, 1))
+            myResp.context['myCurrentDate'], myDate)
         self.assertEqual(
             myResp.context['myPrevDate'],
-            datetime.date(2010, 7, 1) - datetime.timedelta(days=1))
+            myDate - datetime.timedelta(days=1))
         self.assertEqual(
             myResp.context['myNextDate'],
-            datetime.date(2010, 7, 1) + datetime.timedelta(days=31))
+            myDate + datetime.timedelta(days=31))
         # check used templates
         myExpTemplates = [
             'searchMonthlyReport.html', u'base.html',
