@@ -14,8 +14,8 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '19/10/2012'
+__version__ = '0.2'
+__date__ = '19/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 from datetime import date, timedelta
@@ -24,27 +24,14 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from catalogue.models import Order
+from core.model_factories import UserF
+from .model_factories import OrderF
 
 
 class OrdersViews_orderMonthlyReport_Tests(TestCase):
     """
     Tests orders.py orderMonthlyReport method/view
     """
-    fixtures = [
-        'test_user.json',
-        'test_orderstatus.json',
-        'test_deliverymethod.json',
-        'test_deliverydetail.json',
-        'test_marketsector.json',
-        'test_order.json',
-        'test_taskingrequest.json',
-        'test_processinglevel.json',
-        'test_projection.json',
-        'test_datum.json',
-        'test_resamplingmethod.json',
-        'test_fileformat.json',
-    ]
 
     def setUp(self):
         """
@@ -56,10 +43,11 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
         Test badURL requests
         """
         myKwargsTests = [
-            {'theyear':'', 'themonth':''}, {'theyear':'12345', 'themonth':'5'},
-            {'theyear':'12345', 'themonth':'5'},
-            {'theyear':'abcd', 'themonth':'ab'},
-            {'testarg1':'1234', 'thearg2':'5'}
+            {'theyear': '', 'themonth': ''},
+            {'theyear': '12345', 'themonth': '5'},
+            {'theyear': '12345', 'themonth': '5'},
+            {'theyear': 'abcd', 'themonth': 'ab'},
+            {'testarg1': '1234', 'thearg2': '5'}
         ]
 
         for myKwargTest in myKwargsTests:
@@ -86,14 +74,17 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
         """
         Test view if staff user is logged in
         """
-        # get initial counts
-        myTestDate = date(2012, 6, 1)
-        myOrderCount = len(
-            Order.base_objects.filter(
-                order_date__month=myTestDate.month)
-            .filter(
-                order_date__year=myTestDate.year)
-            .order_by('order_date').all())
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        today = date.today()
+        myTestDate = date(today.year, today.month, 1)
+        OrderF.create(**{
+            'id': 1
+        })
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
@@ -108,8 +99,7 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
         self.assertEqual(myResp.status_code, 200)
 
         # check response object
-        self.assertEqual(
-            myResp.context['myCurrentDate'], myTestDate)
+        self.assertEqual(myResp.context['myCurrentDate'], myTestDate)
 
         self.assertEqual(
             myResp.context['myPrevDate'],
@@ -124,25 +114,26 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
             'orderMonthlyReport.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html']
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
-        self.assertEqual(
-            len(myResp.context['myRecords']), myOrderCount)
+        self.assertEqual(len(myResp.context['myRecords']), 1)
 
     def test_orderMonthlyReport_login_user(self):
         """
         Test view if normal user is logged in
         """
-        # get initial counts
-        myTestDate = date(2012, 6, 1)
-        myOrderCount = len(
-            Order.base_objects.filter(
-                order_date__month=myTestDate.month)
-            .filter(
-                order_date__year=myTestDate.year)
-            .filter(user__username='pompies')
-            .order_by('order_date').all())
+        myUser = UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
+
+        today = date.today()
+        myTestDate = date(today.year, today.month, 1)
+        OrderF.create(**{
+            'id': 1,
+            'user': myUser
+        })
 
         myClient = Client()
         myClient.login(username='pompies', password='password')
@@ -173,24 +164,26 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
             'orderMonthlyReport.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html']
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
-        self.assertEqual(
-            len(myResp.context['myRecords']), myOrderCount)
+        self.assertEqual(len(myResp.context['myRecords']), 1)
 
     def test_orderMonthlyReport_login_staff_pdf(self):
         """
         Test view if staff user is logged in, requesting pdf
         """
-        # get initial counts
-        myTestDate = date(2012, 6, 1)
-        myOrderCount = len(
-            Order.base_objects.filter(
-                order_date__month=myTestDate.month)
-            .filter(
-                order_date__year=myTestDate.year)
-            .order_by('order_date').all())
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        today = date.today()
+        myTestDate = date(today.year, today.month, 1)
+        OrderF.create(**{
+            'id': 1
+        })
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
@@ -220,8 +213,7 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
         # check used templates
         myExpTemplates = ['pdf/orderMonthlyReport.html', u'pdfpage.html']
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
-        self.assertEqual(
-            len(myResp.context['myRecords']), myOrderCount)
+        self.assertEqual(len(myResp.context['myRecords']), 1)
