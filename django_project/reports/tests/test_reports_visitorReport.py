@@ -14,8 +14,8 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '22/11/2012'
+__version__ = '0.2'
+__date__ = '20/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 import datetime
@@ -23,18 +23,14 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-
-from catalogue.models import Visit
+from core.model_factories import UserF
+from catalogue.tests.model_factories import VisitF
 
 
 class ReportsViews_visitorReport_Tests(TestCase):
     """
     Tests reports.py visitorReport method/view
     """
-    fixtures = [
-        'test_user.json',
-        'test_visit.json',
-    ]
 
     def setUp(self):
         """
@@ -45,7 +41,7 @@ class ReportsViews_visitorReport_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -67,6 +63,11 @@ class ReportsViews_visitorReport_Tests(TestCase):
         """
         Test view if user is logged as user
         """
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
@@ -79,6 +80,14 @@ class ReportsViews_visitorReport_Tests(TestCase):
         """
         Test view if user is logged as staff
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        VisitF.create()
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -89,13 +98,11 @@ class ReportsViews_visitorReport_Tests(TestCase):
         self.assertEqual(
             myResp.context['myCurrentMonth'], datetime.date.today())
         self.assertEqual(
-            len(myResp.context['myTopCountries']), 1)
-        self.assertEqual(
             len(myResp.context['myScores']), 1)
         # check used templates
         myExpTemplates = [
             'visitorReport.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html']
 
-        myUsedTemplates = [tmpl.name for tmpl in myResp.template]
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
