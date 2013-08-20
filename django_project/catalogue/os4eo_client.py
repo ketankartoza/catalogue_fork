@@ -20,8 +20,7 @@ __copyright__ = 'South African National Space Agency'
 
 from django.conf import settings
 
-# Uses a patched version of ElementSOAP, with enhanced debug capabilities
-from catalogue.elementsoap.ElementSOAP import (
+from elementsoap.ElementSOAP import (
     SoapService, SoapElement, SoapRequest)
 
 

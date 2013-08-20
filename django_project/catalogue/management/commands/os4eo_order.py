@@ -14,7 +14,7 @@ from django.db import transaction
 
 from catalogue.models import *
 from catalogue.os4eo_client import OS4EOClient
-from catalogue.elementsoap.ElementSOAP import SoapFault
+from elementsoap.ElementSOAP import SoapFault
 
 
 class Command(BaseCommand):
