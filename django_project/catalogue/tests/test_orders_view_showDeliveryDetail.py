@@ -14,60 +14,22 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '23/10/2012'
+__version__ = '0.2'
+__date__ = '20/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from catalogue.models import DeliveryDetail
+from core.model_factories import UserF
+from .model_factories import OrderF, DeliveryDetailF
 
 
 class OrdersViews_showDeliveryDetail_Tests(TestCase):
     """
     Tests orders.py showDeliveryDetail method/view
     """
-
-    fixtures = [
-        'test_institution.json',
-        'test_license.json',
-        'test_projection.json',
-        'test_creatingsoftware.json',
-        'test_datum.json',
-        'test_resamplingmethod.json',
-        'test_fileformat.json',
-        'test_quality.json',
-        'test_search.json',
-        'test_searchdaterange.json',
-        'test_processinglevel.json',
-        # new_dicts
-        'test_radarbeam.json',
-        'test_imagingmode.json',
-        'test_spectralgroup.json',
-        'test_spectralmode.json',
-        'test_scannertype.json',
-        'test_instrumenttype.json',
-        'test_collection.json',
-        'test_satellite.json',
-        'test_satelliteinstrument.json',
-        'test_radarproductprofile.json',
-        'test_opticalproductprofile.json',
-
-        'test_genericproduct.json',
-        'test_genericimageryproduct.json',
-        'test_genericsensorproduct.json',
-        'test_opticalproduct.json',
-        'test_user.json',
-        'test_orderstatus.json',
-        'test_orderstatushistory.json',
-        'test_marketsector.json',
-        'test_deliverymethod.json',
-        'test_deliverydetail.json',
-        'test_order.json',
-        'test_searchrecord.json'
-    ]
 
     def setUp(self):
         """
@@ -80,7 +42,7 @@ class OrdersViews_showDeliveryDetail_Tests(TestCase):
         """
         myKwargsTests = [
             {}, {'theReferenceId': 'testtest'}, {'theReferenceId': None},
-            {'theReferenceId': 3.14}, {'testargs':1}]
+            {'theReferenceId': 3.14}, {'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -103,24 +65,32 @@ class OrdersViews_showDeliveryDetail_Tests(TestCase):
         """
         Test view if user is staff
         """
-        myReferenceId = 1
-        myDeliveryDetailObj = DeliveryDetail.objects.filter(
-            pk__exact=myReferenceId).get()
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        myDeliveryDetail = DeliveryDetailF.create()
+
+        OrderF.create(**{
+            'id': 1,
+            'delivery_detail': myDeliveryDetail
+        })
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
-            reverse(
-                'showDeliveryDetail',
-                kwargs={'theReferenceId': myReferenceId}))
+            reverse('showDeliveryDetail', kwargs={'theReferenceId': 1})
+        )
 
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
             myResp.context['myDeliveryDetail'],
-            myDeliveryDetailObj)
+            myDeliveryDetail)
 
         # check used templates
-        myExpTemplates = 'deliveryDetail.html'
-        myUsedTemplates = myResp.template.name
+        myExpTemplates = ['deliveryDetail.html']
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
 
         self.assertEqual(myUsedTemplates, myExpTemplates)
