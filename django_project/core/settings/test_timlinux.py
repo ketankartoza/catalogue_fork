@@ -1,4 +1,5 @@
 from .test import *
+import platform
 
 DATABASES = {
     'default': {

@@ -23,7 +23,7 @@ from django.test import TestCase
 from django.test.client import Client
 
 from core.model_factories import UserF
-from .model_factories import OrderF, DeliveryDetailF
+from .model_factories import DeliveryDetailF
 
 
 class OrdersViews_showDeliveryDetail_Tests(TestCase):
@@ -71,12 +71,7 @@ class OrdersViews_showDeliveryDetail_Tests(TestCase):
             'is_staff': True
         })
 
-        myDeliveryDetail = DeliveryDetailF.create()
-
-        OrderF.create(**{
-            'id': 1,
-            'delivery_detail': myDeliveryDetail
-        })
+        myDeliveryDetail = DeliveryDetailF.create(**{'id': 1})
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
