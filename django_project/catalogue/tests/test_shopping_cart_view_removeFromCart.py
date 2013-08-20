@@ -23,52 +23,15 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from search.models import SearchRecord
+from core.model_factories import UserF
+from search.tests.model_factories import SearchRecordF
+from .model_factories import OpticalProductF
 
 
 class ShoppingCart_removeFromCart_Tests(TestCase):
     """
     Tests tasking.py removeFromCart method/view
     """
-
-    fixtures = [
-        'test_user.json',
-        'test_creatingsoftware.json',
-        'test_deliverydetail.json',
-        'test_institution.json',
-        'test_search.json',
-        'test_datum.json',
-        'test_resamplingmethod.json',
-        'test_fileformat.json',
-        'test_searchdaterange.json',
-        'test_processinglevel.json',
-        # new dicts
-        'test_radarbeam.json',
-        'test_imagingmode.json',
-        'test_spectralgroup.json',
-        'test_spectralmode.json',
-        'test_scannertype.json',
-        'test_instrumenttype.json',
-        'test_collection.json',
-        'test_satellite.json',
-        'test_satelliteinstrument.json',
-        'test_radarproductprofile.json',
-        'test_opticalproductprofile.json',
-
-        'test_genericproduct.json',
-        'test_genericimageryproduct.json',
-        'test_genericsensorproduct.json',
-        'test_opticalproduct.json',
-        'test_user.json',
-        'test_orderstatus.json',
-        'test_marketsector.json',
-        'test_deliverymethod.json',
-        'test_order.json',
-        'test_license.json',
-        'test_projection.json',
-        'test_quality.json',
-        'test_searchrecord.json'
-    ]
 
     def setUp(self):
         """
@@ -81,7 +44,7 @@ class ShoppingCart_removeFromCart_Tests(TestCase):
         """
         myKwargsTests = [
             {}, {'theId': 'testtest'}, {'theId': None}, {'theId': 3.14},
-            {'testargs':1}]
+            {'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -104,12 +67,28 @@ class ShoppingCart_removeFromCart_Tests(TestCase):
         """
         Test view if user is staff
         """
-        #get initial objects count
-        mySearchRecord_count = len(SearchRecord.objects.all())
+
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        myOProduct = OpticalProductF.create(**{
+            'id': 1,
+            'unique_product_id': 'XY1234'
+        })
+
+        SearchRecordF.create(**{
+            'id': 1,
+            'user': myUser,
+            'order': None,
+            'product': myOProduct
+        })
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(reverse('removeFromCart', kwargs={'theId': 5}))
+        myResp = myClient.get(reverse('removeFromCart', kwargs={'theId': 1}))
 
         self.assertEqual(myResp.status_code, 200)
 
@@ -117,21 +96,33 @@ class ShoppingCart_removeFromCart_Tests(TestCase):
         self.assertEqual(myResp['content-type'], 'text/plain')
         self.assertEqual(
             myResp.content,
-            ('Successfully removed item from your basket'))
-        # check if record was deleted
-        myNewSearchRecord_count = len(SearchRecord.objects.all())
-        self.assertEqual(myNewSearchRecord_count, mySearchRecord_count - 1)
+            ('Successfully removed item from your basket')
+        )
 
     def test_removeFromCart_login_staff_notowned(self):
         """
         Test view if user is staff, but doesn't own search record
         """
-        #get initial objects count
-        mySearchRecord_count = len(SearchRecord.objects.all())
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        myOProduct = OpticalProductF.create(**{
+            'id': 1,
+            'unique_product_id': 'XY1234'
+        })
+
+        SearchRecordF.create(**{
+            'id': 1,
+            'order': None,
+            'product': myOProduct
+        })
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(reverse('removeFromCart', kwargs={'theId': 7}))
+        myResp = myClient.get(reverse('removeFromCart', kwargs={'theId': 1}))
 
         self.assertEqual(myResp.status_code, 200)
 
@@ -140,9 +131,6 @@ class ShoppingCart_removeFromCart_Tests(TestCase):
         self.assertEqual(
             myResp.content,
             ('You don\'t own this record so you can not delete it!'))
-        # check if record was not deleted
-        myNewSearchRecord_count = len(SearchRecord.objects.all())
-        self.assertEqual(myNewSearchRecord_count, mySearchRecord_count)
 
     def test_removeFromCart_login_staff_owned_ordered(self):
         """
@@ -151,8 +139,22 @@ class ShoppingCart_removeFromCart_Tests(TestCase):
 
         WARNING: is it allowed to delete ordered records ?
         """
-        #get initial objects count
-        mySearchRecord_count = len(SearchRecord.objects.all())
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        myOProduct = OpticalProductF.create(**{
+            'id': 1,
+            'unique_product_id': 'XY1234'
+        })
+
+        SearchRecordF.create(**{
+            'id': 1,
+            'user': myUser,
+            'product': myOProduct
+        })
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
@@ -165,6 +167,3 @@ class ShoppingCart_removeFromCart_Tests(TestCase):
         self.assertEqual(
             myResp.content,
             ('Successfully removed item from your basket'))
-        # check if record was deleted
-        myNewSearchRecord_count = len(SearchRecord.objects.all())
-        self.assertEqual(myNewSearchRecord_count, mySearchRecord_count - 1)
