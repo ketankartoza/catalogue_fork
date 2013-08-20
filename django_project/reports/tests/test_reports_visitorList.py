@@ -14,25 +14,22 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '22/11/2012'
+__version__ = '0.2'
+__date__ = '20/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from catalogue.models import Visit
+from core.model_factories import UserF
+from catalogue.tests.model_factories import VisitF
 
 
 class ReportsViews_visitorList_Tests(TestCase):
     """
     Tests reports.py visitorList method/view
     """
-    fixtures = [
-        'test_user.json',
-        'test_visit.json',
-    ]
 
     def setUp(self):
         """
@@ -43,7 +40,7 @@ class ReportsViews_visitorList_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -67,6 +64,11 @@ class ReportsViews_visitorList_Tests(TestCase):
         """
         Test view if user is logged as user
         """
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
@@ -81,21 +83,23 @@ class ReportsViews_visitorList_Tests(TestCase):
         """
         Test view if user is logged as staff
         """
-        myRecords = Visit.objects.all().order_by('-visit_date')
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        VisitF.create()
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(
-            reverse(
-                'visitorList',
-                kwargs={}))
+        myResp = myClient.get(reverse('visitorList', kwargs={}))
+
         self.assertEqual(myResp.status_code, 200)
-        self.assertEqual(
-            len(myResp.context['myRecords'].object_list), len(myRecords))
+        self.assertEqual(len(myResp.context['myRecords'].object_list), 1)
         # check used templates
         myExpTemplates = [
-            'visitors.html',
-            u'base.html',
-            u'menu.html',
+            'visitors.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 
@@ -106,16 +110,21 @@ class ReportsViews_visitorList_Tests(TestCase):
         """
         Test view if pdf is requested
         """
-        myRecords = Visit.objects.all().order_by('-visit_date')
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        VisitF.create()
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(
-            reverse(
-                'visitorList',
-                kwargs={}), {'pdf': ''})
+        myResp = myClient.get(reverse('visitorList', kwargs={}), {'pdf': ''})
+
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
-            len(myResp.context['myRecords'].object_list), len(myRecords))
+            len(myResp.context['myRecords'].object_list), 1)
         # check used templates
         myExpTemplates = ['pdf/visitors.html', u'pdfpage.html']
 
@@ -131,7 +140,14 @@ class ReportsViews_visitorList_Tests(TestCase):
         Test view if user is logged in, specifying invalid page parameter
         View will default to page 1
         """
-        myRecords = Visit.objects.all().order_by('-visit_date')
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        VisitF.create()
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -140,12 +156,10 @@ class ReportsViews_visitorList_Tests(TestCase):
                 kwargs={}), {'page': 'this is a new page!'})
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
-            len(myResp.context['myRecords'].object_list), len(myRecords))
+            len(myResp.context['myRecords'].object_list), 1)
         # check used templates
         myExpTemplates = [
-            'visitors.html',
-            u'base.html',
-            u'menu.html',
+            'visitors.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 
@@ -157,7 +171,14 @@ class ReportsViews_visitorList_Tests(TestCase):
         Test view if user is logged in, specifying outbound page parameter
         View will default to page 1
         """
-        myRecords = Visit.objects.all().order_by('-visit_date')
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        VisitF.create()
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
@@ -166,12 +187,10 @@ class ReportsViews_visitorList_Tests(TestCase):
                 kwargs={}), {'page': '10001'})
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
-            len(myResp.context['myRecords'].object_list), len(myRecords))
+            len(myResp.context['myRecords'].object_list), 1)
         # check used templates
         myExpTemplates = [
-            'visitors.html',
-            u'base.html',
-            u'menu.html',
+            'visitors.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 

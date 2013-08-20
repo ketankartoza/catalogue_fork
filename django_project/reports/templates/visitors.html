@@ -11,11 +11,19 @@
   <div class="row-fluid gap-bottom center">
     <button onclick='location="{% url 'visitorList' %}?page={{ myRecords.number}}&pdf"' class="btn" id="download-btn"><i class="icon-download"></i></button>
     <span class="step-links btn-group">
-      <a href="{% url 'visitorList' %}?page={{ myRecords.previous_page_number }}" class="{% if not myRecords.has_previous %}disabled{% endif %} previous-btn btn "><i class="icon-backward"></i></a>
+      {% if myRecords.has_previous %}
+        <a href="{% url 'visitorList' %}?page={{ myRecords.previous_page_number }}" class="previous-btn btn"><i class="icon-backward"></i></a>
+      {% else %}
+          <a href="#" class="previous-btn btn disabled"><i class="icon-backward"></i></a>
+      {% endif %}
       <span class="current btn  disabled btn-success">
         {{ myRecords.number }} of {{ myRecords.paginator.num_pages }}
       </span>
-      <a href="{% url 'visitorList' %}?page={{ myRecords.next_page_number }}" class="{% if not myRecords.has_next %}disbaled{% endif %} next-btn btn "><i class="icon-forward"></i></a>
+      {% if myRecords.has_previous %}
+        <a href="{% url 'visitorList' %}?page={{ myRecords.next_page_number }}" class="next-btn btn "><i class="icon-forward"></i></a>
+      {% else %}
+        <a href="#" class="previous-btn btn disabled"><i class="icon-forward"></i></a>
+      {% endif %}
     </span>
   </div>
   <div class="row-fluid" id="visitors-content">
@@ -45,11 +53,19 @@
     </table>
     <div class="row-fluid center">
       <span class="step-links btn-group">
-        <a href="{% url 'visitorList' %}?page={{ myRecords.previous_page_number }}" class="{% if not myRecords.has_previous %}disabled{% endif %} previous-btn btn "><i class="icon-backward"></i></a>
-        <span class="current btn  disabled btn-success">
-          {{ myRecords.number }} of {{ myRecords.paginator.num_pages }}
-        </span>
-        <a href="{% url 'visitorList' %}?page={{ myRecords.next_page_number }}" class="{% if not myRecords.has_next %}disbaled{% endif %} next-btn btn "><i class="icon-forward"></i></a>
+      {% if myRecords.has_previous %}
+        <a href="{% url 'visitorList' %}?page={{ myRecords.previous_page_number }}" class="previous-btn btn"><i class="icon-backward"></i></a>
+      {% else %}
+          <a href="#" class="previous-btn btn disabled"><i class="icon-backward"></i></a>
+      {% endif %}
+      <span class="current btn  disabled btn-success">
+        {{ myRecords.number }} of {{ myRecords.paginator.num_pages }}
+      </span>
+      {% if myRecords.has_previous %}
+        <a href="{% url 'visitorList' %}?page={{ myRecords.next_page_number }}" class="next-btn btn "><i class="icon-forward"></i></a>
+      {% else %}
+        <a href="#" class="previous-btn btn disabled"><i class="icon-forward"></i></a>
+      {% endif %}
       </span>
     </div>
   </div>
