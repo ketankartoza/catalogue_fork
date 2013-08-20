@@ -14,8 +14,8 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '15/10/2012'
+__version__ = '0.2'
+__date__ = '20/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 
@@ -23,52 +23,15 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from search.models import SearchRecord
+from core.model_factories import UserF
+from search.tests.model_factories import SearchRecordF
+from .model_factories import OpticalProductF
 
 
 class ShoppingCart_addToCart_Tests(TestCase):
     """
     Tests tasking.py addToCart method/view
     """
-
-    fixtures = [
-        'test_user.json',
-        'test_institution.json',
-        'test_license.json',
-        'test_search.json',
-        'test_searchdaterange.json',
-        'test_processinglevel.json',
-        # new dicts
-        'test_radarbeam.json',
-        'test_imagingmode.json',
-        'test_spectralgroup.json',
-        'test_spectralmode.json',
-        'test_scannertype.json',
-        'test_instrumenttype.json',
-        'test_collection.json',
-        'test_satellite.json',
-        'test_satelliteinstrument.json',
-        'test_radarproductprofile.json',
-        'test_opticalproductprofile.json',
-
-        'test_genericproduct.json',
-        'test_genericimageryproduct.json',
-        'test_genericsensorproduct.json',
-        'test_opticalproduct.json',
-        'test_user.json',
-        'test_orderstatus.json',
-        'test_marketsector.json',
-        'test_deliverymethod.json',
-        'test_order.json',
-        'test_searchrecord.json',
-        'test_projection.json',
-        'test_quality.json',
-        'test_creatingsoftware.json',
-        'test_deliverydetail.json',
-        'test_datum.json',
-        'test_resamplingmethod.json',
-        'test_fileformat.json',
-    ]
 
     def setUp(self):
         """
@@ -81,7 +44,7 @@ class ShoppingCart_addToCart_Tests(TestCase):
         """
         myKwargsTests = [
             {}, {'theId': 'testtest'}, {'theId': None}, {'theId': 3.14},
-            {'testargs':1}]
+            {'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -104,58 +67,84 @@ class ShoppingCart_addToCart_Tests(TestCase):
         """
         Test view if user is staff
         """
-        #get initial objects count
-        mySearchRecord_count = len(SearchRecord.objects.all())
+
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        OpticalProductF.create(**{
+            'id': 1,
+            'unique_product_id': 'XY1234'
+        })
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(reverse('addToCart', kwargs={'theId': 1934163}))
+        myResp = myClient.get(reverse('addToCart', kwargs={'theId': 1}))
 
         self.assertEqual(myResp.status_code, 200)
 
         # check response
         self.assertEqual(myResp['content-type'], 'text/html')
         self.assertEqual(
-            myResp.content,
-            ('Successfully added S1-_HRV_X--_S1C2_0120_00_0404_00_860619_08463'
-                '2_1B--_ORBIT- to your myCart'))
-        # check if new record count
-        myNewSearchRecord_count = len(SearchRecord.objects.all())
-        self.assertEqual(myNewSearchRecord_count, mySearchRecord_count + 1)
+            myResp.content, ('Successfully added XY1234 to your myCart')
+        )
 
     def test_addToCart_login_staff_ajax(self):
         """
         Test view if the request is an AJAX request
         """
-        #get initial objects count
-        mySearchRecord_count = len(SearchRecord.objects.all())
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        OpticalProductF.create(**{
+            'id': 1,
+            'unique_product_id': 'XY1234'
+        })
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
-            reverse('addToCart', kwargs={'theId': 1934163}),
+            reverse('addToCart', kwargs={'theId': 1}),
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
         self.assertEqual(myResp.status_code, 200)
 
         # check response
-        self.assertEqual(myResp['content-type'], 'application/javascript')
+        self.assertEqual(myResp['content-type'], 'application/json')
         self.assertEqual(
-            myResp.content, '{"Status": "Added", "Item": "1934163"}')
-        # check if new record count
-        myNewSearchRecord_count = len(SearchRecord.objects.all())
-        self.assertEqual(myNewSearchRecord_count, mySearchRecord_count + 1)
+            myResp.content, '{"Status": "Added", "Item": "1"}')
 
     def test_addToCart_login_staff_duplicate_item(self):
         """
         Test view when trying to add duplicate item to cart
         """
-        #get initial objects count
-        mySearchRecord_count = len(SearchRecord.objects.all())
+
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        myOProduct = OpticalProductF.create(**{
+            'id': 1,
+            'unique_product_id': 'XY1234'
+        })
+
+        SearchRecordF.create(**{
+            'id': 1,
+            'user': myUser,
+            'order': None,
+            'product': myOProduct
+        })
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(reverse('addToCart', kwargs={'theId': 6541}))
+        myResp = myClient.get(reverse('addToCart', kwargs={'theId': 1}))
 
         self.assertEqual(myResp.status_code, 200)
 
@@ -163,6 +152,3 @@ class ShoppingCart_addToCart_Tests(TestCase):
         self.assertEqual(myResp['content-type'], 'application/javascript')
         self.assertEqual(
             myResp.content, 'alert("Item already exists in your cart!");')
-        # check if new record count is the same as before changes
-        myNewSearchRecord_count = len(SearchRecord.objects.all())
-        self.assertEqual(myNewSearchRecord_count, mySearchRecord_count)

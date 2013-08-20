@@ -14,8 +14,8 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '15/10/2012'
+__version__ = '0.2'
+__date__ = '20/08/2013'
 __copyright__ = 'South African National Space Agency'
 
 
@@ -23,41 +23,13 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
+from core.model_factories import UserF
+
 
 class ShoppingCart_downloadCart_Tests(TestCase):
     """
     Tests tasking.py downloadCart method/view
     """
-
-    fixtures = [
-        'test_user.json',
-        'test_institution.json',
-        'test_license.json',
-        'test_projection.json',
-        'test_search.json',
-        'test_quality.json',
-        'test_creatingsoftware.json',
-        'test_searchdaterange.json',
-        'test_processinglevel.json',
-        # new dicts
-        'test_radarbeam.json',
-        'test_imagingmode.json',
-        'test_spectralgroup.json',
-        'test_spectralmode.json',
-        'test_scannertype.json',
-        'test_instrumenttype.json',
-        'test_collection.json',
-        'test_satellite.json',
-        'test_satelliteinstrument.json',
-        'test_radarproductprofile.json',
-        'test_opticalproductprofile.json',
-
-        'test_genericproduct.json',
-        'test_genericimageryproduct.json',
-        'test_genericsensorproduct.json',
-        'test_opticalproduct.json',
-        'test_user.json'
-    ]
 
     def setUp(self):
         """
@@ -91,6 +63,12 @@ class ShoppingCart_downloadCart_Tests(TestCase):
         """
         Test view if user is staff, requesing SHP file
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(reverse('downloadCart', kwargs={}), {'shp': ''})
@@ -107,6 +85,12 @@ class ShoppingCart_downloadCart_Tests(TestCase):
         """
         Test view if user is staff, requesing SHP file
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(reverse('downloadCart', kwargs={}), {'kml': ''})
@@ -124,6 +108,13 @@ class ShoppingCart_downloadCart_Tests(TestCase):
         """
         Test view if user is staff, requesing SHP file
         """
+
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(reverse('downloadCart', kwargs={}), {'kmz': ''})
@@ -141,6 +132,12 @@ class ShoppingCart_downloadCart_Tests(TestCase):
         """
         Test view if staff user is logged in, but using invalid request params
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
 
