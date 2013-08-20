@@ -14,43 +14,23 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.1'
-__date__ = '22/11/2012'
+__version__ = '0.2'
+__date__ = '20/08/2013'
 __copyright__ = 'South African National Space Agency'
 
-import datetime
+
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
+
+from core.model_factories import UserF
+from search.tests.model_factories import SearchF
 
 
 class ReportsViews_searchHistory_Tests(TestCase):
     """
     Tests reports.py searchHistory method/view
     """
-    fixtures = [
-        'test_user.json',
-        'test_search.json',
-        'test_searchdatarange.json',
-        'test_searchrecord.json',
-        'test_orderstatus.json',
-        'test_deliverymethod.json',
-        'test_deliverydetail.json',
-        'test_marketsector.json',
-        'test_order.json',
-        #'test_taskingrequest.json',
-        'test_processinglevel.json',
-        'test_fileformat.json',
-        'test_projection.json',
-        'test_datum.json',
-        'test_resamplingmethod.json',
-        #'test_fileformat.json',
-        'test_genericproduct.json',
-        'test_institution.json',
-        'test_license.json',
-        'test_quality.json',
-        'test_creatingsoftware.json'
-    ]
 
     def setUp(self):
         """
@@ -61,7 +41,7 @@ class ReportsViews_searchHistory_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -84,6 +64,15 @@ class ReportsViews_searchHistory_Tests(TestCase):
         """
         Test view if user is logged as user
         """
+        myUser = UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
+        SearchF.create(**{
+            'user': myUser
+        })
+        SearchF.create()
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
@@ -93,9 +82,7 @@ class ReportsViews_searchHistory_Tests(TestCase):
             len(myResp.context['mySearches']), 1)
         # check used templates
         myExpTemplates = [
-            'mySearches.html',
-            u'base.html',
-            u'menu.html',
+            'mySearches.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 
@@ -106,18 +93,27 @@ class ReportsViews_searchHistory_Tests(TestCase):
         """
         Test view if staff is logged as user
         """
+        myUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        SearchF.create(**{
+            'user': myUser
+        })
+        SearchF.create()
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
             reverse('searchHistory', kwargs={}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
-            len(myResp.context['mySearches']), 25)
+            len(myResp.context['mySearches']), 1)
         # check used templates
         myExpTemplates = [
-            'mySearches.html',
-            u'base.html',
-            u'menu.html',
+            'mySearches.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 
