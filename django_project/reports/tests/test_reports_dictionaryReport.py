@@ -15,22 +15,21 @@ Contact : lkleyn@sansa.org.za
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.1'
-__date__ = '22/11/2012'
+__date__ = '20/08/2013'
 __copyright__ = 'South African National Space Agency'
 
-import datetime
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
+
+from core.model_factories import UserF
+from dictionaries.tests.model_factories import SatelliteInstrumentGroupF
 
 
 class ReportsViews_dictionaryReport_Tests(TestCase):
     """
     Tests reports.py dictionaryReport method/view
     """
-    fixtures = [
-        'test_user.json',
-    ]
 
     def setUp(self):
         """
@@ -41,7 +40,7 @@ class ReportsViews_dictionaryReport_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -64,6 +63,12 @@ class ReportsViews_dictionaryReport_Tests(TestCase):
         """
         Test view if user is logged as user
         """
+
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
@@ -77,16 +82,23 @@ class ReportsViews_dictionaryReport_Tests(TestCase):
         """
         Test view if user is logged as staff and basic functionality
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        SatelliteInstrumentGroupF.create()
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
             reverse('dictionaryReport',
                     kwargs={}))
         self.assertEqual(myResp.status_code, 200)
+
         self.assertEqual(
-            len(myResp.context['myTypeResults']), 22)
-        self.assertEqual(
-            len(myResp.context['myResults']), 35)
+            len(myResp.context['myResults']), 1)
         # check used templates
         myExpTemplates = ['dictionaryReport.html']
 
