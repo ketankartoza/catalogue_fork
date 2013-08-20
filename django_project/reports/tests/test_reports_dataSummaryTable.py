@@ -15,44 +15,25 @@ Contact : lkleyn@sansa.org.za
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.1'
-__date__ = '22/11/2012'
+__date__ = '20/08/2013'
 __copyright__ = 'South African National Space Agency'
 
-import datetime
+
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
+
+from core.model_factories import UserF
+from dictionaries.tests.model_factories import (
+    SatelliteInstrumentGroupF, SatelliteInstrumentF, OpticalProductProfileF
+)
+from catalogue.tests.model_factories import OpticalProductF
 
 
 class ReportsViews_dataSummaryTable_Tests(TestCase):
     """
     Tests reports.py dataSummaryTable method/view
     """
-    fixtures = [
-        'test_user.json',
-        'test_processinglevel.json',
-        'test_genericproduct.json',
-        'test_institution.json',
-        'test_license.json',
-        'test_quality.json',
-        'test_creatingsoftware.json',
-        'test_projection.json',
-        # new dicts
-        'test_radarbeam.json',
-        'test_imagingmode.json',
-        'test_spectralgroup.json',
-        'test_spectralmode.json',
-        'test_scannertype.json',
-        'test_instrumenttype.json',
-        'test_collection.json',
-        'test_satellite.json',
-        'test_satelliteinstrument.json',
-        'test_radarproductprofile.json',
-        'test_opticalproductprofile.json',
-
-        'test_genericsensorproduct.json',
-        'test_genericimageryproduct.json'
-    ]
 
     def setUp(self):
         """
@@ -63,7 +44,7 @@ class ReportsViews_dataSummaryTable_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -86,6 +67,11 @@ class ReportsViews_dataSummaryTable_Tests(TestCase):
         """
         Test view if user is logged as user
         """
+        UserF.create(**{
+            'username': 'pompies',
+            'password': 'password'
+        })
+
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
@@ -99,16 +85,31 @@ class ReportsViews_dataSummaryTable_Tests(TestCase):
         """
         Test view if user is logged as staff
         """
+        UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password',
+            'is_staff': True
+        })
+
+        mySatInsGroup = SatelliteInstrumentGroupF.create()
+        mySatInst = SatelliteInstrumentF.create(**{
+            'satellite_instrument_group': mySatInsGroup
+        })
+        myOPP = OpticalProductProfileF.create(**{
+            'satellite_instrument': mySatInst
+        })
+        OpticalProductF.create(**{
+            'product_profile': myOPP
+        })
+
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
             reverse('dataSummaryTable',
                     kwargs={}))
         self.assertEqual(myResp.status_code, 200)
-        self.assertEqual(
-            len(myResp.context['myResultSet']), 71)
-        self.assertEqual(
-            myResp.context['myTotal'], 114)
+        self.assertEqual(len(myResp.context['myResultSet']), 1)
+        self.assertEqual(myResp.context['myTotal'], 1)
         # check used templates
         myExpTemplates = [
             'dataSummaryTable.html', u'base.html',

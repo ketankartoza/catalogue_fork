@@ -28,7 +28,7 @@ NOSE_ARGS = [
     'dictionaries',
     'useraccounts',
     'search',
-    'dictionaries',
+    'reports'
 ]
 
 #
@@ -39,6 +39,7 @@ PROJECT_APPS = (
     'dictionaries',
     'useraccounts',
     'search',
+    'reports'
 )
 
 PYLINT_RCFILE = 'pylintrc'
