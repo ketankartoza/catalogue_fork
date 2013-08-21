@@ -56,7 +56,7 @@ from search.models import (
 )
 
 from dictionaries.models import SatelliteInstrumentGroup
-from webodt.shortcuts import render_to_response as renderPDF
+from webodt.shortcuts import render_to_response as renderReport
 from django.template import RequestContext
 
 
@@ -119,7 +119,7 @@ def visitorMonthlyReport(theRequest, theYear, theMonth):
 @staff_member_required
 def renderVisitorListPDF(theRequest):
     myRecords = Visit.objects.order_by('-visit_date')[:20]
-    return renderPDF('visitor-list3.odt',
+    return renderReport('visitor-list.odt',
                      context_instance=RequestContext(theRequest),
                      format='pdf',
                      filename='visitor-list.pdf',
