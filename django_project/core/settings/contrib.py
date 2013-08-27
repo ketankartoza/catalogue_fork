@@ -10,7 +10,8 @@ INSTALLED_APPS += (
     'guardian',
     'easy_thumbnails',
     'crispy_forms',
-    'webodt'
+    'webodt',
+    'tastypie'
 )
 
 # Added by George for webodt
