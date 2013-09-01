@@ -180,9 +180,9 @@ class Searcher:
             for jrow in myParsedData:
                 if len(jrow) == 2:
                     myJFrameRowQ = (
-                        myJFrameRowQ | Q(path__range=(jrow[0], jrow[1])))
+                        myJFrameRowQ | Q(row__range=(jrow[0], jrow[1])))
                 else:
-                    myJFrameRowQ = myJFrameRowQ | Q(path=jrow[0])
+                    myJFrameRowQ = myJFrameRowQ | Q(row=jrow[0])
             self.mQuerySet = self.mQuerySet.filter(myJFrameRowQ)
             logger.debug('J Frame Row filter: %s', myParsedData)
 

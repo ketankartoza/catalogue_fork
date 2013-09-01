@@ -94,7 +94,6 @@ class SearchIncliantionAngle_Test(TestCase):
             'sensor_inclination_angle': 80
         })
 
-
         mySearch = SearchF.create(**{
             'sensor_inclination_angle_start': 50,
             'sensor_inclination_angle_end': 30
