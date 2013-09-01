@@ -21,16 +21,18 @@ from django.test import TestCase
 from catalogue.tests.test_utils import simpleMessage
 
 from catalogue.models import License
+
 from ..models import (
     OpticalProductProfile, Collection, InstrumentType, Satellite,
     SpectralGroup
 )
 
-from .data_factories import create_dictionaries
+from catalogue.tests.model_factories import LicenseF
 
 from .model_factories import (
     OpticalProductProfileF, SatelliteInstrumentF, SpectralModeF,
-    InstrumentTypeF, ProcessingLevelF, SatelliteInstrumentGroupF
+    InstrumentTypeF, ProcessingLevelF, SatelliteInstrumentGroupF, SatelliteF,
+    CollectionF, SpectralGroupF
 )
 
 
@@ -217,33 +219,68 @@ class TestOpticalProductProfileCRUD(TestCase):
         """
         Tests OpticalProductProfile model QuerySet for_license_type
         """
-        create_dictionaries()
+        license_1 = LicenseF(**{
+            'id': 1, u'type': 3, u'name': u'SANSA Commercial License',
+            u'details': u'SANSA Commercial License'
+        })
+        satellite_1 = SatelliteF(**{'id': 1, u'license_type': license_1})
+        satelliteinstrumentgroup_1 = SatelliteInstrumentGroupF(**{
+            'id': 1, u'satellite': satellite_1
+        })
+        satelliteinstrument_1 = SatelliteInstrumentF(**{
+            'id': 1, u'satellite_instrument_group': satelliteinstrumentgroup_1
+        })
+
+        OpticalProductProfileF(**{
+            'id': 1, u'satellite_instrument': satelliteinstrument_1
+        })
 
         myLicense = License.objects.filter(pk=1)
 
         myResult = OpticalProductProfile.objects.for_licence_type(myLicense)
 
-        self.assertEqual(myResult.count(), 30)
+        self.assertEqual(myResult.count(), 1)
 
     def test_OpticalProductProfile_QuerySet_for_collection(self):
         """
         Tests OpticalProductProfile model QuerySet for_collection
         """
-        create_dictionaries()
+        collection_1 = CollectionF(**{'id': 1})
+        satellite_1 = SatelliteF(**{'id': 1, u'collection': collection_1})
+        satelliteinstrumentgroup_1 = SatelliteInstrumentGroupF(**{
+            'id': 1, u'satellite': satellite_1
+        })
+        satelliteinstrument_1 = SatelliteInstrumentF(**{
+            'id': 1, u'satellite_instrument_group': satelliteinstrumentgroup_1
+        })
+
+        OpticalProductProfileF(**{
+            'id': 1, u'satellite_instrument': satelliteinstrument_1
+        })
 
         myCollection = Collection.objects.filter(pk=1)
 
         myResult = OpticalProductProfile.objects.for_collection(myCollection)
 
-        self.assertEqual(myResult.count(), 24)
+        self.assertEqual(myResult.count(), 1)
 
     def test_OpticalProductProfile_QuerySet_for_instrumenttypes(self):
         """
         Tests OpticalProductProfile model QuerySet for_instrumenttypes
         """
-        create_dictionaries()
+        instrumenttype_1 = InstrumentTypeF(**{'id': 1})
+        satelliteinstrumentgroup_1 = SatelliteInstrumentGroupF(**{
+            'id': 1, u'instrument_type': instrumenttype_1
+        })
+        satelliteinstrument_1 = SatelliteInstrumentF(**{
+            'id': 1, u'satellite_instrument_group': satelliteinstrumentgroup_1
+        })
 
-        myInsType = InstrumentType.objects.filter(pk=10)
+        OpticalProductProfileF(**{
+            'id': 1, u'satellite_instrument': satelliteinstrument_1
+        })
+
+        myInsType = InstrumentType.objects.filter(pk=1)
 
         myResult = OpticalProductProfile.objects.for_instrumenttypes(myInsType)
 
@@ -253,7 +290,17 @@ class TestOpticalProductProfileCRUD(TestCase):
         """
         Tests OpticalProductProfile model QuerySet for_satellite
         """
-        create_dictionaries()
+        satellite_1 = SatelliteF(**{'id': 1})
+        satelliteinstrumentgroup_1 = SatelliteInstrumentGroupF(**{
+            'id': 1, u'satellite': satellite_1
+        })
+        satelliteinstrument_1 = SatelliteInstrumentF(**{
+            'id': 1, u'satellite_instrument_group': satelliteinstrumentgroup_1
+        })
+
+        OpticalProductProfileF(**{
+            'id': 1, u'satellite_instrument': satelliteinstrument_1
+        })
 
         mySatellite = Satellite.objects.filter(pk=1)
 
@@ -265,10 +312,17 @@ class TestOpticalProductProfileCRUD(TestCase):
         """
         Tests OpticalProductProfile model QuerySet for_spectralgroup
         """
-        create_dictionaries()
+        spectralgroup_1 = SpectralGroupF(**{'id': 1})
+        spectralmode_1 = SpectralModeF(**{
+            'id': 1, u'spectralgroup': spectralgroup_1
+        })
+
+        OpticalProductProfileF(**{
+            'id': 1, u'spectral_mode': spectralmode_1
+        })
 
         mySpecGroup = SpectralGroup.objects.filter(pk=1)
 
         myResult = OpticalProductProfile.objects.for_spectralgroup(mySpecGroup)
 
-        self.assertEqual(myResult.count(), 21)
+        self.assertEqual(myResult.count(), 1)
