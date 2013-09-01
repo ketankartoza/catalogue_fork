@@ -19,18 +19,14 @@ __date__ = '18/07/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
-from django.test.client import RequestFactory
-
-from catalogue.tests.test_utils import simpleMessage
-
-from core.model_factories import UserF
 
 from search.searcher import Searcher
-from search.models import Search
+
+from catalogue.tests.model_factories import OpticalProductF
+from .model_factories import SearchF
 
 
 class SearchBandCount_Test(TestCase):
-    user = UserF.create()
     """
     Tests Search Band Count
     """
@@ -38,35 +34,106 @@ class SearchBandCount_Test(TestCase):
         """
         Set up before each test
         """
-        self.factory = RequestFactory(enforce_csrf_checks=True)
 
-    def test_Search_bandcount(self):
+    def test_Search_bandcount_pan(self):
         """
         Test band count searches:
         - Panchromatic band count, range 0-2
+        """
+
+        OpticalProductF.create(**{
+            'band_count': 1
+        })
+        OpticalProductF.create(**{
+            'band_count': 2
+        })
+
+        mySearch = SearchF.create(**{
+            'band_count': 0
+        })
+
+        #create Searcher object
+        mySearcher = Searcher(mySearch)
+        self.assertEqual(mySearcher.mQuerySet.count(), 2)
+
+    def test_Search_bandcount_truecolor(self):
+        """
+        Test band count searches:
         - Truecolor band count, range 3
+        """
+
+        OpticalProductF.create(**{
+            'band_count': 3
+        })
+
+        mySearch = SearchF.create(**{
+            'band_count': 1
+        })
+
+        #create Searcher object
+        mySearcher = Searcher(mySearch)
+        self.assertEqual(mySearcher.mQuerySet.count(), 1)
+
+    def test_Search_bandcount_multi(self):
+        """
+        Test band count searches:
         - Multispectral band count, range 4-8
+        """
+
+        OpticalProductF.create(**{
+            'band_count': 4
+        })
+
+        OpticalProductF.create(**{
+            'band_count': 8
+        })
+
+        mySearch = SearchF.create(**{
+            'band_count': 2
+        })
+
+        #create Searcher object
+        mySearcher = Searcher(mySearch)
+        self.assertEqual(mySearcher.mQuerySet.count(), 2)
+
+    def test_Search_bandcount_super(self):
+        """
+        Test band count searches:
         - Superspectral band count, range 9-40
+        """
+
+        OpticalProductF.create(**{
+            'band_count': 9
+        })
+        OpticalProductF.create(**{
+            'band_count': 40
+        })
+
+        mySearch = SearchF.create(**{
+            'band_count': 3
+        })
+
+        #create Searcher object
+        mySearcher = Searcher(mySearch)
+        self.assertEqual(mySearcher.mQuerySet.count(), 2)
+
+    def test_Search_bandcount_hyper(self):
+        """
+        Test band count searches:
         - Hyperspectral band count, range 41-1000
         """
 
-        myTestSearches = [5, 6, 7, 8, 9]
-        myExpectedResults = [8, 10, 15, 1, 1]
+        OpticalProductF.create(**{
+            'band_count': 41
+        })
+        OpticalProductF.create(**{
+            'band_count': 1000
+        })
 
-        for idx, searchPK in enumerate(myTestSearches):
-            mySearch = Search.objects.get(pk=searchPK)
+        mySearch = SearchF.create(**{
+            'band_count': 4
+        })
 
-            #create a fake request object
-            request = self.factory.get(
-                '/searchresult/%s' % mySearch.guid)
-            #assign user to request (usually done by middleware)
-            request.user = self.user
-
-            #create Searcher object
-            mySearcher = Searcher(request, mySearch)
-            mySearcher.search()
-
-            assert mySearcher.mQuerySet.count() >= myExpectedResults[idx], \
-                simpleMessage(
-                    mySearcher.mQuerySet.count(), myExpectedResults[idx],
-                    message='For search pk %s expected more then:' % searchPK)
+        #create Searcher object
+        mySearcher = Searcher(mySearch)
+        self.assertEqual(mySearcher.mQuerySet.count(), 2)
