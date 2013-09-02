@@ -8,8 +8,8 @@
 <div id="content" class="row-fluid">
   <div class="span4 center">
     <h3>{% trans "Your Profile" %}</h3>
-    <p class="lead">These are the personal details which we currently have on our system.</p> 
-    <a href="{% url userena_profile_edit user %}" class="btn btn-success">Edit Profile</a>
+    <p class="lead">These are the personal details which we currently have on our system.</p>
+    <a href="{% url "userena_profile_edit" user %}" class="btn btn-success">Edit Profile</a>
   </div>
     <div id="details" class="span6 offset1">
       {% block profile_details %}
