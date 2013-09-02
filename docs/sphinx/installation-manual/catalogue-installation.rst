@@ -147,7 +147,7 @@ is required. After successfully copying swq.h header, in active virtual environm
 Python GDAL library from pypi: ``pip install --no-install GDAL==1.7``
 + ``cd $VIRTUAL_ENV/build/GDAL``
 + ``rm setup.cfg``
-+ ``python setup.py build_ext --gdal-config=gdal-config --library-dirs=/usr/lib --libraries=gdal1.7.0 --include-dirs=/usr/include/gdal install``
++ ``python setup.py build_ext --gdal-config=gdal-config --library-dirs=/usr/lib --libraries=gdal --include-dirs=/usr/include/gdal install``
 + TEST: ``python -m gdal`` - success if no output
 
 
