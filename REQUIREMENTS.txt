@@ -25,6 +25,8 @@ lxml==2.3
 mercurial==2.7
 nose-exclude==0.1.9
 pep8==1.4.5
+# Newer pip needed as it has user agent support needed for pygooglechart install
+pip==1.4.1
 pisa==3.0.33
 psycopg2==2.2.2
 pyflakes==0.7.2
