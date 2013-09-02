@@ -1,7 +1,7 @@
 #DateUtils==0.6.6
 # Use my forked version because pip 1.4.1 requires non beta deps and pytz
 # (dependency of dateutils) is a beta release.
-git+https://github.com/timlinux/python-dateutils.git@85493dc7a8c093815b857c9a3b28ad85ae2d5eac
+git+https://github.com/timlinux/python-dateutils.git@c67ee1932d678b82d65aa69ee35b07791d1c0364
 Django==1.5.1
 GDAL
 PIL==1.1.7
