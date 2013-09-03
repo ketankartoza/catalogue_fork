@@ -20,7 +20,7 @@ __copyright__ = 'South African National Space Agency'
 import os
 import sys
 import glob
-from datetime import datetime  # , timedelta
+from datetime import datetime
 from xml.dom.minidom import parse
 import traceback
 
@@ -74,6 +74,48 @@ def parseDateTime(theDate):
         int(myStartMinute),
         int(myStartSeconds))
     return myDateTime
+
+
+def get_geometry(logMessage, myDom):
+    # Get the spatial coverage
+    """Extract teh bounding box as a geometry from the xml file.
+
+    :param logMessage: A logMessage function used for user feedback.
+    :type logMessage: logMessage
+
+    :param myDom: Dom Document containing the bounds of the scene.
+    :type myDom: DOM document.
+
+    :return: geoemtry
+    """
+    iif = myDom.getElementsByTagName('IIF')[0]
+    item = iif.getElementsByTagName('item')[0]
+    parameters = item.getElementsByTagName('parameters')[0]
+    coverage = parameters.getElementsByTagName('spatialCoverage')[0]
+    polygon = coverage.getElementsByTagName('boundingPolygon')[0]
+    points = polygon.getElementsByTagName('point')
+    polygon = 'POLYGON(('
+    is_first = True
+    for point in points:
+        latitude = point.getElementsByTagName('latitude')[0]
+        latitude = latitude.firstChild.nodeValue
+        longitude = point.getElementsByTagName('longitude')[0]
+        longitude = longitude.firstChild.nodeValue
+        if not is_first:
+            polygon += ','
+        else:
+            first_latitude = latitude
+            first_longitude = longitude
+            is_first = False
+        polygon += '%s %s' % (longitude, latitude)
+    polygon += ',%s %s))' % (first_longitude, first_latitude)
+    logMessage(polygon, 2)
+
+    # Now make a geometry object
+    myReader = WKTReader()
+    myGeometry = myReader.read(polygon)
+    #logMessage('Geometry: %s' % myGeometry, 2)
+    return myGeometry
 
 
 @transaction.commit_manually
@@ -150,14 +192,14 @@ def ingest(
 
         # Create a DOM document from the file
         myDom = parse(myXmlFile)
+        myGeometry = get_geometry(logMessage, myDom)
 
-        # Get the owner - maybe fetch this via the OpticalProductProfile
-        # if theOwner is None? TS
-        myElement = myDom.getElementsByTagName('owner')[0]
+        specific_parameters = myDom.getElementsByTagName('specificParameters')
+        myElement = specific_parameters.getElementsByTagName('owner')[0]
         theOwner = myElement.firstChild.nodeValue
         logMessage('Owner: %s' % theOwner, 2)
         try:
-            myOwner = Institution.objects.get_or_create(
+            myOwner = Institution.objects.get(
                 name=theOwner,
                 defaults={
                     'address1': '',
@@ -186,7 +228,7 @@ def ingest(
         logMessage('SANSA License: %s' % theSANSALicense, 2)
 
         try:
-            myLicense = License.objects.get_or_create(
+            myLicense = License.objects.get(
                 name=theSANSALicense,
                 details=myLicense)[0]
         except License.DoesNotExist:
@@ -212,7 +254,7 @@ def ingest(
         logMessage('Software Version: %s' % theSoftwareVersion, 2)
 
         try:
-            mySoftware = CreatingSoftware.objects.get_or_create(
+            mySoftware = CreatingSoftware.objects.get(
                 name=theSoftware,
                 version=theSoftwareVersion)[0]
         except CreatingSoftware.DoesNotExist:
@@ -228,7 +270,7 @@ def ingest(
         logMessage('Quality: %s' % theQuality, 2)
 
         try:
-            myQuality = Quality.objects.get_or_create(name=theQuality)[0]
+            myQuality = Quality.objects.get(name=theQuality)[0]
         except Quality.DoesNotExist:
             #logMessage(
             #'Quality %s does not exists and cannot be created,'
@@ -316,55 +358,6 @@ def ingest(
         myProcessingLevel = myProfile.baseProcessingLevel()
         logMessage('Processing Level: %s' % myProcessingLevel, 2)
 
-        # Get the spatial coverage
-        myElement = myDom.getElementsByTagName(
-            'spatialCoverage.boundingPolygon.latitiude')[0]
-        myUpperLeftLat = myElement.firstChild.nodeValue
-        logMessage('Upper Left Lat: %s' % myUpperLeftLat, 2)
-
-        myElement = myDom.getElementsByTagName(
-            'spatialCoverage.boundingPolygon.longitude')[0]
-        myUpperLeftLon = myElement.firstChild.nodeValue
-        logMessage('Upper Left Lon: %s' % myUpperLeftLon, 2)
-
-        myElement = myDom.getElementsByTagName('LL_LAT')[0]
-        myLowerLeftLat = myElement.firstChild.nodeValue
-        logMessage('Lower Left Lat: %s' % myLowerLeftLat, 2)
-
-        myElement = myDom.getElementsByTagName('LL_LONG')[0]
-        myLowerLeftLon = myElement.firstChild.nodeValue
-        logMessage('Lower Left Lon: %s' % myLowerLeftLon, 2)
-
-        myElement = myDom.getElementsByTagName('UR_LAT')[0]
-        myUpperRightLat = myElement.firstChild.nodeValue
-        logMessage('Upper Right Lat: %s' % myUpperRightLat, 2)
-
-        myElement = myDom.getElementsByTagName('UR_LONG')[0]
-        myUpperRightLon = myElement.firstChild.nodeValue
-        logMessage('Upper Right Lon: %s' % myUpperRightLon, 2)
-
-        myElement = myDom.getElementsByTagName('LR_LAT')[0]
-        myLowerRightLat = myElement.firstChild.nodeValue
-        logMessage('Lower Right Lat: %s' % myLowerRightLat, 2)
-
-        myElement = myDom.getElementsByTagName('LR_LONG')[0]
-        myLowerRightLon = myElement.firstChild.nodeValue
-        logMessage('Lower Right Lon: %s' % myLowerRightLon, 2)
-
-        # Now make a WKT polygon
-        myWkt = ('POLYGON((%s %s,%s %s,%s %s,%s %s,%s %s))' % (
-            myUpperLeftLon, myUpperLeftLat,
-            myUpperRightLon, myUpperRightLat,
-            myLowerRightLon, myLowerRightLat,
-            myLowerLeftLon, myLowerLeftLat,
-            myUpperLeftLon, myUpperLeftLat))
-        logMessage(myWkt, 2)
-
-        # Now make a geometry object
-
-        myReader = WKTReader()
-        myGeometry = myReader.read(myWkt)
-        #logMessage('Geometry: %s' % myGeometry, 2)
 
         # Get the projection - assume always UTM and South
         # we just need to find the zone.
