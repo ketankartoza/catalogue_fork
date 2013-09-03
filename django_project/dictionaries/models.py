@@ -364,6 +364,53 @@ class ImagingMode(models.Model):
 
 class SatelliteInstrumentGroup(models.Model):
     """Satellite instrument group - an instrument as deployed on a satellite.
+
+    It may be the case that an instrument type can be both on multiple
+    satellites and deployed multiple times on a single satellite. This model
+    caters for the latter case by allowing a one to many relationship between
+    instrument group and satellite instrument.
+
+    Example::
+
+        SELECT
+          dictionaries_instrumenttype.name,
+          dictionaries_satellite.name,
+          dictionaries_satelliteinstrumentgroup.id,
+          dictionaries_satelliteinstrumentgroup.satellite_id,
+          dictionaries_satelliteinstrumentgroup.instrument_type_id,
+          dictionaries_satelliteinstrument.name,
+          dictionaries_satelliteinstrument.description,
+          dictionaries_satelliteinstrument.abbreviation,
+          dictionaries_satelliteinstrument.operator_abbreviation
+        FROM
+          public.dictionaries_satelliteinstrumentgroup,
+          public.dictionaries_satellite,
+          public.dictionaries_instrumenttype,
+          public.dictionaries_satelliteinstrument
+        WHERE
+          dictionaries_satelliteinstrumentgroup.satellite_id =
+          dictionaries_satellite.id AND
+          dictionaries_satelliteinstrumentgroup.instrument_type_id =
+          dictionaries_instrumenttype.id AND
+          dictionaries_satelliteinstrument.satellite_instrument_group_id =
+          dictionaries_satelliteinstrumentgroup.id
+        ORDER BY
+          dictionaries_satellite.name;
+
+    Would produce::
+
+        "HRV";"SPOT 1";15;8;6;"SPOT 1 HRV 2";"HRV Camera 2 on the SPOT 1
+            Satellite";"S1-HRV2";"S1-HRV2"
+        "HRV";"SPOT 1";15;8;6;"SPOT 1 HRV 1";"HRV Camera 1 on the SPOT 1
+            Satellite";"S1-HRV1";"S1-HRV1"
+        "HRV";"SPOT 2";8;9;6;"SPOT 2 HRV 1";"HRV Camera 1 on the SPOT 2
+            Satellite";"S2-HRV1";"S2-HRV1"
+        "HRV";"SPOT 2";8;9;6;"SPOT 2 HRV 2";"HRV Camera 2 on the SPOT 2
+            Satellite";"S2-HRV2";"S2-HRV2"
+
+    In the example output above you can see for example that there is an HRV
+    camera deployed twice on SPOT 1 and twice on SPOT 2.
+
     """
     satellite = models.ForeignKey('Satellite')
     instrument_type = models.ForeignKey('InstrumentType')
