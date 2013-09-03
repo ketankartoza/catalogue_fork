@@ -11,6 +11,7 @@ Contact : lkleyn@sansa.org.za
    of Linfiniti Consulting CC.
 
 """
+from docutils.nodes import paragraph
 
 __author__ = 'tim@linfiniti.com, lkleyn@sansa.org.za'
 __version__ = '0.1'
@@ -58,7 +59,7 @@ def parseDateTime(theDate):
     myStartYear = theDate[0:4]
     myStartMonth = theDate[5:7]
     myStartDay = theDate[8:10]
-    myStartTime = theDate[11:23]
+    myStartTime = theDate[11:19]
     myTokens = myStartTime.split(':')
     myStartHour = myTokens[0]
     myStartMinute = myTokens[1]
@@ -76,9 +77,23 @@ def parseDateTime(theDate):
     return myDateTime
 
 
+def get_parameters_element(myDom):
+    """Get the spatial coverage element from the dom.
+    :param myDom: Dom Document containing the bounds of the scene.
+    :type myDom: DOM document.
+
+    :returns: A dome element representing the spatialCoverage.
+    :type: DOM
+    """
+    iif = myDom.getElementsByTagName('IIF')[0]
+    item = iif.getElementsByTagName('item')[0]
+    parameters = item.getElementsByTagName('parameters')[0]
+    return parameters
+
+
 def get_geometry(logMessage, myDom):
     # Get the spatial coverage
-    """Extract teh bounding box as a geometry from the xml file.
+    """Extract the bounding box as a geometry from the xml file.
 
     :param logMessage: A logMessage function used for user feedback.
     :type logMessage: logMessage
@@ -88,9 +103,7 @@ def get_geometry(logMessage, myDom):
 
     :return: geoemtry
     """
-    iif = myDom.getElementsByTagName('IIF')[0]
-    item = iif.getElementsByTagName('item')[0]
-    parameters = item.getElementsByTagName('parameters')[0]
+    parameters = get_parameters_element(myDom)
     coverage = parameters.getElementsByTagName('spatialCoverage')[0]
     polygon = coverage.getElementsByTagName('boundingPolygon')[0]
     points = polygon.getElementsByTagName('point')
@@ -116,6 +129,41 @@ def get_geometry(logMessage, myDom):
     myGeometry = myReader.read(polygon)
     #logMessage('Geometry: %s' % myGeometry, 2)
     return myGeometry
+
+
+def get_dates(logMessage, myDom):
+    # Look for key concepts needed to create an OpticalProduct
+    """Get the start, mid scene and end dates.
+
+    :param logMessage: A logMessage function used for user feedback.
+    :type logMessage: logMessage
+
+    :param myDom: Dom Document containing the bounds of the scene.
+    :type myDom: DOM document.
+
+    :return: A three-tuple of dates for the start, mid scene and end dates
+        respectively.
+    :rtype: (datetime, datetime, datetime)
+    """
+    parameters = get_parameters_element(myDom)
+    coverage = parameters.getElementsByTagName('temporalCoverage')[0]
+
+    start_element = coverage.getElementsByTagName('startTime')[0]
+    start_date = start_element.firstChild.nodeValue
+    start_date = parseDateTime(start_date)
+    logMessage('Product Start Date: %s' % start_date, 2)
+
+    center_element = myDom.getElementsByTagName('centerTime')[0]
+    center_date = center_element.firstChild.nodeValue
+    center_date = parseDateTime(center_date)
+    logMessage('Product Date: %s' % center_date, 2)
+
+    end_element = myDom.getElementsByTagName('stopTime')[0]
+    end_date = end_element.firstChild.nodeValue
+    end_date = parseDateTime(end_date)
+    logMessage('Product End Date: %s' % end_date, 2)
+
+    return start_date, center_date, end_date
 
 
 @transaction.commit_manually
@@ -192,7 +240,11 @@ def ingest(
 
         # Create a DOM document from the file
         myDom = parse(myXmlFile)
+
+        # First grap all the generic properties that any IIF will have...
         myGeometry = get_geometry(logMessage, myDom)
+        myEndDateTime, myMidDateTime, myStartDateTime = get_dates(
+            logMessage, myDom)
 
         specific_parameters = myDom.getElementsByTagName('specificParameters')
         myElement = specific_parameters.getElementsByTagName('owner')[0]
@@ -280,24 +332,6 @@ def ingest(
                 ' be created: aborting' % theQuality)
         logMessage('Quality: %s' % myQuality)
 
-        # Look for key concepts needed to create an OpticalProduct
-        myElement = myDom.getElementsByTagName('temporalCoverage.centerTime')[0]
-        myProductDate = myElement.firstChild.nodeValue
-        myMidDateTime = myElement.firstChild.nodeValue
-        logMessage('Product Date: %s' % myProductDate, 2)
-
-        myElement = myDom.getElementsByTagName('temporalCoverage.startTime')[0]
-        myStartDate = myElement.firstChild.nodeValue
-        myStartDateTime = parseDateTime(myStartDate)
-        logMessage('Product Start Date: %s' % myStartDateTime, 2)
-
-        logMessage('Mid Scene Date: %s' % myMidDateTime, 2)
-
-        myElement = myDom.getElementsByTagName('temporalCoverage.stopTime')[0]
-        myEndDate = myElement.firstChild.nodeValue
-        myEndDateTime = parseDateTime(myEndDate)
-        logMessage('Product End Date: %s' % myEndDateTime, 2)
-
         # Get the spectral mode
         myElement = myDom.getElementsByTagName('sensor')[0]
         mySpectralModeName = myElement.firstChild.nodeValue
@@ -357,7 +391,6 @@ def ingest(
         # Get the base processing level
         myProcessingLevel = myProfile.baseProcessingLevel()
         logMessage('Processing Level: %s' % myProcessingLevel, 2)
-
 
         # Get the projection - assume always UTM and South
         # we just need to find the zone.

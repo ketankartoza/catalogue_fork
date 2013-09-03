@@ -59,7 +59,7 @@ class DIMSIIFIngestorTest(TestCase):
             'dictionaries.tests.model_factories.OpticalProductProfileF')
         dims_iif.ingest(
             theSourceDir=DATA_DIR_PATH,
-            theVerbosityLevel=1)
+            theVerbosityLevel=2)
         myProducts = GenericProduct.objects.filter(product_id__contains='L5')
         myList = []
         myFormattedList = ''
