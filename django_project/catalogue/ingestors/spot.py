@@ -30,13 +30,14 @@ from django.db import transaction
 from django.contrib.gis.gdal import OGRGeometry
 from django.contrib.gis.gdal import DataSource
 
-from catalogue.models import (
+from ..models import (
     Quality,
     License,
     CreatingSoftware,
     Institution,
     OpticalProduct,
 )
+from dictionaries.models import Satellite
 
 
 @transaction.commit_manually
@@ -130,8 +131,9 @@ def ingest(theShapeFile,
             theSoftware = CreatingSoftware.objects.get_or_create(
                 name=theSoftware, defaults={'version': 0})[0]
         except CreatingSoftware.DoesNotExist:
-            raise CommandError, ('Creating Software %s does not exists '
-                                 ' and cannot create: aborting' % theSoftware)
+            raise CommandError(
+                'Creating Software %s does not exists and cannot create: '
+                'aborting' % theSoftware)
         # Get the license
         try:
             theLicense = License.objects.get_or_create(
@@ -139,8 +141,9 @@ def ingest(theShapeFile,
                 defaults={'type': License.LICENSE_TYPE_COMMERCIAL,
                           'details': theLicense})[0]
         except License.DoesNotExist:
-            raise CommandError, ('License %s does not exists and cannot '
-                                 ' create: aborting' % theLicense)
+            raise CommandError(
+                'License %s does not exists and cannot create: aborting'
+                % theLicense)
         # Get the owner
         try:
             myOwner = Institution.objects.get_or_create(
@@ -169,13 +172,12 @@ def ingest(theShapeFile,
             myUpdatedRecordCount = 0
             myCreatedRecordCount = 0
             myDiscardedRecordCount = 0
-            logMessage('Starting index dowload...', 2)
+            logMessage('Starting index download...', 2)
             for myFeature in fetchFeatures(theShapeFile, myAreaOfInterest):
                 #if imported > 5:
                 #  transaction.commit()
                 #  return
-                if (myRecordCount % 10000 == 0 and
-                    myRecordCount > 0):
+                if myRecordCount % 10000 == 0 and myRecordCount > 0:
                     print 'Products processed : %s ' % myRecordCount
                     print 'Products updated : %s ' % myUpdatedRecordCount
                     print 'Products imported : %s ' % myCreatedRecordCount
@@ -205,10 +207,10 @@ def ingest(theShapeFile,
 
                 myOriginalProductId = myFeature.get('A21')
                 # Gets the mission
-                myMissionId = myFeature.get('SATEL')
-                if not int(myMissionId) in (1,2,3,4,5):
+                mySatelliteId = myFeature.get('SATEL')
+                if not int(mySatelliteId) in (1, 2, 3, 4, 5):
                     raise CommandError('Unknown Spot mission number'
-                                       '(should be 1-5) %s.' % myMissionId)
+                                       '(should be 1-5) %s.' % mySatelliteId)
                 try:
                     #sac=# select * from catalogue_mission where
                     #       operator_abbreviation = 'SPOT-5';
@@ -220,9 +222,9 @@ def ingest(theShapeFile,
                     # owner                 | CNES
                     # operator_abbreviation | SPOT-5
 
-                    myMissionAbbreviation = 'SPOT-%s' % myMissionId
-                    mySpotMission = Mission.objects.get(
-                        operator_abbreviation = myMissionAbbreviation)
+                    mySatelliteAbbreviation = 'SPOT-%s' % mySatelliteId
+                    mySpotSatellite = Satellite.objects.get(
+                        operator_abbreviation=mySatelliteAbbreviation)
 
                     #sac=# select * from catalogue_missionsensor where
                     #             mission_id = 18;
@@ -263,18 +265,18 @@ def ingest(theShapeFile,
                     myAbbreviation=None
                     # If it is a spot 1,2 or three assume the sensor type
                     # is HRV-1 or HRV-2 or HRV-3.
-                    if myMissionId in [1, 2, 3]:
-                        myAbbreviation = 'HRV-%s' % myMissionId
+                    if mySatelliteId in [1, 2, 3]:
+                        myAbbreviation = 'HRV-%s' % mySatelliteId
                     # If it is a spot 4 image then assume the sensor type
                     # is HIR
-                    elif myMissionId == 4:
+                    elif mySatelliteId == 4:
                         myAbbreviation = 'HRVIR-4'
                     # If it is a spot 5 image then assume the sensor type
                     # is a HRG
-                    elif myMissionId == 5:
+                    elif mySatelliteId == 5:
                             myAbbreviation = 'HRG-5'
 
-                    myMissionSensor = MissionSensor.objects.get(
+                    mySatelliteSensor = SatelliteSensor.objects.get(
                         operator_abbreviation=myAbbreviation)
 
                     #sac=# select * from catalogue_sensortype where
@@ -322,22 +324,22 @@ def ingest(theShapeFile,
                     # The type abbreviation should be unique for its sensor
                     # so we chain two filters to get it
                     myTypes = SensorType.objects.filter(
-                        mission_sensor=myMissionSensor).filter(
+                        mission_sensor=mySatelliteSensor).filter(
                         operator_abbreviation = myImportFileSensorType)
 
 
                     if myTypes.count() < 1:
                         logMessage(('Auto-adding unmatched sensor type: %s'
-                                    '\nMission sensor was: %s') % (
+                                    '\nSatellite sensor was: %s') % (
                                   myImportFileSensorType,
-                                  myMissionSensor), 0)
+                                  mySatelliteSensor), 0)
                         # Make a new sensor
                         mySensorType = SensorType()
                         mySensorType.abbreviation = myImportFileSensorType
                         mySensorType.name = myImportFileSensorType
                         mySensorType.operator_abbreviation = \
                                 myImportFileSensorType
-                        mySensorType.mission_sensor = myMissionSensor
+                        mySensorType.mission_sensor = mySatelliteSensor
                         mySensorType.save()
                         logMessage('New sensor type auto-added: %s' %
                                     mySensorType, 0)
@@ -350,13 +352,13 @@ def ingest(theShapeFile,
                         myMode = AcquisitionMode()
                         myMode.sensor_type = mySensorType
                         myMode.abbreviation = str(
-                            mySpotMission.abbreviation) + 'C1'
+                            mySpotSatellite.abbreviation) + 'C1'
                         myMode.name = 'Camera 1'
                         myMode.spatial_resolution = myResolution
                         myMode.band_count = myBandCount
                         myMode.is_grayscale = myGrayScaleFlag
                         myMode.operator_abbreviation = str(
-                            mySpotMission.abbreviation) + 'C1'
+                            mySpotSatellite.abbreviation) + 'C1'
                         myMode.save()
                         logMessage('New acquistion mode auto-added: %s' %
                             myMode, 0)
@@ -366,13 +368,13 @@ def ingest(theShapeFile,
                         myMode2 = AcquisitionMode()
                         myMode2.sensor_type = mySensorType
                         myMode2.abbreviation =  str(
-                            mySpotMission.abbreviation) + 'C2'
+                            mySpotSatellite.abbreviation) + 'C2'
                         myMode2.name = 'Camera 2'
                         myMode2.spatial_resolution = myResolution
                         myMode2.band_count = myBandCount
                         myMode2.is_grayscale = myGrayScaleFlag
                         myMode2.operator_abbreviation = str(
-                            mySpotMission.abbreviation) + 'C2'
+                            mySpotSatellite.abbreviation) + 'C2'
                         myMode2.save()
                         logMessage('New acquistion mode auto-added: %s' %
                             myMode2, 0)
@@ -381,7 +383,7 @@ def ingest(theShapeFile,
                     # The mode should be unique for its type so we
                     # chain two filters to get it
                     myMode = 'S%sC%s' % (
-                        myMissionId, myFeature.get('A21')[-2:-1] )
+                        mySatelliteId, myFeature.get('A21')[-2:-1] )
 
                     #print '%s : %s' % (mySensorType, myMode)
                     myAcquisitionMode = AcquisitionMode.objects.filter(
@@ -391,9 +393,9 @@ def ingest(theShapeFile,
                     #
                     # Following for debugging info only
                     #
-                    logMessage('Detected mission: %s' % mySpotMission, 2)
+                    logMessage('Detected mission: %s' % mySpotSatellite, 2)
                     logMessage('Allowed sensor:', 2)
-                    logMessage(myMissionSensor, 2)
+                    logMessage(mySatelliteSensor, 2)
                     logMessage('Detected sensor type: %s' % mySensorType, 2)
                     logMessage('Detected acquisition mode: %s' %
                             myAcquisitionMode, 2)
@@ -414,7 +416,7 @@ def ingest(theShapeFile,
                               's_%(JJJJ)s_%(JS)s_%(YYMMDD)s_%(HHMMSS)s_%(LEVL)'
                               's_%(PROJTN)s') %
                 {
-                  'SAT': mySpotMission.abbreviation.ljust(3, '-'),
+                  'SAT': mySpotSatellite.abbreviation.ljust(3, '-'),
                   'SEN': mySensorType.mission_sensor.abbreviation.ljust(3, '-'),
                   'TYP': mySensorType.abbreviation.ljust(3, '-'),
                   'MOD': myAcquisitionMode.abbreviation.ljust(4, '-'),
