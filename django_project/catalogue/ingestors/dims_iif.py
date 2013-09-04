@@ -41,9 +41,7 @@ from dictionaries.models import (
 
 from catalogue.models import (
     OpticalProduct,
-    Projection,
-    CreatingSoftware,
-    Quality)
+    Projection)
 
 
 def parseDateTime(theDate):
@@ -448,40 +446,43 @@ def ingest(
 
         # First grab all the generic properties that any IIF will have...
         myGeometry = get_geometry(logMessage, myDom)
-        myEndDateTime, myMidDateTime, myStartDateTime = get_dates(
+        start_date_time, center_date_time, end_date_time = get_dates(
             logMessage, myDom)
 
         # Now get all sensor specific metadata
         specific_parameters = get_specific_parameters_element(myDom)
 
         # Orbit number for GenericSensorProduct
-        orbit_number = get_feature_value('orbitNumber', myDom)
-        logMessage('Orbit: %s' % orbit_number, 2)
+        orbit_number = get_feature_value(
+            'orbitNumber', specific_parameters)
+        #logMessage('Orbit: %s' % orbit_number, 2)
 
         # Original product id for GenericProduct
-        original_product_id = get_feature_value('productName', myDom)
-        logMessage('Product Number: %s' % original_product_id, 2)
+        original_product_id = get_feature_value(
+            'productName', specific_parameters)
+        #logMessage('Product Number: %s' % original_product_id, 2)
 
-        resolution_element = get_feature('resolution', myDom)
+        resolution_element = get_feature(
+            'resolution', specific_parameters)
 
         # Band count for GenericImageryProduct
         band_count = get_feature_value('numberOfBands', resolution_element)
-        logMessage('Band count: %s' % band_count, 2)
+        #logMessage('Band count: %s' % band_count, 2)
 
         # Spatial resolution x for GenericImageryProduct
         spatial_resolution_x = float(
             get_feature_value('x', resolution_element))
-        logMessage('Spatial resolution x: %s' % spatial_resolution_x, 2)
+        #logMessage('Spatial resolution x: %s' % spatial_resolution_x, 2)
 
         # Spatial resolution y for GenericImageryProduct
         spatial_resolution_y = float(
             get_feature_value('y', resolution_element))
-        logMessage('Spatial resolution y: %s' % spatial_resolution_y, 2)
+        #logMessage('Spatial resolution y: %s' % spatial_resolution_y, 2)
 
         # Spatial resolution for GenericImageryProduct calculated as (x+y)/2
         spatial_resolution = (
             spatial_resolution_x + spatial_resolution_y) / 2
-        logMessage('Spatial resolution: %s' % spatial_resolution, 2)
+        #logMessage('Spatial resolution: %s' % spatial_resolution, 2)
 
         # Radiometric resolution for GenericImageryProduct
         # Note quantisation is mis-spelled as quantitisation in IIF docs
@@ -491,242 +492,86 @@ def ingest(
             bit_depth += 1
         base = 2  # to get to bit depth in base 2
         radiometric_resolution = int(log(bit_depth, base).real)
-        logMessage('Radiometric resolution: %s' % radiometric_resolution, 2)
+        #logMessage('Radiometric resolution: %s' % radiometric_resolution, 2)
 
         # projection for GenericProduct
-        projection_element = get_feature('projectionInfo', myDom)
+        projection_element = get_feature(
+            'projectionInfo', specific_parameters)
         projection = get_feature_value('code', projection_element)
-        logMessage('Projection: %s' % projection, 2)
+        projection = Projection.objects.get(epsg_code=int(projection))
+        #logMessage('Projection: %s' % projection, 2)
 
         # path for GenericSensorProduct
-        path = get_feature_value('path', myDom)
-        logMessage('Path: %s' % path, 2)
+        path = get_feature_value('path', specific_parameters)
+        #logMessage('Path: %s' % path, 2)
 
         # row for GenericSensorProduct
-        row = get_feature_value('row', myDom)
-        logMessage('Row: %s' % row, 2)
+        row = get_feature_value('row', specific_parameters)
+        #logMessage('Row: %s' % row, 2)
 
         # earth_sun_distance for OpticalProduct
-        earth_sun_distance = get_feature_value('earthSunDistance', myDom)
-        logMessage('Earth Sun Distance: %s' % earth_sun_distance, 2)
+        earth_sun_distance = get_feature_value(
+            'earthSunDistance', specific_parameters)
+        #logMessage('Earth Sun Distance: %s' % earth_sun_distance, 2)
 
         # solar azimuth angle for OpticalProduct
-        solar_azimuth_angle = get_feature_value('solarAzimuthAngle', myDom)
-        logMessage('Solar Azimuth Angle: %s' % solar_azimuth_angle, 2)
+        solar_azimuth_angle = get_feature_value(
+            'solarAzimuthAngle', specific_parameters)
+        #logMessage('Solar Azimuth Angle: %s' % solar_azimuth_angle, 2)
 
         # solar zenith angle for OpticalProduct
-        solar_zenith_angle = get_feature_value('solarZenithAngle', myDom)
-        logMessage('Solar Azimuth Angle: %s' % solar_zenith_angle, 2)
+        solar_zenith_angle = get_feature_value(
+            'solarZenithAngle', specific_parameters)
+        #logMessage('Solar Azimuth Angle: %s' % solar_zenith_angle, 2)
 
         # sensor viewing angle for OpticalProduct
-        sensor_viewing_angle = get_feature_value('sensorViewingAngle', myDom)
-        logMessage('Sensor viewing angle: %s' % sensor_viewing_angle, 2)
+        sensor_viewing_angle = get_feature_value(
+            'sensorViewingAngle', specific_parameters)
+        #logMessage('Sensor viewing angle: %s' % sensor_viewing_angle, 2)
 
         # sensor inclination angle for OpticalProduct
         sensor_inclination_angle = get_feature_value(
-            'sensorInclinationAngle', myDom)
-        logMessage(
-            'Sensor inclination angle: %s' % sensor_inclination_angle, 2)
+            'sensorInclinationAngle', specific_parameters)
+        #logMessage(
+        #    'Sensor inclination angle: %s' % sensor_inclination_angle, 2)
 
         # cloud cover as percentage for OpticalProduct
-        cloud_cover = get_feature_value('cloudCoverPercentage', myDom)
-        logMessage('Cloud cover percentage: %s' % cloud_cover, 2)
+        # integer percent - must be scaled to 0-100 for all ingestors
+        cloud_cover = int(get_feature_value(
+            'cloudCoverPercentage', specific_parameters))
+        #logMessage('Cloud cover percentage: %s' % cloud_cover, 2)
 
         # ProductProfile for OpticalProduct
-        product_profile = get_product_profile(logMessage, myDom)
-
-        #
-        #
-        # Checked by Tim to here
-        #
-        #
-
-
-        # Get the creating software - maybe fetch this via the
-        # OpticalProductProfile if theOwner is None? TS
-        myElement = myDom.getElementsByTagName('softwareInfo.name')[0]
-        mySoftware = myElement.firstChild.nodeValue
-        logMessage('Software: %s' % mySoftware, 2)
-        mySoftwareMapping = {
-            'Pinkmatter Landsat Processor': 'LPGS'
-        }
-        theSoftware = CreatingSoftware.objects.get(
-            name=mySoftwareMapping[mySoftware])
-
-        logMessage('Software: %s' % mySoftware, 2)
-        myElement = myDom.getElementsByTagName('softwareInfo.version')[0]
-        theSoftwareVersion = myElement.firstChild.nodeValue
-        logMessage('Software Version: %s' % theSoftwareVersion, 2)
-
-        try:
-            mySoftware = CreatingSoftware.objects.get(
-                name=theSoftware,
-                version=theSoftwareVersion)[0]
-        except CreatingSoftware.DoesNotExist:
-            raise CommandError(
-                'Software %s does not exist and '
-                'cannot create: aborting' % mySoftware)
-
-        logMessage('Software: %s' % mySoftware)
-
-        # Get the quality assessment.
-        myElement = myDom.getElementsByTagName('quality')[0]
-        theQuality = myElement.firstChild.nodeValue
-        logMessage('Quality: %s' % theQuality, 2)
-
-        try:
-            myQuality = Quality.objects.get(name=theQuality)[0]
-        except Quality.DoesNotExist:
-            #logMessage(
-            #'Quality %s does not exists and cannot be created,'
-            #' it will be read from metadata.' % theQuality, 2)
-            raise CommandError(
-                'Quality %s does not exists and cannot '
-                ' be created: aborting' % theQuality)
-        logMessage('Quality: %s' % myQuality)
-
-        # Get the spectral mode
-        myElement = myDom.getElementsByTagName('sensor')[0]
-        mySpectralModeName = myElement.firstChild.nodeValue
-        logMessage('Spectral Mode: %s' % mySpectralModeName, 2)
-        # Need to get the Spectral mode used for
-        # Landsat 8, spectral mode is OLI_TIRS HRF
-        # Landsat 8, spectral mode is OLI HRF
-        # Landsat 8, spectral mode is TIRS THM
-        # Landsat 7, spectral mode is ETM+ HRF
-        # Landsat 5, spectral mode is TM HRF
-        # Landsat 5, spectral mode is MSS HRF
-        #
-        # select * from dictionaries_spectralmode;
-        # id| name     | description
-        # 1 | ETM+ HRF | Landsat 7 ETM+ Multi-spectral bands denoted as HRF
-        # 4 | TM HRF   | Landsat 4 or 5 TM Multi-spectral bands denoted as HRF
-        mySpectralModeMapping = {
-            'MSS': 'MSS HRF',
-            'TM': 'TM HRF',
-            'ETM+': 'ETM+ HRF',
-            'OLI_TIRS': 'OLI_TIRS HRF',
-            'OLI': 'OLI HRF',
-            'TiRS': 'TIRS THM'}
-        mySpectralMode = SpectralMode.objects.get(
-            name=mySpectralModeMapping[mySpectralModeName])
-        logMessage('Spectral Mode: %s' % mySpectralMode, 2)
-
-        # Get the instrument name from the metadata so we can
-        # determine if this is L8, L7 or L5
-        myElement = myDom.getElementsByTagName('mission')[0]
-        myInstrumentName = myElement.firstChild.nodeValue
-        logMessage('Instrument Name: %s' % myInstrumentName, 2)
-
-        # *** Continue from here
-
-        # And the SatelliteInstrument
-        #id |          name
-        #----+------------------------
-        # ...
-        # 17 | Landsat 5 TM
-        # 18 | Landsat 7 ETM+
-        # ...
-        #(23 rows)
-        mySatelliteInstrumentMapping = {
-            'TM': 'Landsat 5 TM',
-            'ETM+': 'Landsat 7 ETM+'}
-        mySatelliteInstrument = SatelliteInstrument.objects.get(
-            name=mySatelliteInstrumentMapping[myInstrumentName])
-        logMessage('Satellite Instrument: %s' % mySatelliteInstrument, 2)
-
-        # So that we can get the optical product OpticalProductProfile
-        myProfile = OpticalProductProfile(
-            spectral_mode=mySpectralMode,
-            satellite_instrument=mySatelliteInstrument)
-        logMessage('Spectral Profile: %s' % myProfile, 2)
-
-        # Get the base processing level
-        myProcessingLevel = myProfile.baseProcessingLevel()
-        logMessage('Processing Level: %s' % myProcessingLevel, 2)
-
-        # Get the projection - assume always UTM and South
-        # we just need to find the zone.
-        myElement = myDom.getElementsByTagName('ZONE')[0]
-        myZone = myElement.firstChild.nodeValue
-        logMessage('Zone: %s' % myZone, 2)
-        myProjectionName = 'UTM%sS' % myZone
-        myProjection = Projection.objects.get(name=myProjectionName)
-        logMessage('Projection: %s' % myProjection, 2)
+        product_profile = get_product_profile(
+            logMessage, specific_parameters)
 
         # Get the original text file metadata
-        mySearchPath = os.path.join(str(myFolder), '*.txt')
-        logMessage(mySearchPath, 2)
-        myTxtFile = glob.glob(mySearchPath)[0]
-        logMessage(myTxtFile, 2)
-        myMetadataFile = file(myTxtFile, 'rt')
-        myMetadata = myMetadataFile.readlines()
+        myMetadataFile = file(myXmlFile, 'rt')
+        metadata = myMetadataFile.readlines()
         myMetadataFile.close()
-
-        # We hard code the radiometric resolution to 8 bits
-        myRadiometricResolution = 8
-
-        # Get the band count (its also a property of GenericProduct
-        myBandCount = myProfile.bandCount()
-
-        # Get the cloud cover from the DOM document
-        myElement = myDom.getElementsByTagName('CLOUDCOVERPERCENTAGE')[0]
-        myCloudCover = myElement.firstChild.nodeValue
-        logMessage('Cloud Cover: %s%%' % myCloudCover, 2)
-
-        # For Landsat the Inclination Angle is None because we don't have
-        # access to this data in the metadata record.
-        myInclinationAngle = None
-        logMessage('Inclination Angle: %s' % myInclinationAngle, 2)
-
-        # For Landsat the Viewing Angle is None because we don't have
-        # access to this data in the metadata record.
-        myViewingAngle = None
-        logMessage('Viewing Angle: %s' % myViewingAngle, 2)
-
-        #Product ID is same as the folder ID??
-        myOriginalProductId = myProductFolder
-
-        # Get the solar zenith from the DOM document
-        myElement = myDom.getElementsByTagName('SUN_ELEVATION')[0]
-        mySolarZenithAngle = myElement.firstChild.nodeValue
-        logMessage('Solar Zenith: %s' % mySolarZenithAngle, 2)
-
-        # Get the solar azimuth from the DOM document
-        myElement = myDom.getElementsByTagName('SUN_AZIMUTH')[0]
-        mySolarAzimuthAngle = myElement.firstChild.nodeValue
-        logMessage('Solar Azimuth: %s' % mySolarAzimuthAngle, 2)
-
-        # We hard code the spatial resolution for both l7 and l5 to 30m
-        myResolution = 30
-        logMessage('Resolution: %sm' % myResolution, 2)
 
         # Check if there is already a matching product based
         # on original_product_id
 
         # Do the ingestion here...
         myData = {
-            'metadata': myMetadata,
+            'metadata': metadata,
             'spatial_coverage': myGeometry,
-            'radiometric_resolution': myRadiometricResolution,
-            'band_count': myBandCount,
-            # integer percent - must be scaled to 0-100 for all ingestors
-            'cloud_cover': int(myCloudCover),
-            'creating_software': mySoftware,
-            'quality': myQuality,
-            'sensor_inclination_angle': myInclinationAngle,
-            'sensor_viewing_angle': myViewingAngle,
-            'original_product_id': myOriginalProductId,
-            'solar_zenith_angle': mySolarZenithAngle,
-            'solar_azimuth_angle': mySolarAzimuthAngle,
-            'spatial_resolution_x': myResolution,
-            'spatial_resolution_y': myResolution,
-            'spatial_resolution': myResolution,
-            'product_profile': myProfile,
-            'product_acquisition_start': myStartDateTime,
-            'product_acquisition_end': myEndDateTime,
-            'product_date': myMidDateTime,
-            'processing_level': myProcessingLevel
+            'radiometric_resolution': radiometric_resolution,
+            'band_count': band_count,
+            'cloud_cover': cloud_cover,
+            'sensor_inclination_angle': sensor_inclination_angle,
+            'sensor_viewing_angle': sensor_viewing_angle,
+            'original_product_id': original_product_id,
+            'solar_zenith_angle': solar_zenith_angle,
+            'solar_azimuth_angle': solar_azimuth_angle,
+            'spatial_resolution_x': spatial_resolution_x,
+            'spatial_resolution_y': spatial_resolution_y,
+            'spatial_resolution': spatial_resolution,
+            'product_profile': product_profile,
+            'product_acquisition_start': start_date_time,
+            'product_acquisition_end': end_date_time,
+            'product_date': center_date_time,
         }
 
         # Check if it's already in catalogue:
@@ -734,10 +579,10 @@ def ingest(
             #original_product_id is not necessarily unique
             #so we use product_id
             myProduct = OpticalProduct.objects.get(
-                original_product_id=myOriginalProductId
+                original_product_id=original_product_id
             ).getConcreteInstance()
             logMessage(('Already in catalogue: updating %s.'
-                        % myOriginalProductId), 2)
+                        % original_product_id), 2)
             myNewRecordFlag = False
             myUpdatedRecordCount += 1
             myProduct.__dict__.update(myData)
