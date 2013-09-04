@@ -68,7 +68,7 @@ class Institution(models.Model):
 
 class License(models.Model):
     """
-    Licenses for Products, e.g. SANSA Free License
+    Licenses for Products, e.g. SANSA Free License.
     """
 
     LICENSE_TYPE_FREE = 1
