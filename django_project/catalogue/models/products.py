@@ -230,7 +230,9 @@ class GenericProduct(models.Model):
         help_text='Original id assigned to the product by the vendor/operator',
         max_length=255, null=True, blank=True)
     unique_product_id = models.CharField(
-        help_text='SAC Formatted product ID',
+        help_text=(
+            'A unique identifier for product used internally e.g. for '
+            'DIMS orders'),
         max_length=255, db_index=True, unique=True)
     product_revision = models.CharField(
         max_length=255, null=True, blank=True)
