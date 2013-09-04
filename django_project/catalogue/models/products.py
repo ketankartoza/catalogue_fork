@@ -839,8 +839,12 @@ class GenericSensorProduct(GenericImageryProduct):
     radiometric_signal_to_noise_ratio = models.FloatField(
         null=True, blank=True)
     radiometric_percentage_error = models.FloatField(null=True, blank=True)
+    # TODO why not move this into the data dictionaries? TS
     spectral_accuracy = models.FloatField(
-        help_text='Wavelength Deviation', null=True, blank=True)
+        help_text=(
+            'Wavelength Deviation - a static figure that normally does not '
+            'change for a given sensor.'),
+        null=True, blank=True)
     orbit_number = models.IntegerField(null=True, blank=True)
     # K Path Orbit
     path = models.IntegerField(null=True, blank=True, db_index=True)

@@ -11,8 +11,6 @@ Contact : lkleyn@sansa.org.za
    of Linfiniti Consulting CC.
 
 """
-from cmath import log
-from docutils.nodes import paragraph
 
 __author__ = 'tim@linfiniti.com, lkleyn@sansa.org.za'
 __version__ = '0.1'
@@ -22,6 +20,7 @@ __copyright__ = 'South African National Space Agency'
 import os
 import sys
 import glob
+from cmath import log
 from datetime import datetime
 from xml.dom.minidom import parse
 import traceback
@@ -35,12 +34,14 @@ from django.conf import settings
 from dictionaries.models import (
     SpectralMode,
     SatelliteInstrument,
-    OpticalProductProfile)
+    OpticalProductProfile,
+    InstrumentType,
+    Satellite,
+    SatelliteInstrumentGroup)
+
 from catalogue.models import (
     OpticalProduct,
-    Institution,
     Projection,
-    License,
     CreatingSoftware,
     Quality)
 
@@ -80,10 +81,10 @@ def parseDateTime(theDate):
 
 def get_parameters_element(myDom):
     """Get the parameters element from the dom.
-    :param myDom: Dom Document containing the parameters.
+    :param myDom: DOM Document containing the parameters.
     :type myDom: DOM document.
 
-    :returns: A dom element representing the parameters.
+    :returns: A DOM element representing the parameters.
     :type: DOM
     """
     iif = myDom.getElementsByTagName('IIF')[0]
@@ -94,10 +95,10 @@ def get_parameters_element(myDom):
 
 def get_specific_parameters_element(myDom):
     """Get the specificParameters element from the dom.
-    :param myDom: Dom Document containing the specificParameters element.
+    :param myDom: DOM Document containing the specificParameters element.
     :type myDom: DOM document.
 
-    :returns: A dome element representing the specificParameters element.
+    :returns: A dom element representing the specificParameters element.
     :type: DOM
     """
     iif = myDom.getElementsByTagName('IIF')[0]
@@ -106,13 +107,29 @@ def get_specific_parameters_element(myDom):
     return specific_parameters
 
 
+def get_dims_id(myDom):
+    """Get the ID used by DIMS for this product.
+    :param myDom: DOM Document containing the specificParameters element.
+    :type myDom: DOM document.
+
+    :returns: A dom element representing the specificParameters element.
+    :type: DOM
+    """
+    iif = myDom.getElementsByTagName('IIF')[0]
+    item = iif.getElementsByTagName('item')[0]
+    administration = item.getElementsByTagName('administration')[0]
+    keys = administration.getElementsByTagName('keys')
+    product_id = get_feature_value('productID', keys)
+    return product_id
+
+
 def get_geometry(logMessage, myDom):
     """Extract the bounding box as a geometry from the xml file.
 
     :param logMessage: A logMessage function used for user feedback.
     :type logMessage: logMessage
 
-    :param myDom: Dom Document containing the bounds of the scene.
+    :param myDom: DOM Document containing the bounds of the scene.
     :type myDom: DOM document.
 
     :return: geoemtry
@@ -123,6 +140,8 @@ def get_geometry(logMessage, myDom):
     points = polygon.getElementsByTagName('point')
     polygon = 'POLYGON(('
     is_first = True
+    first_longitude = None
+    first_latitude = None
     for point in points:
         latitude = point.getElementsByTagName('latitude')[0]
         latitude = latitude.firstChild.nodeValue
@@ -283,6 +302,71 @@ def get_feature_value(key, dom):
     return result
 
 
+def get_product_profile(logMessage, dom):
+    """Find the product_profile for this record.
+
+    It can be that one or more spectral modes are associated with a product.
+    For example Landsat8 might have Pan (1 band), Multispectral (8 bands) and
+    Thermal (2 bands) modes associated with a single product (total 11 bands).
+
+    Because of this there is a many to many relationship on
+    OpticalProductProfile and to get a specific OpticalProductProfile record
+    we would need to know the satellite instrument and all the associated
+    spectral modes to that profile record.
+
+    We use the following elements to reverse engineer what the
+    OpticalProductProfile is::
+
+        <feature key="type">HRF</feature>
+        <feature key="sensor">OLI_TIRS</feature>
+        <feature key="mission">LANDSAT8</feature>
+
+    :param logMessage: A logMessage function used for user feedback.
+    :type logMessage: logMessage
+
+    :param dom: Dom Document containing the bounds of the scene.
+    :type dom: DOM document.
+
+    :return: A product profile for the given product.
+    :rtype: OpticalProductProfile
+    """
+    # We need type, sensor and mission so that we can look up the
+    # OpticalProductProfile that applies to this product
+    type_value = get_feature_value('type', dom)
+    sensor_value = get_feature_value('sensor', dom)
+    mission_value = get_feature_value('mission', dom)
+    logMessage('Type (used to determine spectral mode): %s' % type_value, 2)
+    logMessage(
+        'Sensor (used to determine instrument type): %s' % sensor_value,  2)
+    logMessage('Mission(used to determine satellite): %s' % mission_value, 2)
+
+    instrument_type = InstrumentType.objects.get(
+        abbreviation=sensor_value)  # e.g. OLI_TIRS
+
+    if mission_value == 'LANDSAT8':
+        mission_value = 'L8'
+    satellite = Satellite.objects.get(abbreviation=mission_value)
+
+    satellite_instrument_group = SatelliteInstrumentGroup.objects.get(
+        satellite=satellite, instrument_type=instrument_type)
+
+    # Note that in some cases e.g. SPOT you may get more that one instrument
+    # groups matched. When the time comes you will need to add more filtering
+    # rules to ensure that you end up with only one instrument group.
+    # For the mean time, we can assume that Landsat will return only one.
+    satellite_instrument = SatelliteInstrument.objects.get(
+        satellite_instrument_group=satellite_instrument_group)
+
+    spectral_modes = SpectralMode.objects.filter(
+        instrument_type=instrument_type)
+
+    product_profile = OpticalProductProfile.ojects.get(
+        satellite_instrument=satellite_instrument,
+        spectral_mode__in=spectral_modes)
+
+    return product_profile
+
+
 @transaction.commit_manually
 def ingest(
         theTestOnlyFlag=True,
@@ -409,54 +493,25 @@ def ingest(
         radiometric_resolution = int(log(bit_depth, base).real)
         logMessage('Radiometric resolution: %s' % radiometric_resolution, 2)
 
+        # projection for GenericProduct
+        projection_element = get_feature('projectionInfo', myDom)
+        projection = get_feature_value('code', projection_element)
+        logMessage('Projection: %s' % projection, 2)
 
+        # ProductProfile for OpticalProduct
+        product_profile = get_product_profile(logMessage, myDom)
+        #
+        #
+        # Checked by Tim to here
+        #
+        #
 
+        # license for GenericProduct
+        projection_element = get_feature('projectionInfo', myDom)
+        projection = get_feature_value('code', projection_element)
+        logMessage('Projection: %s' % projection, 2)
 
-
-
-
-
-        myElement = specific_parameters.getElementsByTagName('owner')[0]
-        theOwner = myElement.firstChild.nodeValue
-        logMessage('Owner: %s' % theOwner, 2)
-        try:
-            myOwner = Institution.objects.get(
-                name=theOwner,
-                defaults={
-                    'address1': '',
-                    'address2': '',
-                    'address3': '',
-                    'post_code': '', })[0]
-        except Institution.DoesNotExist:
-            #logMessage('Institution %s does not exists and '
-            #         'cannot be created.' % owner, 2)
-            raise CommandError(
-                'Institution %s does not exist and '
-                'cannot create: aborting' % theOwner)
-        logMessage('Owner: %s' % myOwner)
-
-        # Get the license - maybe fetch this via the OpticalProductProfile
-        # if license is None? TS
-        myElement = myDom.getElementsByTagName('license')[0]
-        myLicense = myElement.firstChild.nodeValue
-        logMessage('License: %s' % myLicense, 2)
-        myLicenseMapping = {
-            'USGS free distribution license': 'SANSA Free License'
-        }
-        theSANSALicense = License.objects.get(
-            name=myLicenseMapping[myLicense])
-        logMessage('License: %s' % myLicense, 2)
-        logMessage('SANSA License: %s' % theSANSALicense, 2)
-
-        try:
-            myLicense = License.objects.get(
-                name=theSANSALicense,
-                details=myLicense)[0]
-        except License.DoesNotExist:
-            raise CommandError(
-                'License %s does not exist and '
-                'cannot create: aborting' % theOwner)
-        logMessage('License: %s' % myLicense)
+        product_profile = get_product_profile(logMessage, myDom)
 
         # Get the creating software - maybe fetch this via the
         # OpticalProductProfile if theOwner is None? TS
@@ -481,7 +536,7 @@ def ingest(
         except CreatingSoftware.DoesNotExist:
             raise CommandError(
                 'Software %s does not exist and '
-                'cannot create: aborting' % theOwner)
+                'cannot create: aborting' % mySoftware)
 
         logMessage('Software: %s' % mySoftware)
 
@@ -628,8 +683,6 @@ def ingest(
             'band_count': myBandCount,
             # integer percent - must be scaled to 0-100 for all ingestors
             'cloud_cover': int(myCloudCover),
-            'owner': myOwner,
-            'license': myLicense,
             'creating_software': mySoftware,
             'quality': myQuality,
             'sensor_inclination_angle': myInclinationAngle,
