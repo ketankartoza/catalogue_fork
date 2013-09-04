@@ -3,6 +3,7 @@
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
+      <env name="PYTHONPATH" value="$PROJECT_DIR$/django_project" />
       <env name="PYTHONUNBUFFERED" value="1" />
     </envs>
     <option name="SDK_HOME" value="" />
@@ -13,11 +14,13 @@
     <module name="sac_catalogue" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
     <option name="TARGET" value="catalogue" />
-    <option name="SETTINGS_FILE" value="$PROJECT_DIR$/django_project/sansa_catalogue/settings/test_timlinux.py" />
+    <option name="SETTINGS_FILE" value="$PROJECT_DIR$/django_project/core/settings/test_timlinux.py" />
     <option name="CUSTOM_SETTINGS" value="true" />
     <option name="USE_OPTIONS" value="false" />
     <option name="OPTIONS" value="" />
+    <RunnerSettings RunnerId="PyDebugRunner" />
     <RunnerSettings RunnerId="PythonRunner" />
+    <ConfigurationWrapper RunnerId="PyDebugRunner" />
     <ConfigurationWrapper RunnerId="PythonRunner" />
     <method />
   </configuration>
