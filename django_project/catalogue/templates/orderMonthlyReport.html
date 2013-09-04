@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% block content %}
   <script type="text/javascript">
       function showOrder(theId) {
@@ -46,7 +47,7 @@
         <td>{{myOrder.order_status}}</td>
         <td>{{myOrder.user.get_profile.first_name}} {{myOrder.user.get_profile.last_name}}</td>
         <td>
-          <img src="/media/images/search_16.png"
+          <img src="{% static 'images/search_16.png' %}" 
                style="cursor: pointer;"
                onclick='
                $("#content").load("/vieworder/{{myOrder.id}}/","", zebraTables );
