@@ -759,7 +759,10 @@ class GenericImageryProduct(GenericProduct):
     spatial_resolution_y = models.FloatField(
         help_text='Spatial resolution in m (y direction)')
     radiometric_resolution = models.IntegerField(
-        help_text='Bit depth of image e.g. 16bit')
+        help_text=(
+            'Bit depth of image e.g. 16bit Note that this is for the '
+            'delivered image and not necessarily the same as bit depth at '
+            'acquisition.'))
     band_count = models.IntegerField(
         help_text='Number of spectral bands in product')
 

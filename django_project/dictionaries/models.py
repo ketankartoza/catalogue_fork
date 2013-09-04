@@ -286,7 +286,10 @@ class InstrumentType(models.Model):
         help_text='Semicolon delimited list of Instrument spatial resolutions')
     quantization_bits = models.IntegerField(
         blank=True, null=True,
-        help_text='Quantization bit rate')
+        help_text=(
+            'Quantization bit rate - the aquisition bits per pixel for '
+            'example 12 bit landsat 8. Note that products are likely '
+            'delivered with a different bit depth to customers.'))
     image_size_km = models.CharField(
         blank=True, null=True,
         max_length=255,

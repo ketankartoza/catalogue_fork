@@ -11,6 +11,7 @@ Contact : lkleyn@sansa.org.za
    of Linfiniti Consulting CC.
 
 """
+from cmath import log
 from docutils.nodes import paragraph
 
 __author__ = 'tim@linfiniti.com, lkleyn@sansa.org.za'
@@ -78,11 +79,11 @@ def parseDateTime(theDate):
 
 
 def get_parameters_element(myDom):
-    """Get the spatial coverage element from the dom.
-    :param myDom: Dom Document containing the bounds of the scene.
+    """Get the parameters element from the dom.
+    :param myDom: Dom Document containing the parameters.
     :type myDom: DOM document.
 
-    :returns: A dome element representing the spatialCoverage.
+    :returns: A dom element representing the parameters.
     :type: DOM
     """
     iif = myDom.getElementsByTagName('IIF')[0]
@@ -91,8 +92,21 @@ def get_parameters_element(myDom):
     return parameters
 
 
+def get_specific_parameters_element(myDom):
+    """Get the specificParameters element from the dom.
+    :param myDom: Dom Document containing the specificParameters element.
+    :type myDom: DOM document.
+
+    :returns: A dome element representing the specificParameters element.
+    :type: DOM
+    """
+    iif = myDom.getElementsByTagName('IIF')[0]
+    item = iif.getElementsByTagName('item')[0]
+    specific_parameters = item.getElementsByTagName('specificParameters')[0]
+    return specific_parameters
+
+
 def get_geometry(logMessage, myDom):
-    # Get the spatial coverage
     """Extract the bounding box as a geometry from the xml file.
 
     :param logMessage: A logMessage function used for user feedback.
@@ -132,7 +146,6 @@ def get_geometry(logMessage, myDom):
 
 
 def get_dates(logMessage, myDom):
-    # Look for key concepts needed to create an OpticalProduct
     """Get the start, mid scene and end dates.
 
     :param logMessage: A logMessage function used for user feedback.
@@ -164,6 +177,110 @@ def get_dates(logMessage, myDom):
     logMessage('Product End Date: %s' % end_date, 2)
 
     return start_date, center_date, end_date
+
+
+def get_quality(logMessage, myDom):
+    """The DIMS quality indication for this scene (APPROVED or NOT_APPROVED).
+
+    The quality is based on drop outs or any other acquisition anomalies -
+    not cloud cover or rectification quality etc.
+
+    :param logMessage: A logMessage function used for user feedback.
+    :type logMessage: logMessage
+
+    :param myDom: Dom Document containing the bounds of the scene.
+    :type myDom: DOM document.
+
+    :return: A boolean indicating if the product is approved for
+        redistribution (according to DIMS).
+    :rtype: bool
+    """
+    parameters = get_parameters_element(myDom)
+    quality_element = parameters.getElementsByTagName('quality')[0]
+    quality = quality_element.firstChild.nodeValue
+    quality_flag = False
+    if 'APPROVED' in quality:
+        quality_flag = True
+    logMessage('Product Quality: %s' % quality_flag, 2)
+    return quality_flag
+
+
+def get_feature(key, dom):
+    """Find the <feature> element with key 'key' and return it as an element.
+
+    Example::
+
+        <feature key="resolution">
+          <feature key="numberOfBands">12</feature>
+          <feature key="groundSamplingDistance">
+            <feature key="x">30.0</feature>
+            <feature key="y">30.0</feature>
+         </feature>
+
+    Calling get_feature_value('resolution', dom) would return the dom element
+     '<feature key="resolution">' and its children.
+
+    :param key: The key to search for (represented in the xml document as
+        key='foo').
+    :type key: str
+
+    :param dom: Dom Document containing the bounds of the scene.
+    :type dom: DOM document.
+
+    :return: The node for this feature
+    :rtype: DOM
+    """
+    features = dom.getElementsByTagName('feature')
+    result = None
+    for feature in features:
+        attributes = feature.attributes.items()
+        for attribute in attributes:
+            if 'key' in attribute[0]:
+                value = attribute[1]
+                if key in value:
+                    result = feature
+                    break
+        if result is not None:
+            break
+    return result
+
+
+def get_feature_value(key, dom):
+    """Find the <feature> element whose key matches key and return its value.
+
+    Example::
+
+        <feature key="fileFormatVersion">x.x</feature>
+        <feature key="fileFormat">GEOTIFF</feature>
+        <feature key="trackNumber">173</feature>
+        <feature key="orbitNumber">20</feature>
+        <feature key="productName">LC81730832013162JSA00</feature>
+
+    Calling get_feature_value('orbitNumber', dom) would return 20.
+
+    :param key: The key to search for (represented in the xml document as
+        key='foo').
+    :type key: str
+
+    :param dom: Dom Document containing the bounds of the scene.
+    :type dom: DOM document.
+
+    :return: The value of the node for this feature
+    :rtype: str
+    """
+    features = dom.getElementsByTagName('feature')
+    result = None
+    for feature in features:
+        attributes = feature.attributes.items()
+        for attribute in attributes:
+            if 'key' in attribute[0]:
+                value = attribute[1]
+                if key in value:
+                    result = feature.firstChild.nodeValue
+                    break
+        if result is not None:
+            break
+    return result
 
 
 @transaction.commit_manually
@@ -240,13 +357,65 @@ def ingest(
 
         # Create a DOM document from the file
         myDom = parse(myXmlFile)
+        # Skip this record if the quality is not 'APPROVED'
+        if not get_quality(logMessage, myDom):
+            logMessage('Skipping %s' % myXmlFile)
+            continue
 
-        # First grap all the generic properties that any IIF will have...
+        # First grab all the generic properties that any IIF will have...
         myGeometry = get_geometry(logMessage, myDom)
         myEndDateTime, myMidDateTime, myStartDateTime = get_dates(
             logMessage, myDom)
 
-        specific_parameters = myDom.getElementsByTagName('specificParameters')
+        # Now get all sensor specific metadata
+        specific_parameters = get_specific_parameters_element(myDom)
+
+        # Orbit number for GenericSensorProduct
+        orbit_number = get_feature_value('orbitNumber', myDom)
+        logMessage('Orbit: %s' % orbit_number, 2)
+
+        # Original product id for GenericProduct
+        original_product_id = get_feature_value('productName', myDom)
+        logMessage('Product Number: %s' % original_product_id, 2)
+
+        resolution_element = get_feature('resolution', myDom)
+
+        # Band count for GenericImageryProduct
+        band_count = get_feature_value('numberOfBands', resolution_element)
+        logMessage('Band count: %s' % band_count, 2)
+
+        # Spatial resolution x for GenericImageryProduct
+        spatial_resolution_x = float(
+            get_feature_value('x', resolution_element))
+        logMessage('Spatial resolution x: %s' % spatial_resolution_x, 2)
+
+        # Spatial resolution y for GenericImageryProduct
+        spatial_resolution_y = float(
+            get_feature_value('y', resolution_element))
+        logMessage('Spatial resolution y: %s' % spatial_resolution_y, 2)
+
+        # Spatial resolution for GenericImageryProduct calculated as (x+y)/2
+        spatial_resolution = (
+            spatial_resolution_x + spatial_resolution_y) / 2
+        logMessage('Spatial resolution: %s' % spatial_resolution, 2)
+
+        # Radiometric resolution for GenericImageryProduct
+        # Note quantisation is mis-spelled as quantitisation in IIF docs
+        base_number = int(float(get_feature_value('min', resolution_element)))
+        bit_depth = int(float(get_feature_value('max', resolution_element)))
+        if base_number == 0:
+            bit_depth += 1
+        base = 2  # to get to bit depth in base 2
+        radiometric_resolution = int(log(bit_depth, base).real)
+        logMessage('Radiometric resolution: %s' % radiometric_resolution, 2)
+
+
+
+
+
+
+
+
         myElement = specific_parameters.getElementsByTagName('owner')[0]
         theOwner = myElement.firstChild.nodeValue
         logMessage('Owner: %s' % theOwner, 2)
