@@ -11,7 +11,8 @@ INSTALLED_APPS += (
     'easy_thumbnails',
     'crispy_forms',
     'webodt',
-    'tastypie'
+    'tastypie',
+    'backbone_tastypie',
 )
 
 # Added by George for webodt
