@@ -498,20 +498,49 @@ def ingest(
         projection = get_feature_value('code', projection_element)
         logMessage('Projection: %s' % projection, 2)
 
+        # path for GenericSensorProduct
+        path = get_feature_value('path', myDom)
+        logMessage('Path: %s' % path, 2)
+
+        # row for GenericSensorProduct
+        row = get_feature_value('row', myDom)
+        logMessage('Row: %s' % row, 2)
+
+        # earth_sun_distance for OpticalProduct
+        earth_sun_distance = get_feature_value('earthSunDistance', myDom)
+        logMessage('Earth Sun Distance: %s' % earth_sun_distance, 2)
+
+        # solar azimuth angle for OpticalProduct
+        solar_azimuth_angle = get_feature_value('solarAzimuthAngle', myDom)
+        logMessage('Solar Azimuth Angle: %s' % solar_azimuth_angle, 2)
+
+        # solar zenith angle for OpticalProduct
+        solar_zenith_angle = get_feature_value('solarZenithAngle', myDom)
+        logMessage('Solar Azimuth Angle: %s' % solar_zenith_angle, 2)
+
+        # sensor viewing angle for OpticalProduct
+        sensor_viewing_angle = get_feature_value('sensorViewingAngle', myDom)
+        logMessage('Sensor viewing angle: %s' % sensor_viewing_angle, 2)
+
+        # sensor inclination angle for OpticalProduct
+        sensor_inclination_angle = get_feature_value(
+            'sensorInclinationAngle', myDom)
+        logMessage(
+            'Sensor inclination angle: %s' % sensor_inclination_angle, 2)
+
+        # cloud cover as percentage for OpticalProduct
+        cloud_cover = get_feature_value('cloudCoverPercentage', myDom)
+        logMessage('Cloud cover percentage: %s' % cloud_cover, 2)
+
         # ProductProfile for OpticalProduct
         product_profile = get_product_profile(logMessage, myDom)
+
         #
         #
         # Checked by Tim to here
         #
         #
 
-        # license for GenericProduct
-        projection_element = get_feature('projectionInfo', myDom)
-        projection = get_feature_value('code', projection_element)
-        logMessage('Projection: %s' % projection, 2)
-
-        product_profile = get_product_profile(logMessage, myDom)
 
         # Get the creating software - maybe fetch this via the
         # OpticalProductProfile if theOwner is None? TS
