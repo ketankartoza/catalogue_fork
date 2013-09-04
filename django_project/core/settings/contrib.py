@@ -13,6 +13,7 @@ INSTALLED_APPS += (
     'webodt',
     'tastypie',
     'backbone_tastypie',
+    'pipeline'
 )
 
 # Added by George for webodt
@@ -55,3 +56,12 @@ USERENA_MUGSHOT_GRAVATAR = False
 USERENA_DEFAULT_PRIVACY = 'closed'
 USERENA_DISABLE_PROFILE_LIST = True
 USERENA_USE_MESSAGES = False
+
+# use underscore template function
+PIPELINE_TEMPLATE_FUNC = '_.template'
+
+# enable cached storage - requires uglify.js (node.js)
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+# we use some of the libraries which use global namespace (OL, Proj4JS, ...)
+PIPELINE_DISABLE_WRAPPER = True
