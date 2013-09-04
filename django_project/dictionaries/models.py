@@ -184,7 +184,8 @@ class Satellite(models.Model):
     abbreviation = models.CharField(max_length=20, unique=True)
     operator_abbreviation = models.CharField(
         max_length=255, unique=True,
-        help_text='Satellite abbreviation as named by operator.')
+        help_text=(
+            'Satellite abbreviation as named by satellite owning institution.'))
     #image = models.ImageField()
     collection = models.ForeignKey(Collection)
     launch_date = models.DateField(
@@ -235,7 +236,9 @@ class InstrumentType(models.Model):
     abbreviation = models.CharField(max_length=20, unique=True)
     operator_abbreviation = models.CharField(
         max_length=255, unique=True,
-        help_text='Satellite abbreviation as named by operator.')
+        help_text=(
+            'Instrument abbreviation as named by satellite owning institution'
+            '.'))
     is_radar = models.BooleanField(
         verbose_name='Is this a RADAR sensor?',
         help_text='Mark true if this sensor captures RADAR data.',
@@ -458,7 +461,8 @@ class SatelliteInstrument(models.Model):
     abbreviation = models.CharField(max_length=20, unique=True)
     operator_abbreviation = models.CharField(
         max_length=255, unique=True,
-        help_text='Satellite abbreviation as named by operator.')
+        help_text=('Satellite abbreviation as named by satellite owning '
+                   'institution.'))
     satellite_instrument_group = models.ForeignKey('SatelliteInstrumentGroup')
 
     def __unicode__(self):
