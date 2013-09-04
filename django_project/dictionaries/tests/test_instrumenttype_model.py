@@ -83,6 +83,7 @@ class TestInstrumentTypeCRUD(TestCase):
             'is_taskable': False,
             'scanner_type': myScannerType,
             'base_processing_level': myProcLevel,
+            'default_processing_level': myProcLevel,
             'reference_system': myRefSystem,
             'swath_optical_km': 20,
             'band_count': 3
@@ -103,6 +104,8 @@ class TestInstrumentTypeCRUD(TestCase):
         self.assertEqual(myModel.scanner_type.abbreviation, 'NST1')
 
         self.assertEqual(myModel.base_processing_level.abbreviation, 'TST1')
+
+        self.assertEqual(myModel.default_processing_level.abbreviation, 'TST1')
 
         self.assertEqual(myModel.reference_system.name, 'NewRefSystem')
 

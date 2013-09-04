@@ -112,6 +112,7 @@ class InstrumentTypeF(factory.django.DjangoModelFactory):
     is_taskable = False
     scanner_type = factory.SubFactory(ScannerTypeF)
     base_processing_level = factory.SubFactory(ProcessingLevelF)
+    default_processing_level = factory.SubFactory(ProcessingLevelF)
     reference_system = factory.SubFactory(ReferenceSystemF)
     swath_optical_km = 0
     band_count = 0
