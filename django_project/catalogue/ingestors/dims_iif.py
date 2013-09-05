@@ -672,6 +672,7 @@ def ingest(
         except Exception, e:
             print e.message
 
+        update_mode = True
         try:
             log_message('Trying to update')
             #original_product_id is not necessarily unique
@@ -682,7 +683,6 @@ def ingest(
             log_message(('Already in catalogue: updating %s.'
                         % original_product_id), 2)
             myNewRecordFlag = False
-            updated_record_count += 1
             log = myProduct.ingestion_log
             log += '\n'
             log += '%s : %s - updating record' % (time_stamp, ingestor_version)
@@ -690,6 +690,7 @@ def ingest(
             myProduct.__dict__.update(myData)
         except ObjectDoesNotExist:
             log_message('Not in catalogue: creating.', 2)
+            update_mode = False
             log = '%s : %s - creating record' % (time_stamp, ingestor_version)
             myData['ingestion_log'] = log
             try:
@@ -700,13 +701,16 @@ def ingest(
                 print e.message
 
             myNewRecordFlag = True
-            created_record_count += 1
         except Exception, e:
             print e.message
 
         log_message('Saving product and setting thumb', 2)
         try:
             myProduct.save()
+            if update_mode:
+                updated_record_count += 1
+            else:
+                created_record_count += 1
             if theTestOnlyFlag:
                 log_message('Testing: image not saved.', 2)
                 pass
