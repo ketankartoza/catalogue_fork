@@ -49,6 +49,7 @@ class Command(BaseCommand):
             self.migrate_search()
             self.migrate_proc_levels()
             self.migrate_unique_product_ids()
+            self.migrate_product_models()
             self.migrate_pycsw()
             self.migrate_cleanup()
 
@@ -70,8 +71,19 @@ class Command(BaseCommand):
         if 'unique_product_id' in myMigrations:
             self.migrate_unique_product_ids()
 
-        if 'cleanup':
+        if 'product_schema_changes' in myMigrations:
+            self.migrate_product_models()
+
+        if 'cleanup' in myMigrations:
             self.migrate_cleanup()
+
+    def migrate_product_models(self):
+        print '* Starting product models migration...'
+        origWD = os.getcwd()
+        os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
+        print '* Executing product schema change scripts...'
+        subprocess.call(['sh', '020_product_schema_changes.sh', self.db])
+        os.chdir(origWD)
 
     def migrate_new_dicts(self):
         print '* Starting new_dicts migration...'

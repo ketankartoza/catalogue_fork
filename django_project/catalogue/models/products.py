@@ -212,9 +212,6 @@ class GenericProduct(models.Model):
     """
 
     product_date = models.DateTimeField(db_index=True)
-    processing_level = models.ForeignKey('dictionaries.ProcessingLevel')
-    owner = models.ForeignKey(Institution)
-    license = models.ForeignKey(License)
     spatial_coverage = models.PolygonField(
         srid=4326, help_text='Image footprint')
     projection = models.ForeignKey(Projection)
@@ -223,9 +220,6 @@ class GenericProduct(models.Model):
         help_text=(
             'A quality assessment describing the amount of dropouts etc.'
             'and how usable the entire scene is.'))
-    creating_software = models.ForeignKey(
-        CreatingSoftware,
-        null=False, blank=False)
     original_product_id = models.CharField(
         help_text='Original id assigned to the product by the vendor/operator',
         max_length=255, null=True, blank=True)
@@ -234,8 +228,6 @@ class GenericProduct(models.Model):
             'A unique identifier for product used internally e.g. for '
             'DIMS orders'),
         max_length=255, db_index=True, unique=True)
-    product_revision = models.CharField(
-        max_length=255, null=True, blank=True)
     local_storage_path = models.CharField(
         help_text=(
             'Location on local storage if this product is offered for '
@@ -244,6 +236,11 @@ class GenericProduct(models.Model):
     metadata = models.TextField(
         help_text=(
             'An xml document describing all known metadata for this product.'))
+    ingestion_log = models.TextField(
+        help_text=(
+            'The log of ingestion events (written programmatically to this '
+            'field by ingestors. Stored in chronological order by appending '
+            'to the bottom of this text field.'))
     remote_thumbnail_url = models.TextField(
         max_length=255, null=True, blank=True, help_text=(
             'Location on a remote server where this product\'s thumbnail '
