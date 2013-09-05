@@ -49,20 +49,6 @@ class DIMSIIFIngestorTest(TestCase):
         """
         Sets up before each test
         """
-        pass
-
-    def testImportUsingManagementCommand(self):
-        """Test that we can ingest spot using the management command"""
-        call_command('dims_iif_harvest',
-                     verbosity=2,
-                     source_dir=DATA_DIR_PATH)
-
-    def testImportDirectly(self):
-        """Test that we can ingest DIMS IIF using the ingestor function"""
-
-        #
-        # Test with a full load of data
-        #
         QualityF.create(name='Unknown')
         ProjectionF.create(epsg_code=32734)
         satellite = SatelliteF.create(
@@ -97,6 +83,19 @@ class DIMSIIFIngestorTest(TestCase):
             'satellite_instrument': instrument,
             'spectral_mode': mySpecMode1
         })
+
+    def testImportUsingManagementCommand(self):
+        """Test that we can ingest spot using the management command"""
+        call_command('dims_iif_harvest',
+                     verbosity=2,
+                     source_dir=DATA_DIR_PATH)
+
+    def testImportDirectly(self):
+        """Test that we can ingest DIMS IIF using the ingestor function"""
+
+        #
+        # Test with a full load of data
+        #
         dims_iif.ingest(
             theSourceDir=DATA_DIR_PATH,
             theVerbosityLevel=2)
