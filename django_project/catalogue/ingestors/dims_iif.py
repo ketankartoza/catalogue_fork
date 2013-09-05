@@ -121,11 +121,11 @@ def get_dims_id(myDom):
     return product_id
 
 
-def get_geometry(logMessage, myDom):
+def get_geometry(log_message, myDom):
     """Extract the bounding box as a geometry from the xml file.
 
-    :param logMessage: A logMessage function used for user feedback.
-    :type logMessage: logMessage
+    :param log_message: A log_message function used for user feedback.
+    :type log_message: log_message
 
     :param myDom: DOM Document containing the bounds of the scene.
     :type myDom: DOM document.
@@ -153,20 +153,20 @@ def get_geometry(logMessage, myDom):
             is_first = False
         polygon += '%s %s' % (longitude, latitude)
     polygon += ',%s %s))' % (first_longitude, first_latitude)
-    logMessage(polygon, 2)
+    log_message(polygon, 2)
 
     # Now make a geometry object
     myReader = WKTReader()
     myGeometry = myReader.read(polygon)
-    #logMessage('Geometry: %s' % myGeometry, 2)
+    #log_message('Geometry: %s' % myGeometry, 2)
     return myGeometry
 
 
-def get_dates(logMessage, myDom):
+def get_dates(log_message, myDom):
     """Get the start, mid scene and end dates.
 
-    :param logMessage: A logMessage function used for user feedback.
-    :type logMessage: logMessage
+    :param log_message: A log_message function used for user feedback.
+    :type log_message: log_message
 
     :param myDom: Dom Document containing the bounds of the scene.
     :type myDom: DOM document.
@@ -181,29 +181,29 @@ def get_dates(logMessage, myDom):
     start_element = coverage.getElementsByTagName('startTime')[0]
     start_date = start_element.firstChild.nodeValue
     start_date = parseDateTime(start_date)
-    logMessage('Product Start Date: %s' % start_date, 2)
+    log_message('Product Start Date: %s' % start_date, 2)
 
     center_element = myDom.getElementsByTagName('centerTime')[0]
     center_date = center_element.firstChild.nodeValue
     center_date = parseDateTime(center_date)
-    logMessage('Product Date: %s' % center_date, 2)
+    log_message('Product Date: %s' % center_date, 2)
 
     end_element = myDom.getElementsByTagName('stopTime')[0]
     end_date = end_element.firstChild.nodeValue
     end_date = parseDateTime(end_date)
-    logMessage('Product End Date: %s' % end_date, 2)
+    log_message('Product End Date: %s' % end_date, 2)
 
     return start_date, center_date, end_date
 
 
-def get_quality(logMessage, myDom):
+def get_quality(log_message, myDom):
     """The DIMS quality indication for this scene (APPROVED or NOT_APPROVED).
 
     The quality is based on drop outs or any other acquisition anomalies -
     not cloud cover or rectification quality etc.
 
-    :param logMessage: A logMessage function used for user feedback.
-    :type logMessage: logMessage
+    :param log_message: A log_message function used for user feedback.
+    :type log_message: log_message
 
     :param myDom: Dom Document containing the bounds of the scene.
     :type myDom: DOM document.
@@ -218,7 +218,7 @@ def get_quality(logMessage, myDom):
     quality_flag = False
     if 'APPROVED' in quality:
         quality_flag = True
-    logMessage('Product Quality: %s' % quality_flag, 2)
+    log_message('Product Quality: %s' % quality_flag, 2)
     return quality_flag
 
 
@@ -300,7 +300,7 @@ def get_feature_value(key, dom):
     return result
 
 
-def get_product_profile(logMessage, dom):
+def get_product_profile(log_message, dom):
     """Find the product_profile for this record.
 
     It can be that one or more spectral modes are associated with a product.
@@ -319,8 +319,8 @@ def get_product_profile(logMessage, dom):
         <feature key="sensor">OLI_TIRS</feature>
         <feature key="mission">LANDSAT8</feature>
 
-    :param logMessage: A logMessage function used for user feedback.
-    :type logMessage: logMessage
+    :param log_message: A log_message function used for user feedback.
+    :type log_message: log_message
 
     :param dom: Dom Document containing the bounds of the scene.
     :type dom: DOM document.
@@ -333,10 +333,10 @@ def get_product_profile(logMessage, dom):
     type_value = get_feature_value('type', dom)
     sensor_value = get_feature_value('sensor', dom)
     mission_value = get_feature_value('mission', dom)
-    logMessage('Type (used to determine spectral mode): %s' % type_value, 2)
-    logMessage(
+    log_message('Type (used to determine spectral mode): %s' % type_value, 2)
+    log_message(
         'Sensor (used to determine instrument type): %s' % sensor_value,  2)
-    logMessage('Mission(used to determine satellite): %s' % mission_value, 2)
+    log_message('Mission(used to determine satellite): %s' % mission_value, 2)
 
     instrument_type = InstrumentType.objects.get(
         abbreviation=sensor_value)  # e.g. OLI_TIRS
@@ -449,11 +449,11 @@ def ingest(
     Exceptions:
         Any unhandled exceptions will be raised.
     """
-    def logMessage(theMessage, theLevel=1):
+    def log_message(theMessage, theLevel=1):
         if theVerbosityLevel >= theLevel:
             print theMessage
 
-    logMessage((
+    log_message((
         'Running DIMS Landsat Importer with these options:\n'
         'Test Only Flag: %s\n'
         'Source Dir: %s\n'
@@ -466,38 +466,39 @@ def ingest(
     # Scan the source folder and look for any sub-folders
     # The sub-folder names should be e.g. L519890503170076
     # Which will be used as the original_product_id
-    logMessage('Scanning folders in %s' % theSourceDir, 1)
+    log_message('Scanning folders in %s' % theSourceDir, 1)
     # Loop through each folder found
 
-    myRecordCount = 0
-    myUpdatedRecordCount = 0
-    myCreatedRecordCount = 0
-    logMessage('Starting directory scan...', 2)
+    ingestor_version = 'DIMS IIF ingestor version 1'
+    record_count = 0
+    updated_record_count = 0
+    created_record_count = 0
+    log_message('Starting directory scan...', 2)
 
     for myFolder in glob.glob(os.path.join(theSourceDir, '*')):
-        myRecordCount += 1
+        record_count += 1
 
         # Get the folder name
         myProductFolder = os.path.split(myFolder)[-1]
-        logMessage(myProductFolder, 2)
+        log_message(myProductFolder, 2)
 
         # Find the first and only xml file in the folder
         mySearchPath = os.path.join(str(myFolder), '*.xml')
-        logMessage(mySearchPath, 2)
+        log_message(mySearchPath, 2)
         myXmlFile = glob.glob(mySearchPath)[0]
-        logMessage(myXmlFile, 2)
+        log_message(myXmlFile, 2)
 
         # Create a DOM document from the file
         myDom = parse(myXmlFile)
         # Skip this record if the quality is not 'APPROVED'
-        if not get_quality(logMessage, myDom):
-            logMessage('Skipping %s' % myXmlFile)
+        if not get_quality(log_message, myDom):
+            log_message('Skipping %s' % myXmlFile)
             continue
 
         # First grab all the generic properties that any IIF will have...
-        myGeometry = get_geometry(logMessage, myDom)
+        myGeometry = get_geometry(log_message, myDom)
         start_date_time, center_date_time, end_date_time = get_dates(
-            logMessage, myDom)
+            log_message, myDom)
 
         # Now get all sensor specific metadata
         specific_parameters = get_specific_parameters_element(myDom)
@@ -505,86 +506,86 @@ def ingest(
         # Orbit number for GenericSensorProduct
         orbit_number = get_feature_value(
             'orbitNumber', specific_parameters)
-        #logMessage('Orbit: %s' % orbit_number, 2)
+        #log_message('Orbit: %s' % orbit_number, 2)
 
         # Original product id for GenericProduct
         original_product_id = get_feature_value(
             'productName', specific_parameters)
-        #logMessage('Product Number: %s' % original_product_id, 2)
+        #log_message('Product Number: %s' % original_product_id, 2)
 
         resolution_element = get_feature(
             'resolution', specific_parameters)
 
         # Band count for GenericImageryProduct
         band_count = get_feature_value('numberOfBands', resolution_element)
-        #logMessage('Band count: %s' % band_count, 2)
+        #log_message('Band count: %s' % band_count, 2)
 
         # Spatial resolution x for GenericImageryProduct
         spatial_resolution_x = float(
             get_feature_value('x', resolution_element))
-        #logMessage('Spatial resolution x: %s' % spatial_resolution_x, 2)
+        #log_message('Spatial resolution x: %s' % spatial_resolution_x, 2)
 
         # Spatial resolution y for GenericImageryProduct
         spatial_resolution_y = float(
             get_feature_value('y', resolution_element))
-        #logMessage('Spatial resolution y: %s' % spatial_resolution_y, 2)
+        #log_message('Spatial resolution y: %s' % spatial_resolution_y, 2)
 
         # Spatial resolution for GenericImageryProduct calculated as (x+y)/2
         spatial_resolution = (
             spatial_resolution_x + spatial_resolution_y) / 2
-        #logMessage('Spatial resolution: %s' % spatial_resolution, 2)
+        #log_message('Spatial resolution: %s' % spatial_resolution, 2)
 
         # Radiometric resolution for GenericImageryProduct
         radiometric_resolution = get_radiometric_resolution(resolution_element)
-        #logMessage('Radiometric resolution: %s' % radiometric_resolution, 2)
+        #log_message('Radiometric resolution: %s' % radiometric_resolution, 2)
 
         # projection for GenericProduct
         projection = get_projection(specific_parameters)
-        #logMessage('Projection: %s' % projection, 2)
+        #log_message('Projection: %s' % projection, 2)
 
         # path for GenericSensorProduct
         path = get_feature_value('path', specific_parameters)
-        #logMessage('Path: %s' % path, 2)
+        #log_message('Path: %s' % path, 2)
 
         # row for GenericSensorProduct
         row = get_feature_value('row', specific_parameters)
-        #logMessage('Row: %s' % row, 2)
+        #log_message('Row: %s' % row, 2)
 
         # earth_sun_distance for OpticalProduct
         earth_sun_distance = get_feature_value(
             'earthSunDistance', specific_parameters)
-        #logMessage('Earth Sun Distance: %s' % earth_sun_distance, 2)
+        #log_message('Earth Sun Distance: %s' % earth_sun_distance, 2)
 
         # solar azimuth angle for OpticalProduct
         solar_azimuth_angle = get_feature_value(
             'solarAzimuthAngle', specific_parameters)
-        #logMessage('Solar Azimuth Angle: %s' % solar_azimuth_angle, 2)
+        #log_message('Solar Azimuth Angle: %s' % solar_azimuth_angle, 2)
 
         # solar zenith angle for OpticalProduct
         solar_zenith_angle = get_feature_value(
             'solarZenithAngle', specific_parameters)
-        #logMessage('Solar Azimuth Angle: %s' % solar_zenith_angle, 2)
+        #log_message('Solar Azimuth Angle: %s' % solar_zenith_angle, 2)
 
         # sensor viewing angle for OpticalProduct
         sensor_viewing_angle = get_feature_value(
             'sensorViewingAngle', specific_parameters)
-        #logMessage('Sensor viewing angle: %s' % sensor_viewing_angle, 2)
+        #log_message('Sensor viewing angle: %s' % sensor_viewing_angle, 2)
 
         # sensor inclination angle for OpticalProduct
         sensor_inclination_angle = get_feature_value(
             'sensorInclinationAngle', specific_parameters)
-        #logMessage(
+        #log_message(
         #    'Sensor inclination angle: %s' % sensor_inclination_angle, 2)
 
         # cloud cover as percentage for OpticalProduct
         # integer percent - must be scaled to 0-100 for all ingestors
         cloud_cover = int(get_feature_value(
             'cloudCoverPercentage', specific_parameters))
-        #logMessage('Cloud cover percentage: %s' % cloud_cover, 2)
+        #log_message('Cloud cover percentage: %s' % cloud_cover, 2)
 
         # ProductProfile for OpticalProduct
         product_profile = get_product_profile(
-            logMessage, specific_parameters)
+            log_message, specific_parameters)
 
         # Get the original text file metadata
         myMetadataFile = file(myXmlFile, 'rt')
@@ -621,28 +622,36 @@ def ingest(
         }
 
         # Check if it's already in catalogue:
+        today = datetime.date.today()
+        time_stamp = today.strftime("%Y-%m-%d")
         try:
             #original_product_id is not necessarily unique
             #so we use product_id
             myProduct = OpticalProduct.objects.get(
                 original_product_id=original_product_id
             ).getConcreteInstance()
-            logMessage(('Already in catalogue: updating %s.'
+            log_message(('Already in catalogue: updating %s.'
                         % original_product_id), 2)
             myNewRecordFlag = False
-            myUpdatedRecordCount += 1
+            updated_record_count += 1
+            log = myProduct.ingestion_log
+            log += '\n'
+            log += '%s : %s - updating record' % (time_stamp, ingestor_version)
+            myData['ingestion_log'] = log
             myProduct.__dict__.update(myData)
         except ObjectDoesNotExist:
+            log += '%s : %s - creating record' % (time_stamp, ingestor_version)
+            myData['ingestion_log'] = log
             myProduct = OpticalProduct(**myData)
-            logMessage('Not in catalogue: creating.', 2)
+            log_message('Not in catalogue: creating.', 2)
             myNewRecordFlag = True
-            myCreatedRecordCount += 1
+            created_record_count += 1
 
-        logMessage('Saving product and setting thumb', 2)
+        log_message('Saving product and setting thumb', 2)
         try:
             myProduct.save()
             if theTestOnlyFlag:
-                logMessage('Testing: image not saved.', 2)
+                log_message('Testing: image not saved.', 2)
                 pass
             else:
                 # Store thumbnail
@@ -657,18 +666,18 @@ def ingest(
                     pass
 
                     # Transform and store .wld file
-                    logMessage('Referencing thumb', 2)
+                    log_message('Referencing thumb', 2)
                     try:
                         myPath = myProduct.georeferencedThumbnail()
-                        logMessage('Georeferenced Thumb: %s' % myPath, 2)
+                        log_message('Georeferenced Thumb: %s' % myPath, 2)
                     except:
                         traceback.print_exc(file=sys.stdout)
 
             if myNewRecordFlag:
-                logMessage('Product %s imported.' % myRecordCount, 2)
+                log_message('Product %s imported.' % record_count, 2)
                 pass
             else:
-                logMessage('Product %s updated.' % myUpdatedRecordCount, 2)
+                log_message('Product %s updated.' % updated_record_count, 2)
                 pass
         except Exception, e:
             traceback.print_exc(file=sys.stdout)
@@ -676,13 +685,13 @@ def ingest(
 
         if theTestOnlyFlag:
             transaction.rollback()
-            logMessage('Imported scene : %s' % myProductFolder, 1)
-            logMessage('Testing only: transaction rollback.', 1)
+            log_message('Imported scene : %s' % myProductFolder, 1)
+            log_message('Testing only: transaction rollback.', 1)
         else:
             transaction.commit()
-            logMessage('Imported scene : %s' % myProductFolder, 1)
+            log_message('Imported scene : %s' % myProductFolder, 1)
 
     # To decide: should we remove ingested product folders?
-    print 'Products processed : %s ' % myRecordCount
-    print 'Products updated : %s ' % myUpdatedRecordCount
-    print 'Products imported : %s ' % myCreatedRecordCount
+    print 'Products processed : %s ' % record_count
+    print 'Products updated : %s ' % updated_record_count
+    print 'Products imported : %s ' % created_record_count
