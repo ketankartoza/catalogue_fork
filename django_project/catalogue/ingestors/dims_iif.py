@@ -41,7 +41,8 @@ from dictionaries.models import (
 
 from catalogue.models import (
     OpticalProduct,
-    Projection)
+    Projection,
+    Quality)
 
 
 def parseDateTime(theDate):
@@ -196,7 +197,7 @@ def get_dates(log_message, myDom):
     return start_date, center_date, end_date
 
 
-def get_quality(log_message, myDom):
+def get_acquisition_quality(log_message, myDom):
     """The DIMS quality indication for this scene (APPROVED or NOT_APPROVED).
 
     The quality is based on drop outs or any other acquisition anomalies -
@@ -442,6 +443,16 @@ def get_projection(specific_parameters):
     return projection
 
 
+def get_quality():
+    """Get the quality for this record - currently hard coded to unknown.
+
+    :returns: A quality object fixed to 'unknown'.
+    :rtype: Quality
+    """
+    quality = Quality.objects.get(name='Unknown')
+    return quality
+
+
 @transaction.commit_manually
 def ingest(
         theTestOnlyFlag=True,
@@ -518,7 +529,7 @@ def ingest(
         # Create a DOM document from the file
         myDom = parse(myXmlFile)
         # Skip this record if the quality is not 'APPROVED'
-        if not get_quality(log_message, myDom):
+        if not get_acquisition_quality(log_message, myDom):
             log_message('Skipping %s' % myXmlFile)
             continue
 
@@ -610,6 +621,9 @@ def ingest(
             'cloudCoverPercentage', specific_parameters))
         #log_message('Cloud cover percentage: %s' % cloud_cover, 2)
 
+        # Get the quality for GenericProduct
+        quality = get_quality()
+
         # ProductProfile for OpticalProduct
         product_profile = get_product_profile(
             log_message, specific_parameters)
@@ -645,7 +659,8 @@ def ingest(
             'orbit_number': orbit_number,
             'path': path,
             'row': row,
-            'projection': projection
+            'projection': projection,
+            'quality': quality
         }
         log_message(myData, 3)
         # Check if it's already in catalogue:
