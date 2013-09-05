@@ -24,6 +24,7 @@ from cmath import log
 from datetime import datetime
 from xml.dom.minidom import parse
 import traceback
+import shutil
 
 from django.db import transaction
 from django.contrib.gis.geos import WKTReader
@@ -721,13 +722,20 @@ def ingest(
                     # attempt to  recreate an existing dir
                     pass
 
-                    # Transform and store .wld file
-                    log_message('Referencing thumb', 2)
-                    try:
-                        myPath = myProduct.georeferencedThumbnail()
-                        log_message('Georeferenced Thumb: %s' % myPath, 2)
-                    except:
-                        traceback.print_exc(file=sys.stdout)
+                jpeg_path = os.path.join(str(myFolder), '*.jpeg')
+                log_message(jpeg_path, 2)
+                jpeg_path = glob.glob(jpeg_path)[0]
+                new_name = '%s.jpg' % myProduct.original_product_id
+                shutil.copyfile(
+                    jpeg_path,
+                    os.path.join(myThumbsFolder, new_name))
+                # Transform and store .wld file
+                log_message('Referencing thumb', 2)
+                try:
+                    myPath = myProduct.georeferencedThumbnail()
+                    log_message('Georeferenced Thumb: %s' % myPath, 2)
+                except:
+                    traceback.print_exc(file=sys.stdout)
 
             if myNewRecordFlag:
                 log_message('Product %s imported.' % record_count, 2)

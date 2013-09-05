@@ -508,20 +508,33 @@ class GenericProduct(models.Model):
         # Note the above logic makes some assumptions about the oreintation of
         # the swath which may not hold true for every sensor.
         #
-
+        print myExtents
         myImageXDim = myImage.size[0]
         myImageYDim = myImage.size[1]
         myCandidates = []
+        #should only be a single arc in our case!
+        coverage_coords = self.spatial_coverage.coords
+        myArc = coverage_coords[0]  # first arc
+        print coverage_coords
         try:
-            #should only be a single arc in our case!
-            for myArc in self.spatial_coverage.coords:
-                for myCoord in myArc[:-1]:
-                    if coordIsOnBounds(myCoord, myExtents):
-                        myCandidates.append(myCoord)
+            for myCoord in myArc[:-1]:
+                if coordIsOnBounds(myCoord, myExtents):
+                    myCandidates.append(myCoord)
         except:
             raise
-            # print "Candidates Before: %s %s " % (
-        #    len(myCandidates), str(myCandidates))
+
+        print "Candidates on bounds intersection: %s %s " % (
+            len(myCandidates), str(myCandidates))
+
+        # If the image footprint is not truly rectangular we wont find 4
+        # vertices that touch the bbox. In that case we use the rule that
+        # if the feature has only 5 vertices (the 5th being the closer for
+        # the polygon), we will use the first 4 vertices.
+        if len(myCandidates) < 4:
+            myCandidates = list(myArc[1:])  # convert from tuple to list
+
+        print "Candidates Before: %s %s " % (
+            len(myCandidates), str(myCandidates))
         myCentroid = self.spatial_coverage.centroid
         try:
             myCandidates = sortCandidates(myCandidates, myExtents, myCentroid)
@@ -741,7 +754,7 @@ class GenericProduct(models.Model):
         """
         Simple product_id property, helper with unique_product_id migration
         """
-        return self.unique_product_id
+        return self.original_product_id
 
 
 ###############################################################################
