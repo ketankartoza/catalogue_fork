@@ -365,6 +365,56 @@ def get_product_profile(logMessage, dom):
     return product_profile
 
 
+def get_radiometric_resolution(resolution_element):
+    """Get the radiometric resolution for the supplied product record.
+
+    Note that the resolution (quantitisation) is stored in the document as an
+    integer describing the maximum number of values allowed per pixel (e.g.
+    4096), but we want it expressed as the number of bits (e.g. 12bit,
+    16bit etc.) allowed per pixel so we do some conversion of the extracted
+    number.
+
+    .. note:: quantisation is mis-spelled as quantitisation in IIF docs
+
+    If min in the product description is 0, the max number is base 0,
+    otherwise it is base 1.
+
+    :param resolution_element: Dom Document containing the bounds of the scene.
+    :type resolution_element: DOM document.
+
+    :returns: The bit depth for the image.
+    :rtype: int
+    """
+    base_number = int(float(get_feature_value('min', resolution_element)))
+    bit_depth = int(float(get_feature_value('max', resolution_element)))
+    if base_number == 0:
+        bit_depth += 1
+    base = 2  # to get to bit depth in base 2
+    radiometric_resolution = int(log(bit_depth, base).real)
+    return radiometric_resolution
+
+
+def get_projection(specific_parameters):
+    """Get the projection for this product record.
+
+    The project is always expressed as an EPSG code and we fetch the related
+    Projection model for that code.
+
+
+    :param specific_parameters: Dom Document containing the bounds of the scene.
+    :type specific_parameters: DOM document.
+
+    :returns: A projection model for the specified EPSG.
+    :rtype: Projection
+    """
+
+    projection_element = get_feature(
+        'projectionInfo', specific_parameters)
+    projection = get_feature_value('code', projection_element)
+    projection = Projection.objects.get(epsg_code=int(projection))
+    return projection
+
+
 @transaction.commit_manually
 def ingest(
         theTestOnlyFlag=True,
@@ -485,20 +535,11 @@ def ingest(
         #logMessage('Spatial resolution: %s' % spatial_resolution, 2)
 
         # Radiometric resolution for GenericImageryProduct
-        # Note quantisation is mis-spelled as quantitisation in IIF docs
-        base_number = int(float(get_feature_value('min', resolution_element)))
-        bit_depth = int(float(get_feature_value('max', resolution_element)))
-        if base_number == 0:
-            bit_depth += 1
-        base = 2  # to get to bit depth in base 2
-        radiometric_resolution = int(log(bit_depth, base).real)
+        radiometric_resolution = get_radiometric_resolution(resolution_element)
         #logMessage('Radiometric resolution: %s' % radiometric_resolution, 2)
 
         # projection for GenericProduct
-        projection_element = get_feature(
-            'projectionInfo', specific_parameters)
-        projection = get_feature_value('code', projection_element)
-        projection = Projection.objects.get(epsg_code=int(projection))
+        projection = get_projection(specific_parameters)
         #logMessage('Projection: %s' % projection, 2)
 
         # path for GenericSensorProduct
@@ -572,6 +613,11 @@ def ingest(
             'product_acquisition_start': start_date_time,
             'product_acquisition_end': end_date_time,
             'product_date': center_date_time,
+            'earth_sun_distance': earth_sun_distance,
+            'orbit_number': orbit_number,
+            'path': path,
+            'row': row,
+            'projection': projection
         }
 
         # Check if it's already in catalogue:
