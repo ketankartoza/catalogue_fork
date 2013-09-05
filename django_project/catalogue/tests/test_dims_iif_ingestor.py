@@ -26,7 +26,7 @@ from django.core.management import call_command
 from catalogue.models import (
     GenericProduct)
 from catalogue.ingestors import dims_iif
-
+from .model_factories import ProjectionF
 DATA_DIR_PATH = os.path.join(
     os.path.dirname(__file__),
     'sample_files/DIMS')
@@ -55,6 +55,10 @@ class DIMSIIFIngestorTest(TestCase):
         #
         # Test with a full load of data
         #
+        ProjectionF.create(epsg_code=32734)
+        InstrumentTypeF.create(abbreviation='OLI_TIRS')
+        intrument_type = factory.SubFactory(
+            'dictionaries.tests.model_factories.InstrumentTypeF')
         product_profile = factory.SubFactory(
             'dictionaries.tests.model_factories.OpticalProductProfileF')
         dims_iif.ingest(

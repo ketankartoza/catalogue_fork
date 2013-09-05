@@ -338,29 +338,56 @@ def get_product_profile(log_message, dom):
         'Sensor (used to determine instrument type): %s' % sensor_value,  2)
     log_message('Mission(used to determine satellite): %s' % mission_value, 2)
 
-    instrument_type = InstrumentType.objects.get(
-        abbreviation=sensor_value)  # e.g. OLI_TIRS
+    try:
+        instrument_type = InstrumentType.objects.get(
+            abbreviation=sensor_value)  # e.g. OLI_TIRS
+    except Exception, e:
+        print e.message
+        instrument_type = None
+    log_message('Instrument Type %s' % instrument_type, 2)
 
     if mission_value == 'LANDSAT8':
         mission_value = 'L8'
     satellite = Satellite.objects.get(abbreviation=mission_value)
 
-    satellite_instrument_group = SatelliteInstrumentGroup.objects.get(
-        satellite=satellite, instrument_type=instrument_type)
+    try:
+        satellite_instrument_group = SatelliteInstrumentGroup.objects.get(
+            satellite=satellite, instrument_type=instrument_type)
+    except Exception, e:
+        print e.message
+        satellite_instrument_group = None
+    log_message('Satellite Instrument Group %s' %
+                satellite_instrument_group, 2)
 
     # Note that in some cases e.g. SPOT you may get more that one instrument
     # groups matched. When the time comes you will need to add more filtering
     # rules to ensure that you end up with only one instrument group.
     # For the mean time, we can assume that Landsat will return only one.
-    satellite_instrument = SatelliteInstrument.objects.get(
-        satellite_instrument_group=satellite_instrument_group)
 
-    spectral_modes = SpectralMode.objects.filter(
-        instrument_type=instrument_type)
+    try:
+        satellite_instrument = SatelliteInstrument.objects.get(
+            satellite_instrument_group=satellite_instrument_group)
+    except Exception, e:
+        print e.message
+        satellite_instrument = None
+    log_message('Satellite Instrument %s' % satellite_instrument, 2)
 
-    product_profile = OpticalProductProfile.ojects.get(
-        satellite_instrument=satellite_instrument,
-        spectral_mode__in=spectral_modes)
+    try:
+        spectral_modes = SpectralMode.objects.filter(
+            instrument_type=instrument_type)
+    except Exception, e:
+        print e.message
+        spectral_modes = None
+    log_message('Spectral Modes %s' % spectral_modes, 2)
+
+    try:
+        product_profile = OpticalProductProfile.objects.get(
+            satellite_instrument=satellite_instrument,
+            spectral_mode__in=spectral_modes)
+    except Exception, e:
+        print e.message
+        product_profile = None
+    log_message('Product Profile %s' % product_profile, 2)
 
     return product_profile
 
@@ -620,11 +647,17 @@ def ingest(
             'row': row,
             'projection': projection
         }
-
+        log_message(myData, 3)
         # Check if it's already in catalogue:
-        today = datetime.date.today()
-        time_stamp = today.strftime("%Y-%m-%d")
         try:
+            today = datetime.today()
+            time_stamp = today.strftime("%Y-%m-%d")
+            log_message('Time Stamp: %s' % time_stamp, 2)
+        except Exception, e:
+            print e.message
+
+        try:
+            log_message('Trying to update')
             #original_product_id is not necessarily unique
             #so we use product_id
             myProduct = OpticalProduct.objects.get(
@@ -640,12 +673,20 @@ def ingest(
             myData['ingestion_log'] = log
             myProduct.__dict__.update(myData)
         except ObjectDoesNotExist:
-            log += '%s : %s - creating record' % (time_stamp, ingestor_version)
-            myData['ingestion_log'] = log
-            myProduct = OpticalProduct(**myData)
             log_message('Not in catalogue: creating.', 2)
+            log = '%s : %s - creating record' % (time_stamp, ingestor_version)
+            myData['ingestion_log'] = log
+            try:
+                myProduct = OpticalProduct(**myData)
+                print myProduct
+
+            except Exception, e:
+                print e.message
+
             myNewRecordFlag = True
             created_record_count += 1
+        except Exception, e:
+            print e.message
 
         log_message('Saving product and setting thumb', 2)
         try:

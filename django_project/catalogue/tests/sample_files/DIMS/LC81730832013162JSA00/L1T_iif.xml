@@ -80,12 +80,12 @@
   </temporalCoverage>
  </parameters> <specificParameters>
      <feature key="insertionTime">2013-07-31T08:11:06.025</feature>
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
      <feature key="fileFormatVersion">x.x</feature>
      <feature key="fileFormat">GEOTIFF</feature>
      <feature key="trackNumber">173</feature>
@@ -127,7 +127,7 @@
      <feature key="processingLevel">L1T</feature>
      <feature key="mode">NORM</feature>
      <feature key="type">HRF</feature>
-     <feature key="sensor">OLI_TIRS</feature>
+     <feature key="sensor">OLI</feature>
      <feature key="mission">LANDSAT8</feature>
      <feature key="row">83</feature>
      <feature key="path">173</feature>
@@ -147,12 +147,12 @@
      <feature key="rlutFileName">L8RLUT20130211_20431231v06.h5</feature>
      <feature key="tirsBpfFileName">LT8BPF20130611075145_20130611082702.02</feature>
      <feature key="oliBpfFileName">LO8BPF20130611075538_20130611082610.01</feature>
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
      <feature key="softwareInfo">
        <feature key="processingLevel">L1T</feature>
        <feature key="name">Pinkmatter Landsat Processor</feature>
@@ -295,7 +295,7 @@
   </temporalCoverage>
  </parameters> <specificParameters>
      <feature key="insertionTime">2013-07-31T08:10:39.000</feature>
-    
+
   </specificParameters>
 </item>
 
@@ -347,7 +347,7 @@
   </temporalCoverage>
  </parameters> <specificParameters>
      <feature key="insertionTime">2013-07-31T08:10:39.007</feature>
-    
+
   </specificParameters>
 </item>
 
@@ -553,7 +553,7 @@
   </temporalCoverage>
  </parameters> <specificParameters>
      <feature key="insertionTime">2013-07-31T08:10:39.014</feature>
-    
+
   </specificParameters>
 </item>
 </IIF>
