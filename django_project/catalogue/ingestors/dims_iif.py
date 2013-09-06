@@ -437,10 +437,13 @@ def get_projection(specific_parameters):
     :rtype: Projection
     """
 
-    projection_element = get_feature(
-        'projectionInfo', specific_parameters)
-    projection = get_feature_value('code', projection_element)
-    projection = Projection.objects.get(epsg_code=int(projection))
+    try:
+        projection_element = get_feature(
+            'projectionInfo', specific_parameters)
+        projection = get_feature_value('code', projection_element)
+        projection = Projection.objects.get(epsg_code=int(projection))
+    except Exception, e:
+        print e.message
     return projection
 
 
@@ -545,82 +548,82 @@ def ingest(
         # Orbit number for GenericSensorProduct
         orbit_number = get_feature_value(
             'orbitNumber', specific_parameters)
-        #log_message('Orbit: %s' % orbit_number, 2)
+        log_message('Orbit: %s' % orbit_number, 2)
 
         # Original product id for GenericProduct
         original_product_id = get_feature_value(
             'productName', specific_parameters)
-        #log_message('Product Number: %s' % original_product_id, 2)
+        log_message('Product Number: %s' % original_product_id, 2)
 
         resolution_element = get_feature(
             'resolution', specific_parameters)
 
         # Band count for GenericImageryProduct
         band_count = get_feature_value('numberOfBands', resolution_element)
-        #log_message('Band count: %s' % band_count, 2)
+        log_message('Band count: %s' % band_count, 2)
 
         # Spatial resolution x for GenericImageryProduct
         spatial_resolution_x = float(
             get_feature_value('x', resolution_element))
-        #log_message('Spatial resolution x: %s' % spatial_resolution_x, 2)
+        log_message('Spatial resolution x: %s' % spatial_resolution_x, 2)
 
         # Spatial resolution y for GenericImageryProduct
         spatial_resolution_y = float(
             get_feature_value('y', resolution_element))
-        #log_message('Spatial resolution y: %s' % spatial_resolution_y, 2)
+        log_message('Spatial resolution y: %s' % spatial_resolution_y, 2)
 
         # Spatial resolution for GenericImageryProduct calculated as (x+y)/2
         spatial_resolution = (
             spatial_resolution_x + spatial_resolution_y) / 2
-        #log_message('Spatial resolution: %s' % spatial_resolution, 2)
+        log_message('Spatial resolution: %s' % spatial_resolution, 2)
 
         # Radiometric resolution for GenericImageryProduct
         radiometric_resolution = get_radiometric_resolution(resolution_element)
-        #log_message('Radiometric resolution: %s' % radiometric_resolution, 2)
+        log_message('Radiometric resolution: %s' % radiometric_resolution, 2)
 
         # projection for GenericProduct
         projection = get_projection(specific_parameters)
-        #log_message('Projection: %s' % projection, 2)
+        log_message('Projection: %s' % projection, 2)
 
         # path for GenericSensorProduct
         path = get_feature_value('path', specific_parameters)
-        #log_message('Path: %s' % path, 2)
+        log_message('Path: %s' % path, 2)
 
         # row for GenericSensorProduct
         row = get_feature_value('row', specific_parameters)
-        #log_message('Row: %s' % row, 2)
+        log_message('Row: %s' % row, 2)
 
         # earth_sun_distance for OpticalProduct
         earth_sun_distance = get_feature_value(
             'earthSunDistance', specific_parameters)
-        #log_message('Earth Sun Distance: %s' % earth_sun_distance, 2)
+        log_message('Earth Sun Distance: %s' % earth_sun_distance, 2)
 
         # solar azimuth angle for OpticalProduct
         solar_azimuth_angle = get_feature_value(
             'solarAzimuthAngle', specific_parameters)
-        #log_message('Solar Azimuth Angle: %s' % solar_azimuth_angle, 2)
+        log_message('Solar Azimuth Angle: %s' % solar_azimuth_angle, 2)
 
         # solar zenith angle for OpticalProduct
         solar_zenith_angle = get_feature_value(
             'solarZenithAngle', specific_parameters)
-        #log_message('Solar Azimuth Angle: %s' % solar_zenith_angle, 2)
+        log_message('Solar Azimuth Angle: %s' % solar_zenith_angle, 2)
 
         # sensor viewing angle for OpticalProduct
         sensor_viewing_angle = get_feature_value(
             'sensorViewingAngle', specific_parameters)
-        #log_message('Sensor viewing angle: %s' % sensor_viewing_angle, 2)
+        log_message('Sensor viewing angle: %s' % sensor_viewing_angle, 2)
 
         # sensor inclination angle for OpticalProduct
         sensor_inclination_angle = get_feature_value(
             'sensorInclinationAngle', specific_parameters)
-        #log_message(
-        #    'Sensor inclination angle: %s' % sensor_inclination_angle, 2)
+        log_message(
+            'Sensor inclination angle: %s' % sensor_inclination_angle, 2)
 
         # cloud cover as percentage for OpticalProduct
         # integer percent - must be scaled to 0-100 for all ingestors
         cloud_cover = int(get_feature_value(
             'cloudCoverPercentage', specific_parameters))
-        #log_message('Cloud cover percentage: %s' % cloud_cover, 2)
+        log_message('Cloud cover percentage: %s' % cloud_cover, 2)
 
         # Get the quality for GenericProduct
         quality = get_quality()
