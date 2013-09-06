@@ -33,7 +33,7 @@ pip==1.4.1
 pisa==3.0.33
 psycopg2==2.2.2
 pyflakes==0.7.2
-pygooglechart==0.3.0
+git+https://github.com/gak/pygooglechart.git
 pylint==0.28.0
 pysqlite==2.6.3
 pytz>=2013b

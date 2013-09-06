@@ -3,7 +3,7 @@ django-debug-toolbar==0.9.4
 werkzeug
 sqlparse==0.1.7
 # install 'subversion' system package
-https://guppy-pe.svn.sourceforge.net/svnroot/guppy-pe/trunk/guppy
+svn+https://svn.code.sf.net/p/guppy-pe/code/trunk/guppy
 line_profiler==1.0b3
 django_devserver==0.6.2
 # Fabric related deps
