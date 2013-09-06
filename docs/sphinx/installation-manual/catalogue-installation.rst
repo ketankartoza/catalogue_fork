@@ -144,7 +144,7 @@ is required. After successfully copying swq.h header, in active virtual environm
 
 + delete GDAL folder ``$VIRTUAL_ENV/build/GDAL``, if it exists
 + on Ubuntu 12.04 we have 1.7.2 GDAL library, so we need to install correct
-Python GDAL library from pypi: ``pip install --no-install GDAL==1.7``
+Python GDAL library from pypi: ``pip install --no-install GDAL==1.10.1``
 + ``cd $VIRTUAL_ENV/build/GDAL``
 + ``rm setup.cfg``
 + ``python setup.py build_ext --gdal-config=gdal-config --library-dirs=/usr/lib --libraries=gdal --include-dirs=/usr/include/gdal install``
