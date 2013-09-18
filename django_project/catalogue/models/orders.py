@@ -229,9 +229,11 @@ class Order(models.Model):
     class Admin:
         pass
 
-    def order_status_history(self):
-        history = OrderStatusHistory.objects.get(order=self)
-        return history
+    def get_recent_history_date(self):
+        current_status = OrderStatus.objects.get(name=self.order_status)
+        recent_history = OrderStatusHistory.objects.filter(
+                            order=self).get(new_order_status=current_status)
+        return recent_history.order_change_date
 
 
 class OrderStatusHistory(models.Model):

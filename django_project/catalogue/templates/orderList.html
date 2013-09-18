@@ -64,7 +64,7 @@ function showOrder(theId) {
     <tr>
       <td>{{myOrder.id }}</td>
       <td>{{myOrder.order_date|date:"D, d M Y, H:m" }}</td>
-      <td>{{myOrder.order_status}}: {{ myOrder.order_status_history.order_change_date|date:"D, d M Y, H:m" }}</td>
+      <td>{{myOrder.order_status}}{% if myOrder.get_recent_history_date %}: {{ myOrder.get_recent_history_date }}{% endif %}</td>
       {% if myUrl == '/listorders/' %}
       <td>{{myOrder.user.get_profile.firstname}} {{myOrder.user.get_profile.surname}}</td>
       {% endif %}
