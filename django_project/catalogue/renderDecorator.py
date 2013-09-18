@@ -5,7 +5,7 @@ SANSA-EO Catalogue - Decorator used to always pass RenderContext to the
 Contact : lkleyn@sansa.org.za
 
 .. note:: This program is the property of the South African National Space
-   Agency (SANSA) and may not be redistributed without expresse permission.
+   Agency (SANSA) and may not be redistributed without express permission.
    This program may include code which is the intellectual property of
    Linfiniti Consulting CC. Linfiniti grants SANSA perpetual, non-transferrable
    license to use any code contained herein which is the intellectual property
@@ -21,7 +21,7 @@ __copyright__ = 'South African National Space Agency'
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from catalogue.pdfReport import render_to_pdf
+from webodt.shortcuts import render_to_response as renderReport
 
 
 class renderWithContext(object):
@@ -62,7 +62,13 @@ class renderWithContext(object):
             #check for PDF arg
             if 'pdf' in request.GET:
                 tmp_template_name = '/'.join(['pdf', self.template_name])
-                return render_to_pdf(tmp_template_name, items)
+                template_name = self.template_name.split('.')[0]
+                odt_template = '%s.odt' % template_name
+                return renderReport(odt_template,
+                                    context_instance=RequestContext(request),
+                                    format='pdf',
+                                    filename=tmp_template_name,
+                                    dictionary=items)
 
             return render_to_response(
                 render_template, items,
