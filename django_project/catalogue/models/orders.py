@@ -231,8 +231,9 @@ class Order(models.Model):
 
     def get_recent_history_date(self):
         current_status = OrderStatus.objects.get(name=self.order_status)
-        recent_history = OrderStatusHistory.objects.filter(
-                            order=self).get(new_order_status=current_status)
+        recent_history = OrderStatusHistory.objects.filter(order=self)\
+                            .filter(new_order_status=current_status)\
+                            .latest('order_change_date')
         return recent_history.order_change_date
 
 
