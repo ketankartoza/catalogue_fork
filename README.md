@@ -14,7 +14,7 @@ django-webodt uses LibreOffice as the backend to run the conversion. Therefore,
 the system running the Catalogue (including local test servers) must have LibreOffice
 installed and running - either daemonized or by starting from the command line.
 
-* Install LibreOffice `sudo apt-get install libreoffice-common`
+* Install LibreOffice `sudo apt-get install libreoffice`
 * Setup LibreOffice as a demon process OR run the following command:
 
 ```sh
