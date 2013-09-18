@@ -17,7 +17,7 @@ admin.autodiscover()
 # Here are our patterns
 urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^eo-catalogue-backend/', include(admin.site.urls)),
     # Usually you would do this using apache but since
     # I have deployed the app to the root of the server
     # we need to do it here

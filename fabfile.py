@@ -68,7 +68,8 @@ def _all():
 def rsync_local():
     _all()
     with cd('/home/web/'):
-        run('rsync -va /vagrant/ %s/' % PROJECT_NAME)
+        run('rsync -va /vagrant/ %s/ --exclude \'venv\' '
+            '--exclude \'*.pyc\' --exclude \'.git\'' % PROJECT_NAME)
     collect_static()
 
 

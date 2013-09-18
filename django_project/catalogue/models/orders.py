@@ -229,6 +229,10 @@ class Order(models.Model):
     class Admin:
         pass
 
+    def order_status_history(self):
+        history = OrderStatusHistory.objects.get(order=self)
+        return history
+
 
 class OrderStatusHistory(models.Model):
     """

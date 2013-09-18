@@ -46,8 +46,9 @@
 
 {% if myScores %}
 <div class="row-fluid">
-  <h2 class="chartTitle">Searches of User Origin</h2>
-  <h4 class="muted">For {{ myCurrentDate|date:'M, Y' }} (by Country)</h4>
+  <h2 class="chartTitle">Searched by User Origin</h2>
+  <h4 class="muted">This report lists the countries of origin of users making
+    searches for {{ myCurrentDate|date:'M, Y' }}</h4>
 </div>
 <div class="row-fluid">
   <div id="chart_div"></div>
@@ -57,7 +58,7 @@
 </div>
 <div class="row-fluid">
   <table id="gradient-style" summary="SAC Catalogue Searches" class="table table-striped">
-    <thead> 
+    <thead>
       <th>Country</th>
       <th>Searches</th>
     </thead>

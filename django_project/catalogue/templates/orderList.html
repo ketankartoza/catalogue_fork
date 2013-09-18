@@ -24,7 +24,7 @@ function showOrder(theId) {
 <div class="row-fluid center gap-bottom">
   <div id="order-list-buttonset" class="btn-group">
     <button id="download-btn" class="btn btn-small" onclick='location="{{ myUrl }}?page={{ myRecords.number}}&pdf"'><i class="icon-download"></i> Download as PDF</button>
-    {% if myUrl = '/listorders/' %} {# can't use url template tag for if evaluation #}
+    {% if myUrl == '/listorders/' %} {# can't use url template tag for if evaluation #}
     <button class="btn btn-small monthly-btn" onclick='location="{% url 'orderMonthlyReport' myCurrentMonth|date:'Y'  myCurrentMonth|date:'m' %}"'><i class="icon-calendar"></i></button>
     <button class="btn btn-small summary-btn" onclick='location="{% url 'ordersSummary' %}"'><i class="icon-tasks"></i></button>
     {% endif %}
@@ -54,7 +54,9 @@ function showOrder(theId) {
     <th>Id</th>
     <th>Date</th>
     <th>Status</th>
+    {% if myUrl == '/listorders/' %}
     <th>Placed by</th>
+    {% endif %}
     <th>View</th>
   </thead>
   <tbody>
@@ -62,8 +64,10 @@ function showOrder(theId) {
     <tr>
       <td>{{myOrder.id }}</td>
       <td>{{myOrder.order_date|date:"D, d M Y, H:m" }}</td>
-      <td>{{myOrder.order_status}}</td>
+      <td>{{myOrder.order_status}}: {{ myOrder.order_status_history.order_change_date|date:"D, d M Y, H:m" }}</td>
+      {% if myUrl == '/listorders/' %}
       <td>{{myOrder.user.get_profile.firstname}} {{myOrder.user.get_profile.surname}}</td>
+      {% endif %}
       <td>
         <a href="#" onclick='$("#content").load("{% url 'viewOrder' myOrder.id %}","", zebraTables );return false;'>
           <i class="icon-search"></i>
