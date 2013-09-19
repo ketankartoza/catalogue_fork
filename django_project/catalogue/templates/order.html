@@ -2,7 +2,7 @@
 {% load boxtag %} {# Custom tag defined in templatetags/ #}
 <script type="text/javascript">
     // <![CDATA[
-    $(function() 
+    $(function()
     {
       {# submit button not used when we are using ajax #}
       $("#submitButton").hide();
@@ -14,33 +14,33 @@
         width: 450,
         modal: true,
         title: 'Update Order status',
-        buttons: 
+        buttons:
         {
-          'Update': function() 
+          'Update': function()
           {
             submitHistory();
             $(this).dialog('close');
           },
-          Cancel: function() 
+          Cancel: function()
           {
             $(this).dialog('close');
           }
         }
       });
     });
-    function submitHistory() 
+    function submitHistory()
     {
-      $("#formHeading").html('Updating status...<img src="/media/images/ajax-loader.gif">'); 
+      $("#formHeading").html('Updating status...<img src="/media/images/ajax-loader.gif">');
       $("#orderHistory").hide();
       // validate and process form here
       var myDataString = 'order={{myOrder.id}}';
       {% for myField in myForm %}
-      myDataString += "&"; 
+      myDataString += "&";
       myDataString+="{{myField.html_name}}=" + $("#id_{{myField.html_name}}").val();
       {% endfor %}
       //alert(myDataString);
       $.post(
-        "{% url 'updateOrderHistory' %}", 
+        "{% url 'updateOrderHistory' %}",
         myDataString,
         function(theResponseData)
         {
@@ -48,8 +48,8 @@
            $("#orderHistory").html('');
            $("#orderHistory").slideDown('slow');
            $("#orderHistory").html(theResponseData);
-           $("#formHeading").html('Status updated!'); 
-        }, 
+           $("#formHeading").html('Status updated!');
+        },
         "html");
       return false;
     };
@@ -89,7 +89,11 @@
       <th colspan="2">Email</th>
     </tr>
     <tr>
-      <td colspan="2">{{myOrder.user.get_profile.firstname}} {{myOrder.user.get_profile.surname}}</td>
+      {% if myOrder.user.get_profile.first_name %}
+        <td colspan="2">{{myOrder.user.get_profile.first_name}} {{myOrder.user.get_profile.last_name}}</td>
+      {% else %}
+        <td colspan="2">{{ myOrder.user.get_profile.email }}</td>
+      {% endif %}
       <td colspan="2"><a href="mailto:{{myOrder.user.email}}">{{myOrder.user.email}}</a></td>
     </tr>
     <tr>
