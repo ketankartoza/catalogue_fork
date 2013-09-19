@@ -5,16 +5,16 @@
 {% block content %}
 <div class="row-fluid center gap-bottom">
   <div class="btn-group">
-    <button id="user-origin-btn" onclick='location="{% url 'searchMonthlyReport' myCurrentMonth|date:'Y' myCurrentMonth|date:'m' %}"' class="btn"><i class="icon-calendar"></i> User Origin</button>
+    <button id="user-origin-btn" onclick='location="{% url 'searchMonthlyReport' myCurrentMonth|date:'Y' myCurrentMonth|date:'m' %}"' class="btn"><i class="icon-calendar"></i> User Country of Origin</button>
 
     <button onclick='location="{% url 'recentSearches' %}?pdf"' class="btn" id="download-btn"><i class="icon-download"></i></button>
 
-    <button id="aoi-report-btn" onclick='location="{% url 'searchMonthlyReportAOI' myCurrentMonth|date:'Y' myCurrentMonth|date:'m' %}"' class="btn"><i class="icon-calendar"></i> AOI Geometry</button>
+    <button id="aoi-report-btn" onclick='location="{% url 'searchMonthlyReportAOI' myCurrentMonth|date:'Y' myCurrentMonth|date:'m' %}"' class="btn"><i class="icon-calendar"></i> Countries Searched</button>
   </div>
 </div>
 
 <div class="row-fluid center">
-  <h2> Recent Search History</h2>
+  <h2>Recent Search History</h2>
   <table width="100%" class="table table-striped">
     <tr>
       <th>
@@ -36,15 +36,15 @@
     {% for mySearch in mySearches %}
     <tr>
       <td>
-        {{ mySearch.user.get_profile.firstname }} {{ mySearch.user.get_profile.surname }}
+        {{ mySearch.user.get_profile.first_name }} {{ mySearch.user.get_profile.last_name }}
       </td>
       <td>
-        {{ mySearch.search_date|date:"D, d M Y, H:m" }} 
+        {{ mySearch.search_date|date:"D, d M Y, H:m" }}
       </td>
       <td class="center">
-        {{ mySearch.sensorsAsString }} 
+        {{ mySearch.satellite.operator_abbreviation }} - {{ mySearch.instrumenttype.operator_abbreviation }}
       </td>
-      <td class="center">
+      <td>
         {{ mySearch.datesAsString }}
       </td>
       <td class="center">
@@ -70,7 +70,7 @@ $('#user-origin-btn').popover({
   placement:'bottom',
   trigger:'hover',
   content:'Click to view the monthly user origin reports',
-  title:'User Origin Reports'
+  title:'User Country of Origin Reports'
 });
 $('#aoi-report-btn').popover({
   placement:'bottom',
