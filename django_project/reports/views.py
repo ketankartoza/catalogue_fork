@@ -118,7 +118,7 @@ def visitorMonthlyReport(theRequest, theYear, theMonth):
 
 @staff_member_required
 def renderVisitorListPDF(theRequest):
-    myRecords = Visit.objects.order_by('-visit_date')[:20]
+    myRecords = Visit.objects.order_by('-visit_date')
     return renderReport('visitor-list.odt',
                      context_instance=RequestContext(theRequest),
                      format='pdf',
@@ -174,6 +174,19 @@ def recentSearches(theRequest):
     return ({
         'mySearches': mySearchHistory,
         'myCurrentMonth': datetime.date.today()})
+
+
+@staff_member_required
+def recentSearchesPDF(theRequest):
+    mySearchHistory = (
+        Search.objects.filter(deleted=False).order_by('-search_date'))
+    if len(mySearchHistory) > 50:
+        mySearchHistory = mySearchHistory[0:50]
+    return renderReport('recent-searches.odt',
+                        context_instance=RequestContext(theRequest),
+                        format='pdf',
+                        filename='recent-searches.pdf',
+                        dictionary={'myRecords': mySearchHistory})
 
 
 #monthly search report by user ip_position

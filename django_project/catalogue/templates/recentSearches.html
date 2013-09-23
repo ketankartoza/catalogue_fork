@@ -7,58 +7,64 @@
   <div class="btn-group">
     <button id="user-origin-btn" onclick='location="{% url 'searchMonthlyReport' myCurrentMonth|date:'Y' myCurrentMonth|date:'m' %}"' class="btn"><i class="icon-calendar"></i> User Country of Origin</button>
 
-    <button onclick='location="{% url 'recentSearches' %}?pdf"' class="btn" id="download-btn"><i class="icon-download"></i></button>
+    <button onclick='location="{% url 'recentSearchesPDF' %}"' class="btn" id="download-btn"><i class="icon-download"></i></button>
 
     <button id="aoi-report-btn" onclick='location="{% url 'searchMonthlyReportAOI' myCurrentMonth|date:'Y' myCurrentMonth|date:'m' %}"' class="btn"><i class="icon-calendar"></i> Countries Searched</button>
   </div>
 </div>
 
-<div class="row-fluid center">
-  <h2>Recent Search History</h2>
-  <table width="100%" class="table table-striped">
-    <tr>
-      <th>
-        <b>Searched by</b>
-      </th>
-      <th>
-        <b>Searched on</b>
-      </th>
-      <th class="center">
-        <b>Sensor</b>
-      </th>
-      <th class="center">
-        <b>Date range(s)</b>
-      </th>
-      <th class="center">
-        <b>Actions</b>
-      </th>
-    </tr>
-    {% for mySearch in mySearches %}
-    <tr>
-      <td>
-        {{ mySearch.user.get_profile.first_name }} {{ mySearch.user.get_profile.last_name }}
-      </td>
-      <td>
-        {{ mySearch.search_date|date:"D, d M Y, H:m" }}
-      </td>
-      <td class="center">
-        {{ mySearch.satellite.operator_abbreviation }} - {{ mySearch.instrumenttype.operator_abbreviation }}
-      </td>
-      <td>
-        {{ mySearch.datesAsString }}
-      </td>
-      <td class="center">
-        <a href="{% url 'searchResultMap' mySearch.guid %}" class="view-btn">
-          <i class="icon-search"></i>
-        </a>
-        <a href="{% url 'deleteSearch' mySearch.id %}" onclick='$.get("{% url 'deleteSearch' mySearch.id %}?xhr");$(this).parent().parent().remove();return false;' class="remove-btn">
-          <i class="icon-remove"></i>
-        </a>
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
-</div>
+{% if mySearches %}
+  <div class="row-fluid center">
+    <h2>Recent Search History</h2>
+    <table width="100%" class="table table-striped">
+      <tr>
+        <th>
+          <b>Searched by</b>
+        </th>
+        <th>
+          <b>Searched on</b>
+        </th>
+        <th class="center">
+          <b>Sensor</b>
+        </th>
+        <th class="center">
+          <b>Date range(s)</b>
+        </th>
+        <th class="center">
+          <b>Actions</b>
+        </th>
+      </tr>
+      {% for mySearch in mySearches %}
+      <tr>
+        <td>
+          {{ mySearch.user.get_profile.first_name }} {{ mySearch.user.get_profile.last_name }}
+        </td>
+        <td>
+          {{ mySearch.search_date|date:"D, d M Y, H:m" }}
+        </td>
+        <td class="center">
+          {{ mySearch.satellite.operator_abbreviation }} - {{ mySearch.instrumenttype.operator_abbreviation }}
+        </td>
+        <td>
+          {{ mySearch.datesAsString }}
+        </td>
+        <td class="center">
+          <a href="{% url 'searchResultMap' mySearch.guid %}" class="view-btn">
+            <i class="icon-search"></i>
+          </a>
+          <a href="{% url 'deleteSearch' mySearch.id %}" onclick='$.get("{% url 'deleteSearch' mySearch.id %}?xhr");$(this).parent().parent().remove();return false;' class="remove-btn">
+            <i class="icon-remove"></i>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+{% else %}
+  <div class="row-fluid center">
+    <h2>No Recent Searches</h2>
+  </div>
+{% endif %}
 <script>
 $('#download-btn').popover({
   placement:'bottom',
