@@ -27,7 +27,7 @@
     </button>
   </span>
   </div>
-  <h2 class="chartTitle text-center">Order list for {{ myCurrentDate|date:'M, Y' }}</h2>
+  <h2 class="chartTitle text-center">Order List for {{ myCurrentDate|date:'M, Y' }}</h2>
   <table class="table table-striped">
     <thead>
     </thead>
@@ -44,7 +44,7 @@
         <td>{{myOrder.id }}</td>
         <td>{{myOrder.order_date|date:"D, d M Y, H:m" }}</td>
         <td>{{myOrder.order_status}}</td>
-        <td>{{myOrder.user.get_profile.firstname}} {{myOrder.user.get_profile.surname}}</td>
+        <td>{{myOrder.user.get_profile.first_name}} {{myOrder.user.get_profile.last_name}}</td>
         <td>
           <img src="/media/images/search_16.png"
                style="cursor: pointer;"
