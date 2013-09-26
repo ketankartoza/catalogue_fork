@@ -11,8 +11,6 @@ from .views import (
     dataSummaryTable,
     dictionaryReport,
     sensorSummaryTable,
-    renderVisitorListPDF,
-    recentSearchesPDF
 )
 
 
@@ -20,7 +18,6 @@ urlpatterns = patterns(
     '',
     url(r'^mysearches/$', searchHistory, name='searchHistory'),
     url(r'^recentsearches/$', recentSearches, name='recentSearches'),
-    url(r'^recentsearchespdf/$', recentSearchesPDF, name='recentSearchesPDF'),
     url(r'^searchmonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$',
         searchMonthlyReport, name='searchMonthlyReport'
         ),
@@ -37,8 +34,4 @@ urlpatterns = patterns(
     url(r'^sensorSummaryTable/(?P<theSensorId>[0-9]+)/$',
         sensorSummaryTable, name='sensorSummaryTable'
         ),
-
-    # George's URLs
-    url(r'^renderVisitorListPDF/$', renderVisitorListPDF,
-        name='visitorListPDF'),
 )

@@ -56,8 +56,6 @@ from search.models import (
 )
 
 from dictionaries.models import SatelliteInstrumentGroup
-from webodt.shortcuts import render_to_response as renderReport
-from django.template import RequestContext
 
 
 # in case you need to slice ResultSet (paginate) for display
@@ -117,16 +115,6 @@ def visitorMonthlyReport(theRequest, theYear, theMonth):
 
 
 @staff_member_required
-def renderVisitorListPDF(theRequest):
-    myRecords = Visit.objects.order_by('-visit_date')[:20]
-    return renderReport('visitor-list.odt',
-                     context_instance=RequestContext(theRequest),
-                     format='pdf',
-                     filename='visitor-list.pdf',
-                     dictionary={'myRecords': myRecords})
-
-
-@staff_member_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('visitors.html')
 def visitorList(theRequest):
@@ -174,19 +162,6 @@ def recentSearches(theRequest):
     return ({
         'mySearches': mySearchHistory,
         'myCurrentMonth': datetime.date.today()})
-
-
-@staff_member_required
-def recentSearchesPDF(theRequest):
-    mySearchHistory = (
-        Search.objects.filter(deleted=False).order_by('-search_date'))
-    if len(mySearchHistory) > 50:
-        mySearchHistory = mySearchHistory[0:50]
-    return renderReport('recent-searches.odt',
-                        context_instance=RequestContext(theRequest),
-                        format='pdf',
-                        filename='recent-searches.pdf',
-                        dictionary={'myRecords': mySearchHistory})
 
 
 #monthly search report by user ip_position

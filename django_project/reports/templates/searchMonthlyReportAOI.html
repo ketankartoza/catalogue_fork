@@ -33,7 +33,7 @@
 {% endblock %}
 {% block content %}
 <div class="row-fluid center gap-bottom">
-  <button onclick='location="?pdf"' class="btn" id="download-btn"><i class="icon-download"></i></button>
+  <button onclick='location="?pdf"' class="btn" id="download-btn"><i class="icon-download"></i> Download as PDF</button>
   <div class="btn-group">
     <button onclick='location="{% url 'searchMonthlyReportAOI' myPrevDate|date:'Y' myPrevDate|date:'m' %}"' class="btn"><i class="icon-backward"></i></button>
     <button class="btn disabled btn-success">{{ myCurrentDate|date:'M, Y' }}</button>
@@ -43,7 +43,7 @@
 {% if myScores %}
 <div class="row-fluid">
   <h2>Countries Searched</h2>
-  <h4 class="muted">This report lists all countries that used have included in
+  <h4 class="muted">This report lists all countries that have been included in
     searches for products during {{ myCurrentDate|date:'M, Y' }}</h4>
 </div>
 <div class="row-fluid">

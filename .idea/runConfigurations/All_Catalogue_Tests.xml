@@ -4,7 +4,7 @@
     <option name="PARENT_ENVS" value="true" />
     <envs>
       <env name="PYTHONUNBUFFERED" value="1" />
-      <env name="PYTHONPATH" value="$PROJECT_DIR$/django_project" />
+      <env name="PYTHONPATH" value="/Users/georgeirwin/Desktop/sites/sansa/django_project" />
     </envs>
     <option name="SDK_HOME" value="" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
