@@ -14,7 +14,7 @@ django-webodt uses LibreOffice as the backend to run the conversion. Therefore,
 the system running the Catalogue (including local test servers) must have LibreOffice
 installed and running - either daemonized or by starting from the command line.
 
-* Install LibreOffice `sudo apt-get install libreoffice`
+* Install LibreOffice `sudo apt-get install libreoffice` and, to be safe, `sudo apt-get install python-uno`
 * Setup LibreOffice as a demon process OR run the following command:
 
 ```sh
@@ -25,7 +25,14 @@ soffice '--accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.NamingService' 
 
 # Usage
 
-Report templates must be saved in django_project/reports/report-templates
+Report templates must be saved in `django_project/reports/report-templates`
+
+**We have hijacked the existing PDF trigger in `renderWith`. This means that all you need to do in order
+to render a PDF from a view is add `?pdf` to the URL, e.g. `/ordermonthlyreport/2013/08/?pdf`. There must
+be an odt template in `django_project/reports/report-templates` with exactly the same name as the html template
+used in the standard view**
+
+If you need to generate a PDF within a function (such as to attach to an email):
 
 django-webodt ships with a shortcut command into which we pass parameters; the shortcut
 creates the file as specified in the parameters. Here is an example usage:
@@ -45,8 +52,6 @@ def renderVisitorListPDF(theRequest):
                      filename='visitor-list.pdf',
                      dictionary={'myRecords': myRecords})
 ```
-
-Please see visitor-list.odt to see how the table is rendered.
 
 The shortcut always returns a file object. In this case, the view is
 called by a URL and the view returns that file object, triggering a file download
