@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 {# Original code from Tim's SABIO project and copyright is retained by the original author #}
-{% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
 
 {% block content %}
 <div class="row-fluid center gap-bottom">
   <div class="btn-group">
     <button id="user-origin-btn" onclick='location="{% url 'searchMonthlyReport' myCurrentMonth|date:'Y' myCurrentMonth|date:'m' %}"' class="btn"><i class="icon-calendar"></i> User Country of Origin</button>
 
-    <button onclick='location="{% url 'recentSearchesPDF' %}"' class="btn" id="download-btn"><i class="icon-download"></i></button>
+    <button onclick='location="?pdf"' class="btn" id="download-btn"><i class="icon-download"></i> Download as PDF</button>
 
     <button id="aoi-report-btn" onclick='location="{% url 'searchMonthlyReportAOI' myCurrentMonth|date:'Y' myCurrentMonth|date:'m' %}"' class="btn"><i class="icon-calendar"></i> Countries Searched</button>
   </div>
