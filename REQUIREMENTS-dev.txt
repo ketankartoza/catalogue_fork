@@ -8,4 +8,4 @@ line_profiler==1.0b3
 django_devserver==0.6.2
 # Fabric related deps
 git+git://github.com/timlinux/fabtools.git
-fabgis==0.10.0
+fabgis==0.16.0

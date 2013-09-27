@@ -7,11 +7,13 @@
 # pip install fabric fabtools
 
 import os
-from fabric.api import *
+from fabric.api import run, sudo, env, hide, cd, task, fastprint
+from fabric.colors import red, magenta, yellow, cyan
 from fabric.contrib.files import contains, exists, append, sed
 import fabtools
-from fabgis import postgres, common
+from fabgis import postgres, common, umn_mapserver, virtualenv, git
 # Don't remove even though its unused
+#noinspection PyUnresolvedReferences
 from fabtools.vagrant import vagrant
 
 # Usage fab localhost [command]
@@ -65,7 +67,8 @@ def _all():
 
 
 @task
-def rsync_local():
+def rsync_vagrant_to_code_dir():
+    """Rsync from vagrant mount to code dir."""
     _all()
     with cd('/home/web/'):
         run('rsync -va /vagrant/ %s/ --exclude \'venv\' '
@@ -110,29 +113,20 @@ def replace_tokens(conf_file):
 def setup_mapserver():
     # Clone and replace tokens in mapserver map file
     # Clone and replace tokens in mapserver conf
-    fabtools.require.deb.package('cgi-mapserver')
+    umn_mapserver.setup_mapserver()
     conf_dirs = [
-        '%s/resources/server_config/mapserver/mapfiles/' % (env.code_path),
+        '%s/resources/server_config/mapserver/mapfiles/' % env.code_path,
         '%s/resources/server_config/mapserver/apache-include/' % (
             env.code_path)]
     for conf_dir in conf_dirs:
         output = run('ls %s' % conf_dir)
         files = output.split()
         for myFile in files:
-            myExt = os.path.splitext(myFile)[1]
+            ext = os.path.splitext(myFile)[1]
             conf_file = os.path.join(conf_dir, myFile)
 
-            if myExt == '.templ':
+            if ext == '.templ':
                 replace_tokens(conf_file)
-
-    # We also need to append 900913 epsg code to the proj epsg list
-    epsg_path = '/usr/share/proj/epsg'
-    epsg_code = (
-        '<900913> +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_'
-        '0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs')
-    epsg_id = '900913'
-    if not contains(epsg_path, epsg_id):
-        append(epsg_path, epsg_code, use_sudo=True)
 
 
 def setup_website():
@@ -239,21 +233,11 @@ def setup_venv():
         fab remote setup_venv
     """
 
-    with cd(env.code_path):
-        # Ensure we have a venv set up
-        fabtools.require.python.virtualenv('venv')
+    virtualenv.setup_venv(env.code_path, requirements_file='REQUIREMENTS.txt')
+    virtualenv.build_pil(env.code_path)
+    virtualenv.build_python_gdal(env.code_path)
 
-    # Gdal does not build cleanly from requirements so we follow advice
-    # from http://ubuntuforums.org/showthread.php?t=1769445
-    pip_path = os.path.join(env.code_path, 'venv', 'bin', 'pip')
-    gdal_build_path = os.path.join(env.code_path, 'venv', 'build', 'GDAL')
-
-    result = run('%s install --no-install GDAL' % pip_path)
-    if 'Requirement already satisfied ' not in result:
-        with cd(gdal_build_path):
-            run('python setup.py build_ext --include-dirs=/usr/include/gdal')
-            run('%s install --no-download GDAL' % pip_path)
-
+    # Run again to check all is up to date
     with cd(env.code_path):
         run('venv/bin/pip install -r REQUIREMENTS.txt')
 
@@ -268,46 +252,16 @@ def update_git_checkout(branch='master'):
 
     To run e.g.::
 
-        fab -H 188.40.123.80:8697 remote update_git_checkout
+        fab -H 188.40.123.80:8697 update_git_checkout
 
-    or if you have configured env.hosts, simply
-
-        fab remote update_git_checkout
 
     """
     _all()
-    fabtools.require.deb.package('git')
-    if not exists(env.code_path):
-        fastprint('Repo checkout does not exist, creating.')
-        user = run('whoami')
-        sudo('sudo mkdir -p %s' % env.webdir)
-        sudo('chown %s.%s %s' % (user, user, env.webdir))
-        with cd(env.webdir):
-            run('git clone %s %s' % (env.git_url, env.repo_alias))
-    else:
-        fastprint('Repo checkout does exist, updating.')
-        with cd(env.code_path):
-            # Get any updates first
-            run('git fetch')
-            # Get rid of any local changes
-            run('git reset --hard')
-            # Get back onto master branch
-            run('git checkout master')
-            # Remove any local changes in master
-            run('git reset --hard')
-            # Delete all local branches
-            run('git branch | grep -v \* | xargs git branch -D')
-
-    with cd(env.code_path):
-        if branch != 'master':
-            run('git branch --track %s origin/%s' % (branch, branch))
-            run('git checkout %s' % branch)
-        else:
-            run('git checkout master')
-        run('git pull')
-        #run('./runcollectstatic.sh')
-        wsgi_file = 'django_project/core/wsgi.py'
-        run('touch %s' % wsgi_file)
+    git.update_git_checkout(
+        env.code_path, env.git_url, env.repo_alias, branch=branch)
+    #run('./runcollectstatic.sh')
+    wsgi_file = 'django_project/core/wsgi.py'
+    run('touch %s' % wsgi_file)
 
 ###############################################################################
 # Next section contains actual tasks
@@ -357,24 +311,21 @@ def deploy(branch='master'):
 
     To run e.g.::
 
-        fab -H 188.40.123.80:8697 remote deploy
+        fab -H 188.40.123.80:8697 deploy
 
         or to package up a specific branch (in this case v1)
 
-        fab -H 88.198.36.154:8697 remote deploy:v1
+        fab -H 88.198.36.154:8697 deploy:v1
 
     For live server:
 
-        fab -H 5.9.140.151:8697 remote deploy
+        fab -H 5.9.140.151:8697 deploy
 
-    or if you have configured env.hosts, simply
-
-        fab remote deploy
     """
 
     common.add_ubuntugis_ppa()
     ## fabgis.setup_postgis()
-    postgres.setup_postgis_1_5()
+    postgres.setup_postgis_2()
     fabtools.require.deb.package('subversion')
     fabtools.require.deb.package('python-pip')
     fabtools.require.deb.package('libxml2-dev')
@@ -394,11 +345,11 @@ def deploy(branch='master'):
 def show_environment():
     """For diagnostics - show any pertinent info about server."""
     fastprint('\n-------------------------------------------------\n')
-    fastprint('User: %s\n' % env.user)
-    fastprint('Host: %s\n' % env.hostname)
-    fastprint('Site Name: %s\n' % env.repo_site_name)
-    fastprint('Dest Path: %s\n' % env.webdir)
-    fastprint('Wsgi User: %s\n' % env.wsgi_user)
-    fastprint('Git Url: %s\n' % env.git_url)
-    fastprint('Repo Alias: %s\n' % env.repo_alias)
-    fastprint('-------------------------------------------------\n')
+    fastprint(cyan('User      : %s\n' % env.user))
+    fastprint(cyan('Host      : %s\n' % env.hostname))
+    fastprint(cyan('Site Name : %s\n' % env.repo_site_name))
+    fastprint(cyan('Dest Path : %s\n' % env.webdir))
+    fastprint(cyan('Wsgi User : %s\n' % env.wsgi_user))
+    fastprint(cyan('Git  Url  : %s\n' % env.git_url))
+    fastprint(cyan('Repo Alias: %s\n' % env.repo_alias))
+    fastprint(cyan('-------------------------------------------------\n'))
