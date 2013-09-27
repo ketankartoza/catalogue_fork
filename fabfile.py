@@ -36,7 +36,7 @@ def _all():
         'spur': '%s.localhost' % PROJECT_NAME,
         'waterfall': '%s.localhost' % PROJECT_NAME,
         'maps.linfiniti.com': '%s.linfiniti.com' % PROJECT_NAME,
-        'testcatalogue': 'test.catalogue.sansa.org.za',
+        'testcatalogue2': 'test.catalogue.sansa.org.za',
         # vagrant vm
         'catalogue': '%s.localhost' % PROJECT_NAME}
 
