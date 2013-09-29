@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" hash="373375344">
-    <data-source source="LOCAL" name="Django default" uuid="f60fb772-02cf-48a9-ba7d-ba2274da0191">
+    <data-source source="LOCAL" name="Django default" product="" version="" jdbc-version="" driver-name="" driver-version="" uuid="f60fb772-02cf-48a9-ba7d-ba2274da0191">
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://:5432/sac-testbed</jdbc-url>
       <user-name>timlinux</user-name>
@@ -15,7 +15,7 @@
         </library>
       </libraries>
     </data-source>
-    <data-source source="LOCAL" name="Django acs" uuid="82adfaf4-17d8-411b-80ee-1c97927dc3a2">
+    <data-source source="LOCAL" name="Django acs" product="" version="" jdbc-version="" driver-name="" driver-version="" uuid="82adfaf4-17d8-411b-80ee-1c97927dc3a2">
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://:5432/acs</jdbc-url>
       <user-name>timlinux</user-name>
