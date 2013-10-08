@@ -10,6 +10,7 @@ import os
 from fabric.api import run, sudo, env, hide, cd, task, fastprint
 from fabric.colors import red, magenta, yellow, cyan
 from fabric.contrib.files import contains, exists, append, sed
+from fabric.context_managers import quiet
 import fabtools
 from fabgis import postgres, common, umn_mapserver, virtualenv, git
 # Don't remove even though its unused
@@ -323,22 +324,39 @@ def deploy(branch='master'):
 
     """
 
-    common.add_ubuntugis_ppa()
-    ## fabgis.setup_postgis()
-    postgres.setup_postgis_2()
-    fabtools.require.deb.package('subversion')
-    fabtools.require.deb.package('python-pip')
-    fabtools.require.deb.package('libxml2-dev')
-    fabtools.require.deb.package('libxslt1-dev')
-    fabtools.require.deb.package('python-dev')
-    fabtools.require.deb.package('build-essential')
-    fabtools.require.deb.package('libgdal1-dev')
-    fabtools.require.deb.package('gdal-bin')
-
-    update_git_checkout(branch)
-    setup_venv()
-    setup_website()
-    setup_mapserver()
+    fastprint(cyan('Catalogue deploy task started...\n'))
+    with quiet():
+        common.add_ubuntugis_ppa()
+        ## fabgis.setup_postgis()
+    fastprint(cyan('Setting up PostGIS...\n'))
+    with quiet():
+        postgres.setup_postgis_2()
+    fastprint(cyan('Setting up packages...\n'))
+    with quiet():
+        fabtools.require.deb.package('subversion')
+        fabtools.require.deb.package('python-pip')
+        fabtools.require.deb.package('libxml2-dev')
+        fabtools.require.deb.package('libxslt1-dev')
+        fabtools.require.deb.package('python-dev')
+        fabtools.require.deb.package('build-essential')
+        fabtools.require.deb.package('libgdal1-dev')
+        fabtools.require.deb.package('gdal-bin')
+    fastprint(cyan('Updating GIT checkout...\n'))
+    with quiet():
+        update_git_checkout(branch)
+    fastprint(cyan('Setting up venv...\n'))
+    with quiet():
+        setup_venv()
+    fastprint(cyan('Setting up website...\n'))
+    with quiet():
+        setup_website()
+    fastprint(cyan('Setting up mapserver...\n'))
+    with quiet():
+        setup_mapserver()
+    if not fabtools.service.is_running('apache2'):
+        fastprint(red(
+            'Apache is not running - you may need to log in to '
+            'start it manually.'))
 
 
 @task
