@@ -356,7 +356,13 @@ def deploy(branch='master'):
     if not fabtools.service.is_running('apache2'):
         fastprint(red(
             'Apache is not running - you may need to log in to '
-            'start it manually.'))
+            'start it manually.\n'))
+    fastprint(cyan('TODO: Set the allowed hosts in '
+                   'django_project/core/settings/prod.py to have the ip '
+                   'address and the host name for this server. Also replace '
+                   'vagrant user / password in '
+                   'django_project/core/settings/project.py with '
+                   'catalogue/catalogue.'))
 
 
 @task
