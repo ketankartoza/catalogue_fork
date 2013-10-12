@@ -357,13 +357,56 @@ def deploy(branch='master'):
         fastprint(red(
             'Apache is not running - you may need to log in to '
             'start it manually.\n'))
-    fastprint(cyan('TODO: Set the allowed hosts in '
-                   'django_project/core/settings/prod.py to have the ip '
-                   'address and the host name for this server. Also replace '
-                   'vagrant user / password in '
-                   'django_project/core/settings/project.py with '
-                   'catalogue/catalogue.'))
+    fastprint(cyan(
+        'TODO: Set the allowed hosts in '
+        'django_project/core/settings/prod.py to have the ip '
+        'address and the host name for this server. Also replace '
+        'vagrant user / password in '
+        'django_project/core/settings/project.py with '
+        'catalogue/catalogue.'))
+    fastprint(magenta(
+        'TODO: set the following permissions on the db:\n'
+        'GRANT ALL ON SCHEMA public TO catalogue;\n'
+        'GRANT ALL ON ALL TABLES IN SCHEMA public TO catalogue;\n'
+        'GRANT ALL ON ALL TABLES IN SCHEMA public TO catalogue;\n'))
+    fastprint(magenta(
+        'TODO: install nodeenv, npm and yuglify then collect static \n'
+        'source venv/bin/activate\n'
+        'pip install nodeenv\n'
+        'nodeenv env --node=0.8.15\n'
+        'venv/bin/npm -g install yuglify\n'))
 
+
+@task
+def server_to_debug_mode():
+    """Put the server in debug mode (normally not recommended)."""
+    _all()
+    fastprint(cyan('Putting server into debug mode.\n'))
+    config_file = os.path.join(
+        env.code_path, 'django_project', 'core', 'settings', 'project.py')
+    sed(
+        config_file,
+        'DEBUG = TEMPLATE_DEBUG = False',
+        'DEBUG = TEMPLATE_DEBUG = True')
+    with cd(os.path.join(env.code_path, 'django_project')):
+        run('touch core/wsgi.py')
+    fastprint(red('Warning: your server is now in DEBUG mode!\n'))
+
+
+@task
+def server_to_production_mode():
+    """Put the server in production mode (recommended)."""
+    _all()
+    fastprint(cyan('Putting server into PRODUCTION mode.\n'))
+    config_file = os.path.join(
+        env.code_path, 'django_project', 'core', 'settings', 'project.py')
+    sed(
+        config_file,
+        'DEBUG = TEMPLATE_DEBUG = True',
+        'DEBUG = TEMPLATE_DEBUG = False')
+    with cd(os.path.join(env.code_path, 'catalogue')):
+        run('touch core/wsgi.py')
+    fastprint(magenta('Note: your server is now in PRODUCTION mode!'))
 
 @task
 def show_environment():
