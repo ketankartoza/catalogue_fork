@@ -188,24 +188,19 @@ class GenericProductF(factory.django.DjangoModelFactory):
     FACTORY_FOR = GenericProduct
 
     product_date = factory.LazyAttribute(lambda d: datetime.now())
-    processing_level = factory.SubFactory(
-        'dictionaries.tests.model_factories.ProcessingLevelF')
-    owner = factory.SubFactory(InstitutionF)
-    license = factory.SubFactory(LicenseF)
     spatial_coverage = (
         'POLYGON ((17.54 -32.05, 20.83 -32.41, 20.30 -35.17, 17.84 '
         '-34.65, 17.54 -32.05))')
     projection = factory.SubFactory(ProjectionF)
     quality = factory.SubFactory(QualityF)
-    creating_software = factory.SubFactory(CreatingSoftwareF)
     unique_product_id = factory.Sequence(
         lambda n: "unique_product_id_{}".format(n))
     original_product_id = factory.Sequence(
         lambda n: "Original_product_id_{}".format(n))
-    product_revision = ''
     local_storage_path = ''
     metadata = ''
     remote_thumbnail_url = ''
+    ingestion_log = ''
 
 
 class GenericImageryProductF(GenericProductF):

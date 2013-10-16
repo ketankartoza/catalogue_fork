@@ -25,7 +25,7 @@ from datetime import datetime
 from django.test import TestCase
 
 from dictionaries.tests.model_factories import (
-    ProcessingLevelF, OpticalProductProfileF, SatelliteInstrumentF,
+    OpticalProductProfileF, SatelliteInstrumentF,
     SpectralModeF, InstrumentTypeF, SatelliteF, SatelliteInstrumentGroupF
 )
 
@@ -140,10 +140,6 @@ class OpticalProductCRUD_Test(TestCase):
             u'name': u'UTM37S', u'epsg_code': 32737
         })
 
-        myProcessingLevel = ProcessingLevelF.create(**{
-            u'abbreviation': u'L1A'
-        })
-
         mySatInst = SatelliteInstrumentF.create(**{
             'operator_abbreviation': 'SATIN 1'
         })
@@ -167,7 +163,6 @@ class OpticalProductCRUD_Test(TestCase):
             'unique_product_id': '123 Product ID 123',
             'owner': myInstitution,
             'projection': myProjection,
-            'processing_level': myProcessingLevel,
             'product_profile': myOPP,
             'quality': myQuality,
             'product_acquisition_start': datetime(2012, 12, 12, 12, 00),
@@ -257,16 +252,11 @@ class OpticalProductCRUD_Test(TestCase):
             'satellite_instrument_group': mySatInstGroup
         })
 
-        myProcessingLevel = ProcessingLevelF.create(**{
-            u'abbreviation': u'L1A'
-        })
-
         myOPP = OpticalProductProfileF.create(**{
             u'satellite_instrument': mySatInst
         })
 
         myModel = OpticalProductF.create(**{
-            'processing_level': myProcessingLevel,
             'product_profile': myOPP,
             'product_acquisition_start': datetime(2012, 12, 12, 12, 00),
         })

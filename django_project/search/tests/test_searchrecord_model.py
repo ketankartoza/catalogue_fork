@@ -123,7 +123,7 @@ class SearchRecordCRUD_Test(TestCase):
         """
         Tests SearchRecord model repr method
         """
-        myProduct = GenericProductF.create(unique_product_id='123qwe')
+        myProduct = GenericProductF.create(original_product_id='123qwe')
         myModel = SearchRecordF.create(product=myProduct)
 
         myExpResult = '123qwe'
@@ -133,7 +133,7 @@ class SearchRecordCRUD_Test(TestCase):
         """
         Tests SearchRecord model repr method
         """
-        myProduct = GenericProductF.create(unique_product_id='123qwe')
+        myProduct = GenericProductF.create(original_product_id='123qwe')
         myUser = UserF.create(username='testuser')
         myModel = SearchRecordF.create()
 
