@@ -46,7 +46,7 @@ class OthersViews_showProduct_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -109,7 +109,8 @@ class OthersViews_showProduct_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'productView.html', u'base.html', u'menu.html',
+            'productView.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html',
             'productTypes/opticalProduct.html',
             u'productTypes/genericSensorProduct.html',

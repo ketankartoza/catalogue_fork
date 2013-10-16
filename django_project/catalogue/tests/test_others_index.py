@@ -44,7 +44,7 @@ class OthersViews_index(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -59,7 +59,10 @@ class OthersViews_index(TestCase):
         myResp = myClient.get(reverse('index', kwargs={}))
         self.assertEqual(myResp.status_code, 200)
         # check used templates
-        myExpTemplates = ['index.html', u'base.html', u'menu.html']
+        myExpTemplates = [
+            'index.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -77,7 +80,8 @@ class OthersViews_index(TestCase):
             myResp.context['myPartnerFlag'], False)
         # check used templates
         myExpTemplates = [
-            'index.html', u'base.html', u'menu.html',
+            'index.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 

@@ -171,7 +171,8 @@ class OrdersViews_viewOrder_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'orderPage.html', u'base.html', u'menu.html',
+            'orderPage.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html', u'order.html',
             u'cartContents.html', u'recordHeader.html', u'record.html',
             u'orderStatusHistory.html'

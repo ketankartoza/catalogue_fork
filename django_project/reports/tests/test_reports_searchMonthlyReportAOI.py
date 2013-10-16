@@ -119,8 +119,9 @@ class ReportsViews_searchMonthlyReportAOI_Tests(TestCase):
             myDate + datetime.timedelta(days=31))
         # check used templates
         myExpTemplates = [
-            'searchMonthlyReportAOI.html', u'base.html',
-            u'menu.html', u'useraccounts/menu_content.html']
+            'searchMonthlyReportAOI.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
+            u'useraccounts/menu_content.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

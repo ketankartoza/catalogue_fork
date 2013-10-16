@@ -42,7 +42,7 @@ class OrdersViews_listOrders_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -71,7 +71,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             'is_staff': True
         })
 
-        OrderF.create(**{'user':myUser})
+        OrderF.create(**{'user': myUser})
         OrderF.create()
 
         myClient = Client()
@@ -88,7 +88,8 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'menu.html',
+            'orderListPage.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
@@ -106,7 +107,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             'password': 'password',
         })
 
-        OrderF.create(**{'user':myUser})
+        OrderF.create(**{'user': myUser})
         OrderF.create()
 
         myClient = Client()
@@ -123,7 +124,8 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'menu.html',
+            'orderListPage.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
@@ -142,7 +144,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             'password': 'password',
         })
 
-        OrderF.create(**{'user':myUser})
+        OrderF.create(**{'user': myUser})
         OrderF.create()
 
         myClient = Client()
@@ -160,7 +162,8 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'menu.html',
+            'orderListPage.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
@@ -179,7 +182,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             'password': 'password',
         })
 
-        OrderF.create(**{'user':myUser})
+        OrderF.create(**{'user': myUser})
         OrderF.create()
 
         myClient = Client()
@@ -216,7 +219,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             'password': 'password',
         })
 
-        OrderF.create(**{'user':myUser})
+        OrderF.create(**{'user': myUser})
         OrderF.create()
 
         myClient = Client()
@@ -234,7 +237,8 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'menu.html',
+            'orderListPage.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
@@ -252,7 +256,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             'password': 'password',
         })
 
-        OrderF.create(**{'user':myUser})
+        OrderF.create(**{'user': myUser})
         OrderF.create()
 
         myClient = Client()

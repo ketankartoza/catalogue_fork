@@ -111,7 +111,8 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'orderMonthlyReport.html', u'base.html', u'menu.html',
+            'orderMonthlyReport.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
@@ -161,7 +162,8 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'orderMonthlyReport.html', u'base.html', u'menu.html',
+            'orderMonthlyReport.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]

@@ -40,7 +40,7 @@ class TaskingViews_myTaskingRequests_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -85,7 +85,8 @@ class TaskingViews_myTaskingRequests_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'taskingRequestPage.html', u'base.html', u'menu.html',
+            'taskingRequestPage.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html', u'taskingRequest.html']
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -156,7 +157,8 @@ class TaskingViews_myTaskingRequests_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'taskingRequestPage.html', u'base.html', u'menu.html',
+            'taskingRequestPage.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html', u'taskingRequest.html']
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -193,7 +195,8 @@ class TaskingViews_myTaskingRequests_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'taskingRequestPage.html', u'base.html', u'menu.html',
+            'taskingRequestPage.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html', u'taskingRequest.html']
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -230,7 +233,8 @@ class TaskingViews_myTaskingRequests_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'taskingRequestPage.html', u'base.html', u'menu.html',
+            'taskingRequestPage.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html', u'taskingRequest.html']
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

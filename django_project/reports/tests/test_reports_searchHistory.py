@@ -82,7 +82,8 @@ class ReportsViews_searchHistory_Tests(TestCase):
             len(myResp.context['mySearches']), 1)
         # check used templates
         myExpTemplates = [
-            'mySearches.html', u'base.html', u'menu.html',
+            'mySearches.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 
@@ -113,7 +114,8 @@ class ReportsViews_searchHistory_Tests(TestCase):
             len(myResp.context['mySearches']), 1)
         # check used templates
         myExpTemplates = [
-            'mySearches.html', u'base.html', u'menu.html',
+            'mySearches.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 
