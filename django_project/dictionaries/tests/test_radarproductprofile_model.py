@@ -18,8 +18,6 @@ __date__ = '23/07/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
-from catalogue.tests.test_utils import simpleMessage
-
 
 from .model_factories import (
     RadarProductProfileF, SatelliteInstrumentF, ImagingModeF
@@ -42,12 +40,7 @@ class TestRadarProductProfileCRUD(TestCase):
         """
         myModel = RadarProductProfileF.create()
 
-        self.assertTrue(
-            myModel.pk is not None,
-            simpleMessage(
-                myModel.pk, 'not None',
-                message='Model PK should NOT equal None')
-        )
+        self.assertTrue(myModel.pk is not None)
 
     def test_RadarProductProfile_delete(self):
         """
@@ -58,11 +51,7 @@ class TestRadarProductProfileCRUD(TestCase):
         myModel.delete()
 
         #check if deleted
-        self.assertTrue(
-            myModel.pk is None, simpleMessage(
-                myModel.pk, None,
-                message='Model PK should equal None')
-        )
+        self.assertTrue(myModel.pk is None)
 
     def test_RadarProductProfile_read(self):
         """
@@ -128,4 +117,5 @@ class TestRadarProductProfileCRUD(TestCase):
             'imaging_mode': myImgMode
         })
 
-        self.assertEqual(unicode(myModel), u'SATIN 1 -- Temp Imaging mode (VV)')
+        self.assertEqual(
+            unicode(myModel), u'SATIN 1 -- Temp Imaging mode (VV)')

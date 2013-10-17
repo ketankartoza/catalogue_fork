@@ -17,8 +17,6 @@ __date__ = '19/07/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
-from catalogue.tests.test_utils import simpleMessage
-
 
 from .model_factories import InstrumentTypeF, RadarBeamF
 
@@ -39,12 +37,7 @@ class TestRadarBeamCRUD(TestCase):
         """
         myModel = RadarBeamF.create()
 
-        self.assertTrue(
-            myModel.pk is not None,
-            simpleMessage(
-                myModel.pk, 'not None',
-                message='Model PK should NOT equal None')
-        )
+        self.assertTrue(myModel.pk is not None)
 
     def test_RadarBeam_delete(self):
         """
@@ -55,11 +48,7 @@ class TestRadarBeamCRUD(TestCase):
         myModel.delete()
 
         #check if deleted
-        self.assertTrue(
-            myModel.pk is None, simpleMessage(
-                myModel.pk, None,
-                message='Model PK should equal None')
-        )
+        self.assertTrue(myModel.pk is None)
 
     def test_RadarBeam_read(self):
         """

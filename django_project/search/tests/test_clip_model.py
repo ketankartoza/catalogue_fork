@@ -18,9 +18,6 @@ __date__ = '17/07/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
-from catalogue.tests.test_utils import simpleMessage
-
-from datetime import datetime
 
 from .model_factories import ClipF
 
@@ -42,12 +39,7 @@ class TestClipCRUD(TestCase):
         """
         myModel = ClipF.create()
         #check if PK exists
-        self.assertTrue(
-            myModel.pk is not None,
-            simpleMessage(
-                myModel.pk, 'not None',
-                message='Model PK should NOT equal None')
-        )
+        self.assertTrue(myModel.pk is not None)
 
     def test_Clip_read(self):
         """
@@ -61,12 +53,7 @@ class TestClipCRUD(TestCase):
         myModel = ClipF.create()
         #check if data is correct
         for key, val in myExpectedModelData.items():
-            self.assertEqual(
-                myModel.__dict__.get(key), val,
-                simpleMessage(
-                    myModel.__dict__.get(key), val,
-                    message='For key "%s"' % key)
-            )
+            self.assertEqual(myModel.__dict__.get(key), val)
 
         self.assertEqual(
             myModel.geometry.hex,
@@ -99,12 +86,7 @@ class TestClipCRUD(TestCase):
         #check if updated
         for key, val in myNewModelData.items():
             if key != 'geometry':
-                self.assertEqual(
-                    myModel.__dict__.get(key), val,
-                    simpleMessage(
-                        myModel.__dict__.get(key), val,
-                        message='For key "%s"' % key)
-                )
+                self.assertEqual(myModel.__dict__.get(key), val)
 
         self.assertEqual(
             myModel.geometry.hex,
@@ -122,8 +104,4 @@ class TestClipCRUD(TestCase):
         myModel.delete()
 
         #check if deleted
-        self.assertTrue(
-            myModel.pk is None,
-            simpleMessage(
-                myModel.pk, None, message='Model PK should equal None')
-        )
+        self.assertTrue(myModel.pk is None)

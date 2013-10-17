@@ -30,7 +30,7 @@ from dictionaries.tests.model_factories import (
 )
 
 from .model_factories import (
-    OpticalProductF, InstitutionF, ProjectionF, QualityF
+    OpticalProductF, ProjectionF, QualityF
 )
 
 
@@ -130,11 +130,6 @@ class OpticalProductCRUD_Test(TestCase):
         """
         Tests OpticalProduct model getMetadataDict method
         """
-        myInstitution = InstitutionF.create(**{
-            u'address1': u'Hartebeeshoek', u'address2': u'Gauteng',
-            u'address3': u'South Africa', u'name': u'SANSA',
-            u'post_code': u'0000'
-        })
 
         myProjection = ProjectionF.create(**{
             u'name': u'UTM37S', u'epsg_code': 32737
@@ -161,7 +156,6 @@ class OpticalProductCRUD_Test(TestCase):
 
         myModel = OpticalProductF.create(**{
             'unique_product_id': '123 Product ID 123',
-            'owner': myInstitution,
             'projection': myProjection,
             'product_profile': myOPP,
             'quality': myQuality,
@@ -186,8 +180,8 @@ class OpticalProductCRUD_Test(TestCase):
             'processing_level_code': u'L1A', 'cloud_cover_percentage': 5,
             'file_identifier': '123 Product ID 123',
             'spatial_coverage': (
-            '17.54,-32.05 20.83,-32.41 20.3,-35.17 17.84,-34.65 '
-            '17.54,-32.05'),
+                '17.54,-32.05 20.83,-32.41 20.3,-35.17 17.84,-34.65 '
+                '17.54,-32.05'),
             'bbox_east': 20.83, 'md_abstract': '',
             'md_product_date': '2012-12-12T00:00:00',
             'institution_city': u'Gauteng', 'bbox_north': -32.05,
@@ -195,7 +189,7 @@ class OpticalProductCRUD_Test(TestCase):
             'institution_country': u'South Africa', 'bbox_west': 17.54,
             'institution_postcode': u'0000',
             'md_data_identification': (
-            u'SATIN 1 -- Temp Spectral mode - INSTYPE1'),
+                u'SATIN 1 -- Temp Spectral mode - INSTYPE1'),
             'bbox_south': -35.17
         }
 

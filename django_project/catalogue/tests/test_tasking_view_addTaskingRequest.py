@@ -120,7 +120,7 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'addPage.html', u'basev3.html', u'menu.html',
+            'addPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'add.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
@@ -266,7 +266,7 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'addPage.html', u'basev3.html', u'menu.html',
+            'addPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'add.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
@@ -406,7 +406,7 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'addPage.html', u'basev3.html', u'menu.html',
+            'addPage.html', u'base.html', u'menu.html',
             u'useraccounts/menu_content.html', u'add.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
