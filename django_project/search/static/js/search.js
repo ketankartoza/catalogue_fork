@@ -392,13 +392,20 @@ APP.ResultGridViewItem = Backbone.View.extend({
     initialize: function() {
         $APP.on('highlightResultItem', $.proxy(this.highlightResultItem, this));
     },
-    highlightResultItem: function() {
-        $APP.trigger('highlightSearchRecord', {'unique_product_id': this.model.get('unique_product_id')});
+    highlightResultItem: function(event, data) {
+        // if id is not set presume user has clicked in result panel on item
+        // if id is set presuem user has clicked record on the map
+        if (typeof data.id == 'undefined') {
+            $APP.trigger('highlightSearchRecord', {'unique_product_id': this.model.get('unique_product_id')});
+            var selectedID = this.model.get('unique_product_id');
+        } else {
+            var selectedID = data.id;
+        }
         $("#results-container div:first-child").each(function (id, data) {
             // reset selected rows
             $(data).css("background-color", "#ffffff");
         });
-        $("#result_item_"+ this.model.get('unique_product_id')).css("background-color", "#BAD696");
+        $("#result_item_"+ selectedID).css("background-color", "#BAD696");
     },
 
     showMetadata: function() {

@@ -22,7 +22,7 @@
         renderIntent: "temporary",
         eventListeners: {
             beforefeaturehighlighted: null,
-            featurehighlighted: this.featureSelected,
+            featurehighlighted: $.proxy(this.featureSelected,this),
             featureunhighlighted: null
         }
       }
@@ -55,7 +55,9 @@
 
   featureSelected: function(theEvent) {
     APP.blockResultPanel();
-    this.hightlightRecord(theEvent.feature.attributes.unique_product_id, false);
+    var id = theEvent.feature.attributes.unique_product_id;
+    $APP.trigger('highlightResultItem', {'id': id});
+    this.highlightRecord(id, false);
     APP.unblockResultPanel();
   },
 
