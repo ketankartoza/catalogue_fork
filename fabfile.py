@@ -371,10 +371,18 @@ def deploy(branch='master'):
         'GRANT ALL ON ALL TABLES IN SCHEMA public TO catalogue;\n'))
     fastprint(magenta(
         'TODO: install nodeenv, npm and yuglify then collect static \n'
+        'Ideally install something like:\n'
         'source venv/bin/activate\n'
         'pip install nodeenv\n'
-        'nodeenv env --node=0.8.15\n'
-        'venv/bin/npm -g install yuglify\n'))
+        'nodeenv venv --node=0.8.15\n'
+        'env/bin/npm -g install yuglify\n'
+        '\n'
+        'But that didnt work well so I did:\n'
+        'sudo apt-get install node\n'
+        'sudo apt-get install npm\n'
+        'sudo npm -g install yuglify\n'
+        'python manage.py collectstatic --settings=core.settings.prod\n'
+    ))
 
 
 @task
