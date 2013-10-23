@@ -59,7 +59,7 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -120,7 +120,8 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'addPage.html', u'base.html', u'menu.html',
+            'addPage.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html', u'add.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
@@ -186,9 +187,10 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         myPostData = {
             u'geometry_file': [u''], u'projection': [u'3'],
             u'geometry': [(
-            u'SRID=4326;POLYGON((22.807620312583 -32.186801708128,24.345706250'
-            '021 -31.776776743422,23.906253125039 -32.261154538247,22.80762031'
-            '2583 -32.186801708128))')],
+                u'SRID=4326;POLYGON((22.807620312583 -32.186801708128,24.34570'
+                '6250021 -31.776776743422,23.906253125039 -32.261154538247,22.'
+                '807620312583 -32.186801708128))'
+            )],
             u'target_date': [u'01-10-2012'], u'notes': [u''], u'ref_id': [u''],
             u'resampling_method': [u'2'],
             u'baseLayers': [u'2m Mosaic 2010 TC'],
@@ -266,7 +268,8 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'addPage.html', u'base.html', u'menu.html',
+            'addPage.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html', u'add.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
@@ -406,7 +409,8 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'addPage.html', u'base.html', u'menu.html',
+            'addPage.html', u'base.html', u'pipeline/js.html',
+            u'pipeline/css.html', u'menu.html',
             u'useraccounts/menu_content.html', u'add.html']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]

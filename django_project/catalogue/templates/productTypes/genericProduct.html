@@ -29,13 +29,12 @@
 {% block tableBody %}
 <tr><th colspan="2">Generic Properties</th></tr>
 <tr><td class="loud">Product Date</td><td class="quiet">{{ myObject.product_date }}</td></tr>
-<tr><td class="loud">Processing Level</td><td class="quiet">{{ myObject.processing_level }}</td></tr>
+<tr><td class="loud">Processing Level</td><td class="quiet">{{ myObject.product_profile.baseProcessingLevel.abbreviation }}</td></tr>
 <tr><td class="loud">Owner</td><td class="quiet">{{ myObject.owner }}</td></tr>
 <tr><td class="loud">License</td><td class="quiet">{{ myObject.license }}</td></tr>
 <tr><td class="loud">Spatial Coverage</td><td class="quiet">{{ myObject.spatial_coverage }}</td></tr>
 <tr><td class="loud">Projection</td><td class="quiet">{{ myObject.projection }}</td></tr>
 <tr><td class="loud">Quality</td><td class="quiet">{{ myObject.quality }}</td></tr>
-<tr><td class="loud">Creating Software</td><td class="quiet">{{ myObject.creating_software }}</td></tr>
 <tr><td class="loud">Original Product ID</td><td class="quiet">{{ myObject.original_product_id }}</td></tr>
 <tr><td class="loud">Product ID</td><td class="quiet">{{ myObject.product_id }}</td></tr>
 <tr><td class="loud">Product Revision</td><td class="quiet">{{ myObject.product_revision }}</td></tr>

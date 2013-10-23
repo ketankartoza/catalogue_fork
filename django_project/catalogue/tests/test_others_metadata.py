@@ -29,7 +29,8 @@ from django.test.client import Client
 from core.model_factories import UserF
 from dictionaries.tests.model_factories import (
     SatelliteInstrumentF, InstrumentTypeF, SpectralModeF,
-    OpticalProductProfileF, SatelliteF, SatelliteInstrumentGroupF
+    OpticalProductProfileF, SatelliteF, SatelliteInstrumentGroupF,
+    ProcessingLevelF
 )
 from .model_factories import (
     OpticalProductF, ProjectionF, QualityF, LicenseF
@@ -88,8 +89,18 @@ class OthersViews_metadata(TestCase):
             'license_type': myLicense
         })
 
+        myProcLevel = ProcessingLevelF.create(**{
+            'abbreviation': 'L1A'
+        })
+
+        myInstType = InstrumentTypeF.create(**{
+            'name': 'INSTYPE1',
+            'base_processing_level': myProcLevel
+        })
+
         mySatInsGroup = SatelliteInstrumentGroupF.create(**{
-            'satellite': mySatellite
+            'satellite': mySatellite,
+            'instrument_type': myInstType
         })
 
         mySatInst = SatelliteInstrumentF.create(**{
@@ -97,13 +108,8 @@ class OthersViews_metadata(TestCase):
             'satellite_instrument_group': mySatInsGroup
         })
 
-        myInstType = InstrumentTypeF.create(**{
-            'name': 'INSTYPE1'
-        })
-
         mySpecMode = SpectralModeF.create(**{
-            'name': 'Temp Spectral mode',
-            'instrument_type': myInstType
+            'name': 'Temp Spectral mode'
         })
 
         myOPP = OpticalProductProfileF.create(**{
@@ -171,8 +177,18 @@ class OthersViews_metadata(TestCase):
             'license_type': myLicense
         })
 
+        myProcLevel = ProcessingLevelF.create(**{
+            'abbreviation': 'L1A'
+        })
+
+        myInstType = InstrumentTypeF.create(**{
+            'name': 'INSTYPE1',
+            'base_processing_level': myProcLevel
+        })
+
         mySatInsGroup = SatelliteInstrumentGroupF.create(**{
-            'satellite': mySatellite
+            'satellite': mySatellite,
+            'instrument_type': myInstType
         })
 
         mySatInst = SatelliteInstrumentF.create(**{
@@ -180,13 +196,8 @@ class OthersViews_metadata(TestCase):
             'satellite_instrument_group': mySatInsGroup
         })
 
-        myInstType = InstrumentTypeF.create(**{
-            'name': 'INSTYPE1'
-        })
-
         mySpecMode = SpectralModeF.create(**{
-            'name': 'Temp Spectral mode',
-            'instrument_type': myInstType
+            'name': 'Temp Spectral mode'
         })
 
         myOPP = OpticalProductProfileF.create(**{

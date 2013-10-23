@@ -14,13 +14,12 @@
 <table>
 <tr><th colspan="2">Generic Properties</th></tr>
 <tr><td class="loud">Product Date</td><td class="quiet">Dec. 12, 2012, midnight</td></tr>
-<tr><td class="loud">Processing Level</td><td class="quiet">L1A L1A Proc level</td></tr>
-<tr><td class="loud">Owner</td><td class="quiet">SANSA</td></tr>
-<tr><td class="loud">License</td><td class="quiet">SAC License</td></tr>
+<tr><td class="loud">Processing Level</td><td class="quiet">L1A</td></tr>
+<tr><td class="loud">Owner</td><td class="quiet"></td></tr>
+<tr><td class="loud">License</td><td class="quiet"></td></tr>
 <tr><td class="loud">Spatial Coverage</td><td class="quiet">POLYGON ((17.5399999999999991 -32.0499999999999972, 20.8299999999999983 -32.4099999999999966, 20.3000000000000007 -35.1700000000000017, 17.8399999999999999 -34.6499999999999986, 17.5399999999999991 -32.0499999999999972))</td></tr>
 <tr><td class="loud">Projection</td><td class="quiet">EPSG: 32737 UTM37S</td></tr>
 <tr><td class="loud">Quality</td><td class="quiet">SuperQuality</td></tr>
-<tr><td class="loud">Creating Software</td><td class="quiet">FreeSoftware</td></tr>
 <tr><td class="loud">Original Product ID</td><td class="quiet">123 Product ID 123</td></tr>
 <tr><td class="loud">Product ID</td><td class="quiet">123 Product ID 123</td></tr>
 <tr><td class="loud">Product Revision</td><td class="quiet"></td></tr>

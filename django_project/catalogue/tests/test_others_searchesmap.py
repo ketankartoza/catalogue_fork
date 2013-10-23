@@ -119,9 +119,13 @@ class OthersViews_searchesMap(TestCase):
 
         # check used templates
         myExpTemplates = [
-            u'base-fluid.html', u'pipeline/css.html',
+            'map.html', u'mapbody.html', u'base.html', u'pipeline/js.html',
             u'pipeline/css.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'pipeline/css.html']
+            u'useraccounts/menu_content.html', u'page.html',
+            u'base-fluid.html', u'pipeline/css.html', u'pipeline/css.html',
+            u'menu.html', u'useraccounts/menu_content.html',
+            u'pipeline/js.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

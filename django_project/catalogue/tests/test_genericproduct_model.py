@@ -172,7 +172,7 @@ class TestGenericProductCRUD(TestCase):
             u'original_product_id': u'11204048606190846322X',
         })
 
-        myExpResult = u'S1 HRV X S1C2 0120 00 0404 00 860619'
+        myExpResult = u'11204048606190846322X'
 
         self.assertEqual(myModel.tidySacId(), myExpResult),
 

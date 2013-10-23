@@ -23,8 +23,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 import os
-import re
-import datetime
 import urllib2
 from functools import wraps
 
@@ -39,11 +37,8 @@ from PIL import Image, ImageFilter, ImageOps
 from catalogue.utmzonecalc import utmZoneFromLatLon
 from catalogue.dims_lib import dimsWriter
 from catalogue.models import (
-    Institution,
-    License,
     Projection,
     Quality,
-    CreatingSoftware,
     PlaceType,
     Place,
     Topic,
@@ -629,7 +624,7 @@ class GenericProduct(models.Model):
         myPath = os.path.join(
             settings.IMAGERY_ROOT, self.productDirectory(),
             self.product_id + '.tar.bz2')
-        myLevel = self.processing_level.abbreviation
+        myLevel = self.product_profile.baseProcessingLevel().abbreviation
         myLevel = myLevel.replace('L', '')
         # since we want *RAW* image in this method set processing level to 1Aa
         myPath = myPath.replace(myLevel, '1Aa')
@@ -802,7 +797,8 @@ class GenericImageryProduct(GenericProduct):
             product_date=self.product_date.isoformat(),
             file_identifier=self.product_id,
             vertical_cs=self.projection.name,
-            processing_level_code=self.processing_level.abbreviation,
+            processing_level_code=(
+                self.product_profile.baseProcessingLevel().abbreviation),
             md_data_identification=unicode(self.product_profile),
             md_product_date=self.product_date.isoformat(),
             md_abstract=self.getAbstract(),
@@ -813,12 +809,12 @@ class GenericImageryProduct(GenericProduct):
             image_quality_code=self.quality.name,
             spatial_coverage=' '.join(
                 ["%s,%s" % _p for _p in self.spatial_coverage.tuple[0]]),
-            institution_name=self.owner.name,
-            institution_address=self.owner.address1,
-            institution_city=self.owner.address2,
+            institution_name=self.product_profile.owner().name,
+            institution_address=self.product_profile.owner().address1,
+            institution_city=self.product_profile.owner().address2,
             institution_region='',
-            institution_postcode=self.owner.post_code,
-            institution_country=self.owner.address3,)
+            institution_postcode=self.product_profile.owner().post_code,
+            institution_country=self.product_profile.owner().address3,)
         return metadata
 
     def toHtml(self, theImageIsLocal=False):
@@ -900,8 +896,8 @@ class GenericSensorProduct(GenericImageryProduct):
         """
         myPath = os.path.join(
             self.product_profile.satellite_instrument
-            .satellite_instrument_group.satellite.abbreviation,
-            str(self.processing_level.abbreviation),
+                .satellite_instrument_group.satellite.abbreviation,
+            str(self.product_profile.baseProcessingLevel().abbreviation),
             str(self.product_acquisition_start.year),
             str(self.product_acquisition_start.month),
             str(self.product_acquisition_start.day))
@@ -1114,7 +1110,8 @@ class OpticalProduct(GenericSensorProduct):
             product_date=self.product_date.isoformat(),
             file_identifier=self.product_id,
             vertical_cs=self.projection.name,
-            processing_level_code=self.processing_level.abbreviation,
+            processing_level_code=(
+                self.product_profile.baseProcessingLevel().abbreviation),
             cloud_cover_percentage=self.cloud_cover,  # OpticalProduct only
             md_data_identification=unicode(self.product_profile),
             md_product_date=self.product_date.isoformat(),
@@ -1126,12 +1123,12 @@ class OpticalProduct(GenericSensorProduct):
             image_quality_code=self.quality.name,
             spatial_coverage=' '.join(
                 ['%s,%s' % _p for _p in self.spatial_coverage.tuple[0]]),
-            institution_name=self.owner.name,
-            institution_address=self.owner.address1,
-            institution_city=self.owner.address2,
+            institution_name=self.product_profile.owner().name,
+            institution_address=self.product_profile.owner().address1,
+            institution_city=self.product_profile.owner().address2,
             institution_region='',
-            institution_postcode=self.owner.post_code,
-            institution_country=self.owner.address3,)
+            institution_postcode=self.product_profile.owner().post_code,
+            institution_country=self.product_profile.owner().address3,)
         return metadata
 
     def productDirectory(self):

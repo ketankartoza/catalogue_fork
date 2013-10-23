@@ -25,12 +25,13 @@ from datetime import datetime
 from django.test import TestCase
 
 from dictionaries.tests.model_factories import (
-    OpticalProductProfileF, SatelliteInstrumentF,
-    SpectralModeF, InstrumentTypeF, SatelliteF, SatelliteInstrumentGroupF
+    OpticalProductProfileF, SatelliteInstrumentF, ProcessingLevelF,
+    SpectralModeF, InstrumentTypeF, SatelliteF, SatelliteInstrumentGroupF,
+    CollectionF
 )
 
 from .model_factories import (
-    OpticalProductF, ProjectionF, QualityF
+    OpticalProductF, ProjectionF, QualityF, InstitutionF
 )
 
 
@@ -135,12 +136,38 @@ class OpticalProductCRUD_Test(TestCase):
             u'name': u'UTM37S', u'epsg_code': 32737
         })
 
+        myInstitution = InstitutionF.create(**{
+            'address1': 'Hartebeeshoek',
+            'address2': 'Gauteng',
+            'address3': 'South Africa',
+            'name': 'SANSA',
+            'post_code': '0000'
+        })
+
+        myCollection = CollectionF.create(**{
+            'institution': myInstitution
+        })
+
+        mySat = SatelliteF.create(**{
+            'collection': myCollection
+        })
+
+        mySatInstGroup = SatelliteInstrumentGroupF.create(**{
+            'satellite': mySat
+        })
+
         mySatInst = SatelliteInstrumentF.create(**{
-            'operator_abbreviation': 'SATIN 1'
+            'operator_abbreviation': 'SATIN 1',
+            'satellite_instrument_group': mySatInstGroup
+        })
+
+        myProcLevel = ProcessingLevelF.create(**{
+            'abbreviation': 'L1A'
         })
 
         myInstType = InstrumentTypeF.create(**{
-            'name': 'INSTYPE1'
+            'name': 'INSTYPE1',
+            'base_processing_level': myProcLevel
         })
 
         mySpecMode = SpectralModeF.create(**{
@@ -155,7 +182,7 @@ class OpticalProductCRUD_Test(TestCase):
         myQuality = QualityF.create(**{'name': 'SuperQuality'})
 
         myModel = OpticalProductF.create(**{
-            'unique_product_id': '123 Product ID 123',
+            'original_product_id': '123 Product ID 123',
             'projection': myProjection,
             'product_profile': myOPP,
             'quality': myQuality,
@@ -175,26 +202,25 @@ class OpticalProductCRUD_Test(TestCase):
 
         myExpResult = {
             'product_date': '2012-12-12T00:00:00',
-            'institution_address': u'Hartebeeshoek', 'institution_region': '',
+            'institution_address': 'Hartebeeshoek', 'institution_region': '',
             'image_quality_code': 'SuperQuality', 'vertical_cs': u'UTM37S',
-            'processing_level_code': u'L1A', 'cloud_cover_percentage': 5,
+            'processing_level_code': 'A9', 'cloud_cover_percentage': 5,
             'file_identifier': '123 Product ID 123',
             'spatial_coverage': (
-                '17.54,-32.05 20.83,-32.41 20.3,-35.17 17.84,-34.65 '
-                '17.54,-32.05'),
+                '17.54,-32.05 20.83,-32.41 20.3,-35.17 17.84,-34.65 17.54,'
+                '-32.05'),
             'bbox_east': 20.83, 'md_abstract': '',
             'md_product_date': '2012-12-12T00:00:00',
-            'institution_city': u'Gauteng', 'bbox_north': -32.05,
-            'institution_name': u'SANSA',
-            'institution_country': u'South Africa', 'bbox_west': 17.54,
-            'institution_postcode': u'0000',
+            'institution_city': 'Gauteng', 'bbox_north': -32.05,
+            'institution_name': 'SANSA', 'institution_country': 'South Africa',
+            'bbox_west': 17.54, 'institution_postcode': '0000',
             'md_data_identification': (
                 u'SATIN 1 -- Temp Spectral mode - INSTYPE1'),
             'bbox_south': -35.17
         }
 
         myRes = myModel.getMetadataDict()
-        self.assertEqual(myRes, myExpResult)
+        self.assertDictEqual(myRes, myExpResult)
 
     def test_OpticalProduct_thumbnailDirectory(self):
         """
@@ -233,12 +259,21 @@ class OpticalProductCRUD_Test(TestCase):
         Tests OpticalProduct model productDirectory method
         """
 
+        myProcLevel = ProcessingLevelF.create(**{
+            'abbreviation': 'L1A'
+        })
+
+        myInsType = InstrumentTypeF.create(**{
+            'base_processing_level': myProcLevel
+        })
+
         mySat = SatelliteF.create(**{
             'abbreviation': 'mySAT'
         })
 
         mySatInstGroup = SatelliteInstrumentGroupF.create(**{
-            'satellite': mySat
+            'satellite': mySat,
+            'instrument_type': myInsType
         })
 
         mySatInst = SatelliteInstrumentF.create(**{
