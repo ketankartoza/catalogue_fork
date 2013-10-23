@@ -18,7 +18,7 @@ INSTALLED_APPS += (
 
 # Added by George for webodt
 WEBODT_CONVERTER = 'webodt.converters.openoffice.OpenOfficeODFConverter'
-WEBODT_TEMPLATE_PATH = '/home/web/catalogue/django_project/reports/report-templates/'
+WEBODT_TEMPLATE_PATH = ABS_PATH('reports', 'report-templates')
 WEBODT_ODF_TEMPLATE_PREPROCESSORS = [
     'webodt.preprocessors.xmlfor_preprocessor',
     'webodt.preprocessors.unescape_templatetags_preprocessor',
