@@ -173,7 +173,10 @@ $('select, input, textarea, .help-inline ').addClass('span8');
     {% endif %}
 
     var myMap = new APP.SansaMap('map');
+
+    {% if myShowCartFlag %}
     //var cartLayer = new APP.CartLayer(myMap, {'username': UserID});
+    {% endif %}
 
     $('#map-layerswitcher-control').click(function() {
       toggleLayerSwitcher();

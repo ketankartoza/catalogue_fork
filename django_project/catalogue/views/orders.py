@@ -492,28 +492,6 @@ def addOrder(theRequest):
     myTitle = 'Create a new order'
     logger.info('Preparing order for user ' + str(theRequest.user))
     myRecords = None
-    (myLayersList,
-     myLayerDefinitions, myActiveBaseMap) = standardLayers(theRequest)
-    myCartLayer = (
-        'var myCartLayer = new OpenLayers.Layer.WMS("Cart", "http://'
-        + settings.WMS_SERVER +
-        '/cgi-bin/mapserv?map='
-        + settings.CART_LAYER +
-        '&user='
-        + str(theRequest.user.username) + '"' + ''',
-            {
-               version: '1.1.1',
-               layers: 'Cart',
-               srs: 'EPSG:4326',
-               format: 'image/png',
-               transparent: 'true'
-             },
-             {isBaseLayer: false, singleTile:true});
-             ''')
-
-    # UGLY hack for adding Cart layer
-    myLayersList = myLayersList[:-1] + ', myCartLayer ]'
-    myLayerDefinitions.append(myCartLayer)
 
     if str(theRequest.user) == 'AnonymousUser':
         logger.debug('User is anonymous')
@@ -543,6 +521,7 @@ def addOrder(theRequest):
         # myShowPreviewFlag
         # myShowDeliveryDetailsFlag
         # myShowDeliveryDetailsFormFlag
+        'myShowCartFlag': True,
         'myShowSensorFlag': False,
         'myShowSceneIdFlag': True,
         'myShowDateFlag': False,
@@ -571,9 +550,6 @@ def addOrder(theRequest):
                       ' to a specific geographic region, you can digitise'
                       ' that region using the map above, or the geometry'
                       ' input field below.</div>'),
-        'myLayerDefinitions': myLayerDefinitions,
-        'myLayersList': myLayersList,
-        'myActiveBaseMap': myActiveBaseMap
     }
     logger.info('Add Order called')
     if theRequest.method == 'POST':
