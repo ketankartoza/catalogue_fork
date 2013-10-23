@@ -1,68 +1,8 @@
-  <script type="text/javascript">
-    // <![CDATA[
-    //$.ui.dialog.prototype.options.bgiframe = true;
-  function check_search_dates() { /* do nothing */ };
-  function init() {
-    if (OpenLayers.Util.getBrowserName() == "msie" && !window.ieLoaded) {
-      window.ieLoaded = true;
-      setTimeout(init, 2000);
-      return;
-    }  
-    {% if myLayerDefinitions %}
-    {% for myValue in myLayerDefinitions %}
-    {{ myValue|safe }}
-    {% endfor %}
-    {% endif %}
-    {% if myLayersList %}
-    setupBaseMap();
-    {% endif %}
-    {% if myTaskingRequestFlag %}
-    setupTaskingMap({{ myLayersList|safe }} );
-    {% else %}
-    mMap.addControl(new OpenLayers.Control.LayerSwitcher());
-    mMap.addLayers( {{ myLayersList|safe }} );
-    mVectorLayer = new OpenLayers.Layer.Vector("search_geometry");
-    mMap.addLayer(mVectorLayer);
-        // Add geometry specific panel of toolbar controls
-        setupEditingPanel(mVectorLayer);
 
-        mWKTFormat = new OpenLayers.Format.WKT();
-        mVectorLayer.events.on({"featuremodified" : modifyWKT});
-        mVectorLayer.events.on({"featureadded" : addWKT});
-
-        var bounds = new OpenLayers.Bounds(16.3477, -35.2411, 33.3984, -21.9727);
-        bounds.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
-        mMap.zoomToExtent(bounds);
-        {% endif %}
-/*
-      {% for myField in myForm %}
-        $("#{{myField.html_name}}Help").dialog({
-        autoOpen: false, 
-        bgiframe: true,
-        modal: true,
-        buttons: {
-          Ok: function() {
-            $(this).dialog('close');
-          }
-        }
-      });
-      $('#{{myField.html_name}}Button').click(function() 
-      { 
-        $('#{{myField.html_name}}Help').dialog('open'); 
-        return false;
-      }); 
-      {% endfor %}
-      */
-{# // add tooltip #}
-//$("#map-navigation-panel div[title]").tooltip('#maptooltip');
-    $('#OpenLayers_Control_MaximizeDiv_innerImage').css({'height':'100px'}); {# //dirty hack, OL sets 'style' element which cannot be overriden by CSS #}
-  };
-  //]]>
-  </script>
   <div id="maptooltip">&nbsp;</div>
   <div class="row-fluid">
     <div id="map-container">
-      <div id="map" style="width: 500px; height: 500px;"></div>
+      <div id="map" style="height:500px;"></div>
       <div id="map-panel" class="row-fluid gap-top">
         <div id="map-navigation-panel" class="span4 center"></div>
         <div id="map-location" class="span4 center"></div>
@@ -183,18 +123,7 @@
     </div>
   </div>
   {% endif %}
-  <!--
-  {% for myField in myForm %}
-    {# popup help for this field #}
-    <div id="{{myField.html_name}}Help" title="{{ myField.label }}">
-      <p>
-        <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
-        {{ myField.help_text }}
-      </p>
-    </div>
-    {# popup ends #}
-  {% endfor %}
--->
+
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -208,4 +137,18 @@
       </div>
 <script>
 $('select, input, textarea, .help-inline ').addClass('span8');
+</script>
+
+ <script type="text/javascript">
+    {% if user.is_authenticated %}
+      var UserLoged = true;
+    {% else %}
+      var UserLoged = false;
+    {% endif %}
+  </script>
+  <script>
+  $( document ).ready(function() {
+
+    var myMap = new APP.SansaMap('map');
+    });
 </script>

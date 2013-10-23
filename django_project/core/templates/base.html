@@ -14,31 +14,34 @@
   {# for Bootstrap responsive layout #}
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  {% block extrajs %}
-    <script type="text/javascript" charset="utf-8" src="{% static 'js/openlayers/OpenLayers.js' %}">  </script>
-    <script type="text/javascript" charset="utf-8" src="{% static 'js/openlayers-plugins/ScaleBar.js' %}"> </script>
-    {# bring in the OpenStreetMap OpenLayers layers. Using this hosted file will make sure we are kept up to date with any necessary changes #}
-    <script type="text/javascript" charset="utf-8" src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
-
-    {% compressed_js 'contrib' %}
-
-    {# used for charting and visalisation - see http://code.google.com/apis/visualization/interactive_charts.html #}
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-
-  {% endblock %}
       {% block extracss %}
-      {# Be very careful about changing the order of these css includes as it can have unintended side effects #}
-      <link href="{% url 'logVisit' %}" rel="stylesheet" type="text/css" />
+    {# Be very careful about changing the order of these css includes as it can have unintended side effects #}
+    <link href="{% url 'logVisit' %}" rel="stylesheet" type="text/css" />
 
-      {% compressed_css 'contrib' %}
+    {% compressed_css 'contrib' %}
+    {% compressed_css 'addpage' %}
 
-      {% endblock %}
+    {% endblock %}
+
+  {% block extrajs %}
+    {# We can't use staticfiles template tag, because it will, in the combination with django-pipeline #}
+    {# it will generate a new OpenLayers.<insert_hash>.js filename which will break _getScriptLocation() -> https://github.com/openlayers/openlayers/blob/08327915d1f7f2add61e33c2092db211604a1921/lib/OpenLayers/SingleFile.js#L27 #}
+    {# which in the end breaks https://github.com/openlayers/openlayers/blob/08327915d1f7f2add61e33c2092db211604a1921/lib/OpenLayers/Map.js#L561 #}
+    {# the end result is a broken path for the style.css, which subtly brakes the page #}
+    <script type="text/javascript" charset="utf-8" src="/static/js/openlayers/OpenLayers.js"></script>
+
+    {% compressed_js 'addpage' %}
+
+    {% endblock %}
+
+
 
       {% block extraHeaders %}
       {% endblock %}
 
       <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}"/>
       <link rel="icon" href="{% static 'images/animated_favicon.gif' %}" type="image/gif" />
+
     </head>
     <body {% block body_load %}{% endblock %}>
       {% include "menu.html" %}

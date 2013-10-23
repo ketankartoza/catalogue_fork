@@ -41,7 +41,6 @@
 
     _initialize: function() {
       var self = this;
-
       this.map = new OpenLayers.Map(this.map_element, this.default_options);
 
       this.initLayers();

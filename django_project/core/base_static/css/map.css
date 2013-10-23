@@ -1,18 +1,4 @@
 /*
- * Map size
- */
-
-#map {
-  /* width defined by blueprint.css */
-  /*height: 100%;*/
-  left: 0;
-  right: 0;
-  top: 37px;
-  bottom:34px;
-  position: fixed;
-}
-
-/*
  * Css required for map controls that are not rendered in the map widget
  */
 

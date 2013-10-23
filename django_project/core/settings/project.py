@@ -142,6 +142,35 @@ PIPELINE_JS = {
             'js/widget.sansaGeoSearchLayer.js'
         ),
         'output_filename': 'js/fluid.js',
+    },
+    'addpage': {
+        'source_filenames': (
+            'js/jquery/jquery-1.8.2.min.js',
+            'js/init_project.js',
+            'js/jquery/jquery-ui-1.10.2.custom.min.js',
+            'js/jquery.form.min.js',
+            'js/csrf-ajax.js',
+            'js/underscore-min.js',
+            'js/backbone-min.js',
+            'js/backbone-tastypie.js',
+            'js/backbone-pagination.js',
+            'bootstrap/js/bootstrap.min.js',
+            'datepicker/js/bootstrap-datepicker.js',
+            'js/bootstrap-modal.js',
+            'js/bootstrap-modalmanager.js',
+            'js/bootstrap-listTree.js',
+            'js/perfect-scrollbar-0.4.3.with-mousewheel.min.js',
+            'js/jquery.blockUI.js',
+            'js/map_layers.js',
+            'js/openlayers-plugins/ScaleBar.js',
+            'js/date_utils.js',
+            'js/widget.daterange.js',
+            'js/widget.sansaMap.js',
+            'js/widget.sansaMapSearchLayer.js',
+            'js/widget.sansaGeoSearchLayer.js',
+            'js/widget.deliveryform.js',
+        ),
+        'output_filename': 'js/fluid.js',
     }
 
 }
@@ -162,6 +191,20 @@ PIPELINE_CSS = {
         },
     },
     'fluid': {
+        'source_filenames': (
+            'css/search-page.css',
+            'css/tabs.css',
+            'css/flat-buttons.css',
+            'css/bootstrap-listTree.css',
+            'css/perfect-scrollbar.css',
+            'css/bootstrap-modal.css'
+        ),
+        'output_filename': 'css/fluid.css',
+        'extra_context': {
+            'media': 'screen, projection',
+        },
+    },
+    'addpage': {
         'source_filenames': (
             'css/tabs.css',
             'css/flat-buttons.css',
