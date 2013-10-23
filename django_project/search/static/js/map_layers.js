@@ -423,6 +423,8 @@ WEB_LAYERS.Heatmap_lastweek = new OpenLayers.Layer.Image(
      }
 );
 
+
+
 // Note for this layer to be used you need to regex replace
 // USERNAME with theRequest.user.username
 // WEB_LAYERS.CartLayer = new OpenLayers.Layer.WMS('Cart', 'http://' +

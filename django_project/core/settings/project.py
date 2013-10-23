@@ -166,7 +166,7 @@ PIPELINE_JS = {
             'js/date_utils.js',
             'js/widget.daterange.js',
             'js/widget.sansaMap.js',
-            'js/widget.sansaMapSearchLayer.js',
+            'js/widget.sansaCartLayer.js',
             'js/widget.sansaGeoSearchLayer.js',
             'js/widget.deliveryform.js',
         ),
