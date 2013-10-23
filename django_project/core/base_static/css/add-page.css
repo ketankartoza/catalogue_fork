@@ -69,10 +69,10 @@
 #map-layerswitcher {
     width: 905px;
     height: 110px;
-    z-index: 101;
-    position: fixed;
-    bottom: 95px;
-    left: 50px;
+    z-index: 750;
+    position: absolute;
+    bottom: 65px;
+    left: 10px;
     color: #000;
     background: #ffffff;
     display: none;

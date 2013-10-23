@@ -151,10 +151,32 @@ $('select, input, textarea, .help-inline ').addClass('span8');
     {% else %}
       var UserLoged = false;
     {% endif %}
+    var LayerSwitcherState = false;
+    function toggleLayerSwitcher() {
+    if (LayerSwitcherState) {
+        $('#map-layerswitcher').hide();
+        $('#map-layerswitcher-control').css('color','#FFFFFF');
+        LayerSwitcherState = false;
+    } else {
+        $('#map-layerswitcher').show();
+        $('#map-layerswitcher-control').css('color','green');
+        LayerSwitcherState = true;
+    }
+  }
+
   </script>
   <script>
   $( document ).ready(function() {
+    var UserID = '0';
+    {% if user.is_authenticated %}
+      UserID = '{{ user.username }}';
+    {% endif %}
 
     var myMap = new APP.SansaMap('map');
+    //var cartLayer = new APP.CartLayer(myMap, {'username': UserID});
+
+    $('#map-layerswitcher-control').click(function() {
+      toggleLayerSwitcher();
+    });
     });
 </script>
