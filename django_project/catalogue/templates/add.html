@@ -178,8 +178,12 @@ $('select, input, textarea, .help-inline ').addClass('span8');
     //var cartLayer = new APP.CartLayer(myMap, {'username': UserID});
     {% endif %}
 
+    {% if myTaskingRequestFlag %}
+      var geoSearchLayer = new APP.GeoSearchLayer(myMap);
+    {% endif %}
+
     $('#map-layerswitcher-control').click(function() {
       toggleLayerSwitcher();
     });
-    });
+  });
 </script>

@@ -172,12 +172,9 @@ def addTaskingRequest(theRequest):
     """Used to create a new tasking request"""
     logger.debug(('Post vars:' + str(theRequest.POST)))
     logger.debug(('Post files:' + str(theRequest.FILES)))
-    myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
-        theRequest)
     logger.debug('Add tasking request called')
     myTitle = 'Create a new tasking request'
     logger.info('Preparing tasking request for user ' + str(theRequest.user))
-    myRecords = None
     if str(theRequest.user) == 'AnonymousUser':
         logger.debug('User is anonymous')
         logger.info('Anonymous users can\'t have items in their cart')
@@ -198,8 +195,6 @@ def addTaskingRequest(theRequest):
             'myTitle': myTitle,
             'mySubmitLabel': "Submit Tasking Request",
             'myTaskingRequestFlag': True,
-            'myLayerDefinitions': myLayerDefinitions,
-            'myLayersList': myLayersList,
         }
         if (myTaskingForm.is_valid() and
                 myTaskingDeliveryDetailsForm.is_valid()):
@@ -268,8 +263,6 @@ def addTaskingRequest(theRequest):
             'myTitle': myTitle,
             'mySubmitLabel': "Submit Tasking Request",
             'myTaskingRequestFlag': True,
-            'myLayerDefinitions': myLayerDefinitions,
-            'myLayersList': myLayersList,
         }
         logger.info('Add Tasking Request: new object requested')
         return render_to_response(
