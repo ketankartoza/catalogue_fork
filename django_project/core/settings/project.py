@@ -206,6 +206,7 @@ PIPELINE_CSS = {
     },
     'addpage': {
         'source_filenames': (
+            'css/add-page.css',
             'css/tabs.css',
             'css/flat-buttons.css',
             'css/bootstrap-listTree.css',
