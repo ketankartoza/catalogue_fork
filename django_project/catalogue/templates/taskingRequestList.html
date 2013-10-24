@@ -22,7 +22,9 @@ function showTask(theId) {
 </div>
 
 <div class="row-fluid center gap-bottom">
-  <button id="product-orders-view-btn" onclick='location="{% url 'listOrders' %}"' class="btn btn-small"><i class="icon-refresh"></i> Switch to My Orders View</button>
+  {% if user.is_staff %}
+  <button id="product-orders-view-btn" onclick='location="{% url 'listOrders' %}"' class="btn btn-small"><i class="icon-refresh"></i> Switch to orders View</button>
+  {% endif %}
   <div class="btn-group">
     {% if myRecords.has_previous %}
       <button href="{{myUrl}}?page={{ myRecords.previous_page_number }}" class="btn btn-small"><i class="icon-backward"></i></button>

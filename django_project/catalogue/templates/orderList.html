@@ -26,7 +26,9 @@ function showOrder(theId) {
     <button class="btn btn-small monthly-btn" onclick='location="{% url 'orderMonthlyReport' myCurrentMonth|date:'Y'  myCurrentMonth|date:'m' %}"'><i class="icon-calendar"></i></button>
     <button class="btn btn-small summary-btn" onclick='location="{% url 'ordersSummary' %}"'><i class="icon-tasks"></i></button>
     {% endif %}
-    <button id="tasking-view-btn" class="btn btn-small" onclick='location="{% url 'myTaskingRequests' %}"'><i class="icon-refresh"></i> Switch to Tasking Request View</button>
+    {% if user.is_staff %}
+      <button id="tasking-view-btn" class="btn btn-small" onclick='location="{% url 'listTaskingRequests' %}"'><i class="icon-refresh"></i> Switch to tasking requests</button>
+    {% endif %}
   </div>
 </div>
 <div class="row-fluid center">
