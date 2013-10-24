@@ -111,7 +111,8 @@ PIPELINE_JS = {
             'js/widget.mapResizer.js',
             'js/widget.deliveryform.js',
             'bootstrap/js/bootstrap.min.js',
-            'datepicker/js/bootstrap-datepicker.js'
+            'datepicker/js/bootstrap-datepicker.js',
+            'js/sansa-ui.js'
         ),
         'output_filename': 'js/contrib.js',
     },
@@ -169,6 +170,7 @@ PIPELINE_JS = {
             'js/widget.sansaCartLayer.js',
             'js/widget.sansaGeoSearchLayer.js',
             'js/widget.deliveryform.js',
+            'js/sansa-ui.js'
         ),
         'output_filename': 'js/fluid.js',
     }
