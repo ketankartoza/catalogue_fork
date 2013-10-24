@@ -103,7 +103,7 @@ def myTaskingRequests(theRequest):
     Used to get an overview listing of tasking requests.
     Non staff users can only see their own orders listed
     """
-    myPath = 'taskingRequestPage.html'
+    myPath = 'taskingRequestListPage.html'
     if theRequest.is_ajax():
         # No page container needed, just a snippet
         myPath = 'taskingRequestList.html'

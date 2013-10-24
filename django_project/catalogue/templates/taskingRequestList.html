@@ -4,7 +4,7 @@
 <script type="text/javascript">
 function showTask(theId) {
   theUrl = '/viewtaskingrequest/' + theId + '/';
-  $('#content').load(theUrl,'', zebraTables );
+  $('#main-content').load(theUrl,'', zebraTables );
 };
 </script>
 <div class="row-fluid">
@@ -22,7 +22,7 @@ function showTask(theId) {
 </div>
 
 <div class="row-fluid center gap-bottom">
-  <button id="product-orders-view-btn" onclick='location="{% url 'listOrders' %}"' class="btn btn-small"><i class="icon-refresh"></i></button>
+  <button id="product-orders-view-btn" onclick='location="{% url 'listOrders' %}"' class="btn btn-small"><i class="icon-refresh"></i> Switch to My Orders View</button>
   <div class="btn-group">
     {% if myRecords.has_previous %}
       <button href="{{myUrl}}?page={{ myRecords.previous_page_number }}" class="btn btn-small"><i class="icon-backward"></i></button>
@@ -51,9 +51,9 @@ function showTask(theId) {
         <td>{{myOrder.id }}</td>
         <td>{{myOrder.order_date|date:"D, d M Y, H:m" }}</td>
         <td>{{myOrder.order_status}}</td>
-        <td>{{myOrder.user}}</td>
+        <td>{{myOrder.user.first_name}} {{myOrder.user.last_name}}</td>
         <td class="center">
-          <a onclick='$("#content").load("{% url 'viewTaskingRequest' myOrder.id %}","", zebraTables ); return false;'>
+          <a href="Javascript:void(0);" onclick='$("#main-content").load("{% url 'viewTaskingRequest' myOrder.id %}","", zebraTables ); return false;'>
             <i class="icon-search"></i>
           </a>
         </td>
