@@ -395,7 +395,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
     highlightResultItem: function(event, data) {
         // if id is not set presume user has clicked in result panel on item
         // if id is set presuem user has clicked record on the map
-        if (typeof data.id == 'undefined') {
+        if (typeof data == 'undefined') {
             $APP.trigger('highlightSearchRecord', {'unique_product_id': this.model.get('unique_product_id')});
             var selectedID = this.model.get('unique_product_id');
         } else {
