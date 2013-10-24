@@ -521,7 +521,7 @@ def addOrder(theRequest):
         # myShowPreviewFlag
         # myShowDeliveryDetailsFlag
         # myShowDeliveryDetailsFormFlag
-        'myShowCartFlag': True,
+        'myShowMapFlag': True,
         'myShowSensorFlag': False,
         'myShowSceneIdFlag': True,
         'myShowDateFlag': False,
@@ -643,7 +643,7 @@ def addOrder(theRequest):
             'myOrderForm': myOrderForm,
             'myDeliveryDetailForm': myDeliveryDetailForm,
             'myTitle': myTitle,
-            'mySubmitLabel': 'Submit Order',
+            'mySubmitLabel': 'Submit Order'
         }
         # shortcut to join two dicts
         myOptions.update(myExtraOptions),

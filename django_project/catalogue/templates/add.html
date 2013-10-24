@@ -174,8 +174,13 @@ $('select, input, textarea, .help-inline ').addClass('span8');
 
     var myMap = new APP.SansaMap('map');
 
-    {% if myShowCartFlag %}
-    //var cartLayer = new APP.CartLayer(myMap, {'username': UserID});
+    var CartRecordsWTK = [];
+
+    {% if myShowMapFlag %}
+      {% for record in myRecords %}
+        CartRecordsWTK.push('{{ record.product.spatial_coverage.wkt }}');
+      {% endfor %}
+      var cartLayer = new APP.CartLayer(myMap, {'wkt': CartRecordsWTK});
     {% endif %}
 
     {% if myTaskingRequestFlag %}
