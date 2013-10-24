@@ -31,3 +31,12 @@ function uiBlock() {
 function uiUnblock() {
     $.unblockUI();
 }
+
+function setupPreviewDialogCart( )
+{
+  $('#main-content').on('click','.mini-icon', function () {
+    var myRecordId = $(this).attr('longdesc');
+    $('#modalContainer').load("/thumbnailpage/" + myRecordId + "/");
+    $('#myModal').modal('show');
+  });
+}

@@ -429,11 +429,9 @@ def showThumbPage(theRequest, theId):
         )
     except AttributeError:
         pass
-    myImageFile = os.path.join(
-        myProduct.thumbnailDirectory(), myProduct.product_id + '.jpg')
     myDetails.append(
-        '<tr><td><center><img src=\"/thumbnails/'
-        + myImageFile + '"></center></td></tr>')
+        '<tr><td><center><img src=\"/thumbnail/'
+        + theId + '/large/"></center></td></tr>')
     #render_to_response is done by the renderWithContext decorator
     logger.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
     logger.info('Static path    :   ' + str(settings.STATIC_ROOT))
