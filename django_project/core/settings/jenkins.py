@@ -64,7 +64,7 @@ JENKINS_TASKS = (
 JENKINS_TEST_RUNNER = 'django_jenkins.nose_runner.CINoseTestSuiteRunner'
 
 # semi-hardcoded YUGLIFY path, for jenkins
-PIPELINE_YUGLIFY_BINARY = ABS_PATH(
-    '..', 'venv', 'bin', 'node', ABS_PATH(
-        '..', 'node_modules', 'yuglify', 'bin', 'yuglify')
+PIPELINE_YUGLIFY_BINARY = (
+    ABS_PATH('..', 'venv', 'bin', 'node') + ' ' +
+    ABS_PATH('..', 'node_modules', 'yuglify', 'bin', 'yuglify')
 )
