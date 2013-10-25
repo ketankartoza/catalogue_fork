@@ -77,7 +77,7 @@ if (!Array.prototype.indexOf)
 			    self.form=$(result);
 			    self.form.insertAfter(order_product);
 			    //add 'toggle visibility' button
-			    $('<span style="margin-left:10px">Toggle visibility</span>').button().insertAfter(order_product).bind('click',function (evt){
+			    $('<button class="btn btn-small" style="margin-left:40px">Toggle visibility</button>').insertAfter(order_product).bind('click',function (evt){
 				evt.preventDefault();
 				self.form.toggle();
 			    });
