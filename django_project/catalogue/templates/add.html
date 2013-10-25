@@ -174,13 +174,13 @@ $('select, input, textarea, .help-inline ').addClass('span8');
 
     var myMap = new APP.SansaMap('map');
 
-    var CartRecordsWTK = [];
+    var CartRecordsWTK = {};
 
     {% if myShowMapFlag %}
       {% for record in myRecords %}
-        CartRecordsWTK.push('{{ record.product.spatial_coverage.wkt }}');
+        CartRecordsWTK['{{ record.id }}'] = '{{ record.product.spatial_coverage.wkt }}';
       {% endfor %}
-      var cartLayer = new APP.CartLayer(myMap, {'wkt': CartRecordsWTK});
+      cartLayer = new APP.CartLayer(myMap, {'wkt': CartRecordsWTK});
     {% endif %}
 
     {% if myTaskingRequestFlag %}
