@@ -41,7 +41,7 @@ urlpatterns = patterns('',
     url(r'^sceneidhelp/$', sceneIdHelp, name='sceneIdHelp'),
 
     # match a product id - its not needed to give teh full id, just enough to be semi unique
-    url(r'^showProduct/(?P<theProductId>[A-Za-z0-9\_\-]{38,58})/$', showProduct, name='showProduct'),
+    url(r'^showProduct/(?P<theProductId>[A-Za-z0-9]+)/$', showProduct, name='showProduct'),
     url(r'^clip/$', clip),
     # is this used?
     url(r'^myclips/$', clipHistory),

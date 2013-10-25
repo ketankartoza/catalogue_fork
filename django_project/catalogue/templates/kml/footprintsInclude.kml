@@ -8,7 +8,7 @@
     {% if transparentStyle %}
     <styleUrl>#transparentPolyStyle</styleUrl>
     {% endif %}
-    <description>http://{{ external_site_url }}{% url 'showProduct' item.product.product_id %}</description>
+    <description>http://{{ external_site_url }}{% url 'showProduct' item.product.unique_product_id %}</description>
     {{ item.product.spatial_coverage.kml|safe }}
 </Placemark>
 {% endfor %}
