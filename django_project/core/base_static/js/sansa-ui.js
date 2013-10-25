@@ -40,3 +40,44 @@ function setupPreviewDialogCart( )
     $('#myModal').modal('show');
   });
 }
+
+function removeFromCart(theId, theObject)
+{
+  uiBlock();
+  //check if this product has delivery details form
+  var myOrderForm_refs = $('#add_form #id_ref_id');
+    if (myOrderForm_refs.length >0){
+  var current_refs=myOrderForm_refs.val();
+  //check if current_refs are empty, and convert to array
+  if (current_refs.length){
+      current_refs=current_refs.split(',');
+  } else {
+      current_refs=[];
+  }
+  //get removed ref_id
+  var ref_id=theObject.parent().parent().find('a.show_form').attr('ref_id')
+  var index = current_refs.indexOf(ref_id);
+  if (index>-1){
+      current_refs.splice(index,1);
+      myOrderForm_refs.val(current_refs.join(','));
+  }
+    }
+  $.get("/removefromcart/" + theId + "/?xhr","",layerRemoved);
+  theObject.parent().parent().remove();
+  //-1 for the header row
+  var myRowCount = $("#cart-contents-table tr").length - 1;
+  $("#cart_title").html( 'Cart (' + myRowCount + ')');
+  $("#cart-item-count").html( myRowCount );
+  if ((myRowCount < 1) && ($("#id_processing_level").length != 0))
+  {
+    //second clause above to prevent this action when minicart is being interacted with
+    window.location.replace("/emptyCartHelp/");
+  }
+  uiUnblock();
+  return false;
+}
+
+function layerRemoved()
+{
+
+}
