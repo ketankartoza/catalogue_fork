@@ -29,20 +29,16 @@
     {% for myDataPage in mySensorYearyStats %}
     <tr>
       {% for myData in myDataPage %}
-      {% if myData.count > 0 %}
       <th>
           {{ myData.year }}
       </th>
-      {% endif %}
       {% endfor %}
     </tr>
     <tr>
       {% for myData in myDataPage %}
-      {% if myData.count > 0 %}
       <td>
           {{ myData.count }}
       </td>
-      {% endif %}
       {% endfor %}
     </tr>
     {% endfor %}
