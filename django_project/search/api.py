@@ -96,7 +96,7 @@ class SearchRecordResource(ModelResource):
         authorization = Authorization()
         # always_return_data = True
         paginator_class = Paginator
-        limit = 1
+        limit = 100
         include_resource_uri = False
         # allowed_methods = ['get']
 
