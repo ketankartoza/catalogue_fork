@@ -178,7 +178,9 @@ $('select, input, textarea, .help-inline ').addClass('span8');
 
     {% if myShowMapFlag %}
       {% for record in myRecords %}
-        CartRecordsWTK['{{ record.id }}'] = '{{ record.product.spatial_coverage.wkt }}';
+        CartRecordsWTK['{{ record.product.id }}'] = {
+          'wkt': '{{ record.product.spatial_coverage.wkt }}',
+          'id': '{{ record.product.unique_product_id }}'};
       {% endfor %}
       cartLayer = new APP.CartLayer(myMap, {'wkt': CartRecordsWTK});
     {% endif %}

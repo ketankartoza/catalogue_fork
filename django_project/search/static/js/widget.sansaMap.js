@@ -110,6 +110,18 @@
     this.refreshLayerSwitcher();
   },
 
+  add_control: function(theControl) {
+    this.map.addControl(theControl);
+  },
+
+  add_popup: function(popup) {
+    this.map.addPopup(popup);
+  },
+
+  remove_popup: function(popup) {
+    this.map.removePopup(popup);
+  },
+
   transformBounds: function (theBounds)
   {
     var myBounds = theBounds.clone();

@@ -693,3 +693,11 @@ div.dr_row{
 .quiet {
     font-size: 10px;
 }
+
+.white {
+    color: #fff;
+}
+
+.noopacity {
+    opacity: 1 !important;
+}
