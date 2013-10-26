@@ -142,19 +142,19 @@ function showResultPanelButtons() {
 }
 
 APP.blockResultPanel = function() {
-    $('body').block({
+    $.blockUI({
         message: '<div class="wrapperloading"><div class="loading up"></div><div class="loading down"></div></div>',
         css: {
             border: '1px solid #000',
             background: 'rgba(0, 0, 0, 0.3)',
-            width: '550px',
-            height:'550px'
+            width: '450px',
+            height:'450px'
         }
     });
 };
 
 APP.unblockResultPanel= function (){
-    $('body').unblock();
+    $.unblockUI();
 };
 
 function toggleResultDownloadButton() {

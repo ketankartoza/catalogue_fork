@@ -93,7 +93,7 @@ div.dr_row{
 
 #search-panel-toggle p:hover {
     cursor: pointer; cursor: hand;
-    text-shadow: 0 0 10px #c61a1a;
+    text-shadow: 0 0 10px #228441;
 }
 
 #cart-panel {
@@ -120,7 +120,7 @@ div.dr_row{
 
 #cart-panel-toggle p:hover {
     cursor: pointer; cursor: hand;
-    text-shadow: 0 0 10px #c61a1a;
+    text-shadow: 0 0 10px #228441;
 }
 
 #cart-panel-order-button {
@@ -196,7 +196,7 @@ div.dr_row{
 
 #result-panel-toggle p:hover {
     cursor: pointer; cursor: hand;
-    text-shadow: 0 0 10px #c61a1a;
+    text-shadow: 0 0 10px #228441;
 }
 
 .search-panel-input {
@@ -219,7 +219,7 @@ div.dr_row{
 }
 
 .cart-item:hover {
-    background: #F2F2F2;
+    background: #EDF1FC;
 }
 
 .cart-item img {
@@ -269,7 +269,7 @@ div.dr_row{
 
 .cart-item .cart-item-info .button:hover {
     cursor: pointer; cursor: hand;
-    text-shadow: 0 0 10px #c61a1a;
+    text-shadow: 0 0 10px #228441;
 }
 
 .result-item {
@@ -280,7 +280,7 @@ div.dr_row{
 }
 
 .result-item:hover {
-    background: #F2F2F2;
+    background: #EDF1FC;
 }
 
 .result-item img {
@@ -335,7 +335,7 @@ div.dr_row{
 
 .result-item .button:hover {
     cursor: pointer; cursor: hand;
-    text-shadow: 0 0 10px #c61a1a;
+    text-shadow: 0 0 10px #228441;
 }
 
 #result-panel .navigation {
@@ -368,7 +368,7 @@ div.dr_row{
 
 #result-panel .navigation .button:hover {
     cursor: pointer; cursor: hand;
-    text-shadow: 0 0 10px #c61a1a;
+    text-shadow: 0 0 10px #228441;
 }
 
 #result-panel .navigation .position {
@@ -395,7 +395,7 @@ div.dr_row{
     height: 65px;
     position: relative;
     float: left;
-    background: #F2F2F2;
+    background: #EDF1FC;
 }
 
 #result-panel-download-button {
@@ -481,7 +481,7 @@ div.dr_row{
 
 #search-panel .date-range .button:hover {
     cursor: pointer; cursor: hand;
-    text-shadow: 0 0 10px #c61a1a;
+    text-shadow: 0 0 10px #228441;
 }
 
 #search-panel .control-group {
@@ -520,7 +520,7 @@ div.dr_row{
 
 .date_range_row > span > i:hover {
     cursor: pointer; cursor: hand;
-    text-shadow: 0 0 10px #c61a1a;
+    text-shadow: 0 0 10px #228441;
 }
 
 .form-error {

@@ -35,13 +35,13 @@
 }
 
 .tabs > label {
-    background: #F2F2F2;
-    background: -moz-linear-gradient(top, #F2F2F2 0%, #fff 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#F2F2F2), color-stop(100%,#fff));
-    background: -webkit-linear-gradient(top, #F2F2F2 0%,#fff 100%);
-    background: -o-linear-gradient(top, #F2F2F2 0%,#fff 100%);
-    background: -ms-linear-gradient(top, #F2F2F2 0%,#fff 100%);
-    background: linear-gradient(top, #F2F2F2 0%,#fff 100%);
+    background: #EDF1FC;
+    background: -moz-linear-gradient(top, #EDF1FC 0%, #fff 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#EDF1FC), color-stop(100%,#fff));
+    background: -webkit-linear-gradient(top, #EDF1FC 0%,#fff 100%);
+    background: -o-linear-gradient(top, #EDF1FC 0%,#fff 100%);
+    background: -ms-linear-gradient(top, #EDF1FC 0%,#fff 100%);
+    background: linear-gradient(top, #EDF1FC 0%,#fff 100%);
     font-size: 12px;
     line-height: 25px;
     height: 25px;
@@ -75,7 +75,7 @@
 }
 
 .tabs > input:hover + label {
-    background: #FFE0E0;
+    background: #EDF1FC;
     top: -4px;
     -webkit-transition: top linear 0.2s;
     -moz-transition: top linear 0.2s;
@@ -84,7 +84,7 @@
     transition: top linear 0.2s;
 }
 .tabs > input:hover + label:after{
-    background: #FFE0E0;
+    background: #EDF1FC;
 }
 .tabs > input:hover + label ~ .clear-shadow {
     top: -4px;
@@ -164,11 +164,11 @@
     -o-transition: top linear 0.2s;
     -ms-transition: top linear 0.2s;
     transition: top linear 0.2s;
-    text-shadow: 0 0 10px #c61a1a;
+    text-shadow: 0 0 10px #228441;
 }
 
 .clear-shadow {
-    background: #FFE0E0;
+    background: #EDF1FC;
     position: relative;
     top: 0;
     height: 10px;
@@ -245,7 +245,7 @@
     margin: 0px;
     text-align: left;
     display: block;
-    background: #F2F2F2;
+    background: #EDF1FC;
     padding: 5px;
     text-transform:uppercase;
 }
