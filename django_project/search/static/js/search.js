@@ -420,9 +420,15 @@ APP.ResultGridViewItem = Backbone.View.extend({
     addToCart: function() {
         if (UserLoged) {
             var id = this.model.get('id');
-
-            APP.Cart.create({'product': {'id':id}},{wait: true});
-            alert('Product added to cart');
+            var exist = APP.Cart.filter(function(item) {
+                return item.get("product").id == id;
+            });
+            if (exist.length > 0) {
+                alert('Product already in cart!');
+            } else {
+                APP.Cart.create({'product': {'id':id}},{wait: true});
+                alert('Product added to cart');
+            }
         } else {
             alert('You need to log in first!');
         }
