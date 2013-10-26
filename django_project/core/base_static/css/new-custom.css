@@ -677,3 +677,7 @@ div.dr_row{
     transform: rotate(360deg);
   }
 }
+
+.centered {
+    text-align: center;
+}

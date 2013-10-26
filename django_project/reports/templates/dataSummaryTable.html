@@ -35,31 +35,32 @@
       </script>
 {% endblock %}
 {% block content %}
-{% box_start "box-data-summary" %}
+
 <h2 class="centered"><img class="icon" src="{% static 'images/diagram_32.png' %}" /> Summary of all sensor based catalogue holdings</h2>
-<p class="centered">Click on a sensor name for a detailed summary for that sensor. For the sensor dictionary report click <a href="#" onclick='loadContent("{% url 'dictionaryReport' %}");'>here</a>
-</p>
 <!--Div that will hold the pie chart-->
-<div id="chart_div" class="centered"></div>
-<table>
-  <thead>
-  </thead>
-  <tbody>
-    <tr><th>Sensor</th><th>Count</th></tr>
-    {% for myRecord in myResultSet %}
-    {% if myRecord.id__count != 0 %}
-    <tr>
-      <td>
-        <a href="#" onclick="loadSummaryTable({{myRecord.id}});">
-          {{myRecord}}</a>
-      </td>
-      <td>{{myRecord.id__count}}</td>
-    </tr>
-    {% endif %}
-    {% endfor %}
-    <tr><th>Total</th><th>{{myTotal}}</th></tr>
-  </tbody>
-</table>
+<div class="centered"><div id="chart_div" style="width: 860px; margin: auto;"></div></div>
+<div class="centered" style="margin-top:20px;">Click on a sensor name for a detailed summary for that sensor. For the sensor dictionary report click <a href="#" onclick='loadContent("{% url 'dictionaryReport' %}");'>here</a></div>
+<div style="width: 860px; margin: auto;">
+  <table class="table table-striped">
+    <thead>
+      <tr><th>Sensor</th><th>Count</th></tr>
+    </thead>
+    <tbody>
+      {% for myRecord in myResultSet %}
+      {% if myRecord.id__count != 0 %}
+      <tr>
+        <td>
+          <a href="#" onclick="loadSummaryTable({{myRecord.id}});">
+            {{myRecord}}</a>
+        </td>
+        <td><script> document.write(numberWithCommas({{myRecord.id__count}}));</script></td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+      <tr><th>Total</th><th><script> document.write(numberWithCommas({{myTotal}}));</script></th></tr>
+    </tbody>
+  </table>
+</div>
 
 {% box_end %}
 {% endblock %}
