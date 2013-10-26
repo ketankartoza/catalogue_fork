@@ -520,13 +520,10 @@ APP.CartGridViewItem = Backbone.View.extend({
     },
 
     showMetadata: function() {
-        $('body').modalmanager('loading');
         var id = this.model.get('product').id;
-        setTimeout(function(){
-            APP.$modal.load('/metadata/'+id, '', function(){
+        APP.$modal.load('/metadata/'+id, '', function(){
             APP.$modal.modal();
         });
-      }, 1000);
     },
     delete: function() {
         var del = confirm('Are you sure?');

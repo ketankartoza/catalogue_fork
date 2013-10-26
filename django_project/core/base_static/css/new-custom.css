@@ -681,3 +681,15 @@ div.dr_row{
 .centered {
     text-align: center;
 }
+
+.loud {
+    font-size: 10px;
+    font-weight: bold;
+    color: #228441;
+    width: 200px;
+    /* background-color: #228441; */
+}
+
+.quiet {
+    font-size: 10px;
+}
