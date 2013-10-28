@@ -701,3 +701,11 @@ div.dr_row{
 .noopacity {
     opacity: 1 !important;
 }
+
+svg {
+    z-index: 10000;
+}
+
+line {
+    z-index: 10000;
+}

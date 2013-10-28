@@ -157,6 +157,9 @@ APP.unblockResultPanel= function (){
     $.unblockUI();
 };
 
+APP.s = Snap('#svg');
+
+
 function toggleResultDownloadButton() {
     if (ResultDownloadOptionsState) {
         hideResultDownloadOptions();
@@ -387,11 +390,28 @@ APP.ResultGridViewItem = Backbone.View.extend({
     events: {
         'click span.metadata-button': 'showMetadata',
         'click span.cart-button': 'addToCart',
-        'click img.result-img': 'highlightResultItem'
+        'click img.result-img': 'highlightResultItem',
+        'hover img.result-img': 'connectTest'
     },
     initialize: function() {
         $APP.on('highlightResultItem', $.proxy(this.highlightResultItem, this));
     },
+
+    connectTest: function() {
+        var selectedID = this.model.get('unique_product_id');
+        var pos2 = $("#result_item_"+ selectedID).offset();
+        var targetFeature = searchLayer.getFeatureElementRecordId(selectedID);
+        var point = targetFeature.geometry.getCentroid();
+        var pos = myMap.map.getPixelFromLonLat(new OpenLayers.LonLat(point.x, point.y));
+        var line = APP.s.line(pos.x, pos.y + 35, pos2.left, pos2.top);
+        console.log(pos.x, pos.y + 35, pos2.left, pos2.top);
+        line.attr({
+            fill: "#bada55",
+            stroke: "#000",
+            strokeWidth: 5
+        });
+    },
+
     highlightResultItem: function(event, data) {
         // if id is not set presume user has clicked in result panel on item
         // if id is set presuem user has clicked record on the map

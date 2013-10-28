@@ -132,6 +132,7 @@ PIPELINE_JS = {
             'js/bootstrap-modal.js',
             'js/bootstrap-modalmanager.js',
             'js/bootstrap-listTree.js',
+            'js/snap.svg-min.js',
             'js/perfect-scrollbar-0.4.3.with-mousewheel.min.js',
             'js/jquery.blockUI.js',
             'js/map_layers.js',

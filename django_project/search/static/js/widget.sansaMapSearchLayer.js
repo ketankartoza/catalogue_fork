@@ -84,6 +84,17 @@
     }
   },
 
+  getFeatureElementRecordId: function( theRecordId ) {
+    var myFeatures = this.layerSearch.features;
+    for(var i=0; i < myFeatures.length; ++i)
+    {
+      if(myFeatures[i].attributes.unique_product_id == theRecordId)
+      {
+        return myFeatures[i];
+      }
+    }
+  },
+
   resetSceneZIndices: function() {
     var myFeatures = this.layerSearch.features;
     for(var i=0; i < myFeatures.length; ++i) {

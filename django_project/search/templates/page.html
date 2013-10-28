@@ -180,6 +180,9 @@
         </div>
       </div>
       <div id="map"></div>
+      <div style="position: fixed; top:0; left:0; bottom:0; right: 0;">
+        <svg id="svg" style="width:100%; height: 100%;"></svg>
+      </div>
       <input type="hidden" id="id_geometry" />
       <div id="map-controls" class="blackalpha60">
         <div id="map-layerswitcher-control">
@@ -211,9 +214,9 @@
   $( document ).ready(function() {
 
 
-    var myMap = new APP.SansaMap('map');
-    var searchLayer = new APP.SearchLayer(myMap);
-    var geoSearchLayer = new APP.GeoSearchLayer(myMap);
+    myMap = new APP.SansaMap('map');
+    searchLayer = new APP.SearchLayer(myMap);
+    geoSearchLayer = new APP.GeoSearchLayer(myMap);
 
     defaultPanelState();
     $('.listTree').listTree( {{ listreeoptions|safe }} , { "startCollapsed": true, "selected": [] });
