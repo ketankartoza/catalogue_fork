@@ -390,7 +390,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
     events: {
         'click span.metadata-button': 'showMetadata',
         'click span.cart-button': 'addToCart',
-        //'click img.result-img': 'highlightResultItem',
+        'click span.zoom-button': 'highlightResultItem',
         'click img.result-img': 'expandResultItem',
         'mouseenter img.result-img': 'focusItem',
         'mouseleave img.result-img': 'blurItem',
@@ -402,13 +402,13 @@ APP.ResultGridViewItem = Backbone.View.extend({
     },
 
     returnToMin: function() {
-        var selectedID = this.model.get('unique_product_id');
-        var div = $("#result_item_"+ selectedID);
-        if (this.expanded) {
-            div.animate({'height': '46px'}, 500);
-            div.find('.result-img').animate({'height': '45px','width': '45px', 'top': '0px'});
-            this.expanded = false;
-        }
+        // var selectedID = this.model.get('unique_product_id');
+        // var div = $("#result_item_"+ selectedID);
+        // if (this.expanded) {
+        //     div.animate({'height': '46px'}, 500);
+        //     div.find('.result-img').animate({'height': '45px','width': '45px', 'top': '0px'});
+        //     this.expanded = false;
+        // }
     },
 
     expandResultItem: function() {
@@ -416,14 +416,14 @@ APP.ResultGridViewItem = Backbone.View.extend({
         var div = $("#result_item_"+ selectedID);
         if (!this.expanded) {
             div.animate({'height': '460px'}, 500);
-            console.log(div.position().top);
-            console.log($('#results-container').scrollTop());
             $('#results-container').animate({scrollTop: div.position().top+$('#results-container').scrollTop()}, 500);
             div.find('.result-img').animate({'height': '420px','width': '420px', 'top': '40px'});
+            div.find('.zoom-button').show();
             this.expanded = true;
         } else {
             div.animate({'height': '46px'}, 500);
             div.find('.result-img').animate({'height': '45px','width': '45px', 'top': '0px'});
+            div.find('.zoom-button').hide();
             this.expanded = false;
         }
     },
@@ -506,6 +506,7 @@ var template = [
             '</div>',
             '<span class="button metadata-button"><i class="icon-list-alt icon-2x"></i></span>',
             '<span class="button cart-button"><i class="icon-shopping-cart icon-2x"></i></span>',
+            '<span class="button zoom-button"><i class="icon-screenshot icon-2x"></i></span>',
           '</div>'
           ].join('');
 
