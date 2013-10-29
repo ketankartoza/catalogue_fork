@@ -17,7 +17,7 @@
     height: 53px;
     z-index: 100;
     position: fixed;
-    bottom: 40px;
+    bottom: 50px;
     right: 10px;
     color: #ffffff;
     font-size: 10px;
@@ -42,8 +42,8 @@
     height: 40px;
     z-index: 100;
     position: fixed;
-    bottom: 40px;
-    left: 10px;
+    bottom: 50px;
+    left: 40px;
     color: #ffffff;
     padding-top: 12px;
     padding-left: 3px;

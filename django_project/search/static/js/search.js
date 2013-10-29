@@ -390,12 +390,42 @@ APP.ResultGridViewItem = Backbone.View.extend({
     events: {
         'click span.metadata-button': 'showMetadata',
         'click span.cart-button': 'addToCart',
-        'click img.result-img': 'highlightResultItem',
+        //'click img.result-img': 'highlightResultItem',
+        'click img.result-img': 'expandResultItem',
         'mouseenter img.result-img': 'focusItem',
-        'mouseleave img.result-img': 'blurItem'
+        'mouseleave img.result-img': 'blurItem',
+        'mouseleave': 'returnToMin'
     },
     initialize: function() {
         $APP.on('highlightResultItem', $.proxy(this.highlightResultItem, this));
+        this.expanded = false;
+    },
+
+    returnToMin: function() {
+        var selectedID = this.model.get('unique_product_id');
+        var div = $("#result_item_"+ selectedID);
+        if (this.expanded) {
+            div.animate({'height': '46px'}, 500);
+            div.find('.result-img').animate({'height': '45px','width': '45px', 'top': '0px'});
+            this.expanded = false;
+        }
+    },
+
+    expandResultItem: function() {
+        var selectedID = this.model.get('unique_product_id');
+        var div = $("#result_item_"+ selectedID);
+        if (!this.expanded) {
+            div.animate({'height': '460px'}, 500);
+            console.log(div.position().top);
+            console.log($('#results-container').scrollTop());
+            $('#results-container').animate({scrollTop: div.position().top+$('#results-container').scrollTop()}, 500);
+            div.find('.result-img').animate({'height': '420px','width': '420px', 'top': '40px'});
+            this.expanded = true;
+        } else {
+            div.animate({'height': '46px'}, 500);
+            div.find('.result-img').animate({'height': '45px','width': '45px', 'top': '0px'});
+            this.expanded = false;
+        }
     },
 
     focusItem: function() {
@@ -461,7 +491,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
 
 var template = [
             '<div class="result-item" id="result_item_<%= model.get("unique_product_id") %>">',
-            '<img class="result-img" src="/thumbnail/<%= model.get("id") %>/medium/" />',
+            '<img class="result-img" src="/thumbnail/<%= model.get("id") %>/large/" />',
             '<div class="result-item-info">',
               '<p><%= model.get("unique_product_id") %></p>',
               '<p><%= model.get("product_date") %></p>',
