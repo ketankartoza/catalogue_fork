@@ -124,3 +124,9 @@
     background-color: LightGray;
     font-weight: bold;
 }
+
+.olTileImage {
+    /*max-width: inherit;*/
+    backface-visibility: inherit !important;
+    transform: inherit !important;
+}

@@ -47,7 +47,8 @@
 
     this.map.zoomToExtent(this.transformBounds(new OpenLayers.Bounds(14.0,-35.0,34.0,-21.0)));
 
-    this.mNavigationPanel = new OpenLayers.Control.Panel({div : OpenLayers.Util.getElement('map-navigation')});
+    this.mNavigationPanel = new OpenLayers.Control.Panel({div : OpenLayers.Util.getElement('map-navigation'), allowDepress: true});
+    this.mNavigationPanel.allowDepress = true;
     this.map.addControl(this.mNavigationPanel);
 
     var myZoomInControl = new OpenLayers.Control.ZoomBox({
