@@ -273,14 +273,16 @@ div.dr_row{
 }
 
 .result-item {
-    width: 440px;
+    width: 443px;
     height: 46px;
     margin:1px 2px 0 4px;
     position: relative;
+    border-left: 2px solid #fff;
 }
 
 .result-item:hover {
     background: #EDF1FC;
+    border-left: 2px solid #228441;
 }
 
 .result-item img {
@@ -708,4 +710,19 @@ svg {
 
 line {
     z-index: 10000;
+}
+
+.focusedResultRow {
+    background-color: #BAD696;
+    border-left: 3px solid #228441;
+}
+
+#svg_layer {
+    pointer-events:none;
+    position: fixed;
+    top:0;
+    left:0;
+    bottom:0;
+    right: 0;
+    z-index: 102;
 }

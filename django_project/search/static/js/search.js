@@ -391,25 +391,25 @@ APP.ResultGridViewItem = Backbone.View.extend({
         'click span.metadata-button': 'showMetadata',
         'click span.cart-button': 'addToCart',
         'click img.result-img': 'highlightResultItem',
-        'hover img.result-img': 'connectTest'
+        'mouseenter img.result-img': 'focusItem',
+        'mouseleave img.result-img': 'blurItem'
     },
     initialize: function() {
         $APP.on('highlightResultItem', $.proxy(this.highlightResultItem, this));
     },
 
-    connectTest: function() {
+    focusItem: function() {
         var selectedID = this.model.get('unique_product_id');
         var pos2 = $("#result_item_"+ selectedID).offset();
         var targetFeature = searchLayer.getFeatureElementRecordId(selectedID);
         var point = targetFeature.geometry.getCentroid();
         var pos = myMap.map.getPixelFromLonLat(new OpenLayers.LonLat(point.x, point.y));
-        var line = APP.s.line(pos.x, pos.y + 35, pos2.left, pos2.top);
-        console.log(pos.x, pos.y + 35, pos2.left, pos2.top);
-        line.attr({
-            fill: "#bada55",
-            stroke: "#000",
-            strokeWidth: 5
-        });
+        this.line = APP.s.line(pos.x, pos.y + 35, pos2.left+2, pos2.top+25);
+        this.line.animate({stroke: "#228441", strokeWidth: "2"}, 500);
+    },
+
+    blurItem: function() {
+        this.line.remove();
     },
 
     highlightResultItem: function(event, data) {
@@ -423,9 +423,9 @@ APP.ResultGridViewItem = Backbone.View.extend({
         }
         $("#results-container div:first-child").each(function (id, data) {
             // reset selected rows
-            $(data).css("background-color", "#ffffff");
+            $(data).removeClass('focusedResultRow');
         });
-        $("#result_item_"+ selectedID).css("background-color", "#BAD696");
+        $("#result_item_"+ selectedID).addClass('focusedResultRow');
     },
 
     showMetadata: function() {
