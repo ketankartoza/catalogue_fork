@@ -200,7 +200,7 @@ PIPELINE_CSS = {
             'css/flat-buttons.css',
             'css/bootstrap-listTree.css',
             'css/perfect-scrollbar.css',
-            'css/bootstrap-modal.css'
+            'css/bootstrap-modal.css',
         ),
         'output_filename': 'css/fluid.css',
         'extra_context': {

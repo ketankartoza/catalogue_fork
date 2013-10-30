@@ -306,7 +306,7 @@ class GenericProduct(models.Model):
 
         @return a PIL image object.
         """
-        if theSize not in ['medium', 'large']:
+        if theSize not in ['medium', 'large', 'raw']:
             theSize = 'small'
 
         mySize = 16
@@ -399,7 +399,8 @@ class GenericProduct(models.Model):
         else:
             myBackground = Image.new('RGBA', myImage.size, myBackgroundColour)
             myBackground.paste(myImage, (0, 0))
-        myBackground.thumbnail((mySize, mySize), Image.ANTIALIAS)
+        if theSize != 'raw':
+            myBackground.thumbnail((mySize, mySize), Image.ANTIALIAS)
 
         # Now cache the scaled thumb for faster access next time...
         if not os.path.isdir(myCacheThumbDir):

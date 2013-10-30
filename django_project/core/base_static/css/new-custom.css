@@ -311,7 +311,16 @@ div.dr_row{
 .result-item .zoom-button {
     margin: 8px 5px 5px 0;
     position: absolute;
-    left: 5px;
+    right: 25px;
+    top: 40px;
+    display: none;
+}
+
+.result-item .showBig-button {
+    margin: 8px 5px 5px 0;
+    position: absolute;
+    right: 25px;
+    top: 80px;
     display: none;
 }
 
