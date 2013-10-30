@@ -37,6 +37,7 @@
     });
 
     $APP.on('SearchLayer_addFeatures', function(evt, payload){
+      self.layerSearch.removeAllFeatures();
       _.each(payload.data, function (feature) {
         var feat = new OpenLayers.Feature.Vector(
           self.map_object.transformGeometry(OpenLayers.Geometry.fromWKT(feature.attributes.spatial_coverage)),
