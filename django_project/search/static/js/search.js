@@ -282,7 +282,7 @@ function resetSearchFromErrors() {
 // backbone models/collections/views
 
 APP.$modal = $('#ajax-modal');
-APP.$imagemodal = $('#imageBox');
+APP.$imagemodal = null;
 APP.guid = '';
 
 APP.ResultItem = Backbone.Model.extend({
@@ -404,8 +404,23 @@ APP.ResultGridViewItem = Backbone.View.extend({
     },
 
     openBigImage: function() {
-        $('#imageBoximage').attr('src','/thumbnail/'+this.model.get('id')+'/raw/');
-        APP.$imagemodal.modal();
+        // APP.$modal.load('/thumbnail/'+this.model.get('id')+'/raw/', '', function(){
+        //     APP.$imagemodal.modal();
+        // });
+        $.loadImage('/thumbnail/'+this.model.get('id')+'/raw/')
+            .done(function(image) {
+              $('#imageBoximage').attr('src',image.src);
+              $('#imageBox').modal();
+            })
+            .fail(function(image) {
+
+            });
+        //$('#imageBoximage').attr('src','/thumbnail/'+this.model.get('id')+'/raw/');
+        //setTimeout(function() {$('#imageBox').modal()}, 1000);;
+        //$('#imageBoximage').fullsizable();
+        //APP.$imagemodal.modal();
+
+        //$.fullsizableOpen($('#imageBoximage'));
     },
 
     returnToMin: function() {
@@ -623,3 +638,40 @@ var templateCart = [
 
 var CartgridViewHtml = new APP.CartGridView({
         'collection': APP.Cart});
+
+$.loadImage = function(url) {
+  // Define a "worker" function that should eventually resolve or reject the deferred object.
+  var loadImage = function(deferred) {
+    var image = new Image();
+    // Set up event handlers to know when the image has loaded
+    // or fails to load due to an error or abort.
+    image.onload = loaded;
+    image.onerror = errored; // URL returns 404, etc
+    image.onabort = errored; // IE may call this if user clicks "Stop"
+
+    // Setting the src property begins loading the image.
+    image.src = url;
+
+    function loaded() {
+      unbindEvents();
+      // Calling resolve means the image loaded sucessfully and is ready to use.
+      deferred.resolve(image);
+    }
+    function errored() {
+      unbindEvents();
+      // Calling reject means we failed to load the image (e.g. 404, server offline, etc).
+      deferred.reject(image);
+    }
+    function unbindEvents() {
+      // Ensures the event callbacks only get called once.
+      image.onload = null;
+      image.onerror = null;
+      image.onabort = null;
+    }
+  };
+
+  // Create the deferred object that will contain the loaded image.
+  // We don't want callers to have access to the resolve() and reject() methods, 
+  // so convert to "read-only" by calling `promise()`.
+  return $.Deferred(loadImage).promise();
+};
