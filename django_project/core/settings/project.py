@@ -173,7 +173,7 @@ PIPELINE_JS = {
             'js/widget.deliveryform.js',
             'js/sansa-ui.js'
         ),
-        'output_filename': 'js/fluid.js',
+        'output_filename': 'js/addpage.js',
     }
 
 }
@@ -216,7 +216,7 @@ PIPELINE_CSS = {
             'css/perfect-scrollbar.css',
             'css/bootstrap-modal.css'
         ),
-        'output_filename': 'css/fluid.css',
+        'output_filename': 'css/addpage.css',
         'extra_context': {
             'media': 'screen, projection',
         },
