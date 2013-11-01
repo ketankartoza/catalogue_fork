@@ -79,4 +79,20 @@ LOGGING = {
 # django 1.5 ALLOWED_HOSTS - protects against host-poisoning attacks
 # change to the real service name
 # https://docs.djangoproject.com/en/1.5/ref/settings/#std:setting-ALLOWED_HOSTS
-ALLOWED_HOSTS = ['41.74.158.4', 'test.catalogue.sansa.org.za']
+# ALLOWED_HOSTS = ['41.74.158.4', 'test.catalogue.sansa.org.za']
+ALLOWED_HOSTS = ['*']
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'sac_dev_dodobas',
+        'USER': 'dodobas',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '5432',
+        'TEST_NAME': 'sac_dev_unittest_master',
+    }
+}
+
+PIPELINE_YUGLIFY_BINARY = ABS_PATH('node_modules', 'yuglify', 'bin', 'yuglify')
+

@@ -99,8 +99,8 @@ class ReportsViews_recentSearches_Tests(TestCase):
             myResp.context['myCurrentMonth'], datetime.date.today())
         # check used templates
         myExpTemplates = [
-            'recentSearches.html', u'base.html', u'pipeline/js.html',
-            u'pipeline/css.html', u'menu.html',
+            'recentSearches.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 

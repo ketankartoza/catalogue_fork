@@ -99,8 +99,8 @@ class ReportsViews_visitorList_Tests(TestCase):
         self.assertEqual(len(myResp.context['myRecords'].object_list), 1)
         # check used templates
         myExpTemplates = [
-            'visitors.html', u'base.html', u'pipeline/js.html',
-            u'pipeline/css.html', u'menu.html',
+            'visitors.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 
@@ -160,8 +160,8 @@ class ReportsViews_visitorList_Tests(TestCase):
             len(myResp.context['myRecords'].object_list), 1)
         # check used templates
         myExpTemplates = [
-            'visitors.html', u'base.html', u'pipeline/js.html',
-            u'pipeline/css.html', u'menu.html',
+            'visitors.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 
@@ -192,8 +192,8 @@ class ReportsViews_visitorList_Tests(TestCase):
             len(myResp.context['myRecords'].object_list), 1)
         # check used templates
         myExpTemplates = [
-            'visitors.html', u'base.html', u'pipeline/js.html',
-            u'pipeline/css.html', u'menu.html',
+            'visitors.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 

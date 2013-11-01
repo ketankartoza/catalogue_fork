@@ -11,3 +11,8 @@ DATABASES = {
         'TEST_NAME': 'sac_dev_unittest_master',
     }
 }
+
+# define yuglify binary...
+# pip install virtual-node
+# npm install yuglify
+PIPELINE_YUGLIFY_BINARY = ABS_PATH('node_modules', 'yuglify', 'bin', 'yuglify')
