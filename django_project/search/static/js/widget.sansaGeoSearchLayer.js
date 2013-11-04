@@ -23,13 +23,13 @@
       this.geoSearch.events.on({"featureremoved": this.removeWKT});
 
     var myDrawingControl = new OpenLayers.Control.DrawFeature(this.geoSearch, OpenLayers.Handler.Polygon, {
-      'displayClass': 'right icon-check-empty icon-2x icon-border olControlDrawFeaturePolygon',
+      'displayClass': 'btn btn-info btn-large right icon-check-empty olControlDrawFeaturePolygon',
       'title': 'Capture polygon: left click to add points, double click to finish capturing',
       div : OpenLayers.Util.getElement('map-navigation'),
     });
 
     var myModifyFeatureControl = new OpenLayers.Control.ModifyFeature(this.geoSearch, {
-      'displayClass': 'right icon-edit icon-2x icon-border olControlModifyFeature',
+      'displayClass': 'btn btn-info btn-large right icon-edit olControlModifyFeature',
       'title': 'Modify polygon: left click to move/add points, hover and press <i>delete</i> to delete points',
       div : OpenLayers.Util.getElement('map-navigation'),
     });
@@ -42,7 +42,7 @@
     });
 
     var myDestroyFeaturesControl = new DestroyFeatures({
-      'displayClass': 'right icon-remove icon-2x icon-border destroyFeature',
+      'displayClass': 'btn btn-info btn-large right icon-remove  destroyFeature',
       'title':'Delete polygon: deletes polygon',
       'layer': this.geoSearch,
       div : OpenLayers.Util.getElement('map-navigation'),

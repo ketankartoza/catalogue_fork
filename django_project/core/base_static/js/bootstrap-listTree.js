@@ -12,7 +12,7 @@
             '<% var ps; %>',
             '<% if ( !_.isUndefined(ps = _.find(options.selected, function(elem) { return elem.key === this.key; }, parent1)) ) { %>',
             'checked="checked"',
-            '<% } %> value="<%= parent1.val %>" /> <%= parent1.key %><i class="icon-chevron-up icon-black"></i></span>',
+            '<% } %> value="<%= parent1.val %>" /> <%= parent1.key %><i class="icon-chevron-down icon-black"></i></span>',
             '<% if (options.startCollapsed) { %>',
                 '<ul style="display: none;">',
             '<% } else { %>',
@@ -42,7 +42,7 @@
                 $(this).prop('checked', true);
             });
     }
-    
+
     /** Uncheck all child checkboxes.
      * @param jQElement The parent <li>.
      */
@@ -52,7 +52,7 @@
                 $(this).prop('checked', false);
             });
     }
-    
+
     /** Toggle all checkboxes.
      * @param[in] jQElement The root <ul> of the list.
      */
@@ -63,7 +63,7 @@
             _deselectAllChildren(jQElement);
         }
     }
-    
+
     /** Toggle the collapse icon based on the current state.
      * @param[in] jQElement The <li> of the header to toggle.
      */
@@ -72,16 +72,16 @@
         if (jQElement.children('ul').is(':visible')) {
             // The user wants to collapse the child list.
             jQElement.children('span').children('i')
-                .removeClass('icon-chevron-down')
-                .addClass('icon-chevron-up');
+                .removeClass('icon-chevron-up')
+                .addClass('icon-chevron-down');
         } else {
             // The user wants to expand the child list.
             jQElement.children('span').children('i')
-                .removeClass('icon-chevron-up')
-                .addClass('icon-chevron-down');
+                .removeClass('icon-chevron-down')
+                .addClass('icon-chevron-up');
         }
     }
-    
+
     /** Make sure there isn't any bogus default selections.
      * @param[in] selected The default selection object.
      * @return The filtered selection object.
@@ -91,7 +91,7 @@
             return ( !_.isEmpty(elem.values) && !_.isUndefined(elem.values) );
         });
     }
-    
+
     /** If a parent has at least one child node selected, check the parent.
      *  Conversely, if a parent has no child nodes selected, uncheck the parent.
      * @param[in] jQElement The parent <li>.
@@ -104,7 +104,7 @@
                     return $(elem).prop('checked');
                 })
             );
-            
+
             // Check to see if any children are checked.
             if (_.indexOf(childrenStatuses, true) !== -1) {
                 // Check the parent node.
@@ -115,7 +115,7 @@
             }
         }
     }
-    
+
     /** Updates the internal object of selected nodes.
      */
     function _updateSelectedObject() {
@@ -279,10 +279,10 @@
             // For each listTree...
             return this.each(function() {
                 var node = $(this).children('ul').children('li');
-                
+
                 // Change the icon.
                 _toggleIcon(node);
-                
+
                 // Hide the child list.
                 node.children('ul').slideUp('fast');
             });
@@ -294,10 +294,10 @@
                 "selected": context
             };
             options = $.extend(defaults, options);
-            
+
             // Validate the user entered default selections.
             options.selected = _validateDefaultSelectionValues(options.selected);
-            
+
             return this.each(function() {
                 var $this = $(this),
                     data = $this.data('listTree');
@@ -311,7 +311,7 @@
                         "options": options,
                         "selected": options.selected
                     });
-                    
+
                     // Generate the list tree.
                     $this.html( _.template( template, { "context": context, "options": options } ) );
                 }

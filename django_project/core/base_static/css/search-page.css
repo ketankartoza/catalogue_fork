@@ -61,7 +61,8 @@
 
 #map-navigation {
     position: relative;
-    top: -29px;
+    top: -28px;
+    left: 50px;
     float: right;
 }
 

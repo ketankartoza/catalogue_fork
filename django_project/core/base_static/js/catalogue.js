@@ -194,8 +194,9 @@ function setupEditingPanel(theLayer)
 {
   var myDrawingControl = new OpenLayers.Control.DrawFeature(theLayer,
       OpenLayers.Handler.Polygon, {
-    'displayClass': 'right icon-check-empty icon-2x olControlDrawFeaturePolygon',
-    'title': 'Capture polygon: left click to add points, double click to finish capturing'
+        'displayClass': 'btn btn-info btn-large right icon-check-empty olControlDrawFeaturePolygon',
+        'title': 'Capture polygon: left click to add points, double click to finish capturing',
+        'button': OpenLayers.Util.getElement('map-navigation')
       });
   var myModifyFeatureControl = new OpenLayers.Control.ModifyFeature(theLayer, {
       'displayClass': 'right icon-edit icon-2x olControlModifyFeature',
@@ -537,7 +538,7 @@ function setupBaseMap()
 
   var myZoomOutControl = new OpenLayers.Control.ZoomBox({
         title: "Zoom Out Box: draw a box on the map, to see the area at a smaller scale.",
-        displayClass:'right icon-zoom-out icon-2x olControlZoomBoxOut', 
+        displayClass:'right icon-zoom-out icon-2x olControlZoomBoxOut',
         out: true
       });
   //mMap.addControl(myZoomOutControl);

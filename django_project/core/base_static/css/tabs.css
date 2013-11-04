@@ -47,7 +47,6 @@
     color: #385c5b;
     top: 0;
     letter-spacing: 1px;
-    text-transform: uppercase;
     font-weight: bold;
     text-align: center;
     border-radius: 3px 3px 0 0;
@@ -68,28 +67,6 @@
 
 .tabs > input:hover + label {
     background: #fff;
-}
-
-.tabs input.tab-selector-1:hover + label.tab-label-1 ~ .clear-shadow{
-    z-index: 5;
-}
-
-.tabs input.tab-selector-2:hover + label.tab-label-2 ~ .clear-shadow {
-    z-index: 4;
-}
-
-.tabs input.tab-selector-3:hover + label.tab-label-3 ~ .clear-shadow {
-    z-index: 3;
-}
-
-.tabs input.tab-selector-4:hover + label.tab-label-4 ~ .clear-shadow {
-    z-index: 2;
-}
-.tabs input.tab-selector-5:hover + label.tab-label-5 ~ .clear-shadow {
-    z-index: 1;
-}
-.tabs input.tab-selector-6:hover + label.tab-label-6 ~ .clear-shadow {
-    z-index: 0;
 }
 
 .tab-label-1 {
@@ -114,6 +91,7 @@
 .tab-label-6 {
     z-index: 1;
 }
+
 .tabs > input:checked + label {
     background: #f5f5f5;
     z-index: 7;
@@ -177,7 +155,6 @@
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-weight: normal;
     margin: 0px;
-    text-transform:uppercase;
 }
 
 .content div h3 {
@@ -191,7 +168,6 @@
     display: block;
     background: #EDF1FC;
     padding: 5px;
-    text-transform:uppercase;
 }
 
 .content div hr {

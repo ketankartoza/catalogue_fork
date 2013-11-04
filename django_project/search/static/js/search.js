@@ -10,7 +10,7 @@ function toggleSearchPanel() {
         hideSearchPanelButtons();
         $("#search-panel").animate({left: -450}, 300 );
         SearchPanelState = false;
-        $("#cart-panel-toggle").animate({top: 155}, 200 );
+        $("#cart-panel-toggle").animate({top: 80}, 200 );
     } else {
         if (CartPanelState) {
             closeCartPanel();
@@ -26,7 +26,7 @@ function closeSearchPanel() {
     hideSearchPanelButtons();
     $("#search-panel").animate({left: -450}, 300 );
     SearchPanelState = false;
-    $("#cart-panel-toggle").animate({top: 155}, 200 );
+    $("#cart-panel-toggle").animate({top: 80}, 200 );
 }
 
 function toggleCartPanel() {
@@ -34,8 +34,8 @@ function toggleCartPanel() {
         hideCartPanelButtons();
         $("#cart-panel").animate({left: -490}, 300 );
         CartPanelState = false;
-        $("#cart-panel-toggle").animate({top: 155}, 200 );
-        $("#search-panel-toggle").animate({top: 64}, 200 );
+        $("#cart-panel-toggle").animate({top: 80}, 200 );
+        $("#search-panel-toggle").animate({top: 27}, 200 );
     } else {
         if (SearchPanelState) {
             closeSearchPanel();
@@ -43,7 +43,7 @@ function toggleCartPanel() {
         $("#cart-panel").animate({left: 10}, 300 );
         showCartPanelButtons();
         CartPanelState = true;
-        $("#cart-panel-toggle").animate({top: 26}, 200 );
+        $("#cart-panel-toggle").animate({top: -1}, 200 );
         $("#search-panel-toggle").animate({top: 590}, 200 );
     }
 }
@@ -52,13 +52,13 @@ function closeCartPanel() {
     hideCartPanelButtons();
     $("#cart-panel").animate({left: -490}, 300 );
     CartPanelState = false;
-    $("#search-panel-toggle").animate({top: 64}, 200 );
+    $("#search-panel-toggle").animate({top: 27}, 200 );
 }
 
 function toggleResultPanel() {
     if (ResultPanelState) {
         hideResultPanelButtons();
-        $("#result-panel").animate({right: -487}, 300 );
+        $("#result-panel").animate({right: -467}, 300 );
         ResultPanelState = false;
     } else {
         $("#result-panel").animate({right: 10}, 300 );
@@ -286,11 +286,11 @@ APP.$imagemodal = null;
 APP.guid = '';
 
 APP.ResultItem = Backbone.Model.extend({
-    //urlRoot: '/api/v1/searchresults/6cfa079f-8be1-4029-a1eb-f80875a4e64c/'
+    //urlRoot: '/api/v1/searchresults/6cfa079f-8be1-4029-a1eb-f80875a4e27c/'
 });
 
 APP.ResultItemCollection = PaginatedCollection.extend({
-    //urlRoot: '/api/v1/searchresults/6cfa079f-8be1-4029-a1eb-f80875a4e64c/',
+    //urlRoot: '/api/v1/searchresults/6cfa079f-8be1-4029-a1eb-f80875a4e27c/',
     urlRoot: function() {
         return '/api/v1/searchresults/'+ APP.guid + '/';
     },
@@ -376,7 +376,7 @@ APP.ResultGridView = Backbone.View.extend({
     _update_pagination_info:function() {
         var cur_pag_el = this.$el.find('#resultsPosition');
         var page_info = this.collection.pageInfo();
-        var text = 'Page ' + page_info.current_page + ' of ' + page_info.pages + '('+page_info.total+' records)';
+        var text = 'Page ' + page_info.current_page + ' of ' + page_info.pages + ' ('+page_info.total+' records)';
         cur_pag_el.html(text);
     },
     _updateResultsInfo:function() {
@@ -554,7 +554,7 @@ APP.CartItem = Backbone.Model.extend({
 });
 
 APP.CartItemCollection = Backbone.Collection.extend({
-    //urlRoot: '/api/v1/searchresults/6cfa079f-8be1-4029-a1eb-f80875a4e64c/',
+    //urlRoot: '/api/v1/searchresults/6cfa079f-8be1-4029-a1eb-f80875a4e27c/',
     urlRoot: '/api/v1/searchrecords/',
     model: APP.CartItem,
     limit: 100

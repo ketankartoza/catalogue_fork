@@ -7,18 +7,26 @@
     <div class="span12">
       <div id="search-panel">
         <div id="search-panel-search-button">
-          <button class="btn btn-success btn-large" onclick="submitSearchForm();">
-            <i class="icon-search"></i>
+          <button class="btn btn-success btn-large btn-left-panel"
+                  onclick="submitSearchForm();"
+                  data-toggle="tooltip" title="Run Search"
+                  data-placement="right">
+            <i class="icon-play"></i>
           </button>
         </div>
         <div id="search-panel-reset-button">
-          <button class="btn btn-warning btn-large">
+          <button class="btn btn-warning btn-large btn-left-panel"
+                  data-toggle="tooltip" title="Reset Search Parameters"
+                  data-placement="right">
             <i class="icon-refresh"></i>
           </button>
         </div>
         <div id="search-panel-toggle">
-          <button class="btn btn-info" onclick="toggleSearchPanel();">
-            <i class="icon-search"></i> SEARCH
+          <button class="btn btn-info btn-large btn-left-panel"
+                  onclick="toggleSearchPanel();"
+                  data-toggle="tooltip" title="Toggle Search Panel"
+                  data-placement="right">
+            <i class="icon-search"></i>
           </button>
         </div>
         <section class="tabs">
@@ -40,13 +48,13 @@
           <input id="tab-6" type="radio" name="radio-set" class="tab-selector-6 chk-hide" />
           <label for="tab-6" class="tab-label-6"><i class="icon-camera"></i></label>-->
           <div class="clear-shadow"></div>
-          <div class="content well">
+          <div class="content well custom-corner-top-right">
             <form id="catalogueSearch" class="form-horizontal" action={% url 'submitSearch' %}>
               {% csrf_token %}
               {{ searchform.geometry }}
               {{ searchform.selected_sensors }}
               <div class="content-1 content_div">
-                <h2>SATELLITE</h2>
+                <h2>Satellite</h2>
                 <hr />
                 <span id="sattelite_inline" class="help-inline"></span>
                 <div id="listTree" class="listTree"></div>
@@ -67,7 +75,7 @@
                 </div>
               </div>
               <div class="content-2 content_div">
-                <h2>DATE RANGE</h2>
+                <h2>Date Range</h2>
                 <hr />
                 <span id="daterange_inline" class="help-inline"></span>
                 <div id="date_from_cg" class="control-group">
@@ -96,7 +104,7 @@
                 </div>
               </div>
               <div class="content-3 content_div">
-                <h2>CLOUD COVER</h2>
+                <h2>Cloud Cover</h2>
                 <hr />
                 <div class="control-group">
                   <label class="control-label" for="id_cloud_mean">Cloud cover</label>
@@ -104,56 +112,56 @@
                     {{ searchform.cloud_mean }}
                   </div>
                 </div>
-                <h2>PATH & ROW</h2>
+                <h2>Path & Row</h2>
                 <hr />
                 <div class="control-group">
-                  <label class="control-label" for="id_k_orbit_path"> Path (K/orbit) </label>
+                  <label class="control-label" for="id_k_orbit_path">Path (K/orbit)</label>
                   <div class="controls">
                     {{ searchform.k_orbit_path }}
                   </div>
                 </div>
                 <div class="control-group">
-                  <label class="control-label" for="id_j_frame_row"> Row (J/frame)  </label>
+                  <label class="control-label" for="id_j_frame_row">Row (J/frame)</label>
                   <div class="controls">
                     {{ searchform.j_frame_row }}
                   </div>
                 </div>
-                <h2>AREA OF INTEREST</h2>
+                <h2>Area of Interest</h2>
                 <hr />
                 <div class="control-group">
-                  <label class="control-label" for="id_aoi_geometry"> Bounding Box/Circle  </label>
+                  <label class="control-label" for="id_aoi_geometry">Bounding Box/Circle</label>
                   <div class="controls">
                     {{ searchform.aoi_geometry }}
                   </div>
                 </div>
                 <div class="control-group">
-                  <label class="control-label" for="id_geometry_file">  Geometry file   </label>
+                  <label class="control-label" for="id_geometry_file">Geometry file</label>
                   <div class="controls">
                     {{ searchform.geometry_file }}
                   </div>
                 </div>
-                <h2>OTHER OPTIONS</h2>
+                <h2>Other Options</h2>
                 <hr />
                 <div class="control-group">
-                  <label class="control-label" for="id_sensor_inclination_angle_start">  Sensor inclination angle start   </label>
+                  <label class="control-label" for="id_sensor_inclination_angle_start">Sensor inclination angle start</label>
                   <div class="controls">
                     {{ searchform.sensor_inclination_angle_start }}
                   </div>
                 </div>
                 <div class="control-group">
-                  <label class="control-label" for="id_sensor_inclination_angle_end">  Sensor inclination angle end    </label>
+                  <label class="control-label" for="id_sensor_inclination_angle_end">Sensor inclination angle end</label>
                   <div class="controls">
                     {{ searchform.sensor_inclination_angle_end }}
                   </div>
                 </div>
                 <div class="control-group">
-                  <label class="control-label" for="id_spatial_resolution">   Spatial resolution    </label>
+                  <label class="control-label" for="id_spatial_resolution">Spatial resolution</label>
                   <div class="controls">
                     {{ searchform.spatial_resolution }}
                   </div>
                 </div>
                 <div class="control-group">
-                  <label class="control-label" for="id_band_count">   Band count     </label>
+                  <label class="control-label" for="id_band_count">Band count</label>
                   <div class="controls">
                     {{ searchform.band_count }}
                   </div>
@@ -165,33 +173,54 @@
       </div>
       <div id="cart-panel" class="well">
         <div id="cart-panel-order-button">
-          <p class="btn btn-success btn-large">
+          <button class="btn btn-success btn-large btn-left-panel"
+                  data-toggle="tooltip" title="Place Order"
+                  data-placement="right">
             <i class="icon-ok"></i>
-          </p>
+          </button>
         </div>
         <div id="cart-panel-download-button">
-          <p class="btn btn-info btn-large">
+          <button class="btn btn-info btn-large btn-left-panel"
+                  data-toggle="tooltip"
+                  data-title="Toggle Download Options"
+                  data-placement="right">
             <i class="icon-download-alt"></i>
-          </p>
+          </button>
         </div>
         <div id="cart-panel-download-button-shp" class="downloadcartoptions">
-          <button class="btn btn-info">SHP</button>
+          <button class="btn btn-info btn-left-panel"
+                  data-toggle="tooltip"
+                  data-title="Download as SHP"
+                  data-placement="right">SHP</button>
         </div>
         <div id="cart-panel-download-button-kml" class="downloadcartoptions">
-          <button class="btn btn-info">KML</button>
+          <button class="btn btn-info btn-left-panel" data-toggle="tooltip"
+                  data-title="Download as KML"
+                  data-placement="right">KML</button>
         </div>
         <div id="cart-panel-download-button-kmz" class="downloadcartoptions">
-          <button class="btn btn-info">KMZ</button>
+          <button class="btn btn-info btn-left-panel"
+                  data-toggle="tooltip"
+                  data-title="Download as KMZ"
+                  data-placement="right">KMZ</button>
         </div>
         <div id="cart-panel-download-button-xml" class="downloadcartoptions">
-          <button class="btn btn-info">XML</button>
+          <button class="btn btn-info btn-left-panel"
+                  data-toggle="tooltip"
+                  data-title="Download as XML"
+                  data-placement="right">XML</button>
         </div>
         <div id="cart-panel-download-button-htm" class="downloadcartoptions">
-          <button class="btn btn-info">HTM</button>
+          <button class="btn btn-info btn-left-panel"
+                  data-toggle="tooltip"
+                  data-title="Download as HTM"
+                  data-placement="right">HTM</button>
         </div>
         <div id="cart-panel-toggle">
-          <button class="btn btn-info" onclick="toggleCartPanel();">
-            <i class="icon-shopping-cart"></i> CART
+          <button class="btn btn-info btn-large btn-left-panel" onclick="toggleCartPanel();"
+              data-toggle="tooltip" data-title="Toggle Cart Panel"
+              data-placement="right">
+            <i class="icon-shopping-cart"></i>
           </button>
         </div>
         <div id="cart-container">
@@ -200,28 +229,43 @@
 
       <div id="result-panel" class="well">
         <div id="result-panel-download-button">
-          <button class="btn btn-success btn-large">
+          <button class="btn btn-success btn-large btn-right-panel"
+                  data-toggle="tooltip" data-title="Toggle Download Options"
+                  data-placement="left">
             <i class="icon-download-alt"></i>
           </button>
         </div>
         <div id="result-panel-download-button-shp" class="downloadoptions">
-          <button class="btn btn-info">SHP</button>
+          <button class="btn btn-info btn-right-panel" data-toggle="tooltip"
+                  data-title="Download as SHP"
+                  data-placement="left">SHP</button>
         </div>
         <div id="result-panel-download-button-kml" class="downloadoptions">
-          <button class="btn btn-info">KML</button>
+          <button class="btn btn-info btn-right-panel" data-toggle="tooltip"
+                  data-title="Download as KML"
+                  data-placement="left">KML</button>
         </div>
         <div id="result-panel-download-button-kmz" class="downloadoptions">
-          <p class="btn btn-info">KMZ</p>
+          <p class="btn btn-info btn-right-panel" data-toggle="tooltip"
+             data-title="Download as KMZ"
+             data-placement="left">KMZ</p>
         </div>
         <div id="result-panel-download-button-xml" class="downloadoptions">
-          <button class="btn btn-info">XML</button>
+          <button class="btn btn-info btn-right-panel" data-toggle="tooltip"
+                  data-title="Download as XML"
+                  data-placement="left">XML</button>
         </div>
         <div id="result-panel-download-button-htm" class="downloadoptions">
-          <button class="btn btn-info">HTM</button>
+          <button class="btn btn-info btn-right-panel" data-toggle="tooltip"
+                  data-title="Download as HTM"
+                  data-placement="left">HTM</button>
         </div>
         <div id="result-panel-toggle">
-          <button class="btn btn-info" onclick="toggleResultPanel();">
-            <i class="icon-list"></i> RESULTS
+          <button class="btn btn-info btn-large btn-right-panel"
+                  onclick="toggleResultPanel();"
+                  data-toggle="tooltip" data-placement="left"
+                  title="Toggle Results Panel">
+            <i class="icon-list"></i>
           </button>
         </div>
         <div class="navigation">
@@ -242,9 +286,9 @@
         <svg id="svg" style="width:100%; height: 100%;"></svg>
       </div>
       <input type="hidden" id="id_geometry" />
-      <div id="map-controls" class="blackalpha60">
+      <div id="map-controls">
         <div id="map-layerswitcher-control">
-          <div class="right icon-globe icon-2x icon-border"></div>
+          <button class="btn btn-info btn-large right icon-globe"></button>
         </div>
         <div id="map-navigation"></div>
       </div>
@@ -273,7 +317,7 @@
   <script type="text/javascript" src="{% static 'js/search.js' %}"></script>
   <script>
   $( document ).ready(function() {
-
+    $('button[data-toggle="tooltip"]').tooltip();
 
     myMap = new APP.SansaMap('map');
     searchLayer = new APP.SearchLayer(myMap);
@@ -283,8 +327,12 @@
     $('.listTree').listTree( {{ listreeoptions|safe }} , { "startCollapsed": true, "selected": [] });
     $('#results-container').perfectScrollbar( { wheelSpeed: 20 } );
     $('#cart-container').perfectScrollbar( { wheelSpeed: 20 } );
-    $('#id_start_datepicker').datepicker();
-    $('#id_end_datepicker').datepicker();
+    $('#id_start_datepicker').datepicker({
+      autoclose: true
+    });
+    $('#id_end_datepicker').datepicker({
+      autoclose: true
+    });
     $('#result-panel-download-button').click(function() {
       toggleResultDownloadButton();
     });

@@ -57,21 +57,49 @@ div.dr_row{
     color:white
 }
 
+.btn:focus {
+    outline: none!important;
+    outline-offset: 0!important;
+}
+
+.custom-corner-top-right {
+    border-radius: 4px 0 4px 4px!important;
+}
+
+.custom-corner-top-left {
+    border-radius: 0 4px 4px 4px !important;
+}
+
+.btn-left-panel {
+    border-radius: 0 4px 4px 0;
+    border-left: none;
+}
+
+.btn-right-panel {
+    border-radius: 4px 0 0 4px;
+    border-left: none;
+}
+
 #search-panel {
     width: 450px; height: 500px; z-index: 101; position: fixed; top: 50px; left: -450px;
 }
 
 #search-panel-toggle {
     width: 40px;
-    z-index: 500;
+    z-index: -1;
     position: absolute;
-    right: -6px;
-    top: 64px;
+    right: -38px;
+    top: 27px;
     white-space: nowrap;
 }
 
 #search-panel-search-button {
-    width: 50px; height: 35px; z-index: 500; position: absolute; top: 370px; right: -54px;
+    width: 50px;
+    height: 35px;
+    z-index: -1;
+    position: absolute;
+    top: 370px;
+    right: -50px;
     /*overflow: hidden;*/
     white-space: nowrap;
     color: #fff;
@@ -79,18 +107,23 @@ div.dr_row{
 }
 
 #search-panel-reset-button {
-    width: 50px; height: 35px; z-index: 500; position: absolute; top: 410px; right: -54px;
+    width: 50px;
+    height: 35px;
+    z-index: -1;
+    position: absolute;
+    top: 410px;
+    right: -50px;
     white-space: nowrap;
     color: #fff;
     margin: 3px;
 }
 
-#search-panel-toggle > .btn {
-    -webkit-transform: rotate(-90deg);
-    -moz-transform: rotate(-90deg);
-    -ms-transform: rotate(-90deg);
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-}
+/*#search-panel-toggle > .btn {*/
+    /*-webkit-transform: rotate(-90deg);*/
+    /*-moz-transform: rotate(-90deg);*/
+    /*-ms-transform: rotate(-90deg);*/
+    /*filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);*/
+/*}*/
 
 #cart-panel {
     width: 450px;
@@ -103,29 +136,39 @@ div.dr_row{
 
 #cart-panel-toggle {
     width: 29px;
-    z-index: 500;
+    z-index: -1;
     position: absolute;
-    top: 155px;
-    right: -6px;
+    top: 80px;
+    right: -29px;
     white-space: nowrap;
 }
 
-#cart-panel-toggle > .btn {
-    -webkit-transform: rotate(-90deg);
-    -moz-transform: rotate(-90deg);
-    -ms-transform: rotate(-90deg);
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-}
+/*#cart-panel-toggle > .btn {*/
+    /*-webkit-transform: rotate(-90deg);*/
+    /*-moz-transform: rotate(-90deg);*/
+    /*-ms-transform: rotate(-90deg);*/
+    /*filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);*/
+/*}*/
 
 #cart-panel-order-button {
-    width: 50px; height: 35px; z-index: 500; position: absolute; top: 410px; right: -57px;
+    width: 50px;
+    height: 35px;
+    z-index: -1;
+    position: absolute;
+    top: 410px;
+    right: -54px;
     white-space: nowrap;
     color: #fff;
     margin: 3px;
 }
 
 #cart-panel-download-button {
-    width: 50px; height: 35px; z-index: 500; position: absolute; top: 370px; right: -57px;
+    width: 50px;
+    height: 35px;
+    z-index: -1;
+    position: absolute;
+    top: 370px;
+    right: -54px;
     white-space: nowrap;
     color: #fff;
     margin: 3px;
@@ -174,19 +217,19 @@ div.dr_row{
 }
 
 #result-panel-toggle {
-    z-index: 500;
+    z-index: -1;
     position: absolute;
-    top: 62px;
-    left: -72px;
+    top: 0;
+    left: -48px;
     white-space: nowrap;
 }
 
-#result-panel-toggle > .btn {
-    -webkit-transform: rotate(-90deg);
-    -moz-transform: rotate(-90deg);
-    -ms-transform: rotate(-90deg);
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-}
+/*#result-panel-toggle > .btn {*/
+    /*-webkit-transform: rotate(-90deg);*/
+    /*-moz-transform: rotate(-90deg);*/
+    /*-ms-transform: rotate(-90deg);*/
+    /*filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);*/
+/*}*/
 
 
 .search-panel-input {
@@ -358,9 +401,8 @@ div.dr_row{
     line-height: 12px;
     color: #000;
     font-weight: normal;
-    margin: 2px 0 2px 0;
+    margin: 2px 0 20px 0;
     padding: 0px 0 0px 2px;
-    text-transform:uppercase;
     width: 440px;
     height: 22px;
 }
@@ -397,23 +439,23 @@ div.dr_row{
 }
 
 #result-panel .summary {
-    font-size: 10px;
-    line-height: 10px;
     color: #000;
     font-weight: normal;
     margin: 2px 0 2px 4px;
-    background: #FFF;
     padding: 5px 0 5px 2px;
-    text-transform:uppercase;
     width: 440px;
     height: 65px;
     position: relative;
     float: left;
-    background: #EDF1FC;
 }
 
 #result-panel-download-button {
-    width: 50px; height: 35px; z-index: 10000; position: absolute; top: 500px; left: -55px;
+    width: 50px;
+    height: 35px;
+    z-index: -1;
+    position: absolute;
+    top: 500px;
+    left: -50px;
     white-space: nowrap;
     margin: 3px;
 }
