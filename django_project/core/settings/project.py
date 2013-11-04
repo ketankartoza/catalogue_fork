@@ -132,7 +132,7 @@ PIPELINE_JS = {
             'js/bootstrap-modal.js',
             'js/bootstrap-modalmanager.js',
             'js/bootstrap-listTree.js',
-            'js/snap.svg-min.js',
+            'js/snap.svg.js',
             'js/perfect-scrollbar-0.4.3.with-mousewheel.min.js',
             'js/jquery.blockUI.js',
             'js/map_layers.js',
@@ -173,7 +173,7 @@ PIPELINE_JS = {
             'js/widget.deliveryform.js',
             'js/sansa-ui.js'
         ),
-        'output_filename': 'js/fluid.js',
+        'output_filename': 'js/addpage.js',
     }
 
 }
@@ -200,7 +200,7 @@ PIPELINE_CSS = {
             'css/flat-buttons.css',
             'css/bootstrap-listTree.css',
             'css/perfect-scrollbar.css',
-            'css/bootstrap-modal.css'
+            'css/bootstrap-modal.css',
         ),
         'output_filename': 'css/fluid.css',
         'extra_context': {
@@ -216,7 +216,7 @@ PIPELINE_CSS = {
             'css/perfect-scrollbar.css',
             'css/bootstrap-modal.css'
         ),
-        'output_filename': 'css/fluid.css',
+        'output_filename': 'css/addpage.css',
         'extra_context': {
             'media': 'screen, projection',
         },

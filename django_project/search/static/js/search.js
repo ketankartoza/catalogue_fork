@@ -282,6 +282,7 @@ function resetSearchFromErrors() {
 // backbone models/collections/views
 
 APP.$modal = $('#ajax-modal');
+APP.$imagemodal = null;
 APP.guid = '';
 
 APP.ResultItem = Backbone.Model.extend({
@@ -391,6 +392,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
         'click span.metadata-button': 'showMetadata',
         'click span.cart-button': 'addToCart',
         'click span.zoom-button': 'highlightResultItem',
+        'click span.showBig-button': 'openBigImage',
         'click img.result-img': 'expandResultItem',
         'mouseenter img.result-img': 'focusItem',
         'mouseleave img.result-img': 'blurItem',
@@ -399,6 +401,26 @@ APP.ResultGridViewItem = Backbone.View.extend({
     initialize: function() {
         $APP.on('highlightResultItem', $.proxy(this.highlightResultItem, this));
         this.expanded = false;
+    },
+
+    openBigImage: function() {
+        // APP.$modal.load('/thumbnail/'+this.model.get('id')+'/raw/', '', function(){
+        //     APP.$imagemodal.modal();
+        // });
+        $.loadImage('/thumbnail/'+this.model.get('id')+'/raw/')
+            .done(function(image) {
+              $('#imageBoximage').attr('src',image.src);
+              $('#imageBox').modal();
+            })
+            .fail(function(image) {
+
+            });
+        //$('#imageBoximage').attr('src','/thumbnail/'+this.model.get('id')+'/raw/');
+        //setTimeout(function() {$('#imageBox').modal()}, 1000);;
+        //$('#imageBoximage').fullsizable();
+        //APP.$imagemodal.modal();
+
+        //$.fullsizableOpen($('#imageBoximage'));
     },
 
     returnToMin: function() {
@@ -415,15 +437,17 @@ APP.ResultGridViewItem = Backbone.View.extend({
         var selectedID = this.model.get('unique_product_id');
         var div = $("#result_item_"+ selectedID);
         if (!this.expanded) {
-            div.animate({'height': '460px'}, 500);
+            div.animate({'height': '410px'}, 500);
             $('#results-container').animate({scrollTop: div.position().top+$('#results-container').scrollTop()}, 500);
-            div.find('.result-img').animate({'height': '420px','width': '420px', 'top': '40px'});
-            div.find('.zoom-button').show();
+            div.find('.result-img').animate({'height': '370px','width': '370px', 'top': '40px'});
+            div.find('.zoom-button').show(400);
+            div.find('.showBig-button').show(400);
             this.expanded = true;
         } else {
             div.animate({'height': '46px'}, 500);
             div.find('.result-img').animate({'height': '45px','width': '45px', 'top': '0px'});
             div.find('.zoom-button').hide();
+            div.find('.showBig-button').hide();
             this.expanded = false;
         }
     },
@@ -459,13 +483,11 @@ APP.ResultGridViewItem = Backbone.View.extend({
     },
 
     showMetadata: function() {
-        $('body').modalmanager('loading');
         var id = this.model.get('id');
-        setTimeout(function(){
-            APP.$modal.load('/metadata/'+id, '', function(){
+        APP.$modal.load('/metadata/'+id, '', function(){
             APP.$modal.modal();
         });
-      }, 1000);
+
     },
     addToCart: function() {
         if (UserLoged) {
@@ -507,6 +529,7 @@ var template = [
             '<span class="button metadata-button"><i class="icon-list-alt icon-2x"></i></span>',
             '<span class="button cart-button"><i class="icon-shopping-cart icon-2x"></i></span>',
             '<span class="button zoom-button"><i class="icon-screenshot icon-2x"></i></span>',
+            '<span class="button showBig-button"><i class="icon-desktop icon-2x"></i></span>',
           '</div>'
           ].join('');
 
@@ -615,3 +638,40 @@ var templateCart = [
 
 var CartgridViewHtml = new APP.CartGridView({
         'collection': APP.Cart});
+
+$.loadImage = function(url) {
+  // Define a "worker" function that should eventually resolve or reject the deferred object.
+  var loadImage = function(deferred) {
+    var image = new Image();
+    // Set up event handlers to know when the image has loaded
+    // or fails to load due to an error or abort.
+    image.onload = loaded;
+    image.onerror = errored; // URL returns 404, etc
+    image.onabort = errored; // IE may call this if user clicks "Stop"
+
+    // Setting the src property begins loading the image.
+    image.src = url;
+
+    function loaded() {
+      unbindEvents();
+      // Calling resolve means the image loaded sucessfully and is ready to use.
+      deferred.resolve(image);
+    }
+    function errored() {
+      unbindEvents();
+      // Calling reject means we failed to load the image (e.g. 404, server offline, etc).
+      deferred.reject(image);
+    }
+    function unbindEvents() {
+      // Ensures the event callbacks only get called once.
+      image.onload = null;
+      image.onerror = null;
+      image.onabort = null;
+    }
+  };
+
+  // Create the deferred object that will contain the loaded image.
+  // We don't want callers to have access to the resolve() and reject() methods,
+  // so convert to "read-only" by calling `promise()`.
+  return $.Deferred(loadImage).promise();
+};

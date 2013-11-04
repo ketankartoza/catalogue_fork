@@ -126,7 +126,7 @@
                 padding:    0,
                 margin:     0,
                 width:      '30%',
-                top:        '40%',
+                top:        '20%',
                 left:       '35%',
                 textAlign:  'center',
                 color:      '#000',
@@ -138,7 +138,7 @@
             // minimal style set used when themes are used
             themedCSS: {
                 width:  '30%',
-                top:    '40%',
+                top:    '20%',
                 left:   '35%'
             },
 
