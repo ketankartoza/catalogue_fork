@@ -30,7 +30,7 @@
 
           <input id="tab-3" type="radio" name="radio-set" class="tab-selector-3 chk-hide" />
           <label for="tab-3" class="tab-label-3"><i class="icon-cogs"></i></label>
-<!--
+          <!--
           <input id="tab-4" type="radio" name="radio-set" class="tab-selector-4 chk-hide" />
           <label for="tab-4" class="tab-label-4"><i class="icon-picture"></i></label>
 
@@ -38,137 +38,157 @@
           <label for="tab-5" class="tab-label-5"><i class="icon-headphones"></i></label>
 
           <input id="tab-6" type="radio" name="radio-set" class="tab-selector-6 chk-hide" />
-          <label for="tab-6" class="tab-label-6"><i class="icon-camera"></i></label>
--->
+          <label for="tab-6" class="tab-label-6"><i class="icon-camera"></i></label>-->
           <div class="clear-shadow"></div>
-
-          <div class="content">
+          <div class="content well">
             <form id="catalogueSearch" class="form-horizontal" action={% url 'submitSearch' %}>
               {% csrf_token %}
               {{ searchform.geometry }}
               {{ searchform.selected_sensors }}
-            <div class="content-1 content_div">
-              <h2>SATELLITE</h2>
-              <hr />
-              <span id="sattelite_inline" class="help-inline"></span>
-              <div id="listTree" class="listTree"></div>
-              <hr />
-              <div class="search-options">
-                <span class="search-panel-input">
-                  {{ searchform.free_imagery }}
-                  {{ searchform.free_imagery.label_tag }}
-                </span>
-                <span class="search-panel-input">
-                  {{ searchform.panchromatic_imagery }}
-                  {{ searchform.panchromatic_imagery.label_tag }}
-                </span>
-              </div>
-              <hr />
-              <div class="search-options">
-                <h3>Search summary</h3>
-              </div>
-            </div>
-            <div class="content-2 content_div">
-              <h2>DATE RANGE</h2>
-              <hr />
-              <span id="daterange_inline" class="help-inline"></span>
-              <div id="date_from_cg" class="control-group">
-                <label class="control-label" for="id_start_datepicker">Date from</label>
-                <div class="controls">
-                  <input type="text" id="id_start_datepicker" placeholder="">
+              <div class="content-1 content_div">
+                <h2>SATELLITE</h2>
+                <hr />
+                <span id="sattelite_inline" class="help-inline"></span>
+                <div id="listTree" class="listTree"></div>
+                <hr />
+                <div class="search-options">
+                  <span class="search-panel-input">
+                    {{ searchform.free_imagery }}
+                    {{ searchform.free_imagery.label_tag }}
+                  </span>
+                  <span class="search-panel-input">
+                    {{ searchform.panchromatic_imagery }}
+                    {{ searchform.panchromatic_imagery.label_tag }}
+                  </span>
+                </div>
+                <hr />
+                <div class="search-options">
+                  <h3>Search summary</h3>
                 </div>
               </div>
-              <div id="date_to_cg" class="control-group">
-                <label class="control-label" for="id_end_datepicker">Date to</label>
-                <div class="controls">
-                  <input type="text" id="id_end_datepicker" placeholder="">
-                  <span id="date_to_inline" class="help-inline"></span>
+              <div class="content-2 content_div">
+                <h2>DATE RANGE</h2>
+                <hr />
+                <span id="daterange_inline" class="help-inline"></span>
+                <div id="date_from_cg" class="control-group">
+                  <label class="control-label" for="id_start_datepicker">Date from</label>
+                  <div class="controls">
+                    <input type="text" id="id_start_datepicker" placeholder="">
+                  </div>
+                </div>
+                <div id="date_to_cg" class="control-group">
+                  <label class="control-label" for="id_end_datepicker">Date to</label>
+                  <div class="controls">
+                    <input type="text" id="id_end_datepicker" placeholder="">
+                    <span id="date_to_inline" class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="date_range">
+                  <div class="date-range text-center">
+                    <button class="btn">
+                      <i class="icon-plus"></i> Add new date range
+                    </button>
+                  </div>
+                  {{ dateformset.management_form }}
+                  {% for form in dateformset.forms %}
+                    {{ form.as_p }} {# TODO: this will FAIL , needs to be specifically formated for daterange widget #}
+                  {% endfor %}
                 </div>
               </div>
-              <div id="date_range">
-                <div class="date-range"><p class="button"><i class="icon-plus"></i> Add new date range</p></div>
-                {{ dateformset.management_form }}
-                {% for form in dateformset.forms %}
-                  {{ form.as_p }} {# TODO: this will FAIL , needs to be specifically formated for daterange widget #}
-                {% endfor %}
-              </div>
-            </div>
-            <div class="content-3 content_div">
-              <h2>CLOUD COVER</h2>
-              <hr />
-              <div class="control-group">
-                <label class="control-label" for="id_cloud_mean">Cloud cover</label>
-                <div class="controls">
-                  {{ searchform.cloud_mean }}
+              <div class="content-3 content_div">
+                <h2>CLOUD COVER</h2>
+                <hr />
+                <div class="control-group">
+                  <label class="control-label" for="id_cloud_mean">Cloud cover</label>
+                  <div class="controls">
+                    {{ searchform.cloud_mean }}
+                  </div>
                 </div>
-              </div>
-              <h2>PATH & ROW</h2>
-              <hr />
-              <div class="control-group">
-                <label class="control-label" for="id_k_orbit_path"> Path (K/orbit) </label>
-                <div class="controls">
-                  {{ searchform.k_orbit_path }}
+                <h2>PATH & ROW</h2>
+                <hr />
+                <div class="control-group">
+                  <label class="control-label" for="id_k_orbit_path"> Path (K/orbit) </label>
+                  <div class="controls">
+                    {{ searchform.k_orbit_path }}
+                  </div>
                 </div>
-              </div>
-              <div class="control-group">
-                <label class="control-label" for="id_j_frame_row"> Row (J/frame)  </label>
-                <div class="controls">
-                  {{ searchform.j_frame_row }}
+                <div class="control-group">
+                  <label class="control-label" for="id_j_frame_row"> Row (J/frame)  </label>
+                  <div class="controls">
+                    {{ searchform.j_frame_row }}
+                  </div>
                 </div>
-              </div>
-              <h2>AREA OF INTEREST</h2>
-              <hr />
-              <div class="control-group">
-                <label class="control-label" for="id_aoi_geometry"> Bounding Box/Circle  </label>
-                <div class="controls">
-                  {{ searchform.aoi_geometry }}
+                <h2>AREA OF INTEREST</h2>
+                <hr />
+                <div class="control-group">
+                  <label class="control-label" for="id_aoi_geometry"> Bounding Box/Circle  </label>
+                  <div class="controls">
+                    {{ searchform.aoi_geometry }}
+                  </div>
                 </div>
-              </div>
-              <div class="control-group">
-                <label class="control-label" for="id_geometry_file">  Geometry file   </label>
-                <div class="controls">
-                  {{ searchform.geometry_file }}
+                <div class="control-group">
+                  <label class="control-label" for="id_geometry_file">  Geometry file   </label>
+                  <div class="controls">
+                    {{ searchform.geometry_file }}
+                  </div>
                 </div>
-              </div>
-              <h2>OTHER OPTIONS</h2>
-              <hr />
-              <div class="control-group">
-                <label class="control-label" for="id_sensor_inclination_angle_start">  Sensor inclination angle start   </label>
-                <div class="controls">
-                  {{ searchform.sensor_inclination_angle_start }}
+                <h2>OTHER OPTIONS</h2>
+                <hr />
+                <div class="control-group">
+                  <label class="control-label" for="id_sensor_inclination_angle_start">  Sensor inclination angle start   </label>
+                  <div class="controls">
+                    {{ searchform.sensor_inclination_angle_start }}
+                  </div>
                 </div>
-              </div>
-              <div class="control-group">
-                <label class="control-label" for="id_sensor_inclination_angle_end">  Sensor inclination angle end    </label>
-                <div class="controls">
-                  {{ searchform.sensor_inclination_angle_end }}
+                <div class="control-group">
+                  <label class="control-label" for="id_sensor_inclination_angle_end">  Sensor inclination angle end    </label>
+                  <div class="controls">
+                    {{ searchform.sensor_inclination_angle_end }}
+                  </div>
                 </div>
-              </div>
-              <div class="control-group">
-                <label class="control-label" for="id_spatial_resolution">   Spatial resolution    </label>
-                <div class="controls">
-                  {{ searchform.spatial_resolution }}
+                <div class="control-group">
+                  <label class="control-label" for="id_spatial_resolution">   Spatial resolution    </label>
+                  <div class="controls">
+                    {{ searchform.spatial_resolution }}
+                  </div>
                 </div>
-              </div>
-              <div class="control-group">
-                <label class="control-label" for="id_band_count">   Band count     </label>
-                <div class="controls">
-                  {{ searchform.band_count }}
+                <div class="control-group">
+                  <label class="control-label" for="id_band_count">   Band count     </label>
+                  <div class="controls">
+                    {{ searchform.band_count }}
+                  </div>
                 </div>
-              </div>
               </form>
             </div>
           </div>
         </section>
       </div>
-      <div id="cart-panel">
-        <div id="cart-panel-order-button"><p class="fbtn fbtn-success drop-shadow"><i class="icon-ok"></i></p></div>
-        <div id="cart-panel-download-button"><p class="fbtn fbtn-info drop-shadow"><i class="icon-download-alt"></i></p></div>
-        <div id="cart-panel-download-button-shp" class="downloadcartoptions"><p class="fbtn fbtn-info drop-shadow">SHP</p></div>
-        <div id="cart-panel-download-button-kml" class="downloadcartoptions"><p class="fbtn fbtn-info drop-shadow">KML</p></div>
-        <div id="cart-panel-download-button-kmz" class="downloadcartoptions"><p class="fbtn fbtn-info drop-shadow">KMZ</p></div>
-        <div id="cart-panel-download-button-xml" class="downloadcartoptions"><p class="fbtn fbtn-info drop-shadow">XML</p></div>
-        <div id="cart-panel-download-button-htm" class="downloadcartoptions"><p class="fbtn fbtn-info drop-shadow">HTM</p></div>
+      <div id="cart-panel" class="well">
+        <div id="cart-panel-order-button">
+          <p class="btn btn-success btn-large">
+            <i class="icon-ok"></i>
+          </p>
+        </div>
+        <div id="cart-panel-download-button">
+          <p class="btn btn-info btn-large">
+            <i class="icon-download-alt"></i>
+          </p>
+        </div>
+        <div id="cart-panel-download-button-shp" class="downloadcartoptions">
+          <button class="btn btn-info">SHP</button>
+        </div>
+        <div id="cart-panel-download-button-kml" class="downloadcartoptions">
+          <button class="btn btn-info">KML</button>
+        </div>
+        <div id="cart-panel-download-button-kmz" class="downloadcartoptions">
+          <button class="btn btn-info">KMZ</button>
+        </div>
+        <div id="cart-panel-download-button-xml" class="downloadcartoptions">
+          <button class="btn btn-info">XML</button>
+        </div>
+        <div id="cart-panel-download-button-htm" class="downloadcartoptions">
+          <button class="btn btn-info">HTM</button>
+        </div>
         <div id="cart-panel-toggle">
           <button class="btn btn-info" onclick="toggleCartPanel();">
             <i class="icon-shopping-cart"></i> CART
@@ -177,24 +197,46 @@
         <div id="cart-container">
         </div>
       </div>
-      <div id="result-panel">
-        <div id="result-panel-download-button"><p class="fbtn fbtn-info shadow"><i class="icon-download-alt"></i></p></div>
-        <div id="result-panel-download-button-shp" class="downloadoptions"><p class="fbtn fbtn-info shadow">SHP</p></div>
-        <div id="result-panel-download-button-kml" class="downloadoptions"><p class="fbtn fbtn-info shadow">KML</p></div>
-        <div id="result-panel-download-button-kmz" class="downloadoptions"><p class="fbtn fbtn-info shadow">KMZ</p></div>
-        <div id="result-panel-download-button-xml" class="downloadoptions"><p class="fbtn fbtn-info shadow">XML</p></div>
-        <div id="result-panel-download-button-htm" class="downloadoptions"><p class="fbtn fbtn-info shadow">HTM</p></div>
-        <div id="result-panel-toggle"><p onclick="toggleResultPanel();"><i class="icon-list"></i> RESULTS</p></div>
+
+      <div id="result-panel" class="well">
+        <div id="result-panel-download-button">
+          <button class="btn btn-success btn-large">
+            <i class="icon-download-alt"></i>
+          </button>
+        </div>
+        <div id="result-panel-download-button-shp" class="downloadoptions">
+          <button class="btn btn-info">SHP</button>
+        </div>
+        <div id="result-panel-download-button-kml" class="downloadoptions">
+          <button class="btn btn-info">KML</button>
+        </div>
+        <div id="result-panel-download-button-kmz" class="downloadoptions">
+          <p class="btn btn-info">KMZ</p>
+        </div>
+        <div id="result-panel-download-button-xml" class="downloadoptions">
+          <button class="btn btn-info">XML</button>
+        </div>
+        <div id="result-panel-download-button-htm" class="downloadoptions">
+          <button class="btn btn-info">HTM</button>
+        </div>
+        <div id="result-panel-toggle">
+          <button class="btn btn-info" onclick="toggleResultPanel();">
+            <i class="icon-list"></i> RESULTS
+          </button>
+        </div>
         <div class="navigation">
-          <div id="searchPrev" class="fbtn button searchPrev"><i class="icon-chevron-left"></i></div>
+          <div id="searchPrev" class="btn searchPrev" style="float:left;">
+            <i class="icon-chevron-left"></i>
+          </div>
           <div class="position" id="resultsPosition"></div>
-          <div id="searchNext" class="fbtn button searchNext"><i class="icon-chevron-right"></i></div>
+          <div id="searchNext" class="btn searchNext" style="float:right;">
+            <i class="icon-chevron-right"></i>
+          </div>
         </div>
-        <div id="results-container">
-        </div>
-        <div class="summary" id="resultsSummary">
-        </div>
+        <div id="results-container"></div>
+        <div class="summary" id="resultsSummary"></div>
       </div>
+
       <div id="map"></div>
       <div id="svg_layer">
         <svg id="svg" style="width:100%; height: 100%;"></svg>
@@ -214,8 +256,8 @@
     </div>
   </div>
   <div id="ajax-modal" class="modal hide fade" tabindex="-1"></div>
-  <div id="imageBox" class="modal container hide fade"  tabindex="-2">
-    <center><img id="imageBoximage" src="" /></center>
+  <div id="imageBox" class="modal container hide fade text-center"  tabindex="-2">
+    <img id="imageBoximage" src="" />
   </div>
 {% endblock%}
 

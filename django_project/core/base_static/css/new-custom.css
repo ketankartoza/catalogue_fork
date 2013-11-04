@@ -66,7 +66,7 @@ div.dr_row{
     z-index: 500;
     position: absolute;
     right: -6px;
-    top: 62px;
+    top: 64px;
     white-space: nowrap;
 }
 
@@ -92,15 +92,13 @@ div.dr_row{
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 
-#search-panel-toggle p:hover {
-    cursor: pointer; cursor: hand;
-    text-shadow: 0 0 10px #228441;
-}
-
 #cart-panel {
-    width: 450px; height: 500px; z-index: 99; position: fixed; top: 50px; left: -450px;
-    background: #FFFFFF;
-    box-shadow: 3px 2px 2px rgba(0,0,0,0.5);
+    width: 450px;
+    height: 500px;
+    z-index: 99;
+    position: fixed;
+    top: 50px;
+    left: -490px;
 }
 
 #cart-panel-toggle {
@@ -108,7 +106,7 @@ div.dr_row{
     z-index: 500;
     position: absolute;
     top: 155px;
-    right: -5px;
+    right: -6px;
     white-space: nowrap;
 }
 
@@ -119,20 +117,15 @@ div.dr_row{
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 
-#cart-panel-toggle p:hover {
-    cursor: pointer; cursor: hand;
-    text-shadow: 0 0 10px #228441;
-}
-
 #cart-panel-order-button {
-    width: 50px; height: 35px; z-index: 500; position: absolute; top: 410px; right: -54px;
+    width: 50px; height: 35px; z-index: 500; position: absolute; top: 410px; right: -57px;
     white-space: nowrap;
     color: #fff;
     margin: 3px;
 }
 
 #cart-panel-download-button {
-    width: 50px; height: 35px; z-index: 500; position: absolute; top: 370px; right: -54px;
+    width: 50px; height: 35px; z-index: 500; position: absolute; top: 370px; right: -57px;
     white-space: nowrap;
     color: #fff;
     margin: 3px;
@@ -174,31 +167,27 @@ div.dr_row{
 }
 
 #result-panel {
-    width: 450px; height: 600px; z-index: 99; position: fixed; top: 50px; right: -450px;
-    background: #FFFFFF;
-    box-shadow: -3px 2px 2px rgba(0,0,0,0.5)
+    z-index: 99;
+    position: fixed;
+    top: 50px;
+    right: -487px;
 }
 
 #result-panel-toggle {
-    width: 30px; height: 130px; z-index: 500; position: absolute; top: 0px; left: -30px;
-    background: #FFFFFF;
-    overflow: hidden;
+    z-index: 500;
+    position: absolute;
+    top: 62px;
+    left: -72px;
     white-space: nowrap;
-    box-shadow: -3px 2px 2px rgba(0,0,0,0.5), -3px -2px 2px rgba(0,0,0,0.5);
 }
 
-#result-panel-toggle p {
+#result-panel-toggle > .btn {
     -webkit-transform: rotate(-90deg);
     -moz-transform: rotate(-90deg);
     -ms-transform: rotate(-90deg);
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-    margin-top: 80px;
 }
 
-#result-panel-toggle p:hover {
-    cursor: pointer; cursor: hand;
-    text-shadow: 0 0 10px #228441;
-}
 
 .search-panel-input {
     padding: 0 40px 0 5px;
@@ -370,7 +359,6 @@ div.dr_row{
     color: #000;
     font-weight: normal;
     margin: 2px 0 2px 0;
-    background: #FFF;
     padding: 0px 0 0px 2px;
     text-transform:uppercase;
     width: 440px;
@@ -400,7 +388,7 @@ div.dr_row{
 #result-panel .navigation .position {
     line-height: 12px;
     padding: 5px 12px 2px;
-    background: none repeat scroll 0 0 #FFF;
+    background: none repeat scroll 0 0;
     color: #000;
     width: 340px;
     position: relative;
