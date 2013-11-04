@@ -17,7 +17,7 @@
       <sourceFolder url="file://$MODULE_DIR$/django_project/search" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/django_project/dictionaries" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Catalogue Venv" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Remote Python 2.7.3(ssh://vagrant@127.0.0.1:2222/home/web/catalogue/venv/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings">

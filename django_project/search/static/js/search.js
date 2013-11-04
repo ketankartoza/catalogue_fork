@@ -18,7 +18,7 @@ function toggleSearchPanel() {
         $("#search-panel").animate({left: 10}, 300 );
         showSearchPanelButtons();
         SearchPanelState = true;
-        $("#cart-panel-toggle").animate({top: 515}, 200 );
+        $("#cart-panel-toggle").animate({top: 535}, 200 );
     }
 }
 
@@ -35,7 +35,7 @@ function toggleCartPanel() {
         $("#cart-panel").animate({left: -450}, 300 );
         CartPanelState = false;
         $("#cart-panel-toggle").animate({top: 155}, 200 );
-        $("#search-panel-toggle").animate({top: 35}, 200 );
+        $("#search-panel-toggle").animate({top: 60}, 200 );
     } else {
         if (SearchPanelState) {
             closeSearchPanel();
@@ -43,8 +43,8 @@ function toggleCartPanel() {
         $("#cart-panel").animate({left: 10}, 300 );
         showCartPanelButtons();
         CartPanelState = true;
-        $("#cart-panel-toggle").animate({top: 0}, 200 );
-        $("#search-panel-toggle").animate({top: 515}, 200 );
+        $("#cart-panel-toggle").animate({top: 26}, 200 );
+        $("#search-panel-toggle").animate({top: 555}, 200 );
     }
 }
 
@@ -52,7 +52,7 @@ function closeCartPanel() {
     hideCartPanelButtons();
     $("#cart-panel").animate({left: -450}, 300 );
     CartPanelState = false;
-    $("#search-panel-toggle").animate({top: 35}, 200 );
+    $("#search-panel-toggle").animate({top: 60}, 200 );
 }
 
 function toggleResultPanel() {
@@ -84,12 +84,12 @@ function defaultPanelState() {
     if (SearchPanelState) {
         $("#search-panel").animate({left: 10}, 300 );
         SearchPanelState = true;
-        $("#cart-panel-toggle").animate({top: 515}, 200 );
+        $("#cart-panel-toggle").animate({top: 535}, 200 );
         showSearchPanelButtons();
     } else if (CartPanelState) {
         $("#cart-panel").animate({left: 10}, 300 );
         $("#cart-panel-toggle").animate({top: 0}, 200 );
-        $("#search-panel-toggle").animate({top: 515}, 200 );
+        $("#search-panel-toggle").animate({top: 535}, 200 );
     }
     if (ResultPanelState) {
         $("#result-panel").animate({right: 10}, 300 );

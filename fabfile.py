@@ -12,7 +12,8 @@ from fabric.colors import red, magenta, yellow, cyan
 from fabric.contrib.files import contains, exists, append, sed
 from fabric.context_managers import quiet
 import fabtools
-from fabgis import postgres, common, umn_mapserver, virtualenv, git
+from fabgis import postgres, common, virtualenv, git
+    #umn_mapserver
 # Don't remove even though its unused
 #noinspection PyUnresolvedReferences
 from fabtools.vagrant import vagrant
@@ -72,8 +73,8 @@ def rsync_vagrant_to_code_dir():
     """Rsync from vagrant mount to code dir."""
     _all()
     with cd('/home/web/'):
-        run('rsync -va /vagrant/ %s/ --exclude \'venv\' '
-            '--exclude \'*.pyc\' --exclude \'.git\'' % PROJECT_NAME)
+        sudo('rsync -va /vagrant/ %s/ --exclude \'venv\' '
+                '--exclude \'*.pyc\' --exclude \'.git\'' % PROJECT_NAME)
     collect_static()
 
 

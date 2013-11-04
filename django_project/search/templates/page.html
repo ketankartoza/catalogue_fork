@@ -6,9 +6,21 @@
   <div class="row-fluid">
     <div class="span12">
       <div id="search-panel">
-        <div id="search-panel-search-button"><p class="fbtn fbtn-success drop-shadow" onclick="submitSearchForm();"><i class="icon-search"></i></p></div>
-        <div id="search-panel-reset-button"><p class="fbtn fbtn-warning drop-shadow"><i class="icon-refresh"></i> </p></div>
-        <div id="search-panel-toggle"><p onclick="toggleSearchPanel();"><i class="icon-search"></i> SEARCH</p></div>
+        <div id="search-panel-search-button">
+          <button class="btn btn-success btn-large" onclick="submitSearchForm();">
+            <i class="icon-search"></i>
+          </button>
+        </div>
+        <div id="search-panel-reset-button">
+          <button class="btn btn-warning btn-large">
+            <i class="icon-refresh"></i>
+          </button>
+        </div>
+        <div id="search-panel-toggle">
+          <button class="btn btn-info" onclick="toggleSearchPanel();">
+            <i class="icon-search"></i> SEARCH
+          </button>
+        </div>
         <section class="tabs">
           <input id="tab-1" type="radio" name="radio-set" class="tab-selector-1 chk-hide" checked />
           <label for="tab-1" class="tab-label-1"><i class="icon-globe"></i></label>
@@ -144,7 +156,7 @@
                   {{ searchform.band_count }}
                 </div>
               </div>
-              </form> {# end form #}
+              </form>
             </div>
           </div>
         </section>
@@ -157,7 +169,11 @@
         <div id="cart-panel-download-button-kmz" class="downloadcartoptions"><p class="fbtn fbtn-info drop-shadow">KMZ</p></div>
         <div id="cart-panel-download-button-xml" class="downloadcartoptions"><p class="fbtn fbtn-info drop-shadow">XML</p></div>
         <div id="cart-panel-download-button-htm" class="downloadcartoptions"><p class="fbtn fbtn-info drop-shadow">HTM</p></div>
-        <div id="cart-panel-toggle"><p onclick="toggleCartPanel();"><i class="icon-shopping-cart"></i> CART</p></div>
+        <div id="cart-panel-toggle">
+          <button class="btn btn-info" onclick="toggleCartPanel();">
+            <i class="icon-shopping-cart"></i> CART
+          </button>
+        </div>
         <div id="cart-container">
         </div>
       </div>
