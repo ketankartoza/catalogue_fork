@@ -441,12 +441,8 @@ div.dr_row{
 #result-panel .summary {
     color: #000;
     font-weight: normal;
-    margin: 2px 0 2px 4px;
-    padding: 5px 0 5px 2px;
     width: 440px;
-    height: 65px;
-    position: relative;
-    float: left;
+    margin-top: 15px;
 }
 
 #result-panel-download-button {
@@ -508,6 +504,7 @@ div.dr_row{
     float: left;
     height: 495px;
     overflow: hidden;
+    margin-bottom: 20px;
 }
 
 #cart-container {
@@ -569,7 +566,6 @@ div.dr_row{
 }
 
 .date_range_row > span {
-    width: 65px;
     text-align: center;
     display: inline-block;
 }

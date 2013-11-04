@@ -142,7 +142,7 @@
     <div id="collapseThree" class="accordion-body collapse in">
       <div class="accordion-inner" id="search-summary-accordion-div">
               {% if myMessages %}<div id="search-messages">
-        <b>{{ myPaginator.count }}</b> record found for
+        <b>{{ myPaginator.count }}</b> record{{ myPaginator.count|pluralize }} found for
         {% for myValue in myMessages %}
           {{ myValue|safe }}{% if not forloop.last %},{% else %}.{% endif %}<br/>
         {% endfor %}

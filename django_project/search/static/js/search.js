@@ -58,7 +58,7 @@ function closeCartPanel() {
 function toggleResultPanel() {
     if (ResultPanelState) {
         hideResultPanelButtons();
-        $("#result-panel").animate({right: -467}, 300 );
+        $("#result-panel").animate({right: -491}, 300 );
         ResultPanelState = false;
     } else {
         $("#result-panel").animate({right: 10}, 300 );
@@ -380,7 +380,7 @@ APP.ResultGridView = Backbone.View.extend({
         cur_pag_el.html(text);
     },
     _updateResultsInfo:function() {
-        var text = '<b>Summary</b>:<br />'+this.collection.total+' record found for<br />Note:The SPOT Imagery provided in this backdrop has been degraded to 10m';
+        var text = '<b>Summary</b>:<br />'+this.collection.total+' records found for<br />Note:The SPOT Imagery provided in this backdrop has been degraded to 10m';
         var pag_el = this.$el.find('#resultsSummary');
         pag_el.html(text);
     }
