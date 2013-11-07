@@ -109,13 +109,13 @@ class OrdersViews_viewOrder_Tests(TestCase):
         self.assertEqual(myResp.context['myCoverage'], {
             'IntersectedArea': 'Not applicable', 'ClipZone': 'Not applicable',
             'CentroidZone': 'UTM34S (EPSG:32734)',
-            'ProductArea': 79894321621.06012
+            'ProductArea': 79894321621
         })
 
         # check used templates
         myExpTemplates = [
-            'orderPage.html', u'base.html', u'pipeline/js.html',
-            u'pipeline/css.html', u'menu.html',
+            'orderPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'order.html',
             u'cartContents.html', u'recordHeader.html', u'record.html',
             u'orderStatusHistory.html'
@@ -167,13 +167,13 @@ class OrdersViews_viewOrder_Tests(TestCase):
         self.assertEqual(myResp.context['myCoverage'], {
             'IntersectedArea': 'Not applicable', 'ClipZone': 'Not applicable',
             'CentroidZone': 'UTM34S (EPSG:32734)',
-            'ProductArea': 79894321621.06012
+            'ProductArea': 79894321621
         })
 
         # check used templates
         myExpTemplates = [
-            'orderPage.html', u'base.html', u'pipeline/js.html',
-            u'pipeline/css.html', u'menu.html',
+            'orderPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'order.html',
             u'cartContents.html', u'recordHeader.html', u'record.html',
             u'orderStatusHistory.html'
@@ -244,7 +244,7 @@ class OrdersViews_viewOrder_Tests(TestCase):
         self.assertEqual(myResp.context['myCoverage'], {
             'IntersectedArea': 'Not applicable', 'ClipZone': 'Not applicable',
             'CentroidZone': 'UTM34S (EPSG:32734)',
-            'ProductArea': 79894321621.06012
+            'ProductArea': 79894321621
         })
         # check used templates
         myExpTemplates = [

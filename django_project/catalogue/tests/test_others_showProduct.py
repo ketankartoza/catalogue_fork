@@ -62,17 +62,14 @@ class OthersViews_showProduct_Tests(TestCase):
             reverse(
                 'showProduct',
                 kwargs={
-                    'theProductId': (
-                        'S1-_RVV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_'
-                        'ORBIT-')
+                    'theProductId': 'XY1234'
                 }
             )
         )
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'], (
-                'http://testserver/accounts/signin/?next=/showProduct/S1-_RVV_'
-                'X--_S1C2_0120_00_0404_00_860619_084632_1B--_ORBIT-/'
+                'http://testserver/accounts/signin/?next=/showProduct/XY1234/'
             )
         )
 
@@ -81,22 +78,12 @@ class OthersViews_showProduct_Tests(TestCase):
         Test view if user is logged as user and product id is found
         """
 
-        OpticalProductF.create(**{
-            'unique_product_id': (
-                'S1-_RVV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_ORBIT-')
-        })
+        OpticalProductF.create(**{'unique_product_id': 'XY1234'})
 
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
-            reverse(
-                'showProduct',
-                kwargs={
-                    'theProductId': (
-                        'S1-_RVV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_'
-                        'ORBIT-')
-                }
-            )
+            reverse('showProduct', kwargs={'theProductId': 'XY1234'})
         )
         self.assertEqual(myResp.status_code, 200)
 
@@ -104,13 +91,13 @@ class OthersViews_showProduct_Tests(TestCase):
 
         self.assertEqual(
             myResp.context['myProduct'].unique_product_id,
-            'S1-_RVV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_ORBIT-'
+            'XY1234'
         )
 
         # check used templates
         myExpTemplates = [
-            'productView.html', u'base.html', u'pipeline/js.html',
-            u'pipeline/css.html', u'menu.html',
+            'productView.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html',
             'productTypes/opticalProduct.html',
             u'productTypes/genericSensorProduct.html',
@@ -128,14 +115,7 @@ class OthersViews_showProduct_Tests(TestCase):
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
-            reverse(
-                'showProduct',
-                kwargs={
-                    'theProductId': (
-                        'S1-_RVV_X--_S1C2_0120_00_0404_00_860619_084632_1B--_'
-                        'ORBIT-')
-                }
-            )
+            reverse('showProduct', kwargs={'theProductId': 'XY1234'})
         )
 
         self.assertEqual(

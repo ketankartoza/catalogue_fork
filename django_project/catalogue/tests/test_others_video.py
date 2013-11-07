@@ -54,8 +54,9 @@ class OthersViews_video(TestCase):
         self.assertEqual(myResp.status_code, 200)
         # check used templates
         myExpTemplates = [
-            'video.html', u'base.html', u'pipeline/js.html',
-            u'pipeline/css.html', u'menu.html']
+            'video.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

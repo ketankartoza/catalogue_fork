@@ -11,7 +11,7 @@
                  />
   </center>
 </p>
-<table>
+<table class="table table-striped">
 <tr><th colspan="2">Generic Properties</th></tr>
 <tr><td class="loud">Product Date</td><td class="quiet">Dec. 12, 2012, midnight</td></tr>
 <tr><td class="loud">Processing Level</td><td class="quiet">L1A</td></tr>

@@ -362,7 +362,7 @@ def coverageForOrder(theOrder, theSearchRecords):
                                          SpatialReference(myZone[0]))
             myUnion.transform(myTransform)
             logger.debug('After geom xform: %s' % myUnion)
-            myCoverage['ProductArea'] = myUnion.area
+            myCoverage['ProductArea'] = int(myUnion.area)
             myCoverage['CentroidZone'] = (
                 '%s (EPSG:%s)' % (myZone[1], myZone[0]))
         else:
@@ -376,7 +376,7 @@ def coverageForOrder(theOrder, theSearchRecords):
             else:
                 myClip = myUnion.intersection(
                     theOrder.delivery_detail.geometry)
-            myCoverage['IntersectedArea'] = myClip.area
+            myCoverage['IntersectedArea'] = int(myClip.area)
             myCentroid = myClip.centroid
             # Calculate the zone independently as centroid may differ
             # from product union
@@ -392,7 +392,7 @@ def coverageForOrder(theOrder, theSearchRecords):
                                              SpatialReference(myZone[0]))
                 myClip.transform(myTransform)
                 #logger.debug('Utm zones: %s' % myZone)
-                myCoverage['IntersectedArea'] = myClip.area
+                myCoverage['IntersectedArea'] = int(myClip.area)
                 myCoverage['ClipZone'] = '%s (EPSG:%s)' % (
                     myZone[1], myZone[0])
         else:

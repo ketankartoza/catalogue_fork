@@ -48,7 +48,7 @@ class OthersViews_showThumbPage_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -141,9 +141,8 @@ class OthersViews_showThumbPage_Tests(TestCase):
             'th:100%; margin:0px;">\n        <thead>\n        </thead>\n      '
             '  <tfoot>\n        </tfoot>\n        <tbody>\n            <tr><th'
             '>Sensor:SuperSpectralMode</th></tr>\n            <tr><td><center>'
-            '<img src="/thumbnails/mySAT/2012/12/12/PROD123.jpg"></center></td'
-            '></tr>\n        </tbody>\n      </table>\n    </div>\n  </body>\n'
-            '</html>\n'
+            '<img src="/thumbnail/123/large/"></center></td></tr>\n        </t'
+            'body>\n      </table>\n    </div>\n  </body>\n</html>\n'
         )
 
         self.assertEqual(myResp.content, myExpResp)

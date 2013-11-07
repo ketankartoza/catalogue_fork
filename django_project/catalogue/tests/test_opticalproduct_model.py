@@ -132,6 +132,15 @@ class OpticalProductCRUD_Test(TestCase):
         Tests OpticalProduct model getMetadataDict method
         """
 
+        myProcLevel = ProcessingLevelF.create(**{
+            'abbreviation': 'L1A'
+        })
+
+        myInstType = InstrumentTypeF.create(**{
+            'name': 'INSTYPE1',
+            'base_processing_level': myProcLevel
+        })
+
         myProjection = ProjectionF.create(**{
             u'name': u'UTM37S', u'epsg_code': 32737
         })
@@ -153,21 +162,13 @@ class OpticalProductCRUD_Test(TestCase):
         })
 
         mySatInstGroup = SatelliteInstrumentGroupF.create(**{
-            'satellite': mySat
+            'satellite': mySat,
+            'instrument_type': myInstType
         })
 
         mySatInst = SatelliteInstrumentF.create(**{
             'operator_abbreviation': 'SATIN 1',
             'satellite_instrument_group': mySatInstGroup
-        })
-
-        myProcLevel = ProcessingLevelF.create(**{
-            'abbreviation': 'L1A'
-        })
-
-        myInstType = InstrumentTypeF.create(**{
-            'name': 'INSTYPE1',
-            'base_processing_level': myProcLevel
         })
 
         mySpecMode = SpectralModeF.create(**{
@@ -204,7 +205,7 @@ class OpticalProductCRUD_Test(TestCase):
             'product_date': '2012-12-12T00:00:00',
             'institution_address': 'Hartebeeshoek', 'institution_region': '',
             'image_quality_code': 'SuperQuality', 'vertical_cs': u'UTM37S',
-            'processing_level_code': 'A9', 'cloud_cover_percentage': 5,
+            'processing_level_code': 'L1A', 'cloud_cover_percentage': 5,
             'file_identifier': '123 Product ID 123',
             'spatial_coverage': (
                 '17.54,-32.05 20.83,-32.41 20.3,-35.17 17.84,-34.65 17.54,'

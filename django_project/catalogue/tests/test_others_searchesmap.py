@@ -119,8 +119,8 @@ class OthersViews_searchesMap(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'map.html', u'mapbody.html', u'base.html', u'pipeline/js.html',
-            u'pipeline/css.html', u'menu.html',
+            'map.html', u'mapbody.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'page.html',
             u'base-fluid.html', u'pipeline/css.html', u'pipeline/css.html',
             u'menu.html', u'useraccounts/menu_content.html',

@@ -88,9 +88,10 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'pipeline/js.html',
-            u'pipeline/css.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'orderList.html']
+            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'orderList.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -124,9 +125,10 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'pipeline/js.html',
-            u'pipeline/css.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'orderList.html']
+            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'orderList.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -162,9 +164,10 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'pipeline/js.html',
-            u'pipeline/css.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'orderList.html']
+            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'orderList.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -200,9 +203,10 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html',  u'base.html', u'pipeline/js.html',
-            u'pipeline/css.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'orderList.html']
+            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'orderList.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
