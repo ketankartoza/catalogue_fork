@@ -37,12 +37,12 @@ Notes:{{ myRecord.notes }}
  Product List
 ---------------
 {% for myRecord in myRecords %}
-{{ myRecord.product.product_id }} 
-{% if myRecord.product.productUrl %}
-Download: {{myRecord.product.productUrl}}
+{{ myRecord.product.getConcreteInstance.product_id }} 
+{% if myRecord.product.getConcreteInstance.productUrl %}
+Download: {{myRecord.product.getConcreteInstance.productUrl}}
 {% endif %}
-{% if myRecord.product.rawProductUrl %}
-Download Raw: {{myRecord.product.rawProductUrl}}
+{% if myRecord.product.getConcreteInstance.rawProductUrl %}
+Download Raw: {{myRecord.product.getConcreteInstance.rawProductUrl}}
 {% endif %}
 
 {% endfor %}

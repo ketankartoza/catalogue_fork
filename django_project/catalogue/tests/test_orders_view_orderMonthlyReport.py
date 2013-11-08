@@ -215,7 +215,7 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
             myTestDate + timedelta(days=31))
 
         # check used templates
-        myExpTemplates = ['pdf/orderMonthlyReport.html', u'pdfpage.html']
+        myExpTemplates = [u'<Unknown Template>']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

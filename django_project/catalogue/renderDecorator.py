@@ -61,13 +61,12 @@ class renderWithContext(object):
             items = func(request, *args, **kwargs)
             #check for PDF arg
             if 'pdf' in request.GET:
-                tmp_template_name = '/'.join(['pdf', self.template_name])
                 template_name = self.template_name.split('.')[0]
                 odt_template = '%s.odt' % template_name
                 return renderReport(odt_template,
                                     context_instance=RequestContext(request),
                                     format='pdf',
-                                    filename=tmp_template_name,
+                                    filename='{}.pdf'.format(template_name),
                                     dictionary=items)
 
             return render_to_response(

@@ -230,7 +230,7 @@ class OrdersViews_myOrders_Tests(TestCase):
             myResp.context['myUrl'], '/myorders/')
 
         # check used templates
-        myExpTemplates = ['pdf/orderListPage.html', u'pdfpage.html']
+        myExpTemplates = [u'<Unknown Template>']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -240,4 +240,6 @@ class OrdersViews_myOrders_Tests(TestCase):
 
         self.assertEqual(myResp['content-type'], 'application/pdf')
         self.assertEqual(
-            myResp['content-disposition'], 'attachment; filename=report.pdf')
+            myResp['content-disposition'],
+            'attachment; filename="orderListPage.pdf"'
+        )
