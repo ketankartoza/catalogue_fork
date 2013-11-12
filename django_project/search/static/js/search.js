@@ -377,6 +377,16 @@ APP.ResultGridView = Backbone.View.extend({
         var cur_pag_el = this.$el.find('#resultsPosition');
         var page_info = this.collection.pageInfo();
         var text = 'Page ' + page_info.current_page + ' of ' + page_info.pages + ' ('+page_info.total+' records)';
+        if (page_info.current_page > 1) {
+            $('#searchPrev').show();
+        } else {
+            $('#searchPrev').hide();
+        }
+        if (page_info.current_page != page_info.pages) {
+            $('#searchNext').show();
+        } else {
+            $('#searchNext').hide();
+        }
         cur_pag_el.html(text);
     },
     _updateResultsInfo:function() {
