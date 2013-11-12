@@ -1,0 +1,91 @@
+<form id="catalogueSearch" action={% url 'submitSearch' %}>
+  {% csrf_token %}
+  {{ searchform.geometry }}
+  {{ searchform.selected_sensors }}
+  <div class="content-1 content_div">
+    <h2>Satellite</h2>
+    <hr />
+    <span id="sattelite_inline" class="help-inline"></span>
+    <div id="listTree" class="listTree"></div>
+    <hr />
+    <div class="search-options">
+      <label class="checkbox">
+        {{ searchform.free_imagery }} {{ searchform.free_imagery.label_tag }}
+      </label>
+      <label class="checkbox">
+        {{ searchform.panchromatic_imagery }} {{ searchform.panchromatic_imagery.label_tag }}
+      </label>
+    </div>
+    <hr />
+    <div class="search-options">
+      <h3>Search summary</h3>
+    </div>
+  </div>
+  <div class="content-2 content_div">
+    <span id="daterange_inline" class="help-inline"></span>
+    <div id="date_from_cg" class="control-group">
+      <label class="control-label" for="id_start_datepicker">Date from</label>
+      <div class="controls">
+        <input type="text" id="id_start_datepicker" placeholder="">
+      </div>
+    </div>
+    <div id="date_to_cg" class="control-group">
+      <label class="control-label" for="id_end_datepicker">Date to</label>
+      <div class="controls">
+        <input type="text" id="id_end_datepicker" placeholder="">
+        <span id="date_to_inline" class="help-inline"></span>
+      </div>
+    </div>
+    <div id="date_range">
+      <div class="date-range text-center">
+        <button class="btn">
+          <i class="icon-plus"></i> Add new date range
+        </button>
+      </div>
+      {{ dateformset.management_form }}
+      {% for form in dateformset.forms %}
+        {{ form.as_p }} {# TODO: this will FAIL , needs to be specifically formated for daterange widget #}
+      {% endfor %}
+    </div>
+  </div>
+  <div class="content-3 content_div">
+    <fieldset>
+      <label class="control-label" for="id_aoi_geometry">Bounding Box/Circle</label>
+      {{ searchform.aoi_geometry }}
+       <span class="help-block">{{ searchform.aoi_geometry.help_text }}</span>
+      <label class="control-label" for="id_geometry_file">Geometry file</label>
+      {{ searchform.geometry_file }}
+       <span class="help-block">{{ searchform.geometry_file.help_text }}</span>
+     </fieldset>
+  </div>
+  <div class="content-4 content_div">
+    <fieldset>
+      <label for="id_cloud_mean">Cloud cover</label>
+      {{ searchform.cloud_mean }}
+      <span class="help-block">{{ searchform.cloud_mean.help_text }}</span>
+    </fieldset>
+  </div>
+  <div class="content-5 content_div">
+    <fieldset>
+    <label for="id_k_orbit_path">Path (K/orbit)</label>
+    {{ searchform.k_orbit_path }}
+    <span class="help-block">{{ searchform.k_orbit_path.help_text }}</span>
+    <label for="id_j_frame_row">Row (J/frame)</label>
+    {{ searchform.j_frame_row }}
+    <span class="help-block">{{ searchform.j_frame_row.help_text }}</span>
+    <label for="id_sensor_inclination_angle_start">Sensor inclination angle start</label>
+    {{ searchform.sensor_inclination_angle_start }}
+    <span class="help-block">{{ searchform.sensor_inclination_angle_start.help_text }}</span>
+    <label for="id_sensor_inclination_angle_end">Sensor inclination angle end</label>
+    {{ searchform.sensor_inclination_angle_end }}
+    <span class="help-block">{{ searchform.sensor_inclination_angle_end.help_text }}</span>
+    <label class="control-label" for="id_spatial_resolution">Spatial resolution</label>
+    {{ searchform.spatial_resolution }}
+    <span class="help-block">{{ searchform.spatial_resolution.help_text }}</span>
+    <label for="id_band_count">Band count</label>
+    {{ searchform.band_count }}
+    <span class="help-block">{{ searchform.band_count.help_text }}</span>
+    </fieldset>
+  </div>
+  </form>
+
