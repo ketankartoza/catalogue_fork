@@ -323,6 +323,8 @@
     searchLayer = new APP.SearchLayer(myMap);
     geoSearchLayer = new APP.GeoSearchLayer(myMap);
 
+    $(".olButton").tooltip({"placement": "top"});
+
     defaultPanelState();
     $('.listTree').listTree( {{ listreeoptions|safe }} , { "startCollapsed": true, "selected": [] });
     $('#results-container').perfectScrollbar( { wheelSpeed: 20 } );
