@@ -51,37 +51,53 @@
     this.mNavigationPanel.allowDepress = true;
     this.map.addControl(this.mNavigationPanel);
 
+    var modifyEventListeners = { 
+        "activate": function() {
+          $(this.panel_div).removeClass("btn-info");
+          $(this.panel_div).addClass("btn-success");
+        },
+        "deactivate": function() {
+          $(this.panel_div).removeClass("btn-success");
+          $(this.panel_div).addClass("btn-info");
+        }
+    };
+
     var myZoomInControl = new OpenLayers.Control.ZoomBox({
       title: "Zoom In Box: draw a box on the map, to see the area at a larger scale.",
       displayClass:'btn btn-large btn-info right icon-zoom-in olControlZoomBoxIn',
       div: OpenLayers.Util.getElement('map-navigation'),
-      out: false
+      out: false,
+      eventListeners: modifyEventListeners
     });
 
     var myZoomOutControl = new OpenLayers.Control.ZoomBox({
           title: "Zoom Out Box: draw a box on the map, to see the area at a smaller scale.",
           displayClass:'btn btn-large btn-info right icon-zoom-out olControlZoomBoxOut',
           div: OpenLayers.Util.getElement('map-navigation'),
-          out: true
+          out: true,
+          eventListeners: modifyEventListeners
         });
 
     var myNavigationControl = new OpenLayers.Control.Navigation({
       title : "Pan map: click and drag map to move the map in the direction of the mouse.",
       zoomWheelEnabled: false,
       displayClass:'btn btn-large btn-info right icon-move olControlNavigation',
-      div: OpenLayers.Util.getElement('map-navigation')
+      div: OpenLayers.Util.getElement('map-navigation'),
+      eventListeners: modifyEventListeners
     });
 
     var myHistoryControl = new OpenLayers.Control.NavigationHistory({
       nextOptions: {
         title : "Next view: quickly jump to the next map view, works only with prevoius view.",
         displayClass:'btn btn-large btn-info right icon-chevron-right olControlNavigationHistoryNext',
-        div: OpenLayers.Util.getElement('map-navigation')
+        div: OpenLayers.Util.getElement('map-navigation'),
+        eventListeners: modifyEventListeners
       },
       previousOptions: {
         title : "Previous view: quickly jump to the prevoius map view.",
         displayClass:'btn btn-large btn-info right icon-chevron-left olControlNavigationHistoryPrevious',
-        div: OpenLayers.Util.getElement('map-navigation')
+        div: OpenLayers.Util.getElement('map-navigation'),
+        eventListeners: modifyEventListeners
       }
     });
 
