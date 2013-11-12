@@ -37,14 +37,14 @@
           <label for="tab-2" class="tab-label-2">Date Range</label>
 
           <input id="tab-3" type="radio" name="radio-set" class="tab-selector-3 chk-hide" />
-          <label for="tab-3" class="tab-label-3">Options</label>
-          <!--
+          <label for="tab-3" class="tab-label-3">Area of Interest</label>
+
           <input id="tab-4" type="radio" name="radio-set" class="tab-selector-4 chk-hide" />
-          <label for="tab-4" class="tab-label-4"><i class="icon-picture"></i></label>
+          <label for="tab-4" class="tab-label-4">Cloud Cover</label>
 
           <input id="tab-5" type="radio" name="radio-set" class="tab-selector-5 chk-hide" />
-          <label for="tab-5" class="tab-label-5"><i class="icon-headphones"></i></label>
-
+          <label for="tab-5" class="tab-label-5">Other</label>
+<!--
           <input id="tab-6" type="radio" name="radio-set" class="tab-selector-6 chk-hide" />
           <label for="tab-6" class="tab-label-6"><i class="icon-camera"></i></label>-->
           <div class="clear-shadow"></div>
@@ -104,28 +104,6 @@
                 </div>
               </div>
               <div class="content-3 content_div">
-                <h2>Cloud Cover</h2>
-                <hr />
-                <div class="control-group">
-                  <label class="control-label" for="id_cloud_mean">Cloud cover</label>
-                  <div class="controls">
-                    {{ searchform.cloud_mean }}
-                  </div>
-                </div>
-                <h2>Path & Row</h2>
-                <hr />
-                <div class="control-group">
-                  <label class="control-label" for="id_k_orbit_path">Path (K/orbit)</label>
-                  <div class="controls">
-                    {{ searchform.k_orbit_path }}
-                  </div>
-                </div>
-                <div class="control-group">
-                  <label class="control-label" for="id_j_frame_row">Row (J/frame)</label>
-                  <div class="controls">
-                    {{ searchform.j_frame_row }}
-                  </div>
-                </div>
                 <h2>Area of Interest</h2>
                 <hr />
                 <div class="control-group">
@@ -138,6 +116,32 @@
                   <label class="control-label" for="id_geometry_file">Geometry file</label>
                   <div class="controls">
                     {{ searchform.geometry_file }}
+                  </div>
+                </div>
+              </div>
+              <div class="content-4 content_div">
+                  <h2>Cloud Cover</h2>
+                <hr />
+                <div class="control-group">
+                  <label class="control-label" for="id_cloud_mean">Cloud cover</label>
+                  <div class="controls">
+                    {{ searchform.cloud_mean }}
+                  </div>
+                </div>
+              </div>
+              <div class="content-5 content_div">
+                  <h2>Path & Row</h2>
+                <hr />
+                <div class="control-group">
+                  <label class="control-label" for="id_k_orbit_path">Path (K/orbit)</label>
+                  <div class="controls">
+                    {{ searchform.k_orbit_path }}
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label" for="id_j_frame_row">Row (J/frame)</label>
+                  <div class="controls">
+                    {{ searchform.j_frame_row }}
                   </div>
                 </div>
                 <h2>Other Options</h2>
@@ -166,6 +170,7 @@
                     {{ searchform.band_count }}
                   </div>
                 </div>
+              </div>
               </form>
             </div>
           </div>

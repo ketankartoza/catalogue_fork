@@ -17,33 +17,37 @@
     cursor: pointer;
 }
 .tabs input#tab-2{
-    left: 50px;
-}
-.tabs input#tab-3{
     left: 100px;
 }
+.tabs input#tab-3{
+    left: 200px;
+}
 .tabs input#tab-4{
-    left: 150px;
+    left: 300px;
 }
 
 .tabs input#tab-5{
-    left: 200px;
+    left: 400px;
 }
 
 .tabs input#tab-6{
-    left: 250px;
+    left: 500px;
+}
+
+.tab-label-1,  .tab-label-5{
+    line-height: 25px !important;
 }
 
 .tabs > label {
     background: #EDF1FC;
-    font-size: 12px;
-    line-height: 25px;
+    font-size: 11px;
+    line-height: 12px;
     height: 25px;
     position: relative;
-    padding: 0 10px;
+    padding: 1px 10px;
     float: left;
     display: block;
-    width: 85px;
+    width: 67px;
     color: #385c5b;
     top: 0;
     letter-spacing: 1px;
