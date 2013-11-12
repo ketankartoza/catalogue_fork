@@ -34,7 +34,7 @@
   };
 
   DateRange.DEFAULTS = {
-    dateFormat: 'yy-mm-dd'
+    dateFormat: 'dd/mm/yy'
   };
 
   DateRange.prototype._resliver_dateranges = function() {
