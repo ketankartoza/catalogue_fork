@@ -1,11 +1,11 @@
 -r REQUIREMENTS.txt
-django-debug-toolbar==0.9.4
+django-debug-toolbar==0.11.0
 werkzeug
 sqlparse==0.1.7
 # install 'subversion' system package
 svn+https://svn.code.sf.net/p/guppy-pe/code/trunk/guppy
 line_profiler==1.0b3
-django_devserver==0.6.2
+django_devserver==0.7.0
 # Fabric related deps
 git+git://github.com/timlinux/fabtools.git
 fabgis==0.16.0

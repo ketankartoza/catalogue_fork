@@ -9,6 +9,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432',
         'TEST_NAME': 'sac_unittest_master',
+        'CONN_MAX_AGE': 0
     },
 }
 
