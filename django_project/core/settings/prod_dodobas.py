@@ -1,4 +1,7 @@
-from .test import *
+from .project import *
+
+
+ALLOWED_HOSTS = ['*']
 
 DATABASES = {
     'default': {
@@ -12,7 +15,5 @@ DATABASES = {
     }
 }
 
-# define yuglify binary...
-# pip install virtual-node
-# npm install yuglify
 PIPELINE_YUGLIFY_BINARY = ABS_PATH('node_modules', 'yuglify', 'bin', 'yuglify')
+
