@@ -26,13 +26,13 @@ git+https://github.com/PaulUithol/backbone-tastypie.git
 git+https://github.com/cmheisel/nose-xcover.git#egg=nosexcover
 git+https://github.com/dodobas/pycsw.git
 git+https://github.com/gak/pygooglechart.git
-git+https://github.com/kmmbvnr/django-jenkins.git@2f241bb6b7a111172f1e5bd26a1d21815f83d1e7
+django-jenkins==0.14.1
 html5lib==0.90
 jslint==0.6.0
 lxml==2.3
 mercurial==2.7
 nose-exclude==0.1.9
-pep8==1.4.5
+pep8==1.4.6
 # Newer pip needed as it has user agent support needed for pygooglechart install
 pip==1.4.1
 pisa==3.0.33
