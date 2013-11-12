@@ -42,7 +42,8 @@
     z-index: 100;
     position: fixed;
     bottom: 50px;
-    left: 40px;
+    left: 50%;
+    margin-left: -212px;
     color: #ffffff;
     padding-top: 12px;
     padding-left: 3px;
@@ -72,11 +73,12 @@
     z-index: 101;
     position: fixed;
     bottom: 95px;
-    left: 50px;
+    left: 50%;
     color: #000;
     background: #ffffff;
     display: none;
     padding-top: 2px;
+    margin-left: -452px;
 }
 
 #map-layerswitcher-control {

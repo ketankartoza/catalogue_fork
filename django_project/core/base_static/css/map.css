@@ -4,7 +4,7 @@
 
 .destroyFeatureItemInactive {
   cursor:pointer;
-  margin-right: 5px;
+  margin-right: 2px;
   /*height: 24px;
   width: 24px;
   background:url(/static/images/delete_16.png) no-repeat;*/
@@ -13,7 +13,7 @@
 .olControlDrawFeaturePolygonItemActive
 {
   color:#228441;
-  margin-right: 5px;
+  margin-right: 2px;
   cursor:pointer;
   /*background:url(/static/images/draw_polygon_on.png) no-repeat;
   height:24px;
@@ -21,7 +21,7 @@
 }
 .olControlDrawFeaturePolygonItemInactive
 {
-  margin-right: 5px;
+  margin-right: 2px;
   cursor:pointer;
   /*background:url(/static/images/draw_polygon_off.png) no-repeat;
   height:24px;
@@ -30,7 +30,7 @@
 .olControlModifyFeatureItemActive
 {
   color:#228441;
-  margin-right: 5px;
+  margin-right: 2px;
   cursor:pointer;
   /*background:url(/static/images/draw_line_on.png) no-repeat;
   height:24px;
@@ -38,7 +38,7 @@
 }
 .olControlModifyFeatureItemInactive
 {
-  margin-right: 5px;
+  margin-right: 2px;
   cursor:pointer;
   /*background:url(/static/images/draw_line_off.png) no-repeat;
   height:24px;
@@ -47,12 +47,12 @@
 .olControlNavigationItemActive
 {
   color:#228441;
-  margin-right: 5px;
+  margin-right: 2px;
   cursor:pointer;
 }
 .olControlNavigationItemInactive
 {
-  margin-right: 5px;
+  margin-right: 2px;
   cursor:pointer;
   /*background:url(/static/images/pan_off.png) no-repeat;
   height:24px;
@@ -61,7 +61,7 @@
 .olControlZoomBoxInItemActive 
 {
   color:#228441;
-  margin-right: 5px;
+  margin-right: 2px;
   cursor:pointer;
   /*background:url(/static/images/zoom_in_24.png) no-repeat;
   height:24px;
@@ -70,7 +70,7 @@
 .olControlZoomBoxOutItemActive 
 {
   color:#228441;
-  margin-right: 5px;
+  margin-right: 2px;
   cursor:pointer;
   /*background:url(/static/images/zoom_out_24.png) no-repeat;
   height:24px;
@@ -78,7 +78,7 @@
 }
 .olControlZoomBoxInItemInactive 
 {
-  margin-right: 5px;
+  margin-right: 2px;
   cursor:pointer;
   /*background:url(/static/images/zoom_in_off_24.png) no-repeat;
   height:24px;
@@ -86,7 +86,7 @@
 }
 .olControlZoomBoxOutItemInactive 
 {
-  margin-right: 5px;
+  margin-right: 2px;
   cursor:pointer;
   /*background:url(/static/images/zoom_out_off_24.png) no-repeat;
   height:24px;
@@ -94,7 +94,7 @@
 }
 .olControlMapHelpItemInactive
 {
-  margin-right: 5px;
+  margin-right: 2px;
   cursor:pointer;
   /* OL button control uses ItemInactive CSS class
   http://dev.openlayers.org/docs/files/OpenLayers/Control/Button-js.html
@@ -105,29 +105,29 @@
 }
 
 .olControlNavigationHistory {
-  margin-right: 5px;
+  margin-right: 2px;
   cursor:pointer;
 }
 .olControlNavigationHistoryPreviousItemActive {
   color:black;
-  margin-right: 5px;
+  margin-right: 2px;
   cursor:pointer;
  /* background-position: 0px 0px;*/
 }
 .olControlNavigationHistoryPreviousItemInactive {
-  margin-right: 5px;
+  margin-right: 2px;
   color:grey;
   cursor:pointer;
    /*background-position: 0px -24px;*/
 }
 .olControlNavigationHistoryNextItemActive {
-  margin-right: 5px;
+  margin-right: 2px;
   color:black;
   cursor:pointer;
    /*background-position: -24px 0px;*/
 }
 .olControlNavigationHistoryNextItemInactive {
-  margin-right: 5px;
+  margin-right: 2px;
   color:grey;
   cursor:pointer;
    /*background-position: -24px -24px;*/
