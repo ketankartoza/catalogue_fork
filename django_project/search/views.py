@@ -245,30 +245,60 @@ def renderSearchResultsPage(theRequest, theGuid):
 
 
 @login_required
+@renderWithContext('page.html')
 def searchguid(theRequest, theGuid):
     """
     Given a search guid, give the user a form prepopulated with
     that search's criteria so they can modify their search easily.
     A new search will be created from the modified one.
     """
-    myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
-        theRequest)
-    logger.info('initial search form being rendered')
-    myForm = AdvancedSearchForm()
-    myFormset = DateRangeInlineFormSet()
-    # render_to_response is done by the renderWithContext decorator
-    return render_to_response(
-        'searchv3.html', {
-            'myAdvancedFlag': False,
-            'mySearchType': None,
-            'myForm': myForm,
-            'myFormset': myFormset,
-            'myHost': settings.HOST,
-            'myLayerDefinitions': myLayerDefinitions,
-            'myLayersList': myLayersList,
-            'myActiveBaseMap': myActiveBaseMap,
-            'theGuid': theGuid},
-        context_instance=RequestContext(theRequest))
+
+    mySearch = get_object_or_404(Search, guid=theGuid)
+    myForm = AdvancedSearchForm(instance=mySearch)
+    myFormset = DateRangeInlineFormSet(instance=mySearch)
+
+    collections = Collection.objects.all().prefetch_related('satellite_set')
+
+    sel_instrumenttypes = mySearch.instrumenttype.all().values_list(
+        'pk', flat=True)
+    sel_satellites = mySearch.satellite.all().values_list('pk', flat=True)
+
+    data = [{
+        'key': col.name,
+        'val': 'cc{}'.format(col.pk),
+        # we need to unnest the lists, and for that purpose we reuse chain
+        # from iterable module
+        'values': list(chain.from_iterable((({
+            'key': '{} {}'.format(sat.name, sig.instrument_type.name),
+            'val': '{}|{}'.format(sat.pk, sig.instrument_type.pk)
+            } for sig in sat.satelliteinstrumentgroup_set.all())
+            for sat in col.satellite_set.all())))
+        } for col in collections
+    ]
+
+    # prepare the selected data subset
+    selected_data = [{
+        'key': col.name,
+        'val': 'cc{}'.format(col.pk),
+        # we need to unnest the lists, and for that purpose we reuse chain
+        # from iterable module
+        'values': list(chain.from_iterable((({
+            'key': '{} {}'.format(sat.name, sig.instrument_type.name),
+            'val': '{}|{}'.format(sat.pk, sig.instrument_type.pk)
+            } for sig in sat.satelliteinstrumentgroup_set.all()
+            if sig.instrument_type.pk in sel_instrumenttypes)
+            for sat in col.satellite_set.all() if sat.pk in sel_satellites)))
+        } for col in collections
+    ]
+
+    myListTreeOptions = simplejson.dumps(data)
+    myListTreeSelected = simplejson.dumps(selected_data)
+
+    return {
+        'searchform': myForm, 'dateformset': myFormset,
+        'listreeoptions': myListTreeOptions,
+        'selected_options': myListTreeSelected
+    }
 
 
 @renderWithContext('page.html')
@@ -276,7 +306,6 @@ def searchView(theRequest):
     """
     Perform an attribute and spatial search for imagery
     """
-
     collections = Collection.objects.all().prefetch_related('satellite_set')
     data = [{
         'key': col.name,
@@ -298,7 +327,8 @@ def searchView(theRequest):
     myFormset = DateRangeInlineFormSet()
     return {
         'searchform': myForm, 'dateformset': myFormset,
-        'listreeoptions': myListTreeOptions
+        'listreeoptions': myListTreeOptions,
+        'selected_options': []
     }
 
 
