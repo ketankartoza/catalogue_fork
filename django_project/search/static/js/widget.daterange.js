@@ -34,7 +34,7 @@
   };
 
   DateRange.DEFAULTS = {
-    dateFormat: 'dd/mm/yy'
+    dateFormat: 'yy-mm-dd'
   };
 
   DateRange.prototype._resliver_dateranges = function() {
@@ -139,9 +139,9 @@
       var tpl=[
           '<input type="hidden" id="id_searchdaterange_set-'+total+'-start_date" name="searchdaterange_set-'+total+'-start_date" value="'+this._format_date(theStartDate)+'">',
           '<input type="hidden" id="id_searchdaterange_set-'+total+'-end_date" name="searchdaterange_set-'+total+'-end_date" value="'+this._format_date(theEndDate)+'">',
-          '<span class="date_from">', this._format_date(theStartDate), '</span>',
+          '<span class="date_from">', this._format_date(theStartDate, 'dd/mm/yy'), '</span>',
           '<span>&nbsp;to&nbsp;</span>',
-          '<span class="date_to">', this._format_date(theEndDate), '&nbsp;&nbsp;</span>',
+          '<span class="date_to">', this._format_date(theEndDate, 'dd/mm/yy'), '&nbsp;&nbsp;</span>',
           '<span><i class="del_daterange icon-trash"></i> </span>'
       ].join('');
       return tpl;
