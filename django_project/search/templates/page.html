@@ -21,6 +21,13 @@
             <i class="icon-refresh"></i>
           </button>
         </div>
+        <div id="search-panel-help-button">
+          <button class="btn btn-info btn-large btn-left-panel"
+                  data-toggle="tooltip" title="Help"
+                  data-placement="right">
+            <i class="icon-question-sign"></i>
+          </button>
+        </div>
         <div id="search-panel-toggle">
           <button class="btn btn-info btn-large btn-left-panel"
                   onclick="toggleSearchPanel();"
@@ -376,6 +383,11 @@
         '/downloadcartmetadata/',
         '_blank'
       );
+    });
+    $('#search-panel-help-button').click(function() {
+      APP.$modal.load('/searchformhelp/', '', function(){
+        APP.$modal.modal();
+      });
     });
     // setup daterange widget
     $('#date_range').daterange();

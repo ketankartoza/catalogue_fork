@@ -669,3 +669,10 @@ def emptyCartHelp(theRequest):
 @renderWithContext('sceneIdHelp.html')
 def sceneIdHelp(theRequest):
     return
+
+
+#renderWithContext is explained in renderWith.py
+@renderWithContext('searchFormHelp.html')
+def searchFormHelp(theRequest):
+    #render_to_response is done by the renderWithContext decorator
+    return ()

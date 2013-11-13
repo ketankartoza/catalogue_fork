@@ -118,6 +118,18 @@ div.dr_row{
     margin: 3px;
 }
 
+#search-panel-help-button {
+    width: 50px;
+    height: 35px;
+    z-index: -1;
+    position: absolute;
+    top: 450px;
+    right: -50px;
+    white-space: nowrap;
+    color: #fff;
+    margin: 3px;
+}
+
 /*#search-panel-toggle > .btn {*/
     /*-webkit-transform: rotate(-90deg);*/
     /*-moz-transform: rotate(-90deg);*/

@@ -100,11 +100,13 @@ function defaultPanelState() {
 function hideSearchPanelButtons() {
     $("#search-panel-search-button").hide();
     $("#search-panel-reset-button").hide();
+    $("#search-panel-help-button").hide();
 }
 
 function showSearchPanelButtons() {
     $("#search-panel-search-button").show();
     $("#search-panel-reset-button").show();
+    $("#search-panel-help-button").show();
 }
 
 function hideCartPanelButtons() {
