@@ -243,6 +243,17 @@ div.dr_row{
     /*filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);*/
 /*}*/
 
+#map-help-button {
+    width: 50px;
+    height: 35px;
+    z-index: 101;
+    position: absolute;
+    top: 647px;
+    left: -2px;
+    white-space: nowrap;
+    color: #fff;
+}
+
 
 .search-panel-input {
     padding: 0 40px 0 5px;
