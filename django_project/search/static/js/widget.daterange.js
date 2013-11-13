@@ -49,7 +49,7 @@
         $(this).empty();
         $(this).append(
             self._dr_input_template(
-                total, self._parse_date(tmpDateFrom.trim(),'yy-mm-dd'), self._parse_date(tmpDateTo.trim(),'yy-mm-dd'))
+                total, self._parse_date(tmpDateFrom.trim(),'dd/mm/yy'), self._parse_date(tmpDateTo.trim(),'dd/mm/yy'))
             );
         total++;
     });
@@ -88,8 +88,8 @@
               var in_list;
               in_list = false;
               self.$element.find('.date_range_row').each(function(){
-                  var tmpDateFrom = self._parse_date($(this).find('.date_from').text(), 'yy-mm-dd');
-                  var tmpDateTo = self._parse_date($(this).find('.date_to').text(), 'yy-mm-dd');
+                  var tmpDateFrom = self._parse_date($(this).find('.date_from').text(), 'dd/mm/yy');
+                  var tmpDateTo = self._parse_date($(this).find('.date_to').text(), 'dd/mm/yy');
                   if (myStartDate.getTime() === tmpDateFrom.getTime() && myEndDate.getTime() === tmpDateTo.getTime() ){
                       in_list = true;
                   }

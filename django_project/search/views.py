@@ -74,7 +74,8 @@ from .models import (
 
 from .forms import (
     AdvancedSearchForm,
-    DateRangeFormSet
+    DateRangeFormSet,
+    DateRangeForm
 )
 
 from .utils import SearchView
@@ -84,7 +85,7 @@ class Http500(Exception):
     pass
 
 DateRangeInlineFormSet = inlineformset_factory(
-    Search, SearchDateRange, extra=0, max_num=0, formset=DateRangeFormSet)
+    Search, SearchDateRange, extra=0, max_num=0, formset=DateRangeFormSet, form=DateRangeForm)
 
 
 @login_required

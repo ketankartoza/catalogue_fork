@@ -29,6 +29,9 @@ from django.forms.models import BaseInlineFormSet
 #from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
+
+from django.forms import HiddenInput
+
 #from django.core.validators import EMPTY_VALUES
 from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import (
@@ -64,6 +67,14 @@ DATE_FORMATS = (
     '%d %b %Y', '%d %b, %Y',  # '25 Oct 2006', '25 Oct, 2006'
     '%d %B %Y', '%d %B, %Y',  # '25 October 2006', '25 October, 2006'
 )
+
+
+class DateRangeForm(forms.ModelForm):
+    class Meta:
+        widgets = {
+            'start_date': HiddenInput,
+            'end_date': HiddenInput
+        }
 
 
 class DateRangeFormSet(BaseInlineFormSet):
@@ -198,13 +209,6 @@ class AdvancedSearchForm(forms.ModelForm):
         exclude = (
             'ip_position', 'guid', 'keywords', 'geometry_file', 'user',
             'deleted', 'processing_level')
-
-    # add Media class for this form, rendered specific for this form
-    class Media:
-        js = (
-            "/static/js/date_utils.js",
-            "/static/js/widget.sansa-datepicker.js",
-            "/staic/js/widget.sansa-daterangecontainer.js",)
 
     def __init__(self, *args, **kwargs):
         """

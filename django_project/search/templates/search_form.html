@@ -44,7 +44,15 @@
       </div>
       {{ dateformset.management_form }}
       {% for form in dateformset.forms %}
-        {{ form.as_p }} {# TODO: this will FAIL , needs to be specifically formated for daterange widget #}
+        <div class="date_range_row">
+            {{ form.start_date }}
+            {{ form.end_date }}
+            <span class="date_from">{{ form.start_date.value|date:"d/m/Y" }}</span>
+            <span> to </span>
+            <span class="date_to">{{ form.end_date.value|date:"d/m/Y" }}</span>
+            <span><i class="del_daterange icon-trash"></i> </span>
+        </div>
+
       {% endfor %}
     </div>
   </div>
