@@ -20,9 +20,9 @@
 
       this.geoSearch.events.on({"featuremodified" : $.proxy(this.modifyWKT, this)});
       this.geoSearch.events.on({"featureadded" : $.proxy(this.addWKT, this)});
-      this.geoSearch.events.on({"featureremoved": this.removeWKT});
+      this.geoSearch.events.on({"featureremoved": $.proxy(this.removeWKT, this)});
 
-    var modifyEventListeners = { 
+    var modifyEventListeners = {
         "activate": function() {
           $(this.panel_div).removeClass("btn-info");
           $(this.panel_div).addClass("btn-success");
@@ -33,14 +33,14 @@
         }
     };
 
-    var myDrawingControl = new OpenLayers.Control.DrawFeature(this.geoSearch, OpenLayers.Handler.Polygon, {
+    this.myDrawingControl = new OpenLayers.Control.DrawFeature(this.geoSearch, OpenLayers.Handler.Polygon, {
       'displayClass': 'btn btn-info btn-large right icon-check-empty olControlDrawFeaturePolygon',
       'title': 'Capture polygon: left click to add points, double click to finish capturing',
       div : OpenLayers.Util.getElement('map-navigation'),
       eventListeners: modifyEventListeners
     });
 
-    var myModifyFeatureControl = new OpenLayers.Control.ModifyFeature(this.geoSearch, {
+    this.myModifyFeatureControl = new OpenLayers.Control.ModifyFeature(this.geoSearch, {
       'displayClass': 'btn btn-info btn-large right icon-edit olControlModifyFeature',
       'title': 'Modify polygon: left click to move/add points, hover and press <i>delete</i> to delete points',
       div : OpenLayers.Util.getElement('map-navigation'),
@@ -54,7 +54,7 @@
       }
     });
 
-    var myDestroyFeaturesControl = new DestroyFeatures({
+    this.myDestroyFeaturesControl = new DestroyFeatures({
       'displayClass': 'btn btn-info btn-large right icon-remove  destroyFeature',
       'title':'Delete polygon: deletes polygon',
       'layer': this.geoSearch,
@@ -64,7 +64,7 @@
 
     // add controls to the panel
     this.map_object.mNavigationPanel.addControls(
-      [myDrawingControl, myModifyFeatureControl, myDestroyFeaturesControl]);
+      [this.myDrawingControl]);
   },
   /* ------------------------------------------------------
  * OpenLayers WKT manipulators
@@ -101,6 +101,8 @@
       this.geoSearch.destroyFeatures(myOldFeatures);
     }
     this.writeWKT(event.feature.geometry);
+    this.map_object.mNavigationPanel.addControls(
+      [this.myModifyFeatureControl, this.myDestroyFeaturesControl]);
   },
 
   modifyWKT: function(event) {
@@ -109,6 +111,9 @@
 
   removeWKT: function(event) {
     document.getElementById('id_geometry').value = '';
+    OpenLayers.Util.removeItem(this.map_object.mNavigationPanel.controls, this.myModifyFeatureControl);
+    OpenLayers.Util.removeItem(this.map_object.mNavigationPanel.controls, this.myDestroyFeaturesControl);
+    this.map_object.mNavigationPanel.redraw();
   }
 
 }; // prototype

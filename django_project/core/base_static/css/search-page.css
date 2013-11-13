@@ -37,13 +37,13 @@
 }
 
 #map-controls {
-    width: 425px;
+    width: 450px;
     height: 40px;
     z-index: 100;
     position: fixed;
     bottom: 50px;
     left: 50%;
-    margin-left: -212px;
+    margin-left: -225px;
     color: #ffffff;
     padding-top: 12px;
     padding-left: 3px;
@@ -61,10 +61,9 @@
 }
 
 #map-navigation {
-    position: relative;
-    top: -28px;
-    left: 50px;
-    float: right;
+    position: absolute;
+    top: 23px;
+    left: 60px;
 }
 
 #map-layerswitcher {
