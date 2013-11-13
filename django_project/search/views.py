@@ -295,7 +295,7 @@ def searchguid(theRequest, theGuid):
     myListTreeSelected = simplejson.dumps(selected_data)
 
     return {
-        'searchform': myForm, 'dateformset': myFormset,
+        'mysearch': mySearch, 'searchform': myForm, 'dateformset': myFormset,
         'listreeoptions': myListTreeOptions,
         'selected_options': myListTreeSelected
     }

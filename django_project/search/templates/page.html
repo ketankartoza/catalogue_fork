@@ -213,6 +213,13 @@
     myMap = new APP.SansaMap('map');
     searchLayer = new APP.SearchLayer(myMap);
     geoSearchLayer = new APP.GeoSearchLayer(myMap);
+    {% if mysearch %}
+      APP.guid = '{{ mysearch.guid }}';
+      $APP.trigger('collectionSearch', {
+          offset: 0
+      });
+      openResultPanel();
+    {% endif %}
 
     $(".olButton").tooltip({"placement": "top"});
 
