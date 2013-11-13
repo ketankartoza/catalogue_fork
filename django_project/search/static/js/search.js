@@ -108,6 +108,9 @@ function showSearchPanelButtons() {
 }
 
 function hideCartPanelButtons() {
+    if (CartDownloadOptionsState) {
+        toggleCartDownloadButton();
+    }
     $("#cart-panel-order-button").hide();
     $("#cart-panel-download-button").hide();
 }
@@ -118,15 +121,20 @@ function showCartPanelButtons() {
 }
 
 function hideResultPanelButtons() {
+    if (ResultDownloadOptionsState) {
+        toggleResultDownloadButton();
+    }
     $("#result-panel-download-button").hide();
 }
 
 function hideResultDownloadOptions() {
     $(".downloadoptions").hide();
+    ResultDownloadOptionsState = false;
 }
 
 function showResultDownloadOptions() {
     $(".downloadoptions").show();
+    ResultDownloadOptionsState = true;
 }
 
 function hideCartDownloadOptions() {
@@ -164,11 +172,9 @@ function toggleResultDownloadButton() {
     if (ResultDownloadOptionsState) {
         hideResultDownloadOptions();
         $("#result-panel-download-button").animate({top: 500}, 200 );
-        ResultDownloadOptionsState = false;
     } else {
         $("#result-panel-download-button").animate({top: 300}, 200 );
         setTimeout(showResultDownloadOptions,210);
-        ResultDownloadOptionsState = true;
     }
 }
 
