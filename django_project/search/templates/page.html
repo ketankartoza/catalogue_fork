@@ -49,7 +49,7 @@
           <label for="tab-6" class="tab-label-6"><i class="icon-camera"></i></label>-->
           <div class="clear-shadow"></div>
           <div class="content well custom-corner-top-right">
-            <form id="catalogueSearch" class="form-horizontal" action={% url 'submitSearch' %}>
+            <form id="catalogueSearch" action={% url 'submitSearch' %}>
               {% csrf_token %}
               {{ searchform.geometry }}
               {{ searchform.selected_sensors }}
@@ -60,14 +60,12 @@
                 <div id="listTree" class="listTree"></div>
                 <hr />
                 <div class="search-options">
-                  <span class="search-panel-input">
-                    {{ searchform.free_imagery }}
-                    {{ searchform.free_imagery.label_tag }}
-                  </span>
-                  <span class="search-panel-input">
-                    {{ searchform.panchromatic_imagery }}
-                    {{ searchform.panchromatic_imagery.label_tag }}
-                  </span>
+                  <label class="checkbox">
+                    {{ searchform.free_imagery }} {{ searchform.free_imagery.label_tag }}
+                  </label>
+                  <label class="checkbox">
+                    {{ searchform.panchromatic_imagery }} {{ searchform.panchromatic_imagery.label_tag }}
+                  </label>
                 </div>
                 <hr />
                 <div class="search-options">
@@ -75,8 +73,6 @@
                 </div>
               </div>
               <div class="content-2 content_div">
-                <h2>Date Range</h2>
-                <hr />
                 <span id="daterange_inline" class="help-inline"></span>
                 <div id="date_from_cg" class="control-group">
                   <label class="control-label" for="id_start_datepicker">Date from</label>
@@ -104,72 +100,43 @@
                 </div>
               </div>
               <div class="content-3 content_div">
-                <h2>Area of Interest</h2>
-                <hr />
-                <div class="control-group">
+                <fieldset>
                   <label class="control-label" for="id_aoi_geometry">Bounding Box/Circle</label>
-                  <div class="controls">
-                    {{ searchform.aoi_geometry }}
-                  </div>
-                </div>
-                <div class="control-group">
+                  {{ searchform.aoi_geometry }}
+                   <span class="help-block">{{ searchform.aoi_geometry.help_text }}</span>
                   <label class="control-label" for="id_geometry_file">Geometry file</label>
-                  <div class="controls">
-                    {{ searchform.geometry_file }}
-                  </div>
-                </div>
+                  {{ searchform.geometry_file }}
+                   <span class="help-block">{{ searchform.geometry_file.help_text }}</span>
+                 </fieldset>
               </div>
               <div class="content-4 content_div">
-                  <h2>Cloud Cover</h2>
-                <hr />
-                <div class="control-group">
-                  <label class="control-label" for="id_cloud_mean">Cloud cover</label>
-                  <div class="controls">
-                    {{ searchform.cloud_mean }}
-                  </div>
-                </div>
+                <fieldset>
+                  <label for="id_cloud_mean">Cloud cover</label>
+                  {{ searchform.cloud_mean }}
+                  <span class="help-block">{{ searchform.cloud_mean.help_text }}</span>
+                </fieldset>
               </div>
               <div class="content-5 content_div">
-                  <h2>Path & Row</h2>
-                <hr />
-                <div class="control-group">
-                  <label class="control-label" for="id_k_orbit_path">Path (K/orbit)</label>
-                  <div class="controls">
-                    {{ searchform.k_orbit_path }}
-                  </div>
-                </div>
-                <div class="control-group">
-                  <label class="control-label" for="id_j_frame_row">Row (J/frame)</label>
-                  <div class="controls">
-                    {{ searchform.j_frame_row }}
-                  </div>
-                </div>
-                <h2>Other Options</h2>
-                <hr />
-                <div class="control-group">
-                  <label class="control-label" for="id_sensor_inclination_angle_start">Sensor inclination angle start</label>
-                  <div class="controls">
-                    {{ searchform.sensor_inclination_angle_start }}
-                  </div>
-                </div>
-                <div class="control-group">
-                  <label class="control-label" for="id_sensor_inclination_angle_end">Sensor inclination angle end</label>
-                  <div class="controls">
-                    {{ searchform.sensor_inclination_angle_end }}
-                  </div>
-                </div>
-                <div class="control-group">
-                  <label class="control-label" for="id_spatial_resolution">Spatial resolution</label>
-                  <div class="controls">
-                    {{ searchform.spatial_resolution }}
-                  </div>
-                </div>
-                <div class="control-group">
-                  <label class="control-label" for="id_band_count">Band count</label>
-                  <div class="controls">
-                    {{ searchform.band_count }}
-                  </div>
-                </div>
+                <fieldset>
+                <label for="id_k_orbit_path">Path (K/orbit)</label>
+                {{ searchform.k_orbit_path }}
+                <span class="help-block">{{ searchform.k_orbit_path.help_text }}</span>
+                <label for="id_j_frame_row">Row (J/frame)</label>
+                {{ searchform.j_frame_row }}
+                <span class="help-block">{{ searchform.j_frame_row.help_text }}</span>
+                <label for="id_sensor_inclination_angle_start">Sensor inclination angle start</label>
+                {{ searchform.sensor_inclination_angle_start }}
+                <span class="help-block">{{ searchform.sensor_inclination_angle_start.help_text }}</span>
+                <label for="id_sensor_inclination_angle_end">Sensor inclination angle end</label>
+                {{ searchform.sensor_inclination_angle_end }}
+                <span class="help-block">{{ searchform.sensor_inclination_angle_end.help_text }}</span>
+                <label class="control-label" for="id_spatial_resolution">Spatial resolution</label>
+                {{ searchform.spatial_resolution }}
+                <span class="help-block">{{ searchform.spatial_resolution.help_text }}</span>
+                <label for="id_band_count">Band count</label>
+                {{ searchform.band_count }}
+                <span class="help-block">{{ searchform.band_count.help_text }}</span>
+                </fieldset>
               </div>
               </form>
             </div>

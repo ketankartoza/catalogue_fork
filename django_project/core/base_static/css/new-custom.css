@@ -515,7 +515,7 @@ div.dr_row{
 }
 
 #search-panel label {
-    display: inline-block;
+    /*display: inline-block;*/
 }
 
 #search-panel .date-range .button {
