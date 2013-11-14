@@ -395,6 +395,7 @@ APP.ResultGridView = Backbone.View.extend({
         } else {
             $('#searchNext').hide();
         }
+        $('#SearchShare').show();
         cur_pag_el.html(text);
     },
     _updateResultsInfo:function() {
