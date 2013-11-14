@@ -64,6 +64,12 @@
       <label class="control-label" for="id_geometry_file">Geometry file</label>
       {{ searchform.geometry_file }}
        <span class="help-block">{{ searchform.geometry_file.help_text }}</span>
+       <label for="id_k_orbit_path">Path (K/orbit)</label>
+      {{ searchform.k_orbit_path }}
+      <span class="help-block">{{ searchform.k_orbit_path.help_text }}</span>
+      <label for="id_j_frame_row">Row (J/frame)</label>
+      {{ searchform.j_frame_row }}
+      <span class="help-block">{{ searchform.j_frame_row.help_text }}</span>
      </fieldset>
   </div>
   <div class="content-4 content_div">
@@ -75,12 +81,6 @@
   </div>
   <div class="content-5 content_div">
     <fieldset>
-    <label for="id_k_orbit_path">Path (K/orbit)</label>
-    {{ searchform.k_orbit_path }}
-    <span class="help-block">{{ searchform.k_orbit_path.help_text }}</span>
-    <label for="id_j_frame_row">Row (J/frame)</label>
-    {{ searchform.j_frame_row }}
-    <span class="help-block">{{ searchform.j_frame_row.help_text }}</span>
     <label for="id_sensor_inclination_angle_start">Sensor inclination angle start</label>
     {{ searchform.sensor_inclination_angle_start }}
     <span class="help-block">{{ searchform.sensor_inclination_angle_start.help_text }}</span>
