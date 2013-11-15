@@ -366,7 +366,6 @@ APP.ResultGridView = Backbone.View.extend({
                 self.renderItem(item);
             },this);
             this._update_pagination_info();
-            this._updateResultsInfo();
         }
 
         APP.unblockResultPanel();
@@ -397,11 +396,6 @@ APP.ResultGridView = Backbone.View.extend({
         }
         $('#SearchShare').show();
         cur_pag_el.html(text);
-    },
-    _updateResultsInfo:function() {
-        var text = '<b>Summary</b>:<br />'+this.collection.total+' records found for<br />Note:The SPOT Imagery provided in this backdrop has been degraded to 10m';
-        var pag_el = this.$el.find('#resultsSummary');
-        pag_el.html(text);
     }
 });
 
