@@ -36,6 +36,11 @@
       self.layerSearch.removeFeatures(self.layerSearch.features);
     });
 
+    $APP.on('resetZoom', function (evt) {
+      self.map_object.map.zoomToExtent(self.layerSearch.getDataExtent());
+      $('#resetZoom').hide();
+    });
+
     $APP.on('SearchLayer_addFeatures', function(evt, payload){
       self.layerSearch.removeAllFeatures();
       _.each(payload.data, function (feature) {

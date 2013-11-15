@@ -313,7 +313,12 @@ APP.ResultGridView = Backbone.View.extend({
 
     events: {
         'click div.searchPrev': 'previous',
-        'click div.searchNext': 'next'
+        'click div.searchNext': 'next',
+        'click div.resetZoom': 'resetZoom'
+    },
+
+    resetZoom: function() {
+        $APP.trigger('resetZoom');
     },
 
     previous: function() {
@@ -433,6 +438,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
         if (typeof data == 'undefined') {
             $APP.trigger('highlightSearchRecord', {'unique_product_id': this.model.get('unique_product_id')});
             var selectedID = this.model.get('unique_product_id');
+            $('#resetZoom').show();
         } else {
             var selectedID = data.id;
         }
