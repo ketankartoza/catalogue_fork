@@ -532,7 +532,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
 
 var template = [
             '<div class="result-item" id="result_item_<%= model.get("unique_product_id") %>">',
-            '<img class="result-img" src="/thumbnail/<%= model.get("id") %>/large/" />',
+            '<img class="result-img" src="/thumbnail/<%= model.get("id") %>/mini/" />',
             '<div class="result-item-info">',
               '<p><%= model.get("unique_product_id") %></p>',
               '<p><%= model.get("product_date") %></p>',

@@ -342,19 +342,19 @@ div.dr_row{
 }
 
 .result-item img {
-    width:45px;
-    height:45px;
+    width:16px;
+    height:16px;
 }
 
 .result-item p {
     font-size: 12px;
 }
 .result-img {
-    width:45px;
-    height:45px;
+    width:16px;
+    height:16px;
     position: absolute;
     top: 0px;
-    left: 2px;
+    right: 2px;
 }
 
 .result-item .result-item-info {
