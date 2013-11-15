@@ -542,8 +542,8 @@ var template = [
               '<% } else { %>UNK',
               '<% } %>',
             '</div>',
-            '<span class="button metadata-button"><i class="icon-list-alt icon-2x"></i></span>',
-            '<span class="button cart-button"><i class="icon-shopping-cart icon-2x"></i></span>',
+            '<span class="button metadata-button"><i class="icon-list-alt"></i></span>',
+            '<span class="button cart-button"><i class="icon-shopping-cart"></i></span>',
             '<span class="button zoom-button"><i class="icon-screenshot icon-2x"></i></span>',
             '<span class="button showBig-button"><i class="icon-desktop icon-2x"></i></span>',
           '</div>'
