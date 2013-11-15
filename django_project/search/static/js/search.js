@@ -411,8 +411,8 @@ APP.ResultGridViewItem = Backbone.View.extend({
         'click span.metadata-button': 'showMetadata',
         'click span.cart-button': 'addToCart',
         'click span.zoom-button': 'highlightResultItem',
-        'mouseenter img.result-img': 'focusItem',
-        'mouseleave img.result-img': 'blurItem'
+        'mouseenter': 'focusItem',
+        'mouseleave': 'blurItem'
     },
     initialize: function() {
         $APP.on('highlightResultItem', $.proxy(this.highlightResultItem, this));
