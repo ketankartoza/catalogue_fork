@@ -404,7 +404,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
     events: {
         'click span.metadata-button': 'showMetadata',
         'click span.cart-button': 'addToCart',
-        'click span.zoom-button': 'highlightResultItem',
+        'click': 'highlightResultItem',
         'mouseenter': 'focusItem',
         'mouseleave': 'blurItem'
     },
