@@ -12,7 +12,13 @@
   APP.SearchLayer.prototype = {
 
     _initialize: function() {
-      this.layerSearch = new OpenLayers.Layer.Vector("Search geometry");
+      var defaultStyle = new OpenLayers.Style({'strokeColor': '#FFA500', 'fillOpacity': 0});
+
+      var selectStyle = new OpenLayers.Style({'strokeColor': '#0000FF', 'fillOpacity': 0});
+
+      var style = new OpenLayers.StyleMap({'default': defaultStyle, 'select': selectStyle});
+
+      this.layerSearch = new OpenLayers.Layer.Vector("Search geometry", { styleMap: style } );
       this.map_object.add_layer(this.layerSearch);
 
       var myHighlightControl = new OpenLayers.Control.SelectFeature(
