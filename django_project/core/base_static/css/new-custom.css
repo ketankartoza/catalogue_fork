@@ -330,10 +330,10 @@ div.dr_row{
 
 .result-item {
     width: 443px;
-    height: 46px;
+    height: 18px;
     margin:1px 2px 0 4px;
     position: relative;
-    border-left: 2px solid #fff;
+    border-left: 2px solid #F5F5F5;
 }
 
 .result-item:hover {
@@ -360,8 +360,8 @@ div.dr_row{
 .result-item .result-item-info {
     position: absolute;
     top: 2px;
-    left: 51px;
-    width: 200px;
+    left: 0px;
+    width: 275px;
 }
 
 .result-item .zoom-button {
@@ -388,7 +388,7 @@ div.dr_row{
 .result-item .cloud-cover {
     position: absolute;
     top: 0px;
-    left: 260px;
+    left: 280px;
 }
 
 .result-item .cloud-cover img {
@@ -396,22 +396,14 @@ div.dr_row{
     height:50px;
 }
 
-.result-item .cloud-cover p {
-    position: absolute;
-    top: 17px;
-    left: 20px;
-}
-
 .result-item .metadata-button {
-    margin: 8px 5px 5px 0px;
     position: absolute;
     right: 70px;
 }
 
 .result-item .cart-button {
-    margin: 5px 5px 5px 0px;
     position: absolute;
-    right: 25px;
+    right: 40px;
 }
 
 .result-item .button:hover {

@@ -425,7 +425,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
         var targetFeature = searchLayer.getFeatureElementRecordId(selectedID);
         var point = targetFeature.geometry.getCentroid();
         var pos = myMap.map.getPixelFromLonLat(new OpenLayers.LonLat(point.x, point.y));
-        this.line = APP.s.line(pos.x, pos.y + 35, pos2.left+2, pos2.top+25);
+        this.line = APP.s.line(pos.x, pos.y + 35, pos2.left+2, pos2.top+9);
         this.line.animate({stroke: "#228441", strokeWidth: "2"}, 500);
     },
 
@@ -482,14 +482,14 @@ var template = [
             '<div class="result-item" id="result_item_<%= model.get("unique_product_id") %>">',
             '<img class="result-img" src="/thumbnail/<%= model.get("id") %>/mini/" />',
             '<div class="result-item-info">',
-              '<p><%= model.get("unique_product_id") %></p>',
-              '<p><%= model.get("product_date") %></p>',
+              '<p><%= model.get("unique_product_id") %> ',
+              '<%= model.get("product_date") %></p>',
             '</div>',
-            '<div class="cloud-cover">',
+            '<div class="cloud-cover"><p>',
               '<% if(model.get("cloud_cover") != -1) { %><%= model.get("cloud_cover") %>%',
               '<% } else { %>UNK',
               '<% } %>',
-            '</div>',
+            '</p></div>',
             '<span class="button metadata-button"><i class="icon-list-alt"></i></span>',
             '<span class="button cart-button"><i class="icon-shopping-cart"></i></span>',
           '</div>'
