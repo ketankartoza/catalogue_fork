@@ -71,6 +71,9 @@ class SearchResultsResource(ModelResource):
                 self.wrap_view('dispatch_list'), name='api_dispatch_list'),
         ]
 
+    def dehydrate_product_date(self, bundle):
+        return bundle.data['product_date'].strftime('%d/%m/%Y %M:%H')
+
     def obj_get_list(self, bundle, *args, **kwargs):
         # for the specific guid, retrieve the results
         mySearch = get_object_or_404(Search, guid=kwargs.get('guid'))
