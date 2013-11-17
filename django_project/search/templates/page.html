@@ -324,18 +324,14 @@
         APP.$modal.modal();
       });
     });
-    // $('#SearchShare').click(function() {
-      // $('#SearchShare').popover('destroy');
-      $("#SearchShare").popover({
-        content: function() {
-          return '<input type="text" value="' + window.location.host + '/search/' + APP.guid + '/" onclick="this.select();" />';
-        },
-        placement:'left',
-        trigger: "click",
-        html: true
-      });
-      //$('#SearchShare').popover('toggle');
-    // });
+    $("#SearchShare").popover({
+      content: function() {
+        return '<input type="text" value="' + window.location.host + '/search/' + APP.guid + '/" onclick="this.select();" />';
+      },
+      placement:'left',
+      trigger: "click",
+      html: true
+    });
     // setup daterange widget
     $('#date_range').daterange();
   });

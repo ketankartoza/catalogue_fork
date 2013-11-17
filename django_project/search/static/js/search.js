@@ -378,12 +378,19 @@ APP.ResultGridView = Backbone.View.extend({
         return this;
     },
     renderItem: function(item) {
-
         var myItem = new APP.ResultGridViewItem({
             model:item,
             collection:this.collection
         });
-        this.cont.append(myItem.render().el);
+        var el = myItem.render().el;
+        this.cont.append(el);
+        //console.log(item);
+        // $(el).find("img").popover({
+        //     content: 'Popover content',
+        //     trigger: 'click',
+        //     placement: 'left',
+        //     container: 'body',
+        // });
     },
     _update_pagination_info:function() {
         var cur_pag_el = this.$el.find('#resultsPosition');
@@ -410,12 +417,34 @@ APP.ResultGridViewItem = Backbone.View.extend({
         'click span.metadata-button': 'showMetadata',
         'click span.cart-button': 'addToCart',
         'click': 'highlightResultItem',
+        'click img': 'imagePopover',
         'mouseenter': 'focusItem',
         'mouseleave': 'blurItem'
     },
     initialize: function() {
         $APP.on('highlightResultItem', $.proxy(this.highlightResultItem, this));
         this.expanded = false;
+    },
+
+    imagePopover: function(event) {
+        if (typeof varPopover == 'undefined') varPopover = [{'id': 0}];
+        if (varPopover[0].id == $(event.currentTarget).parent()[0].id) {
+            $(event.currentTarget).parent().popover('hide');
+            varPopover = [{'id': 0}];
+        } else {
+            if (varPopover[0].id != 0) varPopover.popover('destroy');
+            var src = event.currentTarget.src.replace('mini','large');
+            varPopover = $(event.currentTarget).parent();
+            $.loadImage(src).done(function(image) {
+              varPopover.popover({
+                    content: '<img src="'+image.src+'" />',
+                    placement: 'left',
+                    container: 'body',
+                    html: true
+                }).popover('show');
+            });
+        }
+        event.stopPropagation();
     },
 
     focusItem: function() {
@@ -449,14 +478,14 @@ APP.ResultGridViewItem = Backbone.View.extend({
         $("#result_item_"+ selectedID).addClass('focusedResultRow');
     },
 
-    showMetadata: function() {
+    showMetadata: function(event) {
         var id = this.model.get('id');
         APP.$modal.load('/metadata/'+id, '', function(){
             APP.$modal.modal();
         });
-
+        event.stopPropagation();
     },
-    addToCart: function() {
+    addToCart: function(event) {
         if (UserLoged) {
             var id = this.model.get('id');
             var exist = APP.Cart.filter(function(item) {
@@ -472,6 +501,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
         } else {
             alert('You need to log in first!');
         }
+        event.stopPropagation();
     },
     render: function() {
        $(this.el).html(_.template(template, {model:this.model}));
