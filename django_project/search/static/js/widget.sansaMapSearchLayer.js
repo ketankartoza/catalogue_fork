@@ -12,9 +12,20 @@
   APP.SearchLayer.prototype = {
 
     _initialize: function() {
-      var defaultStyle = new OpenLayers.Style({'strokeColor': '#FFA500', 'fillOpacity': 0});
+      var defaultStyle = new OpenLayers.Style(
+        {'fillOpacity': 0, 'strokeColor' : '${getColor}'},
+        {
+          context :
+            {
+              getColor : function (f)
+                {
+                    return f.attributes.strokeColor;
+                }
+            }
+        }
+      );
 
-      var selectStyle = new OpenLayers.Style({'strokeColor': '#0000FF', 'fillOpacity': 0});
+      var selectStyle = new OpenLayers.Style({'strokeColor': '#0000FF', 'fillOpacity': 0});1
 
       var style = new OpenLayers.StyleMap({'default': defaultStyle, 'select': selectStyle});
 
@@ -54,6 +65,17 @@
           self.map_object.transformGeometry(OpenLayers.Geometry.fromWKT(feature.attributes.spatial_coverage)),
           feature.attributes
         );
+        // check if item is in cart
+        var exist = APP.Cart.filter(function(item) {
+          return item.get("product").id == feature.attributes.id;
+        });
+
+        //if item is in cart, color green else orange
+        if (exist.length > 0) {
+          feat.attributes.strokeColor = '#00FF00';
+        } else {
+          feat.attributes.strokeColor = '#FFA500';
+        }
         self.layerSearch.addFeatures([feat]);
       });
       // zoom to features extent
@@ -62,6 +84,10 @@
 
     $APP.on('highlightSearchRecord', function (evt, data) {
       self.highlightRecord(data.unique_product_id, true);
+    });
+
+    $APP.on('colorCartFeature', function (evt, data) {
+      self.colorCartFeature(data.unique_product_id);
     });
   },
 
@@ -83,6 +109,12 @@
     }
     this.layerSearch.redraw();
     this.resetSceneZIndices();
+  },
+
+  colorCartFeature: function( theRecordId ) {
+    var myIndex = this.getFeatureIndexByRecordId( theRecordId );
+    this.layerSearch.features[myIndex].attributes.strokeColor = '#00FF00';
+    this.layerSearch.redraw();
   },
 
   getFeatureIndexByRecordId: function( theRecordId ) {
