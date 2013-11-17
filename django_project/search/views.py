@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 
 import traceback
 from itertools import chain
+from django.conf import settings
 
 # For shopping cart and ajax product id search
 from django.utils import simplejson
@@ -298,7 +299,7 @@ def searchguid(theRequest, theGuid):
     return {
         'mysearch': mySearch, 'searchform': myForm, 'dateformset': myFormset,
         'listreeoptions': myListTreeOptions,
-        'selected_options': myListTreeSelected
+        'selected_options': myListTreeSelected, 'searchlistnumber': settings.RESULTS_NUMBER
     }
 
 
@@ -329,7 +330,7 @@ def searchView(theRequest):
     return {
         'searchform': myForm, 'dateformset': myFormset,
         'listreeoptions': myListTreeOptions,
-        'selected_options': []
+        'selected_options': [], 'searchlistnumber': settings.RESULTS_NUMBER
     }
 
 

@@ -19,6 +19,7 @@ __copyright__ = 'South African National Space Agency'
 
 from django.conf.urls import url
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 
 from tastypie import fields
 from tastypie.resources import ModelResource
@@ -43,7 +44,7 @@ class SearchResultsResource(ModelResource):
         # authorization = Authorization()
         always_return_data = True
         paginator_class = Paginator
-        limit = 15
+        limit = settings.RESULTS_NUMBER
         include_resource_uri = False
         allowed_methods = ['get']
 

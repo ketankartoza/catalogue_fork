@@ -296,14 +296,13 @@ APP.guid = '';
 APP.ResultItem = Backbone.Model.extend({
     //urlRoot: '/api/v1/searchresults/6cfa079f-8be1-4029-a1eb-f80875a4e27c/'
 });
-
 APP.ResultItemCollection = PaginatedCollection.extend({
     //urlRoot: '/api/v1/searchresults/6cfa079f-8be1-4029-a1eb-f80875a4e27c/',
     urlRoot: function() {
         return '/api/v1/searchresults/'+ APP.guid + '/';
     },
     model: APP.ResultItem,
-    limit: 15
+    limit: APP.searchresults
 });
 
 APP.Results = new APP.ResultItemCollection();

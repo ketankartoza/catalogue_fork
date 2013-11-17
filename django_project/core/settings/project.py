@@ -92,6 +92,9 @@ CATALOGUE_ISO_METADATA_XML_TEMPLATE = ABS_PATH('..', (
 #limit the number of returned metadata records
 MAX_METADATA_RECORDS = 500
 
+#number of search results per page
+RESULTS_NUMBER = 50
+
 # For ingesting MISR data
 MISR_ROOT = ''
 

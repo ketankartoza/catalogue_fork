@@ -209,6 +209,7 @@
 {% block extrajs %}
   {{ block.super }}
   <script type="text/javascript">
+    APP.searchresults = {{ searchlistnumber|safe }};
     {% if user.is_authenticated %}
       var UserLoged = true;
     {% else %}
@@ -220,7 +221,6 @@
   $( document ).ready(function() {
 
     $('button[data-toggle="tooltip"]').tooltip();
-
     myMap = new APP.SansaMap('map');
     searchLayer = new APP.SearchLayer(myMap);
     geoSearchLayer = new APP.GeoSearchLayer(myMap);
