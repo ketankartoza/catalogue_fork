@@ -92,6 +92,12 @@ var PaginatedCollection = Backbone.Collection.extend({
         var info = this.pageInfo();
         this.offset = (info.pages - 1) * info.limit;
         return this.fetch();
+    },
+
+    jumpToPage: function(page) {
+        var info = this.pageInfo();
+        this.offset = (page - 1) * info.limit;
+        return this.fetch();
     }
 
 });

@@ -320,6 +320,12 @@ APP.ResultGridView = Backbone.View.extend({
         $APP.trigger('resetZoom');
     },
 
+    jumpToPage: function(page) {
+        APP.blockResultPanel();
+        this.collection.jumpToPage(page);
+        return false;
+    },
+
     previous: function() {
         APP.blockResultPanel();
         this.collection.previousPage();
@@ -383,18 +389,31 @@ APP.ResultGridView = Backbone.View.extend({
         });
         var el = myItem.render().el;
         this.cont.append(el);
-        //console.log(item);
-        // $(el).find("img").popover({
-        //     content: 'Popover content',
-        //     trigger: 'click',
-        //     placement: 'left',
-        //     container: 'body',
-        // });
     },
+
+    _createSelectPaginator: function(current, end) {
+        var select = document.createElement("select");
+        select.style.width = "50px";
+        var self = this;
+        select.onchange = function(event) {
+            self.jumpToPage(event.explicitOriginalTarget.value);
+        };
+        var option;
+        for (var i = 1; i < end+1; i++) {
+            option = document.createElement("option");
+            option.setAttribute("value", i);
+            option.innerHTML = i;
+            select.appendChild(option);
+        }
+        select.options.selectedIndex = current-1;
+        return select;
+    },
+
     _update_pagination_info:function() {
         var cur_pag_el = this.$el.find('#resultsPosition');
         var page_info = this.collection.pageInfo();
-        var text = 'Page ' + page_info.current_page + ' of ' + page_info.pages + ' ('+page_info.total+' records)';
+        var paginator = this._createSelectPaginator(page_info.current_page, page_info.pages);
+        var text = 'Page <span id="paginator"></span> of ' + page_info.pages + ' ('+page_info.total+' records)';
         if (page_info.current_page > 1) {
             $('#searchPrev').show();
         } else {
@@ -407,6 +426,7 @@ APP.ResultGridView = Backbone.View.extend({
         }
         $('#SearchShare').show();
         cur_pag_el.html(text);
+        $('#paginator').html(paginator);
     }
 });
 
