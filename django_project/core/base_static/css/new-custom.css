@@ -334,6 +334,7 @@ div.dr_row{
     margin:1px 2px 0 4px;
     position: relative;
     border-left: 2px solid #F5F5F5;
+    cursor: pointer; cursor: hand;
 }
 
 .result-item:hover {
