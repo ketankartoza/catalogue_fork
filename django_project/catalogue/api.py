@@ -35,3 +35,6 @@ class OpticalProductResource(ModelResource):
         include_resource_uri = False
         # allowed_methods = ['get']
         fields = ['id', 'unique_product_id', 'product_date', 'cloud_cover']
+
+    def dehydrate_product_date(self, bundle):
+        return bundle.data['product_date'].strftime('%d/%m/%Y %M:%H')
