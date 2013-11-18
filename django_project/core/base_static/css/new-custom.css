@@ -269,7 +269,7 @@ div.dr_row{
 
 .cart-item {
     width: 440px;
-    height: 90px;
+    height: 25px;
     margin:5px 5px 0 5px;
     position: relative;
 }
@@ -279,8 +279,11 @@ div.dr_row{
 }
 
 .cart-item img {
-    width:90px;
-    height:90px;
+    width:16px;
+    height:16px;
+    position: absolute;
+    top: 0px;
+    right: 2px;
 }
 
 .cart-item p {
@@ -289,14 +292,25 @@ div.dr_row{
 
 .cart-item .cart-item-info {
     position: absolute;
-    top: 5px;
-    left: 100px;
+    top: 2px;
+    left: 0px;
 }
 
-.cart-item .cloud-cover {
+.cart-item .cart-item-info-date {
     position: absolute;
-    top: 5px;
-    right: 15px;
+    top: 2px;
+    left: 160px;
+}
+
+.cart-item-buttons {
+    position: absolute;
+    top: 0px;
+    left: 350px;
+}
+.cart-item-cloud-cover {
+    position: absolute;
+    top: 2px;
+    left: 300px;
 }
 
 .cart-item .cloud-cover img {

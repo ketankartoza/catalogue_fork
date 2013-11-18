@@ -645,19 +645,22 @@ APP.CartGridViewItem = Backbone.View.extend({
 
 var templateCart = [
         '<div class="cart-item">',
-          '<img src="/thumbnail/<%= model.get("product").id %>/large/" />',
+          '<img src="/thumbnail/<%= model.get("product").id %>/mini/" />',
           '<div class="cart-item-info">',
             '<p><%= model.get("product").unique_product_id %></p>',
+          '</div>',
+          '<div class="cart-item-info-date">',
             '<p><%= model.get("product").product_date %></p>',
-            '<div class="buttons">',
-              '<span class="button metadata-button"><i class="icon-list-alt"></i> Metadata</span>',
-              '<span class="button icon-2x delete-button"><i class="icon-trash"></i></span>',
-            '</div>',
           '</div>',
-          '<div class="cloud-cover">',
-            '<img src="/static/images/cloud-icon.png" />',
-            '<p><%= model.get("product").cloud_cover %></p>',
+          '<div class="cart-item-buttons">',
+              '<span class="btn btn-small metadata-button"><i class="icon-list-alt"></i></span>',
+              '<span class="btn btn-small btn-danger delete-button"><i class="icon-trash"></i></span>',
           '</div>',
+          '<div class="cart-item-cloud-cover"><p>',
+            '<% if(model.get("product").cloud_cover != -1) { %><%= model.get("product").cloud_cover %>%',
+              '<% } else { %>UNK',
+              '<% } %>',
+          '</p></div>',
         '</div>'
         ].join('');
 
