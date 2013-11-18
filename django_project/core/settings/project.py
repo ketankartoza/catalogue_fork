@@ -145,7 +145,8 @@ PIPELINE_JS = {
             'js/widget.daterange.js',
             'js/widget.sansaMap.js',
             'js/widget.sansaMapSearchLayer.js',
-            'js/widget.sansaGeoSearchLayer.js'
+            'js/widget.sansaGeoSearchLayer.js',
+            'js/lightbox-2.6.min.js'
         ),
         'output_filename': 'js/fluid.js',
     },
@@ -205,6 +206,7 @@ PIPELINE_CSS = {
             'css/bootstrap-listTree.css',
             'css/perfect-scrollbar.css',
             'css/bootstrap-modal.css',
+            'css/lightbox.css'
         ),
         'output_filename': 'css/fluid.css',
         'extra_context': {

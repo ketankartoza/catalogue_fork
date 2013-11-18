@@ -464,8 +464,9 @@ APP.ResultGridViewItem = Backbone.View.extend({
             var src = event.currentTarget.src.replace('mini','large');
             varPopover = $(event.currentTarget).parent();
             $.loadImage(src).done(function(image) {
-              varPopover.popover({
-                    content: '<img src="'+image.src+'" /><br /><a href="#">Open large preview</a>',
+                var src = image.src.replace('large','raw');
+                varPopover.popover({
+                    content: '<img src="'+image.src+'" /><br /><a data-lightbox="'+src+'" href="' + src + '">Open large preview</a>',
                     placement: 'left',
                     container: 'body',
                     html: true
