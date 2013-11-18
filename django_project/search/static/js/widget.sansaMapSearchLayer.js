@@ -13,13 +13,17 @@
 
     _initialize: function() {
       var defaultStyle = new OpenLayers.Style(
-        {'fillOpacity': 0, 'strokeColor' : '${getColor}'},
+        {'fillOpacity': '${getFillOpacity}', 'strokeColor' : '${getColor}', 'fillColor': '#BAD696'},
         {
           context :
             {
               getColor : function (f)
                 {
-                    return f.attributes.strokeColor;
+                  return f.attributes.strokeColor;
+                },
+              getFillOpacity : function (f)
+                {
+                  return f.attributes.fillOpacity;
                 }
             }
         }
@@ -72,9 +76,11 @@
 
         //if item is in cart, color green else orange
         if (exist.length > 0) {
-          feat.attributes.strokeColor = '#00FF00';
+          feat.attributes.strokeColor = '#228441';
+          feat.attributes.fillOpacity = '0.5';
         } else {
           feat.attributes.strokeColor = '#FFA500';
+          feat.attributes.fillOpacity = '0';
         }
         self.layerSearch.addFeatures([feat]);
       });
@@ -113,7 +119,8 @@
 
   colorCartFeature: function( theRecordId ) {
     var myIndex = this.getFeatureIndexByRecordId( theRecordId );
-    this.layerSearch.features[myIndex].attributes.strokeColor = '#00FF00';
+    this.layerSearch.features[myIndex].attributes.strokeColor = '#228441';
+    this.layerSearch.features[myIndex].attributes.fillOpacity = '0.5';
     this.layerSearch.redraw();
   },
 
