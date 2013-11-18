@@ -800,6 +800,11 @@ line {
     border-left: 2px solid #228441;
 }
 
+.cartResultRow {
+    background-color: #da4f49;
+    border-left: 2px solid #da4f49;
+}
+
 #svg_layer {
     pointer-events:none;
     position: fixed;
