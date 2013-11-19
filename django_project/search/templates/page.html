@@ -3,62 +3,98 @@
 {% block body_load %}{% endblock %}
 
 {% block content%}
-  <div class="row-fluid">
-    <div class="span12">
-      <div id="search-panel">
-        <div id="search-panel-search-button">
-          <button class="btn btn-success btn-large btn-left-panel"
+      <div id="search-panel-toggle">
+        <button class="btn btn-info btn-large btn-left-panel"
+                onclick="toggleSearchPanel();"
+                data-toggle="tooltip" title="Toggle Search Panel"
+                data-placement="right">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+      <div id="search-panel" class="well" max-height:40%;overflow-y:scroll;>
+        <form id="catalogueSearch" action="{% url 'submitSearch' %}"
+              class="form-horizontal accordion">
+          <h5 class="text-center">Set Your Search Parameters</h5>
+          <hr />
+          {% csrf_token %}
+          {{ searchform.geometry }}
+          {{ searchform.selected_sensors }}
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-toggle="collapse"
+                 data-parent="#catalogueSearch"
+                 href="#content-1">
+                <i class="icon-angle-down"></i> Choose Satellites
+              </a>
+            </div>
+            {% include 'search_form/content-1.html' %}
+          </div>
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-toggle="collapse"
+                 data-parent="#catalogueSearch"
+                 href="#content-2">
+                <i class="icon-angle-down"></i> Add Date Ranges
+              </a>
+            </div>
+            {% include 'search_form/content-2.html' %}
+          </div>
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-toggle="collapse"
+                 data-parent="#catalogueSearch"
+                 href="#content-3">
+                <i class="icon-angle-down"></i> Enter Area of Interest (or digitize on map)
+              </a>
+            </div>
+            {% include 'search_form/content-3.html' %}
+          </div>
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-toggle="collapse"
+                 data-parent="#catalogueSearch"
+                 href="#content-4">
+                <i class="icon-angle-down"></i> Set Max. Cloud Cover
+              </a>
+            </div>
+            {% include 'search_form/content-4.html' %}
+          </div>
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-toggle="collapse"
+                 data-parent="#catalogueSearch"
+                 href="#content-5">
+                <i class="icon-angle-down"></i> Other Options
+              </a>
+            </div>
+            {% include 'search_form/content-5.html' %}
+          </div>
+        </form>
+      </div>
+      <div id="search-summary-container" class="well">
+        <h5 class="text-center">Search Settings Summary</h5>
+        <hr/>
+        <div id="search-summary"></div>
+        <div id="search-buttons" class="text-center"
+             style="margin-top: 20px;">
+          <hr/>
+          <button class="btn btn-success"
                   onclick="submitSearchForm();"
                   data-toggle="tooltip" title="Run Search"
-                  data-placement="right">
+                  data-placement="top">
             <i class="icon-play"></i>
           </button>
-        </div>
-        <div id="search-panel-reset-button">
-          <button class="btn btn-warning btn-large btn-left-panel"
+          <button class="btn btn-warning"
                   data-toggle="tooltip" title="Reset Search Parameters"
-                  data-placement="right">
+                  data-placement="top">
             <i class="icon-refresh"></i>
           </button>
-        </div>
-        <div id="search-panel-help-button">
-          <button class="btn btn-info btn-large btn-left-panel"
+          <button class="btn btn-info"
                   data-toggle="tooltip" title="Help"
-                  data-placement="right">
+                  data-placement="top">
             <i class="icon-question-sign"></i>
           </button>
         </div>
-        <div id="search-panel-toggle">
-          <button class="btn btn-info btn-large btn-left-panel"
-                  onclick="toggleSearchPanel();"
-                  data-toggle="tooltip" title="Toggle Search Panel"
-                  data-placement="right">
-            <i class="icon-search"></i>
-          </button>
-        </div>
-        <section class="tabs">
-          <input id="tab-1" type="radio" name="radio-set" class="tab-selector-1 chk-hide" checked />
-          <label for="tab-1" class="tab-label-1">Satellite</label>
-
-          <input id="tab-2" type="radio" name="radio-set" class="tab-selector-2 chk-hide" />
-          <label for="tab-2" class="tab-label-2">Date Range</label>
-
-          <input id="tab-3" type="radio" name="radio-set" class="tab-selector-3 chk-hide" />
-          <label for="tab-3" class="tab-label-3">Area of Interest</label>
-
-          <input id="tab-4" type="radio" name="radio-set" class="tab-selector-4 chk-hide" />
-          <label for="tab-4" class="tab-label-4">Cloud Cover</label>
-
-          <input id="tab-5" type="radio" name="radio-set" class="tab-selector-5 chk-hide" />
-          <label for="tab-5" class="tab-label-5">Other</label>
-<!--
-          <input id="tab-6" type="radio" name="radio-set" class="tab-selector-6 chk-hide" />
-          <label for="tab-6" class="tab-label-6"><i class="icon-camera"></i></label>-->
-          <div class="clear-shadow"></div>
-            <div id="searchPanelForm" class="content well custom-corner-top-right">
-              {% include "search_form.html" %}
-            </div>
-        </section>
       </div>
       <div id="cart-panel" class="well">
         <div id="cart-panel-order-button">
@@ -198,8 +234,6 @@
         <div id="map-control-scalebar"></div>
       </div>
       <div id="map-layerswitcher" class="drop-shadow"></div>
-    </div>
-  </div>
   <div id="ajax-modal" class="modal hide fade" tabindex="-1"></div>
   <div id="imageBox" class="modal container hide fade text-center"  tabindex="-2">
     <img id="imageBoximage" src="" />
@@ -239,10 +273,12 @@
     $('#results-container').perfectScrollbar( { wheelSpeed: 20 } );
     $('#cart-container').perfectScrollbar( { wheelSpeed: 20 } );
     $('#id_start_datepicker').datepicker({
-      autoclose: true
+      'autoclose': true,
+      'viewMode': 2
     });
     $('#id_end_datepicker').datepicker({
-      autoclose: true
+      'autoclose': true,
+      'viewMode': 2
     });
     $('#result-panel-download-button').click(function() {
       toggleResultDownloadButton();
@@ -332,8 +368,6 @@
       trigger: "click",
       html: true
     });
-    // setup daterange widget
-    $('#date_range').daterange();
   });
   </script>
 {% endblock %}

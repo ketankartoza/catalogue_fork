@@ -1,0 +1,32 @@
+<div id="content-3" class="accordion-body collapse">
+  <div class="accordion-inner">
+    <div class="control-group">
+      <label class="control-label" for="id_aoi_geometry">Bounding Box/Circle</label>
+      <div class="controls">
+        {{ searchform.aoi_geometry }}
+        <span class="help-block">{{ searchform.aoi_geometry.help_text }}</span>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="id_geometry_file">Geometry file</label>
+      <div class="controls">
+        {{ searchform.geometry_file }}
+        <span class="help-block">{{ searchform.geometry_file.help_text }}</span>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="id_k_orbit_path">Path (K/orbit)</label>
+      <div class="controls">
+        {{ searchform.k_orbit_path }}
+        <span class="help-block">{{ searchform.k_orbit_path.help_text }}</span>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="id_j_frame_row">Row (J/frame)</label>
+      <div class="controls">
+        {{ searchform.j_frame_row }}
+        <span class="help-block">{{ searchform.j_frame_row.help_text }}</span>
+      </div>
+    </div>
+  </div>
+</div>

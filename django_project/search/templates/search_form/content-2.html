@@ -1,0 +1,36 @@
+<div id="content-2" class="accordion-body collapse">
+  <div class="accordion-inner">
+    <span id="daterange_inline" class="help-inline"></span>
+    <div id="date_from_cg" class="control-group">
+      <label class="control-label" for="id_start_datepicker">From: </label>
+      <div class="controls">
+        <input type="text" id="id_start_datepicker" placeholder="">
+      </div>
+    </div>
+    <div id="date_to_cg" class="control-group">
+      <label class="control-label" for="id_end_datepicker">To: </label>
+      <div class="controls">
+        <input type="text" id="id_end_datepicker" placeholder="">
+        <span id="date_to_inline" class="help-inline"></span>
+      </div>
+    </div>
+    <div id="date_range">
+      <div class="date-range text-center">
+        <a href="#" class="btn">
+          <i class="icon-plus"></i> Add
+        </a>
+      </div>
+      {{ dateformset.management_form }}
+      {% for form in dateformset.forms %}
+        <div class="date_range_row">
+          {{ form.start_date }}
+          {{ form.end_date }}
+          <span class="date_from">{{ form.start_date.value|date:"d/m/Y" }}</span>
+          <span> to </span>
+          <span class="date_to">{{ form.end_date.value|date:"d/m/Y" }}</span>
+          <span><i class="del_daterange icon-trash"></i> </span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

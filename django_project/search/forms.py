@@ -160,18 +160,13 @@ class AdvancedSearchForm(forms.ModelForm):
         widget=forms.FileInput(attrs={'class': 'file'}),
         required=False,
         help_text=(
-            'Upload a zipped shapefile or KML/KMZ file of less than 1MB. If '
-            'the shapefile contains more than one polygon, only the first will'
-            ' be used. Complex polygons will increase search time.'))
+            'KML/KMZ file less than 1MB.'))
 
     aoi_geometry = AOIGeometryField(
         label=u'Bounding Box/Circle',
         widget=forms.TextInput(attrs={'title': (
-            'Enter bounding box coordinates separated by comma for Upper '
-            'left and Lower right coordinates i.e. (20,-32,22,-34), or '
-            'enter single coordinate which defines circle center and '
-            'radius in kilometers (20,-32,100). Alternatively, digitise '
-            'the clip area in the map.')
+            'Upper left and lower right coordinates e.g. (20,-32,22,-34). Or '
+            'circle center and radius e.g. (20,-32,100).')
         }),
         required=False)
 
@@ -179,21 +174,18 @@ class AdvancedSearchForm(forms.ModelForm):
         label=u'Path (K/orbit)',
         required=False,
         help_text=(
-            'Insert the orbit path as a list of comma separated values or '
-            'ranges (e.g. : "10,20,30" or  "20-40")'))
+            'e.g."10,20,30" or  "20-40"'))
     j_frame_row = IntegersCSVIntervalsField(
         label=u'Row (J/frame)',
         required=False,
         help_text=(
-            'Insert the frame row as a list of comma separated values or '
-            'ranges (e.g. : "10,20,30" or "20-40")'))
+            'e.g. "10,20,30" or "20-40"'))
 
     cloud_mean = forms.IntegerField(
         label=u'Cloud Percentage',
         min_value=0, max_value=100, initial=100,
         help_text=(
-            'Select the maximum cloud cover (range 0-100) when searching for '
-            'images. Note that not all sensors support cloud cover filtering.')
+            'Range 0 - 100')
     )
     selected_sensors = forms.CharField(
         widget=forms.HiddenInput(), required=False

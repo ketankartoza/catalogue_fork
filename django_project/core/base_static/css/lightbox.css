@@ -1,6 +1,6 @@
 /* line 7, ../sass/lightbox.sass */
 body:after {
-  content: url(../images/close.png) url(../images/loading.gif) url(../images/prev.png) url(../img/next.png);
+  content: url(../images/close.png) url(../images/loading.gif) url(../images/prev.png) url(../images/next.png);
   display: none;
 }
 
@@ -85,7 +85,7 @@ body:after {
   width: 32px;
   height: 32px;
   margin: 0 auto;
-  background: url(../img/loading.gif) no-repeat;
+  background: url(../images/loading.gif) no-repeat;
 }
 
 /* line 64, ../sass/lightbox.sass */
@@ -132,7 +132,7 @@ body:after {
 .lb-prev:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
-  background: url(../img/prev.png) left 48% no-repeat;
+  background: url(../images/prev.png) left 48% no-repeat;
 }
 
 /* line 94, ../sass/lightbox.sass */
@@ -150,7 +150,7 @@ body:after {
 .lb-next:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
-  background: url(../img/next.png) right 48% no-repeat;
+  background: url(../images/next.png) right 48% no-repeat;
 }
 
 /* line 103, ../sass/lightbox.sass */
@@ -205,7 +205,7 @@ body:after {
   float: right;
   width: 30px;
   height: 30px;
-  background: url(../img/close.png) top right no-repeat;
+  background: url(../images/close.png) top right no-repeat;
   text-align: right;
   outline: none;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);

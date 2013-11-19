@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="373375344">
+  <component name="DataSourceManagerImpl" format="xml" hash="3909042680">
     <data-source source="LOCAL" name="Django default" uuid="f60fb772-02cf-48a9-ba7d-ba2274da0191">
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://:5432/sac-testbed</jdbc-url>

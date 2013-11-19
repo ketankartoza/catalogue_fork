@@ -1,0 +1,55 @@
+<div id="content-5" class="accordion-body collapse">
+  <div class="accordion-inner">
+    <div class="control-group">
+      <label class="control-label"
+             for="id_sensor_inclination_angle_start">
+        Sensor inclination angle start
+      </label>
+      <div class="controls">
+        {{ searchform.sensor_inclination_angle_start }}
+        <span class="help-block">{{ searchform.sensor_inclination_angle_start.help_text }}</span>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label"
+             for="id_sensor_inclination_angle_end">
+        Sensor inclination angle end
+      </label>
+      <div class="controls">
+        {{ searchform.sensor_inclination_angle_end }}
+        <span class="help-block">{{ searchform.sensor_inclination_angle_end.help_text }}</span>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="id_spatial_resolution">Spatial resolution</label>
+      <div class="controls">
+        {{ searchform.spatial_resolution }}
+        <span class="help-block">{{ searchform.spatial_resolution.help_text }}</span>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="id_band_count">Band count</label>
+      <div class="controls">
+        {{ searchform.band_count }}
+        <span class="help-block">{{ searchform.band_count.help_text }}</span>
+      </div>
+    </div>
+    <div class="search-options">
+      <div class="control-group">
+        <div class="controls">
+          <label class="checkbox">
+            {{ searchform.free_imagery }} {{ searchform.free_imagery.label_tag }}
+          </label>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <label class="checkbox">
+            {{ searchform.panchromatic_imagery }} {{ searchform.panchromatic_imagery.label_tag }}
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
