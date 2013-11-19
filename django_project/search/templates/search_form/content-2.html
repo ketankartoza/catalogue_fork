@@ -1,24 +1,25 @@
 <div id="content-2" class="accordion-body collapse">
-  <div class="accordion-inner">
+  <div class="accordion-inner" style="padding-bottom: 10px;">
     <span id="daterange_inline" class="help-inline"></span>
     <div id="date_from_cg" class="control-group">
       <label class="control-label" for="id_start_datepicker">From: </label>
       <div class="controls">
-        <input type="text" id="id_start_datepicker" placeholder="">
+        <input type="text" id="id_start_datepicker" placeholder="dd/mm/yyyy">
+          <span class="help-inline">Format: dd/mm/yyyy</span>
       </div>
     </div>
     <div id="date_to_cg" class="control-group">
       <label class="control-label" for="id_end_datepicker">To: </label>
       <div class="controls">
-        <input type="text" id="id_end_datepicker" placeholder="">
-        <span id="date_to_inline" class="help-inline"></span>
+        <input type="text" id="id_end_datepicker" placeholder="dd/mm/yyyy">
+        <span class="help-inline">Format: dd/mm/yyyy</span>
       </div>
     </div>
-    <div id="date_range">
-      <div class="date-range text-center">
-        <a href="#" class="btn">
-          <i class="icon-plus"></i> Add
-        </a>
+    <div id="date_range" class="control-group">
+      <div class="controls date-range">
+        <button type="button" class="btn btn-small">
+          <i class="icon-angle-down"></i> Add
+        </button>
       </div>
       {{ dateformset.management_form }}
       {% for form in dateformset.forms %}

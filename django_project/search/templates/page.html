@@ -273,12 +273,14 @@
     $('#results-container').perfectScrollbar( { wheelSpeed: 20 } );
     $('#cart-container').perfectScrollbar( { wheelSpeed: 20 } );
     $('#id_start_datepicker').datepicker({
-      'autoclose': true,
-      'viewMode': 2
+      autoclose: true,
+      startView: 2,
+      format: "dd/mm/yyyy"
     });
     $('#id_end_datepicker').datepicker({
-      'autoclose': true,
-      'viewMode': 2
+      autoclose: true,
+      startView: 2,
+      format: "dd/mm/yyyy"
     });
     $('#result-panel-download-button').click(function() {
       toggleResultDownloadButton();
