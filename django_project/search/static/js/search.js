@@ -7,52 +7,41 @@ var LayerSwitcherState = false;
 
 function toggleSearchPanel() {
     if (SearchPanelState) {
-        hideSearchPanelButtons();
-        $("#search-panel").animate({left: -450}, 300 );
-        SearchPanelState = false;
-        $("#cart-panel-toggle").animate({top: 80}, 200 );
+        closeSearchPanel();
     } else {
         if (CartPanelState) {
             closeCartPanel();
         }
         $("#search-panel").animate({left: 10}, 300 );
-        showSearchPanelButtons();
+        $('#search-panel-toggle').addClass('active');
         SearchPanelState = true;
-        $("#cart-panel-toggle").animate({top: 535}, 200 );
     }
 }
 
 function closeSearchPanel() {
-    hideSearchPanelButtons();
+    $('#search-panel-toggle').removeClass('active');
     $("#search-panel").animate({left: -450}, 300 );
     SearchPanelState = false;
-    $("#cart-panel-toggle").animate({top: 80}, 200 );
 }
 
 function toggleCartPanel() {
     if (CartPanelState) {
-        hideCartPanelButtons();
-        $("#cart-panel").animate({left: -490}, 300 );
+        closeCartPanel();
         CartPanelState = false;
-        $("#cart-panel-toggle").animate({top: 80}, 200 );
-        $("#search-panel-toggle").animate({top: 27}, 200 );
     } else {
         if (SearchPanelState) {
             closeSearchPanel();
         }
         $("#cart-panel").animate({left: 10}, 300 );
-        showCartPanelButtons();
+        $('#cart-panel-toggle').addClass('active');
         CartPanelState = true;
-        $("#cart-panel-toggle").animate({top: -1}, 200 );
-        $("#search-panel-toggle").animate({top: 590}, 200 );
     }
 }
 
 function closeCartPanel() {
-    hideCartPanelButtons();
     $("#cart-panel").animate({left: -490}, 300 );
+    $('#cart-panel-toggle').removeClass('active');
     CartPanelState = false;
-    $("#search-panel-toggle").animate({top: 27}, 200 );
 }
 
 function toggleResultPanel() {
@@ -78,48 +67,17 @@ function openResultPanel() {
 function defaultPanelState() {
     hideResultDownloadOptions();
     hideCartDownloadOptions();
-    hideSearchPanelButtons();
-    hideCartPanelButtons();
     hideResultPanelButtons();
     if (SearchPanelState) {
         $("#search-panel").animate({left: 10}, 300 );
         SearchPanelState = true;
-        $("#cart-panel-toggle").animate({top: 535}, 200 );
-        showSearchPanelButtons();
     } else if (CartPanelState) {
         $("#cart-panel").animate({left: 10}, 300 );
-        $("#cart-panel-toggle").animate({top: 0}, 200 );
-        $("#search-panel-toggle").animate({top: 535}, 200 );
     }
     if (ResultPanelState) {
         $("#result-panel").animate({right: 10}, 300 );
         showResultPanelButtons();
     }
-}
-
-function hideSearchPanelButtons() {
-    $("#search-panel-search-button").hide();
-    $("#search-panel-reset-button").hide();
-    $("#search-panel-help-button").hide();
-}
-
-function showSearchPanelButtons() {
-    $("#search-panel-search-button").show();
-    $("#search-panel-reset-button").show();
-    $("#search-panel-help-button").show();
-}
-
-function hideCartPanelButtons() {
-    if (CartDownloadOptionsState) {
-        toggleCartDownloadButton();
-    }
-    $("#cart-panel-order-button").hide();
-    $("#cart-panel-download-button").hide();
-}
-
-function showCartPanelButtons() {
-    $("#cart-panel-order-button").show();
-    $("#cart-panel-download-button").show();
 }
 
 function hideResultPanelButtons() {
@@ -140,11 +98,11 @@ function showResultDownloadOptions() {
 }
 
 function hideCartDownloadOptions() {
-    $(".downloadcartoptions").hide();
+    $('#cart-panel-btns').fadeOut('fast');
 }
 
 function showCartDownloadOptions() {
-    $(".downloadcartoptions").show();
+    $('#cart-panel-btns').fadeIn('fast');
 }
 
 function showResultPanelButtons() {
@@ -183,11 +141,11 @@ function toggleResultDownloadButton() {
 function toggleCartDownloadButton() {
     if (CartDownloadOptionsState) {
         hideCartDownloadOptions();
-        $("#cart-panel-download-button").animate({top: 370}, 200 );
+        $('#cart-panel-download-button').html('<i class="icon-download"></i> Download Order');
         CartDownloadOptionsState = false;
     } else {
-        $("#cart-panel-download-button").animate({top: 170}, 200 );
-        setTimeout(showCartDownloadOptions,210);
+        showCartDownloadOptions();
+        $('#cart-panel-download-button').html('<i class="icon-remove"></i> Hide Options');
         CartDownloadOptionsState = true;
     }
 }
@@ -243,7 +201,7 @@ function submitSearchForm() {
           }
         },
         success: function(data){
-            resetSearchFromErrors()
+            resetSearchFromErrors();
             APP.guid = data.guid;
             $APP.trigger('collectionSearch', {
               offset: 0
@@ -255,7 +213,7 @@ function submitSearchForm() {
             if (data.status == '404') {
                 processSearchFormErrors(data.responseText);
             } else {
-                alert('There has been an error! Probably gnomes...');
+                alert('Sorry! There has been an error. Please try again');
                 console.log(data);
             }
         }

@@ -3,116 +3,163 @@
 {% block body_load %}{% endblock %}
 
 {% block content%}
-  <div class="row-fluid">
-    <div class="span12">
-      <div id="search-panel">
-        <div id="search-panel-search-button">
-          <button class="btn btn-success btn-large btn-left-panel"
-                  onclick="submitSearchForm();"
-                  data-toggle="tooltip" title="Run Search"
-                  data-placement="right">
-            <i class="icon-play"></i>
+      <div id="panel-toggles" class="btn-group">
+          <button id="search-panel-toggle"
+                  class="btn btn-info btn-large btn-left-panel active"
+                  onclick="toggleSearchPanel();"
+                  data-toggle="tooltip" title="Toggle Search Panel"
+                  data-placement="bottom">
+            <i class="icon-search"></i>
           </button>
-        </div>
-        <div id="search-panel-reset-button">
-          <button class="btn btn-warning btn-large btn-left-panel"
-                  data-toggle="tooltip" title="Reset Search Parameters"
-                  data-placement="right">
-            <i class="icon-refresh"></i>
+          <button id="cart-panel-toggle"
+                  class="btn btn-info btn-large btn-left-panel"
+                  onclick="toggleCartPanel();"
+                  data-toggle="tooltip" data-title="Toggle Cart Panel"
+                  data-placement="bottom">
+            <i class="icon-shopping-cart"></i>
           </button>
-        </div>
-        <div id="search-panel-help-button">
-          <button class="btn btn-info btn-large btn-left-panel"
-                  data-toggle="tooltip" title="Help"
-                  data-placement="right">
+          <button id="map-help-button"
+                  class="btn btn-info btn-large"
+                  data-toggle="tooltip" title="Map Help"
+                  data-placement="bottom">
             <i class="icon-question-sign"></i>
           </button>
         </div>
-        <div id="search-panel-toggle">
-          <button class="btn btn-info btn-large btn-left-panel"
-                  onclick="toggleSearchPanel();"
-                  data-toggle="tooltip" title="Toggle Search Panel"
-                  data-placement="right">
-            <i class="icon-search"></i>
-          </button>
-        </div>
-        <section class="tabs">
-          <input id="tab-1" type="radio" name="radio-set" class="tab-selector-1 chk-hide" checked />
-          <label for="tab-1" class="tab-label-1">Satellite</label>
-
-          <input id="tab-2" type="radio" name="radio-set" class="tab-selector-2 chk-hide" />
-          <label for="tab-2" class="tab-label-2">Date Range</label>
-
-          <input id="tab-3" type="radio" name="radio-set" class="tab-selector-3 chk-hide" />
-          <label for="tab-3" class="tab-label-3">Area of Interest</label>
-
-          <input id="tab-4" type="radio" name="radio-set" class="tab-selector-4 chk-hide" />
-          <label for="tab-4" class="tab-label-4">Cloud Cover</label>
-
-          <input id="tab-5" type="radio" name="radio-set" class="tab-selector-5 chk-hide" />
-          <label for="tab-5" class="tab-label-5">Other</label>
-<!--
-          <input id="tab-6" type="radio" name="radio-set" class="tab-selector-6 chk-hide" />
-          <label for="tab-6" class="tab-label-6"><i class="icon-camera"></i></label>-->
-          <div class="clear-shadow"></div>
-            <div id="searchPanelForm" class="content well custom-corner-top-right">
-              {% include "search_form.html" %}
+      <div id="search-panel">
+        <div id="search-panel-content" class="well" style="max-height:40%;overflow-y:scroll;">
+          <form id="catalogueSearch" action="{% url 'submitSearch' %}"
+                class="form-horizontal accordion">
+            <h5 class="text-center">Set Your Search Parameters</h5>
+            <hr />
+            {% csrf_token %}
+            {{ searchform.geometry }}
+            {{ searchform.selected_sensors }}
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse"
+                   data-parent="#catalogueSearch"
+                   href="#content-1">
+                  <i class="icon-angle-down"></i> Choose Satellites
+                </a>
+              </div>
+              {% include 'search_form/content-1.html' %}
             </div>
-        </section>
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse"
+                   data-parent="#catalogueSearch"
+                   href="#content-2">
+                  <i class="icon-angle-down"></i> Add Date Ranges
+                </a>
+              </div>
+              {% include 'search_form/content-2.html' %}
+            </div>
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse"
+                   data-parent="#catalogueSearch"
+                   href="#content-3">
+                  <i class="icon-angle-down"></i> Enter Area of Interest (or digitize on map)
+                </a>
+              </div>
+              {% include 'search_form/content-3.html' %}
+            </div>
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse"
+                   data-parent="#catalogueSearch"
+                   href="#content-4">
+                  <i class="icon-angle-down"></i> Set Max. Cloud Cover
+                </a>
+              </div>
+              {% include 'search_form/content-4.html' %}
+            </div>
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse"
+                   data-parent="#catalogueSearch"
+                   href="#content-5">
+                  <i class="icon-angle-down"></i> Other Options
+                </a>
+              </div>
+              {% include 'search_form/content-5.html' %}
+            </div>
+          </form>
+        </div>
+        <div id="search-summary-container" class="well">
+          <h5 class="text-center">Search Settings Summary</h5>
+          <hr/>
+          <div id="search-summary"></div>
+          <div id="search-buttons" class="text-center"
+               style="margin-top: 20px;">
+            <hr/>
+            <button class="btn btn-success"
+                    onclick="submitSearchForm();"
+                    data-toggle="tooltip" title="Run Search"
+                    data-placement="top">
+              <i class="icon-play"></i>
+            </button>
+            <button class="btn btn-warning"
+                    data-toggle="tooltip" title="Reset Search Parameters"
+                    data-placement="top">
+              <i class="icon-refresh"></i>
+            </button>
+            <button id="search-panel-help-button"
+                    class="btn btn-info"
+                    data-toggle="tooltip" title="Search Help"
+                    data-placement="top">
+              <i class="icon-question-sign"></i>
+            </button>
+          </div>
+        </div>
       </div>
-      <div id="cart-panel" class="well">
-        <div id="cart-panel-order-button">
-          <button class="btn btn-success btn-large btn-left-panel"
-                  data-toggle="tooltip" title="Place Order"
-                  data-placement="right">
-            <i class="icon-ok"></i>
+      <div id="cart-panel">
+        <div id="cart-container" class="well"></div>
+        <div id="cart-sub-panel" class="well text-center">
+          <button class="btn btn-success">
+            <i class="icon-ok"></i> Place Order
           </button>
-        </div>
-        <div id="cart-panel-download-button">
-          <button class="btn btn-info btn-large btn-left-panel"
-                  data-toggle="tooltip"
-                  data-title="Toggle Download Options"
-                  data-placement="right">
-            <i class="icon-download-alt"></i>
+          <button id="cart-panel-download-button"
+                  onclick="showCartDownloadOptions();"
+                  class="btn btn-info">
+            <i class="icon-download"></i> Download Order
           </button>
-        </div>
-        <div id="cart-panel-download-button-shp" class="downloadcartoptions">
-          <button class="btn btn-info btn-left-panel"
-                  data-toggle="tooltip"
-                  data-title="Download as SHP"
-                  data-placement="right">SHP</button>
-        </div>
-        <div id="cart-panel-download-button-kml" class="downloadcartoptions">
-          <button class="btn btn-info btn-left-panel" data-toggle="tooltip"
-                  data-title="Download as KML"
-                  data-placement="right">KML</button>
-        </div>
-        <div id="cart-panel-download-button-kmz" class="downloadcartoptions">
-          <button class="btn btn-info btn-left-panel"
-                  data-toggle="tooltip"
-                  data-title="Download as KMZ"
-                  data-placement="right">KMZ</button>
-        </div>
-        <div id="cart-panel-download-button-xml" class="downloadcartoptions">
-          <button class="btn btn-info btn-left-panel"
-                  data-toggle="tooltip"
-                  data-title="Download as XML"
-                  data-placement="right">XML</button>
-        </div>
-        <div id="cart-panel-download-button-htm" class="downloadcartoptions">
-          <button class="btn btn-info btn-left-panel"
-                  data-toggle="tooltip"
-                  data-title="Download as HTM"
-                  data-placement="right">HTM</button>
-        </div>
-        <div id="cart-panel-toggle">
-          <button class="btn btn-info btn-large btn-left-panel" onclick="toggleCartPanel();"
-              data-toggle="tooltip" data-title="Toggle Cart Panel"
-              data-placement="right">
-            <i class="icon-shopping-cart"></i>
-          </button>
-        </div>
-        <div id="cart-container">
+          <div id="cart-panel-btns">
+            <hr />
+            <p>Please choose your download format</p>
+            <div class="btn-group">
+              <button id="cart-panel-download-button-shp"
+                      class="btn btn-info"
+                      data-toggle="tooltip"
+                      data-title="Download as SHP"
+                      data-placement="top">SHP
+              </button>
+              <button id="cart-panel-download-button-kml"
+                      class="btn btn-info"
+                      data-toggle="tooltip"
+                      data-title="Download as KML"
+                      data-placement="top">KML
+              </button>
+              <button id="cart-panel-download-button-kmz"
+                      class="btn btn-info"
+                      data-toggle="tooltip"
+                      data-title="Download as KMZ"
+                      data-placement="top">KMZ
+              </button>
+              <button id="cart-panel-download-button-xml"
+                      class="btn btn-info"
+                      data-toggle="tooltip"
+                      data-title="Download as XML"
+                      data-placement="top">XML
+              </button>
+              <button id="cart-panel-download-button-htm"
+                      class="btn btn-info"
+                      data-toggle="tooltip"
+                      data-title="Download as HTM"
+                      data-placement="top">HTM
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -174,13 +221,6 @@
         </div>
         <div id="results-container"></div>
       </div>
-      <div id="map-help-button">
-          <button class="btn btn-info btn-large"
-                  data-toggle="tooltip" title="Show map help"
-                  data-placement="right">
-            <i class="icon-question-sign"></i>
-          </button>
-      </div>
 
       <div id="map"></div>
       <div id="svg_layer">
@@ -198,8 +238,6 @@
         <div id="map-control-scalebar"></div>
       </div>
       <div id="map-layerswitcher" class="drop-shadow"></div>
-    </div>
-  </div>
   <div id="ajax-modal" class="modal hide fade" tabindex="-1"></div>
   <div id="imageBox" class="modal container hide fade text-center"  tabindex="-2">
     <img id="imageBoximage" src="" />
@@ -219,7 +257,6 @@
   <script type="text/javascript" src="{% static 'js/search.js' %}"></script>
   <script>
   $( document ).ready(function() {
-
     $('button[data-toggle="tooltip"]').tooltip();
     myMap = new APP.SansaMap('map');
     searchLayer = new APP.SearchLayer(myMap);
@@ -239,10 +276,14 @@
     $('#results-container').perfectScrollbar( { wheelSpeed: 20 } );
     $('#cart-container').perfectScrollbar( { wheelSpeed: 20 } );
     $('#id_start_datepicker').datepicker({
-      autoclose: true
+      autoclose: true,
+      startView: 2,
+      format: "dd/mm/yyyy"
     });
     $('#id_end_datepicker').datepicker({
-      autoclose: true
+      autoclose: true,
+      startView: 2,
+      format: "dd/mm/yyyy"
     });
     $('#result-panel-download-button').click(function() {
       toggleResultDownloadButton();
@@ -332,8 +373,6 @@
       trigger: "click",
       html: true
     });
-    // setup daterange widget
-    $('#date_range').daterange();
   });
   </script>
 {% endblock %}

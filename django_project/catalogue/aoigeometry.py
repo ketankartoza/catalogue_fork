@@ -32,11 +32,8 @@ class AOIGeometryField(forms.CharField):
         #if we dont supply help_text use this as default
         if not('help_text' in kwargs):
             self.help_text = (
-                'Enter bounding box coordinates separated by comma for Upper '
-                'left and Lower right coordinates i.e. (20,-32,22,-34), or '
-                'enter single coordinate which defines circle center and '
-                'radius in kilometers (20,-32,100). Alternatively, digitise '
-                'the clip area in the map.')
+                'Upper left and lower right coordinates e.g. (20,-32,22,-34). '
+                'Or circle center and radius e.g. (20,-32,100).')
 
     def clean(self, theValue):
         """ AOI geometry validator """
