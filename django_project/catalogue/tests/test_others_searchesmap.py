@@ -124,7 +124,9 @@ class OthersViews_searchesMap(TestCase):
             u'useraccounts/menu_content.html', u'page.html',
             u'base-fluid.html', u'pipeline/css.html', u'pipeline/css.html',
             u'menu.html', u'useraccounts/menu_content.html',
-            u'search_form.html', u'pipeline/js.html'
+            u'pipeline/js.html', u'search_form/content-1.html',
+            u'search_form/content-2.html', u'search_form/content-3.html',
+            u'search_form/content-4.html', u'search_form/content-5.html'
         ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
