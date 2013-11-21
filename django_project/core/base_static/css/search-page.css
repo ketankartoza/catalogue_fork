@@ -10,12 +10,18 @@
     margin-left: 100px!important;
 }
 
-#search-summary-container {
-    position: fixed;
-    left: 10px;
-    top: 60%;
-    z-index: 101;
-    width: 350px;
+.accordion-inner .controls input {
+    width: 150px;
+}
+
+.accordion-inner .controls select {
+    width: 160px;
+}
+
+#panel-toggles {
+    position: absolute;
+    left: 113px;
+    z-index: 20000;
 }
 
 /*
@@ -82,8 +88,8 @@
 
 #map-navigation {
     position: absolute;
-    top: 23px;
-    left: 60px;
+    top: 22px;
+    left: 53px;
 }
 
 #map-layerswitcher {
@@ -161,173 +167,29 @@
 
 #search-panel {
     width: 350px;
-    max-height: 45%;
     z-index: 101;
     position: fixed;
-    top: 50px;
+    top: 95px;
+    height: 80%;
+}
+
+#search-panel-content {
+    max-height: 45%;
     overflow-y: scroll;
 }
 
-#search-panel-toggle {
-    width: 40px;
-    z-index: -1;
-    position: absolute;
-    right: -38px;
-    top: 27px;
-    white-space: nowrap;
-}
-
-#search-panel-search-button {
-    width: 50px;
-    height: 35px;
-    z-index: -1;
-    position: absolute;
-    top: 370px;
-    right: -50px;
-    /*overflow: hidden;*/
-    white-space: nowrap;
-    color: #fff;
-    margin: 3px;
-}
-
-#search-panel-reset-button {
-    width: 50px;
-    height: 35px;
-    z-index: -1;
-    position: absolute;
-    top: 410px;
-    right: -50px;
-    white-space: nowrap;
-    color: #fff;
-    margin: 3px;
-}
-
-#search-panel-help-button {
-    width: 50px;
-    height: 35px;
-    z-index: -1;
-    position: absolute;
-    top: 450px;
-    right: -50px;
-    white-space: nowrap;
-    color: #fff;
-    margin: 3px;
-}
-
-/*#search-panel-toggle > .btn {*/
-/*-webkit-transform: rotate(-90deg);*/
-/*-moz-transform: rotate(-90deg);*/
-/*-ms-transform: rotate(-90deg);*/
-/*filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);*/
-/*}*/
-
 #cart-panel {
-    width: 450px;
-    height: 500px;
+    width: 350px;
+    height: 80%;
     z-index: 99;
     position: fixed;
-    top: 50px;
+    top: 95px;
     left: -490px;
+    overflow-y: scroll;
 }
 
-#cart-panel-toggle {
-    width: 29px;
-    z-index: -1;
-    position: absolute;
-    top: 80px;
-    right: -29px;
-    white-space: nowrap;
-}
-
-/*#cart-panel-toggle > .btn {*/
-/*-webkit-transform: rotate(-90deg);*/
-/*-moz-transform: rotate(-90deg);*/
-/*-ms-transform: rotate(-90deg);*/
-/*filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);*/
-/*}*/
-
-#cart-panel-order-button {
-    width: 50px;
-    height: 35px;
-    z-index: -1;
-    position: absolute;
-    top: 410px;
-    right: -54px;
-    white-space: nowrap;
-    color: #fff;
-    margin: 3px;
-}
-
-#cart-panel-download-button {
-    width: 50px;
-    height: 35px;
-    z-index: -1;
-    position: absolute;
-    top: 370px;
-    right: -54px;
-    white-space: nowrap;
-    color: #fff;
-    margin: 3px;
-}
-
-#cart-panel-download-button-shp {
-    width: 50px;
-    height: 35px;
-    z-index: 500;
-    position: absolute;
-    top: 210px;
-    right: -54px;
-    white-space: nowrap;
-    color: #fff;
-    margin: 3px;
-}
-
-#cart-panel-download-button-kml {
-    width: 50px;
-    height: 35px;
-    z-index: 500;
-    position: absolute;
-    top: 250px;
-    right: -54px;
-    white-space: nowrap;
-    color: #fff;
-    margin: 3px;
-}
-
-#cart-panel-download-button-kmz {
-    width: 50px;
-    height: 35px;
-    z-index: 500;
-    position: absolute;
-    top: 290px;
-    right: -54px;
-    white-space: nowrap;
-    color: #fff;
-    margin: 3px;
-}
-
-#cart-panel-download-button-xml {
-    width: 50px;
-    height: 35px;
-    z-index: 500;
-    position: absolute;
-    top: 330px;
-    right: -54px;
-    white-space: nowrap;
-    color: #fff;
-    margin: 3px;
-}
-
-#cart-panel-download-button-htm {
-    width: 50px;
-    height: 35px;
-    z-index: 500;
-    position: absolute;
-    top: 370px;
-    right: -54px;
-    white-space: nowrap;
-    color: #fff;
-    margin: 3px;
+#cart-sub-panel p {
+    color: black!important;
 }
 
 #result-panel {
@@ -345,24 +207,6 @@
     white-space: nowrap;
 }
 
-/*#result-panel-toggle > .btn {*/
-/*-webkit-transform: rotate(-90deg);*/
-/*-moz-transform: rotate(-90deg);*/
-/*-ms-transform: rotate(-90deg);*/
-/*filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);*/
-/*}*/
-
-#map-help-button {
-    width: 50px;
-    height: 35px;
-    z-index: 101;
-    position: absolute;
-    top: 647px;
-    left: -2px;
-    white-space: nowrap;
-    color: #fff;
-}
-
 .search-panel-input {
     padding: 0 40px 0 5px;
 }
@@ -376,7 +220,6 @@
 }
 
 .cart-item {
-    width: 440px;
     height: 90px;
     margin: 5px 5px 0 5px;
     position: relative;
@@ -679,10 +522,8 @@
 }
 
 #cart-container {
-    position: relative;
-    float: left;
-    height: 495px;
-    overflow: hidden;
+    height: 45%;
+    overflow-y: scroll;
 }
 
 #search-panel label {
