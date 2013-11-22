@@ -305,7 +305,7 @@ class Search(BaseSearch):
     spectral_group = models.ManyToManyField(
         'dictionaries.SpectralGroup',
         null=True, blank=True,
-        help_text='Select one or more sepectral groups.'
+        help_text='Select one or more spectral groups.'
     )
     processing_level = models.ManyToManyField(
         'dictionaries.ProcessingLevel', null=True, blank=True,
