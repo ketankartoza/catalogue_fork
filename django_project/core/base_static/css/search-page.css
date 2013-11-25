@@ -261,10 +261,6 @@
     left: 20px;
 }
 
-.cart-item .cart-item-info .button {
-
-}
-
 .cart-item .cart-item-info .delete-button {
     position: absolute;
     right: 5px;
@@ -562,10 +558,12 @@
     color: red;
 }
 
-/*.date-range {*/
-    /*width: 440px;*/
-    /*margin: 10px 0 0;*/
-/*}*/
+.date-range {
+    width: 60px;
+    float: right;
+    padding-top: 3px;
+    margin-bottom: 15px;
+}
 
 /*#date_range {*/
     /*position: relative;*/

@@ -47,7 +47,7 @@
         var tmpDateFrom = $(this).find('.date_from').text();
         var tmpDateTo = $(this).find('.date_to').text();
         $(this).empty();
-        $(this).append(
+        $('#date-range-table').append(
             self._dr_input_template(
                 total, self._parse_date(tmpDateFrom.trim(),'dd/mm/yy'), self._parse_date(tmpDateTo.trim(),'dd/mm/yy'))
             );
@@ -98,7 +98,7 @@
               if(in_list){
                   alert('The date range is already in the list.');
               } else {
-                  self.$element.append(self._cloneMore(myStartDate, myEndDate));
+                  $('#date-range-table').append(self._cloneMore(myStartDate, myEndDate));
                   self.datecount++;
               }
           } else {
@@ -113,7 +113,7 @@
     //handle remove events...
     this.$element.find('.del_daterange').live('click', function () {
       //remove the date range
-      $(this).parent().parent().remove();
+      $(this).closest('.date_range_row').remove();
       self._resliver_dateranges();
     }
     );
@@ -123,9 +123,9 @@
       var total = $('#id_searchdaterange_set-TOTAL_FORMS').val();
       // prepare template
       var tpl = [
-        '<div class="date_range_row">',
+        '<tr class="date_range_row text-center">',
           this._dr_input_template(total, theStartDate, theEndDate),
-        '</div>'
+        '</tr>'
         ].join('');
 
       //increase total number of forms
@@ -139,10 +139,9 @@
       var tpl=[
           '<input type="hidden" id="id_searchdaterange_set-'+total+'-start_date" name="searchdaterange_set-'+total+'-start_date" value="'+this._format_date(theStartDate)+'">',
           '<input type="hidden" id="id_searchdaterange_set-'+total+'-end_date" name="searchdaterange_set-'+total+'-end_date" value="'+this._format_date(theEndDate)+'">',
-          '<span class="date_from">', this._format_date(theStartDate, 'dd/mm/yy'), '</span>',
-          '<span>&nbsp;to&nbsp;</span>',
-          '<span class="date_to">', this._format_date(theEndDate, 'dd/mm/yy'), '&nbsp;&nbsp;</span>',
-          '<span><i class="del_daterange icon-trash"></i> </span>'
+          '<td class="date_from">', this._format_date(theStartDate, 'dd/mm/yy'), '</td>',
+          '<td class="date_to">', this._format_date(theEndDate, 'dd/mm/yy'), '</td>',
+          '<td><a href="#"><i class="del_daterange icon-remove"></i></a></td>'
       ].join('');
       return tpl;
     };
