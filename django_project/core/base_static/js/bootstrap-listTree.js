@@ -142,6 +142,11 @@
             "options": data.options,
             "selected": selected
         });
+
+        // fire custom event so we know plugin state changed
+        $.event.trigger({
+            type: "listTreeChange"
+        });
     }
 
     var methods = {
