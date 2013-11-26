@@ -329,6 +329,7 @@ APP.ResultGridView = Backbone.View.extend({
             });
 
             this.cont.empty();
+            this.cont.append('<div class="result-item"><div class="result-item-info">Product</div><div class="result-item-info-date">Date</div><div class="cloud-cover">Cloud cover</div></div>');
             var self=this;
             _(this.collection.models).each(function(item){
                 self.renderItem(item);
