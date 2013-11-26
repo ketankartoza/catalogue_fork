@@ -391,7 +391,7 @@ APP.ResultGridView = Backbone.View.extend({
         select.style.width = "50px";
         var self = this;
         select.onchange = function(event) {
-            self.jumpToPage(event.explicitOriginalTarget.value);
+            self.jumpToPage(event.target.value);
         };
         var option;
         for (var i = 1; i < end+1; i++) {
