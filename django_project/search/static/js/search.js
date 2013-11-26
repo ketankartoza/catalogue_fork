@@ -245,6 +245,34 @@ function resetSearchFromErrors() {
     $('.error').each( function() { $(this).removeClass('error'); })
 }
 
+function resetSearchForm() {
+    // reset listTree
+    $('.listTree').listTree('deselectAll');
+    // remove dateranges
+    $('#date_range').daterange('reset');
+    // reset text fields
+    $('input:text').each(function() {
+        $(this).val('');
+    });
+    // set cloud back to 100
+    $('#id_cloud_mean').val(100);
+    // clear checkboxes
+    $('input:checkbox').each(function() {
+        $(this).attr('checked', false);
+    });
+    // reset dropdowns
+    $('#id_spatial_resolution').prop('selectedIndex',0);
+    $('#id_band_count').prop('selectedIndex',0);
+
+    // reset file filed
+    file = $('#id_geometry_file');
+    file.val("");
+    file.replaceWith( file = file.clone( true ) );
+
+    // reset search summary widget
+    searchSummary.reset();
+}
+
 // backbone models/collections/views
 
 APP.$modal = $('#ajax-modal');

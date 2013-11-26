@@ -269,6 +269,17 @@
 
         _render: function() {
             this.div.html( _.template( this.template, { "context": this.data } ) );
+        },
+
+        _clearData: function() {
+            _.each(this.data, function(row) {
+                row.data = {};
+            });
+        },
+
+        reset: function() {
+            this._clearData();
+            this._render();
         }
     };
 

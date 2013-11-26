@@ -31,6 +31,7 @@
     // $('#id_searchdaterange_set-INITIAL_FORMS').val(self.datecount);
 
     this._setup_events();
+    return this;
   };
 
   DateRange.DEFAULTS = {
@@ -59,6 +60,14 @@
     $('#id_searchdaterange_set-TOTAL_FORMS').val(total);
     $('#id_searchdaterange_set-INITIAL_FORMS').val(total);
 
+  };
+
+  DateRange.prototype._reset = function() {
+    var total = 0;
+    $('#id_searchdaterange_set-TOTAL_FORMS').val(0);
+    $('#id_searchdaterange_set-INITIAL_FORMS').val(0);
+    $('#date-range-table').html('');
+    this._notify();
   };
 
   DateRange.prototype._setup_events = function () {
@@ -187,8 +196,12 @@
     return this.each(function () {
       var $this = $(this);
       // var data = $this.data('bs.button')
-      var options = typeof option == 'object' && option;
-      this.widget = new DateRange(this, options);
+      if (option == 'reset') {
+        this.widget._reset();
+      } else {
+        var options = typeof option == 'object' && option;
+        this.widget = new DateRange(this, options);
+      }
       //if (!data) $this.data('bs.button', (data = new Button(this, options)))
 
       // if (option == 'toggle') data.toggle()
