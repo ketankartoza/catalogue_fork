@@ -178,7 +178,7 @@
       this.$element.find('.date_range_row').each(function(){
           var tmpDateFrom = $(this).find('.date_from').text();
           var tmpDateTo = $(this).find('.date_to').text();
-          dates.push({'from': self._parse_date(tmpDateFrom.trim(),'dd/mm/yy'), 'to': self._parse_date(tmpDateTo.trim(),'dd/mm/yy')})
+          dates.push({'from': self._format_date(self._parse_date(tmpDateFrom.trim(),'dd/mm/yy')), 'to': self._format_date(self._parse_date(tmpDateTo.trim(),'dd/mm/yy'))})
       });
       return JSON.stringify(dates);
     }

@@ -14,9 +14,13 @@
         ];
         this.template = [
             '<table>',
+            // iterate each  row
             '<% _.each(context, function(row) { %>',
+                // if there is any data it means there is something to show
                 '<% if (_.keys(row.data).length > 0) { %>',
+                    // display row name
                     '<tr><td><%= row.label %></td><td>',
+                    // display each option in new row
                     '<% _.each(row.data, function(text) { %>',
                         '<%= text %><br />',
                     '<% }); %>',
@@ -33,6 +37,8 @@
         _initialize: function() {
             // listening on listTree plugin to fire change event
             $(document).on("listTreeChange", $.proxy(this._handleListTree, this));
+            // listening on sansaDateRange plugin to fire change event
+            $(document).on("sansaDateRangeChanged", $.proxy(this._handleDateRange, this));
         },
 
         _handleListTree: function() {
@@ -58,6 +64,25 @@
 
             // save data
             if (text != '') this.data[0].data.listTree = text;
+
+            // request render of specific element
+            this._render();
+        },
+
+        _handleDateRange: function(e) {
+            var text = '';
+            // parse payload from event as json and iterate
+            _.each(JSON.parse(e.dates), function(daterange) {
+                text = text + daterange.from + ' - ' + daterange.to + ', ';
+            });
+            // remove last comma
+            text = text.slice(0, - 2);
+
+            // remove existing
+            if (typeof this.data[1].data.dateRange != undefined) delete this.data[1].data.dateRange;
+
+            // save data
+            if (text != '') this.data[1].data.dateRange = text;
 
             // request render of specific element
             this._render();
