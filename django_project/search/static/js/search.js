@@ -166,12 +166,11 @@ function validate_form(){
   var form_ok = false;
   var myDateRange = $('#date_range .date_range_row');
   if (myDateRange.length === 0) {
-      $('#daterange_inline').html('You have to select at least 1 date range!').addClass('form-error');
+      alert('You have to select at least 1 date range!');
       $('#tab-2').prop('checked',true);
+      $('#content-2').collapse('show');
   } else {
     form_ok = true;
-    // clear missing daterange error
-    $('#daterange_inline').html('');
   }
   return form_ok;
 }
@@ -236,7 +235,7 @@ function processSearchFormErrors(data) {
         var helpElem = '<span class="error-block">'+ errors[field] +'</span>'
         inputDOM.parent().append(helpElem);
     }
-    $('#tab-3').prop('checked',true);
+    $('.error-block').first().closest('.accordion-body').collapse('show');
 }
 
 function resetSearchFromErrors() {
