@@ -220,8 +220,7 @@
 }
 
 .cart-item {
-    height: 90px;
-    margin: 5px 5px 0 5px;
+    height: 23px;
     position: relative;
 }
 
@@ -230,8 +229,8 @@
 }
 
 .cart-item img {
-    width: 90px;
-    height: 90px;
+    width: 16px;
+    height: 16px;
 }
 
 .cart-item p {
@@ -240,13 +239,25 @@
 
 .cart-item .cart-item-info {
     position: absolute;
-    top: 5px;
-    left: 100px;
+    top: 0px;
+    left: 25px;
+}
+
+.cart-item .cart-item-cloud-cover {
+    position: absolute;
+    top: 0px;
+    left: 180px;
+}
+
+.cart-item .cart-item-buttons {
+    position: absolute;
+    top: 0px;
+    left: 225px;
 }
 
 .cart-item .cloud-cover {
     position: absolute;
-    top: 5px;
+    top: 0px;
     right: 15px;
 }
 
