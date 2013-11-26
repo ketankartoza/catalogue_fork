@@ -43,13 +43,16 @@
     // a continuous sequence 0,1,2,3...
     var self = this;
     var total = 0;
+    $('#id_searchdaterange_set-TOTAL_FORMS').val(0);
+    $('#id_searchdaterange_set-INITIAL_FORMS').val(0);
     this.$element.find('.date_range_row').each(function(){
         var tmpDateFrom = $(this).find('.date_from').text();
         var tmpDateTo = $(this).find('.date_to').text();
-        $(this).empty();
+        $(this).remove();
         $('#date-range-table').append(
-            self._dr_input_template(
-                total, self._parse_date(tmpDateFrom.trim(),'dd/mm/yy'), self._parse_date(tmpDateTo.trim(),'dd/mm/yy'))
+          self._cloneMore(self._parse_date(tmpDateFrom.trim(),'dd/mm/yy'), self._parse_date(tmpDateTo.trim(),'dd/mm/yy'))
+            //self._dr_input_template(
+            //    total, self._parse_date(tmpDateFrom.trim(),'dd/mm/yy'), self._parse_date(tmpDateTo.trim(),'dd/mm/yy'))
             );
         total++;
     });
@@ -107,6 +110,7 @@
       } else {
           alert('Please select both start and end dates.');
       }
+      self._notify();
       return false;
     });
 
@@ -115,6 +119,7 @@
       //remove the date range
       $(this).closest('.date_range_row').remove();
       self._resliver_dateranges();
+      self._notify();
     }
     );
   };
@@ -159,6 +164,24 @@
       }
       return sansa_dateutils.parseDate(theFormat, theDate);
     };
+
+    DateRange.prototype._notify = function() {
+      $.event.trigger({
+        type: "sansaDateRangeChanged",
+        dates: this._get_json_dates()
+      });
+    };
+
+    DateRange.prototype._get_json_dates = function() {
+      var self = this;
+      var dates = [];
+      this.$element.find('.date_range_row').each(function(){
+          var tmpDateFrom = $(this).find('.date_from').text();
+          var tmpDateTo = $(this).find('.date_to').text();
+          dates.push({'from': self._parse_date(tmpDateFrom.trim(),'dd/mm/yy'), 'to': self._parse_date(tmpDateTo.trim(),'dd/mm/yy')})
+      });
+      return JSON.stringify(dates);
+    }
 
   $.fn.daterange = function (option) {
     return this.each(function () {
