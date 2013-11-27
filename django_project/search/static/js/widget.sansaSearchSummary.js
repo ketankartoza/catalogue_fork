@@ -50,6 +50,32 @@
             $('#id_panchromatic_imagery').on("change", $.proxy(this._handlePImagery, this));
         },
 
+        _forcePopulateData: function() {
+            var e = {};
+            $.proxy(this._handleListTree, this);
+            $('#date_range').daterange('notify');
+            e.target = $('#id_aoi_geometry')[0];
+            this._handleAoiGeometry(e);
+            e.target = $('#id_k_orbit_path')[0];
+            this._handleAoiGeometry(e);
+            e.target = $('#id_j_frame_row')[0];
+            this._handleRow(e);
+            e.target = $('#id_cloud_mean')[0];
+            this._handleCloud(e);
+            e.target = $('#id_sensor_inclination_angle_start')[0];
+            this._handleAngleStart(e);
+            e.target = $('#id_sensor_inclination_angle_end')[0];
+            this._handleAngleEnd(e);
+            e.target = $('#id_spatial_resolution')[0];
+            this._handleResolution(e);
+            e.target = $('#id_band_count')[0];
+            this._handleBand(e);
+            e.target = $('#id_free_imagery')[0];
+            this._handleImagery(e);
+            e.target = $('#id_panchromatic_imagery')[0];
+            this._handlePImagery(e);
+        },
+
         _handleListTree: function() {
 
             var text = '';
@@ -279,6 +305,11 @@
 
         reset: function() {
             this._clearData();
+            this._render();
+        },
+
+        force: function() {
+            this._forcePopulateData();
             this._render();
         }
     };

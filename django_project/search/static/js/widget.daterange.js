@@ -198,6 +198,8 @@
       // var data = $this.data('bs.button')
       if (option == 'reset') {
         this.widget._reset();
+      } else if (option == 'notify') {
+        this.widget._notify();
       } else {
         var options = typeof option == 'object' && option;
         this.widget = new DateRange(this, options);
