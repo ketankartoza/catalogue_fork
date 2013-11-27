@@ -90,8 +90,8 @@
 
 
       // get the dates from datepickers and parse them
-      var myStartDate = self._parse_date($("#id_start_datepicker").val(),'mm/dd/yy');
-      var myEndDate = self._parse_date($("#id_end_datepicker").val(),'mm/dd/yy');
+      var myStartDate = self._parse_date($("#id_start_datepicker").val(),'dd/mm/yy');
+      var myEndDate = self._parse_date($("#id_end_datepicker").val(),'dd/mm/yy');
 
 
       if(myStartDate && myEndDate) {
