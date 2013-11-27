@@ -340,9 +340,19 @@ APP.ResultGridView = Backbone.View.extend({
         $APP.on('collectionSearch', $.proxy(this.collectionSearch, this));
     },
 
+    clearHTML: function() {
+        this.cont.empty();
+        $('#searchPrev').hide();
+        $('#searchNext').hide();
+        $('#SearchShare').hide();
+        $('#paginator').html('');
+        this.$el.find('#resultsPosition').html('');
+    },
+
     collectionSearch: function (evt, options) {
         $APP.trigger('ResultGridView_fetchresults');
         APP.blockResultPanel();
+        this.clearHTML();
         _.extend(this.collection, options);
         this.collection.fetch({
             reset: true,
