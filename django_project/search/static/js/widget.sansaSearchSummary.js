@@ -108,7 +108,7 @@
             var text = '';
             // parse payload from event as json and iterate
             _.each(JSON.parse(e.dates), function(daterange) {
-                text = text + daterange.from + ' - ' + daterange.to + ', ';
+                text = text + daterange.from + ' to ' + daterange.to + ', ';
             });
             // remove last comma
             text = text.slice(0, - 2);

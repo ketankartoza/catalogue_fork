@@ -178,6 +178,10 @@
     overflow-y: scroll;
 }
 
+#search-summary {
+    font-size: 12px!important;
+}
+
 #cart-panel {
     width: 350px;
     height: 80%;
