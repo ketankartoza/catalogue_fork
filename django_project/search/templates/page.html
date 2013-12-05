@@ -400,21 +400,5 @@
     searchSummary = new APP.SearchSummary('#search-summary');
     searchSummary.force();
   });
-  function toggleSearchShare(){
-    var btn = $("#SearchShare");
-    var content = $('#SearchShare-content');
-    var div = $('#SearchShare-input-container');
-    var input = '<input type="text" value="http://' + window.location.host + '/search/' + APP.guid + '/" onclick="this.select();"/>';
-    if (!searchShareOpen){
-      div.html(input);
-      content.fadeIn('fast');
-      btn.html('<i class="icon-remove"></i>');
-      searchShareOpen = true;
-    } else {
-      content.fadeOut('fast');
-      btn.html('<i class="icon-link"></i>');
-      searchShareOpen = false;
-    }
-  }
   </script>
 {% endblock %}

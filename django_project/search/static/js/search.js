@@ -95,6 +95,23 @@ function showCartDownloadOptions() {
     $('#cart-panel-btns').fadeIn('fast');
 }
 
+function toggleSearchShare() {
+    var btn = $("#SearchShare");
+    var content = $('#SearchShare-content');
+    var div = $('#SearchShare-input-container');
+    var input = '<input type="text" value="http://' + window.location.host + '/search/' + APP.guid + '/" onclick="this.select();"/>';
+    if (!searchShareOpen) {
+        div.html(input);
+        content.fadeIn('fast');
+        btn.html('<i class="icon-remove"></i>');
+        searchShareOpen = true;
+    } else {
+        content.fadeOut('fast');
+        btn.html('<i class="icon-link"></i>');
+        searchShareOpen = false;
+    }
+}
+
 APP.blockResultPanel = function() {
     $.blockUI({
         message: '<div class="wrapperloading"><div class="loading up"></div><div class="loading down"></div></div>',
