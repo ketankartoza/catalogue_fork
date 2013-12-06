@@ -18,9 +18,14 @@
     width: 160px;
 }
 
+.accordion-toggle {
+    background-color: white;
+    border-radius: 4px;
+}
+
 #panel-toggles {
     position: absolute;
-    left: 113px;
+    left: 10px;
     z-index: 20000;
 }
 
@@ -155,16 +160,6 @@
     border-radius: 0 4px 4px 4px !important;
 }
 
-.btn-left-panel {
-    border-radius: 0 4px 4px 0;
-    border-left: none;
-}
-
-.btn-right-panel {
-    border-radius: 4px 0 0 4px;
-    border-left: none;
-}
-
 #search-panel {
     width: 350px;
     z-index: 101;
@@ -174,8 +169,11 @@
 }
 
 #search-panel-content {
-    max-height: 45%;
-    overflow-y: scroll;
+    /* position required for perfectScrollbar */
+    position: relative;
+    max-height: 80%;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 #search-summary {
@@ -190,6 +188,7 @@
     top: 95px;
     left: -490px;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 #cart-sub-panel p {
@@ -198,16 +197,16 @@
 
 #result-panel {
     z-index: 99;
-    position: fixed;
-    top: 50px;
+    position: absolute;
+    top: 55px;
     right: -487px;
 }
 
 #result-panel-toggle {
-    z-index: -1;
+    z-index: 20000;
     position: absolute;
-    top: 0;
-    left: -48px;
+    top: 8px;
+    right: 10px;
     white-space: nowrap;
 }
 
@@ -281,11 +280,11 @@
     right: 5px;
 }
 
-.cart-item .cart-item-info .buttons {
+.cart-item .cart-item-buttons .buttons {
     margin-left: 10px;
 }
 
-.cart-item .cart-item-info .button:hover {
+.cart-item .cart-item-buttons .button:hover {
     cursor: pointer;
     cursor: hand;
     text-shadow: 0 0 10px #228441;
@@ -445,96 +444,17 @@
     margin-top: 15px;
 }
 
-#result-panel-download-button {
-    width: 50px;
-    height: 35px;
-    z-index: -1;
-    position: absolute;
-    top: 500px;
-    left: -50px;
-    white-space: nowrap;
-    margin: 3px;
-}
-
-#result-panel-download-button .shadow {
-    box-shadow: -3px 2px 2px rgba(0, 0, 0, 0.5), -3px -2px 2px rgba(0, 0, 0, 0.5);
-}
-
-#result-panel-download-button-shp {
-    width: 50px;
-    height: 35px;
-    z-index: 10000;
-    position: absolute;
-    top: 340px;
-    left: -55px;
-    white-space: nowrap;
-    margin: 3px;
-}
-
-#result-panel-download-button-kml {
-    width: 50px;
-    height: 35px;
-    z-index: 10000;
-    position: absolute;
-    top: 380px;
-    left: -55px;
-    white-space: nowrap;
-    margin: 3px;
-}
-
-#result-panel-download-button-kmz {
-    width: 50px;
-    height: 35px;
-    z-index: 10000;
-    position: absolute;
-    top: 420px;
-    left: -55px;
-    white-space: nowrap;
-    margin: 3px;
-}
-
-#result-panel-download-button-xml {
-    width: 50px;
-    height: 35px;
-    z-index: 10000;
-    position: absolute;
-    top: 460px;
-    left: -55px;
-    white-space: nowrap;
-    margin: 3px;
-}
-
-#result-panel-download-button-htm {
-    width: 50px;
-    height: 35px;
-    z-index: 10000;
-    position: absolute;
-    top: 500px;
-    left: -55px;
-    white-space: nowrap;
-    margin: 3px;
-}
-
-#result-panel-download-button-shp .shadow, #result-panel-download-button-htm .shadow, #result-panel-download-button-xml .shadow,
-#result-panel-download-button-kmz .shadow, #result-panel-download-button-kml .shadow {
-    box-shadow: -3px 2px 2px rgba(0, 0, 0, 0.5), -3px -2px 2px rgba(0, 0, 0, 0.5);
-}
-
-#result-panel-download-button .shadow {
-    box-shadow: -3px 2px 2px rgba(0, 0, 0, 0.5), -3px -2px 2px rgba(0, 0, 0, 0.5);
-}
-
 #results-container {
     position: relative;
-    float: left;
     height: 495px;
     overflow: hidden;
-    margin-bottom: 20px;
 }
 
 #cart-container {
-    height: 45%;
-    overflow-y: scroll;
+    /* position required for perfectScrollbar */
+    position: relative;
+    min-height: 40%;
+    max-height: 80%;
 }
 
 #search-panel label {
