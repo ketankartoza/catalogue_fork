@@ -88,7 +88,8 @@ class DIMSIIFIngestorTest(TestCase):
         """Test that we can ingest spot using the management command"""
         call_command('dims_iif_harvest',
                      verbosity=2,
-                     source_dir=DATA_DIR_PATH)
+                     source_dir=DATA_DIR_PATH,
+                     halt_on_error=False)
 
     def testImportDirectly(self):
         """Test that we can ingest DIMS IIF using the ingestor function"""
@@ -98,7 +99,8 @@ class DIMSIIFIngestorTest(TestCase):
         #
         dims_iif.ingest(
             theSourceDir=DATA_DIR_PATH,
-            theVerbosityLevel=2)
+            theVerbosityLevel=2,
+            halt_on_error=False )
         products = GenericProduct.objects.filter(
             original_product_id__contains='LC8')
         product_list = []
@@ -118,7 +120,8 @@ class DIMSIIFIngestorTest(TestCase):
 
         dims_iif.ingest(
             theSourceDir=DATA_DIR_PATH,
-            theVerbosityLevel=2)
+            theVerbosityLevel=2,
+            halt_on_error=False)
 
         product = GenericProduct.objects.get(
             original_product_id=existing_product_id)
