@@ -34,7 +34,7 @@ class Command(BaseCommand):
                     default=(
                         '/home/web/catalogue/django_project/catalogue'
                         '/tests/sample_files/landsat/')),
-        make_option('--halt-on-error', '-e', dest='halt_on_error',
+        make_option('--halt_on_error', '-e', dest='halt_on_error',
                     action='store',
                     help=(
                         'Halt on first error that occurs and print a '

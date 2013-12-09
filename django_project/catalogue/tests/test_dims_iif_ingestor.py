@@ -88,7 +88,8 @@ class DIMSIIFIngestorTest(TestCase):
         """Test that we can ingest spot using the management command"""
         call_command('dims_iif_harvest',
                      verbosity=2,
-                     source_dir=DATA_DIR_PATH)
+                     source_dir=DATA_DIR_PATH,
+                     theHaltOnErrorFlag=False)
 
     def testImportDirectly(self):
         """Test that we can ingest DIMS IIF using the ingestor function"""
@@ -98,32 +99,34 @@ class DIMSIIFIngestorTest(TestCase):
         #
         dims_iif.ingest(
             theSourceDir=DATA_DIR_PATH,
-            theVerbosityLevel=2)
-        myProducts = GenericProduct.objects.filter(
+            theVerbosityLevel=2,
+            theHaltOnErrorFlag=False )
+        products = GenericProduct.objects.filter(
             original_product_id__contains='LC8')
-        myList = []
-        myFormattedList = ''
-        for myProduct in myProducts:
-            myList.append(myProduct.product_id)
-            myFormattedList += myProduct.product_id + '\n'
+        product_list = []
+        formatted_list = ''
+        for product in products:
+            product_list.append(product.product_id)
+            formatted_list += product.product_id + '\n'
 
-        myExpectedProductId = 'LC81730832013162JSA00'
-        myMessage = 'Expected:\n%s\nTo be in:\n%s\n' % (
-            myExpectedProductId,
-            myFormattedList)
-        assert myExpectedProductId in myList, myMessage
+        existing_product_id = 'LC81730832013162JSA00'
+        message = 'Expected:\n%s\nTo be in:\n%s\n' % (
+            existing_product_id,
+            formatted_list)
+        assert existing_product_id in product_list, message
 
         # Reingest and make sure that overridden owner sticks
         # Above ran in test mode so image was
 
         dims_iif.ingest(
             theSourceDir=DATA_DIR_PATH,
-            theVerbosityLevel=2)
+            theVerbosityLevel=2,
+            theHaltOnErrorFlag=False)
 
-        myProduct = GenericProduct.objects.get(
-            original_product_id=myExpectedProductId)
+        product = GenericProduct.objects.get(
+            original_product_id=existing_product_id)
 
-        assert 'updating' in myProduct.ingestion_log
+        assert 'updating' in product.ingestion_log
 
 
 if __name__ == '__main__':

@@ -397,7 +397,7 @@ def get_product_profile(log_message, dom):
 def get_radiometric_resolution(resolution_element):
     """Get the radiometric resolution for the supplied product record.
 
-    Note that the resolution (quantitisation) is stored in the document as an
+    Note that the resolution (quantisation) is stored in the document as an
     integer describing the maximum number of values allowed per pixel (e.g.
     4096), but we want it expressed as the number of bits (e.g. 12bit,
     16bit etc.) allowed per pixel so we do some conversion of the extracted
@@ -442,8 +442,11 @@ def get_projection(specific_parameters):
             'projectionInfo', specific_parameters)
         projection = get_feature_value('code', projection_element)
         projection = Projection.objects.get(epsg_code=int(projection))
-    except Exception, e:
-        print e.message
+    except:
+        # If projection not found default to WGS84 - some IIF files
+        # may not have a projection if they are 'scene identifying IIF's'
+        # and the data is raw / unprocessed.
+        projection = Projection.objects.get(epsg_code=4326)
     return projection
 
 
@@ -506,8 +509,8 @@ def ingest(
            theHaltOnErrorFlag), 2)
 
     # Scan the source folder and look for any sub-folders
-    # The sub-folder names should be e.g. L519890503170076
-    # Which will be used as the original_product_id
+    # The sub-folder names should be e.g.
+    # L5-_TM-_HRF_SAM-_0176_00_0078_00_920606_080254_L0Ra_UTM34S
     log_message('Scanning folders in %s' % theSourceDir, 1)
     # Loop through each folder found
 
@@ -515,254 +518,268 @@ def ingest(
     record_count = 0
     updated_record_count = 0
     created_record_count = 0
+    failed_record_count = 0
     log_message('Starting directory scan...', 2)
 
     for myFolder in glob.glob(os.path.join(theSourceDir, '*')):
         record_count += 1
-
-        # Get the folder name
-        myProductFolder = os.path.split(myFolder)[-1]
-        log_message(myProductFolder, 2)
-
-        # Find the first and only xml file in the folder
-        mySearchPath = os.path.join(str(myFolder), '*.xml')
-        log_message(mySearchPath, 2)
-        myXmlFile = glob.glob(mySearchPath)[0]
-        log_message(myXmlFile, 2)
-
-        # Create a DOM document from the file
-        myDom = parse(myXmlFile)
-        # Skip this record if the quality is not 'APPROVED'
-        if not get_acquisition_quality(log_message, myDom):
-            log_message('Skipping %s' % myXmlFile)
-            continue
-
-        # First grab all the generic properties that any IIF will have...
-        myGeometry = get_geometry(log_message, myDom)
-        start_date_time, center_date_time, end_date_time = get_dates(
-            log_message, myDom)
-
-        # Now get all sensor specific metadata
-        specific_parameters = get_specific_parameters_element(myDom)
-
-        # Orbit number for GenericSensorProduct
-        orbit_number = get_feature_value(
-            'orbitNumber', specific_parameters)
-        log_message('Orbit: %s' % orbit_number, 2)
-
-        # Original product id for GenericProduct
-        original_product_id = get_feature_value(
-            'productName', specific_parameters)
-        log_message('Product Number: %s' % original_product_id, 2)
-
-        resolution_element = get_feature(
-            'resolution', specific_parameters)
-
-        # Band count for GenericImageryProduct
-        band_count = get_feature_value('numberOfBands', resolution_element)
-        log_message('Band count: %s' % band_count, 2)
-
-        # Spatial resolution x for GenericImageryProduct
-        spatial_resolution_x = float(
-            get_feature_value('x', resolution_element))
-        log_message('Spatial resolution x: %s' % spatial_resolution_x, 2)
-
-        # Spatial resolution y for GenericImageryProduct
-        spatial_resolution_y = float(
-            get_feature_value('y', resolution_element))
-        log_message('Spatial resolution y: %s' % spatial_resolution_y, 2)
-
-        # Spatial resolution for GenericImageryProduct calculated as (x+y)/2
-        spatial_resolution = (
-            spatial_resolution_x + spatial_resolution_y) / 2
-        log_message('Spatial resolution: %s' % spatial_resolution, 2)
-
-        # Radiometric resolution for GenericImageryProduct
-        radiometric_resolution = get_radiometric_resolution(resolution_element)
-        log_message('Radiometric resolution: %s' % radiometric_resolution, 2)
-
-        # projection for GenericProduct
-        projection = get_projection(specific_parameters)
-        log_message('Projection: %s' % projection, 2)
-
-        # path for GenericSensorProduct
-        path = get_feature_value('path', specific_parameters)
-        log_message('Path: %s' % path, 2)
-
-        # row for GenericSensorProduct
-        row = get_feature_value('row', specific_parameters)
-        log_message('Row: %s' % row, 2)
-
-        # earth_sun_distance for OpticalProduct
-        earth_sun_distance = get_feature_value(
-            'earthSunDistance', specific_parameters)
-        log_message('Earth Sun Distance: %s' % earth_sun_distance, 2)
-
-        # solar azimuth angle for OpticalProduct
-        solar_azimuth_angle = get_feature_value(
-            'solarAzimuthAngle', specific_parameters)
-        log_message('Solar Azimuth Angle: %s' % solar_azimuth_angle, 2)
-
-        # solar zenith angle for OpticalProduct
-        solar_zenith_angle = get_feature_value(
-            'solarZenithAngle', specific_parameters)
-        log_message('Solar Azimuth Angle: %s' % solar_zenith_angle, 2)
-
-        # sensor viewing angle for OpticalProduct
-        sensor_viewing_angle = get_feature_value(
-            'sensorViewingAngle', specific_parameters)
-        log_message('Sensor viewing angle: %s' % sensor_viewing_angle, 2)
-
-        # sensor inclination angle for OpticalProduct
-        sensor_inclination_angle = get_feature_value(
-            'sensorInclinationAngle', specific_parameters)
-        log_message(
-            'Sensor inclination angle: %s' % sensor_inclination_angle, 2)
-
-        # cloud cover as percentage for OpticalProduct
-        # integer percent - must be scaled to 0-100 for all ingestors
-        cloud_cover = int(get_feature_value(
-            'cloudCoverPercentage', specific_parameters))
-        log_message('Cloud cover percentage: %s' % cloud_cover, 2)
-
-        # Get the quality for GenericProduct
-        quality = get_quality()
-
-        # ProductProfile for OpticalProduct
-        product_profile = get_product_profile(
-            log_message, specific_parameters)
-
-        # Get the original text file metadata
-        myMetadataFile = file(myXmlFile, 'rt')
-        metadata = myMetadataFile.readlines()
-        myMetadataFile.close()
-
-        # Check if there is already a matching product based
-        # on original_product_id
-
-        # Do the ingestion here...
-        myData = {
-            'metadata': metadata,
-            'spatial_coverage': myGeometry,
-            'radiometric_resolution': radiometric_resolution,
-            'band_count': band_count,
-            'cloud_cover': cloud_cover,
-            'sensor_inclination_angle': sensor_inclination_angle,
-            'sensor_viewing_angle': sensor_viewing_angle,
-            'original_product_id': original_product_id,
-            'solar_zenith_angle': solar_zenith_angle,
-            'solar_azimuth_angle': solar_azimuth_angle,
-            'spatial_resolution_x': spatial_resolution_x,
-            'spatial_resolution_y': spatial_resolution_y,
-            'spatial_resolution': spatial_resolution,
-            'product_profile': product_profile,
-            'product_acquisition_start': start_date_time,
-            'product_acquisition_end': end_date_time,
-            'product_date': center_date_time,
-            'earth_sun_distance': earth_sun_distance,
-            'orbit_number': orbit_number,
-            'path': path,
-            'row': row,
-            'projection': projection,
-            'quality': quality
-        }
-        log_message(myData, 3)
-        # Check if it's already in catalogue:
         try:
-            today = datetime.today()
-            time_stamp = today.strftime("%Y-%m-%d")
-            log_message('Time Stamp: %s' % time_stamp, 2)
-        except Exception, e:
-            print e.message
 
-        update_mode = True
-        try:
-            log_message('Trying to update')
-            #original_product_id is not necessarily unique
-            #so we use product_id
-            myProduct = OpticalProduct.objects.get(
-                original_product_id=original_product_id
-            ).getConcreteInstance()
-            log_message(('Already in catalogue: updating %s.'
-                        % original_product_id), 2)
-            myNewRecordFlag = False
-            log = myProduct.ingestion_log
-            log += '\n'
-            log += '%s : %s - updating record' % (time_stamp, ingestor_version)
-            myData['ingestion_log'] = log
-            myProduct.__dict__.update(myData)
-        except ObjectDoesNotExist:
-            log_message('Not in catalogue: creating.', 2)
-            update_mode = False
-            log = '%s : %s - creating record' % (time_stamp, ingestor_version)
-            myData['ingestion_log'] = log
+            # Get the folder name
+            myProductFolder = os.path.split(myFolder)[-1]
+            log_message(myProductFolder, 2)
+
+            # Find the first and only xml file in the folder
+            mySearchPath = os.path.join(str(myFolder), '*.xml')
+            log_message(mySearchPath, 2)
+            myXmlFile = glob.glob(mySearchPath)[0]
+            log_message(myXmlFile, 2)
+
+            # Create a DOM document from the file
+            myDom = parse(myXmlFile)
+            # Skip this record if the quality is not 'APPROVED'
+            if not get_acquisition_quality(log_message, myDom):
+                log_message('Skipping %s' % myXmlFile)
+                continue
+
+            # First grab all the generic properties that any IIF will have...
+            myGeometry = get_geometry(log_message, myDom)
+            start_date_time, center_date_time, end_date_time = get_dates(
+                log_message, myDom)
+
+            # Now get all sensor specific metadata
+            specific_parameters = get_specific_parameters_element(myDom)
+
+            # Orbit number for GenericSensorProduct
+            orbit_number = get_feature_value(
+                'orbitNumber', specific_parameters)
+            log_message('Orbit: %s' % orbit_number, 2)
+
+            # Original product id for GenericProduct
+            original_product_id = get_feature_value(
+                'productName', specific_parameters)
+            log_message('Product Number: %s' % original_product_id, 2)
+
+            resolution_element = get_feature(
+                'resolution', specific_parameters)
+
+            # Band count for GenericImageryProduct
+            band_count = get_feature_value('numberOfBands', resolution_element)
+            log_message('Band count: %s' % band_count, 2)
+
+            # Spatial resolution x for GenericImageryProduct
+            spatial_resolution_x = float(
+                get_feature_value('x', resolution_element))
+            log_message('Spatial resolution x: %s' % spatial_resolution_x, 2)
+
+            # Spatial resolution y for GenericImageryProduct
+            spatial_resolution_y = float(
+                get_feature_value('y', resolution_element))
+            log_message('Spatial resolution y: %s' % spatial_resolution_y, 2)
+
+            # Spatial resolution for GenericImageryProduct calculated as (x+y)/2
+            spatial_resolution = (
+                spatial_resolution_x + spatial_resolution_y) / 2
+            log_message('Spatial resolution: %s' % spatial_resolution, 2)
+
+            # Radiometric resolution for GenericImageryProduct
+            radiometric_resolution = get_radiometric_resolution(
+                resolution_element)
+            log_message(
+                'Radiometric resolution: %s' % radiometric_resolution, 2)
+
+            # projection for GenericProduct
+            projection = get_projection(specific_parameters)
+            log_message('Projection: %s' % projection, 2)
+
+            # path for GenericSensorProduct
+            path = get_feature_value('path', specific_parameters)
+            log_message('Path: %s' % path, 2)
+
+            # row for GenericSensorProduct
+            row = get_feature_value('row', specific_parameters)
+            log_message('Row: %s' % row, 2)
+
+            # earth_sun_distance for OpticalProduct
+            earth_sun_distance = get_feature_value(
+                'earthSunDistance', specific_parameters)
+            log_message('Earth Sun Distance: %s' % earth_sun_distance, 2)
+
+            # solar azimuth angle for OpticalProduct
+            solar_azimuth_angle = get_feature_value(
+                'solarAzimuthAngle', specific_parameters)
+            log_message('Solar Azimuth Angle: %s' % solar_azimuth_angle, 2)
+
+            # solar zenith angle for OpticalProduct
+            solar_zenith_angle = get_feature_value(
+                'solarZenithAngle', specific_parameters)
+            log_message('Solar Azimuth Angle: %s' % solar_zenith_angle, 2)
+
+            # sensor viewing angle for OpticalProduct
+            sensor_viewing_angle = get_feature_value(
+                'sensorViewingAngle', specific_parameters)
+            log_message('Sensor viewing angle: %s' % sensor_viewing_angle, 2)
+
+            # sensor inclination angle for OpticalProduct
+            sensor_inclination_angle = get_feature_value(
+                'sensorInclinationAngle', specific_parameters)
+            log_message(
+                'Sensor inclination angle: %s' % sensor_inclination_angle, 2)
+
+            # cloud cover as percentage for OpticalProduct
+            # integer percent - must be scaled to 0-100 for all ingestors
+            cloud_cover = int(get_feature_value(
+                'cloudCoverPercentage', specific_parameters))
+            log_message('Cloud cover percentage: %s' % cloud_cover, 2)
+
+            # Get the quality for GenericProduct
+            quality = get_quality()
+
+            # ProductProfile for OpticalProduct
+            product_profile = get_product_profile(
+                log_message, specific_parameters)
+
+            # Get the original text file metadata
+            myMetadataFile = file(myXmlFile, 'rt')
+            metadata = myMetadataFile.readlines()
+            myMetadataFile.close()
+
+            # Check if there is already a matching product based
+            # on original_product_id
+
+            # Do the ingestion here...
+            myData = {
+                'metadata': metadata,
+                'spatial_coverage': myGeometry,
+                'radiometric_resolution': radiometric_resolution,
+                'band_count': band_count,
+                'cloud_cover': cloud_cover,
+                'sensor_inclination_angle': sensor_inclination_angle,
+                'sensor_viewing_angle': sensor_viewing_angle,
+                'original_product_id': original_product_id,
+                'solar_zenith_angle': solar_zenith_angle,
+                'solar_azimuth_angle': solar_azimuth_angle,
+                'spatial_resolution_x': spatial_resolution_x,
+                'spatial_resolution_y': spatial_resolution_y,
+                'spatial_resolution': spatial_resolution,
+                'product_profile': product_profile,
+                'product_acquisition_start': start_date_time,
+                'product_acquisition_end': end_date_time,
+                'product_date': center_date_time,
+                'earth_sun_distance': earth_sun_distance,
+                'orbit_number': orbit_number,
+                'path': path,
+                'row': row,
+                'projection': projection,
+                'quality': quality
+            }
+            log_message(myData, 3)
+            # Check if it's already in catalogue:
             try:
-                myProduct = OpticalProduct(**myData)
-                print myProduct
-
+                today = datetime.today()
+                time_stamp = today.strftime("%Y-%m-%d")
+                log_message('Time Stamp: %s' % time_stamp, 2)
             except Exception, e:
                 print e.message
 
-            myNewRecordFlag = True
-        except Exception, e:
-            print e.message
-
-        log_message('Saving product and setting thumb', 2)
-        try:
-            myProduct.save()
-            if update_mode:
-                updated_record_count += 1
-            else:
-                created_record_count += 1
-            if theTestOnlyFlag:
-                log_message('Testing: image not saved.', 2)
-                pass
-            else:
-                # Store thumbnail
-                myThumbsFolder = os.path.join(
-                    settings.THUMBS_ROOT,
-                    myProduct.thumbnailDirectory())
+            update_mode = True
+            try:
+                log_message('Trying to update')
+                #original_product_id is not necessarily unique
+                #so we use product_id
+                myProduct = OpticalProduct.objects.get(
+                    original_product_id=original_product_id
+                ).getConcreteInstance()
+                log_message(('Already in catalogue: updating %s.'
+                            % original_product_id), 2)
+                myNewRecordFlag = False
+                log = myProduct.ingestion_log
+                log += '\n'
+                log += '%s : %s - updating record' % (
+                    time_stamp, ingestor_version)
+                myData['ingestion_log'] = log
+                myProduct.__dict__.update(myData)
+            except ObjectDoesNotExist:
+                log_message('Not in catalogue: creating.', 2)
+                update_mode = False
+                log = '%s : %s - creating record' % (
+                    time_stamp, ingestor_version)
+                myData['ingestion_log'] = log
                 try:
-                    os.makedirs(myThumbsFolder)
-                except OSError:
-                    # TODO: check for creation failure rather than
-                    # attempt to  recreate an existing dir
+                    myProduct = OpticalProduct(**myData)
+                    print myProduct
+
+                except Exception, e:
+                    print e.message
+
+                myNewRecordFlag = True
+            except Exception, e:
+                print e.message
+
+            log_message('Saving product and setting thumb', 2)
+            try:
+                myProduct.save()
+                if update_mode:
+                    updated_record_count += 1
+                else:
+                    created_record_count += 1
+                if theTestOnlyFlag:
+                    log_message('Testing: image not saved.', 2)
                     pass
+                else:
+                    # Store thumbnail
+                    myThumbsFolder = os.path.join(
+                        settings.THUMBS_ROOT,
+                        myProduct.thumbnailDirectory())
+                    try:
+                        os.makedirs(myThumbsFolder)
+                    except OSError:
+                        # TODO: check for creation failure rather than
+                        # attempt to  recreate an existing dir
+                        pass
 
-                jpeg_path = os.path.join(str(myFolder), '*.jpeg')
-                log_message(jpeg_path, 2)
-                jpeg_path = glob.glob(jpeg_path)[0]
-                new_name = '%s.jpg' % myProduct.original_product_id
-                shutil.copyfile(
-                    jpeg_path,
-                    os.path.join(myThumbsFolder, new_name))
-                # Transform and store .wld file
-                log_message('Referencing thumb', 2)
-                try:
-                    myPath = myProduct.georeferencedThumbnail()
-                    log_message('Georeferenced Thumb: %s' % myPath, 2)
-                except:
-                    traceback.print_exc(file=sys.stdout)
+                    jpeg_path = os.path.join(str(myFolder), '*.jpeg')
+                    log_message(jpeg_path, 2)
+                    jpeg_path = glob.glob(jpeg_path)[0]
+                    new_name = '%s.jpg' % myProduct.original_product_id
+                    shutil.copyfile(
+                        jpeg_path,
+                        os.path.join(myThumbsFolder, new_name))
+                    # Transform and store .wld file
+                    log_message('Referencing thumb', 2)
+                    try:
+                        myPath = myProduct.georeferencedThumbnail()
+                        log_message('Georeferenced Thumb: %s' % myPath, 2)
+                    except:
+                        traceback.print_exc(file=sys.stdout)
 
-            if myNewRecordFlag:
-                log_message('Product %s imported.' % record_count, 2)
-                pass
+                if myNewRecordFlag:
+                    log_message('Product %s imported.' % record_count, 2)
+                    pass
+                else:
+                    log_message('Product %s updated.' % updated_record_count, 2)
+                    pass
+            except Exception, e:
+                traceback.print_exc(file=sys.stdout)
+                raise CommandError('Cannot import: %s' % e)
+
+            if theTestOnlyFlag:
+                transaction.rollback()
+                log_message('Imported scene : %s' % myProductFolder, 1)
+                log_message('Testing only: transaction rollback.', 1)
             else:
-                log_message('Product %s updated.' % updated_record_count, 2)
-                pass
+                transaction.commit()
+                log_message('Imported scene : %s' % myProductFolder, 1)
         except Exception, e:
-            traceback.print_exc(file=sys.stdout)
-            raise CommandError('Cannot import: %s' % e)
-
-        if theTestOnlyFlag:
-            transaction.rollback()
-            log_message('Imported scene : %s' % myProductFolder, 1)
-            log_message('Testing only: transaction rollback.', 1)
-        else:
-            transaction.commit()
-            log_message('Imported scene : %s' % myProductFolder, 1)
+            failed_record_count += 1
+            if theHaltOnErrorFlag:
+                print e.message
+                break
+            else:
+                continue
 
     # To decide: should we remove ingested product folders?
     print 'Products processed : %s ' % record_count
     print 'Products updated : %s ' % updated_record_count
     print 'Products imported : %s ' % created_record_count
+    print 'Products failed to import : %s ' % failed_record_count
