@@ -10,7 +10,7 @@ Or copy ``django_project/core/jenkins.py`` to e.g.
 ``django_project/core/jenkins_timlinux.py`` and use it in place of jenkins
 below.
 
-To run the full test suite:
+To run the full test suite using the jenkins runner:
 
 ```bash
 python manage.py jenkins --settings=core.settings.jenkins
@@ -18,6 +18,26 @@ python manage.py jenkins --settings=core.settings.jenkins
 
 ```bash
 python manage.py jenkins --settings=core.settings.jenkins_timlinux
+```
+
+To run using the django test runner:
+
+```bash
+python manage.py test catalogue --settings=core.settings.test_timlinux
+```
+
+To run an individual module:
+
+```bash
+python manage.py test catalogue.tests.test_dims_iif_ingestor \
+--settings=core.settings.test_timlinux
+```
+
+To run an individual module:
+
+```bash
+python manage.py test catalogue.tests.test_dims_iif_ingestor.DIMSIIDIngestorTest \
+--settings=core.settings.test_timlinux
 ```
 
 # WebODT
