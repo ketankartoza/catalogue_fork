@@ -1,4 +1,5 @@
 #!/bin/python
+"""Fabric script for Catalgoue."""
 # ~/fabfile.py
 # A Fabric file for carrying out various administrative tasks.
 # Tim Sutton, Jan 2013
