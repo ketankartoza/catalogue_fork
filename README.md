@@ -1,5 +1,7 @@
 # Running tests:
 
+## Preparation
+
 Make sure you have the base sac-master database in place:
 
 ```
@@ -10,15 +12,21 @@ Or copy ``django_project/core/jenkins.py`` to e.g.
 ``django_project/core/jenkins_timlinux.py`` and use it in place of jenkins
 below.
 
+## Jenkins
+
 To run the full test suite using the jenkins runner:
 
 ```bash
 python manage.py jenkins --settings=core.settings.jenkins
 ```
 
+Or using your own jenkins config
+
 ```bash
 python manage.py jenkins --settings=core.settings.jenkins_timlinux
 ```
+
+## Django Test runner
 
 To run using the django test runner:
 
@@ -39,6 +47,31 @@ To run an individual module:
 python manage.py test catalogue.tests.test_dims_iif_ingestor.DIMSIIDIngestorTest \
 --settings=core.settings.test_timlinux
 ```
+
+## Running tests in pycharm
+
+To run tests in pycharm (you need the pro version) create run
+configurations based on the django test base configuration (you must have
+registered your pycharm project as a django project):
+
+Run all tests:
+
+```
+Name: All Catalogue Test
+Target: catalogue
+Custom Settings: /home/timlinux/dev/python/catalogue/django_project/core/settings/test_timlinux.py
+Working Directory: /home/timlinux/dev/python/catalogue
+```
+
+To run an individual module:
+
+```
+Name: Test IIF Ingestors
+Target: catalogue.tests.test_dims_iif_ingestor
+Custom Settings: /home/timlinux/dev/python/catalogue/django_project/core/settings/test_timlinux.py
+Working Directory: /home/timlinux/dev/python/catalogue
+```
+
 
 # WebODT
 
