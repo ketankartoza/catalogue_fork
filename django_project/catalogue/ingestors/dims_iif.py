@@ -442,8 +442,11 @@ def get_projection(specific_parameters):
             'projectionInfo', specific_parameters)
         projection = get_feature_value('code', projection_element)
         projection = Projection.objects.get(epsg_code=int(projection))
-    except Exception, e:
-        print e.message
+    except:
+        # If projection not found default to WGS84 - some IIF files
+        # may not have a projection if they are 'scene identifying IIF's'
+        # and the data is raw / unprocessed.
+        projection = Projection.objects.get(epsg_code=4326)
     return projection
 
 
