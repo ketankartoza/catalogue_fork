@@ -397,7 +397,7 @@ def get_product_profile(log_message, dom):
 def get_radiometric_resolution(resolution_element):
     """Get the radiometric resolution for the supplied product record.
 
-    Note that the resolution (quantitisation) is stored in the document as an
+    Note that the resolution (quantisation) is stored in the document as an
     integer describing the maximum number of values allowed per pixel (e.g.
     4096), but we want it expressed as the number of bits (e.g. 12bit,
     16bit etc.) allowed per pixel so we do some conversion of the extracted
@@ -509,8 +509,8 @@ def ingest(
            theHaltOnErrorFlag), 2)
 
     # Scan the source folder and look for any sub-folders
-    # The sub-folder names should be e.g. L519890503170076
-    # Which will be used as the original_product_id
+    # The sub-folder names should be e.g.
+    # L5-_TM-_HRF_SAM-_0176_00_0078_00_920606_080254_L0Ra_UTM34S
     log_message('Scanning folders in %s' % theSourceDir, 1)
     # Loop through each folder found
 
