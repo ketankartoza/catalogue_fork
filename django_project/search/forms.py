@@ -29,6 +29,9 @@ from django.forms.models import BaseInlineFormSet
 #from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
+
+from django.forms import HiddenInput
+
 #from django.core.validators import EMPTY_VALUES
 from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import (
@@ -54,7 +57,6 @@ from catalogue.aoigeometry import AOIGeometryField
 
 
 from .models import Search
-from .utils import prepareSelectQuerysets
 
 
 # Support dmy formats (see
@@ -65,6 +67,14 @@ DATE_FORMATS = (
     '%d %b %Y', '%d %b, %Y',  # '25 Oct 2006', '25 Oct, 2006'
     '%d %B %Y', '%d %B, %Y',  # '25 October 2006', '25 October, 2006'
 )
+
+
+class DateRangeForm(forms.ModelForm):
+    class Meta:
+        widgets = {
+            'start_date': HiddenInput,
+            'end_date': HiddenInput
+        }
 
 
 class DateRangeFormSet(BaseInlineFormSet):
@@ -150,18 +160,13 @@ class AdvancedSearchForm(forms.ModelForm):
         widget=forms.FileInput(attrs={'class': 'file'}),
         required=False,
         help_text=(
-            'Upload a zipped shapefile or KML/KMZ file of less than 1MB. If '
-            'the shapefile contains more than one polygon, only the first will'
-            ' be used. Complex polygons will increase search time.'))
+            'KML/KMZ file less than 1MB.'))
 
     aoi_geometry = AOIGeometryField(
         label=u'Bounding Box/Circle',
         widget=forms.TextInput(attrs={'title': (
-            'Enter bounding box coordinates separated by comma for Upper '
-            'left and Lower right coordinates i.e. (20,-32,22,-34), or '
-            'enter single coordinate which defines circle center and '
-            'radius in kilometers (20,-32,100). Alternatively, digitise '
-            'the clip area in the map.')
+            'Upper left and lower right coordinates e.g. (20,-32,22,-34). Or '
+            'circle center and radius e.g. (20,-32,100).')
         }),
         required=False)
 
@@ -169,22 +174,27 @@ class AdvancedSearchForm(forms.ModelForm):
         label=u'Path (K/orbit)',
         required=False,
         help_text=(
-            'Insert the orbit path as a list of comma separated values or '
-            'ranges (e.g. : "10,20,30" or  "20-40")'))
+            'e.g."10,20,30" or  "20-40"'))
     j_frame_row = IntegersCSVIntervalsField(
         label=u'Row (J/frame)',
         required=False,
         help_text=(
-            'Insert the frame row as a list of comma separated values or '
-            'ranges (e.g. : "10,20,30" or "20-40")'))
+            'e.g. "10,20,30" or "20-40"'))
 
     cloud_mean = forms.IntegerField(
         label=u'Cloud Percentage',
         min_value=0, max_value=100, initial=100,
         help_text=(
-            'Select the maximum cloud cover (range 0-100) when searching for '
-            'images. Note that not all sensors support cloud cover filtering.')
+            'Range 0 - 100')
     )
+    selected_sensors = forms.CharField(
+        widget=forms.HiddenInput(), required=False
+    )
+
+    free_imagery = forms.BooleanField(
+        required=False, label="Free images only")
+    panchromatic_imagery = forms.BooleanField(
+        required=False, label="Panchromatic images only")
 
     class Meta:
         model = Search
@@ -192,158 +202,11 @@ class AdvancedSearchForm(forms.ModelForm):
             'ip_position', 'guid', 'keywords', 'geometry_file', 'user',
             'deleted', 'processing_level')
 
-    # add Media class for this form, rendered specific for this form
-    class Media:
-        js = (
-            "/media/js/date_utils.js",
-            "/media/js/widget.sansa-datepicker.js",
-            "/media/js/widget.sansa-daterangecontainer.js",)
-
     def __init__(self, *args, **kwargs):
         """
-        We are using jquery tooltip to show a nice tooltip for each field. To
-        ensure that each field has a title set (which is used for the tooltip
-        text), this function iterates the fields of a form and sets their
-        title text to the help text for that field. If the title is already
-        set, its left as is.
+        SearchForm
         """
-
-        self.helper = FormHelper()
-        self.helper.form_class = 'span12 '
-        self.helper.form_id = 'search_form'
-        self.helper.form_method = 'post'
-        self.helper.help_text_inline = True
-        self.helper.form_action = reverse('search', kwargs={})
-
-        self.helper.layout = Layout(
-            Div(
-                Fieldset(
-                    'Satellite',
-                    HTML(
-                        '<div id="reset_dict_selections" '
-                        'class="btn btn-info btn-small">Reset selection</div>'
-                    ),
-                    Field('collection', template='myField.html'),
-                    Field('satellite', template='myField.html'),
-                    Field('instrumenttype', template='myField.html'),
-                    Field('spectral_group', template='myField.html'),
-                    Field('license_type', template='myField.html'),
-                    css_id="collapseSensors",  # rename this class
-                    css_class="in",
-                    data_parent="#accordion-search2",
-                    template="crispy-fieldset-accordion.html"
-                ),
-                Fieldset(
-                    'Cloud Cover',
-                    Field('cloud_mean', template='myField.html'),
-                    css_id="collapseCloudCover",
-                    data_parent="#accordion-search2",
-                    template="crispy-fieldset-accordion.html"
-                ),
-                Fieldset(
-                    'Path & Row',
-                    Field('k_orbit_path', template='myField.html'),
-                    Field('j_frame_row', template='myField.html'),
-                    css_id="collapseRP",
-                    data_parent="#accordion-search2",
-                    template="crispy-fieldset-accordion.html"
-                ),
-                Fieldset(
-                    'Area of Interest',
-                    Field('aoi_geometry', template='myField.html'),
-                    Field('geometry_file', template='myField.html'),
-                    css_id="collapseGeometry",
-                    data_parent="#accordion-search2",
-                    template="crispy-fieldset-accordion.html"
-                ),
-                Fieldset(
-                    'Dates',
-                    HTML(
-                        '<div><div class="control-group error">{% for error i'
-                        'n myFormset.non_form_errors %}<p id="error_date" cla'
-                        'ss="help-block"><strong>{{ error }}</strong></p>{% e'
-                        'ndfor %}</div></div>'),
-                    Field('start_datepicker', template='myField.html'),
-                    Field('end_datepicker', template='myField.html'),
-                    HTML(
-                        '<div class="btn-group" style="margin-left: 50px;">'
-                        '<a class="btn btn-info btn-small" id="dr_add" title'
-                        '="Select the dates in the calend'
-                        'ar and click here to add to the list." href="javascri'
-                        'pt:void(0)"><i class="icon-arrow-down"></i></a>'),
-                    HTML(
-                        '<a class="btn btn-info btn-small" id="dr_del" title'
-                        '="Select the ranges in the list '
-                        'and click here to remove." href="javascript:void(0)">'
-                        '<i class="icon-arrow-up"></i></a>'
-                        '</div>'),
-                    HTML(
-                        '<label for="id_searchdaterange_set">Date range *</lab'
-                        'el>'),
-                    HTML('{{ myFormset.management_form }}'),
-                    Div(
-                        HTML(
-                            '{% for form in myFormset.forms %}<div class="dr_r'
-                            'ow"><div class="dr_input">{{ form }}</div><div cl'
-                            'ass="dr_text" title="Click to select."></div></di'
-                            'v>{% endfor %}'),
-                        id="dr_container",
-                        css_class="well well-small"
-                    ),
-                    css_id="collapseDates",
-                    data_parent="#accordion-search2",
-                    template="crispy-fieldset-accordion.html"
-                ),
-                Fieldset(
-                    'More options...',
-                    Field(
-                        'sensor_inclination_angle_start',
-                        template='myField.html'),
-                    Field(
-                        'sensor_inclination_angle_end',
-                        template='myField.html'),
-                    Field('spatial_resolution', template='myField.html'),
-                    Field('band_count', template='myField.html'),
-                    css_id="collapseImage",
-                    data_parent="#accordion-search2",
-                    template="crispy-fieldset-accordion.html"
-                ),
-                css_id="accordion-search2",
-                template="crispy-div-accordion.html"
-            ),
-            'geometry'
-        )
-
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
-        if self.instance.pk is not None:
-            myCollectionSet = self.instance.collection.all().values_list('id')
-            mySatelliteSet = self.instance.satellite.all().values_list('id')
-            myInstTypeSet = self.instance.instrumenttype.all()\
-                .values_list('id')
-            mySpecGroupSet = self.instance.spectral_group.all()\
-                .values_list('id')
-            myLicenseTypeSet = self.instance.license_type.all()\
-                .values_list('id')
-
-            myQS_data = prepareSelectQuerysets(
-                myCollectionSet, mySatelliteSet, myInstTypeSet,
-                mySpecGroupSet, myLicenseTypeSet
-            )
-        else:
-            myQS_data = prepareSelectQuerysets()
-
-        # set new querysets
-        self.fields['collection'].queryset = myQS_data[0]
-        self.fields['satellite'].queryset = myQS_data[1]
-        self.fields['instrumenttype'].queryset = myQS_data[2]
-        self.fields['spectral_group'].queryset = myQS_data[3]
-        self.fields['license_type'].queryset = myQS_data[4]
-
-        for myFieldName, myField in self.fields.items():
-            myField.widget.attrs['class'] = 'ui-corner-all'
-            if (not 'title' in myField.widget.attrs or
-                    myField.widget.attrs['title'] == ''):
-                myField.widget.attrs['title'] = myField.help_text
 
         # calculate initial search_date (today - 1 month)
         # we use a constant -> 1 month = 31 days
@@ -370,7 +233,6 @@ class AdvancedSearchForm(forms.ModelForm):
 
     def clean(self):
         myCleanedData = self.cleaned_data
-        logger.debug('cleaned data: ' + str(myCleanedData))
 
         myStartSensorAngle = myCleanedData.get(
             'sensor_inclination_angle_start')
@@ -385,5 +247,22 @@ class AdvancedSearchForm(forms.ModelForm):
             raise forms.ValidationError(
                 'Error: Start sensor angle can not be greater than the end'
                 ' sensor angle!')
+        if myCleanedData.get('selected_sensors'):
+            # we use the list unpack operatror to make a reverse zip
+            mySatellites, myInstTypes = zip(
+                *[[
+                    int(b) for b in a.split('|')
+                ] for a in myCleanedData.get('selected_sensors').split(',')])
+            self.cleaned_data['satellite'] = mySatellites
+            self.cleaned_data['instrumenttype'] = myInstTypes
 
+        # check free_imagery
+        if myCleanedData.get('free_imagery'):
+            # HARD CODED value
+            self.cleaned_data['license_type'] = [2]
+        # check panchromatic_imagery
+        if myCleanedData.get('panchromatic_imagery'):
+            self.cleaned_data['spectral_group'] = [2]
+
+        logger.debug('cleaned data: ' + str(self.cleaned_data))
         return self.cleaned_data

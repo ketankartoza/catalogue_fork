@@ -20,7 +20,6 @@ __copyright__ = 'South African National Space Agency'
 from django.test import TestCase
 from offline_messages.models import OfflineMessage
 
-from catalogue.tests.test_utils import simpleMessage
 from catalogue.models import AllUsersMessage
 
 

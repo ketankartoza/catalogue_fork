@@ -95,7 +95,8 @@ class ShoppingCart_showCartContents_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'cartContentsPage.html', u'base.html', u'menu.html',
+            'cartContentsPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'cartContents.html',
             u'recordHeader.html', u'record.html'
         ]

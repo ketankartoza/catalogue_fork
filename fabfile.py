@@ -12,7 +12,8 @@ from fabric.colors import red, magenta, yellow, cyan
 from fabric.contrib.files import contains, exists, append, sed
 from fabric.context_managers import quiet
 import fabtools
-from fabgis import postgres, common, umn_mapserver, virtualenv, git
+from fabgis import postgres, common, virtualenv, git
+    #umn_mapserver
 # Don't remove even though its unused
 #noinspection PyUnresolvedReferences
 from fabtools.vagrant import vagrant
@@ -72,8 +73,8 @@ def rsync_vagrant_to_code_dir():
     """Rsync from vagrant mount to code dir."""
     _all()
     with cd('/home/web/'):
-        run('rsync -va /vagrant/ %s/ --exclude \'venv\' '
-            '--exclude \'*.pyc\' --exclude \'.git\'' % PROJECT_NAME)
+        sudo('rsync -va /vagrant/ %s/ --exclude \'venv\' '
+                '--exclude \'*.pyc\' --exclude \'.git\'' % PROJECT_NAME)
     collect_static()
 
 
@@ -357,13 +358,64 @@ def deploy(branch='master'):
         fastprint(red(
             'Apache is not running - you may need to log in to '
             'start it manually.\n'))
-    fastprint(cyan('TODO: Set the allowed hosts in '
-                   'django_project/core/settings/prod.py to have the ip '
-                   'address and the host name for this server. Also replace '
-                   'vagrant user / password in '
-                   'django_project/core/settings/project.py with '
-                   'catalogue/catalogue.'))
+    fastprint(cyan(
+        'TODO: Set the allowed hosts in '
+        'django_project/core/settings/prod.py to have the ip '
+        'address and the host name for this server. Also replace '
+        'vagrant user / password in '
+        'django_project/core/settings/project.py with '
+        'catalogue/catalogue.'))
+    fastprint(magenta(
+        'TODO: set the following permissions on the db:\n'
+        'GRANT ALL ON SCHEMA public TO catalogue;\n'
+        'GRANT ALL ON ALL TABLES IN SCHEMA public TO catalogue;\n'
+        'GRANT ALL ON ALL TABLES IN SCHEMA public TO catalogue;\n'))
+    fastprint(magenta(
+        'TODO: install nodeenv, npm and yuglify then collect static \n'
+        'Ideally install something like:\n'
+        'source venv/bin/activate\n'
+        'pip install nodeenv\n'
+        'nodeenv venv --node=0.8.15\n'
+        'env/bin/npm -g install yuglify\n'
+        '\n'
+        'But that didnt work well so I did:\n'
+        'sudo apt-get install node\n'
+        'sudo apt-get install npm\n'
+        'sudo npm -g install yuglify\n'
+        'python manage.py collectstatic --settings=core.settings.prod\n'
+    ))
 
+
+@task
+def server_to_debug_mode():
+    """Put the server in debug mode (normally not recommended)."""
+    _all()
+    fastprint(cyan('Putting server into debug mode.\n'))
+    config_file = os.path.join(
+        env.code_path, 'django_project', 'core', 'settings', 'project.py')
+    sed(
+        config_file,
+        'DEBUG = TEMPLATE_DEBUG = False',
+        'DEBUG = TEMPLATE_DEBUG = True')
+    with cd(os.path.join(env.code_path, 'django_project')):
+        run('touch core/wsgi.py')
+    fastprint(red('Warning: your server is now in DEBUG mode!\n'))
+
+
+@task
+def server_to_production_mode():
+    """Put the server in production mode (recommended)."""
+    _all()
+    fastprint(cyan('Putting server into PRODUCTION mode.\n'))
+    config_file = os.path.join(
+        env.code_path, 'django_project', 'core', 'settings', 'project.py')
+    sed(
+        config_file,
+        'DEBUG = TEMPLATE_DEBUG = True',
+        'DEBUG = TEMPLATE_DEBUG = False')
+    with cd(os.path.join(env.code_path, 'catalogue')):
+        run('touch core/wsgi.py')
+    fastprint(magenta('Note: your server is now in PRODUCTION mode!'))
 
 @task
 def show_environment():

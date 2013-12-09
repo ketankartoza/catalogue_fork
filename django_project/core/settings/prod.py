@@ -1,7 +1,6 @@
 from .project import *
 
-SENTRY_DSN = ('http://c9b3062853e34c2b857122d75d4ec663:'
-              'ff3010968b4e47c0a84166da3c1842ae@sentry.linfiniti.com/3')
+SENTRY_DSN = ('http://a63c799050b94d72aae177153df32f46:998d4e6fe9a643a5bf270d8c65831216@sentry.linfiniti.com/9')
 
 MIDDLEWARE_CLASSES = (
     'raven.contrib.django.middleware.SentryResponseErrorIdMiddleware',
@@ -80,4 +79,20 @@ LOGGING = {
 # django 1.5 ALLOWED_HOSTS - protects against host-poisoning attacks
 # change to the real service name
 # https://docs.djangoproject.com/en/1.5/ref/settings/#std:setting-ALLOWED_HOSTS
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['41.74.158.4', 'test.catalogue.sansa.org.za']
+ALLOWED_HOSTS = ['*']
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'sac_dev_dodobas',
+        'USER': 'dodobas',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '5432',
+        'TEST_NAME': 'sac_dev_unittest_master',
+    }
+}
+
+PIPELINE_YUGLIFY_BINARY = ABS_PATH('node_modules', 'yuglify', 'bin', 'yuglify')
+

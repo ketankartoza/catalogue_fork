@@ -4,12 +4,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'catalogue',
-        'USER': 'vagrant',
-        'PASSWORD': 'vagrant',
+        'USER': 'catalogue',
+        'PASSWORD': 'catalogue',
         'HOST': 'localhost',
         'PORT': '5432',
         'TEST_NAME': 'sac_unittest_master',
-    }
+    },
 }
 
 LOGGING = {
@@ -49,3 +49,5 @@ except ImportError:
 # unknown
 #GEOS_LIBRARY_PATH = '/usr/lib/libgeos_c.so.1'
 #GDAL_LIBRARY_PATH = '/usr/lib/libgdal1.7.0.so.1'
+
+PIPELINE_YUGLIFY_BINARY = ABS_PATH('node_modules', 'yuglify', 'bin', 'yuglify')

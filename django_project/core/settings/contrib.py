@@ -10,12 +10,15 @@ INSTALLED_APPS += (
     'guardian',
     'easy_thumbnails',
     'crispy_forms',
-    'webodt'
+    'webodt',
+    'tastypie',
+    'backbone_tastypie',
+    'pipeline'
 )
 
 # Added by George for webodt
-WEBODT_CONVERTER = 'webodt.converters.openoffice.OpenOfficeODFConverter'
-WEBODT_TEMPLATE_PATH = '/home/web/catalogue/django_project/reports/report-templates/'
+WEBODT_CONVERTER = 'webodt.converters.abiword.AbiwordODFConverter'
+WEBODT_TEMPLATE_PATH = ABS_PATH('reports', 'report-templates')
 WEBODT_ODF_TEMPLATE_PREPROCESSORS = [
     'webodt.preprocessors.xmlfor_preprocessor',
     'webodt.preprocessors.unescape_templatetags_preprocessor',
@@ -53,3 +56,12 @@ USERENA_MUGSHOT_GRAVATAR = False
 USERENA_DEFAULT_PRIVACY = 'closed'
 USERENA_DISABLE_PROFILE_LIST = True
 USERENA_USE_MESSAGES = False
+
+# use underscore template function
+PIPELINE_TEMPLATE_FUNC = '_.template'
+
+# enable cached storage - requires uglify.js (node.js)
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+# we use some of the libraries which use global namespace (OL, Proj4JS, ...)
+PIPELINE_DISABLE_WRAPPER = True

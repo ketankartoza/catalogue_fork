@@ -13,6 +13,7 @@ admin.autodiscover()
    #  "template_object_name" : "myOrders",
 #    }
 
+from api import v1_API
 
 # Here are our patterns
 urlpatterns = patterns('',
@@ -32,6 +33,7 @@ urlpatterns = patterns('',
     url(r'^$', index, name='index'),
     url(r'^video/$', video, name='video'),
     url(r'^about/$', about, name='about'),
+    url(r'^searchformhelp/$', searchFormHelp, name='searchformhelp'),
     url(r'^contact/$', contact, name='contact'),
     url(r'^deletesearch/(?P<theId>[0-9]+)/$', deleteSearch, name='deleteSearch'),
     url(r'^kml/$', visitorsKml, name='visitorsKml'),
@@ -40,7 +42,7 @@ urlpatterns = patterns('',
     url(r'^sceneidhelp/$', sceneIdHelp, name='sceneIdHelp'),
 
     # match a product id - its not needed to give teh full id, just enough to be semi unique
-    url(r'^showProduct/(?P<theProductId>[A-Za-z0-9\_\-]{38,58})/$', showProduct, name='showProduct'),
+    url(r'^showProduct/(?P<theProductId>[A-Za-z0-9]+)/$', showProduct, name='showProduct'),
     url(r'^clip/$', clip),
     # is this used?
     url(r'^myclips/$', clipHistory),
@@ -111,4 +113,7 @@ urlpatterns = patterns('',
     url(r'', include('pycsw_integration.urls')),
     # new reports app
     url(r'', include('reports.urls')),
+
+    # api urls
+    url(r'^api/', include(v1_API.urls)),
 )

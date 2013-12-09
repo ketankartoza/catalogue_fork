@@ -64,7 +64,7 @@ STATICFILES_DIRS = (
     # Put strings here, like '/home/html/static' or 'C:/www/django/static'.
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    ABS_PATH('project_static_files'),
+    ABS_PATH('core', 'base_static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -85,11 +85,12 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 )
 
 ROOT_URLCONF = 'core.urls'
@@ -107,7 +108,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
+    'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.gis',
 )

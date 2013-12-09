@@ -37,7 +37,7 @@ class OthersViews_emptyCartHelp(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -52,7 +52,10 @@ class OthersViews_emptyCartHelp(TestCase):
         myResp = myClient.get(reverse('emptyCartHelp', kwargs={}))
         self.assertEqual(myResp.status_code, 200)
         # check used templates
-        myExpTemplates = ['emptyCartHelp.html', u'base.html', u'menu.html']
+        myExpTemplates = [
+            'emptyCartHelp.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

@@ -28,12 +28,12 @@ from django.test.client import Client
 
 from core.model_factories import UserF
 from dictionaries.tests.model_factories import (
-    ProcessingLevelF, SatelliteInstrumentF, InstrumentTypeF, SpectralModeF,
-    OpticalProductProfileF, SatelliteF, SatelliteInstrumentGroupF
+    SatelliteInstrumentF, InstrumentTypeF, SpectralModeF,
+    OpticalProductProfileF, SatelliteF, SatelliteInstrumentGroupF,
+    ProcessingLevelF
 )
 from .model_factories import (
-    OpticalProductF, InstitutionF, ProjectionF, QualityF, LicenseF,
-    CreatingSoftwareF
+    OpticalProductF, ProjectionF, QualityF, LicenseF
 )
 
 
@@ -55,7 +55,7 @@ class OthersViews_metadata(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -77,19 +77,9 @@ class OthersViews_metadata(TestCase):
         """
         Test view if user is not logged in
         """
-        myInstitution = InstitutionF.create(**{
-            u'address1': u'Hartebeeshoek', u'address2': u'Gauteng',
-            u'address3': u'South Africa', u'name': u'SANSA',
-            u'post_code': u'0000'
-        })
 
         myProjection = ProjectionF.create(**{
             u'name': u'UTM37S', u'epsg_code': 32737
-        })
-
-        myProcessingLevel = ProcessingLevelF.create(**{
-            u'abbreviation': u'L1A',
-            u'name': 'L1A Proc level'
         })
 
         myLicense = LicenseF.create(**{
@@ -99,8 +89,18 @@ class OthersViews_metadata(TestCase):
             'license_type': myLicense
         })
 
+        myProcLevel = ProcessingLevelF.create(**{
+            'abbreviation': 'L1A'
+        })
+
+        myInstType = InstrumentTypeF.create(**{
+            'name': 'INSTYPE1',
+            'base_processing_level': myProcLevel
+        })
+
         mySatInsGroup = SatelliteInstrumentGroupF.create(**{
-            'satellite': mySatellite
+            'satellite': mySatellite,
+            'instrument_type': myInstType
         })
 
         mySatInst = SatelliteInstrumentF.create(**{
@@ -108,13 +108,8 @@ class OthersViews_metadata(TestCase):
             'satellite_instrument_group': mySatInsGroup
         })
 
-        myInstType = InstrumentTypeF.create(**{
-            'name': 'INSTYPE1'
-        })
-
         mySpecMode = SpectralModeF.create(**{
-            'name': 'Temp Spectral mode',
-            'instrument_type': myInstType
+            'name': 'Temp Spectral mode'
         })
 
         myOPP = OpticalProductProfileF.create(**{
@@ -122,21 +117,14 @@ class OthersViews_metadata(TestCase):
         })
 
         myQuality = QualityF.create(**{'name': 'SuperQuality'})
-        myCreatingSoftware = CreatingSoftwareF.create(**{
-            'name': 'FreeSoftware'
-        })
 
         OpticalProductF.create(**{
             'id': 1,
             'unique_product_id': '123 Product ID 123',
             'original_product_id': '123 Product ID 123',
-            'creating_software': myCreatingSoftware,
-            'owner': myInstitution,
             'projection': myProjection,
-            'processing_level': myProcessingLevel,
             'product_profile': myOPP,
             'quality': myQuality,
-            'license': myLicense,
             'product_acquisition_start': datetime(2012, 12, 12, 12, 00),
             'product_acquisition_end': datetime(2012, 12, 12, 14, 00),
             'solar_azimuth_angle': 0.0,
@@ -178,19 +166,8 @@ class OthersViews_metadata(TestCase):
         Test view if user is logged as user
         """
 
-        myInstitution = InstitutionF.create(**{
-            u'address1': u'Hartebeeshoek', u'address2': u'Gauteng',
-            u'address3': u'South Africa', u'name': u'SANSA',
-            u'post_code': u'0000'
-        })
-
         myProjection = ProjectionF.create(**{
             u'name': u'UTM37S', u'epsg_code': 32737
-        })
-
-        myProcessingLevel = ProcessingLevelF.create(**{
-            u'abbreviation': u'L1A',
-            u'name': 'L1A Proc level'
         })
 
         myLicense = LicenseF.create(**{
@@ -200,8 +177,18 @@ class OthersViews_metadata(TestCase):
             'license_type': myLicense
         })
 
+        myProcLevel = ProcessingLevelF.create(**{
+            'abbreviation': 'L1A'
+        })
+
+        myInstType = InstrumentTypeF.create(**{
+            'name': 'INSTYPE1',
+            'base_processing_level': myProcLevel
+        })
+
         mySatInsGroup = SatelliteInstrumentGroupF.create(**{
-            'satellite': mySatellite
+            'satellite': mySatellite,
+            'instrument_type': myInstType
         })
 
         mySatInst = SatelliteInstrumentF.create(**{
@@ -209,13 +196,8 @@ class OthersViews_metadata(TestCase):
             'satellite_instrument_group': mySatInsGroup
         })
 
-        myInstType = InstrumentTypeF.create(**{
-            'name': 'INSTYPE1'
-        })
-
         mySpecMode = SpectralModeF.create(**{
-            'name': 'Temp Spectral mode',
-            'instrument_type': myInstType
+            'name': 'Temp Spectral mode'
         })
 
         myOPP = OpticalProductProfileF.create(**{
@@ -223,21 +205,14 @@ class OthersViews_metadata(TestCase):
         })
 
         myQuality = QualityF.create(**{'name': 'SuperQuality'})
-        myCreatingSoftware = CreatingSoftwareF.create(**{
-            'name': 'FreeSoftware'
-        })
 
         OpticalProductF.create(**{
             'id': 1,
             'unique_product_id': '123 Product ID 123',
             'original_product_id': '123 Product ID 123',
-            'creating_software': myCreatingSoftware,
-            'owner': myInstitution,
             'projection': myProjection,
-            'processing_level': myProcessingLevel,
             'product_profile': myOPP,
             'quality': myQuality,
-            'license': myLicense,
             'product_acquisition_start': datetime(2012, 12, 12, 12, 00),
             'product_acquisition_end': datetime(2012, 12, 12, 14, 00),
             'solar_azimuth_angle': 0.0,

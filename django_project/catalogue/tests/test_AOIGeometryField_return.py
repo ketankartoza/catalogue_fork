@@ -21,7 +21,6 @@ __copyright__ = 'South African National Space Agency'
 from django.test import TestCase
 from django import forms
 
-from catalogue.tests.test_utils import simpleMessage
 from catalogue.aoigeometry import AOIGeometryField
 
 
@@ -56,7 +55,7 @@ class TestAOIGeometryField(TestCase):
             myForm = AOIGeometryFieldForm(myTestVal)
             myRes = myForm.is_valid()
             myExpRes = True
-            self.assertEqual(myRes, myExpRes, simpleMessage(myRes, myExpRes))
+            self.assertEqual(myRes, myExpRes)
 
     def test_formValidation_false(self):
         """
@@ -74,7 +73,7 @@ class TestAOIGeometryField(TestCase):
             myForm = AOIGeometryFieldForm(myTestVal)
             myRes = myForm.is_valid()
             myExpRes = False
-            self.assertEqual(myRes, myExpRes, simpleMessage(myRes, myExpRes))
+            self.assertEqual(myRes, myExpRes)
 
     def test_AOIGeometry_value(self):
         """
@@ -152,5 +151,4 @@ class TestAOIGeometryField(TestCase):
             myForm = AOIGeometryFieldForm(myTestVal)
             myValidForm = myForm.is_valid()  # validate form
             myRes = myForm.cleaned_data.get('aoigeometryField')
-            self.assertEqual(
-                myRes, myExpRes[idx], simpleMessage(myRes, myExpRes[idx]))
+            self.assertEqual(myRes, myExpRes[idx])

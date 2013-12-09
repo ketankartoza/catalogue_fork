@@ -76,7 +76,7 @@ class ShoppingCart_addToCart_Tests(TestCase):
 
         OpticalProductF.create(**{
             'id': 1,
-            'unique_product_id': 'XY1234'
+            'original_product_id': 'XY1234'
         })
 
         myClient = Client()

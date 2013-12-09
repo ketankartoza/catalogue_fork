@@ -1,0 +1,43 @@
+<div id="content-2" class="form-inline accordion-body collapse">
+  <div class="accordion-inner" style="padding-bottom: 10px;">
+    <p class="text-center">Date formats must be: dd/mm/yyyy</p>
+    <span id="daterange_inline" class="help-inline"></span>
+    <div id="date_from_cg" class="span1">
+      <label for="id_start_datepicker">From: </label>
+      <input type="text" id="id_start_datepicker" placeholder="dd/mm/yyyy"
+             class="span1">
+    </div>
+    <div id="date_to_cg" class="span1">
+      <label for="id_end_datepicker">To: </label>
+      <input type="text" id="id_end_datepicker" placeholder="dd/mm/yyyy"
+             class="span1">
+    </div>
+    <div id="date_range">
+      <div class="date-range">
+        <button type="button" class="btn btn-mini btn-info">
+          <i class="icon-angle-down"></i> Add
+        </button>
+      </div>
+      {{ dateformset.management_form }}
+      <hr/>
+      <table class="table table-striped" style="margin-top: 10px;">
+        <thead>
+          <th class="text-center">From Date</th>
+          <th class="text-center">To Date</th>
+          <th class="text-center">Actions</th>
+        </thead>
+        <tbody id="date-range-table">
+          {% for form in dateformset.forms %}
+            <tr class="date_range_row text-center">
+              {{ form.start_date }}
+              {{ form.end_date }}
+              <td class="date_from">{{ form.start_date.value|date:"d/m/Y" }}</td>
+              <td class="date_to">{{ form.end_date.value|date:"d/m/Y" }}</td>
+              <td><a href="#"><i class="del_daterange icon-remove"></i></a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

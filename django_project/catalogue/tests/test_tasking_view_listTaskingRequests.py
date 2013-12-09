@@ -20,7 +20,6 @@ __copyright__ = 'South African National Space Agency'
 from datetime import date
 
 from django.core.urlresolvers import reverse, NoReverseMatch
-from django.template import TemplateDoesNotExist
 from django.test import TestCase
 from django.test.client import Client
 
@@ -43,7 +42,7 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -85,8 +84,11 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'taskingRequestListPage.html', u'base.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'taskingRequestList.html']
+            'taskingRequestListPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'taskingRequestList.html'
+        ]
+
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
@@ -122,8 +124,11 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'taskingRequestListPage.html', u'base.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'taskingRequestList.html']
+            'taskingRequestListPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'taskingRequestList.html'
+        ]
+
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
@@ -152,9 +157,35 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
         myClient = Client()
         myClient.login(username='timlinux', password='password')
 
-        self.assertRaises(
-            TemplateDoesNotExist, myClient.get,
-            reverse('listTaskingRequests', kwargs={}), {'pdf': ''})
+        # self.assertRaises(
+        #     TemplateDoesNotExist, myClient.get,
+        #     reverse('listTaskingRequests', kwargs={}), {'pdf': ''})
+        myResp = myClient.get(
+            reverse('listTaskingRequests', kwargs={}),
+            {'page': '1', 'pdf': ''})
+
+        self.assertEqual(myResp.status_code, 200)
+        # check response
+        self.assertEqual(myResp.context['myUrl'], '/listtaskingrequests/')
+
+        # check used templates
+        myExpTemplates = [u'<Unknown Template>']
+
+        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
+        self.assertEqual(myUsedTemplates, myExpTemplates)
+
+        #check taskingrequest object
+        myTaskingRequests = myResp.context['myRecords']
+        self.assertEqual(len(myTaskingRequests.object_list), 1)
+
+        myCurrentMonth = myResp.context['myCurrentMonth']
+        self.assertEqual(myCurrentMonth, date.today())
+
+        self.assertEqual(myResp['content-type'], 'application/pdf')
+        self.assertEqual(
+            myResp['content-disposition'],
+            'attachment; filename="taskingRequestListPage.pdf"'
+        )
 
     def test_listTaskingRequests_login_page_param_existant(self):
         """
@@ -181,8 +212,11 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'taskingRequestListPage.html', u'base.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'taskingRequestList.html']
+            'taskingRequestListPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'taskingRequestList.html'
+        ]
+
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
@@ -220,8 +254,11 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'taskingRequestListPage.html', u'base.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'taskingRequestList.html']
+            'taskingRequestListPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'taskingRequestList.html'
+        ]
+
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
@@ -258,8 +295,11 @@ class TaskingViews_listTaskingRequests_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'taskingRequestListPage.html', u'base.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'taskingRequestList.html']
+            'taskingRequestListPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'taskingRequestList.html'
+        ]
+
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 

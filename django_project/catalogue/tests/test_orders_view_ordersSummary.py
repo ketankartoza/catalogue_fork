@@ -26,6 +26,7 @@ from django.test.client import Client
 from core.model_factories import UserF
 from .model_factories import TaskingRequestF
 
+
 class OrdersViews_ordersSummary_Tests(TestCase):
     """
     Tests orders.py ordersSummary method/view
@@ -40,7 +41,7 @@ class OrdersViews_ordersSummary_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -69,7 +70,7 @@ class OrdersViews_ordersSummary_Tests(TestCase):
             'is_staff': True
         })
 
-        TaskingRequestF.create(**{'id':1})
+        TaskingRequestF.create(**{'id': 1})
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
@@ -83,8 +84,10 @@ class OrdersViews_ordersSummary_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'ordersSummary.html', u'base.html', u'menu.html',
-            u'useraccounts/menu_content.html']
+            'ordersSummary.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

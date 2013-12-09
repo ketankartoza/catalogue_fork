@@ -39,7 +39,7 @@ class OthersViews_searchesMap(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -119,8 +119,16 @@ class OthersViews_searchesMap(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'map.html', u'mapbody.html', u'base.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'page.html']
+            u'map.html', u'mapbody.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'page.html', u'base-fluid.html',
+            u'pipeline/css.html', u'pipeline/css.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'search_form/content-1.html',
+            u'search_form/content-2.html', u'search_form/content-3.html',
+            u'search_form/content-4.html', u'search_form/content-5.html',
+            u'pipeline/js.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
+        print myUsedTemplates
         self.assertEqual(myUsedTemplates, myExpTemplates)

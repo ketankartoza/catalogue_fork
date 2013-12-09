@@ -19,6 +19,7 @@ __copyright__ = 'South African National Space Agency'
 
 
 from django.contrib.gis.geoip import GeoIP
+from django.conf import settings
 import re  # regex support
 import urllib2
 
@@ -55,16 +56,18 @@ class GeoIpUtils:
         return remote_ip
 
     def getMyLatLong(self, request):
-        g = GeoIP()
-        remote_ip = self.getMyIp(request)
-        try:
-            remote_location = g.city(remote_ip)
-            if remote_location:
-                logger.info(remote_location)
-                return remote_location
-            else:  # ip cannot be found
-                logger.info('IP could not be looked up :-(')
+        if settings.USE_GEOIP:
+            g = GeoIP()
+            remote_ip = self.getMyIp(request)
+            try:
+                remote_location = g.city(remote_ip)
+                if remote_location:
+                    logger.info(remote_location)
+                    return remote_location
+                else:  # ip cannot be found
+                    logger.info('IP could not be looked up :-(')
+                    return None
+            except Exception:
+                logger.info(traceback.format_exc())
                 return None
-        except Exception, e:
-            logger.info(traceback.format_exc())
-            return None
+        return None

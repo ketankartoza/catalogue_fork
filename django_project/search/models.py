@@ -296,16 +296,16 @@ class Search(BaseSearch):
     # sensor_inclination_angle: range
     sensor_inclination_angle_start = models.FloatField(
         null=True, blank=True,
-        help_text='Select sensor inclination angle start.'
+        help_text='Enter a minimum sensor inclination angle.'
     )
     sensor_inclination_angle_end = models.FloatField(
         null=True, blank=True,
-        help_text='Select sensor inclination angle end.'
+        help_text='Enter a maximum sensor inclination angle.'
     )
     spectral_group = models.ManyToManyField(
         'dictionaries.SpectralGroup',
         null=True, blank=True,
-        help_text='Select one or more sepectral groups.'
+        help_text='Select one or more spectral groups.'
     )
     processing_level = models.ManyToManyField(
         'dictionaries.ProcessingLevel', null=True, blank=True,

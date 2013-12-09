@@ -59,7 +59,7 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -111,17 +111,12 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
             myResp.context['myTaskingDeliveryDetailsForm'].__class__,
             TaskingRequestDeliveryDetailForm)
 
-        self.assertEqual(myResp.context['myLayersList'], (
-            '[zaSpot10mMosaic2010,zaSpot10mMosaic2009,zaSpot10mMosaic2008,'
-            'zaSpot10mMosaic2007,zaRoadsBoundaries]')
-        )
-        # check number of elements in a list
-        self.assertEqual(len(myResp.context['myLayerDefinitions']), 5)
-
         # check used templates
         myExpTemplates = [
-            'addPage.html', u'basev3.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'add.html']
+            'addPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'add.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -186,9 +181,10 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
         myPostData = {
             u'geometry_file': [u''], u'projection': [u'3'],
             u'geometry': [(
-            u'SRID=4326;POLYGON((22.807620312583 -32.186801708128,24.345706250'
-            '021 -31.776776743422,23.906253125039 -32.261154538247,22.80762031'
-            '2583 -32.186801708128))')],
+                u'SRID=4326;POLYGON((22.807620312583 -32.186801708128,24.34570'
+                '6250021 -31.776776743422,23.906253125039 -32.261154538247,22.'
+                '807620312583 -32.186801708128))'
+            )],
             u'target_date': [u'01-10-2012'], u'notes': [u''], u'ref_id': [u''],
             u'resampling_method': [u'2'],
             u'baseLayers': [u'2m Mosaic 2010 TC'],
@@ -257,17 +253,12 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
             myResp.context['myTaskingDeliveryDetailsForm'].__class__,
             TaskingRequestDeliveryDetailForm)
 
-        self.assertEqual(myResp.context['myLayersList'], (
-            '[zaSpot10mMosaic2010,zaSpot10mMosaic2009,zaSpot10mMosaic2008,'
-            'zaSpot10mMosaic2007,zaRoadsBoundaries]')
-        )
-        # check number of elements in a list
-        self.assertEqual(len(myResp.context['myLayerDefinitions']), 5)
-
         # check used templates
         myExpTemplates = [
-            'addPage.html', u'basev3.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'add.html']
+            'addPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'add.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -397,17 +388,12 @@ class TaskingViews_addTaskingRequest_Tests(TestCase):
             myResp.context['myTaskingDeliveryDetailsForm'].__class__,
             TaskingRequestDeliveryDetailForm)
 
-        self.assertEqual(myResp.context['myLayersList'], (
-            '[zaSpot10mMosaic2010,zaSpot10mMosaic2009,zaSpot10mMosaic2008,'
-            'zaSpot10mMosaic2007,zaRoadsBoundaries]')
-        )
-        # check number of elements in a list
-        self.assertEqual(len(myResp.context['myLayerDefinitions']), 5)
-
         # check used templates
         myExpTemplates = [
-            'addPage.html', u'basev3.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'add.html']
+            'addPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'add.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

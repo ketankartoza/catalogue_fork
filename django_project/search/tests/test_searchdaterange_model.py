@@ -19,7 +19,6 @@ __copyright__ = 'South African National Space Agency'
 
 from datetime import date, datetime
 from django.test import TestCase
-from catalogue.tests.test_utils import simpleMessage
 
 from .model_factories import SearchDateRangeF, SearchF
 from ..models import SearchDateRange
@@ -42,12 +41,7 @@ class SearchDateRangeCRUD_Test(TestCase):
         """
         myModel = SearchDateRangeF.create()
         #check if PK exists
-        self.assertTrue(
-            myModel.pk is not None,
-            simpleMessage(
-                myModel.pk, 'not None',
-                message='Model PK should NOT equal None')
-        )
+        self.assertTrue(myModel.pk is not None)
 
     def test_SearchDateRange_read(self):
         """
@@ -60,12 +54,7 @@ class SearchDateRangeCRUD_Test(TestCase):
         myModel = SearchDateRangeF.create()
         #check if data is correct
         for key, val in myExpectedModelData.items():
-            self.assertEqual(
-                myModel.__dict__.get(key), val,
-                simpleMessage(
-                    myModel.__dict__.get(key), val,
-                    message='For key "%s"' % key)
-            )
+            self.assertEqual(myModel.__dict__.get(key), val)
 
     def test_SearchDateRange_update(self):
         """
@@ -82,12 +71,7 @@ class SearchDateRangeCRUD_Test(TestCase):
 
         #check if updated
         for key, val in myNewModelData.items():
-            self.assertEqual(
-                myModel.__dict__.get(key), val,
-                simpleMessage(
-                    myModel.__dict__.get(key), val,
-                    message='For key "%s"' % key)
-            )
+            self.assertEqual(myModel.__dict__.get(key), val)
 
     def test_SearchDateRange_delete(self):
         """
@@ -98,12 +82,7 @@ class SearchDateRangeCRUD_Test(TestCase):
         myModel.delete()
 
         #check if deleted
-        self.assertTrue(
-            myModel.pk is None,
-            simpleMessage(
-                myModel.pk, None,
-                message='Model PK should equal None')
-        )
+        self.assertTrue(myModel.pk is None)
 
     def test_SearchDateRange_local_format(self):
         """
@@ -114,10 +93,7 @@ class SearchDateRangeCRUD_Test(TestCase):
         myExpResult = '15-07-2010 : 15-07-2012'
 
         myRes = myModel.local_format()
-        self.assertEqual(
-            myRes, myExpResult,
-            simpleMessage(myRes, myExpResult)
-        )
+        self.assertEqual(myRes, myExpResult)
 
     def test_SearchDateRange_from_local_format(self):
         """
@@ -131,12 +107,7 @@ class SearchDateRangeCRUD_Test(TestCase):
 
         for idx, myDate in enumerate(myDates):
             myRes = SearchDateRange.from_local_format(myDate)
-            self.assertEqual(
-                myRes, myExpResults[idx],
-                simpleMessage(
-                    myRes, myExpResults[idx],
-                    message='SearchDateRange from_local_format:')
-            )
+            self.assertEqual(myRes, myExpResults[idx])
 
     def test_SearchDateRange_model_repr(self):
         """

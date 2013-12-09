@@ -111,8 +111,10 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'orderMonthlyReport.html', u'base.html', u'menu.html',
-            u'useraccounts/menu_content.html']
+            'orderMonthlyReport.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -161,8 +163,10 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'orderMonthlyReport.html', u'base.html', u'menu.html',
-            u'useraccounts/menu_content.html']
+            'orderMonthlyReport.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -211,7 +215,7 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
             myTestDate + timedelta(days=31))
 
         # check used templates
-        myExpTemplates = ['pdf/orderMonthlyReport.html', u'pdfpage.html']
+        myExpTemplates = [u'<Unknown Template>']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

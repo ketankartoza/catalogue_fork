@@ -38,7 +38,7 @@ class OthersViews_about(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -53,7 +53,10 @@ class OthersViews_about(TestCase):
         myResp = myClient.get(reverse('about', kwargs={}))
         self.assertEqual(myResp.status_code, 200)
         # check used templates
-        myExpTemplates = ['about.html', u'base.html', u'menu.html']
+        myExpTemplates = [
+            'about.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

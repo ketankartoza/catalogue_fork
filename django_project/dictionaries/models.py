@@ -116,6 +116,15 @@ class OpticalProductProfile(models.Model):
             .instrument_type.band_count
         )
 
+    def owner(self):
+        """
+        Returns owner institution for this product
+        """
+        return (
+            self.satellite_instrument.satellite_instrument_group.satellite
+            .collection.institution
+        )
+
 
 class RadarProductProfile(models.Model):
     """

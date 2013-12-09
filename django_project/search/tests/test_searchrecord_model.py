@@ -18,7 +18,6 @@ __date__ = '17/07/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
-from catalogue.tests.test_utils import simpleMessage
 
 from core.model_factories import UserF
 from catalogue.tests.model_factories import OrderF, GenericProductF
@@ -43,12 +42,7 @@ class SearchRecordCRUD_Test(TestCase):
         """
         myModel = SearchRecordF.create()
         #check if PK exists
-        self.assertTrue(
-            myModel.pk is not None,
-            simpleMessage(
-                myModel.pk, 'not None',
-                message='Model PK should NOT equal None')
-        )
+        self.assertTrue(myModel.pk is not None)
 
     def test_SearchRecord_read(self):
         """
@@ -80,12 +74,7 @@ class SearchRecordCRUD_Test(TestCase):
 
         #check if updated
         for key, val in myNewModelData.items():
-            self.assertEqual(
-                myModel.__dict__.get(key), val,
-                simpleMessage(
-                    myModel.__dict__.get(key), val,
-                    message='For key "%s"' % key)
-            )
+            self.assertEqual(myModel.__dict__.get(key), val)
 
     def test_SearchRecord_delete(self):
         """
@@ -96,12 +85,7 @@ class SearchRecordCRUD_Test(TestCase):
         myModel.delete()
 
         #check if deleted
-        self.assertTrue(
-            myModel.pk is None,
-            simpleMessage(
-                myModel.pk, None,
-                message='Model PK should equal None')
-        )
+        self.assertTrue(myModel.pk is None)
 
     def test_SearchRecord_kmlExtents(self):
         """
@@ -114,16 +98,13 @@ class SearchRecordCRUD_Test(TestCase):
 
         myModel = SearchRecordF.create()
         myRes = myModel.kmlExtents()
-        self.assertEqual(
-            myRes, myExpResult,
-            simpleMessage(myRes, myExpResult)
-        )
+        self.assertEqual(myRes, myExpResult)
 
     def test_SearchRecord_repr(self):
         """
         Tests SearchRecord model repr method
         """
-        myProduct = GenericProductF.create(unique_product_id='123qwe')
+        myProduct = GenericProductF.create(original_product_id='123qwe')
         myModel = SearchRecordF.create(product=myProduct)
 
         myExpResult = '123qwe'
@@ -133,7 +114,7 @@ class SearchRecordCRUD_Test(TestCase):
         """
         Tests SearchRecord model repr method
         """
-        myProduct = GenericProductF.create(unique_product_id='123qwe')
+        myProduct = GenericProductF.create(original_product_id='123qwe')
         myUser = UserF.create(username='testuser')
         myModel = SearchRecordF.create()
 

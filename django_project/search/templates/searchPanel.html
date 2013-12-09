@@ -1,5 +1,4 @@
 {# included in search.html or pulled in by ajax #}
-{% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
 {% load crispy_forms_tags %}
 
   {% if myForm %}
@@ -29,7 +28,7 @@
               </div>
             </div>
           {% endfor %}
-        </div> 
+        </div>
         <div class="span5">
           {% for field in myForm.visible_fields %}
           {% if forloop.counter >= 10 %}
@@ -45,7 +44,7 @@
             </div>
           {% endif %}
           {% endfor %}
-        </div>        
+        </div>
       </form>
       {% endcomment %}
       {% crispy myForm %}
@@ -64,7 +63,8 @@
   });
 
   $('#id_start_datepicker, #id_end_datepicker').datepicker({
-    'autoclose':true
+    'autoclose':true,
+    'viewMode': 2
   });
 
   {% if myAdvancedFlag %}

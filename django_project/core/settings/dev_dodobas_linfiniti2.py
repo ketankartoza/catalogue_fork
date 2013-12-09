@@ -3,7 +3,7 @@ from .dev import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'sac_dev_dodobas',
+        'NAME': 'sac_november',
         'USER': 'dodobas',
         'PASSWORD': '',
         'HOST': '',
@@ -53,7 +53,7 @@ LOGGING = {
             'level': 'INFO',  # switch to DEBUG to show actual SQL
         },
         'search': {
-            'level': 'ERROR',
+            'level': 'DEBUG',
             'handlers': ['logfile'],
             # propagate is True by default, which proppagates logs upstream
             'propagate': False
@@ -123,3 +123,8 @@ DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda *args, **kwargs: False,
     'ENABLE_STACKTRACES': True
 }
+
+# show full Django debug report on TastyPie error
+TASTYPIE_FULL_DEBUG = True
+
+USE_GEOIP = False

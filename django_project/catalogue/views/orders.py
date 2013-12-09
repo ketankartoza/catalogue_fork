@@ -362,7 +362,7 @@ def coverageForOrder(theOrder, theSearchRecords):
                                          SpatialReference(myZone[0]))
             myUnion.transform(myTransform)
             logger.debug('After geom xform: %s' % myUnion)
-            myCoverage['ProductArea'] = myUnion.area
+            myCoverage['ProductArea'] = int(myUnion.area)
             myCoverage['CentroidZone'] = (
                 '%s (EPSG:%s)' % (myZone[1], myZone[0]))
         else:
@@ -376,7 +376,7 @@ def coverageForOrder(theOrder, theSearchRecords):
             else:
                 myClip = myUnion.intersection(
                     theOrder.delivery_detail.geometry)
-            myCoverage['IntersectedArea'] = myClip.area
+            myCoverage['IntersectedArea'] = int(myClip.area)
             myCentroid = myClip.centroid
             # Calculate the zone independently as centroid may differ
             # from product union
@@ -392,7 +392,7 @@ def coverageForOrder(theOrder, theSearchRecords):
                                              SpatialReference(myZone[0]))
                 myClip.transform(myTransform)
                 #logger.debug('Utm zones: %s' % myZone)
-                myCoverage['IntersectedArea'] = myClip.area
+                myCoverage['IntersectedArea'] = int(myClip.area)
                 myCoverage['ClipZone'] = '%s (EPSG:%s)' % (
                     myZone[1], myZone[0])
         else:
@@ -492,28 +492,6 @@ def addOrder(theRequest):
     myTitle = 'Create a new order'
     logger.info('Preparing order for user ' + str(theRequest.user))
     myRecords = None
-    (myLayersList,
-     myLayerDefinitions, myActiveBaseMap) = standardLayers(theRequest)
-    myCartLayer = (
-        'var myCartLayer = new OpenLayers.Layer.WMS("Cart", "http://'
-        + settings.WMS_SERVER +
-        '/cgi-bin/mapserv?map='
-        + settings.CART_LAYER +
-        '&user='
-        + str(theRequest.user.username) + '"' + ''',
-            {
-               version: '1.1.1',
-               layers: 'Cart',
-               srs: 'EPSG:4326',
-               format: 'image/png',
-               transparent: 'true'
-             },
-             {isBaseLayer: false, singleTile:true});
-             ''')
-
-    # UGLY hack for adding Cart layer
-    myLayersList = myLayersList[:-1] + ', myCartLayer ]'
-    myLayerDefinitions.append(myCartLayer)
 
     if str(theRequest.user) == 'AnonymousUser':
         logger.debug('User is anonymous')
@@ -543,6 +521,7 @@ def addOrder(theRequest):
         # myShowPreviewFlag
         # myShowDeliveryDetailsFlag
         # myShowDeliveryDetailsFormFlag
+        'myShowMapFlag': True,
         'myShowSensorFlag': False,
         'myShowSceneIdFlag': True,
         'myShowDateFlag': False,
@@ -571,9 +550,6 @@ def addOrder(theRequest):
                       ' to a specific geographic region, you can digitise'
                       ' that region using the map above, or the geometry'
                       ' input field below.</div>'),
-        'myLayerDefinitions': myLayerDefinitions,
-        'myLayersList': myLayersList,
-        'myActiveBaseMap': myActiveBaseMap
     }
     logger.info('Add Order called')
     if theRequest.method == 'POST':
@@ -667,7 +643,7 @@ def addOrder(theRequest):
             'myOrderForm': myOrderForm,
             'myDeliveryDetailForm': myDeliveryDetailForm,
             'myTitle': myTitle,
-            'mySubmitLabel': 'Submit Order',
+            'mySubmitLabel': 'Submit Order'
         }
         # shortcut to join two dicts
         myOptions.update(myExtraOptions),

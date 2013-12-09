@@ -1,5 +1,4 @@
 {# included in search.html or pulled in by ajax #}
-{% load url from future %} {# https://docs.djangoproject.com/en/1.4/releases/1.3/#changes-to-url-and-ssi #}
 {% load crispy_forms_tags %}
 {% crispy myForm %}
 
@@ -207,7 +206,8 @@
 
     $('#dr_container').sansa_daterangecontainer();
     $('#id_start_datepicker, #id_end_datepicker').datepicker({
-      'autoclose':true
+      'autoclose':true,
+      'viewMode': 2
     });
 
     //$("#id_instrumenttype, #id_satellite, #id_spectral_mode").bind('change', function (){

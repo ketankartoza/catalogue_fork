@@ -28,7 +28,9 @@ NOSE_ARGS = [
     'dictionaries',
     'useraccounts',
     'search',
-    'reports'
+    'reports',
+    '--nocapture',
+    '--nologcapture'
 ]
 
 #
@@ -60,3 +62,9 @@ JENKINS_TASKS = (
 # this feature is currently in git master
 # commit 2f241bb6b7a111172f1e5bd26a1d21815f83d1e7
 JENKINS_TEST_RUNNER = 'django_jenkins.nose_runner.CINoseTestSuiteRunner'
+
+# semi-hardcoded YUGLIFY path, for jenkins
+PIPELINE_YUGLIFY_BINARY = (
+    ABS_PATH('..', 'venv', 'bin', 'node') + ' ' +
+    ABS_PATH('..', 'node_modules', 'yuglify', 'bin', 'yuglify')
+)

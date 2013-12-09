@@ -99,7 +99,8 @@ class ReportsViews_visitorList_Tests(TestCase):
         self.assertEqual(len(myResp.context['myRecords'].object_list), 1)
         # check used templates
         myExpTemplates = [
-            'visitors.html', u'base.html', u'menu.html',
+            'visitors.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 
@@ -126,14 +127,16 @@ class ReportsViews_visitorList_Tests(TestCase):
         self.assertEqual(
             len(myResp.context['myRecords'].object_list), 1)
         # check used templates
-        myExpTemplates = ['pdf/visitors.html', u'pdfpage.html']
+        myExpTemplates = [u'<Unknown Template>']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
         self.assertEqual(myResp['content-type'], 'application/pdf')
         self.assertEqual(
-            myResp['content-disposition'], 'attachment; filename=report.pdf')
+            myResp['content-disposition'],
+            'attachment; filename="visitors.pdf"'
+        )
 
     def test_myReports_stafflogin_invalidpage(self):
         """
@@ -159,7 +162,8 @@ class ReportsViews_visitorList_Tests(TestCase):
             len(myResp.context['myRecords'].object_list), 1)
         # check used templates
         myExpTemplates = [
-            'visitors.html', u'base.html', u'menu.html',
+            'visitors.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 
@@ -190,7 +194,8 @@ class ReportsViews_visitorList_Tests(TestCase):
             len(myResp.context['myRecords'].object_list), 1)
         # check used templates
         myExpTemplates = [
-            'visitors.html', u'base.html', u'menu.html',
+            'visitors.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
 

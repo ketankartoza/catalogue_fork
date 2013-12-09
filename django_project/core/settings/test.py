@@ -45,3 +45,10 @@ LOGGING = {
         },
     }
 }
+
+# force abiword PDF converter for tests
+WEBODT_CONVERTER = 'webodt.converters.abiword.AbiwordODFConverter'
+
+# don't use GEOIP for tests
+USE_GEOIP = False
+

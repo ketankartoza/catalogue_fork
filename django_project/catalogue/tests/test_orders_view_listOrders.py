@@ -42,7 +42,7 @@ class OrdersViews_listOrders_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -71,7 +71,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             'is_staff': True
         })
 
-        OrderF.create(**{'user':myUser})
+        OrderF.create(**{'user': myUser})
         OrderF.create()
 
         myClient = Client()
@@ -88,8 +88,10 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'orderList.html']
+            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'orderList.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -106,7 +108,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             'password': 'password',
         })
 
-        OrderF.create(**{'user':myUser})
+        OrderF.create(**{'user': myUser})
         OrderF.create()
 
         myClient = Client()
@@ -123,8 +125,10 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'orderList.html']
+            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'orderList.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -142,7 +146,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             'password': 'password',
         })
 
-        OrderF.create(**{'user':myUser})
+        OrderF.create(**{'user': myUser})
         OrderF.create()
 
         myClient = Client()
@@ -160,8 +164,10 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'orderList.html']
+            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'orderList.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -179,7 +185,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             'password': 'password',
         })
 
-        OrderF.create(**{'user':myUser})
+        OrderF.create(**{'user': myUser})
         OrderF.create()
 
         myClient = Client()
@@ -197,8 +203,10 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'orderList.html']
+            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'orderList.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -216,7 +224,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             'password': 'password',
         })
 
-        OrderF.create(**{'user':myUser})
+        OrderF.create(**{'user': myUser})
         OrderF.create()
 
         myClient = Client()
@@ -234,8 +242,10 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'orderList.html']
+            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'orderList.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -252,7 +262,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             'password': 'password',
         })
 
-        OrderF.create(**{'user':myUser})
+        OrderF.create(**{'user': myUser})
         OrderF.create()
 
         myClient = Client()
@@ -269,7 +279,7 @@ class OrdersViews_listOrders_Tests(TestCase):
         self.assertEqual(
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
-        myExpTemplates = ['pdf/orderListPage.html', u'pdfpage.html']
+        myExpTemplates = [u'<Unknown Template>']
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -279,4 +289,5 @@ class OrdersViews_listOrders_Tests(TestCase):
 
         self.assertEqual(myResp['content-type'], 'application/pdf')
         self.assertEqual(
-            myResp['content-disposition'], 'attachment; filename=report.pdf')
+            myResp['content-disposition'],
+            'attachment; filename="orderListPage.pdf"')

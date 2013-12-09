@@ -47,7 +47,7 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
         """
         Test badURL requests
         """
-        myKwargsTests = [{'testargs':1}]
+        myKwargsTests = [{'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(
@@ -121,11 +121,11 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
         })
 
         myOrderStatus_old = OrderStatusF.create(**{
-            'id':2, 'name':'An Old Order Status'
+            'id': 2, 'name': 'An Old Order Status'
         })
 
         OrderStatusF.create(**{
-            'id':1, 'name':'A New Orrder Status'
+            'id': 1, 'name': 'A New Orrder Status'
         })
 
         myOrder = OrderF.create(**{
@@ -168,13 +168,14 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'mail/order.txt', u'mail/base.txt', 'mail/order.html',
-            u'mail/base.html', 'orderPage.html', u'base.html', u'menu.html',
+            u'<Unknown Template>', 'mail/order.txt', u'mail/base.txt',
+            'mail/order.html', u'mail/base.html', 'orderPage.html',
+            u'base.html', u'pipeline/css.html', u'pipeline/css.html',
+            u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'order.html',
             u'cartContents.html', u'recordHeader.html', u'record.html',
             u'orderStatusHistory.html'
         ]
-
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
@@ -190,11 +191,11 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
         })
 
         myOrderStatus_old = OrderStatusF.create(**{
-            'id':2, 'name':'An Old Order Status'
+            'id': 2, 'name': 'An Old Order Status'
         })
 
         OrderStatusF.create(**{
-            'id':1, 'name':'A New Orrder Status'
+            'id': 1, 'name': 'A New Orrder Status'
         })
 
         myOrder = OrderF.create(**{
@@ -238,8 +239,9 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'mail/order.txt', u'mail/base.txt', 'mail/order.html',
-            u'mail/base.html', 'orderStatusHistory.html']
+            u'<Unknown Template>', 'mail/order.txt', u'mail/base.txt',
+            'mail/order.html', u'mail/base.html', 'orderStatusHistory.html'
+        ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)

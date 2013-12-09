@@ -18,7 +18,6 @@ __date__ = '23/07/2013'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
-from catalogue.tests.test_utils import simpleMessage
 
 
 from .model_factories import (
@@ -43,12 +42,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
         """
         myModel = SpectralModeProcessingCostsF.create()
 
-        self.assertTrue(
-            myModel.pk is not None,
-            simpleMessage(
-                myModel.pk, 'not None',
-                message='Model PK should NOT equal None')
-        )
+        self.assertTrue(myModel.pk is not None)
 
     def test_SpectralModeProcessingCosts_delete(self):
         """
@@ -59,11 +53,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
         myModel.delete()
 
         #check if deleted
-        self.assertTrue(
-            myModel.pk is None, simpleMessage(
-                myModel.pk, None,
-                message='Model PK should equal None')
-        )
+        self.assertTrue(myModel.pk is None)
 
     def test_SpectralModeProcessingCosts_read(self):
         """
