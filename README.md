@@ -1,4 +1,26 @@
-# Intro
+# Running tests:
+
+Make sure you have the base sac-master database in place:
+
+```
+createdb sac-master -T template_postgis
+```
+
+Or copy ``django_project/core/jenkins.py`` to e.g.
+``django_project/core/jenkins_timlinux.py`` and use it in place of jenkins
+below.
+
+To run the full test suite:
+
+```bash
+python manage.py jenkins --settings=core.settings.jenkins
+```
+
+```bash
+python manage.py jenkins --settings=core.settings.jenkins_timlinux
+```
+
+# WebODT
 
 Since no-one else has added a README for the catalogue, repo, I'm going to hijack it!
 This is information regarding the use of django-webodt for producing PDF and other
@@ -8,7 +30,7 @@ At this stage (21st August 2013), the functionality is in place, but some aesthe
 work is still required in the templates. Further work may also be required for producing
 XLS or CSV reports.
 
-# Requirements
+## Requirements
 
 django-webodt uses LibreOffice as the backend to run the conversion. Therefore,
 the system running the Catalogue (including local test servers) must have LibreOffice
@@ -23,7 +45,7 @@ soffice '--accept=socket,host=127.0.0.1,port=2002;urp;StarOffice.NamingService' 
 
 * If necessary: `pip install django-webodt`
 
-# Usage
+## Usage
 
 Report templates must be saved in `django_project/reports/report-templates`
 
@@ -71,7 +93,7 @@ theOrderPDF = renderPDF('order-summary.odt',
 myMsg.attach_related_file(theOrderPDF)
 ```
 
-# The Templates
+## The Templates
 
 The templates must be edited in LibreOffice. They can be treated as standard LibreOffice
 documents incorporating tables, images and footer/header text. Please use the included
