@@ -350,6 +350,12 @@ def get_product_profile(log_message, dom):
 
     if mission_value == 'LANDSAT8':
         mission_value = 'L8'
+    elif mission_value == 'LANDSAT7':
+        mission_value = 'L7'
+    elif mission_value == 'LANDSAT5':
+        mission_value = 'L5'
+    else:
+        raise Exception('Unknown mission in IIF')
     satellite = Satellite.objects.get(abbreviation=mission_value)
 
     try:
