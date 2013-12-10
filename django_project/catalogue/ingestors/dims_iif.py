@@ -79,43 +79,43 @@ def parseDateTime(theDate):
     return myDateTime
 
 
-def get_parameters_element(myDom):
+def get_parameters_element(dom):
     """Get the parameters element from the dom.
-    :param myDom: DOM Document containing the parameters.
-    :type myDom: DOM document.
+    :param dom: DOM Document containing the parameters.
+    :type dom: DOM document.
 
     :returns: A DOM element representing the parameters.
     :type: DOM
     """
-    iif = myDom.getElementsByTagName('IIF')[0]
+    iif = dom.getElementsByTagName('IIF')[0]
     item = iif.getElementsByTagName('item')[0]
     parameters = item.getElementsByTagName('parameters')[0]
     return parameters
 
 
-def get_specific_parameters_element(myDom):
+def get_specific_parameters_element(dom):
     """Get the specificParameters element from the dom.
-    :param myDom: DOM Document containing the specificParameters element.
-    :type myDom: DOM document.
+    :param dom: DOM Document containing the specificParameters element.
+    :type dom: DOM document.
 
     :returns: A dom element representing the specificParameters element.
     :type: DOM
     """
-    iif = myDom.getElementsByTagName('IIF')[0]
+    iif = dom.getElementsByTagName('IIF')[0]
     item = iif.getElementsByTagName('item')[0]
     specific_parameters = item.getElementsByTagName('specificParameters')[0]
     return specific_parameters
 
 
-def get_dims_id(myDom):
+def get_dims_id(dom):
     """Get the ID used by DIMS for this product.
-    :param myDom: DOM Document containing the specificParameters element.
-    :type myDom: DOM document.
+    :param dom: DOM Document containing the specificParameters element.
+    :type dom: DOM document.
 
     :returns: A dom element representing the specificParameters element.
     :type: DOM
     """
-    iif = myDom.getElementsByTagName('IIF')[0]
+    iif = dom.getElementsByTagName('IIF')[0]
     item = iif.getElementsByTagName('item')[0]
     administration = item.getElementsByTagName('administration')[0]
     keys = administration.getElementsByTagName('keys')
@@ -123,18 +123,18 @@ def get_dims_id(myDom):
     return product_id
 
 
-def get_geometry(log_message, myDom):
+def get_geometry(log_message, dom):
     """Extract the bounding box as a geometry from the xml file.
 
     :param log_message: A log_message function used for user feedback.
     :type log_message: log_message
 
-    :param myDom: DOM Document containing the bounds of the scene.
-    :type myDom: DOM document.
+    :param dom: DOM Document containing the bounds of the scene.
+    :type dom: DOM document.
 
     :return: geoemtry
     """
-    parameters = get_parameters_element(myDom)
+    parameters = get_parameters_element(dom)
     coverage = parameters.getElementsByTagName('spatialCoverage')[0]
     polygon = coverage.getElementsByTagName('boundingPolygon')[0]
     points = polygon.getElementsByTagName('point')
@@ -164,20 +164,20 @@ def get_geometry(log_message, myDom):
     return myGeometry
 
 
-def get_dates(log_message, myDom):
+def get_dates(log_message, dom):
     """Get the start, mid scene and end dates.
 
     :param log_message: A log_message function used for user feedback.
     :type log_message: log_message
 
-    :param myDom: Dom Document containing the bounds of the scene.
-    :type myDom: DOM document.
+    :param dom: Dom Document containing the bounds of the scene.
+    :type dom: DOM document.
 
     :return: A three-tuple of dates for the start, mid scene and end dates
         respectively.
     :rtype: (datetime, datetime, datetime)
     """
-    parameters = get_parameters_element(myDom)
+    parameters = get_parameters_element(dom)
     coverage = parameters.getElementsByTagName('temporalCoverage')[0]
 
     start_element = coverage.getElementsByTagName('startTime')[0]
@@ -185,12 +185,12 @@ def get_dates(log_message, myDom):
     start_date = parseDateTime(start_date)
     log_message('Product Start Date: %s' % start_date, 2)
 
-    center_element = myDom.getElementsByTagName('centerTime')[0]
+    center_element = dom.getElementsByTagName('centerTime')[0]
     center_date = center_element.firstChild.nodeValue
     center_date = parseDateTime(center_date)
     log_message('Product Date: %s' % center_date, 2)
 
-    end_element = myDom.getElementsByTagName('stopTime')[0]
+    end_element = dom.getElementsByTagName('stopTime')[0]
     end_date = end_element.firstChild.nodeValue
     end_date = parseDateTime(end_date)
     log_message('Product End Date: %s' % end_date, 2)
@@ -198,7 +198,7 @@ def get_dates(log_message, myDom):
     return start_date, center_date, end_date
 
 
-def get_acquisition_quality(log_message, myDom):
+def get_acquisition_quality(log_message, dom):
     """The DIMS quality indication for this scene (APPROVED or NOT_APPROVED).
 
     The quality is based on drop outs or any other acquisition anomalies -
@@ -207,14 +207,14 @@ def get_acquisition_quality(log_message, myDom):
     :param log_message: A log_message function used for user feedback.
     :type log_message: log_message
 
-    :param myDom: Dom Document containing the bounds of the scene.
-    :type myDom: DOM document.
+    :param dom: Dom Document containing the bounds of the scene.
+    :type dom: DOM document.
 
     :return: A boolean indicating if the product is approved for
         redistribution (according to DIMS).
     :rtype: bool
     """
-    parameters = get_parameters_element(myDom)
+    parameters = get_parameters_element(dom)
     quality_element = parameters.getElementsByTagName('quality')[0]
     quality = quality_element.firstChild.nodeValue
     quality_flag = False
@@ -468,21 +468,21 @@ def get_quality():
 
 @transaction.commit_manually
 def ingest(
-        theTestOnlyFlag=True,
-        theSourceDir=(
+        test_only_flag=True,
+        source_path=(
             '/home/web/catalogue/django_project/catalogue/tests/sample_files/'
             'landsat/'),
-        theVerbosityLevel=2,
-        theHaltOnErrorFlag=True):
+        verbosity_level=2,
+        halt_on_error_flag=True):
     """
     Ingest a collection of Landsat metadata folders.
 
     Args:
-        * theTestOnlyFlag - (Optional) Defaults to False. Whether to do a dummy
+        * test_only_flag - (Optional) Defaults to False. Whether to do a dummy
            run (database will not be updated).
-        * theSourceDir - (Required) A DIMS created IIF metadata xml file and
+        * source_path - (Required) A DIMS created IIF metadata xml file and
           thumbnail
-        * theVerbosityLevel - (Optional) Defaults to 1. How verbose the logging
+        * verbosity_level - (Optional) Defaults to 1. How verbose the logging
            output should be. 0-2 where 2 is very very very very verbose!
         * myLicense - (Optional) Defaults to 'SANSA Free License',
             License holder of the product.
@@ -493,7 +493,7 @@ def ingest(
         * theSoftwareVersion - str (Optional) Defaults to 11.6.0.
         * theQuality - (Optional) Defaults to 'Unknown', A quality assessment
             for these images defined in the IIF file.
-        * theHaltOnErrorFlag: bool - set to True if we should stop processing
+        * halt_on_error_flag: bool - set to True if we should stop processing
             when the first error is encountered.
     Returns:
         None
@@ -501,7 +501,7 @@ def ingest(
         Any unhandled exceptions will be raised.
     """
     def log_message(theMessage, theLevel=1):
-        if theVerbosityLevel >= theLevel:
+        if verbosity_level >= theLevel:
             print theMessage
 
     log_message((
@@ -511,13 +511,13 @@ def ingest(
         'Verbosity Level: %s\n'
         'Halt on error: %s\n'
         '------------------')
-        % (theTestOnlyFlag, theSourceDir, theVerbosityLevel,
-           theHaltOnErrorFlag), 2)
+        % (test_only_flag, source_path, verbosity_level,
+           halt_on_error_flag), 2)
 
     # Scan the source folder and look for any sub-folders
     # The sub-folder names should be e.g.
     # L5-_TM-_HRF_SAM-_0176_00_0078_00_920606_080254_L0Ra_UTM34S
-    log_message('Scanning folders in %s' % theSourceDir, 1)
+    log_message('Scanning folders in %s' % source_path, 1)
     # Loop through each folder found
 
     ingestor_version = 'DIMS IIF ingestor version 1'
@@ -527,34 +527,34 @@ def ingest(
     failed_record_count = 0
     log_message('Starting directory scan...', 2)
 
-    for myFolder in glob.glob(os.path.join(theSourceDir, '*')):
+    for myFolder in glob.glob(os.path.join(source_path, '*')):
         record_count += 1
         try:
 
             # Get the folder name
-            myProductFolder = os.path.split(myFolder)[-1]
-            log_message(myProductFolder, 2)
+            product_folder = os.path.split(myFolder)[-1]
+            log_message(product_folder, 2)
 
             # Find the first and only xml file in the folder
-            mySearchPath = os.path.join(str(myFolder), '*.xml')
-            log_message(mySearchPath, 2)
-            myXmlFile = glob.glob(mySearchPath)[0]
-            log_message(myXmlFile, 2)
+            search_path = os.path.join(str(myFolder), '*.xml')
+            log_message(search_path, 2)
+            xml_file = glob.glob(search_path)[0]
+            log_message(xml_file, 2)
 
             # Create a DOM document from the file
-            myDom = parse(myXmlFile)
+            dom = parse(xml_file)
             # Skip this record if the quality is not 'APPROVED'
-            if not get_acquisition_quality(log_message, myDom):
-                log_message('Skipping %s' % myXmlFile)
+            if not get_acquisition_quality(log_message, dom):
+                log_message('Skipping %s' % xml_file)
                 continue
 
             # First grab all the generic properties that any IIF will have...
-            myGeometry = get_geometry(log_message, myDom)
+            geometry = get_geometry(log_message, dom)
             start_date_time, center_date_time, end_date_time = get_dates(
-                log_message, myDom)
+                log_message, dom)
 
             # Now get all sensor specific metadata
-            specific_parameters = get_specific_parameters_element(myDom)
+            specific_parameters = get_specific_parameters_element(dom)
 
             # Orbit number for GenericSensorProduct
             orbit_number = get_feature_value(
@@ -646,23 +646,26 @@ def ingest(
                 log_message, specific_parameters)
 
             # Get the original text file metadata
-            myMetadataFile = file(myXmlFile, 'rt')
-            metadata = myMetadataFile.readlines()
-            myMetadataFile.close()
+            metadata_file = file(xml_file, 'rt')
+            metadata = metadata_file.readlines()
+            metadata_file.close()
+
+            dims_product_id = get_dims_id()
 
             # Check if there is already a matching product based
             # on original_product_id
 
             # Do the ingestion here...
-            myData = {
+            data = {
                 'metadata': metadata,
-                'spatial_coverage': myGeometry,
+                'spatial_coverage': geometry,
                 'radiometric_resolution': radiometric_resolution,
                 'band_count': band_count,
                 'cloud_cover': cloud_cover,
                 'sensor_inclination_angle': sensor_inclination_angle,
                 'sensor_viewing_angle': sensor_viewing_angle,
                 'original_product_id': original_product_id,
+                'unique_product_id': dims_product_id,
                 'solar_zenith_angle': solar_zenith_angle,
                 'solar_azimuth_angle': solar_azimuth_angle,
                 'spatial_resolution_x': spatial_resolution_x,
@@ -679,7 +682,7 @@ def ingest(
                 'projection': projection,
                 'quality': quality
             }
-            log_message(myData, 3)
+            log_message(data, 3)
             # Check if it's already in catalogue:
             try:
                 today = datetime.today()
@@ -693,52 +696,52 @@ def ingest(
                 log_message('Trying to update')
                 #original_product_id is not necessarily unique
                 #so we use product_id
-                myProduct = OpticalProduct.objects.get(
+                product = OpticalProduct.objects.get(
                     original_product_id=original_product_id
                 ).getConcreteInstance()
                 log_message(('Already in catalogue: updating %s.'
                             % original_product_id), 2)
-                myNewRecordFlag = False
-                log = myProduct.ingestion_log
-                log += '\n'
-                log += '%s : %s - updating record' % (
+                new_record_flag = False
+                log_message = product.ingestion_log
+                log_message += '\n'
+                log_message += '%s : %s - updating record' % (
                     time_stamp, ingestor_version)
-                myData['ingestion_log'] = log
-                myProduct.__dict__.update(myData)
+                data['ingestion_log'] = log_message
+                product.__dict__.update(data)
             except ObjectDoesNotExist:
                 log_message('Not in catalogue: creating.', 2)
                 update_mode = False
-                log = '%s : %s - creating record' % (
+                log_message = '%s : %s - creating record' % (
                     time_stamp, ingestor_version)
-                myData['ingestion_log'] = log
+                data['ingestion_log'] = log_message
                 try:
-                    myProduct = OpticalProduct(**myData)
-                    print myProduct
+                    product = OpticalProduct(**data)
+                    print product
 
                 except Exception, e:
                     print e.message
 
-                myNewRecordFlag = True
+                new_record_flag = True
             except Exception, e:
                 print e.message
 
             log_message('Saving product and setting thumb', 2)
             try:
-                myProduct.save()
+                product.save()
                 if update_mode:
                     updated_record_count += 1
                 else:
                     created_record_count += 1
-                if theTestOnlyFlag:
+                if test_only_flag:
                     log_message('Testing: image not saved.', 2)
                     pass
                 else:
                     # Store thumbnail
-                    myThumbsFolder = os.path.join(
+                    thumbs_folder = os.path.join(
                         settings.THUMBS_ROOT,
-                        myProduct.thumbnailDirectory())
+                        product.thumbnailDirectory())
                     try:
-                        os.makedirs(myThumbsFolder)
+                        os.makedirs(thumbs_folder)
                     except OSError:
                         # TODO: check for creation failure rather than
                         # attempt to  recreate an existing dir
@@ -747,19 +750,19 @@ def ingest(
                     jpeg_path = os.path.join(str(myFolder), '*.jpeg')
                     log_message(jpeg_path, 2)
                     jpeg_path = glob.glob(jpeg_path)[0]
-                    new_name = '%s.jpg' % myProduct.original_product_id
+                    new_name = '%s.jpg' % product.original_product_id
                     shutil.copyfile(
                         jpeg_path,
-                        os.path.join(myThumbsFolder, new_name))
+                        os.path.join(thumbs_folder, new_name))
                     # Transform and store .wld file
                     log_message('Referencing thumb', 2)
                     try:
-                        myPath = myProduct.georeferencedThumbnail()
+                        myPath = product.georeferencedThumbnail()
                         log_message('Georeferenced Thumb: %s' % myPath, 2)
                     except:
                         traceback.print_exc(file=sys.stdout)
 
-                if myNewRecordFlag:
+                if new_record_flag:
                     log_message('Product %s imported.' % record_count, 2)
                     pass
                 else:
@@ -769,16 +772,16 @@ def ingest(
                 traceback.print_exc(file=sys.stdout)
                 raise CommandError('Cannot import: %s' % e)
 
-            if theTestOnlyFlag:
+            if test_only_flag:
                 transaction.rollback()
-                log_message('Imported scene : %s' % myProductFolder, 1)
+                log_message('Imported scene : %s' % product_folder, 1)
                 log_message('Testing only: transaction rollback.', 1)
             else:
                 transaction.commit()
-                log_message('Imported scene : %s' % myProductFolder, 1)
+                log_message('Imported scene : %s' % product_folder, 1)
         except Exception, e:
             failed_record_count += 1
-            if theHaltOnErrorFlag:
+            if halt_on_error_flag:
                 print e.message
                 break
             else:

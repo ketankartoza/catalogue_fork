@@ -49,8 +49,8 @@ class Command(BaseCommand):
         verbose = int(options.get('verbosity'))
         halt_on_error = options.get('halt_on_error')
         dims_iif.ingest(
-            theSourceDir=source_dir,
-            theTestOnlyFlag=test_only,
-            theVerbosityLevel=verbose,
-            theHaltOnErrorFlag=halt_on_error
+            source_path=source_dir,
+            test_only_flag=test_only,
+            verbosity_level=verbose,
+            halt_on_error_flag=halt_on_error
         )

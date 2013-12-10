@@ -67,21 +67,21 @@ class DIMSIIFIngestorTest(TestCase):
             satellite_instrument_group=group
         )
 
-        mySpecMode1 = SpectralModeF.create(**{
+        spectral_mode1 = SpectralModeF.create(**{
             'abbreviation': 'MS',
             'instrument_type': instrument_type
         })
-        mySpecMode2 = SpectralModeF.create(**{
+        spectral_mode2 = SpectralModeF.create(**{
             'abbreviation': 'PAN',
             'instrument_type': instrument_type
         })
-        mySpecMode3 = SpectralModeF.create(**{
+        spectral_mode3 = SpectralModeF.create(**{
             'abbreviation': 'THM',
             'instrument_type': instrument_type
         })
         myModel = OpticalProductProfileF.create(**{
             'satellite_instrument': instrument,
-            'spectral_mode': mySpecMode1
+            'spectral_mode': spectral_mode1
         })
 
     def testImportUsingManagementCommand(self):
@@ -98,9 +98,9 @@ class DIMSIIFIngestorTest(TestCase):
         # Test with a full load of data
         #
         dims_iif.ingest(
-            theSourceDir=DATA_DIR_PATH,
-            theVerbosityLevel=2,
-            theHaltOnErrorFlag=False )
+            source_path=DATA_DIR_PATH,
+            verbosity_level=2,
+            halt_on_error_flag=False )
         products = GenericProduct.objects.filter(
             original_product_id__contains='LC8')
         product_list = []
@@ -119,9 +119,9 @@ class DIMSIIFIngestorTest(TestCase):
         # Above ran in test mode so image was
 
         dims_iif.ingest(
-            theSourceDir=DATA_DIR_PATH,
-            theVerbosityLevel=2,
-            theHaltOnErrorFlag=False)
+            source_path=DATA_DIR_PATH,
+            verbosity_level=2,
+            halt_on_error_flag=False)
 
         product = GenericProduct.objects.get(
             original_product_id=existing_product_id)
