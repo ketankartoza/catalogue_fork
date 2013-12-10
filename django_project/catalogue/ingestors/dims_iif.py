@@ -712,24 +712,24 @@ def ingest(
                 log_message(('Already in catalogue: updating %s.'
                             % original_product_id), 2)
                 new_record_flag = False
-                log_message = product.ingestion_log
-                log_message += '\n'
-                log_message += '%s : %s - updating record' % (
+                message = product.ingestion_log
+                message += '\n'
+                message += '%s : %s - updating record' % (
                     time_stamp, ingestor_version)
-                data['ingestion_log'] = log_message
+                data['ingestion_log'] = message
                 product.__dict__.update(data)
             except ObjectDoesNotExist:
                 log_message('Not in catalogue: creating.', 2)
                 update_mode = False
-                log_message = '%s : %s - creating record' % (
+                message = '%s : %s - creating record' % (
                     time_stamp, ingestor_version)
-                data['ingestion_log'] = log_message
+                data['ingestion_log'] = message
                 try:
                     product = OpticalProduct(**data)
-                    print product
+                    log_message('Product: %s' % product)
 
                 except Exception, e:
-                    print e.message
+                    log_message(e.message, 2)
 
                 new_record_flag = True
             except Exception, e:
