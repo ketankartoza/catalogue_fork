@@ -79,19 +79,21 @@ class DIMSIIFIngestorTest(TestCase):
             'abbreviation': 'THM',
             'instrument_type': instrument_type
         })
-        myModel = OpticalProductProfileF.create(**{
+        profile = OpticalProductProfileF.create(**{
             'satellite_instrument': instrument,
             'spectral_mode': spectral_mode1
         })
 
-    def testImportUsingManagementCommand(self):
+    # noinspection PyMethodMayBeStatic
+    def test_import_using_management_command(self):
         """Test that we can ingest spot using the management command"""
         call_command('dims_iif_harvest',
                      verbosity=2,
                      source_dir=DATA_DIR_PATH,
                      theHaltOnErrorFlag=False)
 
-    def testImportDirectly(self):
+    # noinspection PyMethodMayBeStatic
+    def test_direct_import(self):
         """Test that we can ingest DIMS IIF using the ingestor function"""
 
         #
@@ -100,7 +102,7 @@ class DIMSIIFIngestorTest(TestCase):
         dims_iif.ingest(
             source_path=DATA_DIR_PATH,
             verbosity_level=2,
-            halt_on_error_flag=False )
+            halt_on_error_flag=False)
         products = GenericProduct.objects.filter(
             original_product_id__contains='LC8')
         product_list = []

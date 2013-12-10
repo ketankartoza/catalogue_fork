@@ -81,6 +81,7 @@ def parseDateTime(theDate):
 
 def get_parameters_element(dom):
     """Get the parameters element from the dom.
+
     :param dom: DOM Document containing the parameters.
     :type dom: DOM document.
 
@@ -95,6 +96,7 @@ def get_parameters_element(dom):
 
 def get_specific_parameters_element(dom):
     """Get the specificParameters element from the dom.
+
     :param dom: DOM Document containing the specificParameters element.
     :type dom: DOM document.
 
@@ -107,20 +109,20 @@ def get_specific_parameters_element(dom):
     return specific_parameters
 
 
-def get_dims_id(dom):
-    """Get the ID used by DIMS for this product.
-    :param dom: DOM Document containing the specificParameters element.
+def get_administration_keys_element(dom):
+    """Get the IIF -> Item -> Administration -> Keys element from the dom.
+
+    :param dom: DOM Document containing the keys.element.
     :type dom: DOM document.
 
-    :returns: A dom element representing the specificParameters element.
+    :returns: A dom element representing the keys element.
     :type: DOM
     """
     iif = dom.getElementsByTagName('IIF')[0]
     item = iif.getElementsByTagName('item')[0]
     administration = item.getElementsByTagName('administration')[0]
-    keys = administration.getElementsByTagName('keys')
-    product_id = get_feature_value('productID', keys)
-    return product_id
+    keys = administration.getElementsByTagName('keys')[0]
+    return keys
 
 
 def get_geometry(log_message, dom):
@@ -342,10 +344,11 @@ def get_product_profile(log_message, dom):
 
     try:
         instrument_type = InstrumentType.objects.get(
-            abbreviation=sensor_value)  # e.g. OLI_TIRS
+            operator_abbreviation=sensor_value)  # e.g. OLI_TIRS
     except Exception, e:
-        print e.message
+        #print e.message
         instrument_type = None
+        raise e
     log_message('Instrument Type %s' % instrument_type, 2)
 
     if mission_value == 'LANDSAT8':
@@ -394,6 +397,9 @@ def get_product_profile(log_message, dom):
             spectral_mode__in=spectral_modes)
     except Exception, e:
         print e.message
+        print 'Searched for satellite instrument: %s and spectral modes %s' % (
+            satellite_instrument, spectral_modes
+        )
         product_profile = None
     log_message('Product Profile %s' % product_profile, 2)
 
@@ -500,9 +506,9 @@ def ingest(
     Exceptions:
         Any unhandled exceptions will be raised.
     """
-    def log_message(theMessage, theLevel=1):
-        if verbosity_level >= theLevel:
-            print theMessage
+    def log_message(message, level=1):
+        if verbosity_level >= level:
+            print message
 
     log_message((
         'Running DIMS Landsat Importer with these options:\n'
@@ -649,9 +655,13 @@ def ingest(
             metadata_file = file(xml_file, 'rt')
             metadata = metadata_file.readlines()
             metadata_file.close()
+            log_message('Metadata retrieved', 2)
 
-            dims_product_id = get_dims_id()
 
+            keys = get_administration_keys_element(dom)
+            dims_product_id = get_feature_value('productID', keys)
+
+            log_message('DIMS product ID: %s' % dims_product_id)
             # Check if there is already a matching product based
             # on original_product_id
 
@@ -757,8 +767,8 @@ def ingest(
                     # Transform and store .wld file
                     log_message('Referencing thumb', 2)
                     try:
-                        myPath = product.georeferencedThumbnail()
-                        log_message('Georeferenced Thumb: %s' % myPath, 2)
+                        path = product.georeferencedThumbnail()
+                        log_message('Georeferenced Thumb: %s' % path, 2)
                     except:
                         traceback.print_exc(file=sys.stdout)
 
