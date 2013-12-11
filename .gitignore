@@ -60,3 +60,4 @@ resources/server_config/mapserver/apache-include/*.map
 venv
 .vagrant
 *.bak
+.idea
