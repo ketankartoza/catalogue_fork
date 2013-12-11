@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 SANSA-EO Catalogue - Ancillary Dictionary models
 
@@ -79,6 +80,10 @@ class OpticalProductProfile(models.Model):
             self.spectral_mode
         )
 
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['satellite_instrument', 'spectral_mode']
+
     def baseProcessingLevel(self):
         """Return the InstrumentType.base_processing_level for this profile.
 
@@ -145,6 +150,9 @@ class RadarProductProfile(models.Model):
             self.imaging_mode
         )
 
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['satellite_instrument', 'imaging_mode']
 
 class ProcessingLevel(models.Model):
     """
@@ -162,6 +170,9 @@ class ProcessingLevel(models.Model):
     def __unicode__(self):
         return u'{0} {1}'.format(self.abbreviation, self.name)
 
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['abbreviation']
 
 class Collection(models.Model):
     """Collection of satellites managed by a single operator."""
@@ -182,6 +193,9 @@ class Collection(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['name']
 
 class Satellite(models.Model):
     """Satellite e.g. SPOT5 - a real satellite in the sky."""
@@ -223,6 +237,9 @@ class Satellite(models.Model):
         """Return 'operator_abbreviation' as model representation."""
         return u'{0}'.format(self.operator_abbreviation)
 
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['name']
 
 class ScannerType(models.Model):
     """Scanner type for the instrument type e.g. Pushbroom"""
@@ -234,6 +251,10 @@ class ScannerType(models.Model):
 
     def __unicode__(self):
         return self.abbreviation
+
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['name']
 
 
 class InstrumentType(models.Model):
@@ -315,6 +336,9 @@ class InstrumentType(models.Model):
     def __unicode__(self):
         return self.operator_abbreviation
 
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['name']
 
 class RadarBeam(models.Model):
     """
@@ -339,6 +363,9 @@ class RadarBeam(models.Model):
     def __unicode__(self):
         return u'{0} ({1})'.format(self.band_name, self.wavelength_cm)
 
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['instrument_type']
 
 class ImagingMode(models.Model):
     """
@@ -378,6 +405,9 @@ class ImagingMode(models.Model):
     def __unicode__(self):
         return u'{0} ({1})'.format(self.name, self.polarization)
 
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['name']
 
 class SatelliteInstrumentGroup(models.Model):
     """Satellite instrument group - an instrument as deployed on a satellite.
@@ -461,6 +491,9 @@ GROUP BY extract(YEAR from gp.product_date)
 ORDER BY year ASC;""", {'sensor_pk': self.pk})
         return myStats
 
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['satellite', 'instrument_type']
 
 class SatelliteInstrument(models.Model):
     """Satellite instrument - a specific instrument as deployed on a satellite.
@@ -482,6 +515,10 @@ class SatelliteInstrument(models.Model):
     def __unicode__(self):
         """Return 'operator_abbreviation' as model representation."""
         return u'{0}'.format(self.operator_abbreviation)
+
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['name']
 
 
 class Band(models.Model):
@@ -509,6 +546,10 @@ class Band(models.Model):
             self.band_name, self.min_wavelength_nm, self.max_wavelength_nm,
             self.pixelsize_resampled_m)
 
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['instrument_type', 'band_name']
+
 
 class SpectralGroup(models.Model):
     """A generic named spectral mode that describes spectral grouping.
@@ -530,6 +571,9 @@ class SpectralGroup(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['abbreviation', 'name']
 
 class SpectralMode(models.Model):
     """
@@ -546,6 +590,10 @@ class SpectralMode(models.Model):
     def __unicode__(self):
         return u'{0} - {1}'.format(self.name, self.instrument_type.name)
 
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['abbreviation', 'name']
+
 
 class BandSpectralMode(models.Model):
     """
@@ -560,6 +608,10 @@ class BandSpectralMode(models.Model):
     def __unicode__(self):
         return u'{0} ({1})'.format(
             self.band.band_name, self.spectral_mode.name)
+
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['band', 'spectral_mode']
 
 
 class InstrumentTypeProcessingLevel(models.Model):
@@ -580,6 +632,10 @@ class InstrumentTypeProcessingLevel(models.Model):
     def __unicode__(self):
         return u'{0} - {1}'.format(
             self.instrument_type.name, self.processinglevel.abbreviation)
+
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['instrument_type', 'processinglevel']
 
 
 class SpectralModeProcessingCosts(models.Model):
@@ -607,6 +663,10 @@ class SpectralModeProcessingCosts(models.Model):
             self.cost_per_scene_in_rands,
             self.spectral_mode.name, self.instrumenttypeprocessinglevel)
 
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['spectral_mode', 'instrumenttypeprocessinglevel']
+
 
 class ReferenceSystem(models.Model):
     """
@@ -620,6 +680,10 @@ class ReferenceSystem(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['name']
 
 
 class ForeignCurrency(models.Model):
@@ -636,3 +700,7 @@ class ForeignCurrency(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        """Meta class implementation."""
+        ordering = ['name']

@@ -43,6 +43,7 @@ class Datum(models.Model):
         app_label = 'catalogue'
         verbose_name = 'Datums'
         verbose_name_plural = 'Datums'
+        ordering = ['name']
 
     def __unicode__(self):
         return self.name
@@ -64,6 +65,7 @@ class ResamplingMethod(models.Model):
         app_label = 'catalogue'
         verbose_name = 'Resampling Method'
         verbose_name_plural = 'Resampling Methods'
+        ordering = ['name']
 
     def __unicode__(self):
         return self.name
@@ -84,6 +86,7 @@ class FileFormat(models.Model):
         app_label = 'catalogue'
         verbose_name = 'File Format'
         verbose_name_plural = 'File Formats'
+        ordering = ['name']
 
     def __unicode__(self):
         return self.name
@@ -105,6 +108,7 @@ class OrderStatus(models.Model):
         app_label = 'catalogue'
         verbose_name = 'Order Status'
         verbose_name_plural = 'Order Status List'
+        ordering = ['name']
 
     def __unicode__(self):
         return self.name
@@ -125,6 +129,7 @@ class DeliveryMethod(models.Model):
         app_label = 'catalogue'
         verbose_name = 'Delivery Method'
         verbose_name_plural = 'Delivery Methods'
+        ordering = ['name']
 
     def __unicode__(self):
         return self.name
@@ -175,6 +180,7 @@ class MarketSector(models.Model):
 
     class Meta:
         app_label = 'catalogue'
+        ordering = ['name']
 
     def __unicode__(self):
         return str(self.name)
@@ -222,6 +228,7 @@ class Order(models.Model):
         app_label = 'catalogue'
         verbose_name = 'Order'
         verbose_name_plural = 'Orders'
+        ordering = ['-order_date']
 
     def __unicode__(self):
         return str(self.id)
@@ -291,6 +298,7 @@ class TaskingRequest(Order):
         app_label = 'catalogue'
         verbose_name = 'Tasking Request'
         verbose_name_plural = 'Tasking Requests'
+        ordering = ['-target_date']
 
     def __unicode__(self):
         return str(self.id)

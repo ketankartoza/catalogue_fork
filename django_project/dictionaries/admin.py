@@ -47,97 +47,158 @@ from .models import (
 ####################################
 
 class ProcessingLevelAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['name', 'abbreviation', 'description']
+    list_display = ['name', 'abbreviation', 'description']
 admin.site.register(ProcessingLevel, ProcessingLevelAdmin)
 
 
 class CollectionAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['name', 'institution', 'description']
+    list_display = ['name', 'institution', 'description']
 admin.site.register(Collection, CollectionAdmin)
 
 
 class SatelliteAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['name', 'abbreviation', 'description']
+    list_filter = [
+        'launch_date',
+        'revist_time_days',
+        'status',
+        'license_type']
+    list_display = ['name', 'abbreviation', 'description']
 admin.site.register(Satellite, SatelliteAdmin)
 
 
 class ScannerTypeAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['name', 'abbreviation', 'description']
+    list_display = ['name', 'abbreviation', 'description']
 admin.site.register(ScannerType, ScannerTypeAdmin)
 
 
 class InstrumentTypeAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['name', 'abbreviation', 'description']
+    list_display = [
+        'name',
+        'abbreviation',
+        'description',
+        'is_radar',
+        'band_count',
+        'pixel_size_list_m',
+        'spatial_resolution_range',
+        'image_size_km']
 admin.site.register(InstrumentType, InstrumentTypeAdmin)
 
 
 class RadarBeamAdmin(admin.ModelAdmin):
+    list_display = [
+        'instrument_type',
+        'band_name',
+        'wavelength_cm',
+        'looking_distance',
+        'azimuth_direction']
     pass
 admin.site.register(RadarBeam, RadarBeamAdmin)
 
 
 class ImagingModeAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['name']
+    list_display = [
+        'name',
+        'incidence_angle_min',
+        'incidence_angle_max',
+        'approximate_resolution_m',
+        'swath_width_km',
+        'number_of_looks',
+        'polarization']
 admin.site.register(ImagingMode, ImagingModeAdmin)
 
 
 class SatelliteInstrumentAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['name', 'abbreviation', 'description']
+    list_filter = ['satellite_instrument_group']
+    list_display = ['name', 'abbreviation', 'description']
 admin.site.register(SatelliteInstrument, SatelliteInstrumentAdmin)
 
 
 class SatelliteInstrumentGroupAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ['satellite', 'instrument_type']
+    list_display = ['satellite', 'instrument_type']
 admin.site.register(SatelliteInstrumentGroup, SatelliteInstrumentGroupAdmin)
 
 
 class BandAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['band_name']
+    list_filter = ['instrument_type']
+    list_display = ['instrument_type', 'band_name', 'band_abbr']
 admin.site.register(Band, BandAdmin)
 
 
 class SpectralGroupAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['name', 'description']
+    list_display = ['abbreviation', 'name', 'description']
 admin.site.register(SpectralGroup, SpectralGroupAdmin)
 
 
 class SpectralModeAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['name', 'description']
+    list_filter = ['instrument_type', 'spectralgroup']
+    list_display = [
+        'instrument_type',
+        'spectralgroup',
+        'abbreviation',
+        'name',
+        'description']
 admin.site.register(SpectralMode, SpectralModeAdmin)
 
 
 class BandSpectralModeAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ['spectral_mode']
+    list_display = ['spectral_mode', 'band']
 admin.site.register(BandSpectralMode, BandSpectralModeAdmin)
 
 
 class InstrumentTypeProcessingLevelAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ['instrument_type', 'processinglevel']
+    list_display = [
+        'instrument_type',
+        'processinglevel',
+        'operator_processing_level_name',
+        'operator_processing_level_abbreviation']
 admin.site.register(
     InstrumentTypeProcessingLevel, InstrumentTypeProcessingLevelAdmin)
 
 
 class SpectralModeProcessingCostsAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ['spectral_mode']
+    list_display = [
+        'spectral_mode',
+        'instrumenttypeprocessinglevel',
+        'cost_per_scene_in_rands',
+        'foreign_currency',
+        'cost_per_scene_in_foreign']
 admin.site.register(
     SpectralModeProcessingCosts, SpectralModeProcessingCostsAdmin)
 
 
 class OpticalProductProfileAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ['satellite_instrument', 'spectral_mode']
+    list_display = ['satellite_instrument', 'spectral_mode']
 admin.site.register(OpticalProductProfile, OpticalProductProfileAdmin)
 
 
 class RadarProductProfileAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ['satellite_instrument', 'imaging_mode']
+    list_display = ['satellite_instrument', 'imaging_mode']
 admin.site.register(RadarProductProfile, RadarProductProfileAdmin)
 
 
 class ForeignCurrencyAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['name']
+    list_display = ['abbreviation', 'name', 'conversion_rate']
 admin.site.register(ForeignCurrency, ForeignCurrencyAdmin)
 
 
 class ReferenceSystemAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['name', 'description']
+    list_display = ['abbreviation', 'name', 'description']
 admin.site.register(ReferenceSystem, ReferenceSystemAdmin)

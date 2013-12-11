@@ -111,6 +111,7 @@ class VisitorReport(models.Model):
         db_table = u'vw_visitor_report'
         #requires django 1.1
         managed = False
+        ordering = ['visit_count']
 
 ##############################################################################
 
@@ -144,6 +145,7 @@ class OrderNotificationRecipients(models.Model):
         app_label = 'catalogue'
         verbose_name = 'Order Notification Recipient'
         verbose_name_plural = 'Order Notification Recipients'
+        ordering = ['user']
 
     def __unicode__(self):
         return str(self.user.username)
@@ -210,6 +212,8 @@ class AllUsersMessage(models.Model):
     class Meta:
         # Specifies which database this model ORM goes to
         app_label = 'catalogue'
+        ordering = ['-created']
+
 
     def save(self, *args, **kwargs):
         """Broadcase the message using offline messages."""

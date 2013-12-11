@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 SANSA-EO Catalogue - Catalogue admin interface
 
@@ -53,15 +54,23 @@ from catalogue.models import (
 
 
 class VisitAdmin(admin.GeoModelAdmin):
-    pass
+    """Admin model for visitors."""
+    search_fields = ['city', 'country', 'user__username']
+    list_filter = ['city', 'country', 'user']
+    list_display = ('visit_date', 'city', 'country', 'user')
 
 
 class OrderStatusAdmin(admin.GeoModelAdmin):
-    pass
+    """Admin model for order status."""
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
 
 
 class OrderNotificationRecipientsAdminForm(forms.ModelForm):
+    """Admin form for order notification recipients."""
     class Meta:
+        """Meta class implementation."""
         model = OrderNotificationRecipients
 
     def clean(self):
@@ -76,12 +85,23 @@ class OrderNotificationRecipientsAdminForm(forms.ModelForm):
 
 
 class OrderNotificationRecipientsAdmin(admin.GeoModelAdmin):
+    """Admin for order notification recipients."""
+    search_fields = [
+        'user_username',
+        'satellite_instrument_group__satellite__name']
+    list_filter = ['user', 'satellite_instrument_group']
     list_display = ('user',)
+
     form = OrderNotificationRecipientsAdminForm
 
-    # This next method will filter the users list in the admin form
-    # so that only staff members can be chosen from the users list
     def render_change_form(self, request, context, *args, **kwargs):
+        """This next method will filter the users list in the admin form.
+
+        :param request:
+        :param context:
+        :param args:
+        :param kwargs:
+        So that only staff members can be chosen from the users list."""
         context['adminform'].form.fields['user'].queryset = (
             User.objects.filter(is_staff=True))
         return (
@@ -91,6 +111,9 @@ class OrderNotificationRecipientsAdmin(admin.GeoModelAdmin):
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         """
         Filters abstract product classes
+        :param db_field:
+        :param request:
+        :param kwargs:
         """
         if db_field.name == 'classes':
             form_field = (
@@ -112,54 +135,86 @@ class OrderNotificationRecipientsAdmin(admin.GeoModelAdmin):
 
 
 class DatumAdmin(admin.GeoModelAdmin):
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
     pass
 
 
 class InstitutionAdmin(admin.GeoModelAdmin):
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
     pass
 
 
 class LicenseAdmin(admin.GeoModelAdmin):
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
     pass
 
 
 class ProjectionAdmin(admin.GeoModelAdmin):
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
     pass
 
 
 class QualityAdmin(admin.GeoModelAdmin):
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
     pass
 
 
 class CreatingSoftwareAdmin(admin.GeoModelAdmin):
-    pass
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
 
 
 class GenericProductAdmin(admin.GeoModelAdmin):
-    pass
+    search_fields = ['original_product_id', 'unique_product_id']
+    list_filter = ['product_date', ]
+    list_display = ('original_product_id', 'unique_product_id')
 
 
 class GeospatialProductAdmin(admin.GeoModelAdmin):
-    pass
+    search_fields = ['original_product_id', 'unique_product_id']
+    list_filter = ['product_date', ]
+    list_display = ('original_product_id', 'unique_product_id')
 
 
 class OpticalProductAdmin(admin.GeoModelAdmin):
-    list_filter = ('product_profile',)
+    search_fields = ['original_product_id', 'unique_product_id']
+    list_filter = ['product_date', ]
+    list_display = ('original_product_id', 'unique_product_id')
 
 
 class ResamplingMethodAdmin(admin.GeoModelAdmin):
-    pass
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
 
 
 class FileFormatAdmin(admin.GeoModelAdmin):
-    pass
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
 
 
 class DeliveryMethodAdmin(admin.GeoModelAdmin):
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
     pass
 
 
 class TaskingRequestAdmin(admin.GeoModelAdmin):
+    list_filter = ['target_date']
+    list_display = ('target_date', 'user')
     pass
 
 

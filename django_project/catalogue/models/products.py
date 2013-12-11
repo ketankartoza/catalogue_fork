@@ -262,7 +262,7 @@ class GenericProduct(models.Model):
         """
         app_label = 'catalogue'
         abstract = False
-        ordering = ('product_date',)
+        ordering = ('-product_date',)
         #db_table = 'sample_genericproduct'
 
     def __unicode__(self):
