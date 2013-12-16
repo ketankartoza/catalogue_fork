@@ -29,9 +29,10 @@
         }
       );
 
-      var selectStyle = new OpenLayers.Style({'strokeColor': '#0000FF', 'fillOpacity': 0});1
+      var selectStyle = new OpenLayers.Style({'strokeColor': '#2f96b4', 'fillOpacity': 0});
+      var tempStyle = new OpenLayers.Style({'strokeColor': '#9EE9FF', 'fillOpacity': 0});
 
-      var style = new OpenLayers.StyleMap({'default': defaultStyle, 'select': selectStyle});
+      var style = new OpenLayers.StyleMap({'default': defaultStyle, 'select': selectStyle, 'temporary': tempStyle});
 
       this.layerSearch = new OpenLayers.Layer.Vector("Search geometry", { styleMap: style } );
       this.map_object.add_layer(this.layerSearch);
@@ -43,14 +44,21 @@
         renderIntent: "temporary",
         eventListeners: {
             beforefeaturehighlighted: null,
-            featurehighlighted: $.proxy(this.featureSelected,this),
+            featurehighlighted: null,
             featureunhighlighted: null
         }
-      }
-    );
+      });
+      var mySelectControl = new OpenLayers.Control.SelectFeature(
+      this.layerSearch , {
+        hover: false,
+        onSelect: $.proxy(this.featureSelected,this),
+      });
     this.map_object.map.addControl(myHighlightControl);
+    this.map_object.map.addControl(mySelectControl);
     myHighlightControl.activate();
-    this.layerSearch.selectFeatureControl = myHighlightControl;
+    mySelectControl.activate();
+    this.layerSearch.highlightFeatureControl = myHighlightControl;
+    this.layerSearch.selectFeatureControl = mySelectControl;
 
     var self=this;
     $APP.on('ResultGridView_fetchresults', function (evt) {
@@ -76,7 +84,7 @@
 
         //if item is in cart, color green else orange
         if (exist.length > 0) {
-          feat.attributes.strokeColor = '#228441';
+          feat.attributes.strokeColor = '#5bb75b';
           feat.attributes.fillOpacity = '0.5';
         } else {
           feat.attributes.strokeColor = '#FFA500';
@@ -89,17 +97,27 @@
     });
 
     $APP.on('highlightSearchRecord', function (evt, data) {
-      self.highlightRecord(data.unique_product_id, true);
+      self.highlightRecord(data.unique_product_id, true, true);
+      //var myIndex = self.getFeatureIndexByRecordId( data.unique_product_id );
+      //self.layerSearch.selectFeatureControl.select( self.layerSearch.features[myIndex]);
     });
 
     $APP.on('colorCartFeature', function (evt, data) {
       self.colorCartFeature(data.unique_product_id);
     });
+
+    $APP.on('focusFeature', function (evt, data) {
+      self.focusFeature(data.unique_product_id);
+    });
+
+    $APP.on('removeFocusFeature', function (evt, data) {
+      self.removeFocusFeature(data.unique_product_id);
+    });
   },
 
   featureSelected: function(theEvent) {
     APP.blockResultPanel();
-    var id = theEvent.feature.attributes.unique_product_id;
+    var id = theEvent.attributes.unique_product_id;
     $APP.trigger('highlightResultItem', {'id': id});
     this.highlightRecord(id, false);
     APP.unblockResultPanel();
@@ -114,14 +132,25 @@
       this.map_object.map.zoomToExtent(this.layerSearch.features[myIndex].geometry.bounds);
     }
     this.layerSearch.redraw();
+    this.layerSearch.selectFeatureControl.highlight( this.layerSearch.features[myIndex]);
     this.resetSceneZIndices();
   },
 
   colorCartFeature: function( theRecordId ) {
     var myIndex = this.getFeatureIndexByRecordId( theRecordId );
-    this.layerSearch.features[myIndex].attributes.strokeColor = '#228441';
+    this.layerSearch.features[myIndex].attributes.strokeColor = '#5bb75b';
     this.layerSearch.features[myIndex].attributes.fillOpacity = '0.5';
     this.layerSearch.redraw();
+  },
+
+  removeFocusFeature: function( theRecordId ) {
+    var myIndex = this.getFeatureIndexByRecordId( theRecordId );
+    this.layerSearch.highlightFeatureControl.unhighlight( this.layerSearch.features[myIndex]);
+  },
+
+  focusFeature: function( theRecordId ) {
+    var myIndex = this.getFeatureIndexByRecordId( theRecordId );
+    this.layerSearch.highlightFeatureControl.highlight( this.layerSearch.features[myIndex]);
   },
 
   getFeatureIndexByRecordId: function( theRecordId ) {
