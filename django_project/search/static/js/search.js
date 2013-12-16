@@ -478,15 +478,17 @@ APP.ResultGridViewItem = Backbone.View.extend({
         var selectedID = this.model.get('unique_product_id');
         var pos2 = $("#result_item_"+ selectedID).offset();
         var targetFeature = searchLayer.getFeatureElementRecordId(selectedID);
-        var point = targetFeature.geometry.getCentroid();
-        var pos = myMap.map.getPixelFromLonLat(new OpenLayers.LonLat(point.x, point.y));
-        this.line = APP.s.line(pos.x, pos.y + 35, pos2.left+2, pos2.top+9);
-        this.line.animate({stroke: "#2f96b4", strokeWidth: "4"}, 500);
+        if (targetFeature.onScreen()) {
+            var point = targetFeature.geometry.getCentroid();
+            var pos = myMap.map.getPixelFromLonLat(new OpenLayers.LonLat(point.x, point.y));
+            this.line = APP.s.line(pos.x, pos.y + 35, pos2.left+2, pos2.top+9);
+            this.line.animate({stroke: "#2f96b4", strokeWidth: "4"}, 500);
+        }
         $APP.trigger('focusFeature', {'unique_product_id': selectedID});
     },
 
     blurItem: function() {
-        this.line.remove();
+        if (typeof this.line != 'undefined') this.line.remove();
         var selectedID = this.model.get('unique_product_id');
         if (APP.selectedFeatureID == selectedID) {
             $APP.trigger('highlightSearchRecord', {'unique_product_id': selectedID, 'zoom': false});
@@ -502,6 +504,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
             $APP.trigger('highlightSearchRecord', {'unique_product_id': this.model.get('unique_product_id'), 'zoom': true});
             var selectedID = this.model.get('unique_product_id');
             $('#resetZoom').show();
+            this.line.remove();
         } else {
             var selectedID = data.id;
         }
