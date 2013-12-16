@@ -278,6 +278,7 @@ function resetSearchForm() {
 APP.$modal = $('#ajax-modal');
 APP.$imagemodal = null;
 APP.guid = '';
+APP.selectedFeatureID = '';
 
 APP.ResultItem = Backbone.Model.extend({
     //urlRoot: '/api/v1/searchresults/6cfa079f-8be1-4029-a1eb-f80875a4e27c/'
@@ -487,7 +488,11 @@ APP.ResultGridViewItem = Backbone.View.extend({
     blurItem: function() {
         this.line.remove();
         var selectedID = this.model.get('unique_product_id');
-        $APP.trigger('removeFocusFeature', {'unique_product_id': selectedID});
+        if (APP.selectedFeatureID == selectedID) {
+            $APP.trigger('highlightSearchRecord', {'unique_product_id': selectedID});
+        } else {
+            $APP.trigger('removeFocusFeature', {'unique_product_id': selectedID});
+        }
     },
 
     highlightResultItem: function(event, data) {

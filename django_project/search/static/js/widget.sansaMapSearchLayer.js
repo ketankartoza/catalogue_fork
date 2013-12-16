@@ -97,9 +97,7 @@
     });
 
     $APP.on('highlightSearchRecord', function (evt, data) {
-      self.highlightRecord(data.unique_product_id, true, true);
-      //var myIndex = self.getFeatureIndexByRecordId( data.unique_product_id );
-      //self.layerSearch.selectFeatureControl.select( self.layerSearch.features[myIndex]);
+      self.highlightRecord(data.unique_product_id, true);
     });
 
     $APP.on('colorCartFeature', function (evt, data) {
@@ -134,6 +132,7 @@
     this.layerSearch.redraw();
     this.layerSearch.selectFeatureControl.highlight( this.layerSearch.features[myIndex]);
     this.resetSceneZIndices();
+    APP.selectedFeatureID = theRecordId;
   },
 
   colorCartFeature: function( theRecordId ) {
