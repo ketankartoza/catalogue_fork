@@ -388,6 +388,15 @@
     right: 40px;
 }
 
+.result-item .cart-remove-button {
+    position: absolute;
+    right: 40px;
+}
+
+.result-item .hide {
+    display:none;
+}
+
 .result-item .button:hover {
     cursor: pointer;
     cursor: hand;

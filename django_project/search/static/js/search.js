@@ -395,6 +395,8 @@ APP.ResultGridView = Backbone.View.extend({
         // if it is, color it differently
         if (exist.length > 0) {
             $("#result_item_"+ myItem.model.get('unique_product_id')).addClass('cartResultRow');
+            $("#result_item_"+ myItem.model.get('unique_product_id')).children('.cart-remove-button').removeClass('hide');
+            $("#result_item_"+ myItem.model.get('unique_product_id')).children('.cart-button').addClass('hide');
         }
     },
 
@@ -442,6 +444,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
     events: {
         'click span.metadata-button': 'showMetadata',
         'click span.cart-button': 'addToCart',
+        'click span.cart-remove-button': 'removeFromCart',
         'click': 'highlightResultItem',
         'click img': 'imagePopover',
         'mouseenter': 'focusItem',
@@ -449,6 +452,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
     },
     initialize: function() {
         $APP.on('highlightResultItem', $.proxy(this.highlightResultItem, this));
+        $APP.on('removedItemFromCartUpdateResults', $.proxy(this.removedItemFromCartUpdateResults, this));
         this.expanded = false;
     },
 
@@ -497,6 +501,16 @@ APP.ResultGridViewItem = Backbone.View.extend({
         }
     },
 
+    removedItemFromCartUpdateResults: function(event, data) {
+        var exist = this.collection.filter(function(item) {
+                return item.get("unique_product_id") == data.unique_product_id;
+            });
+        if (exist.length > 0) {
+            this._removeFromCart(data.unique_product_id);
+            $APP.trigger('removedItemFromCart', {'unique_product_id': data.unique_product_id});
+        }
+    },
+
     highlightResultItem: function(event, data) {
         // if id is not set presume user has clicked in result panel on item
         // if id is set presuem user has clicked record on the map
@@ -534,12 +548,28 @@ APP.ResultGridViewItem = Backbone.View.extend({
                 APP.Cart.create({'product': {'id':id}},{wait: true});
                 $APP.trigger('colorCartFeature', {'unique_product_id': this.model.get('unique_product_id')});
                 $("#result_item_"+ this.model.get('unique_product_id')).addClass('cartResultRow');
+                $("#result_item_"+ this.model.get('unique_product_id')).children('.cart-remove-button').removeClass('hide');
+                $("#result_item_"+ this.model.get('unique_product_id')).children('.cart-button').addClass('hide');
             }
         } else {
             alert('You need to log in first!');
         }
         event.stopPropagation();
     },
+
+    removeFromCart: function(event) {
+        $APP.trigger('deleteCartItem', {'id': this.model.get('unique_product_id')});
+        this._removeFromCart(this.model.get('unique_product_id'));
+        $APP.trigger('removedItemFromCart', {'unique_product_id': this.model.get('unique_product_id')});
+        event.stopPropagation();
+    },
+
+    _removeFromCart: function(id) {
+        $("#result_item_"+ id).removeClass('cartResultRow');
+        $("#result_item_"+ id).children('.cart-remove-button').addClass('hide');
+        $("#result_item_"+ id).children('.cart-button').removeClass('hide');
+    },
+
     render: function() {
        $(this.el).html(_.template(template, {model:this.model}));
         return this;
@@ -562,6 +592,7 @@ var template = [
             '</p></div>',
             '<span class="button metadata-button"><i class="icon-list-alt"></i></span>',
             '<span class="button cart-button"><i class="icon-shopping-cart"></i></span>',
+            '<span class="button cart-remove-button hide"><i class="icon-remove"></i></span>',
           '</div>'
           ].join('');
 
@@ -604,7 +635,19 @@ APP.CartGridView = Backbone.View.extend({
         if (UserLoged) {
             this.collection.fetch({reset: true});
         }
+        $APP.on('deleteCartItem', $.proxy(this.deleteItem, this));
     },
+
+    deleteItem: function(event, data) {
+        var del = confirm('Are you sure?');
+        if (del) {
+            var exist = APP.Cart.find(function(item) {
+                return item.get("product").unique_product_id == data.id;
+            });
+            exist.destroy({wait: true});
+        }
+    },
+
     render: function() {
         // house keeping
         this.$el.empty();
@@ -640,6 +683,7 @@ APP.CartGridViewItem = Backbone.View.extend({
     delete: function() {
         var del = confirm('Are you sure?');
         if (del) {
+            $APP.trigger('removedItemFromCartUpdateResults', {'unique_product_id': this.model.get('product').unique_product_id});
             this.model.destroy({wait: true});
         }
     },

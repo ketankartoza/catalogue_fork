@@ -111,6 +111,10 @@
     $APP.on('removeFocusFeature', function (evt, data) {
       self.removeFocusFeature(data.unique_product_id);
     });
+
+    $APP.on('removedItemFromCart', function (evt, data) {
+      self.removedItemFromCart(data.unique_product_id);
+    });
   },
 
   featureSelected: function(theEvent) {
@@ -139,6 +143,13 @@
     var myIndex = this.getFeatureIndexByRecordId( theRecordId );
     this.layerSearch.features[myIndex].attributes.strokeColor = '#5bb75b';
     this.layerSearch.features[myIndex].attributes.fillOpacity = '0.5';
+    this.layerSearch.redraw();
+  },
+
+  removedItemFromCart: function( theRecordId ) {
+    var myIndex = this.getFeatureIndexByRecordId( theRecordId );
+    this.layerSearch.features[myIndex].attributes.strokeColor = '#FFA500';
+    this.layerSearch.features[myIndex].attributes.fillOpacity = '0';
     this.layerSearch.redraw();
   },
 
