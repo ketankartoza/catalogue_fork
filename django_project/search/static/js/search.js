@@ -362,6 +362,7 @@ APP.ResultGridView = Backbone.View.extend({
         });
     },
     render: function() {
+        $('#result-panel-toggle').removeClass('hide');
         if (_.size(this.collection.models) != 0) {
             $APP.trigger('SearchLayer_addFeatures', {
                 'data': this.collection.models
