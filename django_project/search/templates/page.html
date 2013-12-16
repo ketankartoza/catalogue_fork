@@ -121,7 +121,7 @@
       <div id="cart-panel">
         <div id="cart-container" class="well well-small"></div>
         <div id="cart-sub-panel" class="well well-small text-center">
-          <button class="btn btn-success">
+          <button id="place_order" class="btn btn-success">
             <i class="icon-ok"></i> Place Order
           </button>
           <button id="cart-panel-download-button"
@@ -318,6 +318,9 @@
     });
     $('#cart-panel-download-button').click(function() {
       toggleCartDownloadButton();
+    });
+    $('#place_order').click(function() {
+      window.location.replace('/addorder');
     });
     $('#map-layerswitcher-control').click(function() {
       toggleLayerSwitcher();
