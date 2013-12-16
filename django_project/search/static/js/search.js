@@ -481,7 +481,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
         var point = targetFeature.geometry.getCentroid();
         var pos = myMap.map.getPixelFromLonLat(new OpenLayers.LonLat(point.x, point.y));
         this.line = APP.s.line(pos.x, pos.y + 35, pos2.left+2, pos2.top+9);
-        this.line.animate({stroke: "#2f96b4", strokeWidth: "2"}, 500);
+        this.line.animate({stroke: "#2f96b4", strokeWidth: "4"}, 500);
         $APP.trigger('focusFeature', {'unique_product_id': selectedID});
     },
 
