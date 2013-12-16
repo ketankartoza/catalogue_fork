@@ -534,7 +534,6 @@ APP.ResultGridViewItem = Backbone.View.extend({
                 APP.Cart.create({'product': {'id':id}},{wait: true});
                 $APP.trigger('colorCartFeature', {'unique_product_id': this.model.get('unique_product_id')});
                 $("#result_item_"+ this.model.get('unique_product_id')).addClass('cartResultRow');
-                alert('Product added to cart');
             }
         } else {
             alert('You need to log in first!');
