@@ -154,11 +154,14 @@ function toggleCartDownloadButton() {
 function toggleLayerSwitcher() {
     if (LayerSwitcherState) {
         $('#map-layerswitcher').hide();
-        $('#map-layerswitcher-control').css('color','#FFFFFF');
+        $('#map-layerswitcher-control').children().removeClass('btn-success');
+        $('#map-layerswitcher-control').children().addClass('btn-info');
+
         LayerSwitcherState = false;
     } else {
         $('#map-layerswitcher').show();
-        $('#map-layerswitcher-control').css('color','green');
+        $('#map-layerswitcher-control').children().removeClass('btn-info');
+        $('#map-layerswitcher-control').children().addClass('btn-success');
         LayerSwitcherState = true;
     }
 }
