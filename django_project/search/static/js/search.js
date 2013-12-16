@@ -489,7 +489,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
         this.line.remove();
         var selectedID = this.model.get('unique_product_id');
         if (APP.selectedFeatureID == selectedID) {
-            $APP.trigger('highlightSearchRecord', {'unique_product_id': selectedID});
+            $APP.trigger('highlightSearchRecord', {'unique_product_id': selectedID, 'zoom': false});
         } else {
             $APP.trigger('removeFocusFeature', {'unique_product_id': selectedID});
         }
@@ -499,7 +499,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
         // if id is not set presume user has clicked in result panel on item
         // if id is set presuem user has clicked record on the map
         if (typeof data == 'undefined') {
-            $APP.trigger('highlightSearchRecord', {'unique_product_id': this.model.get('unique_product_id')});
+            $APP.trigger('highlightSearchRecord', {'unique_product_id': this.model.get('unique_product_id'), 'zoom': true});
             var selectedID = this.model.get('unique_product_id');
             $('#resetZoom').show();
         } else {

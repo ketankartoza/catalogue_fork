@@ -97,7 +97,7 @@
     });
 
     $APP.on('highlightSearchRecord', function (evt, data) {
-      self.highlightRecord(data.unique_product_id, true);
+      self.highlightRecord(data.unique_product_id, data.zoom);
     });
 
     $APP.on('colorCartFeature', function (evt, data) {
