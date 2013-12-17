@@ -288,8 +288,10 @@ APP.selectedFeatureID = '';
 APP.checkDateRange = function(e) {
     if (JSON.parse(e.dates).length > 0) {
         $('#search_button').removeClass('hide');
+        $('#daterange_heading').removeClass('red');
     } else {
         $('#search_button').addClass('hide');
+        $('#daterange_heading').addClass('red');
     }
 };
 
