@@ -201,6 +201,17 @@
 
                         e.stopImmediatePropagation();
                     })
+                    .on('click', '.listTree > ul > li > span > i', function(e) {
+                        var node = $(e.target).parent().parent();
+
+                        // Change the icon.
+                        _toggleIcon(node);
+
+                        // Toggle the child list.
+                        node.children('ul').slideToggle('fast');
+
+                        e.stopImmediatePropagation();
+                    })
                     .on('click', '.listTree > ul > li > ul > li > span', function(e) {
                         var node = $(e.target).parent();
 
