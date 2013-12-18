@@ -285,6 +285,10 @@ APP.$imagemodal = null;
 APP.guid = '';
 APP.selectedFeatureID = '';
 
+APP.isNumber = function(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 APP.checkDateRange = function(e) {
     if (JSON.parse(e.dates).length > 0) {
         $('#search_button').removeClass('hide');
@@ -296,8 +300,16 @@ APP.checkDateRange = function(e) {
 };
 
 APP.handleAoiGeometry = function(e) {
+    $APP.trigger('clearAoiBounds');
     if (e.target.value != '') {
-        
+        var values = e.target.value.split(',');
+        if (values.length == 3) {
+            if (!APP.isNumber(values[0]) || !APP.isNumber(values[1]) || !APP.isNumber(values[2])) return;
+            $APP.trigger('drawCircle', {'x': values[0], 'y': values[1], 'r': values[2]});
+        } else if (values.length == 4) {
+            if (!APP.isNumber(values[0]) || !APP.isNumber(values[1]) || !APP.isNumber(values[2]) || !APP.isNumber(values[3])) return;
+            $APP.trigger('drawBox', {'x1': values[0], 'y1': values[1], 'x2': values[2], 'y2': values[3]});
+        }
     }
 }
 

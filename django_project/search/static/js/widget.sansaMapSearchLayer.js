@@ -31,11 +31,15 @@
 
       var selectStyle = new OpenLayers.Style({'strokeColor': '#2f96b4', 'fillOpacity': 0});
       var tempStyle = new OpenLayers.Style({'strokeColor': '#9EE9FF', 'fillOpacity': 0});
+      var boundsStyle = new OpenLayers.Style({'strokeColor': '#FF0000', 'fillOpacity': 0});
 
       var style = new OpenLayers.StyleMap({'default': defaultStyle, 'select': selectStyle, 'temporary': tempStyle});
+      var styleBounds = new OpenLayers.StyleMap({'default': boundsStyle});
 
       this.layerSearch = new OpenLayers.Layer.Vector("Search geometry", { styleMap: style } );
+      this.layerBounds = new OpenLayers.Layer.Vector("Search bounds", {'displayInLayerSwitcher': false, styleMap: styleBounds});
       this.map_object.add_layer(this.layerSearch);
+      this.map_object.add_layer(this.layerBounds);
 
       var myHighlightControl = new OpenLayers.Control.SelectFeature(
       this.layerSearch , {
@@ -115,6 +119,39 @@
     $APP.on('removedItemFromCart', function (evt, data) {
       self.removedItemFromCart(data.unique_product_id);
     });
+
+    $APP.on('drawCircle', function (evt, data) {
+      self.drawCircle(data.x, data.y, data.r);
+    });
+
+    $APP.on('drawBox', function (evt, data) {
+      self.drawBox(data.x1, data.y1, data.x2, data.y2);
+    });
+
+    $APP.on('clearAoiBounds', function (evt, data) {
+      self.layerBounds.removeAllFeatures();
+    });
+  },
+
+  drawBox: function(x1,y1,x2,y2) {
+    var poly = this.map_object.transformBounds(new OpenLayers.Bounds(x1,y1,x2,y2)).toGeometry();
+    var featurebox = new OpenLayers.Feature.Vector(poly);
+    this.layerBounds.addFeatures([featurebox]);
+    APP.BoundsFeature = featurebox;
+  },
+
+  drawCircle: function(x,y,r) {
+    this.layerBounds.removeAllFeatures();
+    var mycircle = OpenLayers.Geometry.Polygon.createRegularPolygon
+      (
+          this.map_object.transformGeometry(new OpenLayers.Geometry.Point(x, y)),
+          r,
+          20,
+          0
+      );
+    var featurecircle = new OpenLayers.Feature.Vector(mycircle);
+    this.layerBounds.addFeatures([featurecircle]);
+    APP.BoundsFeature = featurecircle;
   },
 
   featureSelected: function(theEvent) {
