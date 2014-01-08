@@ -23,6 +23,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 import traceback
+
 from itertools import chain
 from django.conf import settings
 
@@ -57,7 +58,7 @@ from catalogue.views.helpers import (
 
 # SHP and KML readers
 from catalogue.featureReaders import (
-    getGeometryFromUploadedFile,)
+    getGeometryFromUploadedFile,getFeaturesFromZipFile,getFeaturesFromKMLFile,processGeometriesType)
 
 from catalogue.views.geoiputils import GeoIpUtils
 
@@ -452,3 +453,33 @@ def submitSearch(theRequest):
             mimetype='application/json', status=404)
     # we can only process POST requests
     return HttpResponse('Not a POST!', status=404)
+
+
+def upload_geo(theRequest):
+    if theRequest.FILES and theRequest.FILES.get('file_upload'):
+        f = theRequest.FILES.get('file_upload')
+        myOutFile = '/tmp/%s' % f.name
+        destination = open(myOutFile, 'wb+')
+        for chunk in f.chunks():
+            destination.write(chunk)
+        destination.close()
+        myExtension = (f.name.split('.')[-1].lower())
+        if not(myExtension == 'zip' or myExtension == 'kml' or
+                myExtension == 'kmz'):
+            return HttpResponse(
+                simplejson.dumps({"error": "File needs to be KML/KMZ/ZIP"}),
+                mimetype='application/json', status=500)
+        if myExtension == 'zip':
+            extractedGeometries = getFeaturesFromZipFile(
+                myOutFile, 'Polygon', 1)
+        else:
+            extractedGeometries = getFeaturesFromKMLFile(
+                myOutFile, 'Polygon', 1)
+        if len(extractedGeometries) == 0:
+            return HttpResponse(
+                simplejson.dumps({"error": "No geometries found..."}),
+                mimetype='application/json', status=500)
+        else:
+            return HttpResponse(
+                simplejson.dumps({"wkt": processGeometriesType(extractedGeometries).wkt}),
+                mimetype='application/json', status=200)

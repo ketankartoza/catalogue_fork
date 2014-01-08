@@ -11,7 +11,8 @@ from .views import (
     renderSearchForm,
     renderSearchMap,
     renderSearchResultsPage,
-    submitSearch
+    submitSearch,
+    upload_geo
 )
 
 urlpatterns = patterns(
@@ -37,5 +38,7 @@ urlpatterns = patterns(
     url(r'^rendersearchresultspage/(?P<theGuid>[a-h0-9\-]{36})/$',
         renderSearchResultsPage, name='renderSearchResultsPage'),
     url(r'^submitsearch/$', submitSearch,
-        name='submitSearch')
+        name='submitSearch'),
+    url(r'^upload_geo/$', upload_geo,
+        name='upload_geo')
 )

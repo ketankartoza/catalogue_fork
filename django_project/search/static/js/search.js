@@ -313,8 +313,34 @@ APP.handleAoiGeometry = function(e) {
     }
 }
 
+APP.upload_image = function(field, upload_url) {
+    if (field.files.length == 0) {
+        return;
+    }
+    file = field.files[0];
+    var formdata = new FormData();
+    formdata.append('file_upload', file);
+    $.ajax({
+        url: upload_url,
+        type: 'POST',
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            $APP.trigger('clearAoiBounds');
+            $APP.trigger('drawWKT', {'wkt': data.wkt});
+        },
+        error: function(data, text) {
+            alert($.parseJSON(data.responseText).error);
+        }
+    });
+}
+
 $(document).on("sansaDateRangeChanged", APP.checkDateRange);
 $('#id_aoi_geometry').on("blur", APP.handleAoiGeometry);
+$('#id_geometry_file').on("change", function() {
+      APP.upload_image(document.getElementById("id_geometry_file"),'/upload_geo/')
+    });
 
 APP.ResultItem = Backbone.Model.extend({
     //urlRoot: '/api/v1/searchresults/6cfa079f-8be1-4029-a1eb-f80875a4e27c/'

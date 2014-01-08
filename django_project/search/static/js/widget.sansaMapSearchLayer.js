@@ -128,6 +128,10 @@
       self.drawBox(data.x1, data.y1, data.x2, data.y2);
     });
 
+    $APP.on('drawWKT', function (evt, data) {
+      self.drawWKT(data.wkt);
+    });
+
     $APP.on('clearAoiBounds', function (evt, data) {
       self.layerBounds.removeAllFeatures();
     });
@@ -136,6 +140,13 @@
   drawBox: function(x1,y1,x2,y2) {
     var poly = this.map_object.transformBounds(new OpenLayers.Bounds(x1,y1,x2,y2)).toGeometry();
     var featurebox = new OpenLayers.Feature.Vector(poly);
+    this.layerBounds.addFeatures([featurebox]);
+    APP.BoundsFeature = featurebox;
+  },
+
+  drawWKT: function(wkt) {
+    var featurebox = new OpenLayers.Format.WKT().read(wkt);
+    featurebox.geometry.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
     this.layerBounds.addFeatures([featurebox]);
     APP.BoundsFeature = featurebox;
   },
