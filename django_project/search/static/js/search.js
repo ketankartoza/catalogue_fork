@@ -209,6 +209,14 @@ function submitSearchForm() {
             $APP.trigger('collectionSearch', {
               offset: 0
             });
+            //set redirect link if user it not loged in
+            // if he logs in, he will be redirected  back to last performed search
+            if (!UserLoged) {
+                var link = $('#login_link').attr("href") + '?next=/search/' + APP.guid + '/';
+                $('#login_link').attr("href", link);
+                link = $('#login_register').attr("href") + '?next=/search/' + APP.guid + '/';
+                $('#login_register').attr("href", link);
+            }
             openResultPanel();
             toggleSearchPanel();
         },

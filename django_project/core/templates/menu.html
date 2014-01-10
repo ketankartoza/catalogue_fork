@@ -134,10 +134,10 @@
         {% include "useraccounts/menu_content.html" %}
       {% else %}
       <li>
-        <a href="{% url 'userena_signup' %}"><i class="icon-group"></i> <span class="hidden-phone hidden-tablet">Register</span></a>
+        <a id="login_register" href="{% url 'userena_signup' %}"><i class="icon-group"></i> <span class="hidden-phone hidden-tablet">Register</span></a>
       </li>
       <li>
-        <a href="{% url 'userena_signin' %}"><i class="icon-user"></i> <span class="hidden-phone hidden-tablet">Login</span></a>
+        <a id="login_link" href="{% url 'userena_signin' %}"><i class="icon-user"></i> <span class="hidden-phone hidden-tablet">Login</span></a>
       </li>
       <li>
         <a href="{% url 'userena_password_reset' %}"><i class="icon-random"></i> <span class="hidden-phone hidden-tablet">Reset Password</span></a>
