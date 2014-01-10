@@ -466,7 +466,7 @@ def metadata(theRequest, theId):
 
 @staff_member_required
 #renderWithContext is explained in renderWith.py
-@renderWithContext('map.html')
+@renderWithContext('searchesmap.html')
 def searchesMap(theRequest):
     """Show a map of all searches"""
     myMessages = []
