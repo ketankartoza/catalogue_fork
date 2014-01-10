@@ -469,35 +469,6 @@ def metadata(theRequest, theId):
 @renderWithContext('searchesmap.html')
 def searchesMap(theRequest):
     """Show a map of all searches"""
-    myMessages = []
-    myLayerDefinitions = None
-    myLayersList = None
-    myExtent = '(-90.0,-45.0, 90.0, 45.0)'
-    myMessages.append('<h3>All searches</h3>')
-    myCount = Search.objects.count()
-    myMessages.append('Total Searches: ' + str(myCount))
-    myLayerDefinitions = [
-        WEB_LAYERS['BlueMarble'], WEB_LAYERS['Heatmap-total'],
-        WEB_LAYERS['Heatmap-last3month'], WEB_LAYERS['Heatmap-lastmonth'],
-        WEB_LAYERS['Heatmap-lastweek'], WEB_LAYERS['Searches']]
-    myLayersList = (
-        '[BlueMarble, heatmap_total, heatmap_last3month, heatmap_lastmonth, '
-        'heatmap_lastweek,searches]')
-    #myLayerDefinitions = [ WEB_LAYERS['ZaSpot10mMosaic2009'],
-    #  WEB_LAYERS['ZaRoadsBoundaries'], WEB_LAYERS['Searches'] ]
-    #myLayersList = "[zaSpot10mMosaic2009,zaRoadsBoundaries,searches]"
-
-    #render_to_response is done by the renderWithContext decorator
-    return ({
-        'myMessages': myMessages,
-        'myExtent': myExtent,
-        'myLayerDefinitions': myLayerDefinitions,
-        'myLayersList': myLayersList,
-        'myPartnerFlag': isStrategicPartner(theRequest),
-        'myShowSearchFeatureInfoFlag': 'true',
-        'myLegendFlag': 'true',
-        'mySearchAreasToggle': 'true',
-    })
 
 
 #
