@@ -95,38 +95,11 @@ class OthersViews_searchesMap(TestCase):
                 'searchesMap',
                 kwargs={}))
         self.assertEqual(myResp.status_code, 200)
-        self.assertEqual(
-            myResp.context['myMessages'],
-            ['<h3>All searches</h3>', 'Total Searches: 0'])
-        self.assertEqual(
-            myResp.context['myExtent'], '(-90.0,-45.0, 90.0, 45.0)')
-        self.assertEqual(
-            len(myResp.context['myLayerDefinitions']), 6)
-        myExpLaylersList = (
-            '[BlueMarble, heatmap_total, heatmap_last3month, heatmap_lastmonth'
-            ', heatmap_lastweek,searches]'
-        )
-        self.assertEqual(
-            myResp.context['myLayersList'], myExpLaylersList)
-        self.assertEqual(
-            myResp.context['myPartnerFlag'], False)
-        self.assertEqual(
-            myResp.context['myShowSearchFeatureInfoFlag'], 'true')
-        self.assertEqual(
-            myResp.context['myLegendFlag'], 'true')
-        self.assertEqual(
-            myResp.context['mySearchAreasToggle'], 'true')
-
         # check used templates
         myExpTemplates = [
-            u'map.html', u'mapbody.html', u'base.html', u'pipeline/css.html',
-            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'page.html', u'base-fluid.html',
-            u'pipeline/css.html', u'pipeline/css.html', u'menu.html',
-            u'useraccounts/menu_content.html', u'search_form/content-1.html',
-            u'search_form/content-2.html', u'search_form/content-3.html',
-            u'search_form/content-4.html', u'search_form/content-5.html',
-            u'pipeline/js.html'
+            u'searchesmap.html', u'base-fluid.html', u'pipeline/css.html',
+            u'pipeline/css.html', u'menu.html',
+            u'useraccounts/menu_content.html', u'pipeline/js.html'
         ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
