@@ -31,13 +31,12 @@ from django.conf import settings
 from django.utils import simplejson
 
 # Django helpers for forming html pages
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.http import (
     HttpResponse,
     Http404)
 from django.contrib.auth.decorators import login_required
 #from django.contrib.admin.views.decorators import staff_member_required
-from django.template import RequestContext
 #from django.db.models import Count, Min, Max  # for aggregate queries
 from django.forms.models import inlineformset_factory
 
@@ -49,7 +48,6 @@ from shapes.views import ShpResponder
 from catalogue.renderDecorator import renderWithContext
 
 from catalogue.views.helpers import (
-    standardLayers,
     render_to_kml,
     render_to_kmz,
     downloadHtmlMetadata,
@@ -87,61 +85,6 @@ class Http500(Exception):
 
 DateRangeInlineFormSet = inlineformset_factory(
     Search, SearchDateRange, extra=0, max_num=0, formset=DateRangeFormSet, form=DateRangeForm)
-
-
-@login_required
-def modifySearch(theRequest, theGuid):
-    """
-    Given a search guid, give the user a form prepopulated with
-    that search's criteria so they can modify their search easily.
-    A new search will be created from the modified one.
-    """
-    myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
-        theRequest)
-    logger.info('initial search form being rendered')
-    mySearch = get_object_or_404(Search, guid=theGuid)
-    myForm = AdvancedSearchForm(instance=mySearch)
-    myFormset = DateRangeInlineFormSet(instance=mySearch)
-    return render_to_response(
-        'searchv3.html', {
-            'myFormset': myFormset,
-            'myForm': myForm,
-            'myGuid': theGuid,
-            'myLayerDefinitions': myLayerDefinitions,
-            'myLayersList': myLayersList,
-            'myActiveBaseMap': myActiveBaseMap},
-        context_instance=RequestContext(theRequest))
-
-
-#@login_required
-#renderWithContext is explained in renderWith.py
-@renderWithContext('map.html')
-def searchResultMap(theRequest, theGuid):
-    """
-    Renders a search results page including the map and all attendant html
-    content
-    """
-    mySearch = get_object_or_404(Search, guid=theGuid)
-
-    mySearcher = Searcher(mySearch)
-    mySearchView = SearchView(theRequest, mySearcher)
-
-    return(mySearchView.templateData())
-
-
-#@login_required
-#renderWithContext is explained in renderWith.py
-@renderWithContext('page.html')
-def searchResultPage(theRequest, theGuid):
-    """
-    Does the same as searchResultMap but renders only enough html to be
-    inserted into a div
-    """
-    mySearch = get_object_or_404(Search, guid=theGuid)
-    mySearcher = Searcher(mySearch)
-    mySearchView = SearchView(theRequest, mySearcher)
-
-    return(mySearchView.templateData())
 
 
 #@login_required
@@ -198,52 +141,6 @@ def downloadSearchResultMetadata(theRequest, theGuid):
     else:
         return downloadISOMetadata(
             mySearchView.mSearchRecords, 'Search-%s' % theGuid)
-
-
-def renderSearchForm(theRequest):
-    """
-    Returns Search Form HTML used with AJAX calls
-    """
-    logger.info('initial search form being rendered')
-    myForm = AdvancedSearchForm()
-    myFormset = DateRangeInlineFormSet()
-    #render_to_response is done by the renderWithContext decorator
-    return render_to_response(
-        'searchPanelv3.html', {
-            'myForm': myForm,
-            'myFormset': myFormset},
-        context_instance=RequestContext(theRequest))
-
-
-def renderSearchMap(theRequest):
-    """
-    Returns Search Map HTML used with AJAX calls
-    """
-    logger.info('initial search map being rendered')
-    myLayersList, myLayerDefinitions, myActiveBaseMap = standardLayers(
-        theRequest)
-    #render_to_response is done by the renderWithContext decorator
-    return render_to_response(
-        'map_containerv3.html', {
-            'myLayerDefinitions': myLayerDefinitions,
-            'myLayersList': myLayersList,
-            'myActiveBaseMap': myActiveBaseMap},
-        context_instance=RequestContext(theRequest))
-
-
-#@login_required
-#renderWithContext is explained in renderWith.py
-@renderWithContext('pagev3.html')
-def renderSearchResultsPage(theRequest, theGuid):
-    """
-    Does the same as searchResultMap but renders only enough html to be
-    inserted into a div
-    """
-    mySearch = get_object_or_404(Search, guid=theGuid)
-
-    mySearcher = Searcher(mySearch)
-    mySearchView = SearchView(theRequest, mySearcher)
-    return(mySearchView.templateData())
 
 
 @login_required

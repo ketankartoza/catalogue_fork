@@ -103,5 +103,4 @@ class OthersViews_searchesMap(TestCase):
         ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
-        print myUsedTemplates
         self.assertEqual(myUsedTemplates, myExpTemplates)

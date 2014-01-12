@@ -48,7 +48,7 @@
           {{ mySearch.datesAsString }}
         </td>
         <td class="center">
-          <a href="{% url 'searchResultMap' mySearch.guid %}" class="view-btn">
+          <a href="{% url 'searchGuid' mySearch.guid %}" class="view-btn">
             <i class="icon-search"></i>
           </a>
           <a href="{% url 'deleteSearch' mySearch.id %}" onclick='$.get("{% url 'deleteSearch' mySearch.id %}?xhr");$(this).parent().parent().remove();return false;' class="remove-btn">
