@@ -55,7 +55,10 @@ from catalogue.views.helpers import (
 
 # SHP and KML readers
 from catalogue.featureReaders import (
-    getGeometryFromUploadedFile,getFeaturesFromZipFile,getFeaturesFromKMLFile,processGeometriesType)
+    getGeometryFromUploadedFile,
+    getFeaturesFromZipFile,
+    getFeaturesFromKMLFile,
+    processGeometriesType)
 
 from catalogue.views.geoiputils import GeoIpUtils
 
@@ -132,7 +135,7 @@ def downloadSearchResultMetadata(theRequest, theGuid):
     """
 
     mySearch = get_object_or_404(Search, guid=theGuid)
-    mySearcher = Searcher(theRequest, mySearch)
+    mySearcher = Searcher(mySearch)
     mySearchView = SearchView(theRequest, mySearcher)
 
     if 'html' in theRequest.GET:
