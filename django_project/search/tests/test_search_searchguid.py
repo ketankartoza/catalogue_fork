@@ -56,18 +56,23 @@ class SearchViews_searchGuid_Tests(TestCase):
         """
         Test view if user is not logged in
         """
-        myModel = SearchF.create(
+        SearchF.create(
             guid='69d814b7-3164-42b9-9530-50ae77806da9',
             collections=[CollectionF.create(), CollectionF.create()]
         )
 
         myClient = Client()
         myResp = myClient.get(
-            reverse('searchGuid', kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'}))
+            reverse(
+                'searchGuid',
+                kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'})
+        )
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
-            myResp['Location'],
-            'http://testserver/accounts/signin/?next=/search/69d814b7-3164-42b9-9530-50ae77806da9/')
+            myResp['Location'], (
+                'http://testserver/accounts/signin/?next=/search/'
+                '69d814b7-3164-42b9-9530-50ae77806da9/')
+        )
 
     def test_searchGuid_user(self):
         """
@@ -80,9 +85,12 @@ class SearchViews_searchGuid_Tests(TestCase):
             'is_staff': True
         })
 
+        myCol1 = CollectionF.create(**{'id': 10000, 'name': 'My Collection 1'})
+        myCol2 = CollectionF.create(**{'id': 10001, 'name': 'My Collection 2'})
+
         mySearch = SearchF.create(
             guid='69d814b7-3164-42b9-9530-50ae77806da9',
-            collections=[CollectionF.create(), CollectionF.create()]
+            collections=[myCol1, myCol2]
         )
 
         myForm = AdvancedSearchForm(instance=mySearch)
@@ -90,7 +98,10 @@ class SearchViews_searchGuid_Tests(TestCase):
         myClient = Client()
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
-            reverse('searchGuid', kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'}))
+            reverse(
+                'searchGuid',
+                kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'})
+        )
         self.assertEqual(myResp.status_code, 200)
 
         myExpTemplates = [
@@ -106,6 +117,15 @@ class SearchViews_searchGuid_Tests(TestCase):
         self.assertEqual(myUsedTemplates, myExpTemplates)
 
         self.assertEqual(mySearch, myResp.context['mysearch'])
-        self.assertEqual(myForm.__class__, myResp.context['searchform'].__class__)
-        self.assertEqual('[{"values": [], "val": "cc154", "key": "Collection 155"}, {"values": [], "val": "cc155", "key": "Collection 156"}]', myResp.context['listreeoptions'])
-        self.assertEqual('[{"values": [], "val": "cc154", "key": "Collection 155"}, {"values": [], "val": "cc155", "key": "Collection 156"}]', myResp.context['selected_options'])
+        self.assertEqual(
+            myForm.__class__, myResp.context['searchform'].__class__)
+        self.assertEqual(
+            myResp.context['listreeoptions'], (
+                '[{"values": [], "val": "cc10000", "key": "My Collection 1"}, '
+                '{"values": [], "val": "cc10001", "key": "My Collection 2"}]')
+        )
+        self.assertEqual(
+            myResp.context['selected_options'], (
+                '[{"values": [], "val": "cc10000", "key": "My Collection 1"}, '
+                '{"values": [], "val": "cc10001", "key": "My Collection 2"}]')
+        )
