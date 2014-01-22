@@ -1,6 +1,6 @@
 """
 SANSA-EO Catalogue - search_bandcount - test correctness of
-    search results for satellites
+    search results for spectral group
 
 Contact : lkleyn@sansa.org.za
 
@@ -24,41 +24,36 @@ from search.searcher import Searcher
 
 from catalogue.tests.model_factories import OpticalProductF
 from dictionaries.tests.model_factories import (
-    SatelliteF, SatelliteInstrumentGroupF, SatelliteInstrumentF,
-    OpticalProductProfileF
+    SpectralGroupF, OpticalProductProfileF, SpectralModeF
 )
 from .model_factories import SearchF
 
 
-class SearchSatellite_Test(TestCase):
+class SearchSpectralGroup_Test(TestCase):
     """
-    Tests Search Satellites
+    Tests Search Spectral Group
     """
     def setUp(self):
         """
         Set up before each test
         """
 
-    def test_Search_satellites(self):
+    def test_Search_spectral_group(self):
         """
-        Test satellite searches
+        Test spectral group searches
         """
 
-        mySat = SatelliteF.create(**{
-            'name': 'My Satellite'
+        mySpecGroup = SpectralGroupF.create(**{
+            'name': 'My Spectral Group'
         })
 
-        mySatInstGroup = SatelliteInstrumentGroupF.create(**{
-            'satellite': mySat
-        })
-
-        mySatInst = SatelliteInstrumentF.create(**{
-            'operator_abbreviation': 'SATIN 1',
-            'satellite_instrument_group': mySatInstGroup
+        mySpecMode = SpectralModeF.create(**{
+            'name': 'Temp Spectral mode',
+            'spectralgroup': mySpecGroup
         })
 
         myOPP = OpticalProductProfileF.create(**{
-            u'satellite_instrument': mySatInst
+            u'spectral_mode': mySpecMode
         })
 
         OpticalProductF.create(**{
@@ -66,7 +61,7 @@ class SearchSatellite_Test(TestCase):
         })
 
         mySearch = SearchF.create(**{
-            'satellites': [mySat]
+            'spectral_groups': [mySpecGroup]
         })
 
         #create Searcher object

@@ -39,9 +39,9 @@ class SearchInstrumentTypes_Test(TestCase):
         Set up before each test
         """
 
-    def test_Search_bandcount_pan(self):
+    def test_Search_instrument_type(self):
         """
-        Test collection searches
+        Test instrument type searches
         """
 
         myInsType = InstrumentTypeF.create(**{
