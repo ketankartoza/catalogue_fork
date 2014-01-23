@@ -1,6 +1,6 @@
 """
 SANSA-EO Catalogue - search_bandcount - test correctness of
-    search results for satellites
+    search results dates
 
 Contact : lkleyn@sansa.org.za
 
@@ -64,6 +64,9 @@ class SearchSatellite_Test(TestCase):
         OpticalProductF.create(**{
             'product_profile': myOPP
         })
+
+        # create an optical product that should not appear in the results
+        OpticalProductF.create()
 
         mySearch = SearchF.create(**{
             'satellites': [mySat]

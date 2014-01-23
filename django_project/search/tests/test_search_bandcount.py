@@ -48,6 +48,11 @@ class SearchBandCount_Test(TestCase):
             'band_count': 2
         })
 
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'band_count': -1
+        })
+
         mySearch = SearchF.create(**{
             'band_count': 0
         })
@@ -64,6 +69,11 @@ class SearchBandCount_Test(TestCase):
 
         OpticalProductF.create(**{
             'band_count': 3
+        })
+
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'band_count': -1
         })
 
         mySearch = SearchF.create(**{
@@ -88,6 +98,11 @@ class SearchBandCount_Test(TestCase):
             'band_count': 8
         })
 
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'band_count': -1
+        })
+
         mySearch = SearchF.create(**{
             'band_count': 2
         })
@@ -109,6 +124,11 @@ class SearchBandCount_Test(TestCase):
             'band_count': 40
         })
 
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'band_count': -1
+        })
+
         mySearch = SearchF.create(**{
             'band_count': 3
         })
@@ -128,6 +148,11 @@ class SearchBandCount_Test(TestCase):
         })
         OpticalProductF.create(**{
             'band_count': 1000
+        })
+
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'band_count': -1
         })
 
         mySearch = SearchF.create(**{

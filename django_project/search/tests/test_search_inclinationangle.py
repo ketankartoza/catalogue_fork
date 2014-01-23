@@ -45,6 +45,11 @@ class SearchIncliantionAngle_Test(TestCase):
             'sensor_inclination_angle': 30
         })
 
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'sensor_inclination_angle': 55
+        })
+
         mySearch = SearchF.create(**{
             'sensor_inclination_angle_start': 30,
             'sensor_inclination_angle_end': 50
@@ -66,6 +71,11 @@ class SearchIncliantionAngle_Test(TestCase):
         })
         OpticalProductF.create(**{
             'sensor_inclination_angle': -30
+        })
+
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'sensor_inclination_angle': -25
         })
 
         mySearch = SearchF.create(**{

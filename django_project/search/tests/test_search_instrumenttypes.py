@@ -65,6 +65,9 @@ class SearchInstrumentTypes_Test(TestCase):
             'product_profile': myOPP
         })
 
+        # create an optical product that should not appear in the results
+        OpticalProductF.create()
+
         mySearch = SearchF.create(**{
             'instrument_types': [myInsType]
         })

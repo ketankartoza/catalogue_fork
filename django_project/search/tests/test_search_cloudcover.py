@@ -44,6 +44,11 @@ class SearchCloudCover_Test(TestCase):
             'cloud_cover': 50
         })
 
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'cloud_cover': 1000
+        })
+
         mySearch = SearchF.create(**{
             'cloud_mean': 50
         })
@@ -63,6 +68,11 @@ class SearchCloudCover_Test(TestCase):
         })
         OpticalProductF.create(**{
             'cloud_cover': 50
+        })
+
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'cloud_cover': 1000
         })
 
         mySearch = SearchF.create(**{

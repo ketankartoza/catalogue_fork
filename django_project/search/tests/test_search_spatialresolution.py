@@ -44,6 +44,11 @@ class SearchSpatialResolution_Test(TestCase):
             'spatial_resolution': 1
         })
 
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'spatial_resolution': -1
+        })
+
         mySearch = SearchF.create(**{
             'spatial_resolution': 0
         })
@@ -63,6 +68,11 @@ class SearchSpatialResolution_Test(TestCase):
         })
         OpticalProductF.create(**{
             'spatial_resolution': 2
+        })
+
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'spatial_resolution': 5
         })
 
         mySearch = SearchF.create(**{
@@ -86,6 +96,11 @@ class SearchSpatialResolution_Test(TestCase):
             'spatial_resolution': 6
         })
 
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'spatial_resolution': 1
+        })
+
         mySearch = SearchF.create(**{
             'spatial_resolution': 2
         })
@@ -105,6 +120,11 @@ class SearchSpatialResolution_Test(TestCase):
         })
         OpticalProductF.create(**{
             'spatial_resolution': 20
+        })
+
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'spatial_resolution': 5
         })
 
         mySearch = SearchF.create(**{
@@ -128,6 +148,11 @@ class SearchSpatialResolution_Test(TestCase):
             'spatial_resolution': 35
         })
 
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'spatial_resolution': 36
+        })
+
         mySearch = SearchF.create(**{
             'spatial_resolution': 4
         })
@@ -147,6 +172,11 @@ class SearchSpatialResolution_Test(TestCase):
         })
         OpticalProductF.create(**{
             'spatial_resolution': 60
+        })
+
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'spatial_resolution': 66
         })
 
         mySearch = SearchF.create(**{

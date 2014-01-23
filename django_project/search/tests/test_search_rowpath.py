@@ -41,6 +41,11 @@ class SearchRowPath_Test(TestCase):
             'row': 40
         })
 
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'row': 45
+        })
+
         mySearch = SearchF.create(**{
             'j_frame_row': '40'
         })
@@ -57,6 +62,11 @@ class SearchRowPath_Test(TestCase):
 
         OpticalProductF.create(**{
             'path': 144
+        })
+
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'path': 123
         })
 
         mySearch = SearchF.create(**{
@@ -76,6 +86,12 @@ class SearchRowPath_Test(TestCase):
         OpticalProductF.create(**{
             'row': 40,
             'path': 144
+        })
+
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'row': 45,
+            'path': 123
         })
 
         mySearch = SearchF.create(**{
@@ -107,6 +123,12 @@ class SearchRowPath_Test(TestCase):
         })
         OpticalProductF.create(**{
             'row': 385,
+            'path': 110
+        })
+
+        # create an optical product that should not appear in the results
+        OpticalProductF.create(**{
+            'row': 375,
             'path': 110
         })
 

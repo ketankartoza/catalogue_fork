@@ -69,6 +69,9 @@ class SearchLicenseType_Test(TestCase):
             'product_profile': myOPP
         })
 
+        # create an optical product that should not appear in the results
+        OpticalProductF.create()
+
         mySearch = SearchF.create(**{
             'license_types': [myLicense]
         })
