@@ -428,6 +428,8 @@
     // setup search summary widget
     //searchSummary = new APP.SearchSummary('#search-summary');
     //searchSummary.force();
+    // ask daterange widget to notify us about dates, it will trigger state of search button
+    $('#date_range').daterange('notify');
   });
   </script>
 {% endblock %}

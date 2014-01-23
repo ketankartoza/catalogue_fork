@@ -299,10 +299,10 @@ APP.isNumber = function(n) {
 
 APP.checkDateRange = function(e) {
     if (JSON.parse(e.dates).length > 0) {
-        $('#search_button').removeClass('hide');
+        $('#search_button').removeClass('disabled');
         $('#daterange_heading').removeClass('red');
     } else {
-        $('#search_button').addClass('hide');
+        $('#search_button').addClass('disabled');
         $('#daterange_heading').addClass('red');
     }
 };
