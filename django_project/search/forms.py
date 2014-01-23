@@ -22,34 +22,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 import datetime
-import time
 
 from django import forms
 from django.forms.models import BaseInlineFormSet
-#from django.utils.translation import ugettext_lazy as _
-from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
+
 
 from django.forms import HiddenInput
-
-#from django.core.validators import EMPTY_VALUES
-from crispy_forms.helper import FormHelper
-from crispy_forms.bootstrap import (
-    Tab,
-    TabHolder,
-)
-from crispy_forms.layout import (
-    Layout,
-    Fieldset,
-    Submit,
-    Button,
-    Div,
-    HTML,
-    Field
-)
-from crispy_forms.bootstrap import (
-    FormActions
-)
 
 from catalogue.fields import IntegersCSVIntervalsField
 from catalogue.datetimewidget import DateTimeWidget

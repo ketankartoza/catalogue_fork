@@ -87,7 +87,8 @@ class Http500(Exception):
     pass
 
 DateRangeInlineFormSet = inlineformset_factory(
-    Search, SearchDateRange, extra=0, max_num=0, formset=DateRangeFormSet, form=DateRangeForm)
+    Search, SearchDateRange, extra=0, max_num=0, formset=DateRangeFormSet,
+    form=DateRangeForm)
 
 
 #@login_required
@@ -175,7 +176,7 @@ def searchguid(theRequest, theGuid):
             'val': '{}|{}'.format(sat.pk, sig.instrument_type.pk)
             } for sig in sat.satelliteinstrumentgroup_set.all())
             for sat in col.satellite_set.all())))
-        } for col in collections
+    } for col in collections
     ]
 
     # prepare the selected data subset
@@ -187,10 +188,10 @@ def searchguid(theRequest, theGuid):
         'values': list(chain.from_iterable((({
             'key': '{} {}'.format(sat.name, sig.instrument_type.name),
             'val': '{}|{}'.format(sat.pk, sig.instrument_type.pk)
-            } for sig in sat.satelliteinstrumentgroup_set.all()
+        } for sig in sat.satelliteinstrumentgroup_set.all()
             if sig.instrument_type.pk in sel_instrumenttypes)
             for sat in col.satellite_set.all() if sat.pk in sel_satellites)))
-        } for col in collections
+    } for col in collections
     ]
 
     myListTreeOptions = simplejson.dumps(data)
@@ -199,7 +200,8 @@ def searchguid(theRequest, theGuid):
     return {
         'mysearch': mySearch, 'searchform': myForm, 'dateformset': myFormset,
         'listreeoptions': myListTreeOptions,
-        'selected_options': myListTreeSelected, 'searchlistnumber': settings.RESULTS_NUMBER
+        'selected_options': myListTreeSelected,
+        'searchlistnumber': settings.RESULTS_NUMBER
     }
 
 
@@ -219,7 +221,7 @@ def searchView(theRequest):
             'val': '{}|{}'.format(sat.pk, sig.instrument_type.pk)
             } for sig in sat.satelliteinstrumentgroup_set.all())
             for sat in col.satellite_set.all())))
-        } for col in collections
+    } for col in collections
     ]
 
     myListTreeOptions = simplejson.dumps(data)
@@ -380,5 +382,6 @@ def upload_geo(theRequest):
                 mimetype='application/json', status=500)
         else:
             return HttpResponse(
-                simplejson.dumps({"wkt": processGeometriesType(extractedGeometries).wkt}),
+                simplejson.dumps({
+                    "wkt": processGeometriesType(extractedGeometries).wkt}),
                 mimetype='application/json', status=200)

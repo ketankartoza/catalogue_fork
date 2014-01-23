@@ -60,15 +60,16 @@ class SearchViews_downloadSearchMetadata_Tests(TestCase):
             'is_staff': True
         })
 
-        myModel = SearchF.create(
+        SearchF.create(
             guid='69d814b7-3164-42b9-9530-50ae77806da9',
             collections=[CollectionF.create(), CollectionF.create()]
         )
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(
-            reverse('downloadSearchResultMetadata', kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'}),
+        myResp = myClient.get(reverse(
+            'downloadSearchResultMetadata',
+            kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'}),
             {'xxx': ''})
 
         self.assertEqual(myResp.status_code, 200)
@@ -77,7 +78,9 @@ class SearchViews_downloadSearchMetadata_Tests(TestCase):
         self.assertEqual(myResp['content-type'], 'application/zip')
         self.assertEqual(
             myResp['content-disposition'],
-            'attachment; filename=SANSA-Search-69d814b7-3164-42b9-9530-50ae77806da9-Metadata.zip')
+            ('attachment; filename=SANSA-Search-69d814b7-3164-42b9-9530-'
+                '50ae77806da9-Metadata.zip')
+        )
 
     def test_downloadSearchResults_login_html(self):
         """
@@ -89,15 +92,16 @@ class SearchViews_downloadSearchMetadata_Tests(TestCase):
             'is_staff': True
         })
 
-        myModel = SearchF.create(
+        SearchF.create(
             guid='69d814b7-3164-42b9-9530-50ae77806da9',
             collections=[CollectionF.create(), CollectionF.create()]
         )
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(
-            reverse('downloadSearchResultMetadata', kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'}),
+        myResp = myClient.get(reverse(
+            'downloadSearchResultMetadata',
+            kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'}),
             {'html': ''})
 
         self.assertEqual(myResp.status_code, 200)
@@ -106,4 +110,6 @@ class SearchViews_downloadSearchMetadata_Tests(TestCase):
         self.assertEqual(myResp['content-type'], 'application/zip')
         self.assertEqual(
             myResp['content-disposition'],
-            'attachment; filename=SANSA-Search-69d814b7-3164-42b9-9530-50ae77806da9-Metadata.zip')
+            ('attachment; filename=SANSA-Search-69d814b7-3164-42b9-9530-'
+                '50ae77806da9-Metadata.zip')
+        )

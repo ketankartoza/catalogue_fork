@@ -60,15 +60,16 @@ class SearchViews_downloadSearchResult_Tests(TestCase):
             'is_staff': True
         })
 
-        myModel = SearchF.create(
+        SearchF.create(
             guid='69d814b7-3164-42b9-9530-50ae77806da9',
             collections=[CollectionF.create(), CollectionF.create()]
         )
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(
-            reverse('downloadSearchResult', kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'}),
+        myResp = myClient.get(reverse(
+            'downloadSearchResult',
+            kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'}),
             {'shp': ''})
 
         self.assertEqual(myResp.status_code, 200)
@@ -77,7 +78,9 @@ class SearchViews_downloadSearchResult_Tests(TestCase):
         self.assertEqual(myResp['content-type'], 'application/zip')
         self.assertEqual(
             myResp['content-disposition'],
-            'attachment; filename=69d814b7-3164-42b9-9530-50ae77806da9-imagebounds.zip')
+            ('attachment; filename=69d814b7-3164-42b9-9530-50ae77806da9-'
+                'imagebounds.zip')
+        )
 
     def test_downloadSearchResults_login_kml(self):
         """
@@ -89,24 +92,29 @@ class SearchViews_downloadSearchResult_Tests(TestCase):
             'is_staff': True
         })
 
-        myModel = SearchF.create(
+        SearchF.create(
             guid='69d814b7-3164-42b9-9530-50ae77806da9',
             collections=[CollectionF.create(), CollectionF.create()]
         )
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(
-            reverse('downloadSearchResult', kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'}),
-            {'kml': ''})
+        myResp = myClient.get(reverse(
+            'downloadSearchResult',
+            kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'}),
+            {'kml': ''}
+        )
 
         self.assertEqual(myResp.status_code, 200)
 
         # check response
-        self.assertEqual(myResp['content-type'], 'application/vnd.google-earth.kml+xml')
+        self.assertEqual(
+            myResp['content-type'], 'application/vnd.google-earth.kml+xml')
         self.assertEqual(
             myResp['content-disposition'],
-            'attachment; filename=69d814b7-3164-42b9-9530-50ae77806da9-imagebounds.kml')
+            ('attachment; filename=69d814b7-3164-42b9-9530-50ae77806da9-'
+                'imagebounds.kml')
+        )
 
     def test_downloadSearchResults_login_kmz(self):
         """
@@ -118,24 +126,28 @@ class SearchViews_downloadSearchResult_Tests(TestCase):
             'is_staff': True
         })
 
-        myModel = SearchF.create(
+        SearchF.create(
             guid='69d814b7-3164-42b9-9530-50ae77806da9',
             collections=[CollectionF.create(), CollectionF.create()]
         )
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(
-            reverse('downloadSearchResult', kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'}),
+        myResp = myClient.get(reverse(
+            'downloadSearchResult',
+            kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'}),
             {'kmz': ''})
 
         self.assertEqual(myResp.status_code, 200)
 
         # check response
-        self.assertEqual(myResp['content-type'], 'application/vnd.google-earth.kmz')
+        self.assertEqual(
+            myResp['content-type'], 'application/vnd.google-earth.kmz')
         self.assertEqual(
             myResp['content-disposition'],
-            'attachment; filename=69d814b7-3164-42b9-9530-50ae77806da9-imagebounds.kmz')
+            ('attachment; filename=69d814b7-3164-42b9-9530-50ae77806da9-'
+                'imagebounds.kmz')
+        )
 
     def test_downloadSearchResults_login_wrong_guid(self):
         """
@@ -147,20 +159,21 @@ class SearchViews_downloadSearchResult_Tests(TestCase):
             'is_staff': True
         })
 
-        myModel = SearchF.create(
+        SearchF.create(
             guid='69d814b7-3164-42b9-9530-50ae77806da9',
             collections=[CollectionF.create(), CollectionF.create()]
         )
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(
-            reverse('downloadSearchResult', kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806db9'}),
+        myResp = myClient.get(reverse(
+            'downloadSearchResult',
+            kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806db9'}),
             {'kmz': ''})
 
         self.assertEqual(myResp.status_code, 404)
 
-    def test_downloadSearchResults_login_wrong_guid(self):
+    def test_downloadSearchResults_login_wrong_filetype(self):
         """
         Test view if user is logged in
         """
@@ -170,15 +183,17 @@ class SearchViews_downloadSearchResult_Tests(TestCase):
             'is_staff': True
         })
 
-        myModel = SearchF.create(
+        SearchF.create(
             guid='69d814b7-3164-42b9-9530-50ae77806da9',
             collections=[CollectionF.create(), CollectionF.create()]
         )
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(
-            reverse('downloadSearchResult', kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'}),
-            {'xxx': ''})
+        myResp = myClient.get(reverse(
+            'downloadSearchResult',
+            kwargs={'theGuid': '69d814b7-3164-42b9-9530-50ae77806da9'}),
+            {'xxx': ''}
+        )
 
         self.assertEqual(myResp.status_code, 404)
