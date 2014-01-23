@@ -2,6 +2,7 @@ var WMS_SERVER = 'maps.sansa.org.za';
 
 WEB_LAYERS = {}
 WEB_LAYERS_IMAGE = {}
+WEB_LAYERS_DESC = {}
 // Streets and boundaries for SA base map with an
 // underlay of spot 2010 2m mosaic
 //
@@ -48,6 +49,7 @@ WEB_LAYERS.zaSpot2mMosaic2009TC = new OpenLayers.Layer.WMS(
    antialiasing: 'true'
  },
  {isBaseLayer: true});
+
 
 // Streets and boundaries for SA base map with an underlay
 // of spot 2008 mosaic. Uses the degraded 2m product in a tile cache
@@ -452,3 +454,15 @@ WEB_LAYERS_IMAGE['10m Mosaic 2007 TC'] = 'zaLayer.jpeg';
 WEB_LAYERS_IMAGE['SA Vector'] = 'zaLayer2.jpeg';
 WEB_LAYERS_IMAGE['Open Street Map'] = 'layerOSM.png';
 WEB_LAYERS_IMAGE['Search geometry'] = 'mockup3.png';
+
+WEB_LAYERS_DESC['2m Mosaic 2010 TC'] = '2m Mosaic 2010 TC';
+WEB_LAYERS_DESC['2m Mosaic 2009 TC'] = '2m Mosaic 2009 TC';
+WEB_LAYERS_DESC['2m Mosaic 2008 TC'] = '2m Mosaic 2008 TC';
+WEB_LAYERS_DESC['2m Mosaic 2007 TC'] = '2m Mosaic 2007 TC';
+WEB_LAYERS_DESC['10m Mosaic 2010 TC'] = '10m Mosaic 2010 TC';
+WEB_LAYERS_DESC['10m Mosaic 2009 TC'] = '10m Mosaic 2009 TC';
+WEB_LAYERS_DESC['10m Mosaic 2008 TC'] = '10m Mosaic 2008 TC';
+WEB_LAYERS_DESC['10m Mosaic 2007 TC'] = '10m Mosaic 2007 TC';
+WEB_LAYERS_DESC['SA Vector'] = 'SA Vector';
+WEB_LAYERS_DESC['Open Street Map'] = 'Open Street Map';
+WEB_LAYERS_DESC['Search geometry'] = 'mockup3.png';

@@ -169,6 +169,7 @@
     var layer = this.map.getLayersByName(name)[0];
     if (layer.isBaseLayer === true) {
       this.map.setBaseLayer(layer);
+      $('#map-controls3').html(WEB_LAYERS_DESC[layer.name]);
       // clear classes on previously selected layers
       $('#map-layerswitcher .base').removeClass('visible');
       $(el).addClass('visible');
@@ -198,6 +199,7 @@
           base = '';
         };
         if (val.visibility) {
+            if (val.isBaseLayer === true) $('#map-controls3').html(WEB_LAYERS_DESC[val.name]);
             visible = 'visible';
         } else {
             visible = '';
