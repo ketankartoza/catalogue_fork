@@ -25,10 +25,7 @@ from django.test import TestCase
 from search.searcher import Searcher
 
 from catalogue.tests.model_factories import OpticalProductF
-from dictionaries.tests.model_factories import (
-    SatelliteF, SatelliteInstrumentGroupF, SatelliteInstrumentF,
-    OpticalProductProfileF
-)
+
 from .model_factories import SearchF, SearchDateRangeF
 
 
@@ -60,7 +57,6 @@ class SearchDateRange_Test(TestCase):
             'product_acquisition_start': datetime(2010, 07, 14, 0, 0),
             'product_acquisition_end': None
         })
-
 
         mySearch = SearchF.create()
 
