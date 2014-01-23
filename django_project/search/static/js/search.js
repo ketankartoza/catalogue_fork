@@ -218,7 +218,7 @@ function submitSearchForm() {
                 $('#login_register').attr("href", link);
             }
             openResultPanel();
-            toggleSearchPanel();
+            //toggleSearchPanel();
         },
         error: function(data) {
             if (data.status == '404') {
