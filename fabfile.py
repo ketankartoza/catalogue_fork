@@ -13,8 +13,7 @@ from fabric.colors import red, magenta, yellow, cyan
 from fabric.contrib.files import contains, exists, append, sed
 from fabric.context_managers import quiet
 import fabtools
-from fabgis import postgres, common, virtualenv, git
-    #umn_mapserver
+from fabgis import postgres, common, virtualenv, git, umn_mapserver
 # Don't remove even though its unused
 #noinspection PyUnresolvedReferences
 from fabtools.vagrant import vagrant
@@ -83,7 +82,7 @@ def rsync_vagrant_to_code_dir():
 def collect_static():
     _all()
     with cd('%s/django_project' % env.code_path):
-        # run('venv/bin/python manage.py collectstatic --noinput')
+        run('../venv/bin/python manage.py collectstatic --noinput')
         wsgi_file = 'core/wsgi.py'
         sudo('find . -iname \'*.pyc\' -exec rm {} \;')
         run('touch %s' % wsgi_file)
@@ -343,9 +342,11 @@ def deploy(branch='master'):
         fabtools.require.deb.package('build-essential')
         fabtools.require.deb.package('libgdal1-dev')
         fabtools.require.deb.package('gdal-bin')
+        fabtools.require.deb.package('curl')
     fastprint(cyan('Updating GIT checkout...\n'))
-    with quiet():
-        update_git_checkout(branch)
+    # We can't use 'with_quiet' as this suppresses the prompt for
+    # username/password
+    update_git_checkout(branch)
     fastprint(cyan('Setting up venv...\n'))
     with quiet():
         setup_venv()

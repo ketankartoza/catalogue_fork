@@ -259,8 +259,9 @@ line {
 }
 
 .focusedResultRow {
-    background-color: #2f96b4;
+    background-color: #2f96b4!important;
     border-left: 2px solid #2f96b4;
+    color:white!important;
 }
 
 .cartResultRow {

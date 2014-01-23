@@ -1,6 +1,5 @@
 <div id="content-2" class="form-inline accordion-body collapse">
   <div class="accordion-inner" style="padding-bottom: 10px;">
-    <p class="text-center">Date formats must be: dd/mm/yyyy</p>
     <span id="daterange_inline" class="help-inline"></span>
     <div id="date_from_cg" class="span1">
       <label for="id_start_datepicker">From: </label>
@@ -20,6 +19,7 @@
           <i class="icon-angle-down"></i> Add
         </button>
       </div>
+      <p class="text-center">Format: dd/mm/yyyy</p>
       {{ dateformset.management_form }}
       <hr/>
       <table class="table table-striped" style="margin-top: 10px;">

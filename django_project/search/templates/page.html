@@ -185,12 +185,12 @@
                  data-placement="top">
               <i class="icon-chevron-left"></i>
             </div>
-            <div id="resetZoom" style="float:left; display: none;"
-                 class="btn resetZoom"
+            <button id="resetZoom" style="float:left; display: none;"
+                 class="btn btn-info resetZoom"
                  data-toggle="tooltip" data-title="Reset Zoom"
                  data-placement="top">
-              <i class="icon-eye-close"></i>
-            </div>
+              <i class="icon-zoom-out"></i>
+            </button>
             <div class="position" id="resultsPosition"></div>
             <div id="searchNext" class="btn searchNext"
                  style="float:right; display: none;"
@@ -281,6 +281,8 @@
   $( document ).ready(function() {
     // activate tooltips on all buttons
     $('button[data-toggle="tooltip"]').tooltip();
+    // activate help popovers
+    $('.help-popover').popover();
     // initialize map widdget
     myMap = new APP.SansaMap('map');
     // initialize search layer widget

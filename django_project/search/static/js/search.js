@@ -661,9 +661,9 @@ var template = [
               '<% } else { %>UNK',
               '<% } %>',
             '</p></div>',
-            '<span class="button metadata-button"><i class="icon-list-alt"></i></span>',
-            '<span class="button cart-button"><i class="icon-shopping-cart"></i></span>',
-            '<span class="button cart-remove-button hide"><i class="icon-remove"></i></span>',
+            '<span class="button metadata-button btn btn-default"><i class="icon-list-alt"></i></span>',
+            '<span class="button cart-button btn btn-default"><i class="icon-shopping-cart"></i></span>',
+            '<span class="button cart-remove-button btn btn-default hide"><i class="icon-remove"></i></span>',
           '</div>'
           ].join('');
 

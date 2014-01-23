@@ -1,37 +1,68 @@
 <div id="content-5" class="form-horizontal accordion-body collapse">
   <div class="accordion-inner">
     <div class="control-group">
+      <div class="controls">
+        <label class="checkbox">
+          {{ searchform.panchromatic_imagery }} {{ searchform.panchromatic_imagery.label_tag }}
+        </label>
+      </div>
+    </div>
+    <div class="control-group">
       <label class="control-label"
              for="id_sensor_inclination_angle_start">
-        Inclination Start
+        Inclination Angle Min.
       </label>
       <div class="controls">
         {{ searchform.sensor_inclination_angle_start }}
-        <span class="help-block">{{ searchform.sensor_inclination_angle_start.help_text }}</span>
+        <span class="help-popover"
+              data-title="Inclination Angle Min."
+              data-content="{{ searchform.sensor_inclination_angle_start.help_text }}"
+              data-trigger="hover"
+              data-container="body">
+          <i class="icon-question-sign"></i>
+        </span>
       </div>
     </div>
     <div class="control-group">
       <label class="control-label"
              for="id_sensor_inclination_angle_end">
-        Inclination End
+        Inclination Angle Max.
       </label>
       <div class="controls">
         {{ searchform.sensor_inclination_angle_end }}
-        <span class="help-block">{{ searchform.sensor_inclination_angle_end.help_text }}</span>
+        <span class="help-popover"
+              data-title="Inclination Angle Max."
+              data-content="{{ searchform.sensor_inclination_angle_end.help_text }}"
+              data-trigger="hover"
+              data-container="body">
+          <i class="icon-question-sign"></i>
+        </span>
       </div>
     </div>
     <div class="control-group">
       <label class="control-label" for="id_spatial_resolution">Spatial resolution</label>
       <div class="controls">
         {{ searchform.spatial_resolution }}
-        <span class="help-block">{{ searchform.spatial_resolution.help_text }}</span>
+        <span class="help-popover"
+              data-title="Spatial resolution"
+              data-content="{{ searchform.spatial_resolution.help_text }}"
+              data-trigger="hover"
+              data-container="body">
+          <i class="icon-question-sign"></i>
+        </span>
       </div>
     </div>
     <div class="control-group">
       <label class="control-label" for="id_band_count">Band count</label>
       <div class="controls">
         {{ searchform.band_count }}
-        <span class="help-block">{{ searchform.band_count.help_text }}</span>
+        <span class="help-popover"
+              data-title="Band count"
+              data-content="{{ searchform.band_count.help_text }}"
+              data-trigger="hover"
+              data-container="body">
+          <i class="icon-question-sign"></i>
+        </span>
       </div>
     </div>
     <div class="search-options">
@@ -42,14 +73,6 @@
           </label>
         </div>
       </div>
-      <div class="control-group">
-        <div class="controls">
-          <label class="checkbox">
-            {{ searchform.panchromatic_imagery }} {{ searchform.panchromatic_imagery.label_tag }}
-          </label>
-        </div>
-      </div>
     </div>
   </div>
 </div>
-

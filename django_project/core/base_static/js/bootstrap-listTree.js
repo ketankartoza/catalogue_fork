@@ -12,7 +12,7 @@
             '<% var ps; %>',
             '<% if ( !_.isUndefined(ps = _.find(options.selected, function(elem) { return elem.key === this.key; }, parent1)) ) { %>',
             'checked="checked"',
-            '<% } %> value="<%= parent1.val %>" /> <%= parent1.key %><i class="icon-chevron-down icon-black"></i></span>',
+            '<% } %> value="<%= parent1.val %>" /> <%= parent1.key %><i class="icon-angle-down icon-black"></i></span>',
             '<% if (options.startCollapsed) { %>',
                 '<ul style="display: none;">',
             '<% } else { %>',
@@ -72,13 +72,13 @@
         if (jQElement.children('ul').is(':visible')) {
             // The user wants to collapse the child list.
             jQElement.children('span').children('i')
-                .removeClass('icon-chevron-up')
-                .addClass('icon-chevron-down');
+                .removeClass('icon-angle-up')
+                .addClass('icon-angle-down');
         } else {
             // The user wants to expand the child list.
             jQElement.children('span').children('i')
-                .removeClass('icon-chevron-down')
-                .addClass('icon-chevron-up');
+                .removeClass('icon-angle-down')
+                .addClass('icon-angle-up');
         }
     }
 
