@@ -51,7 +51,7 @@
     this.mNavigationPanel.allowDepress = true;
     this.map.addControl(this.mNavigationPanel);
 
-    var modifyEventListeners = { 
+    var modifyEventListeners = {
         "activate": function() {
           $(this.panel_div).removeClass("btn-info");
           $(this.panel_div).addClass("btn-success");

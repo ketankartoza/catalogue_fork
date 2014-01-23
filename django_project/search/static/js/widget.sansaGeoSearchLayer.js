@@ -21,6 +21,7 @@
       this.geoSearch.events.on({"featuremodified" : $.proxy(this.modifyWKT, this)});
       this.geoSearch.events.on({"featureadded" : $.proxy(this.addWKT, this)});
       this.geoSearch.events.on({"featureremoved": $.proxy(this.removeWKT, this)});
+      this.geoSearch.events.on({"featureselected": function() { console.log('test'); } });
 
     var modifyEventListeners = {
         "activate": function() {
@@ -36,14 +37,14 @@
     this.myDrawingControl = new OpenLayers.Control.DrawFeature(this.geoSearch, OpenLayers.Handler.Polygon, {
       'displayClass': 'btn btn-info btn-large right icon-check-empty olControlDrawFeaturePolygon',
       'title': 'Capture polygon: left click to add points, double click to finish capturing',
-      div : OpenLayers.Util.getElement('map-navigation'),
+      div : OpenLayers.Util.getElement('search_geometry_controls'),
       eventListeners: modifyEventListeners
     });
 
     this.myModifyFeatureControl = new OpenLayers.Control.ModifyFeature(this.geoSearch, {
       'displayClass': 'btn btn-info btn-large right icon-edit olControlModifyFeature',
       'title': 'Modify polygon: left click to move/add points, hover and press <i>delete</i> to delete points',
-      div : OpenLayers.Util.getElement('map-navigation'),
+      div : OpenLayers.Util.getElement('search_geometry_controls'),
       eventListeners: modifyEventListeners
     });
 
@@ -58,12 +59,14 @@
       'displayClass': 'btn btn-info btn-large right icon-remove  destroyFeature',
       'title':'Delete polygon: deletes polygon',
       'layer': this.geoSearch,
-      div : OpenLayers.Util.getElement('map-navigation'),
+      div : OpenLayers.Util.getElement('search_geometry_controls'),
       eventListeners: modifyEventListeners
     });
-
+    this.mGeoControlPanel = new OpenLayers.Control.Panel({div : OpenLayers.Util.getElement('search_geometry_controls'), allowDepress: true});
+    this.mGeoControlPanel.allowDepress = true;
+    this.map_object.map.addControl(this.mGeoControlPanel);
     // add controls to the panel
-    this.map_object.mNavigationPanel.addControls(
+    this.mGeoControlPanel.addControls(
       [this.myDrawingControl]);
   },
   /* ------------------------------------------------------
@@ -101,7 +104,7 @@
       this.geoSearch.destroyFeatures(myOldFeatures);
     }
     this.writeWKT(event.feature.geometry);
-    this.map_object.mNavigationPanel.addControls(
+    this.mGeoControlPanel.addControls(
       [this.myModifyFeatureControl, this.myDestroyFeaturesControl]);
   },
 
@@ -111,9 +114,9 @@
 
   removeWKT: function(event) {
     document.getElementById('id_geometry').value = '';
-    OpenLayers.Util.removeItem(this.map_object.mNavigationPanel.controls, this.myModifyFeatureControl);
-    OpenLayers.Util.removeItem(this.map_object.mNavigationPanel.controls, this.myDestroyFeaturesControl);
-    this.map_object.mNavigationPanel.redraw();
+    OpenLayers.Util.removeItem(this.mGeoControlPanel.controls, this.myModifyFeatureControl);
+    OpenLayers.Util.removeItem(this.mGeoControlPanel.controls, this.myDestroyFeaturesControl);
+    this.mGeoControlPanel.redraw();
   }
 
 }; // prototype
