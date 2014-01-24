@@ -513,6 +513,7 @@ APP.ResultGridView = Backbone.View.extend({
             });
 
             this.cont.empty();
+            $('#results-container').perfectScrollbar('destroy');
             this.cont.append('<div class="result-item"><div class="result-item-info">Product</div><div class="result-item-info-date">Date</div><div class="cloud-cover">Cloud cover</div></div>');
             var self=this;
             _(this.collection.models).each(function(item){
@@ -520,9 +521,8 @@ APP.ResultGridView = Backbone.View.extend({
             },this);
             this._update_pagination_info();
         }
-
+        $('#results-container').perfectScrollbar( { wheelSpeed: 20, wheelPropogation: true } );
         APP.unblockResultPanel();
-
         return this;
     },
     renderItem: function(item) {

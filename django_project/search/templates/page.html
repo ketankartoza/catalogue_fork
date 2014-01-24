@@ -313,7 +313,7 @@
     $('.listTree').listTree( {{ listreeoptions|safe }} , { "startCollapsed": true, "selected": {{ selected_options|safe }} });
     // initialize nice scrollbar
     $('#search-panel-content').perfectScrollbar( {wheelSpeed: 20, wheelPropogation: true } );
-    $('#results-container').perfectScrollbar( { wheelSpeed: 20, wheelPropogation: true } );
+    //$('#results-container').perfectScrollbar( { wheelSpeed: 20, wheelPropogation: true } );
     $('#cart-container').perfectScrollbar( { wheelSpeed: 20, wheelPropogation: true } );
     // if size of #catalogue serch has changes since page load, we need to
     // update nice scroller to new height
@@ -322,6 +322,13 @@
     });
     $('#catalogueSearch').on('hide', function () {
       $('#search-panel-content').perfectScrollbar('update');
+    });
+    $('#result-panel').on('show', function(){
+      console.log('test');
+      $('#results-container').perfectScrollbar('update');
+    });
+    $('#results-panel').on('hide', function () {
+      $('#results-container').perfectScrollbar('update');
     });
     // initialize datepicker widgets
     $('#id_start_datepicker').datepicker({
