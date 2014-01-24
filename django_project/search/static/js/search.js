@@ -281,7 +281,8 @@ function resetSearchForm() {
     file.replaceWith( file = file.clone( true ) );
 
     // reset search summary widget
-    searchSummary.reset();
+    // searchSummary.reset();
+    resetSearchFromErrors();
 }
 
 // backbone models/collections/views
@@ -307,16 +308,84 @@ APP.checkDateRange = function(e) {
     }
 };
 
+APP.addErrorNotifiction = function(e, msg) {
+    $(e.target).parent().parent().addClass('error');
+            var helpElem = '<span class="error-block">'+msg+'</span>'
+            $(e.target).parent().append(helpElem);
+}
+
+APP.removeErrorNotification = function(e) {
+    $(e.target).parent().find('.error-block').each( function() { this.remove(); })
+    $(e.target).parent().parent().removeClass('error');
+}
+
 APP.handleAoiGeometry = function(e) {
+    var error_msg = 'Area of interest geometry is not valid.';
+    APP.removeErrorNotification(e);
     $APP.trigger('clearAoiBounds');
     if (e.target.value != '') {
         var values = e.target.value.split(',');
         if (values.length == 3) {
-            if (!APP.isNumber(values[0]) || !APP.isNumber(values[1]) || !APP.isNumber(values[2])) return;
+            if (!APP.isNumber(values[0]) || !APP.isNumber(values[1]) || !APP.isNumber(values[2]))
+                {
+                    APP.addErrorNotifiction(e,error_msg);
+                    return;
+                }
             $APP.trigger('drawCircle', {'x': values[0], 'y': values[1], 'r': values[2]});
         } else if (values.length == 4) {
-            if (!APP.isNumber(values[0]) || !APP.isNumber(values[1]) || !APP.isNumber(values[2]) || !APP.isNumber(values[3])) return;
+            if (!APP.isNumber(values[0]) || !APP.isNumber(values[1]) || !APP.isNumber(values[2]) || !APP.isNumber(values[3]))
+                {
+                    APP.addErrorNotifiction(e,error_msg);
+                    return;
+                }
             $APP.trigger('drawBox', {'x1': values[0], 'y1': values[1], 'x2': values[2], 'y2': values[3]});
+        } else {
+            APP.addErrorNotifiction(e,error_msg);
+        }
+    }
+}
+
+APP.handlePathorRow = function(e) {
+    var error_msg = 'Enter a valid value.';
+    APP.removeErrorNotification(e);
+    if (e.target.value != '') {
+        if (e.target.value.length == 1) {
+            if (!APP.isNumber(e.target.value)) {
+                APP.addErrorNotifiction(e,error_msg);
+                return;
+            }
+        }
+        if (e.target.value.search(/^[0-9\-,\s]+$/) === -1) {
+            APP.addErrorNotifiction(e,error_msg);
+            return;
+        }
+
+    }
+}
+
+APP.handleCloudMean = function(e) {
+    var error_msg = 'Enter a valid value, number between 0 and 100.';
+    APP.removeErrorNotification(e);
+    if (e.target.value != '') {
+        if (!APP.isNumber(e.target.value)) {
+            APP.addErrorNotifiction(e,error_msg);
+            return;
+        }
+        if (e.target.value < 0 || e.target.value > 100) {
+            APP.addErrorNotifiction(e,error_msg);
+            return;
+        }
+
+    }
+}
+
+APP.handleAngle = function(e) {
+    var error_msg = 'Enter a number.';
+    APP.removeErrorNotification(e);
+    if (e.target.value != '') {
+        if (!APP.isNumber(e.target.value)) {
+            APP.addErrorNotifiction(e,error_msg);
+            return;
         }
     }
 }
@@ -345,7 +414,12 @@ APP.upload_image = function(field, upload_url) {
 }
 
 $(document).on("sansaDateRangeChanged", APP.checkDateRange);
-$('#id_aoi_geometry').on("blur", APP.handleAoiGeometry);
+$('#id_aoi_geometry').on("keyup", APP.handleAoiGeometry);
+$('#id_k_orbit_path').on("keyup", APP.handlePathorRow);
+$('#id_j_frame_row').on("keyup", APP.handlePathorRow);
+$('#id_cloud_mean').on("keyup", APP.handleCloudMean);
+$('#id_sensor_inclination_angle_start').on("keyup", APP.handleAngle);
+$('#id_sensor_inclination_angle_end').on("keyup", APP.handleAngle);
 $('#id_geometry_file').on("change", function() {
       APP.upload_image(document.getElementById("id_geometry_file"),'/upload_geo/')
     });
