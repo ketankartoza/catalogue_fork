@@ -144,7 +144,7 @@ class AdvancedSearchForm(forms.ModelForm):
         label=u'Bounding Box/Circle',
         widget=forms.TextInput(attrs={'title': (
             'Upper left and lower right coordinates e.g. (20,-32,22,-34). Or '
-            'circle center and radius e.g. (20,-32,100).')
+            'circle center and radius e.g. (20,-32,100000).')
         }),
         required=False)
 
