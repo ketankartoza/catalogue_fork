@@ -170,9 +170,9 @@ function validate_form(){
   var form_ok = false;
   var myDateRange = $('#date_range .date_range_row');
   if (myDateRange.length === 0) {
-      alert('You have to select at least 1 date range!');
-      $('#tab-2').prop('checked',true);
-      $('#content-2').collapse('show');
+        var helpElem = '<span class="error-block">You have to select at least 1 date range!</span>'
+        $('#date_range').parent().prepend(helpElem);
+        $('#content-2').collapse('show');
   } else {
     form_ok = true;
   }
