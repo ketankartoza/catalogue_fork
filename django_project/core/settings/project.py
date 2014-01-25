@@ -146,6 +146,7 @@ PIPELINE_JS = {
             'js/widget.sansaMap.js',
             'js/widget.sansaMapSearchLayer.js',
             'js/widget.sansaGeoSearchLayer.js',
+            'js/widget.sansaSearchCartLayer.js',
             'js/widget.sansaSearchSummary.js',
             'js/widget.sansaSearchesMap.js',
             'js/lightbox-2.6.min.js'

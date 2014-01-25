@@ -801,6 +801,9 @@ APP.CartGridView = Backbone.View.extend({
             self.renderItem(item);
         },this);
         $('#cart-container').perfectScrollbar('update');
+        $APP.trigger('SearchCartLayer_addFeatures', {
+                'data': this.collection.models
+            });
         return this;
     },
     renderItem: function(item) {

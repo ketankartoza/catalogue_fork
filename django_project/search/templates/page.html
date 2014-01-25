@@ -122,6 +122,9 @@
       <div id="cart-panel">
         <div id="cart-container" class="well well-small"></div>
         <div id="cart-sub-panel" class="well well-small text-center">
+          <button id="cart-show-map" class="btn btn-info" data-state="hidden">
+            Show on map
+          </button>
           <button id="place_order" class="btn btn-success">
             <i class="icon-ok"></i> Place Order
           </button>
@@ -292,6 +295,8 @@
     searchLayer = new APP.SearchLayer(myMap);
     // initialize layer that holds custom geometry control
     geoSearchLayer = new APP.GeoSearchLayer(myMap);
+    // initialize layer that holds cart geometry
+    searchCartLayer = new APP.SearchCartLayer(myMap);
     // check if we are opening existing search from history
     {% if mysearch %}
       // set guid of loaded search
@@ -324,7 +329,6 @@
       $('#search-panel-content').perfectScrollbar('update');
     });
     $('#result-panel').on('show', function(){
-      console.log('test');
       $('#results-container').perfectScrollbar('update');
     });
     $('#results-panel').on('hide', function () {
@@ -350,6 +354,19 @@
     });
     $('#cart-panel-download-button').click(function() {
       toggleCartDownloadButton();
+    });
+    $('#cart-show-map').click(function() {
+      // show cart products on map
+      var elem  = $(this);
+      if (elem.data('state') == 'hidden') {
+        $APP.trigger('SearchCartLayer_setVisibility', true);
+        elem.data('state','visible');
+        elem.html('Hide from map');
+      } else {
+        $APP.trigger('SearchCartLayer_setVisibility', false);
+        elem.data('state','hidden');
+        elem.html('Show on map');
+      }
     });
     $('#place_order').click(function() {
       window.location.replace('/addorder');
