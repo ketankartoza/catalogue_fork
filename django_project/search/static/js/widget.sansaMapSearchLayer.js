@@ -41,7 +41,7 @@
       this.map_object.add_layer(this.layerSearch);
       this.map_object.add_layer(this.layerBounds);
 
-      var myHighlightControl = new OpenLayers.Control.SelectFeature(
+      this.myHighlightControl = new OpenLayers.Control.SelectFeature(
       this.layerSearch , {
         hover: false,
         highlightOnly: true,
@@ -52,17 +52,17 @@
             featureunhighlighted: null
         }
       });
-      var mySelectControl = new OpenLayers.Control.SelectFeature(
+      this.mySelectControl = new OpenLayers.Control.SelectFeature(
       this.layerSearch , {
         hover: false,
         onSelect: $.proxy(this.featureSelected,this),
       });
-    this.map_object.map.addControl(myHighlightControl);
-    this.map_object.map.addControl(mySelectControl);
-    myHighlightControl.activate();
-    mySelectControl.activate();
-    this.layerSearch.highlightFeatureControl = myHighlightControl;
-    this.layerSearch.selectFeatureControl = mySelectControl;
+    this.map_object.map.addControl(this.myHighlightControl);
+    this.map_object.map.addControl(this.mySelectControl);
+    this.myHighlightControl.activate();
+    this.mySelectControl.activate();
+    this.layerSearch.highlightFeatureControl = this.myHighlightControl;
+    this.layerSearch.selectFeatureControl = this.mySelectControl;
 
     var self=this;
     $APP.on('ResultGridView_fetchresults', function (evt) {

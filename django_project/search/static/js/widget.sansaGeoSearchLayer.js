@@ -21,16 +21,20 @@
       this.geoSearch.events.on({"featuremodified" : $.proxy(this.modifyWKT, this)});
       this.geoSearch.events.on({"featureadded" : $.proxy(this.addWKT, this)});
       this.geoSearch.events.on({"featureremoved": $.proxy(this.removeWKT, this)});
-      this.geoSearch.events.on({"featureselected": function() { console.log('test'); } });
+      this.geoSearch.events.on({"beforefeaturemodified": function() { console.log('test'); } });
 
     var modifyEventListeners = {
         "activate": function() {
           $(this.panel_div).removeClass("btn-info");
           $(this.panel_div).addClass("btn-success");
+          searchLayer.myHighlightControl.deactivate();
+          searchLayer.mySelectControl.deactivate();
         },
         "deactivate": function() {
           $(this.panel_div).removeClass("btn-success");
           $(this.panel_div).addClass("btn-info");
+          searchLayer.myHighlightControl.activate();
+          searchLayer.mySelectControl.activate();
         }
     };
 
