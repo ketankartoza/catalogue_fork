@@ -153,13 +153,13 @@
 
   drawCircle: function(x,y,r) {
     this.layerBounds.removeAllFeatures();
-    var mycircle = OpenLayers.Geometry.Polygon.createRegularPolygon
+    var mycircle = this.map_object.transformGeometry(OpenLayers.Geometry.Polygon.createRegularPolygon
       (
-          this.map_object.transformGeometry(new OpenLayers.Geometry.Point(x, y)),
-          r,
+          new OpenLayers.Geometry.Point(x, y),
+          r/111,
           20,
           0
-      );
+      ));
     var featurecircle = new OpenLayers.Feature.Vector(mycircle);
     this.layerBounds.addFeatures([featurecircle]);
     APP.BoundsFeature = featurecircle;
