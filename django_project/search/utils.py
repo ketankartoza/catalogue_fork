@@ -48,26 +48,26 @@ class SearchView(object):
         logger.debug('Starting search')
 
         # Paginate the results
-        self.mPaginator = Paginator(self.mQuerySet, settings.PAGE_SIZE)
+        # self.mPaginator = Paginator(self.mQuerySet, settings.PAGE_SIZE)
 
-        try:
-            self.mPageNo = int(self.mRequest.GET.get('page', '1'))
-        except ValueError:
-            self.mPageNo = 1
-        logger.debug(
-            'search by scene using paginator page... %s', str(self.mPageNo))
-        # If page request (9999) is out of range, deliver last page of results.
-        try:
-            logger.debug('search by scene - getting page')
-            self.mSearchPage = self.mPaginator.page(self.mPageNo)
-            logger.debug('search by scene - search results paginated')
-        except (EmptyPage, InvalidPage):
-            logger.debug(
-                'search by scene - paginator page requested is out of range')
-            self.mSearchPage = self.mPaginator.page(self.mPaginator.num_pages)
+        # try:
+        #     self.mPageNo = int(self.mRequest.GET.get('page', '1'))
+        # except ValueError:
+        #     self.mPageNo = 1
+        # logger.debug(
+        #     'search by scene using paginator page... %s', str(self.mPageNo))
+        # # If page request (9999) is out of range, deliver last page of results.
+        # try:
+        #     logger.debug('search by scene - getting page')
+        #     self.mSearchPage = self.mPaginator.page(self.mPageNo)
+        #     logger.debug('search by scene - search results paginated')
+        # except (EmptyPage, InvalidPage):
+        #     logger.debug(
+        #         'search by scene - paginator page requested is out of range')
+        #     self.mSearchPage = self.mPaginator.page(self.mPaginator.num_pages)
 
         myUnion = None
-        for myObject in self.mSearchPage.object_list:
+        for myObject in self.mQuerySet:
             myRecord = SearchRecord()
             myRecord.product = myObject
             self.mSearchRecords.append(myRecord)
