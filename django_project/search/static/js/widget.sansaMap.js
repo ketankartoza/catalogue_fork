@@ -98,6 +98,9 @@
         displayClass:'btn btn-large btn-info right icon-chevron-left olControlNavigationHistoryPrevious',
         div: OpenLayers.Util.getElement('map-navigation'),
         eventListeners: modifyEventListeners
+      },
+      onPreviousChange: function() {
+        console.log('test');
       }
     });
 

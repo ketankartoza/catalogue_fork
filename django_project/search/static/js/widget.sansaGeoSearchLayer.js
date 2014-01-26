@@ -21,7 +21,6 @@
       this.geoSearch.events.on({"featuremodified" : $.proxy(this.modifyWKT, this)});
       this.geoSearch.events.on({"featureadded" : $.proxy(this.addWKT, this)});
       this.geoSearch.events.on({"featureremoved": $.proxy(this.removeWKT, this)});
-      this.geoSearch.events.on({"beforefeaturemodified": function() { console.log('test'); } });
 
     var modifyEventListeners = {
         "activate": function() {
