@@ -535,6 +535,13 @@
     margin-bottom: 15px;
 }
 
+.alert-search {
+    z-index: 1001;
+    position: absolute;
+    left: 50%;
+    margin-left: -150px;
+}
+
 /*#date_range {*/
     /*position: relative;*/
     /*float: left;*/

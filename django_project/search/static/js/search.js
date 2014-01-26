@@ -581,6 +581,12 @@ APP.ResultGridView = Backbone.View.extend({
         $('#SearchShare').show();
         cur_pag_el.html(text);
         $('#paginator').html(paginator);
+        if (page_info.current_page == 1) {
+            $('#main-content').prepend('<div class="alert alert-info alert-dismissable alert-search"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong>'+page_info.total+' Records Returned. Displaying '+page_info.limit+'.</strong></div>');
+            window.setTimeout(function () {
+                $(".alert").alert('close');
+            }, 6000);
+        }
     }
 });
 
