@@ -357,6 +357,9 @@ def submitSearch(theRequest):
 
 
 def upload_geo(theRequest):
+    """
+    Extract geometry from uploaded geometry
+    """
     if theRequest.FILES and theRequest.FILES.get('file_upload'):
         f = theRequest.FILES.get('file_upload')
         myOutFile = '/tmp/%s' % f.name
