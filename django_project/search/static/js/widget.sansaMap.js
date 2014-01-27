@@ -89,20 +89,37 @@
     var myHistoryControl = new OpenLayers.Control.NavigationHistory({
       nextOptions: {
         title : "Next view: quickly jump to the next map view, works only with prevoius view.",
-        displayClass:'btn btn-large btn-info right icon-chevron-right olControlNavigationHistoryNext',
+        displayClass:'olnext btn btn-large btn-info disabled right icon-chevron-right olControlNavigationHistoryNext',
         div: OpenLayers.Util.getElement('map-navigation'),
         eventListeners: modifyEventListeners
       },
       previousOptions: {
         title : "Previous view: quickly jump to the prevoius map view.",
-        displayClass:'btn btn-large btn-info right icon-chevron-left olControlNavigationHistoryPrevious',
-        div: OpenLayers.Util.getElement('map-navigation'),
-        eventListeners: modifyEventListeners
+        displayClass:'olprev btn btn-large disabled btn-info right icon-chevron-left olControlNavigationHistoryPrevious',
+        div: OpenLayers.Util.getElement('map-navigation')
       },
       onPreviousChange: function() {
-        console.log('test');
+        var num = myHistoryControl.previousStack.length;
+        if (num > 1) {
+          $('.olprev').removeClass('disabled');
+          $('.olprev').html(' <span class="badge">'+(num-1)+'</span>');
+        } else {
+          $('.olprev').addClass('disabled');
+          $('.olprev').html('');
+        }
+      },
+      onNextChange: function() {
+        var num = myHistoryControl.nextStack.length;
+        if (num > 0) {
+          $('.olnext').removeClass('disabled');
+          $('.olnext').html(' <span class="badge">'+num+'</span>');
+        } else {
+          $('.olnext').addClass('disabled');
+          $('.olnext').html('');
+        }
       }
     });
+    this.map.addControl(myHistoryControl);
 
     this.mNavigationPanel.addControls(
       [myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.previous, myHistoryControl.next]
