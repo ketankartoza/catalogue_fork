@@ -187,6 +187,9 @@
                  data-placement="top">
               <i class="icon-chevron-left"></i>
             </div>
+            <div style="float:left;">
+              <input type="checkbox" checked data-on="success" data-off="info" class="switch-small" id="switchSearchLayer">
+            </div>
             <button id="resetZoom" style="float:left; display: none;"
                  class="btn btn-info resetZoom"
                  data-toggle="tooltip" data-title="Reset Zoom"
@@ -357,6 +360,11 @@
     $('#cart-panel-download-button').click(function() {
       toggleCartDownloadButton();
     });
+
+    $('#switchSearchLayer').bootstrapSwitch();
+    $('#switchSearchLayer').on('switch-change', function (e, data) {
+        $APP.trigger('toggleSearchLayer', data.value);
+      });
     $('#cart-show-map').click(function() {
       // show cart products on map
       var elem  = $(this);

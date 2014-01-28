@@ -149,7 +149,8 @@ PIPELINE_JS = {
             'js/widget.sansaSearchCartLayer.js',
             'js/widget.sansaSearchSummary.js',
             'js/widget.sansaSearchesMap.js',
-            'js/lightbox-2.6.min.js'
+            'js/lightbox-2.6.min.js',
+            'js/bootstrap-switch.min.js'
         ),
         'output_filename': 'js/fluid.js',
     },
@@ -209,7 +210,8 @@ PIPELINE_CSS = {
             'css/bootstrap-listTree.css',
             'css/perfect-scrollbar.css',
             'css/bootstrap-modal.css',
-            'css/lightbox.css'
+            'css/lightbox.css',
+            'css/bootstrap-switch.min.css'
         ),
         'output_filename': 'css/fluid.css',
         'extra_context': {

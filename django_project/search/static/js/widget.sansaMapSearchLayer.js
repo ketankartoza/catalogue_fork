@@ -36,7 +36,7 @@
       var style = new OpenLayers.StyleMap({'default': defaultStyle, 'select': selectStyle, 'temporary': tempStyle});
       var styleBounds = new OpenLayers.StyleMap({'default': boundsStyle});
 
-      this.layerSearch = new OpenLayers.Layer.Vector("Search geometry", { styleMap: style } );
+      this.layerSearch = new OpenLayers.Layer.Vector("Search geometry", {'displayInLayerSwitcher': false, styleMap: style } );
       this.layerBounds = new OpenLayers.Layer.Vector("Search bounds", {'displayInLayerSwitcher': false, styleMap: styleBounds});
       this.map_object.add_layer(this.layerSearch);
       this.map_object.add_layer(this.layerBounds);
@@ -65,6 +65,10 @@
     this.layerSearch.selectFeatureControl = this.mySelectControl;
 
     var self=this;
+    $APP.on('toggleSearchLayer', function (evt, visibility) {
+        self.layerSearch.setVisibility(visibility);
+    });
+
     $APP.on('ResultGridView_fetchresults', function (evt) {
       self.layerSearch.removeFeatures(self.layerSearch.features);
     });
