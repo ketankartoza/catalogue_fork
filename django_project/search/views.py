@@ -23,6 +23,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 import traceback
+import tempfile
 
 from itertools import chain
 from django.conf import settings
@@ -362,17 +363,25 @@ def upload_geo(theRequest):
     """
     if theRequest.FILES and theRequest.FILES.get('file_upload'):
         f = theRequest.FILES.get('file_upload')
-        myOutFile = '/tmp/%s' % f.name
-        destination = open(myOutFile, 'wb+')
-        for chunk in f.chunks():
-            destination.write(chunk)
-        destination.close()
+
         myExtension = (f.name.split('.')[-1].lower())
         if not(myExtension == 'zip' or myExtension == 'kml' or
                 myExtension == 'kmz'):
             return HttpResponse(
                 simplejson.dumps({"error": "File needs to be KML/KMZ/ZIP"}),
                 mimetype='application/json', status=500)
+
+        destination = tempfile.NamedTemporaryFile(
+            delete=False, suffix='.{0}'.format(myExtension))
+        # get the filename
+        myOutFile = destination.name
+        # write the file
+        for chunk in f.chunks():
+            destination.write(chunk)
+        destination.close()
+
+        myExtension = (f.name.split('.')[-1].lower())
+
         if myExtension == 'zip':
             extractedGeometries = getFeaturesFromZipFile(
                 myOutFile, 'Polygon', 1)

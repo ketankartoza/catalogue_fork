@@ -97,6 +97,32 @@ class SearchViews_upload_geo_Tests(TestCase):
                 '120849))"}')
         )
 
+    def test_searchView_user_not_logged_in_post_kml(self):
+        """
+        Test view if user is not logged in
+        """
+        # prepare file for upload
+        myUploadFile = open('catalogue/fixtures/search-area.kml', 'rb')
+
+        myClient = Client()
+
+        myPostData = {
+            u'file_upload': myUploadFile
+        }
+
+        myResp = myClient.post(reverse('upload_geo', kwargs={}), myPostData)
+
+        self.assertEqual(myResp.status_code, 200)
+        self.assertEqual(myResp['Content-Type'], 'application/json')
+        self.assertEqual(
+            myResp.content, (
+                '{"wkt": "POLYGON ((19.6655270000000009 -30.2400860000000016, '
+                '20.4345700000000008 -31.5036290000000001, 22.3681640000000002'
+                ' -31.7281669999999991, 24.6533200000000008 -31.18460899999999'
+                '82, 22.8515629999999987 -29.1521609999999995, 19.665527000000'
+                '0009 -30.2400860000000016))"}')
+        )
+
     def test_searchView_user_not_logged_in_post_invalid_file(self):
         """
         Test view if user is not logged in
