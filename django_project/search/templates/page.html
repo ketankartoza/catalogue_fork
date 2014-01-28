@@ -85,7 +85,6 @@
         <div id="search-summary-container" class="well well-small">
           <div id="search-buttons" class="text-center">
             <button id="search_button" class="btn btn-success"
-                    onclick="submitSearchForm();"
                     data-toggle="tooltip" title="Run Search"
                     data-placement="top">
               <i class="icon-play"></i> Search
@@ -352,6 +351,10 @@
     $('#result-panel-download-button').click(function() {
       toggleResultDownloadButton();
     });
+    $('#search_button').click(function() {
+      if (!$(this).hasClass('disabled')) submitSearchForm();
+    });
+
     $('#cart-panel-download-button').click(function() {
       toggleCartDownloadButton();
     });
