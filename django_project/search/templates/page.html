@@ -361,7 +361,7 @@
       toggleCartDownloadButton();
     });
 
-    $('#switchSearchLayer').bootstrapSwitch();
+    $('#switchSearchLayer').bootstrapSwitch().bootstrapSwitch('setState', true);
     $('#switchSearchLayer').on('switch-change', function (e, data) {
         $APP.trigger('toggleSearchLayer', data.value);
       });
