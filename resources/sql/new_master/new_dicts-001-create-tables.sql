@@ -56,6 +56,7 @@ CREATE TABLE "dictionaries_instrumenttype" (
     "operator_abbreviation" varchar(255) NOT NULL UNIQUE,
     "is_radar" boolean NOT NULL,
     "is_taskable" boolean NOT NULL,
+    "is_searchable" boolean NOT NULL,
     "scanner_type_id" integer NOT NULL REFERENCES "dictionaries_scannertype" ("id") DEFERRABLE INITIALLY DEFERRED,
     "base_processing_level_id" integer NOT NULL REFERENCES "dictionaries_processinglevel" ("id") DEFERRABLE INITIALLY DEFERRED,
     "default_processing_level_id" integer NOT NULL REFERENCES "dictionaries_processinglevel" ("id") DEFERRABLE INITIALLY DEFERRED,
