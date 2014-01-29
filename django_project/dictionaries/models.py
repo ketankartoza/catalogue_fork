@@ -154,6 +154,7 @@ class RadarProductProfile(models.Model):
         """Meta class implementation."""
         ordering = ['satellite_instrument', 'imaging_mode']
 
+
 class ProcessingLevel(models.Model):
     """
     Available ProcessingLevels, e.g. L1, L1A, ...
@@ -173,6 +174,7 @@ class ProcessingLevel(models.Model):
     class Meta:
         """Meta class implementation."""
         ordering = ['abbreviation']
+
 
 class Collection(models.Model):
     """Collection of satellites managed by a single operator."""
@@ -197,6 +199,7 @@ class Collection(models.Model):
         """Meta class implementation."""
         ordering = ['name']
 
+
 class Satellite(models.Model):
     """Satellite e.g. SPOT5 - a real satellite in the sky."""
 
@@ -208,7 +211,9 @@ class Satellite(models.Model):
     operator_abbreviation = models.CharField(
         max_length=255, unique=True,
         help_text=(
-            'Satellite abbreviation as named by satellite owning institution.'))
+            'Satellite abbreviation as named by satellite owning institution.'
+        )
+    )
     #image = models.ImageField()
     collection = models.ForeignKey(Collection)
     launch_date = models.DateField(
@@ -240,6 +245,7 @@ class Satellite(models.Model):
     class Meta:
         """Meta class implementation."""
         ordering = ['name']
+
 
 class ScannerType(models.Model):
     """Scanner type for the instrument type e.g. Pushbroom"""
@@ -340,6 +346,7 @@ class InstrumentType(models.Model):
         """Meta class implementation."""
         ordering = ['name']
 
+
 class RadarBeam(models.Model):
     """
     Only for Radar products
@@ -366,6 +373,7 @@ class RadarBeam(models.Model):
     class Meta:
         """Meta class implementation."""
         ordering = ['instrument_type']
+
 
 class ImagingMode(models.Model):
     """
@@ -408,6 +416,7 @@ class ImagingMode(models.Model):
     class Meta:
         """Meta class implementation."""
         ordering = ['name']
+
 
 class SatelliteInstrumentGroup(models.Model):
     """Satellite instrument group - an instrument as deployed on a satellite.
@@ -467,6 +476,7 @@ class SatelliteInstrumentGroup(models.Model):
             'satellite',
             'instrument_type'
         )
+        ordering = ['satellite', 'instrument_type']
 
     def __unicode__(self):
         return u'{0} - {1}'.format(
@@ -491,9 +501,6 @@ GROUP BY extract(YEAR from gp.product_date)
 ORDER BY year ASC;""", {'sensor_pk': self.pk})
         return myStats
 
-    class Meta:
-        """Meta class implementation."""
-        ordering = ['satellite', 'instrument_type']
 
 class SatelliteInstrument(models.Model):
     """Satellite instrument - a specific instrument as deployed on a satellite.
@@ -575,6 +582,7 @@ class SpectralGroup(models.Model):
         """Meta class implementation."""
         ordering = ['abbreviation', 'name']
 
+
 class SpectralMode(models.Model):
     """
     A specific spectral mode for of an instrument type
@@ -604,14 +612,11 @@ class BandSpectralMode(models.Model):
 
     class Meta:
         unique_together = (('band', 'spectral_mode'),)
+        ordering = ['band', 'spectral_mode']
 
     def __unicode__(self):
         return u'{0} ({1})'.format(
             self.band.band_name, self.spectral_mode.name)
-
-    class Meta:
-        """Meta class implementation."""
-        ordering = ['band', 'spectral_mode']
 
 
 class InstrumentTypeProcessingLevel(models.Model):
