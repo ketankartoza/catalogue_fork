@@ -56,6 +56,11 @@ class OpticalProductProfileQuerySet(QuerySet):
         return self.filter(
             spectral_mode__spectralgroup__in=theSpectralgroup.all())
 
+    def only_searchable(self):
+        return self.filter(
+            satellite_instrument__satellite_instrument_group__instrument_type__is_searchable=True
+        )
+
 
 class OpticalProductProfile(models.Model):
     """

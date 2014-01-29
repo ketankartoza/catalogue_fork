@@ -55,6 +55,9 @@ class Searcher:
 
         myOPP = OpticalProductProfile.objects
 
+        # make sure we return only products which are searchable
+        myOPP = myOPP.only_searchable()
+
         # filter instrument type
         if self.mSearch.collection.count() > 0:
             myOPP = myOPP.for_collection(

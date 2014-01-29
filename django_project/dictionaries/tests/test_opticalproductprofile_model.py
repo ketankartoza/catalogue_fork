@@ -316,3 +316,32 @@ class TestOpticalProductProfileCRUD(TestCase):
         myResult = OpticalProductProfile.objects.for_spectralgroup(mySpecGroup)
 
         self.assertEqual(myResult.count(), 1)
+
+    def test_OpticalProductProfile_QuerySet_only_searchable(self):
+        """
+        Tests OpticalProductProfile model QuerySet only_searchable
+        """
+
+        # is_searchable is by default True, so we can create a random OPP
+        OpticalProductProfileF()
+
+        # prepare a control object, which should not be included in results
+        instrumenttype_1 = InstrumentTypeF(**{
+            'id': 1,
+            'is_searchable': False
+        })
+
+        satelliteinstrumentgroup_1 = SatelliteInstrumentGroupF(**{
+            'id': 1, u'instrument_type': instrumenttype_1
+        })
+        satelliteinstrument_1 = SatelliteInstrumentF(**{
+            'id': 1, u'satellite_instrument_group': satelliteinstrumentgroup_1
+        })
+
+        OpticalProductProfileF(**{
+            'id': 1, u'satellite_instrument': satelliteinstrument_1
+        })
+
+        myResult = OpticalProductProfile.objects.only_searchable()
+
+        self.assertEqual(myResult.count(), 1)
