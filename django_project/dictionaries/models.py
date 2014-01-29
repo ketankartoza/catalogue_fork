@@ -284,6 +284,10 @@ class InstrumentType(models.Model):
         default=False,
         help_text='Can this sensor be tasked?'
     )
+    is_searchable = models.BooleanField(
+        default=True,
+        help_text='Can this sensor be searched?'
+    )
     scanner_type = models.ForeignKey(ScannerType)
     base_processing_level = models.ForeignKey(
         ProcessingLevel,

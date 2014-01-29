@@ -110,6 +110,7 @@ class InstrumentTypeF(factory.django.DjangoModelFactory):
         lambda n: 'OperatorAbbr {0}'.format(n))
     is_radar = False
     is_taskable = False
+    is_searchable = True
     scanner_type = factory.SubFactory(ScannerTypeF)
     base_processing_level = factory.SubFactory(ProcessingLevelF)
     default_processing_level = factory.SubFactory(ProcessingLevelF)

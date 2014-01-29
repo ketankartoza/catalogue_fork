@@ -81,6 +81,7 @@ class InstrumentTypeAdmin(admin.ModelAdmin):
         'name',
         'abbreviation',
         'description',
+        'is_searchable',
         'is_radar',
         'band_count',
         'pixel_size_list_m',
