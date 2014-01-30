@@ -63,7 +63,7 @@ COPY dictionaries_scannertype (id, name, description, abbreviation) FROM stdin;
 --
 
 COPY dictionaries_instrumenttype (id, name, description, abbreviation, operator_abbreviation, is_radar, is_taskable, is_searchable, scanner_type_id, base_processing_level_id, default_processing_level_id, reference_system_id, swath_optical_km, band_count, band_type, spectral_range_list_nm, pixel_size_list_m, spatial_resolution_range, quantization_bits, image_size_km, processing_software, keywords) FROM stdin;
-1	AMI	Active Microwave Instrument\r\n	AMI	AMI	t	f	t	1	1	2	4	\N	\N					\N			
+1	AMI	Active Microwave Instrument\r\n	AMI	AMI	t	f	f	1	1	2	4	\N	\N					\N			
 2	MSI	Multi-Spectral Imager\r\n	MSI	MSI	f	f	t	4	3	3	4	45	3	Multi-spectral	620 - 890 nm	6.25 m	6.25 m	12	45 km x 45 km	SANSA Experimental Algorithms 	SumbandilaSat; ZA-2; MSI; multi-spectral; 6.25m; red-edge
 3	MSS	Multi-Spectral Scanner\r\n	MSS	MSS	f	f	t	3	5	5	2	185	5	Multi-spectral; Thermal	500 - 12 600 nm	57 m x 79 m	57 m x 79 m resampled to 60 m	8	180 km x 170 km	Pink Matter Landsat Processor incl LPGS	Landsat 1; Landsat 2; Landsat 3; Landsat 4; 5; MSS; multi-spectral; 60m
 4	TM	Thematic Mapper\r\n	TM	TM	f	f	t	3	5	5	1	185	7	Multi-spectral; Thermal	450 - 12 500 nm	30 m; 120 m	30 m; 120m resampled to 30 m	8	180 km x 170 km	Pink Matter Landsat Processor incl LPGS	Landsat 5; TM; multi-spectral; thermal; 30m; 120m
