@@ -233,7 +233,7 @@ class Satellite(models.Model):
     orbit = models.TextField(
         blank=True, null=True,
         help_text='Satellite orbit description')
-    revist_time_days = models.IntegerField(
+    revisit_time_days = models.IntegerField(
         blank=True, null=True,
         help_text='Days elapsed between observations of the same point')
     reference_url = models.URLField(

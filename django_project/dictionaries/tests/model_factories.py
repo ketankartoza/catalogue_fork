@@ -68,7 +68,7 @@ class SatelliteF(factory.django.DjangoModelFactory):
     status = None
     altitude_km = 0
     orbit = ''
-    revist_time_days = 0
+    revisit_time_days = 0
     reference_url = ''
     license_type = factory.SubFactory(
         'catalogue.tests.model_factories.LicenseF'

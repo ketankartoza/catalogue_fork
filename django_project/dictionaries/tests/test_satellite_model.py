@@ -63,13 +63,13 @@ class TestSatelliteCRUD(TestCase):
             'description': 'No description',
             'abbreviation': 'SAT1',
             'operator_abbreviation': 'SatOp1',
-            'collection':  myCollection,
-            'launch_date':  None,
-            'status':  None,
+            'collection': myCollection,
+            'launch_date': None,
+            'status': None,
             'altitude_km': 10000,
-            'orbit':  '',
-            'revist_time_days':  90,
-            'reference_url':  '',
+            'orbit': '',
+            'revisit_time_days': 90,
+            'reference_url': '',
             'license_type': myLicense
         })
 
@@ -96,12 +96,12 @@ class TestSatelliteCRUD(TestCase):
             'description': 'No description',
             'abbreviation': 'SAT1',
             'operator_abbreviation': 'SatOp1',
-            'launch_date':  None,
-            'status':  None,
+            'launch_date': None,
+            'status': None,
             'altitude_km': 10000,
-            'orbit':  '',
-            'revist_time_days':  90,
-            'reference_url':  ''
+            'orbit': '',
+            'revisit_time_days': 90,
+            'reference_url': ''
         })
         myModel.collection = myCollection
         myModel.license_type = myLicense

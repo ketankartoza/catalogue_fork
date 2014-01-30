@@ -383,7 +383,7 @@ SELECT pg_catalog.setval('dictionaries_instrumenttypeprocessinglevel_id_seq', 23
 -- Data for Name: dictionaries_satellite; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_satellite (id, name, description, abbreviation, operator_abbreviation, collection_id, launch_date, status, altitude_km, orbit, revist_time_days, reference_url, license_type_id) FROM stdin;
+COPY dictionaries_satellite (id, name, description, abbreviation, operator_abbreviation, collection_id, launch_date, status, altitude_km, orbit, revisit_time_days, reference_url, license_type_id) FROM stdin;
 1	ZA-2 SumbandilaSat	The SumbandilaSat Satellite (ZA-2), which was launched on 17 September 2009, is a collaboration between The University of Stellenbosch, Sunspace (Pty) Ltd and the South African National Space Agency (SANSA) under the South African Department of Science and Technology (DST).  No imagery has been acquired since July 2011.\r\n	ZA2	ZASat-002	3	2009-09-17	Stopped functioning July 2011	504	Sun-synchronous, near-circular	4	https://directory.eoportal.org/web/eoportal/satellite-missions/s/sumbandilasat	2
 2	Landsat 1	The Landsat 1 (1972 to 1978), Landsat 2 (1975-1982) and Landsat 3 (1978-1983) satellites have the same MSS instrument on board	L1	LS-1	2	1972-07-23	Decommissioned 6 January 1978	917	Sun-synchronous, near-polar	18	http://landsat.usgs.gov/about_landsat1.php	2
 3	Landsat 2	The Landsat 1 (1972 to 1978), Landsat 2 (1975-1982) and Landsat 3 (1978-1983) satellites have the same MSS instrument on board	L2	LS-2	2	1975-01-22	Decommissioned 27 July 1983	917	Sun-synchronous, near-polar	18	http://landsat.usgs.gov/about_landsat2.php	2

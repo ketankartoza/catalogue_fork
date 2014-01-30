@@ -62,7 +62,7 @@ class SatelliteAdmin(admin.ModelAdmin):
     search_fields = ['name', 'abbreviation', 'description']
     list_filter = [
         'launch_date',
-        'revist_time_days',
+        'revisit_time_days',
         'status',
         'license_type']
     list_display = ['name', 'abbreviation', 'description']

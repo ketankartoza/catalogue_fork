@@ -36,7 +36,7 @@ CREATE TABLE "dictionaries_satellite" (
     "status" text,
     "altitude_km" integer,
     "orbit" text,
-    "revist_time_days" integer,
+    "revisit_time_days" integer,
     "reference_url" varchar(200),
     "license_type_id" integer NOT NULL REFERENCES "catalogue_license" ("id") DEFERRABLE INITIALLY DEFERRED
 )
