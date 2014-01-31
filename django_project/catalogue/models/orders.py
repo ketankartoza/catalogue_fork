@@ -35,7 +35,7 @@ class Datum(models.Model):
     """
     Geographic datum model, used by Order DeliveryDetail records, i.e. WGS84
     """
-    name = models.CharField('Name', max_length=128, db_index=True, unique=True)
+    name = models.CharField('Name', max_length=128, unique=True)
 
     class Meta:
         app_label = 'catalogue'
@@ -57,7 +57,7 @@ class ResamplingMethod(models.Model):
     Order ResamplingMethod model, used by Order DeliveryDetail records,
     i.e. Nearest Neighbour
     """
-    name = models.CharField('Name', max_length=128, db_index=True, unique=True)
+    name = models.CharField('Name', max_length=128, unique=True)
 
     class Meta:
         app_label = 'catalogue'
@@ -78,7 +78,7 @@ class FileFormat(models.Model):
     """
     Order FileFormat model, used by Order DeliveryDetail records, i.e. GeoTiff
     """
-    name = models.CharField('Name', max_length=128, db_index=True, unique=True)
+    name = models.CharField('Name', max_length=128, unique=True)
 
     class Meta:
         app_label = 'catalogue'
@@ -100,7 +100,7 @@ class OrderStatus(models.Model):
     OrderStatus model, used by Order and OrderStatusHistory to track current
     Order status, i.e. Placed, Completed, Awaiting info from client
     """
-    name = models.CharField('Name', max_length=128, db_index=True, unique=True)
+    name = models.CharField('Name', max_length=128, unique=True)
 
     class Meta:
         app_label = 'catalogue'
@@ -121,7 +121,7 @@ class DeliveryMethod(models.Model):
     """
     Types of Order DeliveryMethod, i.e. Download via FTP or HTTP, DVD(s)
     """
-    name = models.CharField('Name', max_length=128, db_index=True, unique=True)
+    name = models.CharField('Name', max_length=128, unique=True)
 
     class Meta:
         app_label = 'catalogue'

@@ -224,7 +224,6 @@ class GenericProduct(models.Model):
             'A unique identifier for product used internally e.g. for '
             'DIMS orders'),
         max_length=255,
-        db_index=True,
         unique=True)
     local_storage_path = models.CharField(
         help_text=(
