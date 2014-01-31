@@ -718,3 +718,23 @@ class ForeignCurrency(models.Model):
     class Meta:
         """Meta class implementation."""
         ordering = ['name']
+
+
+class Projection(models.Model):
+    """
+    A dictionary to define Product Projection, e.g. 32737, UTM37S
+    """
+
+    epsg_code = models.IntegerField(unique=True)
+    name = models.CharField('Name', max_length=128, db_index=True, unique=True)
+
+    def __unicode__(self):
+        return 'EPSG: %s %s' % (str(self.epsg_code), self.name)
+
+    class Meta:
+        verbose_name = 'Projection'
+        verbose_name_plural = 'Projections'
+        ordering = ('epsg_code', 'name')
+
+    class Admin:
+        pass

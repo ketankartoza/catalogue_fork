@@ -38,7 +38,8 @@ from .models import (
     OpticalProductProfile,
     RadarProductProfile,
     ForeignCurrency,
-    ReferenceSystem
+    ReferenceSystem,
+    Projection
 )
 
 
@@ -203,3 +204,10 @@ class ReferenceSystemAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
     list_display = ['abbreviation', 'name', 'description']
 admin.site.register(ReferenceSystem, ReferenceSystemAdmin)
+
+
+class ProjectionAdmin(admin.GeoModelAdmin):
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
+admin.site.register(Projection, ProjectionAdmin)

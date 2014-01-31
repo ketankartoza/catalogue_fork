@@ -23,7 +23,7 @@ from ..models import (
     ReferenceSystem, RadarBeam, ImagingMode, SatelliteInstrumentGroup,
     SatelliteInstrument, Band, SpectralGroup, SpectralMode, BandSpectralMode,
     InstrumentTypeProcessingLevel, SpectralModeProcessingCosts,
-    ForeignCurrency, RadarProductProfile, OpticalProductProfile
+    ForeignCurrency, RadarProductProfile, OpticalProductProfile, Projection
 )
 
 
@@ -286,3 +286,13 @@ class OpticalProductProfileF(factory.django.DjangoModelFactory):
 
     satellite_instrument = factory.SubFactory(SatelliteInstrumentF)
     spectral_mode = factory.SubFactory(SpectralModeF)
+
+
+class ProjectionF(factory.django.DjangoModelFactory):
+    """
+    Projection model factory
+    """
+    FACTORY_FOR = Projection
+
+    name = factory.Sequence(lambda n: "Projection {}".format(n))
+    epsg_code = factory.Sequence(lambda n: n)

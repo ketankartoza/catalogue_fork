@@ -37,7 +37,6 @@ from catalogue.models import (
     Datum,
     Institution,
     License,
-    Projection,
     Quality,
     CreatingSoftware,
     GenericProduct,
@@ -155,13 +154,6 @@ class LicenseAdmin(admin.GeoModelAdmin):
     pass
 
 
-class ProjectionAdmin(admin.GeoModelAdmin):
-    search_fields = ['name']
-    list_filter = ['name']
-    list_display = ('name',)
-    pass
-
-
 class QualityAdmin(admin.GeoModelAdmin):
     search_fields = ['name']
     list_filter = ['name']
@@ -252,7 +244,6 @@ admin.site.register(ResamplingMethod, ResamplingMethodAdmin)
 admin.site.register(Datum, DatumAdmin)
 admin.site.register(Institution, InstitutionAdmin)
 admin.site.register(License, LicenseAdmin)
-admin.site.register(Projection, ProjectionAdmin)
 admin.site.register(Quality, QualityAdmin)
 admin.site.register(CreatingSoftware, CreatingSoftwareAdmin)
 admin.site.register(GenericProduct, GenericProductAdmin)

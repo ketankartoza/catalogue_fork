@@ -27,11 +27,11 @@ from django.test import TestCase
 from dictionaries.tests.model_factories import (
     OpticalProductProfileF, SatelliteInstrumentF, ProcessingLevelF,
     SpectralModeF, InstrumentTypeF, SatelliteF, SatelliteInstrumentGroupF,
-    CollectionF
+    CollectionF, ProjectionF
 )
 
 from .model_factories import (
-    OpticalProductF, ProjectionF, QualityF, InstitutionF
+    OpticalProductF, QualityF, InstitutionF
 )
 
 

@@ -34,9 +34,10 @@ from ..models import Order
 from core.model_factories import UserF
 from useraccounts.tests.model_factories import SansaUserProfileF
 from search.tests.model_factories import SearchRecordF
+from dictionaries.tests.model_factories import ProjectionF
 
 from .model_factories import (
-    DeliveryMethodF, ProjectionF, FileFormatF, ResamplingMethodF, DatumF,
+    DeliveryMethodF, FileFormatF, ResamplingMethodF, DatumF,
     MarketSectorF, OpticalProductF, OrderStatusF
 )
 

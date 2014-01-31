@@ -27,7 +27,6 @@ from django.contrib.auth.models import User
 from catalogue.models import (
     OrderStatus,
     Order,
-    Projection,
     DeliveryDetail,
     TaskingRequest,
     OrderStatusHistory,
@@ -41,7 +40,7 @@ from search.models import (
     Clip,
 )
 
-from dictionaries.models import SatelliteInstrumentGroup
+from dictionaries.models import SatelliteInstrumentGroup, Projection
 
 # Support dmy formats (see
 #    http://dantallis.blogspot.com/2008/11/date-validation-in-django.html )

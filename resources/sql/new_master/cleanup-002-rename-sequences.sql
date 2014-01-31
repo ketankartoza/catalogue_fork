@@ -3,4 +3,9 @@ ALTER SEQUENCE catalogue_clip_id_seq RENAME TO search_clip_id_seq;
 ALTER SEQUENCE catalogue_search_id_seq RENAME TO search_search_id_seq;
 ALTER SEQUENCE catalogue_searchdaterange_id_seq RENAME TO search_searchdaterange_id_seq;
 ALTER SEQUENCE catalogue_searchrecord_id_seq RENAME TO search_searchrecord_id_seq;
+
+-- old dictionaries
+ALTER SEQUENCE catalogue_projection_id_seq RENAME TO dictionaries_projection_id_seq;
+
+
 COMMIT;

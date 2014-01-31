@@ -26,10 +26,10 @@ from catalogue.forms import ProductDeliveryDetailForm
 
 from core.model_factories import UserF
 from search.tests.model_factories import SearchRecordF
+from dictionaries.tests.model_factories import ProjectionF
 
 from .model_factories import (
-    DeliveryMethodF, ProjectionF, FileFormatF, ResamplingMethodF, DatumF,
-    MarketSectorF, OpticalProductF, OrderStatusF
+    OpticalProductF, OrderStatusF
 )
 
 
@@ -49,7 +49,7 @@ class OrdersViews_createDeliveryDetailForm_Tests(TestCase):
         """
         myKwargsTests = [
             {}, {'theReferenceId': 'testtest'}, {'theReferenceId': None},
-            {'theReferenceId': 3.14}, {'testargs':1}]
+            {'theReferenceId': 3.14}, {'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(

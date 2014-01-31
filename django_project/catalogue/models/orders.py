@@ -23,8 +23,6 @@ from django.contrib.auth.models import User
 # Helper classes
 # ABP: unused ? from catalogue.geoiputils import *
 from catalogue.nosubclassmanager import NoSubclassManager
-from catalogue.models import (
-    Projection)
 
 
 ###############################################################################
@@ -150,7 +148,7 @@ class DeliveryDetail(models.Model):
         verbose_name='Processing Level', default=3
     )
     projection = models.ForeignKey(
-        Projection, verbose_name='Projection', default=3
+        'dictionaries.Projection', verbose_name='Projection', default=3
     )
     datum = models.ForeignKey(Datum, verbose_name='Datum', default=1)
     resampling_method = models.ForeignKey(

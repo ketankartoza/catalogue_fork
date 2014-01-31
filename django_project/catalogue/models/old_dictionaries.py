@@ -21,30 +21,9 @@ __copyright__ = 'South African National Space Agency'
 from django.contrib.gis.db import models
 
 
-class Projection(models.Model):
-    """
-    A dictionary to define Product Projection, e.g. 32737, UTM37S
-    """
-
-    epsg_code = models.IntegerField(unique=True)
-    name = models.CharField('Name', max_length=128, db_index=True, unique=True)
-
-    def __unicode__(self):
-        return 'EPSG: %s %s' % (str(self.epsg_code), self.name)
-
-    class Meta:
-        app_label = 'catalogue'
-        verbose_name = 'Projection'
-        verbose_name_plural = 'Projections'
-        ordering = ('epsg_code', 'name')
-
-    class Admin:
-        pass
-
 ###############################################################################
 # These models are not used in generating the sac id
 ###############################################################################
-
 
 class Institution(models.Model):
     """

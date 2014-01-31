@@ -33,14 +33,16 @@ from django.conf import settings
 from dictionaries.models import (
     SpectralMode,
     SatelliteInstrument,
-    OpticalProductProfile)
+    OpticalProductProfile,
+    Projection
+)
 from catalogue.models import (
     OpticalProduct,
     Institution,
-    Projection,
     License,
     CreatingSoftware,
-    Quality)
+    Quality
+)
 
 
 def parseDateTime(theDate):

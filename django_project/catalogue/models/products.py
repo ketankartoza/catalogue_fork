@@ -37,7 +37,6 @@ from PIL import Image, ImageFilter, ImageOps
 from catalogue.utmzonecalc import utmZoneFromLatLon
 from catalogue.dims_lib import dimsWriter
 from catalogue.models import (
-    Projection,
     Quality,
     PlaceType,
     Place,
@@ -209,7 +208,7 @@ class GenericProduct(models.Model):
     product_date = models.DateTimeField(db_index=True)
     spatial_coverage = models.PolygonField(
         srid=4326, help_text='Image footprint')
-    projection = models.ForeignKey(Projection)
+    projection = models.ForeignKey('dictionaries.Projection')
     quality = models.ForeignKey(
         Quality,
         help_text=(

@@ -22,8 +22,8 @@ from datetime import datetime
 
 from ..models import (
     Institution, Order, OrderStatus, DeliveryMethod, DeliveryDetail,
-    Projection, Datum, ResamplingMethod, FileFormat, MarketSector,
-    GenericProduct, License, Quality, CreatingSoftware, GenericImageryProduct,
+    Datum, ResamplingMethod, FileFormat, MarketSector, GenericProduct,
+    License, Quality, CreatingSoftware, GenericImageryProduct,
     GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
     PlaceType, Place, Topic, OrdinalProduct, ContinuousProduct, Unit, Visit,
     OrderStatusHistory, OrderNotificationRecipients, TaskingRequest,
@@ -74,16 +74,6 @@ class DeliveryMethodF(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: "Delivery method {}".format(n))
 
 
-class ProjectionF(factory.django.DjangoModelFactory):
-    """
-    Projection model factory
-    """
-    FACTORY_FOR = Projection
-
-    name = factory.Sequence(lambda n: "Projection {}".format(n))
-    epsg_code = factory.Sequence(lambda n: n)
-
-
 class DatumF(factory.django.DjangoModelFactory):
     """
     Datum model factory
@@ -129,7 +119,8 @@ class DeliveryDetailF(factory.django.DjangoModelFactory):
     user = factory.SubFactory('core.model_factories.UserF')
     processing_level = factory.SubFactory(
         'dictionaries.tests.model_factories.ProcessingLevelF')
-    projection = factory.SubFactory(ProjectionF)
+    projection = factory.SubFactory(
+        'dictionaries.tests.model_factories.ProjectionF')
     datum = factory.SubFactory(DatumF)
     resampling_method = factory.SubFactory(ResamplingMethodF)
     file_format = factory.SubFactory(FileFormatF)
@@ -191,7 +182,8 @@ class GenericProductF(factory.django.DjangoModelFactory):
     spatial_coverage = (
         'POLYGON ((17.54 -32.05, 20.83 -32.41, 20.30 -35.17, 17.84 '
         '-34.65, 17.54 -32.05))')
-    projection = factory.SubFactory(ProjectionF)
+    projection = factory.SubFactory(
+        'dictionaries.tests.model_factories.ProjectionF')
     quality = factory.SubFactory(QualityF)
     unique_product_id = factory.Sequence(
         lambda n: "unique_product_id_{}".format(n))

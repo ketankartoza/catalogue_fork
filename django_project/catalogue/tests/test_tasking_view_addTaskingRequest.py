@@ -37,10 +37,10 @@ from ..models import (
 from core.model_factories import UserF
 from useraccounts.tests.model_factories import SansaUserProfileF
 from dictionaries.tests.model_factories import (
-    SatelliteInstrumentGroupF, InstrumentTypeF
+    SatelliteInstrumentGroupF, InstrumentTypeF, ProjectionF
 )
 from .model_factories import (
-    ProjectionF, ResamplingMethodF, DeliveryMethodF, MarketSectorF,
+    ResamplingMethodF, DeliveryMethodF, MarketSectorF,
     OrderStatusF
 )
 
