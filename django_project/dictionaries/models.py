@@ -726,7 +726,7 @@ class Projection(models.Model):
     """
 
     epsg_code = models.IntegerField(unique=True)
-    name = models.CharField('Name', max_length=128, db_index=True, unique=True)
+    name = models.CharField('Name', max_length=128, unique=True)
 
     def __unicode__(self):
         return 'EPSG: %s %s' % (str(self.epsg_code), self.name)
