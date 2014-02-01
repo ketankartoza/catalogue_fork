@@ -19,19 +19,15 @@ __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
 
-from catalogue.models import License
-
 from ..models import (
     OpticalProductProfile, Collection, InstrumentType, Satellite,
-    SpectralGroup
+    SpectralGroup, License
 )
-
-from catalogue.tests.model_factories import LicenseF
 
 from .model_factories import (
     OpticalProductProfileF, SatelliteInstrumentF, SpectralModeF,
     InstrumentTypeF, ProcessingLevelF, SatelliteInstrumentGroupF, SatelliteF,
-    CollectionF, SpectralGroupF
+    CollectionF, SpectralGroupF, LicenseF
 )
 
 

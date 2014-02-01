@@ -18,9 +18,7 @@ __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
 
-from catalogue.tests.model_factories import LicenseF
-
-from .model_factories import SatelliteF, CollectionF
+from .model_factories import SatelliteF, CollectionF, LicenseF
 
 
 class TestSatelliteCRUD(TestCase):

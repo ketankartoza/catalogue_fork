@@ -35,11 +35,11 @@ from dictionaries.models import (
     SatelliteInstrument,
     OpticalProductProfile,
     Projection,
-    Institution
+    Institution,
+    License
 )
 from catalogue.models import (
     OpticalProduct,
-    License,
     CreatingSoftware,
     Quality
 )

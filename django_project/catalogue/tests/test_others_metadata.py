@@ -30,10 +30,10 @@ from core.model_factories import UserF
 from dictionaries.tests.model_factories import (
     SatelliteInstrumentF, InstrumentTypeF, SpectralModeF,
     OpticalProductProfileF, SatelliteF, SatelliteInstrumentGroupF,
-    ProcessingLevelF, ProjectionF
+    ProcessingLevelF, ProjectionF, LicenseF
 )
 from .model_factories import (
-    OpticalProductF, QualityF, LicenseF
+    OpticalProductF, QualityF
 )
 
 

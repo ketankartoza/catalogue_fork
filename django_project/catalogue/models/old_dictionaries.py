@@ -25,35 +25,6 @@ from django.contrib.gis.db import models
 # These models are not used in generating the sac id
 ###############################################################################
 
-class License(models.Model):
-    """
-    Licenses for Products, e.g. SANSA Free License.
-    """
-
-    LICENSE_TYPE_FREE = 1
-    LICENSE_TYPE_GOVERNMENT = 2
-    LICENSE_TYPE_COMMERCIAL = 3
-
-    LICENSE_TYPE_CHOICES = (
-        (LICENSE_TYPE_FREE, 'Free'),
-        (LICENSE_TYPE_GOVERNMENT, 'Government'),
-        (LICENSE_TYPE_COMMERCIAL, 'Commercial'),
-    )
-
-    name = models.CharField(max_length=255, unique=True)
-    details = models.TextField()
-    type = models.IntegerField(
-        choices=LICENSE_TYPE_CHOICES, default=LICENSE_TYPE_COMMERCIAL)
-
-    class Meta:
-        app_label = 'catalogue'
-
-    def __unicode__(self):
-        return self.name
-
-
-###############################################################################
-
 class Quality(models.Model):
     """
     A dictionary to define Product Quality, e.g. Unknown

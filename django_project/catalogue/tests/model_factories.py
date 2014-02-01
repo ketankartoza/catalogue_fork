@@ -23,24 +23,12 @@ from datetime import datetime
 from ..models import (
     Order, OrderStatus, DeliveryMethod, DeliveryDetail,
     Datum, ResamplingMethod, FileFormat, MarketSector, GenericProduct,
-    License, Quality, CreatingSoftware, GenericImageryProduct,
+    Quality, CreatingSoftware, GenericImageryProduct,
     GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
     PlaceType, Place, Topic, OrdinalProduct, ContinuousProduct, Unit, Visit,
     OrderStatusHistory, OrderNotificationRecipients, TaskingRequest,
     WorldBorders
 )
-
-
-class LicenseF(factory.django.DjangoModelFactory):
-    """
-    License model factory
-    """
-    FACTORY_FOR = License
-
-    name = factory.Sequence(lambda n: 'License {0}'.format(n))
-    details = ''
-    type = factory.Iterator(
-        License.LICENSE_TYPE_CHOICES, getter=lambda c: c[0])
 
 
 class OrderStatusF(factory.django.DjangoModelFactory):

@@ -32,11 +32,10 @@ from django.contrib.gis.gdal import DataSource
 
 from ..models import (
     Quality,
-    License,
     CreatingSoftware,
     OpticalProduct,
 )
-from dictionaries.models import Satellite, Institution
+from dictionaries.models import Satellite, Institution, License
 
 
 @transaction.commit_manually

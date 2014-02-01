@@ -281,7 +281,7 @@ class Search(BaseSearch):
         verbose_name="Max Clouds"
     )
     license_type = models.ManyToManyField(
-        'catalogue.License', blank=True, null=True,
+        'dictionaries.License', blank=True, null=True,
         help_text='Choose a license type.'
     )
     band_count = models.IntegerField(

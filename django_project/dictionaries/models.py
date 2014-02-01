@@ -240,7 +240,7 @@ class Satellite(models.Model):
         blank=True, null=True,
         help_text='Satellite mission URL')
     license_type = models.ForeignKey(
-        'catalogue.License',
+        'License',
         help_text='Satellite product license type')
 
     def __unicode__(self):
@@ -750,6 +750,30 @@ class Institution(models.Model):
     address2 = models.CharField(max_length=255)
     address3 = models.CharField(max_length=255)
     post_code = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.name
+
+
+class License(models.Model):
+    """
+    Licenses for Products, e.g. SANSA Free License.
+    """
+
+    LICENSE_TYPE_FREE = 1
+    LICENSE_TYPE_GOVERNMENT = 2
+    LICENSE_TYPE_COMMERCIAL = 3
+
+    LICENSE_TYPE_CHOICES = (
+        (LICENSE_TYPE_FREE, 'Free'),
+        (LICENSE_TYPE_GOVERNMENT, 'Government'),
+        (LICENSE_TYPE_COMMERCIAL, 'Commercial'),
+    )
+
+    name = models.CharField(max_length=255, unique=True)
+    details = models.TextField()
+    type = models.IntegerField(
+        choices=LICENSE_TYPE_CHOICES, default=LICENSE_TYPE_COMMERCIAL)
 
     def __unicode__(self):
         return self.name

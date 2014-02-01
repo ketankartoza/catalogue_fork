@@ -25,7 +25,7 @@ from .models import (
     Band, SpectralGroup, SpectralMode, BandSpectralMode,
     InstrumentTypeProcessingLevel, SpectralModeProcessingCosts,
     OpticalProductProfile, RadarProductProfile, ForeignCurrency,
-    ReferenceSystem, Projection, Institution
+    ReferenceSystem, Projection, Institution, License
 )
 
 
@@ -204,3 +204,10 @@ class InstitutionAdmin(admin.GeoModelAdmin):
     list_filter = ['name']
     list_display = ('name',)
 admin.site.register(Institution, InstitutionAdmin)
+
+
+class LicenseAdmin(admin.GeoModelAdmin):
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
+admin.site.register(License, LicenseAdmin)

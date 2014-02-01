@@ -23,7 +23,8 @@ from ..models import (
     ReferenceSystem, RadarBeam, ImagingMode, SatelliteInstrumentGroup,
     SatelliteInstrument, Band, SpectralGroup, SpectralMode, BandSpectralMode,
     InstrumentTypeProcessingLevel, SpectralModeProcessingCosts, Institution,
-    ForeignCurrency, RadarProductProfile, OpticalProductProfile, Projection
+    ForeignCurrency, RadarProductProfile, OpticalProductProfile, Projection,
+    License
 )
 
 
@@ -71,7 +72,7 @@ class SatelliteF(factory.django.DjangoModelFactory):
     revisit_time_days = 0
     reference_url = ''
     license_type = factory.SubFactory(
-        'catalogue.tests.model_factories.LicenseF'
+        'dictionaries.tests.model_factories.LicenseF'
     )
 
 
@@ -309,3 +310,15 @@ class InstitutionF(factory.django.DjangoModelFactory):
     address2 = 'Blank'
     address3 = 'Blank'
     post_code = 'Blank'
+
+
+class LicenseF(factory.django.DjangoModelFactory):
+    """
+    License model factory
+    """
+    FACTORY_FOR = License
+
+    name = factory.Sequence(lambda n: 'License {0}'.format(n))
+    details = ''
+    type = factory.Iterator(
+        License.LICENSE_TYPE_CHOICES, getter=lambda c: c[0])
