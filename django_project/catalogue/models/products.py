@@ -211,14 +211,14 @@ class GenericProduct(models.Model):
     original_product_id = models.CharField(
         help_text='Original id assigned to the product by the vendor/operator',
         max_length=255,
-        null=True,
-        blank=True)
+        unique=True)
     unique_product_id = models.CharField(
         help_text=(
             'A unique identifier for product used internally e.g. for '
             'DIMS orders'),
         max_length=255,
-        unique=True)
+        null=True,
+        blank=True)
     local_storage_path = models.CharField(
         help_text=(
             'Location on local storage if this product is offered for '

@@ -97,15 +97,17 @@ DELETE FROM catalogue_genericimageryproduct USING tmp_gen_prod_id
 
 DELETE FROM catalogue_genericproduct WHERE unique_product_id = '534539';
 
+-- copy unique_product_id to original_product_id and set unique_product_id to null
+UPDATE catalogue_genericproduct SET original_product_id = unique_product_id, unique_product_id=NULL;
+
 COMMIT;
 
 
 
 BEGIN;
-
-ALTER TABLE catalogue_genericproduct ALTER unique_product_id SET NOT NULL;
+ALTER TABLE catalogue_genericproduct ALTER original_product_id SET NOT NULL;
 ALTER TABLE catalogue_genericproduct
-    ADD CONSTRAINT unique_product_id UNIQUE (unique_product_id);
+    ADD CONSTRAINT original_product_id UNIQUE (original_product_id);
 
 -- drop product_id column
 ALTER TABLE catalogue_genericproduct DROP product_id CASCADE;
@@ -114,7 +116,7 @@ ALTER TABLE catalogue_genericproduct DROP product_id CASCADE;
 create view vw_usercart as SELECT
   search_searchrecord.id, search_searchrecord.order_id,
   auth_user.username,
-  catalogue_genericproduct."unique_product_id",
+  catalogue_genericproduct."original_product_id",
   catalogue_genericproduct.spatial_coverage
 FROM
   public.search_searchrecord,
