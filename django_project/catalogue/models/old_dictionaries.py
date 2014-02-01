@@ -39,20 +39,3 @@ class CreatingSoftware(models.Model):
 
     def __unicode__(self):
         return self.name
-
-###############################################################################
-
-
-class Unit(models.Model):
-    """
-    A dictionary to define unit types e.g. m, km etc.
-    """
-
-    abbreviation = models.CharField(max_length=10, unique=True, null=False)
-    name = models.CharField(max_length=255, unique=True, null=False)
-
-    class Meta:
-        app_label = 'catalogue'
-
-    def __unicode__(self):
-        return self.name

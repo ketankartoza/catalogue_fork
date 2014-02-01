@@ -24,7 +24,7 @@ from ..models import (
     SatelliteInstrument, Band, SpectralGroup, SpectralMode, BandSpectralMode,
     InstrumentTypeProcessingLevel, SpectralModeProcessingCosts, Institution,
     ForeignCurrency, RadarProductProfile, OpticalProductProfile, Projection,
-    License, Quality, Topic, PlaceType, Place
+    License, Quality, Topic, PlaceType, Place, Unit
 )
 
 
@@ -362,3 +362,13 @@ class PlaceF(factory.django.DjangoModelFactory):
     place_type = factory.SubFactory(
         'dictionaries.tests.model_factories.PlaceTypeF')
     geometry = 'POINT(17.54 -32.05)'
+
+
+class UnitF(factory.django.DjangoModelFactory):
+    """
+    Unit model factory
+    """
+    FACTORY_FOR = Unit
+
+    abbreviation = factory.Sequence(lambda n: "U{}".format(n))
+    name = factory.Sequence(lambda n: "Unit {}".format(n))

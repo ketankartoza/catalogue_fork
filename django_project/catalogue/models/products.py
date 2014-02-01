@@ -36,7 +36,6 @@ from PIL import Image, ImageFilter, ImageOps
 
 from catalogue.utmzonecalc import utmZoneFromLatLon
 from catalogue.dims_lib import dimsWriter
-from catalogue.models import Unit
 
 # for thumb georeferencer
 #from osgeo.gdalconst import *
@@ -1366,7 +1365,7 @@ class ContinuousProduct(GenericProduct):
             'The maximum value in the range of values represented in this'
             'dataset.'))
     unit = models.ForeignKey(
-        Unit,
+        'dictionaries.Unit',
         help_text='Units for the values represented in this dataset.')
     # We need a flag to tell if this Product class can have instances (if it is
     # not abstract)
