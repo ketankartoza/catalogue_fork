@@ -44,6 +44,7 @@ class Command(BaseCommand):
         myMigrations = options.get('migrations').split(';')
 
         if 'all' in myMigrations:
+            self.migrate_backup_tasks()
             self.migrate_new_dicts()
             self.migrate_userprofiles()
             self.migrate_search()
@@ -56,6 +57,9 @@ class Command(BaseCommand):
 
         if 'new_dicts' in myMigrations:
             self.migrate_new_dicts()
+
+        if 'backup_tasks' in myMigrations:
+            self.migrate_backup_tasks()
 
         if 'userprofiles' in myMigrations:
             self.migrate_userprofiles()
@@ -80,6 +84,14 @@ class Command(BaseCommand):
 
         if 'cleanup' in myMigrations:
             self.migrate_cleanup()
+
+    def migrate_backup_tasks(self):
+        print '* Starting backup tasks migration...'
+        origWD = os.getcwd()
+        os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
+        print '* Executing backup tasks scripts...'
+        subprocess.call(['sh', '000_backup_tasks.sh', self.db])
+        os.chdir(origWD)
 
     def migrate_product_models(self):
         print '* Starting product models migration...'
