@@ -10,6 +10,21 @@ BEGIN;
 
 UPDATE catalogue_genericproduct SET unique_product_id = original_product_id;
 
+-- update Sumbandilasat, ERS, SACC, CBERS to SAC_ID
+
+UPDATE catalogue_genericproduct SET
+    unique_product_id = product_id
+FROM
+  dictionaries_opticalproductprofile,
+  catalogue_opticalproduct,
+  dictionaries_spectralmode
+WHERE
+  catalogue_opticalproduct.genericsensorproduct_ptr_id = catalogue_genericproduct.id AND
+  catalogue_opticalproduct.product_profile_id = dictionaries_opticalproductprofile.id AND
+  dictionaries_spectralmode.id = dictionaries_opticalproductprofile.spectral_mode_id AND
+  catalogue_opticalproduct.product_profile_id IN (2,3,4,5,6);
+
+
 -- update SPOT5 products
 UPDATE catalogue_genericproduct SET
     unique_product_id = substring(
