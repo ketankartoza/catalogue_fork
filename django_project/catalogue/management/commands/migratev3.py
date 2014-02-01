@@ -34,9 +34,11 @@ class Command(BaseCommand):
             '--migrations', metavar="MIGRATION_TYPE", default='all',
             help=(
                 'Selectively migrate parts of the database, semicolon ";" '
-                'delimited list of migrations (new_dicts, userprofiles, '
-                'search, processing_levels, unique_product_id, pycsw, cleanup)'
-                'defaults to "all"')),
+                'delimited list of migrations (backup_tasks, new_dicts, '
+                'userprofiles, search, remove_spot, processing_levels, '
+                'unique_product_id, pycsw, cleanup defaults to "all"'
+            )
+        ),
     )
 
     def handle(self, *args, **options):

@@ -40,7 +40,7 @@ CREATE TABLE "search_search_collection" (
 CREATE TABLE "search_search_license_type" (
     "id" serial NOT NULL PRIMARY KEY,
     "search_id" integer NOT NULL,
-    "license_id" integer NOT NULL REFERENCES "catalogue_license" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "license_id" integer NOT NULL REFERENCES "dictionaries_license" ("id") DEFERRABLE INITIALLY DEFERRED,
     UNIQUE ("search_id", "license_id")
 )
 ;
