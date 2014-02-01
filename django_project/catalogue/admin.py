@@ -35,7 +35,6 @@ from catalogue.models import (
     FileFormat,
     ResamplingMethod,
     Datum,
-    CreatingSoftware,
     GenericProduct,
     OpticalProduct,
     GeospatialProduct,
@@ -134,13 +133,6 @@ class DatumAdmin(admin.GeoModelAdmin):
     search_fields = ['name']
     list_filter = ['name']
     list_display = ('name',)
-    pass
-
-
-class CreatingSoftwareAdmin(admin.GeoModelAdmin):
-    search_fields = ['name']
-    list_filter = ['name']
-    list_display = ('name',)
 
 
 class GenericProductAdmin(admin.GeoModelAdmin):
@@ -218,7 +210,6 @@ admin.site.register(OrderStatus, OrderStatusAdmin)
 admin.site.register(FileFormat, FileFormatAdmin)
 admin.site.register(ResamplingMethod, ResamplingMethodAdmin)
 admin.site.register(Datum, DatumAdmin)
-admin.site.register(CreatingSoftware, CreatingSoftwareAdmin)
 admin.site.register(GenericProduct, GenericProductAdmin)
 admin.site.register(OpticalProduct, OpticalProductAdmin)
 admin.site.register(GeospatialProduct, GeospatialProductAdmin)

@@ -21,11 +21,10 @@ import factory
 from datetime import datetime
 
 from ..models import (
-    Order, OrderStatus, DeliveryMethod, DeliveryDetail,
-    Datum, ResamplingMethod, FileFormat, MarketSector, GenericProduct,
-    CreatingSoftware, GenericImageryProduct,
-    GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
-    OrdinalProduct, ContinuousProduct, Visit,
+    Order, OrderStatus, DeliveryMethod, DeliveryDetail, Datum,
+    ResamplingMethod, FileFormat, MarketSector, GenericProduct,
+    GenericImageryProduct, GenericSensorProduct, OpticalProduct, RadarProduct,
+    GeospatialProduct, OrdinalProduct, ContinuousProduct, Visit,
     OrderStatusHistory, OrderNotificationRecipients, TaskingRequest,
     WorldBorders
 )
@@ -126,16 +125,6 @@ class TaskingRequestF(OrderF):
     target_date = datetime(2008, 1, 1)
     satellite_instrument_group = factory.SubFactory(
         'dictionaries.tests.model_factories.SatelliteInstrumentGroupF')
-
-
-class CreatingSoftwareF(factory.django.DjangoModelFactory):
-    """
-    CreatingSoftware model factory
-    """
-    FACTORY_FOR = CreatingSoftware
-
-    name = factory.Sequence(lambda n: "Creating software {}".format(n))
-    version = ''
 
 
 class GenericProductF(factory.django.DjangoModelFactory):

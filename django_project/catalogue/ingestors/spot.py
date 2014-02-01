@@ -30,10 +30,8 @@ from django.db import transaction
 from django.contrib.gis.gdal import OGRGeometry
 from django.contrib.gis.gdal import DataSource
 
-from ..models import (
-    CreatingSoftware,
-    OpticalProduct,
-)
+from ..models import OpticalProduct
+
 from dictionaries.models import Satellite, Institution, License, Quality
 
 

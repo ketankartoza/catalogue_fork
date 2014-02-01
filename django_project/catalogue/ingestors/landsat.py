@@ -39,10 +39,7 @@ from dictionaries.models import (
     License,
     Quality
 )
-from catalogue.models import (
-    OpticalProduct,
-    CreatingSoftware
-)
+from catalogue.models import OpticalProduct
 
 
 def parseDateTime(theDate):
