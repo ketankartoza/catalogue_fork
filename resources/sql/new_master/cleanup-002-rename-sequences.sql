@@ -10,5 +10,6 @@ ALTER SEQUENCE catalogue_institution_id_seq RENAME TO dictionaries_institution_i
 ALTER SEQUENCE catalogue_license_id_seq RENAME TO dictionaries_license_id_seq;
 ALTER SEQUENCE catalogue_quality_id_seq RENAME TO dictionaries_quality_id_seq;
 ALTER SEQUENCE catalogue_topic_id_seq RENAME TO dictionaries_topic_id_seq;
+ALTER SEQUENCE catalogue_placetype_id_seq RENAME TO dictionaries_placetype_id_seq;
 
 COMMIT;

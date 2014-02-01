@@ -24,7 +24,7 @@ from ..models import (
     SatelliteInstrument, Band, SpectralGroup, SpectralMode, BandSpectralMode,
     InstrumentTypeProcessingLevel, SpectralModeProcessingCosts, Institution,
     ForeignCurrency, RadarProductProfile, OpticalProductProfile, Projection,
-    License, Quality, Topic
+    License, Quality, Topic, PlaceType
 )
 
 
@@ -341,3 +341,12 @@ class TopicF(factory.django.DjangoModelFactory):
 
     abbreviation = factory.Sequence(lambda n: "T{}".format(n))
     name = factory.Sequence(lambda n: "Topic {}".format(n))
+
+
+class PlaceTypeF(factory.django.DjangoModelFactory):
+    """
+    PlaceType model factory
+    """
+    FACTORY_FOR = PlaceType
+
+    name = factory.Sequence(lambda n: "PlaceType {}".format(n))

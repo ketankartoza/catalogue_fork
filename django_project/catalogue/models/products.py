@@ -37,7 +37,6 @@ from PIL import Image, ImageFilter, ImageOps
 from catalogue.utmzonecalc import utmZoneFromLatLon
 from catalogue.dims_lib import dimsWriter
 from catalogue.models import (
-    PlaceType,
     Place,
     Unit,)
 
@@ -1276,7 +1275,7 @@ class GeospatialProduct(GenericProduct):
             'The start of the timespan covered by this dataset. If left blank'
             'will default to start date.'))
     place_type = models.ForeignKey(
-        PlaceType,
+        'dictionaries.PlaceType',
         help_text=(
             'Select the type of geographic region covered by this dataset'))
     place = models.ForeignKey(

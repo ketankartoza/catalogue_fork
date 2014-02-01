@@ -25,7 +25,7 @@ from ..models import (
     Datum, ResamplingMethod, FileFormat, MarketSector, GenericProduct,
     CreatingSoftware, GenericImageryProduct,
     GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
-    PlaceType, Place, OrdinalProduct, ContinuousProduct, Unit, Visit,
+    Place, OrdinalProduct, ContinuousProduct, Unit, Visit,
     OrderStatusHistory, OrderNotificationRecipients, TaskingRequest,
     WorldBorders
 )
@@ -242,15 +242,6 @@ class RadarProductF(GenericSensorProductF):
     incidence_angle = 0.0
 
 
-class PlaceTypeF(factory.django.DjangoModelFactory):
-    """
-    PlaceType model factory
-    """
-    FACTORY_FOR = PlaceType
-
-    name = factory.Sequence(lambda n: "PlaceType {}".format(n))
-
-
 class PlaceF(factory.django.DjangoModelFactory):
     """
     Place model factory
@@ -258,7 +249,8 @@ class PlaceF(factory.django.DjangoModelFactory):
     FACTORY_FOR = Place
 
     name = factory.Sequence(lambda n: "Place {}".format(n))
-    place_type = factory.SubFactory(PlaceTypeF)
+    place_type = factory.SubFactory(
+        'dictionaries.tests.model_factories.PlaceTypeF')
     geometry = 'POINT(17.54 -32.05)'
 
 
@@ -277,7 +269,8 @@ class GeospatialProductF(GenericProductF):
         getter=lambda c: c[0])
     temporal_extent_start = datetime(2008, 1, 1, 12, 00)
     temporal_extent_end = datetime(2008, 1, 1, 13, 00)
-    place_type = factory.SubFactory(PlaceTypeF)
+    place_type = factory.SubFactory(
+        'dictionaries.tests.model_factories.PlaceTypeF')
     place = factory.SubFactory(PlaceF)
     primary_topic = factory.SubFactory(
         'dictionaries.tests.model_factories.TopicF')
