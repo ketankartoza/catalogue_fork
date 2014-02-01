@@ -47,6 +47,7 @@ class Command(BaseCommand):
             self.migrate_new_dicts()
             self.migrate_userprofiles()
             self.migrate_search()
+            self.migrate_remove_spot()
             self.migrate_proc_levels()
             self.migrate_unique_product_ids()
             self.migrate_product_models()
@@ -61,6 +62,9 @@ class Command(BaseCommand):
 
         if 'search' in myMigrations:
             self.migrate_search()
+
+        if 'remove_spot' in myMigrations:
+            self.migrate_remove_spot()
 
         if 'pycsw' in myMigrations:
             self.migrate_pycsw()
@@ -112,6 +116,14 @@ class Command(BaseCommand):
         os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '003_search_migration.sh', self.db])
+        os.chdir(origWD)
+
+    def migrate_remove_spot(self):
+        print '* Starting remove_spot migration...'
+        origWD = os.getcwd()
+        os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
+        print '* Executing database migration scripts...'
+        subprocess.call(['sh', '008_remove_spot_migration.sh', self.db])
         os.chdir(origWD)
 
     def migrate_pycsw(self):
