@@ -25,23 +25,6 @@ from django.contrib.gis.db import models
 # These models are not used in generating the sac id
 ###############################################################################
 
-class Quality(models.Model):
-    """
-    A dictionary to define Product Quality, e.g. Unknown
-    """
-
-    name = models.CharField(max_length="255", unique=True)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        app_label = 'catalogue'
-        verbose_name = 'Quality'
-        verbose_name_plural = 'Qualities'
-
-###############################################################################
-
 
 class CreatingSoftware(models.Model):
     """

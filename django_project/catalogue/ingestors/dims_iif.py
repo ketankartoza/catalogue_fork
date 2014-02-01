@@ -39,12 +39,10 @@ from dictionaries.models import (
     InstrumentType,
     Satellite,
     Projection,
-    SatelliteInstrumentGroup
-)
-from catalogue.models import (
-    OpticalProduct,
+    SatelliteInstrumentGroup,
     Quality
 )
+from catalogue.models import OpticalProduct
 
 
 def parseDateTime(theDate):

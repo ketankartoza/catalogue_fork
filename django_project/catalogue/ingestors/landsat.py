@@ -36,12 +36,12 @@ from dictionaries.models import (
     OpticalProductProfile,
     Projection,
     Institution,
-    License
+    License,
+    Quality
 )
 from catalogue.models import (
     OpticalProduct,
-    CreatingSoftware,
-    Quality
+    CreatingSoftware
 )
 
 

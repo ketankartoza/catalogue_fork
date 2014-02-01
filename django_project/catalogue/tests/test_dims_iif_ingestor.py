@@ -26,7 +26,7 @@ from django.core.management import call_command
 from catalogue.models import (
     GenericProduct)
 from catalogue.ingestors import dims_iif
-from .model_factories import QualityF
+
 from dictionaries.tests.model_factories import (
     SatelliteF,
     SatelliteInstrumentF,
@@ -34,7 +34,8 @@ from dictionaries.tests.model_factories import (
     InstrumentTypeF,
     SatelliteInstrumentGroupF,
     OpticalProductProfileF,
-    ProjectionF
+    ProjectionF,
+    QualityF
 )
 DATA_DIR_PATH = os.path.join(
     os.path.dirname(__file__),

@@ -31,11 +31,10 @@ from django.contrib.gis.gdal import OGRGeometry
 from django.contrib.gis.gdal import DataSource
 
 from ..models import (
-    Quality,
     CreatingSoftware,
     OpticalProduct,
 )
-from dictionaries.models import Satellite, Institution, License
+from dictionaries.models import Satellite, Institution, License, Quality
 
 
 @transaction.commit_manually

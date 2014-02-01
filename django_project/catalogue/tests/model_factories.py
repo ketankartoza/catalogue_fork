@@ -23,7 +23,7 @@ from datetime import datetime
 from ..models import (
     Order, OrderStatus, DeliveryMethod, DeliveryDetail,
     Datum, ResamplingMethod, FileFormat, MarketSector, GenericProduct,
-    Quality, CreatingSoftware, GenericImageryProduct,
+    CreatingSoftware, GenericImageryProduct,
     GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
     PlaceType, Place, Topic, OrdinalProduct, ContinuousProduct, Unit, Visit,
     OrderStatusHistory, OrderNotificationRecipients, TaskingRequest,
@@ -128,15 +128,6 @@ class TaskingRequestF(OrderF):
         'dictionaries.tests.model_factories.SatelliteInstrumentGroupF')
 
 
-class QualityF(factory.django.DjangoModelFactory):
-    """
-    Quality model factory
-    """
-    FACTORY_FOR = Quality
-
-    name = factory.Sequence(lambda n: "Quality {}".format(n))
-
-
 class CreatingSoftwareF(factory.django.DjangoModelFactory):
     """
     CreatingSoftware model factory
@@ -159,7 +150,7 @@ class GenericProductF(factory.django.DjangoModelFactory):
         '-34.65, 17.54 -32.05))')
     projection = factory.SubFactory(
         'dictionaries.tests.model_factories.ProjectionF')
-    quality = factory.SubFactory(QualityF)
+    quality = factory.SubFactory('dictionaries.tests.model_factories.QualityF')
     unique_product_id = factory.Sequence(
         lambda n: "unique_product_id_{}".format(n))
     original_product_id = factory.Sequence(

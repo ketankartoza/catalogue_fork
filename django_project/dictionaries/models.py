@@ -777,3 +777,18 @@ class License(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class Quality(models.Model):
+    """
+    A dictionary to define Product Quality, e.g. Unknown
+    """
+
+    name = models.CharField(max_length="255", unique=True)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Quality'
+        verbose_name_plural = 'Qualities'

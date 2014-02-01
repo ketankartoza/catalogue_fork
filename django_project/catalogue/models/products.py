@@ -37,7 +37,6 @@ from PIL import Image, ImageFilter, ImageOps
 from catalogue.utmzonecalc import utmZoneFromLatLon
 from catalogue.dims_lib import dimsWriter
 from catalogue.models import (
-    Quality,
     PlaceType,
     Place,
     Topic,
@@ -210,7 +209,7 @@ class GenericProduct(models.Model):
         srid=4326, help_text='Image footprint')
     projection = models.ForeignKey('dictionaries.Projection')
     quality = models.ForeignKey(
-        Quality,
+        'dictionaries.Quality',
         help_text=(
             'A quality assessment describing the amount of dropouts etc.'
             'and how usable the entire scene is.'))

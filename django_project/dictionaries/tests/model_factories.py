@@ -24,7 +24,7 @@ from ..models import (
     SatelliteInstrument, Band, SpectralGroup, SpectralMode, BandSpectralMode,
     InstrumentTypeProcessingLevel, SpectralModeProcessingCosts, Institution,
     ForeignCurrency, RadarProductProfile, OpticalProductProfile, Projection,
-    License
+    License, Quality
 )
 
 
@@ -322,3 +322,12 @@ class LicenseF(factory.django.DjangoModelFactory):
     details = ''
     type = factory.Iterator(
         License.LICENSE_TYPE_CHOICES, getter=lambda c: c[0])
+
+
+class QualityF(factory.django.DjangoModelFactory):
+    """
+    Quality model factory
+    """
+    FACTORY_FOR = Quality
+
+    name = factory.Sequence(lambda n: "Quality {}".format(n))
