@@ -36,9 +36,7 @@ from PIL import Image, ImageFilter, ImageOps
 
 from catalogue.utmzonecalc import utmZoneFromLatLon
 from catalogue.dims_lib import dimsWriter
-from catalogue.models import (
-    Place,
-    Unit,)
+from catalogue.models import Unit
 
 # for thumb georeferencer
 #from osgeo.gdalconst import *
@@ -1279,7 +1277,7 @@ class GeospatialProduct(GenericProduct):
         help_text=(
             'Select the type of geographic region covered by this dataset'))
     place = models.ForeignKey(
-        Place,
+        'dictionaries.Place',
         help_text='Nearest place, town, country region etc. to this product')
     primary_topic = models.ForeignKey(
         'dictionaries.Topic',

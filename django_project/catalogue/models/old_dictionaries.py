@@ -40,30 +40,6 @@ class CreatingSoftware(models.Model):
     def __unicode__(self):
         return self.name
 
-
-###############################################################################
-
-
-class Place(models.Model):
-    """
-    A collection on named places based largely on geonames (which all get a
-    place type of Nearest named place)
-    """
-
-    name = models.CharField(max_length=255, null=False)
-    place_type = models.ForeignKey(
-        'dictionaries.PlaceType', help_text='Type of place')
-    geometry = models.PointField(
-        srid=4326, help_text='Place geometry', null=False)
-
-    class Meta:
-        app_label = 'catalogue'
-
-    def __unicode__(self):
-        return self.name
-
-    objects = models.GeoManager()
-
 ###############################################################################
 
 
