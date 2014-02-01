@@ -65,7 +65,6 @@ from catalogue.forms import (
 from catalogue.views.helpers import (
     notifySalesStaff,
     notifySalesStaffOfTaskRequest,
-    standardLayers,
     render_to_kml,
     render_to_kmz,
     downloadISOMetadata,
@@ -206,7 +205,7 @@ def downloadOrder(theRequest, theId):
     if 'shp' in theRequest.GET:
         myResponder = ShpResponder(myOrder)
         myResponder.file_name = u'products_for_order_%s' % myOrder.id
-        return  myResponder.write_order_products(
+        return myResponder.write_order_products(
             myOrder.searchrecord_set.all())
     elif 'kml' in theRequest.GET:
         return render_to_kml('kml/searchRecords.kml', {
@@ -236,7 +235,7 @@ def downloadClipGeometry(theRequest, theId):
     if 'shp' in theRequest.GET:
         myResponder = ShpResponder(myOrder)
         myResponder.file_name = u'clip_geometry_order_%s' % myOrder.id
-        return  myResponder.write_delivery_details(myOrder)
+        return myResponder.write_delivery_details(myOrder)
     elif 'kml' in theRequest.GET:
         return render_to_kml(
             'kml/clipGeometry.kml', {
@@ -662,9 +661,13 @@ def ordersSummary(theRequest):
     myOrderStatus = OrderStatus.objects.annotate(num_orders=Count('order__id'))
     #count orders by product type (misson sensor)
     myOrderInstrumentType = InstrumentType.objects.annotate(
-        num_orders=Count('satelliteinstrumentgroup__taskingrequest__order_ptr__id')).order_by('name')
+        num_orders=Count(
+            'satelliteinstrumentgroup__taskingrequest__order_ptr__id')
+    ).order_by('name')
     myOrderSatellite = Satellite.objects.annotate(
-        num_orders=Count('satelliteinstrumentgroup__taskingrequest__order_ptr__id')).order_by('name')
+        num_orders=Count(
+            'satelliteinstrumentgroup__taskingrequest__order_ptr__id')
+    ).order_by('name')
     return dict(
         myOrderStatus=myOrderStatus,
         myOrderInstrumentType=myOrderInstrumentType,

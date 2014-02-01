@@ -44,11 +44,11 @@ class SearchRecord(models.Model):
     havean order id should be added to it.
     """
     user = models.ForeignKey('auth.User')
-    order = models.ForeignKey('catalogue.Order', null=True, blank=True)
+    order = models.ForeignKey('orders.Order', null=True, blank=True)
     product = models.ForeignKey(
         'catalogue.GenericProduct', null=False, blank=False)
     delivery_detail = models.ForeignKey(
-        'catalogue.DeliveryDetail', null=True, blank=True)
+        'orders.DeliveryDetail', null=True, blank=True)
     # DIMS ordering related fields
     internal_order_id = models.IntegerField(null=True, blank=True)
     download_path = models.CharField(

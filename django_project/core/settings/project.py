@@ -19,6 +19,7 @@ INSTALLED_APPS += (
     'dictionaries',
     'useraccounts',
     'search',
+    'orders',
     'pycsw_integration',
     'reports',
 )

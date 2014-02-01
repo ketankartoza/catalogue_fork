@@ -38,18 +38,12 @@ class Datum(models.Model):
     name = models.CharField('Name', max_length=128, unique=True)
 
     class Meta:
-        app_label = 'catalogue'
         verbose_name = 'Datums'
         verbose_name_plural = 'Datums'
         ordering = ['name']
 
     def __unicode__(self):
         return self.name
-
-    class Admin:
-        pass
-
-###############################################################################
 
 
 class ResamplingMethod(models.Model):
@@ -60,18 +54,12 @@ class ResamplingMethod(models.Model):
     name = models.CharField('Name', max_length=128, unique=True)
 
     class Meta:
-        app_label = 'catalogue'
         verbose_name = 'Resampling Method'
         verbose_name_plural = 'Resampling Methods'
         ordering = ['name']
 
     def __unicode__(self):
         return self.name
-
-    class Admin:
-        pass
-
-###############################################################################
 
 
 class FileFormat(models.Model):
@@ -81,18 +69,12 @@ class FileFormat(models.Model):
     name = models.CharField('Name', max_length=128, unique=True)
 
     class Meta:
-        app_label = 'catalogue'
         verbose_name = 'File Format'
         verbose_name_plural = 'File Formats'
         ordering = ['name']
 
     def __unicode__(self):
         return self.name
-
-    class Admin:
-        pass
-
-###############################################################################
 
 
 class OrderStatus(models.Model):
@@ -103,18 +85,12 @@ class OrderStatus(models.Model):
     name = models.CharField('Name', max_length=128, unique=True)
 
     class Meta:
-        app_label = 'catalogue'
         verbose_name = 'Order Status'
         verbose_name_plural = 'Order Status List'
         ordering = ['name']
 
     def __unicode__(self):
         return self.name
-
-    class Admin:
-        pass
-
-###############################################################################
 
 
 class DeliveryMethod(models.Model):
@@ -124,7 +100,6 @@ class DeliveryMethod(models.Model):
     name = models.CharField('Name', max_length=128, unique=True)
 
     class Meta:
-        app_label = 'catalogue'
         verbose_name = 'Delivery Method'
         verbose_name_plural = 'Delivery Methods'
         ordering = ['name']
@@ -132,11 +107,6 @@ class DeliveryMethod(models.Model):
     def __unicode__(self):
         return self.name
 
-    class Admin:
-        pass
-
-
-###############################################################################
 
 class DeliveryDetail(models.Model):
     """
@@ -163,11 +133,8 @@ class DeliveryDetail(models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        app_label = 'catalogue'
         verbose_name = 'Delivery Detail'
         verbose_name_plural = 'Delivery Details'
-
-###############################################################################
 
 
 class MarketSector(models.Model):
@@ -177,16 +144,10 @@ class MarketSector(models.Model):
     name = models.CharField(max_length=80, unique=True)
 
     class Meta:
-        app_label = 'catalogue'
         ordering = ['name']
 
     def __unicode__(self):
         return str(self.name)
-
-    class Admin:
-        pass
-
-###############################################################################
 
 
 class Order(models.Model):
@@ -223,7 +184,6 @@ class Order(models.Model):
     base_objects = NoSubclassManager()  # see catalogue/nosubclassmanager.py
 
     class Meta:
-        app_label = 'catalogue'
         verbose_name = 'Order'
         verbose_name_plural = 'Orders'
         ordering = ['-order_date']
@@ -231,14 +191,13 @@ class Order(models.Model):
     def __unicode__(self):
         return str(self.id)
 
-    class Admin:
-        pass
-
     def get_recent_history_date(self):
         current_status = OrderStatus.objects.get(name=self.order_status)
-        recent_history = OrderStatusHistory.objects.filter(order=self)\
-                            .filter(new_order_status=current_status)\
-                            .latest('order_change_date')
+        recent_history = (
+            OrderStatusHistory.objects.filter(order=self)
+            .filter(new_order_status=current_status)
+            .latest('order_change_date')
+        )
         return recent_history.order_change_date
 
 
@@ -266,13 +225,7 @@ class OrderStatusHistory(models.Model):
         verbose_name = 'Order Status History'
         verbose_name_plural = 'Order Status History'
         ordering = ('-order_change_date',)
-        app_label = 'catalogue'
 
-    class Admin:
-        pass
-
-
-###############################################################################
 
 class TaskingRequest(Order):
     """
@@ -293,13 +246,9 @@ class TaskingRequest(Order):
     objects = models.GeoManager()
 
     class Meta:
-        app_label = 'catalogue'
         verbose_name = 'Tasking Request'
         verbose_name_plural = 'Tasking Requests'
         ordering = ['-target_date']
 
     def __unicode__(self):
         return str(self.id)
-
-    class Admin:
-        pass
