@@ -25,7 +25,7 @@ from ..models import (
     Datum, ResamplingMethod, FileFormat, MarketSector, GenericProduct,
     CreatingSoftware, GenericImageryProduct,
     GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
-    PlaceType, Place, Topic, OrdinalProduct, ContinuousProduct, Unit, Visit,
+    PlaceType, Place, OrdinalProduct, ContinuousProduct, Unit, Visit,
     OrderStatusHistory, OrderNotificationRecipients, TaskingRequest,
     WorldBorders
 )
@@ -262,16 +262,6 @@ class PlaceF(factory.django.DjangoModelFactory):
     geometry = 'POINT(17.54 -32.05)'
 
 
-class TopicF(factory.django.DjangoModelFactory):
-    """
-    Topic model factory
-    """
-    FACTORY_FOR = Topic
-
-    abbreviation = factory.Sequence(lambda n: "T{}".format(n))
-    name = factory.Sequence(lambda n: "Topic {}".format(n))
-
-
 class GeospatialProductF(GenericProductF):
     """
     GeospatialProduct model factory
@@ -289,7 +279,8 @@ class GeospatialProductF(GenericProductF):
     temporal_extent_end = datetime(2008, 1, 1, 13, 00)
     place_type = factory.SubFactory(PlaceTypeF)
     place = factory.SubFactory(PlaceF)
-    primary_topic = factory.SubFactory(TopicF)
+    primary_topic = factory.SubFactory(
+        'dictionaries.tests.model_factories.TopicF')
 
 
 class OrdinalProductF(GenericProductF):

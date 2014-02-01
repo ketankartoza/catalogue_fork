@@ -39,7 +39,6 @@ from catalogue.dims_lib import dimsWriter
 from catalogue.models import (
     PlaceType,
     Place,
-    Topic,
     Unit,)
 
 # for thumb georeferencer
@@ -1284,7 +1283,7 @@ class GeospatialProduct(GenericProduct):
         Place,
         help_text='Nearest place, town, country region etc. to this product')
     primary_topic = models.ForeignKey(
-        Topic,
+        'dictionaries.Topic',
         help_text=(
             'Select the most appopriate topic for this dataset. You can add '
             'additional keywords in the tags box.'))  # e.g. Landuse etc

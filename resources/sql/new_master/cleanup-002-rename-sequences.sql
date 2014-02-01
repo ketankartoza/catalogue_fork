@@ -7,7 +7,8 @@ ALTER SEQUENCE catalogue_searchrecord_id_seq RENAME TO search_searchrecord_id_se
 -- old dictionaries
 ALTER SEQUENCE catalogue_projection_id_seq RENAME TO dictionaries_projection_id_seq;
 ALTER SEQUENCE catalogue_institution_id_seq RENAME TO dictionaries_institution_id_seq;
-ALTER SEQUEnCE catalogue_license_id_seq RENAME TO dictionaries_license_id_seq;
+ALTER SEQUENCE catalogue_license_id_seq RENAME TO dictionaries_license_id_seq;
 ALTER SEQUENCE catalogue_quality_id_seq RENAME TO dictionaries_quality_id_seq;
+ALTER SEQUENCE catalogue_topic_id_seq RENAME TO dictionaries_topic_id_seq;
 
 COMMIT;

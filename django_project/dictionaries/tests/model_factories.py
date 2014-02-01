@@ -24,7 +24,7 @@ from ..models import (
     SatelliteInstrument, Band, SpectralGroup, SpectralMode, BandSpectralMode,
     InstrumentTypeProcessingLevel, SpectralModeProcessingCosts, Institution,
     ForeignCurrency, RadarProductProfile, OpticalProductProfile, Projection,
-    License, Quality
+    License, Quality, Topic
 )
 
 
@@ -331,3 +331,13 @@ class QualityF(factory.django.DjangoModelFactory):
     FACTORY_FOR = Quality
 
     name = factory.Sequence(lambda n: "Quality {}".format(n))
+
+
+class TopicF(factory.django.DjangoModelFactory):
+    """
+    Topic model factory
+    """
+    FACTORY_FOR = Topic
+
+    abbreviation = factory.Sequence(lambda n: "T{}".format(n))
+    name = factory.Sequence(lambda n: "Topic {}".format(n))

@@ -792,3 +792,15 @@ class Quality(models.Model):
     class Meta:
         verbose_name = 'Quality'
         verbose_name_plural = 'Qualities'
+
+
+class Topic(models.Model):
+    """
+    A dictionary to define geospatial dataset topics e.g. LANDUSE, ROADS etc.
+    """
+
+    abbreviation = models.CharField(max_length=10, unique=True, null=False)
+    name = models.CharField(max_length=255, unique=True, null=False)
+
+    def __unicode__(self):
+        return self.name
