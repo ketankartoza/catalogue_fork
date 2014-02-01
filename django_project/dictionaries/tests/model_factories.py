@@ -22,7 +22,7 @@ from ..models import (
     Collection, ProcessingLevel, Satellite, ScannerType, InstrumentType,
     ReferenceSystem, RadarBeam, ImagingMode, SatelliteInstrumentGroup,
     SatelliteInstrument, Band, SpectralGroup, SpectralMode, BandSpectralMode,
-    InstrumentTypeProcessingLevel, SpectralModeProcessingCosts,
+    InstrumentTypeProcessingLevel, SpectralModeProcessingCosts, Institution,
     ForeignCurrency, RadarProductProfile, OpticalProductProfile, Projection
 )
 
@@ -36,7 +36,7 @@ class CollectionF(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'Collection {0}'.format(n))
     description = 'None'
     institution = factory.SubFactory(
-        'catalogue.tests.model_factories.InstitutionF'
+        'dictionaries.tests.model_factories.InstitutionF'
     )
 
 
@@ -296,3 +296,16 @@ class ProjectionF(factory.django.DjangoModelFactory):
 
     name = factory.Sequence(lambda n: "Projection {}".format(n))
     epsg_code = factory.Sequence(lambda n: n)
+
+
+class InstitutionF(factory.django.DjangoModelFactory):
+    """
+    Institution model factory
+    """
+    FACTORY_FOR = Institution
+
+    name = factory.Sequence(lambda n: 'Institution {0}'.format(n))
+    address1 = 'Blank'
+    address2 = 'Blank'
+    address3 = 'Blank'
+    post_code = 'Blank'

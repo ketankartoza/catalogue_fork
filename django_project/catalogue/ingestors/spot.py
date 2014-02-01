@@ -34,10 +34,9 @@ from ..models import (
     Quality,
     License,
     CreatingSoftware,
-    Institution,
     OpticalProduct,
 )
-from dictionaries.models import Satellite
+from dictionaries.models import Satellite, Institution
 
 
 @transaction.commit_manually

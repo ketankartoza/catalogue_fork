@@ -25,26 +25,6 @@ from django.contrib.gis.db import models
 # These models are not used in generating the sac id
 ###############################################################################
 
-class Institution(models.Model):
-    """
-    A dictionary to define Product Institution, e.g. SANSA, ESA
-    """
-
-    name = models.CharField(max_length=255, unique=True)
-    address1 = models.CharField(max_length=255)
-    address2 = models.CharField(max_length=255)
-    address3 = models.CharField(max_length=255)
-    post_code = models.CharField(max_length=255)
-
-    class Meta:
-        app_label = 'catalogue'
-
-    def __unicode__(self):
-        return self.name
-
-
-###############################################################################
-
 class License(models.Model):
     """
     Licenses for Products, e.g. SANSA Free License.

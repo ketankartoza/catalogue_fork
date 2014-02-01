@@ -34,11 +34,11 @@ from dictionaries.models import (
     SpectralMode,
     SatelliteInstrument,
     OpticalProductProfile,
-    Projection
+    Projection,
+    Institution
 )
 from catalogue.models import (
     OpticalProduct,
-    Institution,
     License,
     CreatingSoftware,
     Quality

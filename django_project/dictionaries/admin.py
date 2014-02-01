@@ -20,26 +20,12 @@ __copyright__ = 'South African National Space Agency'
 from django.contrib.gis import admin
 
 from .models import (
-    ProcessingLevel,
-    Collection,
-    Satellite,
-    ScannerType,
-    InstrumentType,
-    RadarBeam,
-    ImagingMode,
-    SatelliteInstrumentGroup,
-    SatelliteInstrument,
-    Band,
-    SpectralGroup,
-    SpectralMode,
-    BandSpectralMode,
-    InstrumentTypeProcessingLevel,
-    SpectralModeProcessingCosts,
-    OpticalProductProfile,
-    RadarProductProfile,
-    ForeignCurrency,
-    ReferenceSystem,
-    Projection
+    ProcessingLevel, Collection, Satellite, ScannerType, InstrumentType,
+    RadarBeam, ImagingMode, SatelliteInstrumentGroup, SatelliteInstrument,
+    Band, SpectralGroup, SpectralMode, BandSpectralMode,
+    InstrumentTypeProcessingLevel, SpectralModeProcessingCosts,
+    OpticalProductProfile, RadarProductProfile, ForeignCurrency,
+    ReferenceSystem, Projection, Institution
 )
 
 
@@ -211,3 +197,10 @@ class ProjectionAdmin(admin.GeoModelAdmin):
     list_filter = ['name']
     list_display = ('name',)
 admin.site.register(Projection, ProjectionAdmin)
+
+
+class InstitutionAdmin(admin.GeoModelAdmin):
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
+admin.site.register(Institution, InstitutionAdmin)

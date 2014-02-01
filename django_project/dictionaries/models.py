@@ -194,7 +194,7 @@ class Collection(models.Model):
     institution = models.ForeignKey(
         # NOTE: when referencing models in another application we need ti
         # specify a model with the full application label
-        'catalogue.Institution',
+        'Institution',
         help_text='Organisation that owns this satellite collection.')
 
     def __unicode__(self):
@@ -738,3 +738,18 @@ class Projection(models.Model):
 
     class Admin:
         pass
+
+
+class Institution(models.Model):
+    """
+    A dictionary to define Product Institution, e.g. SANSA, ESA
+    """
+
+    name = models.CharField(max_length=255, unique=True)
+    address1 = models.CharField(max_length=255)
+    address2 = models.CharField(max_length=255)
+    address3 = models.CharField(max_length=255)
+    post_code = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.name

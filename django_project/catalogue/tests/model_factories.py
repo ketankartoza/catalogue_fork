@@ -21,7 +21,7 @@ import factory
 from datetime import datetime
 
 from ..models import (
-    Institution, Order, OrderStatus, DeliveryMethod, DeliveryDetail,
+    Order, OrderStatus, DeliveryMethod, DeliveryDetail,
     Datum, ResamplingMethod, FileFormat, MarketSector, GenericProduct,
     License, Quality, CreatingSoftware, GenericImageryProduct,
     GenericSensorProduct, OpticalProduct, RadarProduct, GeospatialProduct,
@@ -29,19 +29,6 @@ from ..models import (
     OrderStatusHistory, OrderNotificationRecipients, TaskingRequest,
     WorldBorders
 )
-
-
-class InstitutionF(factory.django.DjangoModelFactory):
-    """
-    Institution model factory
-    """
-    FACTORY_FOR = Institution
-
-    name = factory.Sequence(lambda n: 'Institution {0}'.format(n))
-    address1 = 'Blank'
-    address2 = 'Blank'
-    address3 = 'Blank'
-    post_code = 'Blank'
 
 
 class LicenseF(factory.django.DjangoModelFactory):

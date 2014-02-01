@@ -23,9 +23,10 @@ import unittest
 from django.test import TestCase
 from django.core.management import call_command
 from catalogue.models import (
-    Institution,
     GenericProduct
 )
+
+from dictionaries.models import Institution
 from catalogue.ingestors import spot
 
 
