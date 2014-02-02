@@ -48,8 +48,9 @@ from catalogue.views.helpers import (
 # SHP and KML readers
 from catalogue.featureReaders import getGeometryFromUploadedFile
 
+from orders.forms import OrderStatusHistoryForm
+
 from .forms import (
-    OrderStatusHistoryForm,
     TaskingRequestForm,
     TaskingRequestDeliveryDetailForm)
 

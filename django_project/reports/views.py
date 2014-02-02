@@ -44,11 +44,12 @@ from django.db.models import Count  # for aggregate queries
 # Models and forms for our app
 from catalogue.models import (
     Visit,
-    TaskingRequest,
     GenericSensorProduct,
     OpticalProduct
 )
 from catalogue.renderDecorator import renderWithContext
+
+from tasking.models import TaskingRequest
 
 from search.models import (
     Search,
@@ -283,7 +284,7 @@ def sensorSummaryTable(theRequest, theSensorId):
     myCurrentYear = datetime.date.today().year
     # create a list of 'empty' records
     mySensorYearlyStatsAll = [
-        {'year': myYear, 'count':0}
+        {'year': myYear, 'count': 0}
         for myYear in range(myStartYear, myCurrentYear + 1)]
 
     # update records, replace with actual data

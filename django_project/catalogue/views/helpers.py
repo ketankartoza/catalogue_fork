@@ -40,11 +40,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 
-from catalogue.models import (
+from tasking.models import TaskingRequest
+
+from orders.models import (
     Order,
     OrderStatusHistory,
-    OrderNotificationRecipients,
-    TaskingRequest,
+    OrderNotificationRecipients
 )
 
 from search.models import SearchRecord
@@ -271,7 +272,7 @@ def notifySalesStaff(theUser, theOrderId, theContext=None):
 
     if not settings.EMAIL_NOTIFICATIONS_ENABLED:
         logger.info('Email sending disabled, set EMAIL_NOTIFICATIONS_ENABLED '
-                     'in settings')
+                    'in settings')
         return
     myOrder = get_object_or_404(Order, id=theOrderId)
     myRecords = SearchRecord.objects.filter(user=theUser,
@@ -302,7 +303,7 @@ def notifySalesStaff(theUser, theOrderId, theContext=None):
     # Add default recipients
     if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
         logger.info('Sending notice to default recipients : %s' %
-                     CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
+                    CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
         myRecipients.update(list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS))
 
     for myRecipient in myRecipients:
@@ -380,7 +381,7 @@ def notifySalesStaffOfTaskRequest(theUser, theId, theContext=None):
     """
     if not settings.EMAIL_NOTIFICATIONS_ENABLED:
         logger.info('Email sending disabled, set '
-                     'EMAIL_NOTIFICATIONS_ENABLED in settings')
+                    'EMAIL_NOTIFICATIONS_ENABLED in settings')
         return
 
     myTaskingRequest = get_object_or_404(TaskingRequest, id=theId)
@@ -401,7 +402,7 @@ def notifySalesStaffOfTaskRequest(theUser, theId, theContext=None):
     # Add default recipients if no recipients
     if not myRecipients and CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS:
         logger.info('Sending notice to default recipients : %s' %
-                     CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
+                    CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS)
         myRecipients.update(list(CATALOGUE_DEFAULT_NOTIFICATION_RECIPIENTS))
 
     for myRecipient in myRecipients:
