@@ -30,16 +30,17 @@ from ..forms import (
 )
 
 from ..models import (
-    TaskingRequest,
-    DeliveryDetail
+    TaskingRequest
 )
+
+from orders.models import DeliveryDetail
 
 from core.model_factories import UserF
 from useraccounts.tests.model_factories import SansaUserProfileF
 from dictionaries.tests.model_factories import (
     SatelliteInstrumentGroupF, InstrumentTypeF, ProjectionF
 )
-from .model_factories import (
+from orders.tests.model_factories import (
     ResamplingMethodF, DeliveryMethodF, MarketSectorF,
     OrderStatusF
 )

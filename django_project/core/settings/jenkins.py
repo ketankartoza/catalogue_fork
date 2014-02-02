@@ -30,6 +30,7 @@ NOSE_ARGS = [
     'search',
     'reports',
     'orders',
+    'tasking',
     '--nocapture',
     '--nologcapture'
 ]
@@ -43,7 +44,8 @@ PROJECT_APPS = (
     'useraccounts',
     'search',
     'reports',
-    'orders'
+    'orders',
+    'tasking'
 )
 
 PYLINT_RCFILE = 'pylintrc'
