@@ -36,9 +36,11 @@ from useraccounts.tests.model_factories import SansaUserProfileF
 from search.tests.model_factories import SearchRecordF
 from dictionaries.tests.model_factories import ProjectionF
 
+from catalogue.tests.model_factories import OpticalProductF
+
 from .model_factories import (
     DeliveryMethodF, FileFormatF, ResamplingMethodF, DatumF,
-    MarketSectorF, OpticalProductF, OrderStatusF
+    MarketSectorF, OrderStatusF
 )
 
 

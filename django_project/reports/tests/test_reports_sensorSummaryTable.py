@@ -24,7 +24,8 @@ from django.test import TestCase
 from django.test.client import Client
 
 from core.model_factories import UserF
-from catalogue.tests.model_factories import TaskingRequestF, OpticalProductF
+from tasking.tests.model_factories import TaskingRequestF
+from catalogue.tests.model_factories import OpticalProductF
 from search.tests.model_factories import SearchF, SearchRecordF
 
 from dictionaries.tests.model_factories import (

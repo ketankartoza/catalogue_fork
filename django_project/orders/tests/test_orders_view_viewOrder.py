@@ -23,7 +23,7 @@ from django.test import TestCase
 from django.test.client import Client
 
 
-from catalogue.forms import OrderStatusHistoryForm
+from ..forms import OrderStatusHistoryForm
 
 from core.model_factories import UserF
 from search.tests.model_factories import SearchRecordF

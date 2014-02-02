@@ -133,11 +133,11 @@ class SearchRecordF(factory.django.DjangoModelFactory):
     FACTORY_FOR = SearchRecord
 
     user = factory.SubFactory('core.model_factories.UserF')
-    order = factory.SubFactory('catalogue.tests.model_factories.OrderF')
+    order = factory.SubFactory('orders.tests.model_factories.OrderF')
     product = factory.SubFactory(
         'catalogue.tests.model_factories.GenericProductF')
     delivery_detail = factory.SubFactory(
-        'catalogue.tests.model_factories.DeliveryDetailF')
+        'orders.tests.model_factories.DeliveryDetailF')
     internal_order_id = None
     download_path = factory.Sequence(lambda n: "Download path // {}".format(n))
     product_ready = False

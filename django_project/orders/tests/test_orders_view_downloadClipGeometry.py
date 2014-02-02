@@ -25,6 +25,7 @@ from django.test.client import Client
 from core.model_factories import UserF
 from .model_factories import OrderF
 
+
 class OrdersViews_downloadClipGeometry_Tests(TestCase):
     """
     Tests orders.py downloadClipGeometry method/view
@@ -41,7 +42,7 @@ class OrdersViews_downloadClipGeometry_Tests(TestCase):
         """
         myKwargsTests = [
             {}, {'theId': 'testtest'}, {'theId': None}, {'theId': 3.14},
-            {'testargs':1}]
+            {'testargs': 1}]
 
         for myKwargTest in myKwargsTests:
             self.assertRaises(

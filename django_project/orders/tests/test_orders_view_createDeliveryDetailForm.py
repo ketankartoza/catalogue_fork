@@ -22,15 +22,14 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from catalogue.forms import ProductDeliveryDetailForm
+from ..forms import ProductDeliveryDetailForm
 
 from core.model_factories import UserF
 from search.tests.model_factories import SearchRecordF
 from dictionaries.tests.model_factories import ProjectionF
 
-from .model_factories import (
-    OpticalProductF, OrderStatusF
-)
+from catalogue.tests.model_factories import OpticalProductF
+from .model_factories import OrderStatusF
 
 
 class OrdersViews_createDeliveryDetailForm_Tests(TestCase):

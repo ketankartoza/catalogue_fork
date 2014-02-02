@@ -20,9 +20,10 @@ __copyright__ = 'South African National Space Agency'
 from django.test import TestCase
 from django.core import mail
 
-from catalogue.models import (Order,
-                              User,
-                              TaskingRequest)
+from orders.models import Order
+from tasking.models import TaskingRequest
+
+from catalogue.models import User
 from catalogue.views.helpers import (notifySalesStaff,
                                      notifySalesStaffOfTaskRequest)
 

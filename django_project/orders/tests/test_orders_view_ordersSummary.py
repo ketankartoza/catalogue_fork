@@ -24,7 +24,7 @@ from django.test.client import Client
 
 
 from core.model_factories import UserF
-from .model_factories import TaskingRequestF
+from tasking.tests.model_factories import TaskingRequestF
 
 
 class OrdersViews_ordersSummary_Tests(TestCase):

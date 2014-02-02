@@ -20,7 +20,8 @@ __copyright__ = 'South African National Space Agency'
 from django.test import TestCase
 
 from core.model_factories import UserF
-from catalogue.tests.model_factories import OrderF, GenericProductF
+from orders.tests.model_factories import OrderF
+from catalogue.tests.model_factories import GenericProductF
 
 from .model_factories import SearchRecordF
 

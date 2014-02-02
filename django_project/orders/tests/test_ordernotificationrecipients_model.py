@@ -26,12 +26,12 @@ from core.model_factories import UserF
 
 from dictionaries.tests.model_factories import (
     SatelliteF, InstrumentTypeF, SatelliteInstrumentGroupF,
-    OpticalProductProfileF, SatelliteInstrumentF, SpectralModeF
+    OpticalProductProfileF, SatelliteInstrumentF
 )
 
-from .model_factories import (
-    OrderNotificationRecipientsF, OpticalProductF
-)
+from catalogue.tests.model_factories import OpticalProductF
+
+from .model_factories import OrderNotificationRecipientsF
 
 from ..models import OrderNotificationRecipients
 
