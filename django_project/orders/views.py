@@ -48,15 +48,16 @@ from django.contrib.gis.gdal import (
     SpatialReference,
     CoordTransform)
 # Models and forms for our app
-from catalogue.models import (
+from .models import (
     Order,
     OrderStatusHistory,
     DeliveryDetail,
-    OrderStatus,
-    TaskingRequest
+    OrderStatus
 )
 
-from catalogue.forms import (
+from tasking.models import TaskingRequest
+
+from .forms import (
     OrderStatusHistoryForm,
     ProductDeliveryDetailForm,
     DeliveryDetailForm,

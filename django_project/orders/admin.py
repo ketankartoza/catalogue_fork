@@ -25,10 +25,9 @@ from django import forms
 from django.contrib.auth.models import User
 
 
-from catalogue.models import (
+from .models import (
     OrderNotificationRecipients,
     DeliveryMethod,
-    TaskingRequest,
     OrderStatus,
     FileFormat,
     ResamplingMethod,
@@ -135,9 +134,3 @@ class DeliveryMethodAdmin(admin.GeoModelAdmin):
     list_filter = ['name']
     list_display = ('name',)
 admin.site.register(DeliveryMethod, DeliveryMethodAdmin)
-
-
-class TaskingRequestAdmin(admin.GeoModelAdmin):
-    list_filter = ['target_date']
-    list_display = ('target_date', 'user')
-admin.site.register(TaskingRequest, TaskingRequestAdmin)
