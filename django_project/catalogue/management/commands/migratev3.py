@@ -36,7 +36,8 @@ class Command(BaseCommand):
                 'Selectively migrate parts of the database, semicolon ";" '
                 'delimited list of migrations (backup_tasks, new_dicts, '
                 'userprofiles, search, remove_spot, processing_levels, '
-                'unique_product_id, pycsw, cleanup defaults to "all"'
+                'unique_product_id, pycsw, orders, tasking, cleanup defaults '
+                'to "all"'
             )
         ),
     )
@@ -55,6 +56,8 @@ class Command(BaseCommand):
             self.migrate_unique_product_ids()
             self.migrate_product_models()
             self.migrate_pycsw()
+            self.migrate_orders()
+            self.migrate_tasking()
             self.migrate_cleanup()
 
         if 'new_dicts' in myMigrations:
@@ -86,6 +89,9 @@ class Command(BaseCommand):
 
         if 'orders' in myMigrations:
             self.migrate_orders()
+
+        if 'tasking' in myMigrations:
+            self.migrate_tasking()
 
         if 'cleanup' in myMigrations:
             self.migrate_cleanup()
@@ -187,4 +193,12 @@ class Command(BaseCommand):
         os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '200_orders.sh', self.db])
+        os.chdir(origWD)
+
+    def migrate_tasking(self):
+        print '* Starting tasking app migration...'
+        origWD = os.getcwd()
+        os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
+        print '* Executing database migration scripts...'
+        subprocess.call(['sh', '250_tasking.sh', self.db])
         os.chdir(origWD)
