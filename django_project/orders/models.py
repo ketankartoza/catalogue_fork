@@ -256,7 +256,6 @@ class OrderNotificationRecipients(models.Model):
     )
 
     class Meta:
-        app_label = 'catalogue'
         verbose_name = 'Order Notification Recipient'
         verbose_name_plural = 'Order Notification Recipients'
         ordering = ['user']

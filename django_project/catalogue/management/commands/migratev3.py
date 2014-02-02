@@ -84,6 +84,9 @@ class Command(BaseCommand):
         if 'product_schema_changes' in myMigrations:
             self.migrate_product_models()
 
+        if 'orders' in myMigrations:
+            self.migrate_orders()
+
         if 'cleanup' in myMigrations:
             self.migrate_cleanup()
 
@@ -176,4 +179,12 @@ class Command(BaseCommand):
         os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '999_cleanup.sh', self.db])
+        os.chdir(origWD)
+
+    def migrate_orders(self):
+        print '* Starting orders app migration...'
+        origWD = os.getcwd()
+        os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
+        print '* Executing database migration scripts...'
+        subprocess.call(['sh', '200_orders.sh', self.db])
         os.chdir(origWD)
