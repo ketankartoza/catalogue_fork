@@ -127,9 +127,6 @@ class Command(BaseCommand):
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '002_profile_migration.sh', self.db])
         os.chdir(origWD)
-        print '* Trying to install required python modules (it might fail)'
-        subprocess.call(['../venv/bin/pip', 'install',
-                         'django-userena==1.1.2'])
         print '* Checking user permission (might take awhile)...'
         call_command('check_permissions')
 
@@ -156,12 +153,6 @@ class Command(BaseCommand):
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '100_pycsw_integration.sh', self.db])
         os.chdir(origWD)
-        print '* Trying to install required python modules (it might fail)'
-        subprocess.call([
-            '../venv/bin/pip', 'install',
-            'git+git://github.com/dodobas/pycsw.git',
-            'SQLAlchemy==0.8.0b2'
-        ])
 
     def migrate_proc_levels(self):
         print '* Starting processing_levels migration...'
