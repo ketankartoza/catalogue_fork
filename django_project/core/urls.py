@@ -71,12 +71,6 @@ urlpatterns = patterns('',
     url(r'^showcartcontents/$', showCartContents, name='showCartContents'), #used by xhr requests
     url(r'^showminicartcontents/$', showMiniCartContents, name='showMiniCartContents'),
 
-    # Tasking request managmenet
-    url(r'^listtaskingrequests/$', listTaskingRequests, name='listTaskingRequests'),
-    url(r'^addtaskingrequest/', addTaskingRequest, name='addTaskingRequest'),
-    url(r'^mytaskingrequests/$', myTaskingRequests, name='myTaskingRequests'),
-    url(r'^viewtaskingrequest/(?P<theId>[0-9]+)/$', viewTaskingRequest, name='viewTaskingRequest'),
-    url(r'^taskingrequest/(?P<theId>\d*)/$', downloadTaskingRequest, name='downloadTaskingRequest'),
 
     # upload polygon from zipped shapefile for search/clip
     #( r'^uploadFeature/$', uploadFeature),
@@ -101,6 +95,8 @@ urlpatterns = patterns('',
     url(r'', include('reports.urls')),
     # new orders app
     url(r'', include('orders.urls')),
+    # new tasking app
+    url(r'', include('tasking.urls')),
 
 
     # api urls

@@ -40,22 +40,21 @@ from shapes.views import ShpResponder
 from catalogue.renderDecorator import renderWithContext
 from catalogue.profileRequiredDecorator import requireProfile
 
-from catalogue.models import (
-    TaskingRequest,
-    OrderStatusHistory,)
 from catalogue.views.helpers import (
-    standardLayers,
     notifySalesStaffOfTaskRequest,
     render_to_kml,
     render_to_kmz,)
-from catalogue.forms import (
+
+# SHP and KML readers
+from catalogue.featureReaders import getGeometryFromUploadedFile
+
+from .forms import (
     OrderStatusHistoryForm,
     TaskingRequestForm,
     TaskingRequestDeliveryDetailForm)
 
-# SHP and KML readers
-from catalogue.featureReaders import (
-    getGeometryFromUploadedFile,)
+from .models import TaskingRequest
+from orders.models import OrderStatusHistory
 
 ###########################################################
 #
@@ -286,7 +285,7 @@ def downloadTaskingRequest(theRequest, theId):
     if 'shp' in theRequest.GET:
         myResponder = ShpResponder(myRecord)
         myResponder.file_name = u'geometry_for_taskingrequest_%s' % myRecord.id
-        return  myResponder.write_request_records([myRecord])
+        return myResponder.write_request_records([myRecord])
     elif 'kml' in theRequest.GET:
         return render_to_kml('kml/taskingRequest.kml', {
             'tasking_request': myRecord,

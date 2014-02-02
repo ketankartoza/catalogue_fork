@@ -18,12 +18,11 @@ __date__ = '01/02/2014'
 __copyright__ = 'South African National Space Agency'
 
 import factory
-from datetime import datetime
 
 from ..models import (
     Order, OrderStatus, DeliveryMethod, DeliveryDetail, Datum,
-    ResamplingMethod, FileFormat, MarketSector, TaskingRequest,
-    OrderStatusHistory, OrderNotificationRecipients
+    ResamplingMethod, FileFormat, MarketSector, OrderStatusHistory,
+    OrderNotificationRecipients
 )
 
 
@@ -111,17 +110,6 @@ class OrderF(factory.django.DjangoModelFactory):
     delivery_detail = factory.SubFactory(DeliveryDetailF)
     market_sector = factory.SubFactory(MarketSectorF)
     order_date = None
-
-
-class TaskingRequestF(OrderF):
-    """
-    TaskingRequest model factory
-    """
-    FACTORY_FOR = TaskingRequest
-
-    target_date = datetime(2008, 1, 1)
-    satellite_instrument_group = factory.SubFactory(
-        'dictionaries.tests.model_factories.SatelliteInstrumentGroupF')
 
 
 class OrderStatusHistoryF(factory.django.DjangoModelFactory):

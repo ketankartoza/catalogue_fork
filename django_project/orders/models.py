@@ -20,16 +20,19 @@ __copyright__ = 'South African National Space Agency'
 from django.contrib.gis.db import models
 #for user id foreign keys
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 # Helper classes
 # ABP: unused ? from catalogue.geoiputils import *
 from catalogue.nosubclassmanager import NoSubclassManager
 
+from catalogue.models.products import GenericSensorProduct
 
 ###############################################################################
 #
 # Next bunch of models all relate to order management
 #
 ###############################################################################
+
 
 class Datum(models.Model):
     """
@@ -227,28 +230,69 @@ class OrderStatusHistory(models.Model):
         ordering = ('-order_change_date',)
 
 
-class TaskingRequest(Order):
+class OrderNotificationRecipients(models.Model):
     """
-    A tasking request inherits from the order model and adds
-    three fields: geometry, target date  and sensor. The tasking
-    request is used by end users to queue up acquisition requests
-    for a given sensor.
+    This class is used to map which staff members receive
+    notifications for which sensors so that the notices when
+    orders are placed/updated etc are targeted to the correct
+    individuals
     """
-    target_date = models.DateTimeField(
-        verbose_name='Target Date', auto_now=False, auto_now_add=False,
+    user = models.ForeignKey(User)
+    satellite_instrument_group = models.ManyToManyField(
+        'dictionaries.SatelliteInstrumentGroup',
+        verbose_name='SatelliteInstrument', null=True, blank=True,
         help_text=(
-            'When the image should be acquired (as close as possible '
-            'to this date).')
+            'Please choose one or more SatelliteInstrument. Use ctrl-click'
+            'to select more than one.'
+        )
     )
-    satellite_instrument_group = models.ForeignKey(
-        'dictionaries.SatelliteInstrumentGroup')
-
-    objects = models.GeoManager()
+    classes = models.ManyToManyField(
+        ContentType,
+        null=True, blank=True,
+        verbose_name='Product classes',
+        help_text=(
+            'Please subscribe to one or more product class. Use ctrl-click to '
+            'select more than one.')
+    )
 
     class Meta:
-        verbose_name = 'Tasking Request'
-        verbose_name_plural = 'Tasking Requests'
-        ordering = ['-target_date']
+        app_label = 'catalogue'
+        verbose_name = 'Order Notification Recipient'
+        verbose_name_plural = 'Order Notification Recipients'
+        ordering = ['user']
 
     def __unicode__(self):
-        return str(self.id)
+        return str(self.user.username)
+
+    @staticmethod
+    def getUsersForProduct(theProduct):
+        """
+        Returns all users registered to this product class or sensors
+
+        Args:
+            theProduct - instance of product model (Required)
+        Returns:
+            listeners - users monitoring contenttypes and sensors
+        Exceptions:
+            None
+        """
+        # Determines the product concrete class, should raise an error if does
+        # not exists
+        instance = theProduct.getConcreteInstance()
+        # Get class listeners
+        listeners = set([o.user for o in (
+            OrderNotificationRecipients.objects
+            .filter(
+                classes=ContentType.objects.get_for_model(instance.__class__))
+            .select_related()
+        )])
+        # Determines if is a sensor-based product and add sensor listeners
+        if isinstance(instance, GenericSensorProduct):
+            listeners.update([o.user for o in (
+                OrderNotificationRecipients.objects
+                .filter(
+                    satellite_instrument_group=instance.product_profile
+                    .satellite_instrument.satellite_instrument_group)
+                .select_related()
+            )])
+        return listeners
