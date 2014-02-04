@@ -73,7 +73,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
         myModel = SpectralModeProcessingCostsF.create(**{
             'spectral_mode': mySpecMode,
             'instrumenttypeprocessinglevel': myInstTypeProcLevel,
-            'cost_per_scene_in_rands': 200.94,
+            'cost_per_scene': 200.94,
             'currency': myForeignCur,
             'cost_per_scene_in_foreign': 123.12
         })
@@ -85,7 +85,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
             'Level 0'
         )
 
-        self.assertEqual(myModel.cost_per_scene_in_rands, 200.94)
+        self.assertEqual(myModel.cost_per_scene, 200.94)
 
         self.assertEqual(myModel.currency.name, 'SuperGold')
 
@@ -108,7 +108,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
         myModel = InstrumentTypeProcessingLevelF.create()
 
         myModel.__dict__.update(**{
-            'cost_per_scene_in_rands': 200.94,
+            'cost_per_scene': 200.94,
             'cost_per_scene_in_foreign': 123.12
         })
 
@@ -124,7 +124,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
             'Level 0'
         )
 
-        self.assertEqual(myModel.cost_per_scene_in_rands, 200.94)
+        self.assertEqual(myModel.cost_per_scene, 200.94)
 
         self.assertEqual(myModel.currency.name, 'SuperGold')
 
@@ -151,12 +151,18 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
             'processinglevel': myProcLevel
         })
 
+        myCurrency = CurrencyF.create(**{
+            'name': 'SuperGold',
+            'abbreviation': 'SG'
+        })
+
         myModel = SpectralModeProcessingCostsF.create(**{
             'spectral_mode': mySpecMode,
             'instrumenttypeprocessinglevel': myInstTypeProcLevel,
-            'cost_per_scene_in_rands': 200.94
+            'cost_per_scene': 200.94,
+            'currency': myCurrency
         })
 
         self.assertEqual(
             unicode(myModel),
-            u'200.94 ZAR (New Spectral mode - IT name - PL1)')
+            u'200.94 SG (New Spectral mode - IT name - PL1)')

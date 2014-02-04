@@ -263,7 +263,7 @@ class SpectralModeProcessingCostsF(factory.django.DjangoModelFactory):
     spectral_mode = factory.SubFactory(SpectralModeF)
     instrumenttypeprocessinglevel = factory.SubFactory(
         InstrumentTypeProcessingLevelF)
-    cost_per_scene_in_rands = 0.0
+    cost_per_scene = 0.0
     currency = factory.SubFactory(CurrencyF)
     cost_per_scene_in_foreign = 0.0
 

@@ -161,7 +161,7 @@ class SpectralModeProcessingCostsAdmin(admin.ModelAdmin):
     list_display = [
         'spectral_mode',
         'instrumenttypeprocessinglevel',
-        'cost_per_scene_in_rands',
+        'cost_per_scene',
         'foreign_currency',
         'cost_per_scene_in_foreign']
 admin.site.register(

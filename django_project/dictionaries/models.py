@@ -660,8 +660,8 @@ class SpectralModeProcessingCosts(models.Model):
     instrumenttypeprocessinglevel = models.ForeignKey(
         InstrumentTypeProcessingLevel
     )
-    cost_per_scene_in_rands = models.FloatField(
-        help_text='Cost per scene in ZAR (rands)'
+    cost_per_scene = models.FloatField(
+        help_text='Cost per scene'
     )
     currency = models.ForeignKey(
         'Currency',
@@ -673,8 +673,9 @@ class SpectralModeProcessingCosts(models.Model):
     )
 
     def __unicode__(self):
-        return u'{0} ZAR ({1} - {2})'.format(
-            self.cost_per_scene_in_rands,
+        return u'{0} {1} ({2} - {3})'.format(
+            self.cost_per_scene,
+            self.currency.abbreviation,
             self.spectral_mode.name, self.instrumenttypeprocessinglevel)
 
     class Meta:

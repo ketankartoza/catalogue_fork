@@ -601,7 +601,7 @@ SELECT pg_catalog.setval('dictionaries_spectralmode_id_seq', 43, true);
 -- Data for Name: dictionaries_spectralmodeprocessingcosts; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_spectralmodeprocessingcosts (id, spectral_mode_id, instrumenttypeprocessinglevel_id, cost_per_scene_in_rands, currency_id, cost_per_scene_in_foreign) FROM stdin;
+COPY dictionaries_spectralmodeprocessingcosts (id, spectral_mode_id, instrumenttypeprocessinglevel_id, cost_per_scene, currency_id, cost_per_scene_in_foreign) FROM stdin;
 1	14	14	400	\N	\N
 2	16	14	400	\N	\N
 3	18	11	200	\N	\N
