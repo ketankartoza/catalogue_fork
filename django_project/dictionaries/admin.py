@@ -162,8 +162,8 @@ class SpectralModeProcessingCostsAdmin(admin.ModelAdmin):
         'spectral_mode',
         'instrumenttypeprocessinglevel',
         'cost_per_scene',
-        'foreign_currency',
-        'cost_per_scene_in_foreign']
+        'foreign_currency'
+    ]
 admin.site.register(
     SpectralModeProcessingCosts, SpectralModeProcessingCostsAdmin)
 

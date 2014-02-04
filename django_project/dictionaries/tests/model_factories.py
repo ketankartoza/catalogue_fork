@@ -265,7 +265,6 @@ class SpectralModeProcessingCostsF(factory.django.DjangoModelFactory):
         InstrumentTypeProcessingLevelF)
     cost_per_scene = 0.0
     currency = factory.SubFactory(CurrencyF)
-    cost_per_scene_in_foreign = 0.0
 
 
 class RadarProductProfileF(factory.django.DjangoModelFactory):

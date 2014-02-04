@@ -162,8 +162,7 @@ CREATE TABLE "dictionaries_spectralmodeprocessingcosts" (
     "spectral_mode_id" integer NOT NULL REFERENCES "dictionaries_spectralmode" ("id") DEFERRABLE INITIALLY DEFERRED,
     "instrumenttypeprocessinglevel_id" integer NOT NULL REFERENCES "dictionaries_instrumenttypeprocessinglevel" ("id") DEFERRABLE INITIALLY DEFERRED,
     "cost_per_scene" double precision NOT NULL,
-    "currency_id" integer,
-    "cost_per_scene_in_foreign" double precision
+    "currency_id" integer
 )
 ;
 CREATE TABLE "dictionaries_referencesystem" (

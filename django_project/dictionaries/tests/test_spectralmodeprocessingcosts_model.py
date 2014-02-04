@@ -74,8 +74,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
             'spectral_mode': mySpecMode,
             'instrumenttypeprocessinglevel': myInstTypeProcLevel,
             'cost_per_scene': 200.94,
-            'currency': myForeignCur,
-            'cost_per_scene_in_foreign': 123.12
+            'currency': myForeignCur
         })
 
         self.assertEqual(myModel.spectral_mode.name, 'New Spectral mode')
@@ -88,8 +87,6 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
         self.assertEqual(myModel.cost_per_scene, 200.94)
 
         self.assertEqual(myModel.currency.name, 'SuperGold')
-
-        self.assertEqual(myModel.cost_per_scene_in_foreign, 123.12)
 
     def test_SpectralModeProcessingCosts_update(self):
         """
@@ -108,8 +105,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
         myModel = InstrumentTypeProcessingLevelF.create()
 
         myModel.__dict__.update(**{
-            'cost_per_scene': 200.94,
-            'cost_per_scene_in_foreign': 123.12
+            'cost_per_scene': 200.94
         })
 
         myModel.spectral_mode = mySpecMode
@@ -127,8 +123,6 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
         self.assertEqual(myModel.cost_per_scene, 200.94)
 
         self.assertEqual(myModel.currency.name, 'SuperGold')
-
-        self.assertEqual(myModel.cost_per_scene_in_foreign, 123.12)
 
     def test_SpectralModeProcessingCosts_repr(self):
         """

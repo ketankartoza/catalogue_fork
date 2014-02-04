@@ -667,10 +667,6 @@ class SpectralModeProcessingCosts(models.Model):
         'Currency',
         null=True, blank=True
     )
-    cost_per_scene_in_foreign = models.FloatField(
-        null=True, blank=True,
-        help_text='Cost per scene in foreign currency'
-    )
 
     def __unicode__(self):
         return u'{0} {1} ({2} - {3})'.format(
