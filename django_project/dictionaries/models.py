@@ -678,6 +678,7 @@ class SpectralModeProcessingCosts(models.Model):
         ),
         null=True, blank=True
     )
+    sales_region = models.ForeignKey('SalesRegion', default=1)
 
     def __unicode__(self):
         return u'{0} {1} ({2} - {3})'.format(
@@ -849,3 +850,15 @@ class Unit(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class SalesRegion(models.Model):
+    """
+    A dictionary for sales region information
+    """
+    name = models.CharField(
+        max_length=50, help_text='Full name of a sales region')
+    abbreviation = models.CharField(max_length=4)
+
+    def __unicode__(self):
+        return self.abbreviation

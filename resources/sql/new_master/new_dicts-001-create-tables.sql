@@ -164,8 +164,8 @@ CREATE TABLE "dictionaries_spectralmodeprocessingcosts" (
     "cost_per_scene" double precision NOT NULL,
     "currency_id" integer,
     "cost_per_square_km" double precision,
-    "minimum_square_km" double precision
-
+    "minimum_square_km" double precision,
+    "sales_region_id" integer NOT NULL
 )
 ;
 CREATE TABLE "dictionaries_referencesystem" (
@@ -176,6 +176,7 @@ CREATE TABLE "dictionaries_referencesystem" (
 )
 ;
 ALTER TABLE "dictionaries_instrumenttype" ADD CONSTRAINT "reference_system_id_refs_id_4dbfe45f" FOREIGN KEY ("reference_system_id") REFERENCES "dictionaries_referencesystem" ("id") DEFERRABLE INITIALLY DEFERRED;
+
 CREATE TABLE "dictionaries_currency" (
     "id" serial NOT NULL PRIMARY KEY,
     "abbreviation" varchar(20) NOT NULL,
@@ -183,6 +184,14 @@ CREATE TABLE "dictionaries_currency" (
 )
 ;
 ALTER TABLE "dictionaries_spectralmodeprocessingcosts" ADD CONSTRAINT "currency_id_refs_id_27966a8a" FOREIGN KEY ("currency_id") REFERENCES "dictionaries_currency" ("id") DEFERRABLE INITIALLY DEFERRED;
+
+CREATE TABLE "dictionaries_salesregion" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "name" varchar(50) NOT NULL,
+    "abbreviation" varchar(4) NOT NULL
+)
+;
+ALTER TABLE "dictionaries_spectralmodeprocessingcosts" ADD CONSTRAINT "sales_region_id_refs_id_79172456" FOREIGN KEY ("sales_region_id") REFERENCES "dictionaries_salesregion" ("id") DEFERRABLE INITIALLY DEFERRED;
 
 CREATE INDEX "dictionaries_opticalproductprofile_satellite_instrument_id" ON "dictionaries_opticalproductprofile" ("satellite_instrument_id");
 CREATE INDEX "dictionaries_opticalproductprofile_spectral_mode_id" ON "dictionaries_opticalproductprofile" ("spectral_mode_id");

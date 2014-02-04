@@ -24,8 +24,8 @@ from .models import (
     RadarBeam, ImagingMode, SatelliteInstrumentGroup, SatelliteInstrument,
     Band, SpectralGroup, SpectralMode, BandSpectralMode,
     InstrumentTypeProcessingLevel, SpectralModeProcessingCosts,
-    OpticalProductProfile, RadarProductProfile, Currency,
-    ReferenceSystem, Projection, Institution, License, Quality
+    OpticalProductProfile, RadarProductProfile, Currency, ReferenceSystem,
+    Projection, Institution, License, Quality, SalesRegion
 )
 
 
@@ -218,3 +218,10 @@ class QualityAdmin(admin.GeoModelAdmin):
     list_filter = ['name']
     list_display = ('name',)
 admin.site.register(Quality, QualityAdmin)
+
+
+class SalesRegionAdmin(admin.GeoModelAdmin):
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
+admin.site.register(SalesRegion, SalesRegionAdmin)
