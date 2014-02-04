@@ -601,32 +601,33 @@ SELECT pg_catalog.setval('dictionaries_spectralmode_id_seq', 43, true);
 -- Data for Name: dictionaries_spectralmodeprocessingcosts; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_spectralmodeprocessingcosts (id, spectral_mode_id, instrumenttypeprocessinglevel_id, cost_per_scene, currency_id) FROM stdin;
-1	14	14	400	\N
-2	16	14	400	\N
-3	18	11	200	\N
-4	17	11	200	\N
-5	19	9	200	\N
-6	20	9	200	\N
-9	1	7	2000	\N
-11	4	5	2000	\N
-12	15	14	400	\N
-13	13	14	800	\N
-14	6	4	2000	\N
-15	4	6	1000	\N
-16	1	8	1000	\N
-17	13	15	1000	\N
-18	16	15	1000	\N
-19	16	16	2500	\N
-20	16	17	500	\N
-21	18	12	1000	\N
-22	18	12	1000	\N
-23	18	13	2500	\N
-24	18	18	500	\N
-25	20	10	1000	\N
-26	19	10	1000	\N
-27	19	22	2500	\N
-28	19	23	500	\N
+
+COPY dictionaries_spectralmodeprocessingcosts (id, spectral_mode_id, instrumenttypeprocessinglevel_id, cost_per_scene, currency_id, cost_per_square_km, minimum_square_km) FROM stdin;
+1	14	14	400	\N	\N	\N
+2	16	14	400	\N	\N	\N
+3	18	11	200	\N	\N	\N
+4	17	11	200	\N	\N	\N
+5	19	9	200	\N	\N	\N
+6	20	9	200	\N	\N	\N
+9	1	7	2000	\N	\N	\N
+11	4	5	2000	\N	\N	\N
+12	15	14	400	\N	\N	\N
+13	13	14	800	\N	\N	\N
+14	6	4	2000	\N	\N	\N
+15	4	6	1000	\N	\N	\N
+16	1	8	1000	\N	\N	\N
+17	13	15	1000	\N	\N	\N
+18	16	15	1000	\N	\N	\N
+19	16	16	2500	\N	\N	\N
+20	16	17	500	\N	\N	\N
+21	18	12	1000	\N	\N	\N
+22	18	12	1000	\N	\N	\N
+23	18	13	2500	\N	\N	\N
+24	18	18	500	\N	\N	\N
+25	20	10	1000	\N	\N	\N
+26	19	10	1000	\N	\N	\N
+27	19	22	2500	\N	\N	\N
+28	19	23	500	\N	\N	\N
 \.
 
 

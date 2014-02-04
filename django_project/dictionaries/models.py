@@ -667,6 +667,17 @@ class SpectralModeProcessingCosts(models.Model):
         'Currency',
         null=True, blank=True
     )
+    cost_per_square_km = models.FloatField(
+        help_text='Cost per square kilometre',
+        null=True, blank=True
+    )
+    minimum_square_km = models.FloatField(
+        help_text=(
+            'Minimum number of square kilometers that can be ordered for a'
+            'price of per kilometer'
+        ),
+        null=True, blank=True
+    )
 
     def __unicode__(self):
         return u'{0} {1} ({2} - {3})'.format(
