@@ -1,6 +1,5 @@
 """
-SANSA-EO Catalogue - Dictionaries ForeignCurrency - basic CRUD
-unittests
+SANSA-EO Catalogue - Dictionaries Currency - basic CRUD unittests
 
 Contact : lkleyn@sansa.org.za
 
@@ -13,18 +12,18 @@ Contact : lkleyn@sansa.org.za
 """
 
 __author__ = 'dodobasic@gmail.com'
-__version__ = '0.1'
-__date__ = '23/07/2013'
+__version__ = '0.2'
+__date__ = '04/02/2014'
 __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
 
-from .model_factories import ForeignCurrencyF
+from .model_factories import CurrencyF
 
 
-class TestForeignCurrencyCRUD(TestCase):
+class TestCurrencyCRUD(TestCase):
     """
-    Tests ForeignCurrency model
+    Tests Currency model
     """
 
     def setUp(self):
@@ -32,69 +31,63 @@ class TestForeignCurrencyCRUD(TestCase):
         Sets up before each test
         """
 
-    def test_ForeignCurrency_create(self):
+    def test_Currency_create(self):
         """
-        Tests ForeignCurrency model creation
+        Tests Currency model creation
         """
-        myModel = ForeignCurrencyF.create()
+        myModel = CurrencyF.create()
 
         self.assertTrue(myModel.pk is not None)
 
-    def test_ForeignCurrency_delete(self):
+    def test_Currency_delete(self):
         """
-        Tests ForeignCurrency model delete
+        Tests Currency model delete
         """
-        myModel = ForeignCurrencyF.create()
+        myModel = CurrencyF.create()
 
         myModel.delete()
 
         #check if deleted
         self.assertTrue(myModel.pk is None)
 
-    def test_ForeignCurrency_read(self):
+    def test_Currency_read(self):
         """
-        Tests ForeignCurrency model read
+        Tests Currency model read
         """
 
-        myModel = ForeignCurrencyF.create(**{
+        myModel = CurrencyF.create(**{
             'abbreviation': 'SG',
             'name': 'SuperGold',
-            'conversion_rate': 0.01
         })
 
         self.assertEqual(myModel.name, 'SuperGold')
 
-        self.assertEqual(myModel.conversion_rate, 0.01)
-
         self.assertEqual(myModel.abbreviation, 'SG')
 
-    def test_ForeignCurrency_update(self):
+    def test_Currency_update(self):
         """
-        Tests ForeignCurrency model update
+        Tests Currency model update
         """
 
-        myModel = ForeignCurrencyF.create()
+        myModel = CurrencyF.create()
 
         myModel.__dict__.update(**{
             'abbreviation': 'SG',
-            'name': 'SuperGold',
-            'conversion_rate': 0.01
+            'name': 'SuperGold'
         })
 
         myModel.save()
 
         self.assertEqual(myModel.name, 'SuperGold')
 
-        self.assertEqual(myModel.conversion_rate, 0.01)
-
         self.assertEqual(myModel.abbreviation, 'SG')
 
-    def test_ForeignCurrency_repr(self):
+    def test_Currency_repr(self):
         """
-        Tests ForeignCurrency model repr
+        Tests Currency model repr
         """
 
-        myModel = ForeignCurrencyF.create(**{
+        myModel = CurrencyF.create(**{
             'name': 'SuperGold'
         })
 

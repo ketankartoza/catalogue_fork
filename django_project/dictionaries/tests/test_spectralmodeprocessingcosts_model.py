@@ -21,7 +21,7 @@ from django.test import TestCase
 
 
 from .model_factories import (
-    SpectralModeProcessingCostsF, SpectralModeF, ForeignCurrencyF,
+    SpectralModeProcessingCostsF, SpectralModeF, CurrencyF,
     InstrumentTypeProcessingLevelF, InstrumentTypeF, ProcessingLevelF
 )
 
@@ -63,7 +63,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
         mySpecMode = SpectralModeF.create(**{
             'name': 'New Spectral mode'
         })
-        myForeignCur = ForeignCurrencyF.create(**{
+        myForeignCur = CurrencyF.create(**{
             'name': 'SuperGold'
         })
         myInstTypeProcLevel = InstrumentTypeProcessingLevelF.create(**{
@@ -74,7 +74,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
             'spectral_mode': mySpecMode,
             'instrumenttypeprocessinglevel': myInstTypeProcLevel,
             'cost_per_scene_in_rands': 200.94,
-            'foreign_currency': myForeignCur,
+            'currency': myForeignCur,
             'cost_per_scene_in_foreign': 123.12
         })
 
@@ -87,7 +87,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
 
         self.assertEqual(myModel.cost_per_scene_in_rands, 200.94)
 
-        self.assertEqual(myModel.foreign_currency.name, 'SuperGold')
+        self.assertEqual(myModel.currency.name, 'SuperGold')
 
         self.assertEqual(myModel.cost_per_scene_in_foreign, 123.12)
 
@@ -98,7 +98,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
         mySpecMode = SpectralModeF.create(**{
             'name': 'New Spectral mode'
         })
-        myForeignCur = ForeignCurrencyF.create(**{
+        myForeignCur = CurrencyF.create(**{
             'name': 'SuperGold'
         })
         myInstTypeProcLevel = InstrumentTypeProcessingLevelF.create(**{
@@ -114,7 +114,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
 
         myModel.spectral_mode = mySpecMode
         myModel.instrumenttypeprocessinglevel = myInstTypeProcLevel
-        myModel.foreign_currency = myForeignCur
+        myModel.currency = myForeignCur
         myModel.save()
 
         self.assertEqual(myModel.spectral_mode.name, 'New Spectral mode')
@@ -126,7 +126,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
 
         self.assertEqual(myModel.cost_per_scene_in_rands, 200.94)
 
-        self.assertEqual(myModel.foreign_currency.name, 'SuperGold')
+        self.assertEqual(myModel.currency.name, 'SuperGold')
 
         self.assertEqual(myModel.cost_per_scene_in_foreign, 123.12)
 

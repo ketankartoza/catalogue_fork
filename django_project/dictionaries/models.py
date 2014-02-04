@@ -663,8 +663,8 @@ class SpectralModeProcessingCosts(models.Model):
     cost_per_scene_in_rands = models.FloatField(
         help_text='Cost per scene in ZAR (rands)'
     )
-    foreign_currency = models.ForeignKey(
-        'ForeignCurrency',
+    currency = models.ForeignKey(
+        'Currency',
         null=True, blank=True
     )
     cost_per_scene_in_foreign = models.FloatField(
@@ -700,17 +700,12 @@ class ReferenceSystem(models.Model):
         ordering = ['name']
 
 
-class ForeignCurrency(models.Model):
+class Currency(models.Model):
     """
-    Foreign currency lookup table
-
-    conversion_rate: 1.00 unit in ZAR (i.e. 1.00 USD = 8.8634 ZAR)
+    Currency lookup table
     """
     abbreviation = models.CharField(max_length=20)
     name = models.CharField(max_length=255, unique=True)
-    conversion_rate = models.FloatField(
-        null=True, blank=True,
-        help_text='Conversion rate for 1.00 unit in ZAR')
 
     def __unicode__(self):
         return self.name

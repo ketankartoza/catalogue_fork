@@ -24,7 +24,7 @@ from .models import (
     RadarBeam, ImagingMode, SatelliteInstrumentGroup, SatelliteInstrument,
     Band, SpectralGroup, SpectralMode, BandSpectralMode,
     InstrumentTypeProcessingLevel, SpectralModeProcessingCosts,
-    OpticalProductProfile, RadarProductProfile, ForeignCurrency,
+    OpticalProductProfile, RadarProductProfile, Currency,
     ReferenceSystem, Projection, Institution, License, Quality
 )
 
@@ -180,10 +180,10 @@ class RadarProductProfileAdmin(admin.ModelAdmin):
 admin.site.register(RadarProductProfile, RadarProductProfileAdmin)
 
 
-class ForeignCurrencyAdmin(admin.ModelAdmin):
+class CurrencyAdmin(admin.ModelAdmin):
     search_fields = ['name']
-    list_display = ['abbreviation', 'name', 'conversion_rate']
-admin.site.register(ForeignCurrency, ForeignCurrencyAdmin)
+    list_display = ['abbreviation', 'name']
+admin.site.register(Currency, CurrencyAdmin)
 
 
 class ReferenceSystemAdmin(admin.ModelAdmin):

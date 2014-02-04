@@ -162,7 +162,7 @@ CREATE TABLE "dictionaries_spectralmodeprocessingcosts" (
     "spectral_mode_id" integer NOT NULL REFERENCES "dictionaries_spectralmode" ("id") DEFERRABLE INITIALLY DEFERRED,
     "instrumenttypeprocessinglevel_id" integer NOT NULL REFERENCES "dictionaries_instrumenttypeprocessinglevel" ("id") DEFERRABLE INITIALLY DEFERRED,
     "cost_per_scene_in_rands" double precision NOT NULL,
-    "foreign_currency_id" integer,
+    "currency_id" integer,
     "cost_per_scene_in_foreign" double precision
 )
 ;
@@ -174,14 +174,14 @@ CREATE TABLE "dictionaries_referencesystem" (
 )
 ;
 ALTER TABLE "dictionaries_instrumenttype" ADD CONSTRAINT "reference_system_id_refs_id_4dbfe45f" FOREIGN KEY ("reference_system_id") REFERENCES "dictionaries_referencesystem" ("id") DEFERRABLE INITIALLY DEFERRED;
-CREATE TABLE "dictionaries_foreigncurrency" (
+CREATE TABLE "dictionaries_currency" (
     "id" serial NOT NULL PRIMARY KEY,
     "abbreviation" varchar(20) NOT NULL,
-    "name" varchar(255) NOT NULL UNIQUE,
-    "conversion_rate" double precision
+    "name" varchar(255) NOT NULL UNIQUE
 )
 ;
-ALTER TABLE "dictionaries_spectralmodeprocessingcosts" ADD CONSTRAINT "foreign_currency_id_refs_id_0d1260ea" FOREIGN KEY ("foreign_currency_id") REFERENCES "dictionaries_foreigncurrency" ("id") DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE "dictionaries_spectralmodeprocessingcosts" ADD CONSTRAINT "currency_id_refs_id_27966a8a" FOREIGN KEY ("currency_id") REFERENCES "dictionaries_currency" ("id") DEFERRABLE INITIALLY DEFERRED;
+
 CREATE INDEX "dictionaries_opticalproductprofile_satellite_instrument_id" ON "dictionaries_opticalproductprofile" ("satellite_instrument_id");
 CREATE INDEX "dictionaries_opticalproductprofile_spectral_mode_id" ON "dictionaries_opticalproductprofile" ("spectral_mode_id");
 CREATE INDEX "dictionaries_radarproductprofile_satellite_instrument_id" ON "dictionaries_radarproductprofile" ("satellite_instrument_id");
@@ -223,8 +223,8 @@ CREATE INDEX "dictionaries_instrumenttypeprocessinglevel_instrument_type_id" ON 
 CREATE INDEX "dictionaries_instrumenttypeprocessinglevel_processinglevel_id" ON "dictionaries_instrumenttypeprocessinglevel" ("processinglevel_id");
 CREATE INDEX "dictionaries_spectralmodeprocessingcosts_spectral_mode_id" ON "dictionaries_spectralmodeprocessingcosts" ("spectral_mode_id");
 CREATE INDEX "dictionaries_spectralmodeprocessingcosts_instrumenttypeprocb4fb" ON "dictionaries_spectralmodeprocessingcosts" ("instrumenttypeprocessinglevel_id");
-CREATE INDEX "dictionaries_spectralmodeprocessingcosts_foreign_currency_id" ON "dictionaries_spectralmodeprocessingcosts" ("foreign_currency_id");
+CREATE INDEX "dictionaries_spectralmodeprocessingcosts_currency_id" ON "dictionaries_spectralmodeprocessingcosts" ("currency_id");
 CREATE INDEX "dictionaries_referencesystem_name_like" ON "dictionaries_referencesystem" ("name" varchar_pattern_ops);
-CREATE INDEX "dictionaries_foreigncurrency_name_like" ON "dictionaries_foreigncurrency" ("name" varchar_pattern_ops);
+CREATE INDEX "dictionaries_currency_name_like" ON "dictionaries_currency" ("name" varchar_pattern_ops);
 
 COMMIT;

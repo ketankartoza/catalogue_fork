@@ -296,18 +296,18 @@ SELECT pg_catalog.setval('dictionaries_collection_id_seq', 6, true);
 
 
 --
--- Data for Name: dictionaries_foreigncurrency; Type: TABLE DATA; Schema: public; Owner: dodobas
+-- Data for Name: dictionaries_currency; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_foreigncurrency (id, abbreviation, name, conversion_rate) FROM stdin;
+COPY dictionaries_currency (id, abbreviation, name) FROM stdin;
 \.
 
 
 --
--- Name: dictionaries_foreigncurrency_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+-- Name: dictionaries_currency_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
 --
 
-SELECT pg_catalog.setval('dictionaries_foreigncurrency_id_seq', 1, false);
+SELECT pg_catalog.setval('dictionaries_currency_id_seq', 1, false);
 
 
 --
@@ -601,7 +601,7 @@ SELECT pg_catalog.setval('dictionaries_spectralmode_id_seq', 43, true);
 -- Data for Name: dictionaries_spectralmodeprocessingcosts; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_spectralmodeprocessingcosts (id, spectral_mode_id, instrumenttypeprocessinglevel_id, cost_per_scene_in_rands, foreign_currency_id, cost_per_scene_in_foreign) FROM stdin;
+COPY dictionaries_spectralmodeprocessingcosts (id, spectral_mode_id, instrumenttypeprocessinglevel_id, cost_per_scene_in_rands, currency_id, cost_per_scene_in_foreign) FROM stdin;
 1	14	14	400	\N	\N
 2	16	14	400	\N	\N
 3	18	11	200	\N	\N
