@@ -20,7 +20,6 @@ INSTALLED_APPS += (
     'useraccounts',
     'search',
     'orders',
-    'tasking',
     'pycsw_integration',
     'reports',
 )

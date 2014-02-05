@@ -95,8 +95,6 @@ urlpatterns = patterns('',
     url(r'', include('reports.urls')),
     # new orders app
     url(r'', include('orders.urls')),
-    # new tasking app
-    url(r'', include('tasking.urls')),
 
 
     # api urls
