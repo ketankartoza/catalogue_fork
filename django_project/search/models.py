@@ -59,11 +59,12 @@ class SearchRecord(models.Model):
     product_ready = models.BooleanField(default=False)
     cost_per_scene = models.FloatField(null=True, blank=True)
     processing_level = models.ForeignKey(
-        'dictionaries.ProcessingLevel',
-        verbose_name='Processing Level', default=3
+        'dictionaries.ProcessingLevel', verbose_name='Processing Level',
+        null=True, blank=True
     )
     projection = models.ForeignKey(
-        'dictionaries.Projection', verbose_name='Projection', default=3
+        'dictionaries.Projection', verbose_name='Projection',
+        null=True, blank=True
     )
 
     # Required because genericproduct fkey references a table with geometry

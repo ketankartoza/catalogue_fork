@@ -20,4 +20,7 @@ DROP TABLE catalogue_creatingsoftware CASCADE;
 -- tasking requests
 DROP TABLE catalogue_taskingrequest CASCADE;
 
+-- delivery details
+DROP TABLE orders_deliverydetail CASCADE;
+
 COMMIT;
