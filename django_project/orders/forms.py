@@ -22,14 +22,9 @@ logger = logging.getLogger(__name__)
 
 from django import forms
 
-from catalogue.aoigeometry import AOIGeometryField
-from search.models import SearchRecord
-from dictionaries.models import Projection
-
 from .models import (
     OrderStatus,
     Order,
-    DeliveryDetail,
     OrderStatusHistory,
 )
 
@@ -44,74 +39,6 @@ class OrderForm(forms.ModelForm):
         model = Order
         #exclude = ('user','order_status')
         exclude = ('user', 'order_status', 'delivery_detail')
-
-
-class DeliveryDetailForm(forms.ModelForm):
-    ref_id = forms.CharField(widget=forms.HiddenInput(), required=False)
-    aoi_geometry = AOIGeometryField(
-        required=False,
-        help_text=(
-            'Enter bounding box coordinates separated by comma for Upper '
-            'left and Lower right coordinates i.e. (20,-32,22,-34), or '
-            'enter single coordinate which defines circle center and '
-            'radius in kilometers (20,-32,100). Alternatively, digitise '
-            'the clip area in the map.'))
-    geometry = forms.CharField(widget=forms.HiddenInput(), required=False)
-    geometry_file = forms.FileField(
-        widget=forms.FileInput(attrs={'class': 'file'}),
-        required=False,
-        help_text=(
-            'Upload a zipped shapefile or KML/KMZ file of less than 1MB. If '
-            'the shapefile contains more than one polygon, only the first will'
-            ' be used.'))
-
-    def __init__(self, theRecords, *args, **kwargs):
-        super(DeliveryDetailForm, self).__init__(*args, **kwargs)
-        #determine UTM zones for all products
-        myProductZones = set()
-        for record in theRecords:
-            myProductZones = myProductZones.union(
-                record.product.getUTMZones(theBuffer=1))
-
-        myDefaultProjections = set((
-            ('4326', 'EPSG 4326'), ('900913', 'EPSG 900913')))
-        myEpsgCodes = [k for k, v in myProductZones | myDefaultProjections]
-        self.fields['projection'] = forms.ModelChoiceField(
-            queryset=Projection.objects.filter(
-                epsg_code__in=myEpsgCodes).all(),
-            empty_label=None)
-
-    class Meta:
-        model = DeliveryDetail
-        exclude = ('user', 'processing_level',)
-
-    def clean(self):
-        myCleanedData = self.cleaned_data
-        #if AOIgeometry is defined set it as default geometry
-        if myCleanedData.get('aoi_geometry'):
-            self.cleaned_data['geometry'] = self.cleaned_data['aoi_geometry']
-
-        return self.cleaned_data
-
-
-class ProductDeliveryDetailForm(forms.ModelForm):
-    ref_id = forms.CharField(widget=forms.HiddenInput(), required=False)
-
-    def __init__(self, *args, **kwargs):
-        super(ProductDeliveryDetailForm, self).__init__(*args, **kwargs)
-        myPK = kwargs.get('prefix')
-        myProduct = SearchRecord.objects.filter(pk__exact=myPK).get().product
-        myDefaultProjections = set((
-            ('4326', 'EPSG 4326'), ('900913', 'EPSG 900913')))
-        myUTMZones = myProduct.getUTMZones(theBuffer=0)
-        myEpsgCodes = [k for k, v in myUTMZones | myDefaultProjections]
-        self.fields['projection'] = forms.ModelChoiceField(
-            queryset=Projection.objects.filter(
-                epsg_code__in=myEpsgCodes).all(), empty_label=None)
-
-    class Meta:
-        model = DeliveryDetail
-        exclude = ('user', 'geometry', 'processing_level')
 
 
 class OrderStatusHistoryForm(forms.ModelForm):

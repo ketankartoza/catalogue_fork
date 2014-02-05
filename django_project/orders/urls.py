@@ -10,7 +10,6 @@ from .views import (
     viewOrder,
     updateOrderHistory,
     createDeliveryDetailForm,
-    showDeliveryDetail,
     addOrder,
     ordersSummary
 )
@@ -20,8 +19,6 @@ urlpatterns = patterns(
     url(r'^addorder/', addOrder, name='addOrder'),
     url(r'^deliverydetailform/(?P<theReferenceId>\d*)/$',
         createDeliveryDetailForm, name='createDeliveryDetailForm'),
-    url(r'^showdeliverydetail/(?P<theReferenceId>\d*)/$',
-        showDeliveryDetail, name='showDeliveryDetail'),
     url(r'^downloadclipgeometry/(?P<theId>\d*)/$',
         downloadClipGeometry, name='downloadClipGeometry'),
     url(r'^downloadordermetadata/(?P<theId>\d*)/$',

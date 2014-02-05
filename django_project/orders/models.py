@@ -111,33 +111,26 @@ class DeliveryMethod(models.Model):
         return self.name
 
 
-class DeliveryDetail(models.Model):
-    """
-    DeliveryDetail model, records processing parameters of an order
-    """
-    user = models.ForeignKey(User)
-    processing_level = models.ForeignKey(
-        'dictionaries.ProcessingLevel',
-        verbose_name='Processing Level', default=3
-    )
-    projection = models.ForeignKey(
-        'dictionaries.Projection', verbose_name='Projection', default=3
-    )
-    datum = models.ForeignKey(Datum, verbose_name='Datum', default=1)
-    resampling_method = models.ForeignKey(
-        ResamplingMethod, verbose_name='Resampling Method', default=2
-    )  # cubic conv#cubic conv
-    file_format = models.ForeignKey(
-        FileFormat, verbose_name="File Format", default=1
-    )
-    #geometry field
-    geometry = models.PolygonField(srid=4326, null=True, blank=True)
-    #geomanager
-    objects = models.GeoManager()
+# class DeliveryDetail(models.Model):
+#     """
+#     DeliveryDetail model, records processing parameters of an order
+#     """
+#     user = models.ForeignKey(User)
+#     datum = models.ForeignKey(Datum, verbose_name='Datum', default=1)
+#     resampling_method = models.ForeignKey(
+#         ResamplingMethod, verbose_name='Resampling Method', default=2
+#     )  # cubic conv#cubic conv
+#     file_format = models.ForeignKey(
+#         FileFormat, verbose_name="File Format", default=1
+#     )
+#     #geometry field
+#     geometry = models.PolygonField(srid=4326, null=True, blank=True)
+#     #geomanager
+#     objects = models.GeoManager()
 
-    class Meta:
-        verbose_name = 'Delivery Detail'
-        verbose_name_plural = 'Delivery Details'
+#     class Meta:
+#         verbose_name = 'Delivery Detail'
+#         verbose_name_plural = 'Delivery Details'
 
 
 class MarketSector(models.Model):
@@ -170,7 +163,6 @@ class Order(models.Model):
         OrderStatus, verbose_name='Order Status', default=1)
     delivery_method = models.ForeignKey(
         DeliveryMethod, verbose_name='Delivery Method', default=1)
-    delivery_detail = models.ForeignKey(DeliveryDetail, null=True, blank=True)
     market_sector = models.ForeignKey(
         MarketSector, null=False, blank=False, default=1)
     order_date = models.DateTimeField(

@@ -47,8 +47,6 @@ class SearchRecord(models.Model):
     order = models.ForeignKey('orders.Order', null=True, blank=True)
     product = models.ForeignKey(
         'catalogue.GenericProduct', null=False, blank=False)
-    delivery_detail = models.ForeignKey(
-        'orders.DeliveryDetail', null=True, blank=True)
     # DIMS ordering related fields
     internal_order_id = models.IntegerField(null=True, blank=True)
     download_path = models.CharField(
@@ -60,6 +58,13 @@ class SearchRecord(models.Model):
     # product (see overridden save() below) or download_path is filled
     product_ready = models.BooleanField(default=False)
     cost_per_scene = models.FloatField(null=True, blank=True)
+    processing_level = models.ForeignKey(
+        'dictionaries.ProcessingLevel',
+        verbose_name='Processing Level', default=3
+    )
+    projection = models.ForeignKey(
+        'dictionaries.Projection', verbose_name='Projection', default=3
+    )
 
     # Required because genericproduct fkey references a table with geometry
     objects = models.GeoManager()

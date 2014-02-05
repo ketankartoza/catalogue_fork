@@ -20,9 +20,8 @@ __copyright__ = 'South African National Space Agency'
 import factory
 
 from ..models import (
-    Order, OrderStatus, DeliveryMethod, DeliveryDetail, Datum,
-    ResamplingMethod, FileFormat, MarketSector, OrderStatusHistory,
-    OrderNotificationRecipients
+    Order, OrderStatus, DeliveryMethod, Datum, ResamplingMethod, FileFormat,
+    MarketSector, OrderStatusHistory, OrderNotificationRecipients
 )
 
 
@@ -80,23 +79,6 @@ class MarketSectorF(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: "Market sector {}".format(n))
 
 
-class DeliveryDetailF(factory.django.DjangoModelFactory):
-    """
-    DeliveryDetail model factory
-    """
-    FACTORY_FOR = DeliveryDetail
-
-    user = factory.SubFactory('core.model_factories.UserF')
-    processing_level = factory.SubFactory(
-        'dictionaries.tests.model_factories.ProcessingLevelF')
-    projection = factory.SubFactory(
-        'dictionaries.tests.model_factories.ProjectionF')
-    datum = factory.SubFactory(DatumF)
-    resampling_method = factory.SubFactory(ResamplingMethodF)
-    file_format = factory.SubFactory(FileFormatF)
-    geometry = None
-
-
 class OrderF(factory.django.DjangoModelFactory):
     """
     Order model factory
@@ -107,7 +89,6 @@ class OrderF(factory.django.DjangoModelFactory):
     notes = ''
     order_status = factory.SubFactory(OrderStatusF)
     delivery_method = factory.SubFactory(DeliveryMethodF)
-    delivery_detail = factory.SubFactory(DeliveryDetailF)
     market_sector = factory.SubFactory(MarketSectorF)
     order_date = None
 

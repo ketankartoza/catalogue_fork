@@ -136,9 +136,11 @@ class SearchRecordF(factory.django.DjangoModelFactory):
     order = factory.SubFactory('orders.tests.model_factories.OrderF')
     product = factory.SubFactory(
         'catalogue.tests.model_factories.GenericProductF')
-    delivery_detail = factory.SubFactory(
-        'orders.tests.model_factories.DeliveryDetailF')
     internal_order_id = None
     download_path = factory.Sequence(lambda n: "Download path // {}".format(n))
     product_ready = False
     cost_per_scene = None
+    processing_level = factory.SubFactory(
+        'dictionaries.tests.model_factories.ProcessingLevelF')
+    projection = factory.SubFactory(
+        'dictionaries.tests.model_factories.ProjectionF')

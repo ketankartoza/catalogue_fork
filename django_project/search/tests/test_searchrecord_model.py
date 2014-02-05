@@ -77,7 +77,8 @@ class SearchRecordCRUD_Test(TestCase):
         myNewModelData = {
             'order': myNewOrder,
             'download_path': 'Some path',
-            'product_ready': True
+            'product_ready': True,
+            'cost_per_scene': 123
         }
 
         myModel.__dict__.update(myNewModelData)

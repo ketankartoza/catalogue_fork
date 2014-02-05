@@ -51,7 +51,6 @@ from django.contrib.gis.gdal import (
 from .models import (
     Order,
     OrderStatusHistory,
-    DeliveryDetail,
     OrderStatus
 )
 
@@ -474,15 +473,6 @@ def createDeliveryDetailForm(theRequest, theReferenceId):
     myDeliveryDetailForm = ProductDeliveryDetailForm(
         initial={'ref_id': theReferenceId}, prefix='%i' % int(theReferenceId))
     return dict(myDeliveryDetailForm=myDeliveryDetailForm)
-
-
-@login_required
-@renderWithContext('deliveryDetail.html')
-def showDeliveryDetail(theRequest, theReferenceId):
-    del theRequest
-    myDeliveryDetail = DeliveryDetail.objects.filter(
-        pk__exact=theReferenceId).get()
-    return dict(myDeliveryDetail=myDeliveryDetail)
 
 
 @login_required
