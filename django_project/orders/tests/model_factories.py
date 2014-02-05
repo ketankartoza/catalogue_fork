@@ -91,6 +91,9 @@ class OrderF(factory.django.DjangoModelFactory):
     delivery_method = factory.SubFactory(DeliveryMethodF)
     market_sector = factory.SubFactory(MarketSectorF)
     order_date = None
+    datum = factory.SubFactory(DatumF)
+    resampling_method = factory.SubFactory(ResamplingMethodF)
+    file_format = factory.SubFactory(FileFormatF)
 
 
 class OrderStatusHistoryF(factory.django.DjangoModelFactory):

@@ -220,10 +220,11 @@ class OrdersViews_addOrder_Tests(TestCase):
             'id': 86,
             'epsg_code': '4326'
         })
-        FileFormatF.create(**{'id': 1})
 
+        FileFormatF.create(**{'id': 1})
         DatumF.create(**{'id': 1})
         ResamplingMethodF.create(**{'id': 1})
+
         MarketSectorF.create(**{'id': 1})
         DeliveryMethodF.create(**{'id': 1})
 
@@ -246,14 +247,13 @@ class OrdersViews_addOrder_Tests(TestCase):
         myClient.login(username='timlinux', password='password')
 
         myPostData = {
-            u'aoi_geometry': [u''], u'projection': [u'86'],
-            u'file_format': [u'1'], u'geometry': [u''], u'notes': [u''],
+            u'projection': [u'86'], u'file_format': [u'1'], u'notes': [u''],
             u'datum': [u'1'], u'resampling_method': [u'1'],
-            u'market_sector': [u'1'], u'geometry_file': [u''],
-            u'delivery_method': [u'1'], u'ref_id': [u'6'],
-            u'6-file_format': [u'1'],
-            u'6-datum': [u'1'], u'6-ref_id': [u'6'],
-            u'6-resampling_method': [u'1'], u'6-projection': [u'86']}
+            u'market_sector': [u'1'], u'delivery_method': [u'1'],
+            u'ref_id': [u'6'], u'6-file_format': [u'1'], u'6-datum': [u'1'],
+            u'6-ref_id': [u'6'], u'6-resampling_method': [u'1'],
+            u'6-projection': [u'86']
+        }
 
         myResp = myClient.post(reverse('addOrder', kwargs={}), myPostData)
 
@@ -314,11 +314,10 @@ class OrdersViews_addOrder_Tests(TestCase):
         myClient.login(username='timlinux', password='password')
 
         myPostData = {
-            u'aoi_geometry': [u''], u'projection': [u'100'],
-            u'file_format': [u'1'], u'geometry': [u''], u'notes': [u''],
+            u'projection': [u'100'], u'file_format': [u'1'], u'notes': [u''],
             u'datum': [u'1'], u'resampling_method': [u'1'],
-            u'market_sector': [u'1'],
-            u'ref_id': [u'6']}
+            u'market_sector': [u'1'], u'ref_id': [u'6']
+        }
 
         myResp = myClient.post(reverse('addOrder', kwargs={}), myPostData)
 
@@ -370,141 +369,3 @@ class OrdersViews_addOrder_Tests(TestCase):
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
         self.assertEqual(myUsedTemplates, myExpTemplates)
-
-    def test_addOrder_login_staff_valid_post_geometryfile(self):
-        """
-        Test view if user is staff, and post is valid, valid geometry_file
-        """
-        myUser = UserF.create(**{
-            'username': 'timlinux',
-            'password': 'password',
-            'is_staff': True
-        })
-
-        SansaUserProfileF.create(**{
-            'user': myUser,
-            'address1': '12321 kjk',
-            'address2': 'kjkj',
-            'post_code': '123',
-            'organisation': 'None',
-            'contact_no': '123123'
-        })
-        myProjection = ProjectionF.create(**{
-            'id': 86,
-            'epsg_code': '4326'
-        })
-        FileFormatF.create(**{'id': 1})
-
-        DatumF.create(**{'id': 1})
-        ResamplingMethodF.create(**{'id': 1})
-        MarketSectorF.create(**{'id': 1})
-        DeliveryMethodF.create(**{'id': 1})
-
-        myOProduct = OpticalProductF.create(**{
-            'projection': myProjection
-        })
-
-        SearchRecordF.create(**{
-            'id': 6,
-            'user': myUser,
-            'order': None,
-            'product': myOProduct
-        })
-
-        OrderStatusF.create(**{'id': 1})
-
-        # prepare file for upload
-        myUploadFile = open('catalogue/fixtures/search-area.zip', 'rb')
-
-        myClient = Client()
-        myClient.login(username='timlinux', password='password')
-
-        myPostData = {
-            u'aoi_geometry': [u''], u'projection': [u'86'],
-            u'file_format': [u'1'], u'geometry': [u''], u'notes': [u''],
-            u'datum': [u'1'], u'resampling_method': [u'1'],
-            u'market_sector': [u'1'], u'geometry_file': myUploadFile,
-            u'delivery_method': [u'1'], u'ref_id': [u'6'],
-            u'6-file_format': [u'1'],
-            u'6-datum': [u'1'], u'6-ref_id': [u'6'],
-            u'6-resampling_method': [u'1'], u'6-projection': [u'86']}
-
-        myResp = myClient.post(reverse('addOrder', kwargs={}), myPostData)
-
-        self.assertEqual(myResp.status_code, 302)
-        self.assertTrue(
-            re.match(
-                'http://testserver/vieworder/(\d+)/',
-                myResp['Location']) is not None
-        )
-
-        self.assertEqual(len(Order.objects.all()), 1)
-
-    def test_addOrder_login_staff_valid_post_invalid_geometryfile(self):
-        """
-        Test view if user is staff, and post is valid, invalid geometry_file
-        """
-        myUser = UserF.create(**{
-            'username': 'timlinux',
-            'password': 'password',
-            'is_staff': True
-        })
-
-        SansaUserProfileF.create(**{
-            'user': myUser,
-            'address1': '12321 kjk',
-            'address2': 'kjkj',
-            'post_code': '123',
-            'organisation': 'None',
-            'contact_no': '123123'
-        })
-        myProjection = ProjectionF.create(**{
-            'id': 86,
-            'epsg_code': '4326'
-        })
-        FileFormatF.create(**{'id': 1})
-
-        DatumF.create(**{'id': 1})
-        ResamplingMethodF.create(**{'id': 1})
-        MarketSectorF.create(**{'id': 1})
-        DeliveryMethodF.create(**{'id': 1})
-
-        myOProduct = OpticalProductF.create(**{
-            'projection': myProjection
-        })
-
-        SearchRecordF.create(**{
-            'id': 6,
-            'user': myUser,
-            'order': None,
-            'product': myOProduct
-        })
-
-        OrderStatusF.create(**{'id': 1})
-
-        # prepare file for upload
-        myUploadFile = open('catalogue/fixtures/search-area-invalid.zip', 'rb')
-
-        myClient = Client()
-        myClient.login(username='timlinux', password='password')
-
-        myPostData = {
-            u'aoi_geometry': [u''], u'projection': [u'86'],
-            u'file_format': [u'1'], u'geometry': [u''], u'notes': [u''],
-            u'datum': [u'1'], u'resampling_method': [u'1'],
-            u'market_sector': [u'1'], u'geometry_file': myUploadFile,
-            u'delivery_method': [u'1'], u'ref_id': [u'6'],
-            u'6-file_format': [u'1'],
-            u'6-datum': [u'1'], u'6-ref_id': [u'6'],
-            u'6-resampling_method': [u'1'], u'6-projection': [u'86']}
-
-        myResp = myClient.post(reverse('addOrder', kwargs={}), myPostData)
-
-        self.assertEqual(myResp.status_code, 302)
-        self.assertTrue(
-            re.match(
-                'http://testserver/vieworder/(\d+)/',
-                myResp['Location']) is not None
-        )
-
-        self.assertEqual(len(Order.objects.all()), 1)
