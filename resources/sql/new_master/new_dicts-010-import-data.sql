@@ -613,6 +613,21 @@ SELECT pg_catalog.setval('dictionaries_salesregion_id_seq', 2, true);
 
 
 --
+-- Data for Name: dictionaries_subsidytype; Type: TABLE DATA; Schema: public; Owner: dodobas
+--
+
+COPY dictionaries_subsidytype (id, name, abbreviation) FROM stdin;
+1	None	None
+\.
+
+--
+-- Name: dictionaries_subsidytype_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
+--
+
+SELECT pg_catalog.setval('dictionaries_subsidytype_id_seq', 2, true);
+
+
+--
 -- Data for Name: dictionaries_spectralmodeprocessingcosts; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 

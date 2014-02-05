@@ -193,6 +193,15 @@ CREATE TABLE "dictionaries_salesregion" (
 ;
 ALTER TABLE "dictionaries_spectralmodeprocessingcosts" ADD CONSTRAINT "sales_region_id_refs_id_79172456" FOREIGN KEY ("sales_region_id") REFERENCES "dictionaries_salesregion" ("id") DEFERRABLE INITIALLY DEFERRED;
 
+
+CREATE TABLE "dictionaries_subsidytype" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "name" varchar(50) NOT NULL,
+    "abbreviation" varchar(10) NOT NULL
+)
+;
+
+
 CREATE INDEX "dictionaries_opticalproductprofile_satellite_instrument_id" ON "dictionaries_opticalproductprofile" ("satellite_instrument_id");
 CREATE INDEX "dictionaries_opticalproductprofile_spectral_mode_id" ON "dictionaries_opticalproductprofile" ("spectral_mode_id");
 CREATE INDEX "dictionaries_radarproductprofile_satellite_instrument_id" ON "dictionaries_radarproductprofile" ("satellite_instrument_id");

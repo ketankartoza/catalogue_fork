@@ -25,7 +25,7 @@ from .models import (
     Band, SpectralGroup, SpectralMode, BandSpectralMode,
     InstrumentTypeProcessingLevel, SpectralModeProcessingCosts,
     OpticalProductProfile, RadarProductProfile, Currency, ReferenceSystem,
-    Projection, Institution, License, Quality, SalesRegion
+    Projection, Institution, License, Quality, SalesRegion, SubsidyType
 )
 
 
@@ -225,3 +225,10 @@ class SalesRegionAdmin(admin.GeoModelAdmin):
     list_filter = ['name']
     list_display = ('name',)
 admin.site.register(SalesRegion, SalesRegionAdmin)
+
+
+class SubsidyTypeAdmin(admin.GeoModelAdmin):
+    search_fields = ['name']
+    list_filter = ['name']
+    list_display = ('name',)
+admin.site.register(SubsidyType, SubsidyTypeAdmin)

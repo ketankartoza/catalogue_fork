@@ -859,3 +859,15 @@ class SalesRegion(models.Model):
 
     def __unicode__(self):
         return self.abbreviation
+
+
+class SubsidyType(models.Model):
+    """
+    A dictionary for subsidy types
+    """
+    name = models.CharField(
+        max_length=50, help_text='Full name of a subsidy type')
+    abbreviation = models.CharField(max_length=10)
+
+    def __unicode__(self):
+        return self.abbreviation
