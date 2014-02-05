@@ -107,9 +107,7 @@ class OrdersViews_viewOrder_Tests(TestCase):
         self.assertEqual(len(myResp.context['myHistory']), 1)
         self.assertEqual(myResp.context['myCartTitle'], 'Product List')
         self.assertEqual(myResp.context['myCoverage'], {
-            'IntersectedArea': 'Not applicable', 'ClipZone': 'Not applicable',
-            'CentroidZone': 'UTM34S (EPSG:32734)',
-            'ProductArea': 79894321621
+            'CentroidZone': 'UTM34S (EPSG:32734)', 'ProductArea': 79894321621
         })
 
         # check used templates
@@ -165,9 +163,7 @@ class OrdersViews_viewOrder_Tests(TestCase):
         self.assertEqual(len(myResp.context['myHistory']), 1)
         self.assertEqual(myResp.context['myCartTitle'], 'Product List')
         self.assertEqual(myResp.context['myCoverage'], {
-            'IntersectedArea': 'Not applicable', 'ClipZone': 'Not applicable',
-            'CentroidZone': 'UTM34S (EPSG:32734)',
-            'ProductArea': 79894321621
+            'CentroidZone': 'UTM34S (EPSG:32734)', 'ProductArea': 79894321621
         })
 
         # check used templates
@@ -242,9 +238,7 @@ class OrdersViews_viewOrder_Tests(TestCase):
         self.assertEqual(len(myResp.context['myHistory']), 1)
         self.assertEqual(myResp.context['myCartTitle'], 'Product List')
         self.assertEqual(myResp.context['myCoverage'], {
-            'IntersectedArea': 'Not applicable', 'ClipZone': 'Not applicable',
-            'CentroidZone': 'UTM34S (EPSG:32734)',
-            'ProductArea': 79894321621
+            'CentroidZone': 'UTM34S (EPSG:32734)', 'ProductArea': 79894321621
         })
         # check used templates
         myExpTemplates = [

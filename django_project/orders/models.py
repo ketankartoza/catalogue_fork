@@ -111,28 +111,6 @@ class DeliveryMethod(models.Model):
         return self.name
 
 
-# class DeliveryDetail(models.Model):
-#     """
-#     DeliveryDetail model, records processing parameters of an order
-#     """
-#     user = models.ForeignKey(User)
-#     datum = models.ForeignKey(Datum, verbose_name='Datum', default=1)
-#     resampling_method = models.ForeignKey(
-#         ResamplingMethod, verbose_name='Resampling Method', default=2
-#     )  # cubic conv#cubic conv
-#     file_format = models.ForeignKey(
-#         FileFormat, verbose_name="File Format", default=1
-#     )
-#     #geometry field
-#     geometry = models.PolygonField(srid=4326, null=True, blank=True)
-#     #geomanager
-#     objects = models.GeoManager()
-
-#     class Meta:
-#         verbose_name = 'Delivery Detail'
-#         verbose_name_plural = 'Delivery Details'
-
-
 class MarketSector(models.Model):
     """
     A dictionary table of market sectors in which an order will be used.
@@ -168,6 +146,13 @@ class Order(models.Model):
     order_date = models.DateTimeField(
         verbose_name='Order Date', auto_now=True, auto_now_add=True,
         help_text='When the order was placed - not shown to users')
+    datum = models.ForeignKey(Datum, verbose_name='Datum', default=1)
+    resampling_method = models.ForeignKey(
+        ResamplingMethod, verbose_name='Resampling Method', default=2
+    )  # cubic conv#cubic conv
+    file_format = models.ForeignKey(
+        FileFormat, verbose_name="File Format", default=1
+    )
     #default manager
     objects = models.Manager()
     # A model can have more than one manager. Above will be used as default

@@ -24,10 +24,7 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
 
-from ..forms import (
-    OrderForm,
-    DeliveryDetailForm
-)
+from ..forms import OrderForm
 
 from ..models import Order
 
@@ -151,9 +148,6 @@ class OrdersViews_addOrder_Tests(TestCase):
         # self.assertEqual(myResp.context['myLayersList'], myLayersList)
         # self.assertEqual(myResp.context['myActiveBaseMap'], myActiveBaseMap)
         self.assertEqual(myResp.context['myOrderForm'].__class__, OrderForm)
-        self.assertEqual(
-            myResp.context['myDeliveryDetailForm'].__class__,
-            DeliveryDetailForm)
         self.assertEqual(myResp.context['myTitle'], 'Create a new order')
         self.assertEqual(myResp.context['mySubmitLabel'], 'Submit Order')
         self.assertEqual(myResp.context['myMessage'], (
@@ -323,11 +317,8 @@ class OrdersViews_addOrder_Tests(TestCase):
             u'aoi_geometry': [u''], u'projection': [u'100'],
             u'file_format': [u'1'], u'geometry': [u''], u'notes': [u''],
             u'datum': [u'1'], u'resampling_method': [u'1'],
-            u'market_sector': [u'1'], u'geometry_file': [u''],
-            u'delivery_method': [u'1'], u'ref_id': [u'6'],
-            u'6-file_format': [u'1'],
-            u'6-datum': [u'1'], u'6-ref_id': [u'6'],
-            u'6-resampling_method': [u'1'], u'6-projection': [u'100']}
+            u'market_sector': [u'1'],
+            u'ref_id': [u'6']}
 
         myResp = myClient.post(reverse('addOrder', kwargs={}), myPostData)
 
@@ -357,9 +348,6 @@ class OrdersViews_addOrder_Tests(TestCase):
         # self.assertEqual(myResp.context['myLayersList'], myLayersList)
         # self.assertEqual(myResp.context['myActiveBaseMap'], myActiveBaseMap)
         self.assertEqual(myResp.context['myOrderForm'].__class__, OrderForm)
-        self.assertEqual(
-            myResp.context['myDeliveryDetailForm'].__class__,
-            DeliveryDetailForm)
         self.assertEqual(myResp.context['myTitle'], 'Create a new order')
         self.assertEqual(myResp.context['mySubmitLabel'], 'Submit Order')
         self.assertEqual(myResp.context['myMessage'], (

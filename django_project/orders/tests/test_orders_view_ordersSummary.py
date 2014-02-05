@@ -75,9 +75,9 @@ class OrdersViews_ordersSummary_Tests(TestCase):
 
         self.assertEqual(myResp.status_code, 200)
 
-        self.assertEqual(len(myResp.context['myOrderStatus']), 1)
-        self.assertEqual(len(myResp.context['myOrderInstrumentType']), 1)
-        self.assertEqual(len(myResp.context['myOrderSatellite']), 1)
+        self.assertEqual(len(myResp.context['myOrderStatus']), 0)
+        self.assertEqual(myResp.context['myOrderInstrumentType'], None)
+        self.assertEqual(myResp.context['myOrderSatellite'], None)
 
         # check used templates
         myExpTemplates = [

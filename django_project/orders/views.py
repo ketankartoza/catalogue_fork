@@ -56,9 +56,8 @@ from .models import (
 
 from .forms import (
     OrderStatusHistoryForm,
-    ProductDeliveryDetailForm,
-    DeliveryDetailForm,
-    OrderForm)
+    OrderForm
+)
 # Helper classes
 from catalogue.views.helpers import (
     notifySalesStaff,
@@ -66,14 +65,14 @@ from catalogue.views.helpers import (
     render_to_kmz,
     downloadISOMetadata,
     downloadHtmlMetadata,)
+
 # SHP and KML readers
-from catalogue.featureReaders import getGeometryFromUploadedFile
 from catalogue.utmzonecalc import utmZoneFromLatLon
 from catalogue.profileRequiredDecorator import requireProfile
 from catalogue.renderDecorator import renderWithContext
 
 from search.models import SearchRecord
-from dictionaries.models import InstrumentType, Satellite
+# from dictionaries.models import InstrumentType, Satellite
 ###########################################################
 #
 # Ordering related views
@@ -462,15 +461,6 @@ def updateOrderHistory(theRequest):
 
 
 @login_required
-@renderWithContext('deliveryDetailForm.html')
-def createDeliveryDetailForm(theRequest, theReferenceId):
-    del theRequest
-    myDeliveryDetailForm = ProductDeliveryDetailForm(
-        initial={'ref_id': theReferenceId}, prefix='%i' % int(theReferenceId))
-    return dict(myDeliveryDetailForm=myDeliveryDetailForm)
-
-
-@login_required
 @requireProfile('addorder')
 def addOrder(theRequest):
     logger.debug('Order called')
@@ -541,78 +531,22 @@ def addOrder(theRequest):
         logger.debug('Order posted')
 
         myOrderForm = OrderForm(theRequest.POST, theRequest.FILES)
-        myDeliveryDetailForm = DeliveryDetailForm(
-            myRecords, theRequest.POST, theRequest.FILES)
-
-        # get ref_ids of product details forms, if any,
-        # and generate forms for validation
-        myProductForms = [
-            ProductDeliveryDetailForm(
-                theRequest.POST, prefix='%i' % int(myref)) for myref in
-            myDeliveryDetailForm.data.get('ref_id').split(',')
-            if len(myref) > 0]
 
         myOptions = {
             'myOrderForm': myOrderForm,
-            'myDeliveryDetailForm': myDeliveryDetailForm,
             'myTitle': myTitle,
             'mySubmitLabel': 'Submit Order',
         }
         # shortcut to join two dicts
         myOptions.update(myExtraOptions)
-        if (myOrderForm.is_valid() and myDeliveryDetailForm.is_valid()
-                and all([form.is_valid() for form in myProductForms])):
+        if myOrderForm.is_valid():
             logger.debug('Order valid')
 
-            myDeliveryDetailObject = myDeliveryDetailForm.save(commit=False)
-            myDeliveryDetailObject.user = theRequest.user
-            #check if user uploaded file and try to extract geometry
-            try:
-                myGeometry = getGeometryFromUploadedFile(
-                    theRequest, myDeliveryDetailForm, 'geometry_file')
-                if myGeometry:
-                    myDeliveryDetailObject.geometry = myGeometry
-                else:
-                    logger.info(
-                        'Failed to set search area from uploaded geometry '
-                        'file')
-            except:
-                logger.info(
-                    'An error occurred trying to set search area from uploaded'
-                    ' geometry file')
-            myDeliveryDetailObject.user = theRequest.user
-            myDeliveryDetailObject.save()
-            #save order
             myObject = myOrderForm.save(commit=False)
             myObject.user = theRequest.user
-            myObject.delivery_detail = myDeliveryDetailObject
             myObject.save()
             logger.debug('Order saved')
 
-            #save all of the subforms
-            myDeliveryDetailsProducts = {}
-            for mySubDeliveryForm in myProductForms:
-                mySubData = mySubDeliveryForm.save(commit=False)
-                mySubData.user = theRequest.user
-                mySubData.save()
-                # temporary store reference to deliverydetails
-                # with search record ID as a key
-                myDeliveryDetailsProducts[
-                    int(mySubDeliveryForm.cleaned_data.get('ref_id'))
-                ] = mySubData
-            #update serachrecords
-            for myRecord in myRecords:
-                #check if this record has sepcific DeliveryDetails
-                if myRecord.id in myDeliveryDetailsProducts:
-                    myRecord.delivery_detail = myDeliveryDetailsProducts[
-                        myRecord.id]
-                myRecord.order = myObject
-                myRecord.save()
-
-            logger.info('Add Order : data is valid')
-
-            logger.debug('Search records added')
-            #return HttpResponse('Done')
             notifySalesStaff(theRequest.user, myObject.id)
             return HttpResponseRedirect(
                 reverse('viewOrder', kwargs={'theId': myObject.id}))
@@ -623,10 +557,8 @@ def addOrder(theRequest):
                 context_instance=RequestContext(theRequest))
     else:  # new order
         myOrderForm = OrderForm()
-        myDeliveryDetailForm = DeliveryDetailForm(myRecords)
         myOptions = {
             'myOrderForm': myOrderForm,
-            'myDeliveryDetailForm': myDeliveryDetailForm,
             'myTitle': myTitle,
             'mySubmitLabel': 'Submit Order'
         }
@@ -645,15 +577,10 @@ def ordersSummary(theRequest):
     del theRequest
     #count orders by status
     myOrderStatus = OrderStatus.objects.annotate(num_orders=Count('order__id'))
-    #count orders by product type (misson sensor)
-    myOrderInstrumentType = InstrumentType.objects.annotate(
-        num_orders=Count(
-            'satelliteinstrumentgroup__taskingrequest__order_ptr__id')
-    ).order_by('name')
-    myOrderSatellite = Satellite.objects.annotate(
-        num_orders=Count(
-            'satelliteinstrumentgroup__taskingrequest__order_ptr__id')
-    ).order_by('name')
+    # count orders by product type (misson sensor)
+    # TODO - refactoring
+    myOrderInstrumentType = None
+    myOrderSatellite = None
     return dict(
         myOrderStatus=myOrderStatus,
         myOrderInstrumentType=myOrderInstrumentType,
