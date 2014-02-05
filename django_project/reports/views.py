@@ -49,8 +49,6 @@ from catalogue.models import (
 )
 from catalogue.renderDecorator import renderWithContext
 
-from tasking.models import TaskingRequest
-
 from search.models import (
     Search,
     SearchRecord,
@@ -246,9 +244,6 @@ def sensorSummaryTable(theRequest, theSensorId):
     #       use count() rather
     #
     mySensor = get_object_or_404(SatelliteInstrumentGroup, id=theSensorId)
-    myTaskingSensorCount = TaskingRequest.objects.filter(
-        satellite_instrument_group=mySensor).count()
-    myTaskingTotalCount = TaskingRequest.objects.count()
     mySearchCount = Search.objects.all().count()
     mySearchForSensorCount = Search.objects.filter(
         satellite__satelliteinstrumentgroup=mySensor).count()
@@ -268,8 +263,6 @@ def sensorSummaryTable(theRequest, theSensorId):
         .count())
 
     myResults = SortedDict()
-    myResults['Tasking requests for this sensor'] = myTaskingSensorCount
-    myResults['Tasking requests all sensors'] = myTaskingTotalCount
     myResults['Searches for this sensor'] = mySearchForSensorCount
     myResults['Searches for all sensors'] = mySearchCount
     myResults['Total ordered products for this sensor'] = myProductOrdersForSensorCount

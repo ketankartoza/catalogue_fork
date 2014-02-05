@@ -24,7 +24,6 @@ from django.test.client import Client
 
 
 from core.model_factories import UserF
-from tasking.tests.model_factories import TaskingRequestF
 
 
 class OrdersViews_ordersSummary_Tests(TestCase):
@@ -69,8 +68,6 @@ class OrdersViews_ordersSummary_Tests(TestCase):
             'password': 'password',
             'is_staff': True
         })
-
-        TaskingRequestF.create(**{'id': 1})
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')

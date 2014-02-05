@@ -54,8 +54,6 @@ from .models import (
     OrderStatus
 )
 
-from tasking.models import TaskingRequest
-
 from .forms import (
     OrderStatusHistoryForm,
     ProductDeliveryDetailForm,
@@ -64,7 +62,6 @@ from .forms import (
 # Helper classes
 from catalogue.views.helpers import (
     notifySalesStaff,
-    notifySalesStaffOfTaskRequest,
     render_to_kml,
     render_to_kmz,
     downloadISOMetadata,
@@ -442,11 +439,9 @@ def updateOrderHistory(theRequest):
     myRequestContext = RequestContext(theRequest)
     if theRequest.user.is_staff:
         myForm = OrderStatusHistoryForm()
-    if TaskingRequest.objects.filter(id=myOrderId):
-        notifySalesStaffOfTaskRequest(
-            myOrder.user, myOrderId, myRequestContext)
-    else:
-        notifySalesStaff(myOrder.user, myOrderId, myRequestContext)
+
+    notifySalesStaff(myOrder.user, myOrderId, myRequestContext)
+
     return render_to_response(myTemplatePath, {
         'myOrder': myOrder,
         'myRecords': myRecords,
