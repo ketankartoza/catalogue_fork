@@ -17,4 +17,7 @@ DROP TABLE sentry_messageindex CASCADE;
 -- creating software
 DROP TABLE catalogue_creatingsoftware CASCADE;
 
+-- tasking requests
+DROP TABLE catalogue_taskingrequest CASCADE;
+
 COMMIT;
