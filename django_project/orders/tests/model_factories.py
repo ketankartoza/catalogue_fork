@@ -94,6 +94,10 @@ class OrderF(factory.django.DjangoModelFactory):
     datum = factory.SubFactory(DatumF)
     resampling_method = factory.SubFactory(ResamplingMethodF)
     file_format = factory.SubFactory(FileFormatF)
+    subsidy_type_requested = factory.SubFactory(
+        'dictionaries.tests.model_factories.SubsidyTypeF')
+    subsidy_type_assigned = factory.SubFactory(
+        'dictionaries.tests.model_factories.SubsidyTypeF')
 
 
 class OrderStatusHistoryF(factory.django.DjangoModelFactory):

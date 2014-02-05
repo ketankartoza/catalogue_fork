@@ -153,6 +153,15 @@ class Order(models.Model):
     file_format = models.ForeignKey(
         FileFormat, verbose_name="File Format", default=1
     )
+    # if related_name ends with +, Django will not create backwards relation
+    subsidy_type_requested = models.ForeignKey(
+        'dictionaries.SubsidyType', null=True, blank=True,
+        related_name='subsidy_type+'
+    )
+    subsidy_type_assigned = models.ForeignKey(
+        'dictionaries.SubsidyType', null=True, blank=True,
+        related_name='subsidy_type+'
+    )
     #default manager
     objects = models.Manager()
     # A model can have more than one manager. Above will be used as default
