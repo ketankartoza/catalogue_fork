@@ -200,6 +200,11 @@ CREATE TABLE "dictionaries_subsidytype" (
     "abbreviation" varchar(10) NOT NULL
 )
 ;
+CREATE TABLE "dictionaries_productprocessstate" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "name" varchar(30) NOT NULL
+)
+;
 
 
 CREATE INDEX "dictionaries_opticalproductprofile_satellite_instrument_id" ON "dictionaries_opticalproductprofile" ("satellite_instrument_id");

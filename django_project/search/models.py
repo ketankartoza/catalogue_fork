@@ -66,7 +66,9 @@ class SearchRecord(models.Model):
         'dictionaries.Projection', verbose_name='Projection',
         null=True, blank=True
     )
-
+    productprocessstate = models.ForeignKey(
+        'dictionaries.ProductProcessState', null=True, blank=True
+    )
     # Required because genericproduct fkey references a table with geometry
     objects = models.GeoManager()
 

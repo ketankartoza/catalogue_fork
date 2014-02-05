@@ -871,3 +871,14 @@ class SubsidyType(models.Model):
 
     def __unicode__(self):
         return self.abbreviation
+
+
+class ProductProcessState(models.Model):
+    """
+    A dictionary for product process states
+    """
+    name = models.CharField(
+        max_length=30, help_text='Full name of a product process state')
+
+    def __unicode__(self):
+        return self.name

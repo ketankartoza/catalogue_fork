@@ -24,7 +24,8 @@ from ..models import (
     SatelliteInstrument, Band, SpectralGroup, SpectralMode, BandSpectralMode,
     InstrumentTypeProcessingLevel, SpectralModeProcessingCosts, Institution,
     Currency, RadarProductProfile, OpticalProductProfile, Projection, License,
-    Quality, Topic, PlaceType, Place, Unit, SalesRegion, SubsidyType
+    Quality, Topic, PlaceType, Place, Unit, SalesRegion, SubsidyType,
+    ProductProcessState
 )
 
 
@@ -392,3 +393,12 @@ class SubsidyTypeF(factory.django.DjangoModelFactory):
 
     name = factory.Sequence(lambda n: "SubsidyType {}".format(n))
     abbreviation = factory.Sequence(lambda n: "ST{}".format(n))
+
+
+class ProductProcessStateF(factory.django.DjangoModelFactory):
+    """
+    ProductProcessState model factory
+    """
+    FACTORY_FOR = ProductProcessState
+
+    name = factory.Sequence(lambda n: "ProductProcessState {}".format(n))
