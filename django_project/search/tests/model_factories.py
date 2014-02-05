@@ -141,3 +141,4 @@ class SearchRecordF(factory.django.DjangoModelFactory):
     internal_order_id = None
     download_path = factory.Sequence(lambda n: "Download path // {}".format(n))
     product_ready = False
+    cost_per_scene = None

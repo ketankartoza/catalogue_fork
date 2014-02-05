@@ -740,9 +740,6 @@ class Projection(models.Model):
         verbose_name_plural = 'Projections'
         ordering = ('epsg_code', 'name')
 
-    class Admin:
-        pass
-
 
 class Institution(models.Model):
     """

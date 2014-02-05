@@ -21,7 +21,17 @@ from django.test import TestCase
 
 from core.model_factories import UserF
 from orders.tests.model_factories import OrderF
-from catalogue.tests.model_factories import GenericProductF
+from catalogue.tests.model_factories import (
+    GenericProductF,
+    OpticalProductF
+)
+
+from dictionaries.tests.model_factories import (
+    OpticalProductProfileF,
+    SpectralModeF,
+    CurrencyF,
+    SpectralModeProcessingCostsF
+)
 
 from .model_factories import SearchRecordF
 
@@ -113,7 +123,7 @@ class SearchRecordCRUD_Test(TestCase):
 
     def test_SearchRecord_create_method(self):
         """
-        Tests SearchRecord model repr method
+        Tests SearchRecord model create method
         """
         myProduct = GenericProductF.create(original_product_id='123qwe')
         myUser = UserF.create(username='testuser')
@@ -123,3 +133,38 @@ class SearchRecordCRUD_Test(TestCase):
 
         self.assertEqual(unicode(myNewModel), '123qwe')
         self.assertEqual(myNewModel.user.username, 'testuser')
+
+    def test_SearchRecord_snapshot_price_and_currency_method(self):
+        """
+        Tests SearchRecord model snapshot_price_and_currency method
+        """
+
+        mySpecMode = SpectralModeF.create(**{
+            'name': 'New Spectral mode'
+        })
+
+        myCurrency = CurrencyF.create(**{
+            'name': 'SuperGold',
+            'abbreviation': 'SG'
+        })
+
+        myModel = SpectralModeProcessingCostsF.create(**{
+            'spectral_mode': mySpecMode,
+            'cost_per_scene': 123.45,
+            'currency': myCurrency
+        })
+
+        myOPP = OpticalProductProfileF.create(**{
+            'spectral_mode': mySpecMode
+        })
+
+        myProduct = OpticalProductF.create(**{
+            'original_product_id': '123qwe',
+            'product_profile': myOPP
+        })
+        myUser = UserF.create(username='testuser')
+        myModel = SearchRecordF.create()
+
+        myNewModel = myModel.create(myUser, myProduct)
+
+        self.assertEqual(myNewModel.snapshot_price_and_currency(), True)

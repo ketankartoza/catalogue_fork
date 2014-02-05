@@ -59,6 +59,7 @@ class SearchRecord(models.Model):
     # Default to False unless there is a populated local_storage_path in the
     # product (see overridden save() below) or download_path is filled
     product_ready = models.BooleanField(default=False)
+    cost_per_scene = models.FloatField(null=True, blank=True)
 
     # Required because genericproduct fkey references a table with geometry
     objects = models.GeoManager()
@@ -106,8 +107,14 @@ class SearchRecord(models.Model):
             myExtent[0])  # xmin
         return myString
 
-    class Admin:
-        pass
+    def snapshot_price_and_currency(self):
+        """
+        This method will grab latest price_per_km and currency and save them
+        to the model in the moment of order creation
+
+        This method is invoked by a post_save signal on Order model
+        """
+        return None
 
 
 ###############################################################################
