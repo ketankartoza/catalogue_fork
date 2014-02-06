@@ -36,7 +36,7 @@ class Command(BaseCommand):
                 'Selectively migrate parts of the database, comma "," '
                 'delimited list of migrations (backup_tasks, new_dicts, '
                 'userprofiles, search, remove_spot, processing_levels, '
-                'unique_product_id, pycsw, orders, cleanup defaults '
+                'unique_product_id, pycsw, orders, exchange, cleanup defaults '
                 'to "all"'
             )
         ),
@@ -57,13 +57,14 @@ class Command(BaseCommand):
             self.migrate_product_models()
             self.migrate_pycsw()
             self.migrate_orders()
+            self.migrate_exchange()
             self.migrate_cleanup()
-
-        if 'new_dicts' in myMigrations:
-            self.migrate_new_dicts()
 
         if 'backup_tasks' in myMigrations:
             self.migrate_backup_tasks()
+
+        if 'new_dicts' in myMigrations:
+            self.migrate_new_dicts()
 
         if 'userprofiles' in myMigrations:
             self.migrate_userprofiles()
@@ -74,9 +75,6 @@ class Command(BaseCommand):
         if 'remove_spot' in myMigrations:
             self.migrate_remove_spot()
 
-        if 'pycsw' in myMigrations:
-            self.migrate_pycsw()
-
         if 'processing_levels' in myMigrations:
             self.migrate_proc_levels()
 
@@ -86,8 +84,14 @@ class Command(BaseCommand):
         if 'product_schema_changes' in myMigrations:
             self.migrate_product_models()
 
+        if 'pycsw' in myMigrations:
+            self.migrate_pycsw()
+
         if 'orders' in myMigrations:
             self.migrate_orders()
+
+        if 'exchange' in myMigrations:
+            self.migrate_exchange()
 
         if 'cleanup' in myMigrations:
             self.migrate_cleanup()
@@ -180,4 +184,12 @@ class Command(BaseCommand):
         os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
         print '* Executing database migration scripts...'
         subprocess.call(['sh', '200_orders.sh', self.db])
+        os.chdir(origWD)
+
+    def migrate_exchange(self):
+        print '* Starting exchange app migration...'
+        origWD = os.getcwd()
+        os.chdir(os.path.join(origWD, '..', 'resources', 'sql', 'new_master'))
+        print '* Executing database migration scripts...'
+        subprocess.call(['sh', '250_exchange.sh', self.db])
         os.chdir(origWD)
