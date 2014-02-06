@@ -19,6 +19,7 @@ __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
 
+from dictionaries.tests.model_factories import SubsidyTypeF
 from search.tests.model_factories import SearchRecordF
 from .model_factories import OrderF
 
@@ -104,3 +105,51 @@ class OrderCRUD_Test(TestCase):
         })
 
         self.assertEqual(tstOrder.value(), 222)
+
+    def test_Order_cost_no_subsidy(self):
+        """
+        Tests Order model cost attribute without subsidy
+        """
+
+        tstSubsidyType = SubsidyTypeF.create(**{
+            'name': 'None'
+        })
+
+        tstOrder = OrderF.create(**{
+            'subsidy_type_assigned': tstSubsidyType
+        })
+
+        SearchRecordF.create(**{
+            'rand_cost_per_scene': 120.49,
+            'order': tstOrder
+        })
+        SearchRecordF.create(**{
+            'rand_cost_per_scene': 101.51,
+            'order': tstOrder
+        })
+
+        self.assertEqual(tstOrder.cost(), 222.0)
+
+    def test_Order_cost_with_subsidy(self):
+        """
+        Tests Order model cost attribute with subsidy
+        """
+
+        tstSubsidyType = SubsidyTypeF.create(**{
+            'name': 'PhD Grant'
+        })
+
+        tstOrder = OrderF.create(**{
+            'subsidy_type_assigned': tstSubsidyType
+        })
+
+        SearchRecordF.create(**{
+            'rand_cost_per_scene': 120.49,
+            'order': tstOrder
+        })
+        SearchRecordF.create(**{
+            'rand_cost_per_scene': 101.51,
+            'order': tstOrder
+        })
+
+        self.assertEqual(tstOrder.cost(), 0)

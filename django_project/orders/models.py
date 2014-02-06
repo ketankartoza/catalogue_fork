@@ -214,6 +214,15 @@ class Order(models.Model):
         """
         return Order.objects.filter(pk=self.pk).sum_product_values()
 
+    def cost(self):
+        """
+        Determine actual cost of an order, based on subsidy_type
+        """
+        if self.subsidy_type_assigned.name is 'None':
+            return self.value()
+        else:
+            return 0
+
 
 class OrderStatusHistory(models.Model):
     """
