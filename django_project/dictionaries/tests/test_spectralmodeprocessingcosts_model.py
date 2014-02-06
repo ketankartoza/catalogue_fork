@@ -19,10 +19,14 @@ __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
 
+from core.model_factories import CurrencyF
 
 from .model_factories import (
-    SpectralModeProcessingCostsF, SpectralModeF, CurrencyF,
-    InstrumentTypeProcessingLevelF, InstrumentTypeF, ProcessingLevelF
+    SpectralModeProcessingCostsF,
+    SpectralModeF,
+    InstrumentTypeProcessingLevelF,
+    InstrumentTypeF,
+    ProcessingLevelF
 )
 
 
@@ -160,7 +164,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
 
         myCurrency = CurrencyF.create(**{
             'name': 'SuperGold',
-            'abbreviation': 'SG'
+            'code': 'USD'
         })
 
         myModel = SpectralModeProcessingCostsF.create(**{
@@ -172,4 +176,4 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
 
         self.assertEqual(
             unicode(myModel),
-            u'200.94 SG (New Spectral mode - IT name - PL1)')
+            u'200.94 USD (New Spectral mode - IT name - PL1)')

@@ -24,7 +24,7 @@ from .models import (
     RadarBeam, ImagingMode, SatelliteInstrumentGroup, SatelliteInstrument,
     Band, SpectralGroup, SpectralMode, BandSpectralMode,
     InstrumentTypeProcessingLevel, SpectralModeProcessingCosts,
-    OpticalProductProfile, RadarProductProfile, Currency, ReferenceSystem,
+    OpticalProductProfile, RadarProductProfile, ReferenceSystem,
     Projection, Institution, License, Quality, SalesRegion, SubsidyType,
     ProductProcessState
 )
@@ -163,7 +163,7 @@ class SpectralModeProcessingCostsAdmin(admin.ModelAdmin):
         'spectral_mode',
         'instrumenttypeprocessinglevel',
         'cost_per_scene',
-        'foreign_currency'
+        'currency'
     ]
 admin.site.register(
     SpectralModeProcessingCosts, SpectralModeProcessingCostsAdmin)
@@ -179,12 +179,6 @@ class RadarProductProfileAdmin(admin.ModelAdmin):
     list_filter = ['satellite_instrument', 'imaging_mode']
     list_display = ['satellite_instrument', 'imaging_mode']
 admin.site.register(RadarProductProfile, RadarProductProfileAdmin)
-
-
-class CurrencyAdmin(admin.ModelAdmin):
-    search_fields = ['name']
-    list_display = ['abbreviation', 'name']
-admin.site.register(Currency, CurrencyAdmin)
 
 
 class ReferenceSystemAdmin(admin.ModelAdmin):

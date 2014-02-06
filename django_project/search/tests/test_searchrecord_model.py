@@ -19,7 +19,10 @@ __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
 
-from core.model_factories import UserF
+from core.model_factories import (
+    UserF,
+    CurrencyF
+)
 from orders.tests.model_factories import OrderF
 from catalogue.tests.model_factories import (
     GenericProductF,
@@ -29,7 +32,6 @@ from catalogue.tests.model_factories import (
 from dictionaries.tests.model_factories import (
     OpticalProductProfileF,
     SpectralModeF,
-    CurrencyF,
     SpectralModeProcessingCostsF,
     ProcessingLevelF,
     ProjectionF,
@@ -186,8 +188,7 @@ class SearchRecordCRUD_Test(TestCase):
         })
 
         myCurrency = CurrencyF.create(**{
-            'name': 'SuperGold',
-            'abbreviation': 'SG'
+            'name': 'SuperGold'
         })
 
         tstProcLevel = ProcessingLevelF.create(**{})

@@ -19,12 +19,34 @@ __copyright__ = 'South African National Space Agency'
 import factory
 
 from ..models import (
-    Collection, ProcessingLevel, Satellite, ScannerType, InstrumentType,
-    ReferenceSystem, RadarBeam, ImagingMode, SatelliteInstrumentGroup,
-    SatelliteInstrument, Band, SpectralGroup, SpectralMode, BandSpectralMode,
-    InstrumentTypeProcessingLevel, SpectralModeProcessingCosts, Institution,
-    Currency, RadarProductProfile, OpticalProductProfile, Projection, License,
-    Quality, Topic, PlaceType, Place, Unit, SalesRegion, SubsidyType,
+    Collection,
+    ProcessingLevel,
+    Satellite,
+    ScannerType,
+    InstrumentType,
+    ReferenceSystem,
+    RadarBeam,
+    ImagingMode,
+    SatelliteInstrumentGroup,
+    SatelliteInstrument,
+    Band,
+    SpectralGroup,
+    SpectralMode,
+    BandSpectralMode,
+    InstrumentTypeProcessingLevel,
+    SpectralModeProcessingCosts,
+    Institution,
+    RadarProductProfile,
+    OpticalProductProfile,
+    Projection,
+    License,
+    Quality,
+    Topic,
+    PlaceType,
+    Place,
+    Unit,
+    SalesRegion,
+    SubsidyType,
     ProductProcessState
 )
 
@@ -245,16 +267,6 @@ class InstrumentTypeProcessingLevelF(factory.django.DjangoModelFactory):
     operator_processing_level_abbreviation = ''
 
 
-class CurrencyF(factory.django.DjangoModelFactory):
-    """
-    Currency factory
-    """
-    FACTORY_FOR = Currency
-
-    abbreviation = ''
-    name = factory.Sequence(lambda n: 'Currency {0}'.format(n))
-
-
 class SpectralModeProcessingCostsF(factory.django.DjangoModelFactory):
     """
     SpectralModeProcessingCosts factory
@@ -265,7 +277,7 @@ class SpectralModeProcessingCostsF(factory.django.DjangoModelFactory):
     instrumenttypeprocessinglevel = factory.SubFactory(
         InstrumentTypeProcessingLevelF)
     cost_per_scene = 0.0
-    currency = factory.SubFactory(CurrencyF)
+    currency = factory.SubFactory('core.model_factories.CurrencyF')
     cost_per_square_km = 0.0
     minimum_square_km = 0.0
 

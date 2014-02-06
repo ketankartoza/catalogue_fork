@@ -142,7 +142,7 @@ class SearchRecordF(factory.django.DjangoModelFactory):
     cost_per_scene = 0.0
     rand_cost_per_scene = 0.0
     currency = factory.SubFactory(
-        'dictionaries.tests.model_factories.CurrencyF')
+        'core.model_factories.CurrencyF')
     processing_level = factory.SubFactory(
         'dictionaries.tests.model_factories.ProcessingLevelF')
     projection = factory.SubFactory(

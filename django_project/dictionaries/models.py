@@ -664,7 +664,7 @@ class SpectralModeProcessingCosts(models.Model):
         help_text='Cost per scene'
     )
     currency = models.ForeignKey(
-        'Currency',
+        'exchange.Currency',
         null=True, blank=True
     )
     cost_per_square_km = models.FloatField(
@@ -683,7 +683,7 @@ class SpectralModeProcessingCosts(models.Model):
     def __unicode__(self):
         return u'{0} {1} ({2} - {3})'.format(
             self.cost_per_scene,
-            self.currency.abbreviation,
+            self.currency.code,
             self.spectral_mode.name, self.instrumenttypeprocessinglevel)
 
     class Meta:
@@ -700,21 +700,6 @@ class ReferenceSystem(models.Model):
         verbose_name='Detailed description.',
         help_text='A detailed description of the reference system.')
     abbreviation = models.CharField(max_length=20)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        """Meta class implementation."""
-        ordering = ['name']
-
-
-class Currency(models.Model):
-    """
-    Currency lookup table
-    """
-    abbreviation = models.CharField(max_length=20)
-    name = models.CharField(max_length=255, unique=True)
 
     def __unicode__(self):
         return self.name

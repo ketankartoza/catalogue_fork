@@ -165,6 +165,6 @@ class NonSearchRecordF(factory.django.DjangoModelFactory):
     download_path = factory.Sequence(lambda n: 'Download path // {}'.format(n))
     cost_per_scene = 0.0
     currency = factory.SubFactory(
-        'dictionaries.tests.model_factories.CurrencyF'
+        'core.model_factories.CurrencyF'
     )
     rand_cost_per_scene = 0.0

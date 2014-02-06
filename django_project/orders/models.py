@@ -340,7 +340,7 @@ class NonSearchRecord(models.Model):
     )
     cost_per_scene = models.FloatField(null=True, blank=True)
     currency = models.ForeignKey(
-        'dictionaries.Currency',
+        'exchange.Currency',
         null=True, blank=True
     )
     rand_cost_per_scene = models.FloatField(null=True, blank=True)

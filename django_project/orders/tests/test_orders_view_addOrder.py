@@ -28,13 +28,15 @@ from ..forms import OrderForm
 
 from ..models import Order
 
-from core.model_factories import UserF
+from core.model_factories import (
+    UserF,
+    CurrencyF
+)
 from useraccounts.tests.model_factories import SansaUserProfileF
 from search.tests.model_factories import SearchRecordF
 from dictionaries.tests.model_factories import (
     SpectralModeF,
     OpticalProductProfileF,
-    CurrencyF,
     SpectralModeProcessingCostsF,
     ProcessingLevelF,
     ProjectionF,
@@ -248,8 +250,7 @@ class OrdersViews_addOrder_Tests(TestCase):
         })
 
         myCurrency = CurrencyF.create(**{
-            'name': 'SuperGold',
-            'abbreviation': 'SG'
+            'name': 'SuperGold'
         })
 
         tstProcLevel = ProcessingLevelF.create(**{})
