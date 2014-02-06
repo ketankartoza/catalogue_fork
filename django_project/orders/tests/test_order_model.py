@@ -19,6 +19,7 @@ __copyright__ = 'South African National Space Agency'
 
 from django.test import TestCase
 
+from search.tests.model_factories import SearchRecordF
 from .model_factories import OrderF
 
 
@@ -85,3 +86,21 @@ class OrderCRUD_Test(TestCase):
         })
 
         self.assertEqual(unicode(myModel), '1')
+
+    def test_Order_value(self):
+        """
+        Tests Order model value attribute
+        """
+
+        tstOrder = OrderF.create()
+
+        SearchRecordF.create(**{
+            'rand_cost_per_scene': 120.49,
+            'order': tstOrder
+        })
+        SearchRecordF.create(**{
+            'rand_cost_per_scene': 101.51,
+            'order': tstOrder
+        })
+
+        self.assertEqual(tstOrder.value(), 222)

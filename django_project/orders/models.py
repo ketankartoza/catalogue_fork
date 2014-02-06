@@ -18,10 +18,14 @@ __date__ = '09/08/2012'
 __copyright__ = 'South African National Space Agency'
 
 from django.contrib.gis.db import models
+from django.db.models.query import QuerySet
+
 #for user id foreign keys
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-# Helper classes
+
+from model_utils.managers import PassThroughManager
+
 # ABP: unused ? from catalogue.geoiputils import *
 from catalogue.nosubclassmanager import NoSubclassManager
 
@@ -124,6 +128,20 @@ class MarketSector(models.Model):
         return str(self.name)
 
 
+class OrderQuerySet(QuerySet):
+    """
+    Order model extended query manager
+    """
+
+    def sum_product_values(self):
+        """
+        Returns a sum of rand_cost_per_scene values for every related product
+        """
+        return self.aggregate(
+            models.Sum('searchrecord__rand_cost_per_scene')
+        ).get('searchrecord__rand_cost_per_scene__sum')
+
+
 class Order(models.Model):
     """
     Order model, records orders placed by users
@@ -163,7 +181,7 @@ class Order(models.Model):
         related_name='subsidy_type+'
     )
     #default manager
-    objects = models.Manager()
+    objects = PassThroughManager.for_queryset_class(OrderQuerySet)()
     # A model can have more than one manager. Above will be used as default
     # see: http://docs.djangoproject.com/en/dev/topics/db/managers/
     # Also use a custom manager so that we can get
@@ -178,7 +196,7 @@ class Order(models.Model):
         ordering = ['-order_date']
 
     def __unicode__(self):
-        return str(self.id)
+        return unicode(self.id)
 
     def get_recent_history_date(self):
         current_status = OrderStatus.objects.get(name=self.order_status)
@@ -188,6 +206,13 @@ class Order(models.Model):
             .latest('order_change_date')
         )
         return recent_history.order_change_date
+
+    def value(self):
+        """
+        Total order vaule, a sum of total rand_cost_per_scene for all
+        products per order
+        """
+        return Order.objects.filter(pk=self.pk).sum_product_values()
 
 
 class OrderStatusHistory(models.Model):

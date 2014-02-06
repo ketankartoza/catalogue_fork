@@ -76,7 +76,7 @@ class SearchRecordCRUD_Test(TestCase):
 
         tstProcLevel = ProcessingLevelF.create()
 
-        tstProjection = ProjectionF.crate()
+        tstProjection = ProjectionF.create()
 
         tstProdProcState = ProductProcessStateF.create()
 
