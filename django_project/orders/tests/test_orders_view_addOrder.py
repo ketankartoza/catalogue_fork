@@ -31,13 +31,28 @@ from ..models import Order
 from core.model_factories import UserF
 from useraccounts.tests.model_factories import SansaUserProfileF
 from search.tests.model_factories import SearchRecordF
-from dictionaries.tests.model_factories import ProjectionF
+from dictionaries.tests.model_factories import (
+    SpectralModeF,
+    OpticalProductProfileF,
+    CurrencyF,
+    SpectralModeProcessingCostsF,
+    ProcessingLevelF,
+    ProjectionF,
+    InstrumentTypeF,
+    SatelliteInstrumentGroupF,
+    SatelliteInstrumentF,
+    InstrumentTypeProcessingLevelF
+)
 
 from catalogue.tests.model_factories import OpticalProductF
 
 from .model_factories import (
-    DeliveryMethodF, FileFormatF, ResamplingMethodF, DatumF,
-    MarketSectorF, OrderStatusF
+    DeliveryMethodF,
+    FileFormatF,
+    ResamplingMethodF,
+    DatumF,
+    MarketSectorF,
+    OrderStatusF
 )
 
 
@@ -228,20 +243,58 @@ class OrdersViews_addOrder_Tests(TestCase):
         MarketSectorF.create(**{'id': 1})
         DeliveryMethodF.create(**{'id': 1})
 
+        mySpecMode = SpectralModeF.create(**{
+            'name': 'New Spectral mode'
+        })
+
+        myCurrency = CurrencyF.create(**{
+            'name': 'SuperGold',
+            'abbreviation': 'SG'
+        })
+
+        tstProcLevel = ProcessingLevelF.create(**{})
+        tstInstType = InstrumentTypeF.create()
+
+        tstInsTypeProcLevel = InstrumentTypeProcessingLevelF.create(**{
+            'instrument_type': tstInstType,
+            'processinglevel': tstProcLevel
+        })
+
+        SpectralModeProcessingCostsF.create(**{
+            'spectral_mode': mySpecMode,
+            'instrumenttypeprocessinglevel': tstInsTypeProcLevel,
+            'cost_per_scene': 123.45,
+            'currency': myCurrency
+        })
+
+        tstSatInstGrp = SatelliteInstrumentGroupF.create(**{
+            'instrument_type': tstInstType
+        })
+
+        tstSatInst = SatelliteInstrumentF.create(**{
+            'satellite_instrument_group': tstSatInstGrp
+        })
+        myOPP = OpticalProductProfileF.create(**{
+            'spectral_mode': mySpecMode,
+            'satellite_instrument': tstSatInst
+        })
+
         myOProduct = OpticalProductF.create(**{
-            'projection': myProjection
+            'projection': myProjection,
+            'product_profile': myOPP
         })
 
         SearchRecordF.create(**{
             'id': 6,
             'user': myUser,
             'order': None,
-            'product': myOProduct
+            'product': myOProduct,
+            'processing_level': tstProcLevel
         })
 
         OrderStatusF.create(**{'id': 1})
 
-        myOrdersCount = len(Order.objects.all())
+        myOrdersCount = Order.objects.all().count()
 
         myClient = Client()
         myClient.login(username='timlinux', password='password')
@@ -264,7 +317,7 @@ class OrdersViews_addOrder_Tests(TestCase):
                 myResp['Location']) is not None
         )
 
-        myOrdersCount_new = len(Order.objects.all())
+        myOrdersCount_new = Order.objects.all().count()
         self.assertEqual(myOrdersCount_new, myOrdersCount + 1)
 
     def test_addOrder_login_staff_invalid_post(self):

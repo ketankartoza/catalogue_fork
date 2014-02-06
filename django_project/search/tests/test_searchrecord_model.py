@@ -198,7 +198,7 @@ class SearchRecordCRUD_Test(TestCase):
             'processinglevel': tstProcLevel
         })
 
-        myModel = SpectralModeProcessingCostsF.create(**{
+        SpectralModeProcessingCostsF.create(**{
             'spectral_mode': mySpecMode,
             'instrumenttypeprocessinglevel': tstInsTypeProcLevel,
             'cost_per_scene': 123.45,

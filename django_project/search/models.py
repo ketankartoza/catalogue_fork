@@ -109,6 +109,13 @@ class SearchRecord(models.Model):
                 self.product_ready = True
             else:
                 self.product_ready = False
+        # if order is null and searchrecord is updated, make snapshot at the
+        # time of placing order
+        if (self.pk and self._cached_data.get('order_id') is None and
+                self.order_id is not None):
+            # snapshot data and suppress save (we are in a save method)
+            self._snapshot_cost_and_currency(save=False)
+
         super(SearchRecord, self).save(*args, **kwargs)
 
     def kmlExtents(self):
@@ -124,7 +131,7 @@ class SearchRecord(models.Model):
             myExtent[0])  # xmin
         return myString
 
-    def _snapshot_cost_and_currency(self):
+    def _snapshot_cost_and_currency(self, save=True):
         """
         This method will grab latest price_per_km and currency and save them
         to the model in the moment of order creation
@@ -135,22 +142,26 @@ class SearchRecord(models.Model):
         insTypeProcLevel = InstrumentTypeProcessingLevel.objects.filter(
             processinglevel=self.processing_level,
             instrument_type=(
-                self.product.product_profile.satellite_instrument
-                .satellite_instrument_group.instrument_type
+                self.product.getConcreteInstance().product_profile
+                .satellite_instrument.satellite_instrument_group
+                .instrument_type
             )
         ).get()
-
         # retrieve the processing mode costs
         spectralModeProcCosts = SpectralModeProcessingCosts.objects.filter(
-            spectral_mode=self.product.product_profile.spectral_mode,
+            spectral_mode=(
+                self.product.getConcreteInstance().product_profile
+                .spectral_mode
+            ),
             instrumenttypeprocessinglevel=insTypeProcLevel
         ).get()
-
-        # save (snapshot) current values
+        # snapshot current values
         self.cost_per_scene = spectralModeProcCosts.cost_per_scene
         self.currency = spectralModeProcCosts.currency
 
-        self.save()
+        # invoke model save method - default behaviour
+        if save is True:
+            self.save()
 
 
 ###############################################################################

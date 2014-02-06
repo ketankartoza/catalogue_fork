@@ -518,6 +518,11 @@ def addOrder(theRequest):
             myObject.save()
             logger.debug('Order saved')
 
+            #update serachrecords
+            for myRecord in myRecords:
+                myRecord.order = myObject
+                myRecord.save()
+
             notifySalesStaff(theRequest.user, myObject.id)
             return HttpResponseRedirect(
                 reverse('viewOrder', kwargs={'theId': myObject.id}))

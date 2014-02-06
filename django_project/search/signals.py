@@ -1,5 +1,5 @@
 """
-SANSA-EO Catalogue - Signals for Orders
+SANSA-EO Catalogue - Signals for Search
 
 Contact : lkleyn@sansa.org.za
 
@@ -14,26 +14,23 @@ Contact : lkleyn@sansa.org.za
 
 __author__ = 'dodobasic@gmail.com'
 __version__ = '0.1'
-__date__ = '04/02/2014'
+__date__ = '06/02/2014'
 __copyright__ = 'South African National Space Agency'
 
 import logging
 logger = logging.getLogger(__name__)
 
 from django.contrib.gis.db import models
+from .models import SearchRecord
 
-from .models import Order
 
-
-def snapshot_cost_and_currency(sender, instance, created, **kwargs):
+def cache_model_attributes(sender, instance, **kwargs):
     """
-    Take a snapshot of cost and currency at the time of placing order
+    Take a snapshot of current attribute values
     """
-    if created is True:
-            pass
+    instance._cached_data = instance.__dict__.copy()
 
-
-# set post_save signal
-models.signals.post_save.connect(
-    snapshot_cost_and_currency,
-    sender=Order)
+# set post_init signal
+models.signals.post_init.connect(
+    cache_model_attributes, sender=SearchRecord
+)
