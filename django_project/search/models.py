@@ -58,6 +58,10 @@ class SearchRecord(models.Model):
     # product (see overridden save() below) or download_path is filled
     product_ready = models.BooleanField(default=False)
     cost_per_scene = models.FloatField(null=True, blank=True)
+    rand_cost_per_scene = models.FloatField(null=True, blank=True)
+    currency = models.ForeignKey(
+        'dictionaries.Currency', null=True, blank=True
+    )
     processing_level = models.ForeignKey(
         'dictionaries.ProcessingLevel', verbose_name='Processing Level',
         null=True, blank=True

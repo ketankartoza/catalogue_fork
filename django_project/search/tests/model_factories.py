@@ -139,7 +139,10 @@ class SearchRecordF(factory.django.DjangoModelFactory):
     internal_order_id = None
     download_path = factory.Sequence(lambda n: "Download path // {}".format(n))
     product_ready = False
-    cost_per_scene = None
+    cost_per_scene = 0.0
+    rand_cost_per_scene = 0.0
+    currency = factory.SubFactory(
+        'dictionaries.tests.model_factories.CurrencyF')
     processing_level = factory.SubFactory(
         'dictionaries.tests.model_factories.ProcessingLevelF')
     projection = factory.SubFactory(

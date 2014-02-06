@@ -30,7 +30,10 @@ from dictionaries.tests.model_factories import (
     OpticalProductProfileF,
     SpectralModeF,
     CurrencyF,
-    SpectralModeProcessingCostsF
+    SpectralModeProcessingCostsF,
+    ProcessingLevelF,
+    ProjectionF,
+    ProductProcessStateF
 )
 
 from .model_factories import SearchRecordF
@@ -59,13 +62,46 @@ class SearchRecordCRUD_Test(TestCase):
         """
         Tests SearchRecord model read
         """
+        tstUser = UserF.create(**{
+            'username': 'timlinux',
+            'password': 'password'
+        })
+
         myOrder = OrderF.create(notes='New Order')
-        myModel = SearchRecordF.create(order=myOrder)
+        tstCurrency = CurrencyF.create(**{
+            'name': 'SuperGold'
+        })
+
+        tstProduct = OpticalProductF.create()
+
+        tstProcLevel = ProcessingLevelF.create()
+
+        tstProjection = ProjectionF.crate()
+
+        tstProdProcState = ProductProcessStateF.create()
+
+        myModel = SearchRecordF.create(**{
+            'user': tstUser,
+            'order': myOrder,
+            'product': tstProduct,
+            'internal_order_id': 98765,
+            'download_path': 'someplace/somewhere',
+            'product_ready': True,
+            'cost_per_scene': 123.12,
+            'rand_cost_per_scene': 321.21,
+            'currency': tstCurrency,
+            'processing_level': tstProcLevel,
+            'projection': tstProjection,
+            'productprocessstate': tstProdProcState
+        })
 
         self.assertTrue(myModel.pk is not None)
-        self.assertTrue(myModel.order.notes == 'New Order')
-        self.assertTrue(myModel.product_ready is True)
-        self.assertTrue(myModel.internal_order_id is None)
+        self.assertEqual(
+            myModel.internal_order_id, 98765)
+        self.assertEqual(myModel.download_path, 'someplace/somewhere')
+        self.assertEqual(myModel.cost_per_scene, 123.12)
+        self.assertEqual(myModel.rand_cost_per_scene, 321.21)
+        self.assertEqual(myModel.product_ready, True)
 
     def test_SearchRecord_update(self):
         """
@@ -78,7 +114,8 @@ class SearchRecordCRUD_Test(TestCase):
             'order': myNewOrder,
             'download_path': 'Some path',
             'product_ready': True,
-            'cost_per_scene': 123
+            'cost_per_scene': 123,
+            'rand_cost_per_scene': 123
         }
 
         myModel.__dict__.update(myNewModelData)
