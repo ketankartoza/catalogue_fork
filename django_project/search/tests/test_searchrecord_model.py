@@ -33,7 +33,11 @@ from dictionaries.tests.model_factories import (
     SpectralModeProcessingCostsF,
     ProcessingLevelF,
     ProjectionF,
-    ProductProcessStateF
+    ProductProcessStateF,
+    InstrumentTypeF,
+    SatelliteInstrumentGroupF,
+    SatelliteInstrumentF,
+    InstrumentTypeProcessingLevelF
 )
 
 from .model_factories import SearchRecordF
@@ -186,23 +190,45 @@ class SearchRecordCRUD_Test(TestCase):
             'abbreviation': 'SG'
         })
 
+        tstProcLevel = ProcessingLevelF.create(**{})
+        tstInstType = InstrumentTypeF.create()
+
+        tstInsTypeProcLevel = InstrumentTypeProcessingLevelF.create(**{
+            'instrument_type': tstInstType,
+            'processinglevel': tstProcLevel
+        })
+
         myModel = SpectralModeProcessingCostsF.create(**{
             'spectral_mode': mySpecMode,
+            'instrumenttypeprocessinglevel': tstInsTypeProcLevel,
             'cost_per_scene': 123.45,
             'currency': myCurrency
         })
 
+        tstSatInstGrp = SatelliteInstrumentGroupF.create(**{
+            'instrument_type': tstInstType
+        })
+
+        tstSatInst = SatelliteInstrumentF.create(**{
+            'satellite_instrument_group': tstSatInstGrp
+        })
         myOPP = OpticalProductProfileF.create(**{
-            'spectral_mode': mySpecMode
+            'spectral_mode': mySpecMode,
+            'satellite_instrument': tstSatInst
         })
 
         myProduct = OpticalProductF.create(**{
-            'original_product_id': '123qwe',
             'product_profile': myOPP
         })
         myUser = UserF.create(username='testuser')
-        myModel = SearchRecordF.create()
+        myModel = SearchRecordF.create(**{
+            'processing_level': tstProcLevel,
+            'product': myProduct,
+            'user': myUser
+        })
 
-        myNewModel = myModel.create(myUser, myProduct)
+        # preform the snapshot
+        myModel._snapshot_cost_and_currency()
 
-        self.assertEqual(myNewModel.snapshot_price_and_currency(), True)
+        self.assertEqual(myModel.cost_per_scene, 123.45)
+        self.assertEqual(myModel.currency, myCurrency)

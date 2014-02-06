@@ -25,6 +25,11 @@ from django.contrib.gis.db import models
 
 from catalogue.dbhelpers import executeRAWSQL
 
+from dictionaries.models import (
+    SpectralModeProcessingCosts,
+    InstrumentTypeProcessingLevel
+)
+
 ###############################################################################
 
 
@@ -119,14 +124,33 @@ class SearchRecord(models.Model):
             myExtent[0])  # xmin
         return myString
 
-    def snapshot_price_and_currency(self):
+    def _snapshot_cost_and_currency(self):
         """
         This method will grab latest price_per_km and currency and save them
         to the model in the moment of order creation
 
         This method is invoked by a post_save signal on Order model
         """
-        return None
+        # identify InstrumentTypeProcessingLevel
+        insTypeProcLevel = InstrumentTypeProcessingLevel.objects.filter(
+            processinglevel=self.processing_level,
+            instrument_type=(
+                self.product.product_profile.satellite_instrument
+                .satellite_instrument_group.instrument_type
+            )
+        ).get()
+
+        # retrieve the processing mode costs
+        spectralModeProcCosts = SpectralModeProcessingCosts.objects.filter(
+            spectral_mode=self.product.product_profile.spectral_mode,
+            instrumenttypeprocessinglevel=insTypeProcLevel
+        ).get()
+
+        # save (snapshot) current values
+        self.cost_per_scene = spectralModeProcCosts.cost_per_scene
+        self.currency = spectralModeProcCosts.currency
+
+        self.save()
 
 
 ###############################################################################
