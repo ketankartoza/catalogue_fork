@@ -281,3 +281,35 @@ class OrderNotificationRecipients(models.Model):
                 .select_related()
             )])
         return listeners
+
+
+class NonSearchRecord(models.Model):
+    """
+    The purpose of this model is to allow staff users (it should not be
+    available to non-staff) to create orders containing ad-hoc upstream orders
+    for things we do not hold in the catalogue (e.g. and Ikonos image for a
+    client). Basically this will allow SANSA to act as a clearing house for
+    upstream vendor's products but give us the ability to keep statistics on
+    sales.
+    """
+    user = models.ForeignKey('auth.User')
+    order = models.ForeignKey('orders.Order', null=True, blank=True)
+    product_description = models.CharField(
+        max_length=100,
+        help_text='Description of an ordered product'
+    )
+    download_path = models.CharField(
+        max_length=512, null=False, blank=False,
+        help_text=(
+            'This is the location from where the product can be downloaded '
+            'after a successfull OS4EO order placement.')
+    )
+    cost_per_scene = models.FloatField(null=True, blank=True)
+    currency = models.ForeignKey(
+        'dictionaries.Currency',
+        null=True, blank=True
+    )
+    rand_cost_per_scene = models.FloatField(null=True, blank=True)
+
+    def __unicode__(self):
+        return unicode(self.id)

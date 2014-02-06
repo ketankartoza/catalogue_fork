@@ -20,8 +20,16 @@ __copyright__ = 'South African National Space Agency'
 import factory
 
 from ..models import (
-    Order, OrderStatus, DeliveryMethod, Datum, ResamplingMethod, FileFormat,
-    MarketSector, OrderStatusHistory, OrderNotificationRecipients
+    Order,
+    OrderStatus,
+    DeliveryMethod,
+    Datum,
+    ResamplingMethod,
+    FileFormat,
+    MarketSector,
+    OrderStatusHistory,
+    OrderNotificationRecipients,
+    NonSearchRecord
 )
 
 
@@ -142,3 +150,21 @@ class OrderNotificationRecipientsF(factory.django.DjangoModelFactory):
             # A list of groups were passed in, use them
             for klass in extracted:
                 self.classes.add(klass)
+
+
+class NonSearchRecordF(factory.django.DjangoModelFactory):
+    """
+    NonSearchRecord model factory
+    """
+    FACTORY_FOR = NonSearchRecord
+
+    user = factory.SubFactory('core.model_factories.UserF')
+    order = factory.SubFactory(OrderF)
+    product_description = factory.Sequence(
+        lambda n: 'Product description {}'.format(n))
+    download_path = factory.Sequence(lambda n: 'Download path // {}'.format(n))
+    cost_per_scene = 0.0
+    currency = factory.SubFactory(
+        'dictionaries.tests.model_factories.CurrencyF'
+    )
+    rand_cost_per_scene = 0.0
