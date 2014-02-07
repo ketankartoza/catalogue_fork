@@ -17,11 +17,14 @@ __version__ = '0.2'
 __date__ = '17/07/2013'
 __copyright__ = 'South African National Space Agency'
 
+from decimal import Decimal
+
 from django.test import TestCase
 
 from core.model_factories import (
     UserF,
-    CurrencyF
+    CurrencyF,
+    ExchangeRateF
 )
 from orders.tests.model_factories import OrderF
 from catalogue.tests.model_factories import (
@@ -187,8 +190,20 @@ class SearchRecordCRUD_Test(TestCase):
             'name': 'New Spectral mode'
         })
 
+        superRand = CurrencyF.create(**{
+            'name': 'SuperRand',
+            'code': 'ZAR'
+        })
+
         myCurrency = CurrencyF.create(**{
-            'name': 'SuperGold'
+            'name': 'SuperGold',
+            'code': 'SG'
+        })
+
+        ExchangeRateF.create(**{
+            'source': myCurrency,
+            'target': superRand,
+            'rate': 2.0
         })
 
         tstProcLevel = ProcessingLevelF.create(**{})
@@ -202,7 +217,7 @@ class SearchRecordCRUD_Test(TestCase):
         SpectralModeProcessingCostsF.create(**{
             'spectral_mode': mySpecMode,
             'instrumenttypeprocessinglevel': tstInsTypeProcLevel,
-            'cost_per_scene': 123.45,
+            'cost_per_scene': Decimal(123.45),
             'currency': myCurrency
         })
 
@@ -231,5 +246,11 @@ class SearchRecordCRUD_Test(TestCase):
         # preform the snapshot
         myModel._snapshot_cost_and_currency()
 
-        self.assertEqual(myModel.cost_per_scene, 123.45)
+        self.assertEqual(
+            myModel.cost_per_scene, Decimal(123.45).quantize(Decimal('.01'))
+        )
         self.assertEqual(myModel.currency, myCurrency)
+        self.assertEqual(
+            myModel.rand_cost_per_scene,
+            Decimal(246.90).quantize(Decimal('.01'))
+        )

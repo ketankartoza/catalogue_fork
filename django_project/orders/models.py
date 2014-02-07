@@ -338,12 +338,15 @@ class NonSearchRecord(models.Model):
             'This is the location from where the product can be downloaded '
             'after a successfull OS4EO order placement.')
     )
-    cost_per_scene = models.FloatField(null=True, blank=True)
-    currency = models.ForeignKey(
-        'exchange.Currency',
-        null=True, blank=True
+    cost_per_scene = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
     )
-    rand_cost_per_scene = models.FloatField(null=True, blank=True)
+    rand_cost_per_scene = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+    currency = models.ForeignKey(
+        'exchange.Currency', null=True, blank=True
+    )
 
     def __unicode__(self):
         return unicode(self.id)

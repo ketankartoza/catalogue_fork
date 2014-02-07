@@ -23,6 +23,8 @@ from datetime import datetime
 
 from django.contrib.gis.db import models
 
+from exchange.conversion import convert_value
+
 from catalogue.dbhelpers import executeRAWSQL
 
 from dictionaries.models import (
@@ -62,8 +64,12 @@ class SearchRecord(models.Model):
     # Default to False unless there is a populated local_storage_path in the
     # product (see overridden save() below) or download_path is filled
     product_ready = models.BooleanField(default=False)
-    cost_per_scene = models.FloatField(null=True, blank=True)
-    rand_cost_per_scene = models.FloatField(null=True, blank=True)
+    cost_per_scene = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+    rand_cost_per_scene = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
     currency = models.ForeignKey(
         'exchange.Currency', null=True, blank=True
     )
@@ -158,6 +164,10 @@ class SearchRecord(models.Model):
         # snapshot current values
         self.cost_per_scene = spectralModeProcCosts.cost_per_scene
         self.currency = spectralModeProcCosts.currency
+        self.rand_cost_per_scene = convert_value(
+            spectralModeProcCosts.cost_per_scene,
+            spectralModeProcCosts.currency.code, 'ZAR'
+        )
 
         # invoke model save method - default behaviour
         if save is True:

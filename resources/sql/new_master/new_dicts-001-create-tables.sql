@@ -161,9 +161,9 @@ CREATE TABLE "dictionaries_spectralmodeprocessingcosts" (
     "id" serial NOT NULL PRIMARY KEY,
     "spectral_mode_id" integer NOT NULL REFERENCES "dictionaries_spectralmode" ("id") DEFERRABLE INITIALLY DEFERRED,
     "instrumenttypeprocessinglevel_id" integer NOT NULL REFERENCES "dictionaries_instrumenttypeprocessinglevel" ("id") DEFERRABLE INITIALLY DEFERRED,
-    "cost_per_scene" double precision NOT NULL,
+    "cost_per_scene" numeric(10, 2) NOT NULL,
     "currency_id" integer,
-    "cost_per_square_km" double precision,
+    "cost_per_square_km" numeric(10, 2),
     "minimum_square_km" double precision,
     "sales_region_id" integer NOT NULL
 )

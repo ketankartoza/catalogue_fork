@@ -660,15 +660,15 @@ class SpectralModeProcessingCosts(models.Model):
     instrumenttypeprocessinglevel = models.ForeignKey(
         InstrumentTypeProcessingLevel
     )
-    cost_per_scene = models.FloatField(
-        help_text='Cost per scene'
+    cost_per_scene = models.DecimalField(
+        help_text='Cost per scene', max_digits=10, decimal_places=2
+    )
+    cost_per_square_km = models.DecimalField(
+        help_text='Cost per square kilometre',
+        null=True, blank=True, max_digits=10, decimal_places=2
     )
     currency = models.ForeignKey(
         'exchange.Currency',
-        null=True, blank=True
-    )
-    cost_per_square_km = models.FloatField(
-        help_text='Cost per square kilometre',
         null=True, blank=True
     )
     minimum_square_km = models.FloatField(

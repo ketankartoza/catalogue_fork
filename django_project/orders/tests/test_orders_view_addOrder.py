@@ -30,7 +30,8 @@ from ..models import Order
 
 from core.model_factories import (
     UserF,
-    CurrencyF
+    CurrencyF,
+    ExchangeRateF
 )
 from useraccounts.tests.model_factories import SansaUserProfileF
 from search.tests.model_factories import SearchRecordF
@@ -249,8 +250,20 @@ class OrdersViews_addOrder_Tests(TestCase):
             'name': 'New Spectral mode'
         })
 
+        superRand = CurrencyF.create(**{
+            'name': 'SuperRand',
+            'code': 'ZAR'
+        })
+
         myCurrency = CurrencyF.create(**{
-            'name': 'SuperGold'
+            'name': 'SuperGold',
+            'code': 'SG'
+        })
+
+        ExchangeRateF.create(**{
+            'source': myCurrency,
+            'target': superRand,
+            'rate': 2.0
         })
 
         tstProcLevel = ProcessingLevelF.create(**{})

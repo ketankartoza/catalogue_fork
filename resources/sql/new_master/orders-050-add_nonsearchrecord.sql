@@ -6,9 +6,9 @@ CREATE TABLE "orders_nonsearchrecord" (
     "order_id" integer REFERENCES "orders_order" ("id") DEFERRABLE INITIALLY DEFERRED,
     "product_description" varchar(100) NOT NULL,
     "download_path" varchar(512) NOT NULL,
-    "cost_per_scene" double precision,
-    "currency_id" integer,
-    "rand_cost_per_scene" double precision
+    "cost_per_scene" numeric(10, 2),
+    "rand_cost_per_scene" numeric(10, 2),
+    "currency_id" integer
 )
 ;
 
