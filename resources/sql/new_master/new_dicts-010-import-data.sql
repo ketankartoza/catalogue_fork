@@ -295,20 +295,6 @@ COPY dictionaries_collection (id, name, description, institution_id) FROM stdin;
 SELECT pg_catalog.setval('dictionaries_collection_id_seq', 6, true);
 
 
---
--- Data for Name: dictionaries_currency; Type: TABLE DATA; Schema: public; Owner: dodobas
---
-
-COPY dictionaries_currency (id, abbreviation, name) FROM stdin;
-\.
-
-
---
--- Name: dictionaries_currency_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dodobas
---
-
-SELECT pg_catalog.setval('dictionaries_currency_id_seq', 1, false);
-
 
 --
 -- Data for Name: dictionaries_radarbeam; Type: TABLE DATA; Schema: public; Owner: dodobas

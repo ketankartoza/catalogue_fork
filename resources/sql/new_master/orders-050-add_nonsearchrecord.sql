@@ -7,7 +7,7 @@ CREATE TABLE "orders_nonsearchrecord" (
     "product_description" varchar(100) NOT NULL,
     "download_path" varchar(512) NOT NULL,
     "cost_per_scene" double precision,
-    "currency_id" integer REFERENCES "dictionaries_currency" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "currency_id" integer,
     "rand_cost_per_scene" double precision
 )
 ;

@@ -177,13 +177,6 @@ CREATE TABLE "dictionaries_referencesystem" (
 ;
 ALTER TABLE "dictionaries_instrumenttype" ADD CONSTRAINT "reference_system_id_refs_id_4dbfe45f" FOREIGN KEY ("reference_system_id") REFERENCES "dictionaries_referencesystem" ("id") DEFERRABLE INITIALLY DEFERRED;
 
-CREATE TABLE "dictionaries_currency" (
-    "id" serial NOT NULL PRIMARY KEY,
-    "abbreviation" varchar(20) NOT NULL,
-    "name" varchar(255) NOT NULL UNIQUE
-)
-;
-ALTER TABLE "dictionaries_spectralmodeprocessingcosts" ADD CONSTRAINT "currency_id_refs_id_27966a8a" FOREIGN KEY ("currency_id") REFERENCES "dictionaries_currency" ("id") DEFERRABLE INITIALLY DEFERRED;
 
 CREATE TABLE "dictionaries_salesregion" (
     "id" serial NOT NULL PRIMARY KEY,
@@ -250,6 +243,5 @@ CREATE INDEX "dictionaries_spectralmodeprocessingcosts_spectral_mode_id" ON "dic
 CREATE INDEX "dictionaries_spectralmodeprocessingcosts_instrumenttypeprocb4fb" ON "dictionaries_spectralmodeprocessingcosts" ("instrumenttypeprocessinglevel_id");
 CREATE INDEX "dictionaries_spectralmodeprocessingcosts_currency_id" ON "dictionaries_spectralmodeprocessingcosts" ("currency_id");
 CREATE INDEX "dictionaries_referencesystem_name_like" ON "dictionaries_referencesystem" ("name" varchar_pattern_ops);
-CREATE INDEX "dictionaries_currency_name_like" ON "dictionaries_currency" ("name" varchar_pattern_ops);
 
 COMMIT;
