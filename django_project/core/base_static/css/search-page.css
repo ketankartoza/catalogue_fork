@@ -40,7 +40,7 @@
 /*
  * Map size
  */
-#map {
+.search-map {
   /* width defined by blueprint.css */
   /*height: 100%;*/
   left: 0;

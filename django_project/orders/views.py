@@ -542,7 +542,7 @@ def addOrder(theRequest):
         myOptions.update(myExtraOptions),
         logger.info('Add Order: new object requested')
         return render_to_response(
-            'addPage.html', myOptions,
+            'orderForm.html', myOptions,
             context_instance=RequestContext(theRequest))
 
 

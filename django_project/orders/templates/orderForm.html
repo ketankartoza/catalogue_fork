@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load compressed %}
+
+{% block extracss %}
+	{{ block.super }}
+	{% compressed_css 'orderpage' %}
+{% endblock %}
+
+{% block content%}
+  <div class="row">
+  	<div class="span12">
+  		<div id="map" class="order-map">
+	  		<div id="map-controls" class="blackalpha60">
+			    <div id="map-layerswitcher-control">
+			      <button class="btn btn-info btn-large right icon-globe"></button>
+			    </div>
+				<div id="map-navigation"></div>
+			</div>
+			<div id="map-controls2" class="blackalpha60">
+			    <div id="map-control-position"></div>
+				<div id="map-control-scalebar"></div>  
+			</div>
+			<div id="map-layerswitcher" class="drop-shadow"></div>
+		</div>
+  	</div>
+  </div>
+  <div class="row">
+  	<div class="span12">
+  		<form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="form-horizontal" id="order-form">
+      		{% csrf_token %}
+      	</form>
+  	</div>
+  </div>
+{% endblock %}
+
+{% block extrajs %}
+  {{ block.super }}
+  {% compressed_js 'orderpage' %}
+  <script>
+  	var LayerSwitcherState = false;
+    function toggleLayerSwitcher() {
+	    if (LayerSwitcherState) {
+	        $('#map-layerswitcher').hide();
+	        $('#map-layerswitcher-control').css('color','#FFFFFF');
+	        LayerSwitcherState = false;
+	    } else {
+	        $('#map-layerswitcher').show();
+	        $('#map-layerswitcher-control').css('color','green');
+	        LayerSwitcherState = true;
+	    }
+	}
+
+  	$( document ).ready(function() {
+  		var myMap = new APP.SansaMap('map');
+  		APP.CartRecordsWTK = {};
+
+  		{% for record in myRecords %}
+        APP.CartRecordsWTK['{{ record.product.id }}'] = {
+          'wkt': '{{ record.product.spatial_coverage.wkt }}',
+          'id': '{{ record.product.unique_product_id }}'};
+      	{% endfor %}
+      	var cartLayer = new APP.CartLayer(myMap, {'wkt': APP.CartRecordsWTK});
+
+		$('#map-layerswitcher-control').click(function() {
+			toggleLayerSwitcher();
+		});
+    });
+  </script>
+{% endblock %}
