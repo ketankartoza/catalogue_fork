@@ -26,11 +26,80 @@
   </div>
   <div class="row">
   	<div class="span12">
-  		<form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="form-horizontal" id="order-form">
-      		{% csrf_token %}
-      	</form>
+  		<h2>Order options</h2>
   	</div>
   </div>
+  <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="form-horizontal" id="order-form">
+      	{% csrf_token %}
+		<div class="row">
+			<div class="span12">
+				<div class="control-group">
+					<label class="control-label" for="{{ myOrderForm.datum.auto_id }}">{{ myOrderForm.datum.label }}</label>
+					<div class="controls">
+						{{ myOrderForm.datum }}
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="{{ myOrderForm.resampling_method.auto_id }}">{{ myOrderForm.resampling_method.label }}</label>
+					<div class="controls">
+						{{ myOrderForm.resampling_method }}
+					</div>
+				</div>
+				<hr />
+			</div>
+		</div>
+		<div class="row">
+			<div class="span6">
+				<div class="control-group">
+					<label class="control-label" for="{{ myOrderForm.file_format.auto_id }}">{{ myOrderForm.file_format.label }}</label>
+					<div class="controls">
+						{{ myOrderForm.file_format }}
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="{{ myOrderForm.delivery_method.auto_id }}">{{ myOrderForm.delivery_method.label }}</label>
+					<div class="controls">
+						{{ myOrderForm.delivery_method }}
+					</div>
+				</div>
+				<hr />
+				<div class="control-group">
+					<label class="control-label" for="{{ myOrderForm.market_sector.auto_id }}">{{ myOrderForm.market_sector.label }}</label>
+					<div class="controls">
+						{{ myOrderForm.market_sector }}
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="{{ myOrderForm.subsidy_type_requested.auto_id }}">{{ myOrderForm.subsidy_type_requested.label }}</label>
+					<div class="controls">
+						{{ myOrderForm.subsidy_type_requested }}
+					</div>
+				</div>
+				{% if user.is_staff %}
+				<div class="control-group">
+					<label class="control-label" for="{{ myOrderForm.subsidy_type_assigned.auto_id }}">{{ myOrderForm.subsidy_type_assigned.label }}</label>
+					<div class="controls">
+						{{ myOrderForm.subsidy_type_assigned }}
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="{{ myOrderForm.user.auto_id }}">{{ myOrderForm.user.label }}</label>
+					<div class="controls">
+						{{ myOrderForm.user }}
+					</div>
+				</div>
+				{% endif %}
+			</div>
+			<div class="span6">
+				<div class="control-group">
+					<label class="control-label" for="{{ myOrderForm.notes.auto_id }}">{{ myOrderForm.notes.label }}</label>
+					<div class="controls">
+						{{ myOrderForm.notes }}
+					</div>
+				</div>
+			</div>
+		</div>
+  </form>
 {% endblock %}
 
 {% block extrajs %}

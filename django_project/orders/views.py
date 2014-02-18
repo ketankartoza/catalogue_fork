@@ -435,7 +435,6 @@ def updateOrderHistory(theRequest):
 @requireProfile('addorder')
 def addOrder(theRequest):
     logger.debug('Order called')
-    myTitle = 'Create a new order'
     logger.info('Preparing order for user ' + str(theRequest.user))
     myRecords = None
 
@@ -457,45 +456,7 @@ def addOrder(theRequest):
             logger.debug('Cart has records')
             logger.info('Cart contains : %i items', myRecords.count())
     myExtraOptions = {
-        # Possible flags for the record template
-        # myShowSensorFlag
-        # myShowIdFlag
-        # myShowSceneIdFlag
-        # myShowDateFlag
-        # myShowCartFlag
-        # myShowRemoveIconFlag
-        # myShowPreviewFlag
-        # myShowDeliveryDetailsFlag
-        # myShowDeliveryDetailsFormFlag
-        'myShowMapFlag': True,
-        'myShowSensorFlag': False,
-        'myShowSceneIdFlag': True,
-        'myShowDateFlag': False,
-        'myShowRemoveIconFlag': True,
-        'myShowRowFlag': False,
-        'myShowPathFlag': False,
-        'myShowCloudCoverFlag': True,
-        'myShowMetdataFlag': False,
-        # used when you need to add an item to the cart only
-        'myShowCartFlag': False,
-        # used when you need to add an item to the cart only
-        'myShowCartContentsFlag': True,
-        'myShowPreviewFlag': False,
-        'myShowDeliveryDetailsFlag': False,
-        'myShowDeliveryDetailsFormFlag': True,
-        'myCartTitle': 'Order Product List',
         'myRecords': myRecords,
-        # propogated into the cart template
-        'myBaseTemplate': 'emptytemplate.html',
-        'mySubmitLabel': 'Submit Order',
-        'myMessage': (' <div>Please specify any details for your order'
-                      ' requirements below. If you need specific processing'
-                      ' steps taken on individual images, please use the notes'
-                      ' area below to provide detailed instructions. If you'
-                      ' would like the product(s) to be clipped and masked'
-                      ' to a specific geographic region, you can digitise'
-                      ' that region using the map above, or the geometry'
-                      ' input field below.</div>'),
     }
     logger.info('Add Order called')
     if theRequest.method == 'POST':
@@ -505,8 +466,6 @@ def addOrder(theRequest):
 
         myOptions = {
             'myOrderForm': myOrderForm,
-            'myTitle': myTitle,
-            'mySubmitLabel': 'Submit Order',
         }
         # shortcut to join two dicts
         myOptions.update(myExtraOptions)
@@ -529,14 +488,12 @@ def addOrder(theRequest):
         else:
             logger.info('Add Order: form is NOT valid')
             return render_to_response(
-                'addPage.html', myOptions,
+                'myOrderForm.html', myOptions,
                 context_instance=RequestContext(theRequest))
     else:  # new order
         myOrderForm = OrderForm()
         myOptions = {
             'myOrderForm': myOrderForm,
-            'myTitle': myTitle,
-            'mySubmitLabel': 'Submit Order'
         }
         # shortcut to join two dicts
         myOptions.update(myExtraOptions),

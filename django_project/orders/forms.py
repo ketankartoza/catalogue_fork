@@ -37,8 +37,6 @@ class OrderStatusForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        #exclude = ('user','order_status')
-        exclude = ('user', 'order_status', 'delivery_detail')
 
 
 class OrderStatusHistoryForm(forms.ModelForm):
