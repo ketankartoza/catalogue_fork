@@ -99,7 +99,38 @@
 				</div>
 			</div>
 		</div>
+		<div class="row">
+			<div class="span12">
+				<table class="table table-striped">
+				<thead><tr>
+					<th>Thumb</th>
+					<th>Product</th>
+					<th>Date</th>
+					<th>Cloud</th>
+					<th>Metadata</th>
+					<th>Projection</th>
+					<th>Processing<br />level</th>
+					<th>Cost</th>
+					<th>Remove</th>
+				</tr></thead>
+				{% for record in myRecords %}
+					<tr>
+						<td><img src="/thumbnail/{{ record.product.id }}/small/"></td>
+						<td>product</td>
+						<td>{{ record.product.formated_date }}</td>
+						<td>{{ record.product.getConcreteInstance.cloud_cover }}</td>
+						<td><button class="btn btn-small metadata" data-id="{{ record.product.id }}" type="button"><i class="icon-list-alt"></i></button></td>
+						<td></td>
+						<td></td>
+						<td>{{ record.rand_cost_per_scene }}</td>
+						<td><button class="btn btn-small btn-danger remove" data-id="{{ record.id }}" type="button"><i class="icon-trash"></i></button></td>
+					</tr>
+				{% endfor %}
+				</table>
+			</div>
+		</div>
   </form>
+  <div id="ajax-modal" class="modal hide fade" tabindex="-1"></div>
 {% endblock %}
 
 {% block extrajs %}
@@ -121,10 +152,11 @@
 
   	$( document ).ready(function() {
   		var myMap = new APP.SansaMap('map');
+  		APP.$modal = $('#ajax-modal');
   		APP.CartRecordsWTK = {};
 
   		{% for record in myRecords %}
-        APP.CartRecordsWTK['{{ record.product.id }}'] = {
+        APP.CartRecordsWTK['{{ record.id }}'] = {
           'wkt': '{{ record.product.spatial_coverage.wkt }}',
           'id': '{{ record.product.unique_product_id }}'};
       	{% endfor %}
@@ -133,6 +165,30 @@
 		$('#map-layerswitcher-control').click(function() {
 			toggleLayerSwitcher();
 		});
+
+		$('.metadata').click(function() {
+			var id = $(this).data('id');
+	        APP.$modal.load('/metadata/'+id, '', function(){
+	            APP.$modal.modal();
+	        });
+		})
+
+		$('.remove').click(function() {
+			if (confirm('You are about to remove product from cart, are you sure?')) {
+			    uiBlock();
+			    var elem = $(this);
+			    var id = elem.data('id');
+			    $.get("/removefromcart/" + id + "/?xhr")
+			    .done(function () {
+			    	elem.parent().parent().remove();
+			        cartLayer.removeFeature(id);
+			    })
+			    .fail(function () {
+			      alert('There has been a problem!');
+			    });
+				uiUnblock();
+			}
+		})
     });
   </script>
 {% endblock %}

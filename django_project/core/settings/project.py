@@ -172,6 +172,8 @@ PIPELINE_JS = {
     },
     'orderpage': {
         'source_filenames': (
+            'js/bootstrap-modal.js',
+            'js/bootstrap-modalmanager.js',
             'js/map_layers.js',
             'js/openlayers-plugins/ScaleBar.js',
             'js/widget.sansaMap.js',

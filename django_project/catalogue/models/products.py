@@ -748,6 +748,13 @@ class GenericProduct(models.Model):
         """
         return self.original_product_id
 
+    @property
+    def formated_date(self):
+        """
+        Simple date property, helper with display
+        """
+        return self.product_date.strftime('%d/%m/%Y')
+
 
 ###############################################################################
 
