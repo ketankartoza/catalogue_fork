@@ -120,8 +120,26 @@
 						<td>{{ record.product.formated_date }}</td>
 						<td>{{ record.product.getConcreteInstance.cloud_cover }}</td>
 						<td><button class="btn btn-small metadata" data-id="{{ record.product.id }}" type="button"><i class="icon-list-alt"></i></button></td>
-						<td></td>
-						<td></td>
+						{% autoescape off %}
+						<td>
+							<script>
+								$(document.createElement('select')).deliveryUTMOptions(
+									{
+										'data': $.parseJSON('{{ record.availableUTMZonesJSON }}'),
+										'id': {{ record.product.id }}
+									});
+							</script>
+						</td>
+						<td>
+							<script>
+								$(document.createElement('select')).deliveryProcessOptions(
+									{
+										'data': $.parseJSON('{{ record.availableProcessingLevelsJSON }}'),
+										'id': {{ record.product.id }}
+									});
+							</script>
+						</td>
+						{% endautoescape %}
 						<td>{{ record.rand_cost_per_scene }}</td>
 						<td><button class="btn btn-small btn-danger remove" data-id="{{ record.id }}" type="button"><i class="icon-trash"></i></button></td>
 					</tr>
@@ -153,17 +171,19 @@
   	$( document ).ready(function() {
   		var myMap = new APP.SansaMap('map');
   		APP.$modal = $('#ajax-modal');
-  		APP.CartRecordsWTK = {};
+  		APP.CartRecords = {};
 
   		{% for record in myRecords %}
-  		{% autoescape off %}
-  		console.log("{{ record.UTMZones }}");
-  		{% endautoescape %}
-        APP.CartRecordsWTK['{{ record.id }}'] = {
+        APP.CartRecords['{{ record.id }}'] = {
           'wkt': '{{ record.product.spatial_coverage.wkt }}',
-          'id': '{{ record.product.unique_product_id }}'};
+          'id': '{{ record.product.unique_product_id }}',
+          {% autoescape off %}
+          'utmzones': $.parseJSON('{{ record.availableUTMZonesJSON }}'),
+          'levels': $.parseJSON('{{ record.availableProcessingLevelsJSON }}')
+          {% endautoescape %}
+    	};
       	{% endfor %}
-      	var cartLayer = new APP.CartLayer(myMap, {'wkt': APP.CartRecordsWTK});
+      	var cartLayer = new APP.CartLayer(myMap, {'wkt': APP.CartRecords});
 
 		$('#map-layerswitcher-control').click(function() {
 			toggleLayerSwitcher();

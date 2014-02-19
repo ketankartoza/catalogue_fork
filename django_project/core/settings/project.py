@@ -178,6 +178,8 @@ PIPELINE_JS = {
             'js/openlayers-plugins/ScaleBar.js',
             'js/widget.sansaMap.js',
             'js/widget.sansaCartLayer.js',
+            'js/widget.deliveryUTMoptions.js',
+            'js/widget.deliveryProcessoptions.js',
         ),
         'output_filename': 'js/orderpage.js',
     }
