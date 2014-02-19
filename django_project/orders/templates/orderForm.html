@@ -156,6 +156,9 @@
   		APP.CartRecordsWTK = {};
 
   		{% for record in myRecords %}
+  		{% autoescape off %}
+  		console.log("{{ record.UTMZones }}");
+  		{% endautoescape %}
         APP.CartRecordsWTK['{{ record.id }}'] = {
           'wkt': '{{ record.product.spatial_coverage.wkt }}',
           'id': '{{ record.product.unique_product_id }}'};

@@ -94,6 +94,9 @@ class SearchRecord(models.Model):
     def __unicode__(self):
         return self.product.product_id
 
+    def UTMZones(self):
+        return [list(zone) for zone in self.product.getUTMZones(theBuffer=1)]
+
     def create(self, theUser, theProduct):
         """Python has no support for overloading constrctors"""
         myRecord = None
