@@ -82,7 +82,7 @@ class OrdersViews_myOrders_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            'orderListPage.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html'
         ]
@@ -119,7 +119,7 @@ class OrdersViews_myOrders_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            'orderListPage.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html'
         ]
@@ -157,7 +157,7 @@ class OrdersViews_myOrders_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            'orderListPage.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html'
         ]
@@ -194,7 +194,7 @@ class OrdersViews_myOrders_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            'orderListPage.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html'
         ]

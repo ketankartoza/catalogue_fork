@@ -170,7 +170,7 @@ class OrdersViews_updateOrderHistory_Tests(TestCase):
         myExpTemplates = [
             u'<Unknown Template>', 'mail/order.txt', u'mail/base.txt',
             'mail/order.html', u'mail/base.html', 'orderPage.html',
-            u'base.html', u'pipeline/css.html', u'pipeline/css.html',
+            u'base.html', u'pipeline/css.html',
             u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'order.html',
             u'cartContents.html', u'recordHeader.html', u'record.html',

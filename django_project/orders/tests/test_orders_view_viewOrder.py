@@ -112,7 +112,7 @@ class OrdersViews_viewOrder_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'orderPage.html', u'base.html', u'pipeline/css.html',
+            'orderPage.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'order.html',
             u'cartContents.html', u'recordHeader.html', u'record.html',
@@ -168,7 +168,7 @@ class OrdersViews_viewOrder_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'orderPage.html', u'base.html', u'pipeline/css.html',
+            'orderPage.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'order.html',
             u'cartContents.html', u'recordHeader.html', u'record.html',

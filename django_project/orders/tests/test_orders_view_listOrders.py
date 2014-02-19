@@ -88,7 +88,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            'orderListPage.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html'
         ]
@@ -125,7 +125,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            'orderListPage.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html'
         ]
@@ -164,7 +164,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            'orderListPage.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html'
         ]
@@ -203,7 +203,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            'orderListPage.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html'
         ]
@@ -242,7 +242,7 @@ class OrdersViews_listOrders_Tests(TestCase):
             myResp.context['myCurrentMonth'], date.today())
         # check used templates
         myExpTemplates = [
-            'orderListPage.html', u'base.html', u'pipeline/css.html',
+            'orderListPage.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html', u'orderList.html'
         ]

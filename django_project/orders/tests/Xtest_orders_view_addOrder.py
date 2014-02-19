@@ -142,41 +142,8 @@ class OrdersViews_addOrder_Tests(TestCase):
 
         self.assertEqual(myResp.status_code, 200)
 
-        self.assertEqual(myResp.context['myShowSensorFlag'], False)
-        self.assertEqual(myResp.context['myShowSceneIdFlag'], True)
-        self.assertEqual(myResp.context['myShowDateFlag'], False)
-        self.assertEqual(myResp.context['myShowRemoveIconFlag'], True)
-        self.assertEqual(myResp.context['myShowRowFlag'], False)
-        self.assertEqual(myResp.context['myShowPathFlag'], False)
-        self.assertEqual(myResp.context['myShowCloudCoverFlag'], True)
-        self.assertEqual(myResp.context['myShowMetdataFlag'], False)
-        self.assertEqual(myResp.context['myShowCartFlag'], False)
-        self.assertEqual(myResp.context['myShowCartContentsFlag'], True)
-        self.assertEqual(myResp.context['myShowPreviewFlag'], False)
-        self.assertEqual(myResp.context['myShowDeliveryDetailsFlag'], False)
-        self.assertEqual(
-            myResp.context['myShowDeliveryDetailsFormFlag'], True)
-        self.assertEqual(myResp.context['myCartTitle'], 'Order Product List')
         self.assertEqual(len(myResp.context['myRecords']), 1)
-        self.assertEqual(
-            myResp.context['myBaseTemplate'], 'emptytemplate.html')
-        self.assertEqual(myResp.context['mySubmitLabel'], 'Submit Order')
-        # self.assertEqual(
-        #     myResp.context['myLayerDefinitions'], myLayerDefinitions)
-        # self.assertEqual(myResp.context['myLayersList'], myLayersList)
-        # self.assertEqual(myResp.context['myActiveBaseMap'], myActiveBaseMap)
         self.assertEqual(myResp.context['myOrderForm'].__class__, OrderForm)
-        self.assertEqual(myResp.context['myTitle'], 'Create a new order')
-        self.assertEqual(myResp.context['mySubmitLabel'], 'Submit Order')
-        self.assertEqual(myResp.context['myMessage'], (
-            ' <div>Please specify any details for your order'
-            ' requirements below. If you need specific processing'
-            ' steps taken on individual images, please use the notes'
-            ' area below to provide detailed instructions. If you'
-            ' would like the product(s) to be clipped and masked'
-            ' to a specific geographic region, you can digitise'
-            ' that region using the map above, or the geometry'
-            ' input field below.</div>'))
 
         # check used templates
         myExpTemplates = [

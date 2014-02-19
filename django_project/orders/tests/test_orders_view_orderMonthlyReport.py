@@ -111,7 +111,7 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'orderMonthlyReport.html', u'base.html', u'pipeline/css.html',
+            'orderMonthlyReport.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
@@ -163,7 +163,7 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
 
         # check used templates
         myExpTemplates = [
-            'orderMonthlyReport.html', u'base.html', u'pipeline/css.html',
+            'orderMonthlyReport.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
             u'useraccounts/menu_content.html'
         ]
