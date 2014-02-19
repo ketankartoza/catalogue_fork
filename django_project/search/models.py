@@ -19,6 +19,7 @@ __copyright__ = 'South African National Space Agency'
 
 # for generating globally unique id's - I think python 2.5 is required
 import uuid
+import json
 from datetime import datetime
 
 from django.contrib.gis.db import models
@@ -94,8 +95,25 @@ class SearchRecord(models.Model):
     def __unicode__(self):
         return self.product.product_id
 
-    def UTMZones(self):
-        return [list(zone) for zone in self.product.getUTMZones(theBuffer=1)]
+    def availableUTMZonesJSON(self):
+        """
+        json formatted available UTM zones for product
+        used in order page for populating available product UTM zones
+        """
+        return json.dumps(
+            [list(zone) for zone in self.product.getUTMZones(theBuffer=1)])
+
+    def availableProcessingLevelsJSON(self):
+        """
+        json formated available processing levels for products
+        user in order page for populating available product processing
+        options
+        """
+        levels = (
+            self.product.getConcreteInstance().availableProcessingLevels().
+            values_list('id', 'name')
+        )
+        return json.dumps([list(level) for level in levels])
 
     def create(self, theUser, theProduct):
         """Python has no support for overloading constrctors"""
