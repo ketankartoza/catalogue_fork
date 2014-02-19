@@ -101,7 +101,7 @@ class SearchRecordCRUD_Test(TestCase):
             'currency': tstCurrency,
             'processing_level': tstProcLevel,
             'projection': tstProjection,
-            'productprocessstate': tstProdProcState
+            'product_process_state': tstProdProcState
         })
 
         self.assertTrue(myModel.pk is not None)

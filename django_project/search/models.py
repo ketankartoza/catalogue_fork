@@ -81,7 +81,7 @@ class SearchRecord(models.Model):
         'dictionaries.Projection', verbose_name='Projection',
         null=True, blank=True
     )
-    productprocessstate = models.ForeignKey(
+    product_process_state = models.ForeignKey(
         'dictionaries.ProductProcessState', null=True, blank=True
     )
     # Required because genericproduct fkey references a table with geometry
@@ -309,7 +309,7 @@ class Search(BaseSearch):
 
     # foreign keys require the first arg to the be the relation name
     # so we explicitly have to use verbose_name for the user friendly name
-    instrumenttype = models.ManyToManyField(
+    instrument_type = models.ManyToManyField(
         'dictionaries.InstrumentType',
         verbose_name=u'Sensors', null=True, blank=True,
         help_text=(

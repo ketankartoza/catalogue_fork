@@ -238,9 +238,9 @@ CREATE INDEX "dictionaries_spectralmode_spectralgroup_id" ON "dictionaries_spect
 CREATE INDEX "dictionaries_bandspectralmode_band_id" ON "dictionaries_bandspectralmode" ("band_id");
 CREATE INDEX "dictionaries_bandspectralmode_spectral_mode_id" ON "dictionaries_bandspectralmode" ("spectral_mode_id");
 CREATE INDEX "dictionaries_instrumenttypeprocessinglevel_instrument_type_id" ON "dictionaries_instrumenttypeprocessinglevel" ("instrument_type_id");
-CREATE INDEX "dictionaries_instrumenttypeprocessinglevel_processinglevel_id" ON "dictionaries_instrumenttypeprocessinglevel" ("processinglevel_id");
+CREATE INDEX "dictionaries_instrumenttypeprocessinglevel_processinglevel_id" ON "dictionaries_instrumenttypeprocessinglevel" ("processing_level_id");
 CREATE INDEX "dictionaries_spectralmodeprocessingcosts_spectral_mode_id" ON "dictionaries_spectralmodeprocessingcosts" ("spectral_mode_id");
-CREATE INDEX "dictionaries_spectralmodeprocessingcosts_instrumenttypeprocb4fb" ON "dictionaries_spectralmodeprocessingcosts" ("instrumenttypeprocessinglevel_id");
+CREATE INDEX "dictionaries_spectralmodeprocessingcosts_instrumenttypeprocb4fb" ON "dictionaries_spectralmodeprocessingcosts" ("instrument_type_processing_level_id");
 CREATE INDEX "dictionaries_spectralmodeprocessingcosts_currency_id" ON "dictionaries_spectralmodeprocessingcosts" ("currency_id");
 CREATE INDEX "dictionaries_referencesystem_name_like" ON "dictionaries_referencesystem" ("name" varchar_pattern_ops);
 

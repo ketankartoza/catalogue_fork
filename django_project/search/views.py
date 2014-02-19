@@ -163,7 +163,7 @@ def searchguid(theRequest, theGuid):
 
     collections = Collection.objects.all().prefetch_related('satellite_set')
 
-    sel_instrumenttypes = mySearch.instrumenttype.all().values_list(
+    sel_instrumenttypes = mySearch.instrument_type.all().values_list(
         'pk', flat=True)
     sel_satellites = mySearch.satellite.all().values_list('pk', flat=True)
 

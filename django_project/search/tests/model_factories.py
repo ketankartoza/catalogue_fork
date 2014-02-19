@@ -38,7 +38,7 @@ class SearchF(factory.django.DjangoModelFactory):
         if extracted:
             # A list of groups were passed in, use them
             for instrument_type in extracted:
-                self.instrumenttype.add(instrument_type)
+                self.instrument_type.add(instrument_type)
 
     @factory.post_generation
     def satellites(self, create, extracted, **kwargs):
@@ -147,3 +147,5 @@ class SearchRecordF(factory.django.DjangoModelFactory):
         'dictionaries.tests.model_factories.ProcessingLevelF')
     projection = factory.SubFactory(
         'dictionaries.tests.model_factories.ProjectionF')
+    product_process_state = factory.SubFactory(
+        'dictionaries.tests.model_factories.ProductProcessStateF')
