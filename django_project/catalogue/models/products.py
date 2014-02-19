@@ -34,6 +34,8 @@ from django.core.exceptions import ObjectDoesNotExist
 # PIL and os needed for making small thumbs
 from PIL import Image, ImageFilter, ImageOps
 
+from dictionaries.models import ProcessingLevel
+
 from catalogue.utmzonecalc import utmZoneFromLatLon
 from catalogue.dims_lib import dimsWriter
 
@@ -1158,6 +1160,18 @@ class OpticalProduct(GenericSensorProduct):
         return render_to_string(
             'productTypes/opticalProduct.html', {
                 'myObject': self, 'myImageIsLocalFlag': theImageIsLocal})
+
+    def availableProcessingLevels(self):
+        """
+        Return a list of ProcessingLevel models which are available for this
+        product (related to the instrument_type)
+        """
+        return ProcessingLevel.objects.filter(
+            instrumenttypeprocessinglevel__instrument_type__in=(
+                self.product_profile.satellite_instrument
+                .satellite_instrument_group.satelliteinstrument_set.all()
+            )
+        )
 
 
 ###############################################################################
