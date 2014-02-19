@@ -76,7 +76,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
 
         myModel = SpectralModeProcessingCostsF.create(**{
             'spectral_mode': mySpecMode,
-            'instrumenttypeprocessinglevel': myInstTypeProcLevel,
+            'instrument_type_processing_level': myInstTypeProcLevel,
             'cost_per_scene': 200.94,
             'currency': myForeignCur,
             'cost_per_square_km': 12.0,
@@ -87,7 +87,10 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
         self.assertEqual(myModel.spectral_mode.name, 'New Spectral mode')
 
         self.assertEqual(
-            myModel.instrumenttypeprocessinglevel.operator_processing_level_name,
+            (
+                myModel.instrument_type_processing_level
+                .operator_processing_level_name
+            ),
             'Level 0'
         )
 
@@ -122,14 +125,17 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
         })
 
         myModel.spectral_mode = mySpecMode
-        myModel.instrumenttypeprocessinglevel = myInstTypeProcLevel
+        myModel.instrument_type_processing_level = myInstTypeProcLevel
         myModel.currency = myForeignCur
         myModel.save()
 
         self.assertEqual(myModel.spectral_mode.name, 'New Spectral mode')
 
         self.assertEqual(
-            myModel.instrumenttypeprocessinglevel.operator_processing_level_name,
+            (
+                myModel.instrument_type_processing_level
+                .operator_processing_level_name
+            ),
             'Level 0'
         )
 
@@ -159,7 +165,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
 
         myInstTypeProcLevel = InstrumentTypeProcessingLevelF.create(**{
             'instrument_type': myInstType,
-            'processinglevel': myProcLevel
+            'processing_level': myProcLevel
         })
 
         myCurrency = CurrencyF.create(**{
@@ -169,7 +175,7 @@ class TestSpectralModeProcessingCostsCRUD(TestCase):
 
         myModel = SpectralModeProcessingCostsF.create(**{
             'spectral_mode': mySpecMode,
-            'instrumenttypeprocessinglevel': myInstTypeProcLevel,
+            'instrument_type_processing_level': myInstTypeProcLevel,
             'cost_per_scene': 200.94,
             'currency': myCurrency
         })

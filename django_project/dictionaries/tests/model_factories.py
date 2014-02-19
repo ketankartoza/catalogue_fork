@@ -262,7 +262,7 @@ class InstrumentTypeProcessingLevelF(factory.django.DjangoModelFactory):
     FACTORY_FOR = InstrumentTypeProcessingLevel
 
     instrument_type = factory.SubFactory(InstrumentTypeF)
-    processinglevel = factory.SubFactory(ProcessingLevelF)
+    processing_level = factory.SubFactory(ProcessingLevelF)
     operator_processing_level_name = ''
     operator_processing_level_abbreviation = ''
 
@@ -274,7 +274,7 @@ class SpectralModeProcessingCostsF(factory.django.DjangoModelFactory):
     FACTORY_FOR = SpectralModeProcessingCosts
 
     spectral_mode = factory.SubFactory(SpectralModeF)
-    instrumenttypeprocessinglevel = factory.SubFactory(
+    instrument_type_processing_level = factory.SubFactory(
         InstrumentTypeProcessingLevelF)
     cost_per_scene = 0.0
     currency = factory.SubFactory('core.model_factories.CurrencyF')

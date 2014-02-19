@@ -633,7 +633,7 @@ class InstrumentTypeProcessingLevel(models.Model):
     Relation between ProcessingLevel and InstrumentType
     """
     instrument_type = models.ForeignKey(InstrumentType)
-    processinglevel = models.ForeignKey(ProcessingLevel)
+    processing_level = models.ForeignKey(ProcessingLevel)
     operator_processing_level_name = models.CharField(
         max_length=50,
         help_text='Operator original processing level name'
@@ -645,11 +645,11 @@ class InstrumentTypeProcessingLevel(models.Model):
 
     def __unicode__(self):
         return u'{0} - {1}'.format(
-            self.instrument_type.name, self.processinglevel.abbreviation)
+            self.instrument_type.name, self.processing_level.abbreviation)
 
     class Meta:
         """Meta class implementation."""
-        ordering = ['instrument_type', 'processinglevel']
+        ordering = ['instrument_type', 'processing_level']
 
 
 class SpectralModeProcessingCosts(models.Model):
@@ -657,7 +657,7 @@ class SpectralModeProcessingCosts(models.Model):
     Processing costs for specific processing level per spectral mode
     """
     spectral_mode = models.ForeignKey(SpectralMode)
-    instrumenttypeprocessinglevel = models.ForeignKey(
+    instrument_type_processing_level = models.ForeignKey(
         InstrumentTypeProcessingLevel
     )
     cost_per_scene = models.DecimalField(
@@ -684,11 +684,11 @@ class SpectralModeProcessingCosts(models.Model):
         return u'{0} {1} ({2} - {3})'.format(
             self.cost_per_scene,
             self.currency.code,
-            self.spectral_mode.name, self.instrumenttypeprocessinglevel)
+            self.spectral_mode.name, self.instrument_type_processing_level)
 
     class Meta:
         """Meta class implementation."""
-        ordering = ['spectral_mode', 'instrumenttypeprocessinglevel']
+        ordering = ['spectral_mode', 'instrument_type_processing_level']
 
 
 class ReferenceSystem(models.Model):

@@ -211,12 +211,12 @@ class SearchRecordCRUD_Test(TestCase):
 
         tstInsTypeProcLevel = InstrumentTypeProcessingLevelF.create(**{
             'instrument_type': tstInstType,
-            'processinglevel': tstProcLevel
+            'processing_level': tstProcLevel
         })
 
         SpectralModeProcessingCostsF.create(**{
             'spectral_mode': mySpecMode,
-            'instrumenttypeprocessinglevel': tstInsTypeProcLevel,
+            'instrument_type_processing_level': tstInsTypeProcLevel,
             'cost_per_scene': Decimal(123.45),
             'currency': myCurrency
         })

@@ -332,7 +332,7 @@ SELECT pg_catalog.setval('dictionaries_instrumenttype_id_seq', 13, true);
 -- Data for Name: dictionaries_instrumenttypeprocessinglevel; Type: TABLE DATA; Schema: public; Owner: dodobas
 --
 
-COPY dictionaries_instrumenttypeprocessinglevel (id, instrument_type_id, processinglevel_id, operator_processing_level_name, operator_processing_level_abbreviation) FROM stdin;
+COPY dictionaries_instrumenttypeprocessinglevel (id, instrument_type_id, processing_level_id, operator_processing_level_name, operator_processing_level_abbreviation) FROM stdin;
 1	2	2	Level 1A	L1A
 2	2	3	Level 1B	L1B
 4	3	3	Level 1G	L1G
@@ -618,7 +618,7 @@ SELECT pg_catalog.setval('dictionaries_subsidytype_id_seq', 2, true);
 --
 
 
-COPY dictionaries_spectralmodeprocessingcosts (id, spectral_mode_id, instrumenttypeprocessinglevel_id, cost_per_scene, currency_id, cost_per_square_km, minimum_square_km, sales_region_id) FROM stdin;
+COPY dictionaries_spectralmodeprocessingcosts (id, spectral_mode_id, instrument_type_processing_level_id, cost_per_scene, currency_id, cost_per_square_km, minimum_square_km, sales_region_id) FROM stdin;
 1	14	14	400	\N	\N	\N	1
 2	16	14	400	\N	\N	\N	1
 3	18	11	200	\N	\N	\N	1

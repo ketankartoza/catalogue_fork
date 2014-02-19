@@ -149,7 +149,7 @@ class SearchRecord(models.Model):
         """
         # identify InstrumentTypeProcessingLevel
         insTypeProcLevel = InstrumentTypeProcessingLevel.objects.filter(
-            processinglevel=self.processing_level,
+            processing_level=self.processing_level,
             instrument_type=(
                 self.product.getConcreteInstance().product_profile
                 .satellite_instrument.satellite_instrument_group
@@ -162,7 +162,7 @@ class SearchRecord(models.Model):
                 self.product.getConcreteInstance().product_profile
                 .spectral_mode
             ),
-            instrumenttypeprocessinglevel=insTypeProcLevel
+            instrument_type_processing_level=insTypeProcLevel
         ).get()
         # snapshot current values
         self.cost_per_scene = spectralModeProcCosts.cost_per_scene

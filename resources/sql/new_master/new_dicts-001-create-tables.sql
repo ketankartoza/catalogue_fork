@@ -152,7 +152,7 @@ CREATE TABLE "dictionaries_bandspectralmode" (
 CREATE TABLE "dictionaries_instrumenttypeprocessinglevel" (
     "id" serial NOT NULL PRIMARY KEY,
     "instrument_type_id" integer NOT NULL REFERENCES "dictionaries_instrumenttype" ("id") DEFERRABLE INITIALLY DEFERRED,
-    "processinglevel_id" integer NOT NULL REFERENCES "dictionaries_processinglevel" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "processing_level_id" integer NOT NULL REFERENCES "dictionaries_processinglevel" ("id") DEFERRABLE INITIALLY DEFERRED,
     "operator_processing_level_name" varchar(50) NOT NULL,
     "operator_processing_level_abbreviation" varchar(4) NOT NULL
 )
@@ -160,7 +160,7 @@ CREATE TABLE "dictionaries_instrumenttypeprocessinglevel" (
 CREATE TABLE "dictionaries_spectralmodeprocessingcosts" (
     "id" serial NOT NULL PRIMARY KEY,
     "spectral_mode_id" integer NOT NULL REFERENCES "dictionaries_spectralmode" ("id") DEFERRABLE INITIALLY DEFERRED,
-    "instrumenttypeprocessinglevel_id" integer NOT NULL REFERENCES "dictionaries_instrumenttypeprocessinglevel" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "instrument_type_processing_level_id" integer NOT NULL REFERENCES "dictionaries_instrumenttypeprocessinglevel" ("id") DEFERRABLE INITIALLY DEFERRED,
     "cost_per_scene" numeric(10, 2) NOT NULL,
     "currency_id" integer,
     "cost_per_square_km" numeric(10, 2),

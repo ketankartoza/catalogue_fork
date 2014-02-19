@@ -323,12 +323,12 @@ class OpticalProductCRUD_Test(TestCase):
         # connect processing levels to the instrument type
         InstrumentTypeProcessingLevelF.create(**{
             'instrument_type': myInsType,
-            'processinglevel': myProcLevel
+            'processing_level': myProcLevel
         })
 
         InstrumentTypeProcessingLevelF.create(**{
             'instrument_type': myInsType,
-            'processinglevel': myOtherProcLevel
+            'processing_level': myOtherProcLevel
         })
         # a dummy InstrumentTypeProcessingLevel
         InstrumentTypeProcessingLevelF.create()
