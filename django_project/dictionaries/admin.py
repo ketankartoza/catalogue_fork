@@ -147,10 +147,10 @@ admin.site.register(BandSpectralMode, BandSpectralModeAdmin)
 
 
 class InstrumentTypeProcessingLevelAdmin(admin.ModelAdmin):
-    list_filter = ['instrument_type', 'processinglevel']
+    list_filter = ['instrument_type', 'processing_level']
     list_display = [
         'instrument_type',
-        'processinglevel',
+        'processing_level',
         'operator_processing_level_name',
         'operator_processing_level_abbreviation']
 admin.site.register(
@@ -161,7 +161,7 @@ class SpectralModeProcessingCostsAdmin(admin.ModelAdmin):
     list_filter = ['spectral_mode']
     list_display = [
         'spectral_mode',
-        'instrumenttypeprocessinglevel',
+        'instrument_type_processing_level',
         'cost_per_scene',
         'currency'
     ]
