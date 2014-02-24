@@ -530,8 +530,7 @@
 }
 
 .date-range {
-    width: 60px;
-    float: right;
+    text-align: center;
     padding-top: 3px;
     margin-bottom: 15px;
 }
