@@ -105,23 +105,23 @@
     });
 
     $APP.on('highlightSearchRecord', function (evt, data) {
-      self.highlightRecord(data.unique_product_id, data.zoom);
+      self.highlightRecord(data.original_product_id, data.zoom);
     });
 
     $APP.on('colorCartFeature', function (evt, data) {
-      self.colorCartFeature(data.unique_product_id);
+      self.colorCartFeature(data.original_product_id);
     });
 
     $APP.on('focusFeature', function (evt, data) {
-      self.focusFeature(data.unique_product_id);
+      self.focusFeature(data.original_product_id);
     });
 
     $APP.on('removeFocusFeature', function (evt, data) {
-      self.removeFocusFeature(data.unique_product_id);
+      self.removeFocusFeature(data.original_product_id);
     });
 
     $APP.on('removedItemFromCart', function (evt, data) {
-      self.removedItemFromCart(data.unique_product_id);
+      self.removedItemFromCart(data.original_product_id);
     });
 
     $APP.on('drawCircle', function (evt, data) {
@@ -171,7 +171,7 @@
 
   featureSelected: function(theEvent) {
     APP.blockResultPanel();
-    var id = theEvent.attributes.unique_product_id;
+    var id = theEvent.attributes.original_product_id;
     $APP.trigger('highlightResultItem', {'id': id});
     this.highlightRecord(id, false);
     APP.unblockResultPanel();
@@ -219,7 +219,7 @@
     var myFeatures = this.layerSearch.features;
     for(var i=0; i < myFeatures.length; ++i)
     {
-      if(myFeatures[i].attributes.unique_product_id == theRecordId)
+      if(myFeatures[i].attributes.original_product_id == theRecordId)
       {
         return i;
       }
@@ -230,7 +230,7 @@
     var myFeatures = this.layerSearch.features;
     for(var i=0; i < myFeatures.length; ++i)
     {
-      if(myFeatures[i].attributes.unique_product_id == theRecordId)
+      if(myFeatures[i].attributes.original_product_id == theRecordId)
       {
         return myFeatures[i];
       }
