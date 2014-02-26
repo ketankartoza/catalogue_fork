@@ -361,3 +361,42 @@ class OpticalProductCRUD_Test(TestCase):
             list(myModel.availableProcessingLevels()),
             [myProcLevel, myOtherProcLevel]
         )
+
+    def test_OpticalProduct_productName(self):
+        """
+        Test OpticalProduct productName method
+        """
+
+        myInsType = InstrumentTypeF.create(**{
+            'abbreviation': 'HRF'
+        })
+
+        mySat = SatelliteF.create(**{
+            'abbreviation': 'L5'
+        })
+
+        mySatInstGroup = SatelliteInstrumentGroupF.create(**{
+            'satellite': mySat,
+            'instrument_type': myInsType
+        })
+
+        mySatInst = SatelliteInstrumentF.create(**{
+            'satellite_instrument_group': mySatInstGroup
+        })
+
+        mySpecMode = SpectralModeF.create(**{
+            'abbreviation': 'TM'
+        })
+
+        myOPP = OpticalProductProfileF.create(**{
+            u'satellite_instrument': mySatInst,
+            u'spectral_mode': mySpecMode
+        })
+
+        myModel = OpticalProductF.create(**{
+            'product_profile': myOPP,
+            'path': 135,
+            'row': 78
+        })
+        # satellite spectral_mode row path instrument_type
+        self.assertEqual(myModel.productName(), u'L5 TM 135 078 HRF')
