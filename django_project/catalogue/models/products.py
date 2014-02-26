@@ -1178,11 +1178,17 @@ class OpticalProduct(GenericSensorProduct):
         Returns product name as specified
         """
         return '{0} {1} {2:03d} {3:03d} {4}'.format(
-            self.product_profile.satellite_instrument.satellite_instrument_group.satellite.abbreviation,
+            (
+                self.product_profile.satellite_instrument
+                .satellite_instrument_group.satellite.abbreviation
+            ),
             self.product_profile.spectral_mode.abbreviation,
             self.path,
             self.row,
-            self.product_profile.satellite_instrument.satellite_instrument_group.instrument_type.abbreviation
+            (
+                self.product_profile.satellite_instrument
+                .satellite_instrument_group.instrument_type.abbreviation
+            )
         )
 
 
