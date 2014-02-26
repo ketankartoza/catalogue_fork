@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+<{% extends "base.html" %}
 {% load compressed %}
 
 {% block extracss %}
@@ -31,6 +31,24 @@
   </div>
   <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="form-horizontal" id="order-form">
       	{% csrf_token %}
+      	<div class="row">
+			<div class="span4">
+				<div class="control-group">
+					<label class="control-label">Projection</label>
+				  	<label class="controls radio">
+				    	<input type="radio" name="projectionRadio" id="projectionRadio1" value="0" checked>
+				    	UTM
+				  	</label>
+				  	<label class="controls radio">
+				    	<input type="radio" name="projectionRadio" id="projectionRadio1" value="1">
+				    	Geographic
+				  	</label>
+				</div>
+			</div>
+			<div class="span4">
+				<button type="button" class="btn" onclick="triggerProjectionChange('projection')">Apply</button>
+			</div>
+		</div>
 		<div class="row">
 			<div class="span12">
 				<div class="control-group">
@@ -39,6 +57,28 @@
 						{{ myOrderForm.datum }}
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span4">
+				<div class="control-group">
+					<label class="control-label">Processing level</label>
+				  	<label class="controls radio">
+				    	<input type="radio" name="processingRadio" id="processingRadio1" value="1">
+				    	Raw
+				  	</label>
+				  	<label class="controls radio">
+				    	<input type="radio" name="processingRadio" id="processingRadio1" value="0" checked>
+				    	Standard default
+				  	</label>
+				</div>
+			</div>
+			<div class="span4">
+				<button type="button" class="btn" onclick="triggerProjectionChange('processing')">Apply</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span12">
 				<div class="control-group">
 					<label class="control-label" for="{{ myOrderForm.resampling_method.auto_id }}">{{ myOrderForm.resampling_method.label }}</label>
 					<div class="controls">
@@ -109,7 +149,7 @@
 					<th>Cloud</th>
 					<th>Metadata</th>
 					<th>Projection</th>
-					<th>Processing<br />level</th>
+					<th>Processing level</th>
 					<th>Cost</th>
 					<th>Remove</th>
 				</tr></thead>
@@ -123,19 +163,21 @@
 						{% autoescape off %}
 						<td>
 							<script>
-								$(document.createElement('select')).deliveryUTMOptions(
+								$(document.createElement('select')).deliveryOptions(
 									{
 										'data': $.parseJSON('{{ record.availableUTMZonesJSON }}'),
-										'id': {{ record.product.id }}
+										'id': {{ record.product.id }},
+										'type': 'projection'
 									});
 							</script>
 						</td>
 						<td>
 							<script>
-								$(document.createElement('select')).deliveryProcessOptions(
+								$(document.createElement('select')).deliveryOptions(
 									{
 										'data': $.parseJSON('{{ record.availableProcessingLevelsJSON }}'),
-										'id': {{ record.product.id }}
+										'id': {{ record.product.id }},
+										'type': 'processing'
 									});
 							</script>
 						</td>
@@ -168,6 +210,16 @@
 	    }
 	}
 
+	function triggerProjectionChange(option) {
+		var type = $('input[name='+ option +'Radio]:radio:checked').val()
+		if (type == 1) {
+			var selector = 'option:last';
+		} else {
+			var selector = 'option:first';
+		}
+		$("select[name*='_"+option+"']").find(selector).attr("selected","selected");
+	}
+
   	$( document ).ready(function() {
   		var myMap = new APP.SansaMap('map');
   		APP.$modal = $('#ajax-modal');
@@ -177,10 +229,6 @@
         APP.CartRecords['{{ record.id }}'] = {
           'wkt': '{{ record.product.spatial_coverage.wkt }}',
           'id': '{{ record.product.unique_product_id }}',
-          {% autoescape off %}
-          'utmzones': $.parseJSON('{{ record.availableUTMZonesJSON }}'),
-          'levels': $.parseJSON('{{ record.availableProcessingLevelsJSON }}')
-          {% endautoescape %}
     	};
       	{% endfor %}
       	var cartLayer = new APP.CartLayer(myMap, {'wkt': APP.CartRecords});
