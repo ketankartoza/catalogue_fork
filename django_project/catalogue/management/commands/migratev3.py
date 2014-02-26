@@ -36,8 +36,8 @@ class Command(BaseCommand):
                 'Selectively migrate parts of the database, comma "," '
                 'delimited list of migrations (backup_tasks, new_dicts, '
                 'userprofiles, search, remove_spot, processing_levels, '
-                'unique_product_id, pycsw, orders, exchange, cleanup defaults '
-                'to "all"'
+                'unique_product_id, product_schema_changes, pycsw, orders, '
+                'exchange, cleanup defaults to "all"'
             )
         ),
     )
