@@ -182,7 +182,11 @@
 							</script>
 						</td>
 						{% endautoescape %}
-						<td>{{ record.rand_cost_per_scene }}</td>
+						<td id="{{ record.product.id }}_cost">
+							<script>
+								document.write(APP['widget_{{ record.product.id }}_processing'].getCost());
+							</script>
+						</td>
 						<td><button class="btn btn-small btn-danger remove" data-id="{{ record.id }}" type="button"><i class="icon-trash"></i></button></td>
 					</tr>
 				{% endfor %}

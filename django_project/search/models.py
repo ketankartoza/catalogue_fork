@@ -138,6 +138,7 @@ class SearchRecord(models.Model):
             spectralModeProcCosts.currency.code, 'ZAR'
             )
             levels.append([lvl.id, lvl.name, int(rand_cost_per_scene)])
+        levels.append([14, 'Level 0 Raw instrument data', 0])
         return json.dumps([list(level) for level in levels])
 
     def create(self, theUser, theProduct):
