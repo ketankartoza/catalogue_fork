@@ -45,6 +45,7 @@
 		if (options.type == 'processing') {
 			$('#'+options.id + suffix).on('change', function() {
 				$('#'+options.id+'_cost').html(options.data[this.selectedIndex][2])
+				setTotalCost();
 			})
 		}
 		APP['widget_' + options.id + suffix ] = this;

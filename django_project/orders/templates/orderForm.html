@@ -182,7 +182,7 @@
 							</script>
 						</td>
 						{% endautoescape %}
-						<td id="{{ record.product.id }}_cost">
+						<td id="{{ record.product.id }}_cost" name="{{ record.product.id }}_cost" data-id="{{ record.product.id }}">
 							<script>
 								document.write(APP['widget_{{ record.product.id }}_processing'].getCost());
 							</script>
@@ -191,6 +191,11 @@
 					</tr>
 				{% endfor %}
 				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span12">
+				<div class="pull-right">Total cost: <span id="product_total_cost">0</span></div>
 			</div>
 		</div>
   </form>
@@ -222,6 +227,14 @@
 			var selector = 'option:first';
 		}
 		$("select[name*='_"+option+"']").find(selector).attr("selected","selected");
+	}
+
+	function setTotalCost() {
+		var cost = 0;
+		$('td[name*="_cost"]').each(function() {
+			cost += APP['widget_' + $(this).data('id') + '_processing'].getCost();
+		})
+		$('#product_total_cost').html(cost);
 	}
 
   	$( document ).ready(function() {
@@ -263,7 +276,8 @@
 			    });
 				uiUnblock();
 			}
-		})
+		});
+		setTotalCost();
     });
   </script>
 {% endblock %}
