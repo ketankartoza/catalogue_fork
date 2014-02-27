@@ -72,6 +72,7 @@ from catalogue.profileRequiredDecorator import requireProfile
 from catalogue.renderDecorator import renderWithContext
 
 from search.models import SearchRecord
+from dictionaries.models import Projection, ProcessingLevel
 # from dictionaries.models import InstrumentType, Satellite
 ###########################################################
 #
@@ -463,7 +464,7 @@ def addOrder(theRequest):
         logger.debug('Order posted')
 
         myOrderForm = OrderForm(theRequest.POST, theRequest.FILES)
-
+        
         myOptions = {
             'myOrderForm': myOrderForm,
         }
@@ -472,17 +473,20 @@ def addOrder(theRequest):
         if myOrderForm.is_valid():
             logger.debug('Order valid')
 
-            myObject = myOrderForm.save(commit=False)
-            myObject.user = theRequest.user
-            myObject.save()
+            myObject = myOrderForm.save()
             logger.debug('Order saved')
 
             #update serachrecords
+            
             for myRecord in myRecords:
                 myRecord.order = myObject
+                proj = Projection.objects.get(epsg_code=theRequest.POST.get(str(myRecord.product.id) + '_projection'))
+                myRecord.projection = proj
+                proc = ProcessingLevel.objects.get(pk=theRequest.POST.get(str(myRecord.product.id) + '_processing'))
+                myRecord.processing_level = proc
                 myRecord.save()
 
-            notifySalesStaff(theRequest.user, myObject.id)
+            #notifySalesStaff(theRequest.user, myObject.id)
             return HttpResponseRedirect(
                 reverse('viewOrder', kwargs={'theId': myObject.id}))
         else:
@@ -491,7 +495,7 @@ def addOrder(theRequest):
                 'myOrderForm.html', myOptions,
                 context_instance=RequestContext(theRequest))
     else:  # new order
-        myOrderForm = OrderForm()
+        myOrderForm = OrderForm({'user': theRequest.user.id })
         myOptions = {
             'myOrderForm': myOrderForm,
         }

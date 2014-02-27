@@ -37,6 +37,7 @@ class OrderStatusForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
+        exclude = ('order_status',)
 
 
 class OrderStatusHistoryForm(forms.ModelForm):
