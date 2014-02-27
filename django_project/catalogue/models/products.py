@@ -1170,6 +1170,7 @@ class OpticalProduct(GenericSensorProduct):
             instrumenttypeprocessinglevel__instrument_type=(
                 self.product_profile.satellite_instrument
                 .satellite_instrument_group.instrument_type
+<<<<<<< HEAD
             )
         )
 
@@ -1188,6 +1189,8 @@ class OpticalProduct(GenericSensorProduct):
             (
                 self.product_profile.satellite_instrument
                 .satellite_instrument_group.instrument_type.abbreviation
+=======
+>>>>>>> fix for correct pulling of available process levels for product
             )
         )
 
