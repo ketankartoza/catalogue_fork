@@ -10,8 +10,12 @@
 	// default options
 	options: {
 		id: 0,
+		// data example
+		// projection: {[id, name]}
+		// processing: {[id, name, cost]}
 		data: {},
-		type: ''
+		// must be either projection or processing
+		type: '' 
 	},
 
 	default: {
@@ -36,18 +40,22 @@
 			var option = new Option(opt[1], opt[0]);
 			elem.append(option);
 		});
+		// process widget gets all options in data
+		// but we must add secondary option for projection
 		if (options.type == 'projection') {
 			var requiredOption = this.default[options.type].option;
 			elem.append(requiredOption);
 		}
 
 		document.write(elem.prop('outerHTML'));
+		// for process level widget we must set on change trigger to update cost
 		if (options.type == 'processing') {
 			$('#'+options.id + suffix).on('change', function() {
 				$('#'+options.id+'_cost').html(options.data[this.selectedIndex][2])
 				setTotalCost();
 			})
 		}
+		// add widget to APP namespace
 		APP['widget_' + options.id + suffix ] = this;
 	},
 
