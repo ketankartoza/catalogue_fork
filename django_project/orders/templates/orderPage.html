@@ -1,5 +1,142 @@
 {% extends "base.html" %}
-{% load boxtag %} {# Custom tag defined in templatetags/ #}
+{% load compressed %}
+
+{% block extracss %}
+	{{ block.super }}
+	{% compressed_css 'orderpage' %}
+{% endblock %}
+
 {% block content %}
-  {% include "order.html" %}
+  <div class="row">
+  	<div class="span12">
+  		<h2>Order details</h2>
+  	</div>
+  </div>
+  <div class="row">
+  	<div class="span8">
+  		<p><b>Order no.</b> {{ myOrder.orderNumber }}</p>
+  	</div>
+  	<div class="span4">
+  		<p><b>Status:</b> {{ myOrder.order_status.name }}
+  	</div>
+  </div>
+  <div class="row">
+  	<div class="span12">
+  		<h4>Client details</h4>
+  	</div>
+  </div>
+  <div class="row">
+  	<div class="span4">
+  		<p>
+  			<b>Full name:</b> {{ myOrder.user.first_name}} {{ myOrder.user.last_name}}
+  		</p>
+  	</div>
+  	<div class="span8">
+  		<p><b>Email:</b> {{ myOrder.user.email }}
+  	</div>
+  </div>
+  <div class="row">
+  	<div class="span4">
+  		<p>
+  			<b>Organisation:</b> {{ myOrder.user.get_profile.organisation}}
+  		</p>
+  	</div>
+  	<div class="span8">
+  		<p><b>Contact No:</b> {{ myOrder.user.get_profile.contact_no }}
+  	</div>
+  </div>
+  <div class="row">
+  	<div class="span1">
+  		<p>
+  			<b>Address:</b> 
+  		</p>
+  	</div>
+  	<div class="span11">
+  			<address>
+			  {{ myOrder.user.get_profile.address1 }}<br>
+			  {{ myOrder.user.get_profile.address2 }}<br>
+			  {{ myOrder.user.get_profile.address3 }}<br>
+			  {{ myOrder.user.get_profile.address4 }}<br>
+			  {{ myOrder.user.get_profile.post_code }}
+			</address>
+  	</div>
+  </div>
+  <div class="row">
+  	<div class="span12">
+  		<h4>Order options</h4>
+  	</div>
+  </div>
+  {% include "orderFormSearch.html" %}
+{% endblock %}
+
+{% block extrajs %}
+  {{ block.super }}
+  {% compressed_js 'orderpage' %}
+  <script>
+	function triggerProjectionChange(option) {
+		/*
+		function is triggered by applying one of helper filters for either projection or
+		processing level
+		expected input is either "projection" or "processing"
+		filter value (option element) can be:
+		0 - default option
+		1 - secondary selection
+		logic is based on presumtion that default selection is first option in select
+		and secondary option (GEO for projection and RAW for processing) is last option in select
+		*/
+		var type = $('input[name='+ option +'Radio]:radio:checked').val()
+		if (type == 1) {
+			var selector = 'option:last';
+		} else {
+			var selector = 'option:first';
+		}
+		$("select[name*='_"+option+"']").find(selector).attr("selected","selected");
+		/* 
+		we need to manually trigger change event for costs to get updated
+		*/
+		$("select[name*='_"+option+"']").trigger('change');
+	}
+
+	function setTotalCost() {
+		/*
+		function expects for DOM elements that hold costs have name attribute with _cost suffix
+		and data-id attribute that holds product ID
+		using product ID we lookup corresponding widget which has method that returns cost
+		for curently selected process level
+		*/
+		var cost = 0;
+		$('td[name*="_cost"]').each(function() {
+			cost += APP['widget_' + $(this).data('id') + '_processing'].getCost();
+		})
+		$('#product_total_cost').html(cost);
+	}
+
+  	$( document ).ready(function() {
+  		$('.metadata').click(function() {
+			var id = $(this).data('id');
+	        APP.$modal.load('/metadata/'+id, '', function(){
+	            APP.$modal.modal();
+	        });
+		})
+
+		$('.remove').click(function() {
+			if (confirm('You are about to remove product from cart, are you sure?')) {
+			    uiBlock();
+			    var elem = $(this);
+			    var id = elem.data('id');
+			    $.get("/removefromcart/" + id + "/?xhr")
+			    .done(function () {
+			    	elem.parent().parent().remove();
+			        cartLayer.removeFeature(id);
+			    })
+			    .fail(function () {
+			      alert('There has been a problem!');
+			    });
+				uiUnblock();
+			}
+		});
+		// initial setup of total cost across all products
+		setTotalCost();
+    });
+  </script>
 {% endblock %}

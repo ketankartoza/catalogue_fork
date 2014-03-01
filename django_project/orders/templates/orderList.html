@@ -78,7 +78,7 @@ function showOrder(theId) {
       <td>{{myOrder.user.get_profile.firstname}} {{myOrder.user.get_profile.surname}}</td>
       {% endif %}
       <td>
-        <a href="Javascript:void(0);" onclick='$("#main-content").load("{% url 'viewOrder' myOrder.id %}","", zebraTables );'>
+        <a href="{% url 'viewOrder' myOrder.id %}">
           <i class="icon-search"></i>
         </a>
       </td>

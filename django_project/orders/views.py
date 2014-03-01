@@ -269,11 +269,57 @@ def downloadOrderMetadata(theRequest, theId):
 
 @login_required
 def viewOrder(theRequest, theId):
+
+    myOrder = get_object_or_404(Order, id=theId)
+    if not ((myOrder.user == theRequest.user) or (theRequest.user.is_staff)):
+            raise Http404
+    if (theRequest.method == 'POST'):
+        myOrderForm = OrderForm(theRequest.POST, theRequest.FILES, instance=myOrder)
+        myRecords = SearchRecord.objects.all().filter(order=myOrder)
+        myOptions = {
+                'myOrder': myOrder,
+                'myOrderForm': myOrderForm,
+                'myRecords': myRecords
+            }
+        if myOrderForm.is_valid():
+            myObject = myOrderForm.save()
+           
+            for myRecord in myRecords:
+                proj = Projection.objects.get(epsg_code=theRequest.POST.get(str(myRecord.product.id) + '_projection'))
+                myRecord.projection = proj
+                proc = ProcessingLevel.objects.get(pk=theRequest.POST.get(str(myRecord.product.id) + '_processing'))
+                myRecord.processing_level = proc
+                myRecord.save()
+
+            return HttpResponseRedirect(
+                reverse('viewOrder', kwargs={'theId': myObject.id}))
+                
+        else:
+            return render_to_response(
+                'orderPage.html', myOptions,
+                context_instance=RequestContext(theRequest))
+    else:
+        if (theRequest.user.is_staff):
+            myOrderForm = OrderForm(instance=myOrder)
+            myRecords = SearchRecord.objects.all().filter(order=myOrder)
+            myOptions = {
+                'myOrder': myOrder,
+                'myOrderForm': myOrderForm,
+                'myRecords': myRecords
+            }
+            return render_to_response(
+                'orderPage.html', myOptions,
+                context_instance=RequestContext(theRequest))
+
+
+@login_required
+def viewOrder2(theRequest, theId):
     """This view is strictly for staff only or the order owner"""
     # check if the post ended with /?xhr
     # we do this as well as is_ajax call because we
     # may have arrived at this page via a response redirect
     # which will not then have the is_ajax flag set
+
     myAjaxFlag = 'xhr' in theRequest.GET
     myTemplatePath = 'orderPage.html'
     if theRequest.is_ajax() or myAjaxFlag:
