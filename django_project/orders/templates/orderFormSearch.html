@@ -139,6 +139,7 @@
 							data - json with data for select fields
 							id - id used to uniquely define widget and connect with other DOM elements for product
 							type - must be either projection or processing
+							value - option to select by default
 						{% endcomment %}
 						<td>
 							<script>
@@ -146,7 +147,8 @@
 									{
 										'data': $.parseJSON('{{ record.availableUTMZonesJSON }}'),
 										'id': {{ record.product.id }},
-										'type': 'projection'
+										'type': 'projection',
+										'value': '{{ record.projection.epsg_code }}'
 									});
 							</script>
 						</td>
@@ -156,7 +158,8 @@
 									{
 										'data': $.parseJSON('{{ record.availableProcessingLevelsJSON }}'),
 										'id': {{ record.product.id }},
-										'type': 'processing'
+										'type': 'processing',
+										'value': '{{ record.processing_level.id }}'
 									});
 							</script>
 						</td>

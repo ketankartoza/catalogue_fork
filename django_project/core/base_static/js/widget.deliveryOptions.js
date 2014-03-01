@@ -15,7 +15,8 @@
 		// processing: {[id, name, cost]}
 		data: {},
 		// must be either projection or processing
-		type: '' 
+		type: '',
+		value: '' 
 	},
 
 	default: {
@@ -31,6 +32,7 @@
 	// creation code for mywidget
 	// can use this.options
 	_create: function() {
+		console.log(this.options);
 		var options = this.options;
 		var elem = this.element;
 		var suffix = this.default[options.type].suffix;
@@ -48,6 +50,10 @@
 		}
 
 		document.write(elem.prop('outerHTML'));
+		// select inital value
+		if (this.options.value != '')
+			$('#'+options.id + suffix).val(this.options.value);
+
 		// for process level widget we must set on change trigger to update cost
 		if (options.type == 'processing') {
 			$('#'+options.id + suffix).on('change', function() {
