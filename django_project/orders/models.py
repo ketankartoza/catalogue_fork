@@ -223,6 +223,15 @@ class Order(models.Model):
         else:
             return 0
 
+    def orderNumber(self):
+        """
+        return descriptive order number EOYYMMDDId where:
+        EO is the suffix for Earth Observation,
+        YYMMDD is the date of order placed and
+        Id is the order sequential ID used as the order number at present
+        """
+        date = self.order_date.strftime("%y%m%d")
+        return "EO" + date + str(self.id)
 
 class OrderStatusHistory(models.Model):
     """
