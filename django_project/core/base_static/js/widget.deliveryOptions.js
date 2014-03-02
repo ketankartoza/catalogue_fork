@@ -32,7 +32,6 @@
 	// creation code for mywidget
 	// can use this.options
 	_create: function() {
-		console.log(this.options);
 		var options = this.options;
 		var elem = this.element;
 		var suffix = this.default[options.type].suffix;

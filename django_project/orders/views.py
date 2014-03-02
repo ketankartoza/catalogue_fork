@@ -47,6 +47,8 @@ from django.db.models import Count
 from django.contrib.gis.gdal import (
     SpatialReference,
     CoordTransform)
+
+from django.utils import simplejson
 # Models and forms for our app
 from .models import (
     Order,
@@ -272,14 +274,18 @@ def viewOrder(theRequest, theId):
 
     myOrder = get_object_or_404(Order, id=theId)
     if not ((myOrder.user == theRequest.user) or (theRequest.user.is_staff)):
-            raise Http404
+        raise Http404
+    myRecords = SearchRecord.objects.all().filter(order=myOrder)
+    myHistory = OrderStatusHistory.objects.all().filter(order=myOrder)
+    myStatusForm = OrderStatusHistoryForm()
     if (theRequest.method == 'POST'):
         myOrderForm = OrderForm(theRequest.POST, theRequest.FILES, instance=myOrder)
-        myRecords = SearchRecord.objects.all().filter(order=myOrder)
         myOptions = {
                 'myOrder': myOrder,
                 'myOrderForm': myOrderForm,
-                'myRecords': myRecords
+                'myRecords': myRecords,
+                'myHistory': myHistory,
+                'myStatusForm': myStatusForm
             }
         if myOrderForm.is_valid():
             myObject = myOrderForm.save()
@@ -301,72 +307,16 @@ def viewOrder(theRequest, theId):
     else:
         if (theRequest.user.is_staff):
             myOrderForm = OrderForm(instance=myOrder)
-            myRecords = SearchRecord.objects.all().filter(order=myOrder)
             myOptions = {
                 'myOrder': myOrder,
                 'myOrderForm': myOrderForm,
-                'myRecords': myRecords
+                'myRecords': myRecords,
+                'myHistory': myHistory,
+                'myStatusForm': myStatusForm
             }
             return render_to_response(
                 'orderPage.html', myOptions,
                 context_instance=RequestContext(theRequest))
-
-
-@login_required
-def viewOrder2(theRequest, theId):
-    """This view is strictly for staff only or the order owner"""
-    # check if the post ended with /?xhr
-    # we do this as well as is_ajax call because we
-    # may have arrived at this page via a response redirect
-    # which will not then have the is_ajax flag set
-
-    myAjaxFlag = 'xhr' in theRequest.GET
-    myTemplatePath = 'orderPage.html'
-    if theRequest.is_ajax() or myAjaxFlag:
-        # No page container needed, just a snippet
-        myTemplatePath = 'orderPageAjax.html'
-        logger.debug('Request is ajax enabled')
-    myOrder = get_object_or_404(Order, id=theId)
-    myRecords = SearchRecord.objects.all().filter(order=myOrder)
-    myCoverage = coverageForOrder(myOrder, myRecords)
-    if not ((myOrder.user == theRequest.user) or (theRequest.user.is_staff)):
-        raise Http404
-    myHistory = OrderStatusHistory.objects.all().filter(order=myOrder)
-    myForm = None
-    if theRequest.user.is_staff:
-        myForm = OrderStatusHistoryForm()
-    #render_to_response is done by the renderWithContext decorator
-    return render_to_response(myTemplatePath, {
-        'myOrder': myOrder,
-        'myRecords': myRecords,
-        # Possible flags for the record template
-        # myShowSensorFlag
-        # myShowSceneIdFlag
-        # myShowDateFlag
-        # myCartFlag
-        # myRemoveFlag
-        # myThumbFlag
-        # myShowDeliveryDetailsFlag
-        # myShowDeliveryDetailsFormFlag
-        # myDownloadOrderFlag
-        'myShowSensorFlag': False,
-        'myShowSceneIdFlag': True,
-        'myShowDateFlag': False,
-        # cant remove stuff after order was placed
-        'myRemoveFlag': False,
-        'myThumbFlag': False,
-        'myShowMetdataFlag': False,
-        # used when you need to add an item to the cart only
-        'myCartFlag': False,
-        'myPreviewFlag': False,
-        'myShowDeliveryDetailsFlag': True,
-        'myShowDeliveryDetailsFormFlag': False,
-        'myDownloadOrderFlag': True,
-        'myForm': myForm,
-        'myHistory': myHistory,
-        'myCartTitle': 'Product List',
-        'myCoverage': myCoverage,
-    }, context_instance=RequestContext(theRequest))
 
 
 def coverageForOrder(theOrder, theSearchRecords):
@@ -421,14 +371,7 @@ def coverageForOrder(theOrder, theSearchRecords):
 def updateOrderHistory(theRequest):
     if not theRequest.user.is_staff:
         return HttpResponse('''Access denied''')
-    if not theRequest.method == 'POST':
-        return HttpResponse('You can only access this view from a form POST')
-    myTemplatePath = 'orderPage.html'
-    if theRequest.is_ajax():
-        # No page container needed, just a snippet
-        myTemplatePath = 'orderStatusHistory.html'
-        logger.debug('Request is ajax enabled')
-    myOrderId = theRequest.POST['order']
+    myOrderId = theRequest.POST['order'] 
     myOrder = get_object_or_404(Order, id=myOrderId)
     myNewStatusId = theRequest.POST['new_order_status']
     myNotes = theRequest.POST['notes']
@@ -443,39 +386,14 @@ def updateOrderHistory(theRequest):
     try:
         myOrderStatusHistory.save()
     except:
-        return HttpResponse('<html><head></head><body>Query error'
-                            ' - please report to SAC staff</body></html>')
+        resp = simplejson.dumps({"saved": 'failed'})
+        return HttpResponse(resp, mimetype="application/json")
     myOrder.order_status = myNewStatus
     myOrder.save()
-    myHistory = OrderStatusHistory.objects.all().filter(order=myOrder)
-    # These next few lines and the long list of options below needed
-    # for no ajax fallback
-    myRecords = SearchRecord.objects.all().filter(order=myOrder)
-    myForm = None
+    #notifySalesStaff(myOrder.user, myOrderId, myRequestContext)
+    resp = simplejson.dumps({"saved": 'ok'})
+    return HttpResponse(resp, mimetype="application/json")
 
-    myRequestContext = RequestContext(theRequest)
-    if theRequest.user.is_staff:
-        myForm = OrderStatusHistoryForm()
-
-    notifySalesStaff(myOrder.user, myOrderId, myRequestContext)
-
-    return render_to_response(myTemplatePath, {
-        'myOrder': myOrder,
-        'myRecords': myRecords,
-        'myShowSensorFlag': True,
-        'myShowSceneIdFlag': True,
-        'myShowDateFlag': True,
-        # cant remove stuff after order was placed
-        'myRemoveFlag': False,
-        'myThumbFlag': False,
-        'myShowMetdataFlag': False,
-        # used when you need to add an item to the cart only
-        'myCartFlag': False,
-        'myPreviewFlag': False,
-        'myForm': myForm,
-        'myHistory': myHistory,
-        'myCartTitle': 'Product List',
-    }, context_instance=myRequestContext)
 
 
 @login_required

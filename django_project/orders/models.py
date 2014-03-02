@@ -233,6 +233,7 @@ class Order(models.Model):
         date = self.order_date.strftime("%y%m%d")
         return "EO" + date + str(self.id)
 
+
 class OrderStatusHistory(models.Model):
     """
     Used to maintain provenance of all status changes that happen to an order
