@@ -120,16 +120,21 @@
       <div id="cart-panel">
         <div id="cart-container" class="well well-small"></div>
         <div id="cart-sub-panel" class="well well-small text-center">
-          <button id="cart-show-map" class="btn btn-info" data-state="hidden">
-            Show on map
+          <button id="cart-show-map" class="btn btn-info"
+                  data-state="hidden"
+                  data-toggle="tooltip"
+                  data-title="Show on Map">
+            <i class="icon-globe"></i>
           </button>
           <button id="place_order" class="btn btn-success">
             <i class="icon-ok"></i> Place Order
           </button>
           <button id="cart-panel-download-button"
                   onclick="showCartDownloadOptions();"
-                  class="btn btn-info">
-            <i class="icon-download"></i> Download Order
+                  class="btn btn-info"
+                  data-toggle="tooltip"
+                  data-title="Download Order">
+            <i class="icon-download"></i>
           </button>
           <div id="cart-panel-btns">
             <hr />
@@ -187,7 +192,8 @@
                  data-placement="top">
               <i class="icon-chevron-left"></i>
             </div>
-            <div style="float:left;">
+            <div style="float:left;" data-toggle="tooltip"
+                 data-title="Toggle Polygons">
               <input type="checkbox" checked data-on="success" data-off="info" class="switch-small" id="switchSearchLayer">
             </div>
             <button id="resetZoom" style="float:left; display: none;"
@@ -286,8 +292,12 @@
   // default false
   var searchShareOpen = false;
   $( document ).ready(function() {
-    // activate tooltips on all buttons
-    $('button[data-toggle="tooltip"]').tooltip();
+    // activate tooltips on all elements
+    $('[data-toggle="tooltip"]').tooltip();
+    // activate tooltips on new AJAX-loaded elements
+    $('body').bind('ajaxComplete', function(e, xhr, settings){
+       $('[data-toggle="tooltip"]').tooltip();
+    });
     // activate help popovers
     $('.help-popover').popover();
     // initialize map widdget
