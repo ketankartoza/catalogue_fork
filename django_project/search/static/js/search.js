@@ -142,7 +142,7 @@ function toggleResultDownloadButton() {
 function toggleCartDownloadButton() {
     if (CartDownloadOptionsState) {
         hideCartDownloadOptions();
-        $('#cart-panel-download-button').html('<i class="icon-download"></i> Download Order');
+        $('#cart-panel-download-button').html('<i class="icon-download"></i>');
         CartDownloadOptionsState = false;
     } else {
         showCartDownloadOptions();
@@ -514,7 +514,7 @@ APP.ResultGridView = Backbone.View.extend({
 
             this.cont.empty();
             $('#results-container').perfectScrollbar('destroy');
-            this.cont.append('<div class="result-item"><div class="result-item-info">Product</div><div class="result-item-info-date">Date</div><div class="cloud-cover">Cloud cover</div></div>');
+            this.cont.append('<div class="result-items-header"><div class="result-item-info">Product</div><div class="result-item-info-date">Date</div><div class="cloud-cover">Cloud cover</div></div>');
             var self=this;
             _(this.collection.models).each(function(item){
                 self.renderItem(item);
@@ -741,9 +741,9 @@ var template = [
               '<% } else { %>UNK',
               '<% } %>',
             '</p></div>',
-            '<span class="button metadata-button btn btn-default"><i class="icon-list-alt"></i></span>',
-            '<span class="button cart-button btn btn-default"><i class="icon-shopping-cart"></i></span>',
-            '<span class="button cart-remove-button btn btn-default hide"><i class="icon-remove"></i></span>',
+            '<span class="button metadata-button btn btn-default" data-toggle="tooltip" data-title="View Metadata"><i class="icon-list-alt"></i></span>',
+            '<span class="button cart-button btn btn-default" data-toggle="tooltip" data-title="Add to Cart"><i class="icon-shopping-cart"></i></span>',
+            '<span class="button cart-remove-button btn btn-danger hide" data-toggle="tooltip" data-title="Remove From Cart"><i class="icon-remove"></i></span>',
           '</div>'
           ].join('');
 
@@ -858,8 +858,8 @@ var templateCart = [
           //  '<p><%= model.get("product").product_date %></p>',
           //'</div>',
           '<div class="cart-item-buttons">',
-              '<span class="button metadata-button btn btn-default"><i class="icon-list-alt"></i></span>',
-              '<span class="button delete-button btn btn-default hide"><i class="icon-remove"></i></span>',
+              '<span class="button metadata-button btn btn-default" data-toggle="tooltip" data-title="View Metadata"><i class="icon-list-alt"></i></span>',
+              '<span class="button delete-button btn btn-danger" data-toggle="tooltip" data-title="Remove From Cart"><i class="icon-remove"></i></span>',
           '</div>',
           '<div class="cart-item-cloud-cover"><p>',
             '<% if(model.get("product").cloud_cover != -1) { %><%= model.get("product").cloud_cover %>%',
