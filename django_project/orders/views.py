@@ -317,6 +317,15 @@ def viewOrder(theRequest, theId):
             return render_to_response(
                 'orderPage.html', myOptions,
                 context_instance=RequestContext(theRequest))
+        else:
+            myOptions = {
+                'myOrder': myOrder,
+                'myRecords': myRecords,
+                'myHistory': myHistory
+            }
+            return render_to_response(
+                'orderPageUser.html', myOptions,
+                context_instance=RequestContext(theRequest))
 
 
 def coverageForOrder(theOrder, theSearchRecords):
