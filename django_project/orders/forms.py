@@ -26,6 +26,7 @@ from .models import (
     OrderStatus,
     Order,
     OrderStatusHistory,
+    NonSearchRecord
 )
 
 
@@ -44,3 +45,9 @@ class OrderStatusHistoryForm(forms.ModelForm):
     class Meta:
         model = OrderStatusHistory
         exclude = ('order', 'user', 'order_change_date', 'old_order_status')
+
+
+class NonSearchRecordForm(forms.ModelForm):
+    class Meta:
+        model = NonSearchRecord
+        exclude = ('download_path',)

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load compressed %}
+
+{% block extracss %}
+	{{ block.super }}
+	{% compressed_css 'orderpage' %}
+{% endblock %}
+
+{% block content%}
+  <div class="row">
+  	<div class="span12">
+  		<h2>Order</h2>
+  	</div>
+  </div>
+  <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="form-horizontal" id="order-form">
+  	<div class="row">
+		<div class="span6">
+			<div class="control-group">
+				<label class="control-label" for="{{ myOrderForm.market_sector.auto_id }}">{{ myOrderForm.market_sector.label }}</label>
+				<div class="controls">
+					{{ myOrderForm.market_sector }}
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="{{ myOrderForm.subsidy_type_requested.auto_id }}">{{ myOrderForm.subsidy_type_requested.label }}</label>
+				<div class="controls">
+					{{ myOrderForm.subsidy_type_requested }}
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="{{ myOrderForm.subsidy_type_assigned.auto_id }}">{{ myOrderForm.subsidy_type_assigned.label }}</label>
+				<div class="controls">
+					{{ myOrderForm.subsidy_type_assigned }}
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="{{ myOrderForm.user.auto_id }}">{{ myOrderForm.user.label }}</label>
+				<div class="controls">
+					{{ myOrderForm.user }}
+				</div>
+			</div>
+		</div>
+		<div class="span6">
+			<div class="control-group">
+				<label class="control-label" for="{{ myOrderForm.notes.auto_id }}">{{ myOrderForm.notes.label }}</label>
+				<div class="controls">
+					{{ myOrderForm.notes }}
+				</div>
+			</div>
+		</div>
+	</div>
+  </form>
+  <div class="row">
+	<div class="span12">
+		<table class="table table-striped">
+		<thead><tr>
+			<th>Product description</th>
+			<th>Price</th>
+			<th>Currency</th>
+			<th>ZAR</th>
+			<th>Remove</th>
+		</tr></thead>
+		<tbody id="products">
+		</tbody>
+		</table>
+	</div>
+  </div>
+  <div class="row">
+  	<div class="span12">
+  		<button type="button" class="btn" id="addNewRow">Add new row</button>
+  	</div>
+  </div>
+{% endblock %}
+
+{% block extrajs %}
+  {{ block.super }}
+  {% compressed_js 'orderpage' %}
+  <script>
+  	{% autoescape off %}
+  	var currency = '{{ myNonSearchForm.currency }}';
+  	{% endautoescape %}
+  	$( document ).ready(function() {
+  		$('#addNewRow').click(function() {
+  			$('#products').append('<tr><td></td><td></td><td>'+currency+'</td><td></td><td></td></tr>');
+  		})
+  	}):
+  </script>
+{% endblock %}

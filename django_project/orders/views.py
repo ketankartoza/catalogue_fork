@@ -58,7 +58,8 @@ from .models import (
 
 from .forms import (
     OrderStatusHistoryForm,
-    OrderForm
+    OrderForm,
+    NonSearchRecordForm
 )
 # Helper classes
 from catalogue.views.helpers import (
@@ -289,7 +290,6 @@ def viewOrder(theRequest, theId):
             }
         if myOrderForm.is_valid():
             myObject = myOrderForm.save()
-           
             for myRecord in myRecords:
                 proj = Projection.objects.get(epsg_code=theRequest.POST.get(str(myRecord.product.id) + '_projection'))
                 myRecord.projection = proj
@@ -299,7 +299,6 @@ def viewOrder(theRequest, theId):
 
             return HttpResponseRedirect(
                 reverse('viewOrder', kwargs={'theId': myObject.id}))
-                
         else:
             return render_to_response(
                 'orderPage.html', myOptions,
@@ -380,7 +379,7 @@ def coverageForOrder(theOrder, theSearchRecords):
 def updateOrderHistory(theRequest):
     if not theRequest.user.is_staff:
         return HttpResponse('''Access denied''')
-    myOrderId = theRequest.POST['order'] 
+    myOrderId = theRequest.POST['order']
     myOrder = get_object_or_404(Order, id=myOrderId)
     myNewStatusId = theRequest.POST['new_order_status']
     myNotes = theRequest.POST['notes']
@@ -437,7 +436,7 @@ def addOrder(theRequest):
         logger.debug('Order posted')
 
         myOrderForm = OrderForm(theRequest.POST, theRequest.FILES)
-        
+
         myOptions = {
             'myOrderForm': myOrderForm,
         }
@@ -450,7 +449,7 @@ def addOrder(theRequest):
             logger.debug('Order saved')
 
             #update serachrecords
-            
+
             for myRecord in myRecords:
                 myRecord.order = myObject
                 proj = Projection.objects.get(epsg_code=theRequest.POST.get(str(myRecord.product.id) + '_projection'))
@@ -495,3 +494,23 @@ def ordersSummary(theRequest):
         myOrderStatus=myOrderStatus,
         myOrderInstrumentType=myOrderInstrumentType,
         myOrderSatellite=myOrderSatellite)
+
+
+@staff_member_required
+def addAdhocOrder(theRequest):
+    logger.debug('Adhoc order called')
+    logger.info('by user ' + str(theRequest.user))
+    if theRequest.method == 'POST':
+        pass
+    else:
+        myOrderForm = OrderForm()
+        myNonSearchForm = NonSearchRecordForm()
+        myOptions = {
+            'myOrderForm': myOrderForm,
+            'myNonSearchForm': NonSearchRecordForm
+        }
+        # shortcut to join two dicts
+        logger.info('Add Order: new object requested')
+        return render_to_response(
+            'orderAdHocForm.html', myOptions,
+            context_instance=RequestContext(theRequest))

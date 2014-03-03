@@ -10,7 +10,8 @@ from .views import (
     viewOrder,
     updateOrderHistory,
     addOrder,
-    ordersSummary
+    ordersSummary,
+    addAdhocOrder
 )
 # Here are our patterns
 urlpatterns = patterns(
@@ -30,4 +31,5 @@ urlpatterns = patterns(
     url(r'^updateorderhistory/$',
         updateOrderHistory, name='updateOrderHistory'),
     url(r'^orderssummary/$', ordersSummary, name='ordersSummary'),
+    url(r'^addadhocorder/', addAdhocOrder, name='addAdhocOrder'),
 )

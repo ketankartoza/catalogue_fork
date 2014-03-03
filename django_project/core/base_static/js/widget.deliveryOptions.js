@@ -16,7 +16,7 @@
 		data: {},
 		// must be either projection or processing
 		type: '',
-		value: '' 
+		value: ''
 	},
 
 	default: {

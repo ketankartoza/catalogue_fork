@@ -134,7 +134,7 @@
 						<td><button class="btn btn-small metadata" data-id="{{ record.product.id }}" type="button"><i class="icon-list-alt"></i></button></td>
 						{# we need to turn autoesacpe off for django not to encode json strings #}
 						{% autoescape off %}
-						{% comment %} 
+						{% comment %}
 							widget expects:
 							data - json with data for select fields
 							id - id used to uniquely define widget and connect with other DOM elements for product
