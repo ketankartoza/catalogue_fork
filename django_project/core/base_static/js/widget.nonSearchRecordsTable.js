@@ -44,7 +44,11 @@
   			var currency = self.frm.find('select').val();
   			self._addProduct(product, price, currency);
   			self._hideForm();
-  		})
+  		});
+
+  		$('.deleteRow').click(function() {
+  			console.log(this);
+  		});
 
 	},
 
@@ -86,7 +90,14 @@
 		  url: '/convertprice/',
 		  data: {'currency': currency, 'price': price}
 		})).done(function(result) {
-			self.element.prepend('<tr><td>'+product+'</td><td>'+price+'</td><td>'+currency+'</td><td>'+result.rand_price+'</td><td></td></tr>');
+			var html = '<tr><td>'+product+'</td><td>'+price+'</td><td>'+currency+'</td><td>'+result.rand_price+'</td>';
+			html = html + '<td><input type="hidden" name="'+self.numProducts+'_product" value="'+product+'">';
+			html = html + '<input type="hidden" name="'+self.numProducts+'_price" value="'+price+'">';
+			html = html + '<input type="hidden" name="'+self.numProducts+'_currency" value="'+currency+'">';
+			html = html + '<input type="hidden" name="productlist" value="'+self.numProducts+'">';
+			html = html + '<button class="btn deleteRow">Delete</button>';
+			html = html + '</td></tr>';
+			self.element.prepend(html);
 		});
 		// TODO fail
 	},

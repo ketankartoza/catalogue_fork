@@ -504,7 +504,7 @@ def addAdhocOrder(theRequest):
     logger.debug('Adhoc order called')
     logger.info('by user ' + str(theRequest.user))
     if theRequest.method == 'POST':
-        pass
+        products = request.POST.getlist('productlist')
     else:
         myOrderForm = OrderForm()
         listCurrency = Currency.objects.all().values_list('code', 'name')
