@@ -296,11 +296,13 @@ class InstrumentType(models.Model):
     scanner_type = models.ForeignKey(ScannerType)
     base_processing_level = models.ForeignKey(
         ProcessingLevel,
+        blank=True, null=True,
         related_name='base_processing_level',
         help_text=('Processing level as provided by the ground station as '
                    '"raw data".'))
     default_processing_level = models.ForeignKey(
         ProcessingLevel,
+        blank=True, null=True,
         related_name='default_processing_level',
         help_text=('Default processing level that will be supplied to '
                    'customers.'))
