@@ -107,7 +107,8 @@ class InstrumentTypeAdmin(admin.ModelAdmin):
         'band_count',
         'pixel_size_list_m',
         'spatial_resolution_range',
-        'image_size_km']
+        'image_size_km'
+    ]
 admin.site.register(InstrumentType, InstrumentTypeAdmin)
 
 
@@ -117,8 +118,8 @@ class RadarBeamAdmin(admin.ModelAdmin):
         'band_name',
         'wavelength_cm',
         'looking_distance',
-        'azimuth_direction']
-    pass
+        'azimuth_direction'
+    ]
 admin.site.register(RadarBeam, RadarBeamAdmin)
 
 
@@ -131,7 +132,8 @@ class ImagingModeAdmin(admin.ModelAdmin):
         'approximate_resolution_m',
         'swath_width_km',
         'number_of_looks',
-        'polarization']
+        'polarization'
+    ]
 admin.site.register(ImagingMode, ImagingModeAdmin)
 
 
@@ -169,7 +171,8 @@ class SpectralModeAdmin(admin.ModelAdmin):
         'spectralgroup',
         'abbreviation',
         'name',
-        'description']
+        'description'
+    ]
 admin.site.register(SpectralMode, SpectralModeAdmin)
 
 
@@ -185,7 +188,8 @@ class InstrumentTypeProcessingLevelAdmin(admin.ModelAdmin):
         'instrument_type',
         'processing_level',
         'operator_processing_level_name',
-        'operator_processing_level_abbreviation']
+        'operator_processing_level_abbreviation'
+    ]
 admin.site.register(
     InstrumentTypeProcessingLevel, InstrumentTypeProcessingLevelAdmin)
 
