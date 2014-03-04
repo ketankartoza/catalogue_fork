@@ -22,7 +22,8 @@ logger = logging.getLogger(__name__)
 
 import datetime
 import traceback
-
+import json
+from decimal import Decimal
 #other modules
 from shapes.views import ShpResponder
 
@@ -49,6 +50,8 @@ from django.contrib.gis.gdal import (
     CoordTransform)
 
 from django.utils import simplejson
+from exchange.models import Currency
+from exchange.conversion import convert_value
 # Models and forms for our app
 from .models import (
     Order,
@@ -504,13 +507,22 @@ def addAdhocOrder(theRequest):
         pass
     else:
         myOrderForm = OrderForm()
-        myNonSearchForm = NonSearchRecordForm()
+        listCurrency = Currency.objects.all().values_list('code', 'name')
+        myCurrency = json.dumps([list(currency) for currency in listCurrency])
         myOptions = {
             'myOrderForm': myOrderForm,
-            'myNonSearchForm': NonSearchRecordForm
+            'myCurrency': myCurrency
         }
         # shortcut to join two dicts
         logger.info('Add Order: new object requested')
         return render_to_response(
             'orderAdHocForm.html', myOptions,
             context_instance=RequestContext(theRequest))
+
+
+def convertPrice(theRequest):
+    currency = theRequest.POST.get('currency')
+    price = Decimal(theRequest.POST.get('price'))
+    rand_price = "%0.2f" % (convert_value(price, currency, 'ZAR'),)
+    resp = simplejson.dumps({"rand_price": rand_price})
+    return HttpResponse(resp, mimetype="application/json")

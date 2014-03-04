@@ -1,0 +1,119 @@
+/*
+ * non search records widget - enables users dynamically add non search records
+ * @author: Igor Crnković <icrni@candela-it.com>
+ *
+ */
+
+(function($) {
+    $.widget("sansa.nonSearchRecordsTable",{
+	// default options
+	options: {
+		currency: {}
+	},
+
+	// creation code for mywidget
+	// can use this.options
+	_create: function() {
+		var self = this;
+		var options = this.options;
+		var elem = this.element;
+		this.currencyElem = document.createElement("select");
+		_.each(options.currency, function(element) {
+			var option = new Option(element[1], element[0]);
+			$(self.currencyElem).append(option);
+		})
+
+		elem.append(this._writeHeader());
+		elem.append(this._writeBody());
+		this.numProducts = 0;
+		this.btnAdd = elem.find('.addNewRow');
+		this.btnSave = elem.find('.submitNewRow');
+		this.frm = elem.find('.nonsearchForm');
+		this.formVisible = false;
+  		this.btnAdd.click(function() {
+  			if (self.formVisible) {
+  				self._hideForm();
+  			} else {
+  				self._showForm();
+  			}
+  		});
+
+  		this.btnSave.click(function() {
+  			var product = self.frm.find('.product_desc').val();
+  			var price = self.frm.find('.product_price').val();
+  			var currency = self.frm.find('select').val();
+  			self._addProduct(product, price, currency);
+  			self._hideForm();
+  		})
+
+	},
+
+	//called everytime when accessing element without calling function
+	//$('#').dialog({'something':'something else'})
+	_init: function(){
+
+	},
+
+	_hideForm: function() {
+		this.formVisible = false;
+		this.frm.addClass('hide');
+		this.btnSave.addClass('hide');
+		this.btnAdd.html('Add new row');
+	},
+
+	_showForm: function() {
+		this.formVisible = true;
+		this.frm.removeClass('hide');
+		this.btnSave.removeClass('hide');
+		this.btnAdd.html('Cancel');
+	},
+
+	_convertPrice: function(price, currency) {
+		$.ajax({
+		  dataType: "json",
+		  type: "POST",
+		  url: '/convertprice/',
+		  data: {'currency': currency, 'price': price}
+		});
+	},
+
+	_addProduct: function(product, price, currency) {
+		this.numProducts++;
+		var self = this;
+		$.when($.ajax({
+		  dataType: "json",
+		  type: "POST",
+		  url: '/convertprice/',
+		  data: {'currency': currency, 'price': price}
+		})).done(function(result) {
+			self.element.prepend('<tr><td>'+product+'</td><td>'+price+'</td><td>'+currency+'</td><td>'+result.rand_price+'</td><td></td></tr>');
+		});
+		// TODO fail
+	},
+
+	_writeHeader: function() {
+		return '<thead><tr><th>Product description</th><th>Price</th><th>Currency</th><th>ZAR</th><th>Remove</th></tr></thead>';
+	},
+
+	_writeBody: function() {
+		var body = '<tbody id="products"><tr class="hide nonsearchForm">';
+		body = body + '<td><input type="text" class="product_desc" style="width: 300px;"></td>';
+		body = body + '<td><input type="text" class="product_price" style="width: 100px;"></td>';
+		body = body + '<td>' + this.currencyElem.outerHTML + '</td>';
+		body = body + '<td></td>';
+		body = body + '<td></td>';
+		body = body + '</tr><tr>';
+		body = body + '<td colspan="5">';
+		body = body + '<button type="button" class="btn addNewRow">Add new row</button>';
+		body = body + '<button type="button" class="btn hide submitNewRow">Save</button>';
+		body = body + '</td>';
+		body = body + '</tr></tbody>';
+		return body;
+	},
+
+	_writeForm: function() {
+
+	}
+
+    })//end widget
+})(jQuery);

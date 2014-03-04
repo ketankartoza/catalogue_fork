@@ -179,6 +179,7 @@ PIPELINE_JS = {
             'js/widget.sansaMap.js',
             'js/widget.sansaCartLayer.js',
             'js/widget.deliveryOptions.js',
+            'js/widget.nonSearchRecordsTable.js'
         ),
         'output_filename': 'js/orderpage.js',
     }

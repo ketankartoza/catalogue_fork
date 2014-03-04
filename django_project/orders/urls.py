@@ -11,7 +11,8 @@ from .views import (
     updateOrderHistory,
     addOrder,
     ordersSummary,
-    addAdhocOrder
+    addAdhocOrder,
+    convertPrice
 )
 # Here are our patterns
 urlpatterns = patterns(
@@ -32,4 +33,5 @@ urlpatterns = patterns(
         updateOrderHistory, name='updateOrderHistory'),
     url(r'^orderssummary/$', ordersSummary, name='ordersSummary'),
     url(r'^addadhocorder/', addAdhocOrder, name='addAdhocOrder'),
+    url(r'^convertprice/', convertPrice, name='convertPrice'),
 )
