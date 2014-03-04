@@ -398,5 +398,5 @@ class OpticalProductCRUD_Test(TestCase):
             'path': 135,
             'row': 78
         })
-        # satellite spectral_mode row path instrument_type
-        self.assertEqual(myModel.productName(), u'L5 TM 135 078 HRF')
+        # satellite instrument_type path row spectral_mode
+        self.assertEqual(myModel.productName(), u'L5 HRF 135 078 TM')
