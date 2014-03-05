@@ -34,7 +34,7 @@
 					{{ myOrderForm.subsidy_type_assigned }}
 				</div>
 			</div>
-			<div class="control-group">
+			<div class="control-group" id="user_div">
 				<label class="control-label" for="{{ myOrderForm.user.auto_id }}">{{ myOrderForm.user.label }}</label>
 				<div class="controls">
 					{{ myOrderForm.user }}
@@ -58,7 +58,7 @@
   </div>
   <div class="row">
 	<div class="span12">
-		<button class="btn submit">Submit</button>
+		<button class="btn submit" type="button" id="submitForm">Submit</button>
 	</div>
   </div>
   </form>
@@ -74,11 +74,14 @@
   	$( document ).ready(function() {
   		$('#nonsearchWidget').nonSearchRecordsTable({ 'currency': currencies });
 
-  		$('#submitNewRow').click(function() {
-  			var row = '<tr>';
-  			row = row + '<td>'+ $('#product_desc').val() +'</td>'
-  			row = '</tr>';
-  		})
+  		$('#submitForm').click(function() {
+  			if ($('#id_user').val() == "") {
+  				$('#user_div').addClass('error');
+  				return
+  			}
+  			$('form').submit();
+  		});
+
   	});
   </script>
 {% endblock %}

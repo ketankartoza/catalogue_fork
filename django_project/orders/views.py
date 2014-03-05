@@ -282,54 +282,75 @@ def viewOrder(theRequest, theId):
     if not ((myOrder.user == theRequest.user) or (theRequest.user.is_staff)):
         raise Http404
     myRecords = SearchRecord.objects.all().filter(order=myOrder)
-    myHistory = OrderStatusHistory.objects.all().filter(order=myOrder)
-    myStatusForm = OrderStatusHistoryForm()
-    if (theRequest.method == 'POST'):
-        myOrderForm = OrderForm(theRequest.POST, theRequest.FILES, instance=myOrder)
-        myOptions = {
-                'myOrder': myOrder,
-                'myOrderForm': myOrderForm,
-                'myRecords': myRecords,
-                'myHistory': myHistory,
-                'myStatusForm': myStatusForm
-            }
-        if myOrderForm.is_valid():
-            myObject = myOrderForm.save()
-            for myRecord in myRecords:
-                proj = Projection.objects.get(epsg_code=theRequest.POST.get(str(myRecord.product.id) + '_projection'))
-                myRecord.projection = proj
-                proc = ProcessingLevel.objects.get(pk=theRequest.POST.get(str(myRecord.product.id) + '_processing'))
-                myRecord.processing_level = proc
-                myRecord.save()
+    if (myRecords.count() > 0):
+        myHistory = OrderStatusHistory.objects.all().filter(order=myOrder)
+        myStatusForm = OrderStatusHistoryForm()
+        if (theRequest.method == 'POST'):
+            myOrderForm = OrderForm(theRequest.POST, theRequest.FILES, instance=myOrder)
+            myOptions = {
+                    'myOrder': myOrder,
+                    'myOrderForm': myOrderForm,
+                    'myRecords': myRecords,
+                    'myHistory': myHistory,
+                    'myStatusForm': myStatusForm
+                }
+            if myOrderForm.is_valid():
+                myObject = myOrderForm.save()
+                for myRecord in myRecords:
+                    proj = Projection.objects.get(epsg_code=theRequest.POST.get(str(myRecord.product.id) + '_projection'))
+                    myRecord.projection = proj
+                    proc = ProcessingLevel.objects.get(pk=theRequest.POST.get(str(myRecord.product.id) + '_processing'))
+                    myRecord.processing_level = proc
+                    myRecord.save()
 
-            return HttpResponseRedirect(
-                reverse('viewOrder', kwargs={'theId': myObject.id}))
+                return HttpResponseRedirect(
+                    reverse('viewOrder', kwargs={'theId': myObject.id}))
+            else:
+                return render_to_response(
+                    'orderPage.html', myOptions,
+                    context_instance=RequestContext(theRequest))
         else:
-            return render_to_response(
-                'orderPage.html', myOptions,
-                context_instance=RequestContext(theRequest))
+            if (theRequest.user.is_staff):
+                myOrderForm = OrderForm(instance=myOrder)
+                myOptions = {
+                    'myOrder': myOrder,
+                    'myOrderForm': myOrderForm,
+                    'myRecords': myRecords,
+                    'myHistory': myHistory,
+                    'myStatusForm': myStatusForm
+                }
+                return render_to_response(
+                    'orderPage.html', myOptions,
+                    context_instance=RequestContext(theRequest))
+            else:
+                myOptions = {
+                    'myOrder': myOrder,
+                    'myRecords': myRecords,
+                    'myHistory': myHistory
+                }
+                return render_to_response(
+                    'orderPageUser.html', myOptions,
+                    context_instance=RequestContext(theRequest))
     else:
-        if (theRequest.user.is_staff):
-            myOrderForm = OrderForm(instance=myOrder)
-            myOptions = {
-                'myOrder': myOrder,
-                'myOrderForm': myOrderForm,
-                'myRecords': myRecords,
-                'myHistory': myHistory,
-                'myStatusForm': myStatusForm
-            }
-            return render_to_response(
-                'orderPage.html', myOptions,
-                context_instance=RequestContext(theRequest))
+        myRecords = NonSearchRecord.objects.all().filter(order=myOrder)
+        myStatusForm = OrderStatusHistoryForm()
+        if (theRequest.method == 'POST'):
+            pass
         else:
-            myOptions = {
-                'myOrder': myOrder,
-                'myRecords': myRecords,
-                'myHistory': myHistory
-            }
-            return render_to_response(
-                'orderPageUser.html', myOptions,
-                context_instance=RequestContext(theRequest))
+            if (theRequest.user.is_staff):
+                myOrderForm = OrderFormNonSearchRecords(instance=myOrder)
+                myOptions = {
+                    'myOrder': myOrder,
+                    'myOrderForm': myOrderForm,
+                    'myRecords': myRecords,
+                    'myHistory': myHistory,
+                    'myStatusForm': myStatusForm
+                }
+                return render_to_response(
+                    'orderPage.html', myOptions,
+                    context_instance=RequestContext(theRequest))
+            else:
+                pass
 
 
 def coverageForOrder(theOrder, theSearchRecords):
