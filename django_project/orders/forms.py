@@ -41,6 +41,12 @@ class OrderForm(forms.ModelForm):
         exclude = ('order_status',)
 
 
+class OrderFormNonSearchRecords(forms.ModelForm):
+    class Meta:
+        model = Order
+        exclude = ('order_status', 'file_format', 'datum', 'resampling_method', 'delivery_method')
+
+
 class OrderStatusHistoryForm(forms.ModelForm):
     class Meta:
         model = OrderStatusHistory

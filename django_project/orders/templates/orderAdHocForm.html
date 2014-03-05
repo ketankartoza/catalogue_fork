@@ -13,6 +13,7 @@
   	</div>
   </div>
   <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="form-horizontal" id="order-form">
+  	{% csrf_token %}
   	<div class="row">
 		<div class="span6">
 			<div class="control-group">
@@ -49,13 +50,18 @@
 			</div>
 		</div>
 	</div>
-  </form>
   <div class="row">
 	<div class="span12">
 		<table class="table table-striped" id="nonsearchWidget">
 		</table>
 	</div>
   </div>
+  <div class="row">
+	<div class="span12">
+		<button class="btn submit">Submit</button>
+	</div>
+  </div>
+  </form>
 {% endblock %}
 
 {% block extrajs %}

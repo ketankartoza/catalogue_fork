@@ -56,13 +56,15 @@ from exchange.conversion import convert_value
 from .models import (
     Order,
     OrderStatusHistory,
-    OrderStatus
+    OrderStatus,
+    NonSearchRecord
 )
 
 from .forms import (
     OrderStatusHistoryForm,
     OrderForm,
-    NonSearchRecordForm
+    NonSearchRecordForm,
+    OrderFormNonSearchRecords
 )
 # Helper classes
 from catalogue.views.helpers import (
@@ -504,9 +506,35 @@ def addAdhocOrder(theRequest):
     logger.debug('Adhoc order called')
     logger.info('by user ' + str(theRequest.user))
     if theRequest.method == 'POST':
-        products = request.POST.getlist('productlist')
+        myOrderForm = OrderFormNonSearchRecords(theRequest.POST, theRequest.FILES)
+        myOptions = {
+            'myOrderForm': myOrderForm,
+        }
+
+        if myOrderForm.is_valid():
+            myObject = myOrderForm.save(commit=False)
+            products = theRequest.POST.getlist('productlist')
+
+            for product in products:
+                nonSearchRecord = NonSearchRecord();
+                nonSearchRecord.user = theRequest.user
+                nonSearchRecord.order = myObject
+                nonSearchRecord.product_description = theRequest.POST.get(str(product) + '_product')
+                prod_cost = Decimal(theRequest.POST.get(str(product) + '_price'))
+                prod_currency = theRequest.POST.get(str(product) + '_currency')
+                nonSearchRecord.cost_per_scene = prod_cost
+                nonSearchRecord.rand_cost_per_scene = convert_value(prod_cost, prod_currency, 'ZAR')
+                nonSearchRecord.currency = Currency.objects.get(code=prod_currency)
+                nonSearchRecord.save()
+            myObject,save()
+            return HttpResponseRedirect(
+                reverse('viewOrder', kwargs={'theId': myObject.id}))
+        else:
+            return render_to_response(
+                'orderAdHocForm.html', myOptions,
+                context_instance=RequestContext(theRequest))
     else:
-        myOrderForm = OrderForm()
+        myOrderForm = OrderFormNonSearchRecords()
         listCurrency = Currency.objects.all().values_list('code', 'name')
         myCurrency = json.dumps([list(currency) for currency in listCurrency])
         myOptions = {
