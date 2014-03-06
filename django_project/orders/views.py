@@ -334,8 +334,41 @@ def viewOrder(theRequest, theId):
     else:
         myRecords = NonSearchRecord.objects.all().filter(order=myOrder)
         myStatusForm = OrderStatusHistoryForm()
+        myHistory = OrderStatusHistory.objects.all().filter(order=myOrder)
+        myStatusForm = OrderStatusHistoryForm()
+        listCurrency = Currency.objects.all().values_list('code', 'name')
+        myCurrency = json.dumps([list(currency) for currency in listCurrency])
         if (theRequest.method == 'POST'):
-            pass
+            myOrderForm = OrderFormNonSearchRecords(theRequest.POST, theRequest.FILES, instance=myOrder)
+            myOptions = {
+                    'myOrder': myOrder,
+                    'myOrderForm': myOrderForm,
+                    'myRecords': myRecords,
+                    'myHistory': myHistory,
+                    'myStatusForm': myStatusForm,
+                    'myCurrency': myCurrency
+                }
+            if myOrderForm.is_valid():
+                myObject = myOrderForm.save()
+                NonSearchRecord.objects.all().filter(order=myOrder).delete()
+                products = theRequest.POST.getlist('productlist')
+
+                for product in products:
+                    nonSearchRecord = NonSearchRecord();
+                    nonSearchRecord.user = theRequest.user
+                    nonSearchRecord.order = myObject
+                    nonSearchRecord.product_description = theRequest.POST.get(str(product) + '_product')
+                    nonSearchRecord.cost_per_scene = Decimal(theRequest.POST.get(str(product) + '_price'))
+                    nonSearchRecord.rand_cost_per_scene = Decimal(theRequest.POST.get(str(product) + '_rand_price'))
+                    prod_currency = theRequest.POST.get(str(product) + '_currency')
+                    nonSearchRecord.currency = Currency.objects.get(code=prod_currency)
+                    nonSearchRecord.save()
+                return HttpResponseRedirect(
+                    reverse('viewOrder', kwargs={'theId': myObject.id}))
+            else:
+                return render_to_response(
+                    'orderAdHocForm.html', myOptions,
+                    context_instance=RequestContext(theRequest))
         else:
             if (theRequest.user.is_staff):
                 myOrderForm = OrderFormNonSearchRecords(instance=myOrder)
@@ -344,10 +377,11 @@ def viewOrder(theRequest, theId):
                     'myOrderForm': myOrderForm,
                     'myRecords': myRecords,
                     'myHistory': myHistory,
-                    'myStatusForm': myStatusForm
+                    'myStatusForm': myStatusForm,
+                    'myCurrency': myCurrency
                 }
                 return render_to_response(
-                    'orderPage.html', myOptions,
+                    'orderAdHocPage.html', myOptions,
                     context_instance=RequestContext(theRequest))
             else:
                 pass
@@ -533,7 +567,7 @@ def addAdhocOrder(theRequest):
         }
 
         if myOrderForm.is_valid():
-            myObject = myOrderForm.save(commit=False)
+            myObject = myOrderForm.save()
             products = theRequest.POST.getlist('productlist')
 
             for product in products:
@@ -547,7 +581,6 @@ def addAdhocOrder(theRequest):
                 nonSearchRecord.rand_cost_per_scene = convert_value(prod_cost, prod_currency, 'ZAR')
                 nonSearchRecord.currency = Currency.objects.get(code=prod_currency)
                 nonSearchRecord.save()
-            myObject,save()
             return HttpResponseRedirect(
                 reverse('viewOrder', kwargs={'theId': myObject.id}))
         else:

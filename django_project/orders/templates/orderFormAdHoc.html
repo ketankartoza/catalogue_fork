@@ -1,18 +1,4 @@
-{% extends "base.html" %}
-{% load compressed %}
-
-{% block extracss %}
-	{{ block.super }}
-	{% compressed_css 'orderpage' %}
-{% endblock %}
-
-{% block content%}
-  <div class="row">
-  	<div class="span12">
-  		<h2>Order</h2>
-  	</div>
-  </div>
-  <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="form-horizontal" id="order-form">
+<form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="form-horizontal" id="order-form">
   	{% csrf_token %}
   	<div class="row">
 		<div class="span6">
@@ -62,26 +48,3 @@
 	</div>
   </div>
   </form>
-{% endblock %}
-
-{% block extrajs %}
-  {{ block.super }}
-  {% compressed_js 'orderpage' %}
-  <script>
-  	{% autoescape  off %}
-  		var currencies = $.parseJSON('{{ myCurrency }}');
-  	{% endautoescape %}
-  	$( document ).ready(function() {
-  		$('#nonsearchWidget').nonSearchRecordsTable({ 'currency': currencies });
-
-  		$('#submitForm').click(function() {
-  			if ($('#id_user').val() == "") {
-  				$('#user_div').addClass('error');
-  				return
-  			}
-  			$('#order-form').submit();
-  		});
-
-  	});
-  </script>
-{% endblock %}

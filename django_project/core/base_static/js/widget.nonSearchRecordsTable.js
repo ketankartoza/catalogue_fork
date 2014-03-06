@@ -8,7 +8,8 @@
     $.widget("sansa.nonSearchRecordsTable",{
 	// default options
 	options: {
-		currency: {}
+		currency: {},
+		records: {}
 	},
 
 	// creation code for mywidget
@@ -45,6 +46,12 @@
   			self._addProduct(product, price, currency);
   			self._hideForm();
   		});
+
+  		if (_.keys(this.options.records).length > 0) {
+  			_.each(this.options.records, function(element) {
+  				self._addExistingProduct(element.id, element.desc, element.price, element.currency, element.rand_price);
+  			});
+  		}
 
   		$('.deleteRow').click(function() {
   			console.log(this);
@@ -93,13 +100,29 @@
 			var html = '<tr><td>'+product+'</td><td>'+price+'</td><td>'+currency+'</td><td>'+result.rand_price+'</td>';
 			html = html + '<td><input type="hidden" name="'+self.numProducts+'_product" value="'+product+'">';
 			html = html + '<input type="hidden" name="'+self.numProducts+'_price" value="'+price+'">';
+			html = html + '<input type="hidden" name="'+self.numProducts+'_id" value="0">';
 			html = html + '<input type="hidden" name="'+self.numProducts+'_currency" value="'+currency+'">';
+			html = html + '<input type="hidden" name="'+self.numProducts+'_rand_price" value="'+result.rand_price+'">';
 			html = html + '<input type="hidden" name="productlist" value="'+self.numProducts+'">';
 			html = html + '<button class="btn deleteRow">Delete</button>';
 			html = html + '</td></tr>';
 			self.element.prepend(html);
 		});
 		// TODO fail
+	},
+
+	_addExistingProduct: function(id, product, price, currency, rand_price) {
+		this.numProducts++;
+		var html = '<tr><td>'+product+'</td><td>'+price+'</td><td>'+currency+'</td><td>'+rand_price+'</td>';
+		html = html + '<td><input type="hidden" name="'+this.numProducts+'_product" value="'+product+'">';
+		html = html + '<input type="hidden" name="'+this.numProducts+'_price" value="'+price+'">';
+		html = html + '<input type="hidden" name="'+this.numProducts+'_currency" value="'+currency+'">';
+		html = html + '<input type="hidden" name="productlist" value="'+this.numProducts+'">';
+		html = html + '<input type="hidden" name="'+this.numProducts+'_id" value="'+id+'">';
+		html = html + '<input type="hidden" name="'+this.numProducts+'_rand_price" value="'+rand_price+'">';
+		html = html + '<button class="btn deleteRow">Delete</button>';
+		html = html + '</td></tr>';
+		this.element.prepend(html);
 	},
 
 	_writeHeader: function() {
