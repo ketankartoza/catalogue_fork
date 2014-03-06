@@ -30,6 +30,7 @@
 		this.btnAdd = elem.find('.addNewRow');
 		this.btnSave = elem.find('.submitNewRow');
 		this.frm = elem.find('.nonsearchForm');
+		this.elemTotal = elem.find('.totalPrice');
 		this.formVisible = false;
   		this.btnAdd.click(function() {
   			if (self.formVisible) {
@@ -62,11 +63,13 @@
   			_.each(this.options.records, function(element) {
   				self._addExistingProduct(element.id, element.desc, element.price, element.currency, element.rand_price);
   			});
+  			this._calculateTotal();
   		}
 
   		$('.deleteRow').click(function() {
   			datachanged = true;
   			$(this).parent().parent().remove();
+  			self._calculateTotal();
   		});
 
 	},
@@ -91,6 +94,14 @@
 		this.btnAdd.html('Cancel');
 	},
 
+	_calculateTotal: function() {
+		var total = 0;
+		this.element.find('input[name*="_rand_price"]').each(function() {
+			total = total + parseFloat($(this).val());
+		});
+		this.elemTotal.html(total);
+	},
+
 	_addProduct: function(product, price, currency) {
 		this.numProducts++;
 		var self = this;
@@ -110,6 +121,7 @@
 			html = html + '<button class="btn deleteRow" type="button">Delete</button>';
 			html = html + '</td></tr>';
 			self.element.prepend(html);
+			self._calculateTotal();
 		});
 		// TODO fail
 	},
@@ -140,10 +152,11 @@
 		body = body + '<td></td>';
 		body = body + '<td></td>';
 		body = body + '</tr><tr>';
-		body = body + '<td colspan="5">';
+		body = body + '<td colspan="3">';
 		body = body + '<button type="button" class="btn addNewRow">Add new row</button>';
 		body = body + '<button type="button" class="btn hide submitNewRow">Save</button>';
 		body = body + '</td>';
+		body = body + '<td colspan="2"> Total: R <span class="totalPrice">0</span></td>';
 		body = body + '</tr></tbody>';
 		return body;
 	},

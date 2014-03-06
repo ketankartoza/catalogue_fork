@@ -384,10 +384,14 @@ def viewOrder(theRequest, theId):
                     'orderAdHocPage.html', myOptions,
                     context_instance=RequestContext(theRequest))
             else:
+                mySum = 0
+                for record in myRecords:
+                    mySum = mySum + record.rand_cost_per_scene
                 myOptions = {
                     'myOrder': myOrder,
                     'myRecords': myRecords,
                     'myHistory': myHistory,
+                    'mySum': mySum
                 }
                 return render_to_response(
                     'orderAdHocPageUser.html', myOptions,
