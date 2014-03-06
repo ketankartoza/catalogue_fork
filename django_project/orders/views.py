@@ -384,7 +384,14 @@ def viewOrder(theRequest, theId):
                     'orderAdHocPage.html', myOptions,
                     context_instance=RequestContext(theRequest))
             else:
-                pass
+                myOptions = {
+                    'myOrder': myOrder,
+                    'myRecords': myRecords,
+                    'myHistory': myHistory,
+                }
+                return render_to_response(
+                    'orderAdHocPageUser.html', myOptions,
+                    context_instance=RequestContext(theRequest))
 
 
 def coverageForOrder(theOrder, theSearchRecords):

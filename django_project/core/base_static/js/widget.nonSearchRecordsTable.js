@@ -43,9 +43,20 @@
   			var product = self.frm.find('.product_desc').val();
   			var price = self.frm.find('.product_price').val();
   			var currency = self.frm.find('select').val();
-  			self._addProduct(product, price, currency);
-  			self._hideForm();
-  		});
+  			var pattern=/\d+(\.\d{2})?$/;
+			if(pattern.test(price))	{
+  				self._addProduct(product, price, currency);
+  				self._hideForm();
+  				self.frm.find('.product_desc').val('');
+  				self.frm.find('.product_price').val('');
+  				self.frm.find('.product_price').parent().removeClass('error');
+  				self.frm.find('.product_price').parent().removeClass('control-group');
+  				datachanged = true;
+  			} else {
+  				self.frm.find('.product_price').parent().addClass('error');
+  				self.frm.find('.product_price').parent().addClass('control-group');
+  			}
+  	 	});
 
   		if (_.keys(this.options.records).length > 0) {
   			_.each(this.options.records, function(element) {
@@ -54,7 +65,8 @@
   		}
 
   		$('.deleteRow').click(function() {
-  			console.log(this);
+  			datachanged = true;
+  			$(this).parent().parent().remove();
   		});
 
 	},
@@ -79,15 +91,6 @@
 		this.btnAdd.html('Cancel');
 	},
 
-	_convertPrice: function(price, currency) {
-		$.ajax({
-		  dataType: "json",
-		  type: "POST",
-		  url: '/convertprice/',
-		  data: {'currency': currency, 'price': price}
-		});
-	},
-
 	_addProduct: function(product, price, currency) {
 		this.numProducts++;
 		var self = this;
@@ -104,7 +107,7 @@
 			html = html + '<input type="hidden" name="'+self.numProducts+'_currency" value="'+currency+'">';
 			html = html + '<input type="hidden" name="'+self.numProducts+'_rand_price" value="'+result.rand_price+'">';
 			html = html + '<input type="hidden" name="productlist" value="'+self.numProducts+'">';
-			html = html + '<button class="btn deleteRow">Delete</button>';
+			html = html + '<button class="btn deleteRow" type="button">Delete</button>';
 			html = html + '</td></tr>';
 			self.element.prepend(html);
 		});
@@ -120,7 +123,7 @@
 		html = html + '<input type="hidden" name="productlist" value="'+this.numProducts+'">';
 		html = html + '<input type="hidden" name="'+this.numProducts+'_id" value="'+id+'">';
 		html = html + '<input type="hidden" name="'+this.numProducts+'_rand_price" value="'+rand_price+'">';
-		html = html + '<button class="btn deleteRow">Delete</button>';
+		html = html + '<button class="btn deleteRow" type="button">Delete</button>';
 		html = html + '</td></tr>';
 		this.element.prepend(html);
 	},
