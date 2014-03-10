@@ -1,3 +1,28 @@
+
+var mapBounds = new OpenLayers.Bounds( 16.0, -34.9999882412, 32.9999919763, -22.0);
+var mapMinZoom = 1;
+var mapMaxZoom = 15;
+
+// avoid pink tiles
+OpenLayers.IMAGE_RELOAD_ATTEMPTS = 3;
+OpenLayers.Util.onImageLoadErrorColor = "transparent";
+
+function overlay_getTileURL(bounds) {
+    var res = this.map.getResolution();
+    var x = Math.round((bounds.left - this.maxExtent.left) / (res * this.tileSize.w));
+    var y = Math.round((bounds.bottom - this.tileOrigin.lat) / (res * this.tileSize.h));
+    var z = this.map.getZoom();
+    if (this.map.baseLayer.name == 'Virtual Earth Roads' || this.map.baseLayer.name == 'Virtual Earth Aerial' || this.map.baseLayer.name == 'Virtual Earth Hybrid') {
+       z = z + 1;
+    }
+    if (mapBounds.intersectsBounds( bounds ) && z >= mapMinZoom && z <= mapMaxZoom ) {
+       //console.log( this.url + z + "/" + x + "/" + y + "." + this.type);
+       return this.url + z + "/" + x + "/" + y + "." + this.type;
+    } else {
+       return "http://www.maptiler.org/img/none.png";
+    }
+}
+
 +function () {
 
   "use strict"; // jshint ;_;
@@ -22,18 +47,22 @@
     },
 
     initLayers: function() {
+      var TMSOverlay = new OpenLayers.Layer.TMS(
+        "TMS Overlay", "http://maps.sansa.org.za/SPOT2012/", {
+            layername: '.',
+            type: 'png',
+            getURL: overlay_getTileURL,
+            alpha: true,
+            isBaseLayer: false
+        });
+
+        if (OpenLayers.Util.alphaHack() == false){
+            TMSOverlay.setOpacity(0.7);
+        }
       var layerMapnik = new OpenLayers.Layer.OSM("Open Street Map");
 
       var myLayersList = [
-            WEB_LAYERS.zaSpot2mMosaic2010TC,
-            WEB_LAYERS.zaSpot2mMosaic2009TC,
-            WEB_LAYERS.zaSpot2mMosaic2008TC,
-            WEB_LAYERS.zaSpot2mMosaic2007TC,
-            WEB_LAYERS.zaSpot10mMosaic2010,
-            WEB_LAYERS.zaSpot10mMosaic2009,
-            WEB_LAYERS.zaSpot10mMosaic2008,
-            WEB_LAYERS.zaSpot10mMosaic2007,
-            WEB_LAYERS.zaRoadsBoundaries,
+            TMSOverlay,
             layerMapnik
         ];
         this.map.addLayers(myLayersList);
