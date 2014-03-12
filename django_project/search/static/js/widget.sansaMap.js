@@ -15,7 +15,7 @@ function overlay_getTileURL(bounds) {
     if (this.map.baseLayer.name == 'Virtual Earth Roads' || this.map.baseLayer.name == 'Virtual Earth Aerial' || this.map.baseLayer.name == 'Virtual Earth Hybrid') {
        z = z + 1;
     }
-    if (mapBounds.intersectsBounds( bounds ) && z >= mapMinZoom && z <= mapMaxZoom ) {
+    if (z >= mapMinZoom && z <= mapMaxZoom ) {
        //console.log( this.url + z + "/" + x + "/" + y + "." + this.type);
        return this.url + z + "/" + x + "/" + y + "." + this.type;
     } else {
