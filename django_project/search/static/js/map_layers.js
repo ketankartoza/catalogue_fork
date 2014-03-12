@@ -455,7 +455,7 @@ WEB_LAYERS_IMAGE['10m Mosaic 2007 TC'] = 'zaLayer.jpeg';
 WEB_LAYERS_IMAGE['SA Vector'] = 'zaLayer2.jpeg';
 WEB_LAYERS_IMAGE['Open Street Map'] = 'layerOSM.png';
 WEB_LAYERS_IMAGE['Search geometry'] = 'mockup3.png';
-WEB_LAYERS_IMAGE['TMS Overlay'] = 'tms_layer.png';
+WEB_LAYERS_IMAGE['2012 Mosaic'] = 'tms_layer.png';
 
 WEB_LAYERS_DESC['2m Mosaic 2010 TC'] = '2m Mosaic 2010 TC';
 WEB_LAYERS_DESC['2m Mosaic 2009 TC'] = '2m Mosaic 2009 TC';

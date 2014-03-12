@@ -48,7 +48,7 @@ function overlay_getTileURL(bounds) {
 
     initLayers: function() {
       var TMSOverlay = new OpenLayers.Layer.TMS(
-        "TMS Overlay", "http://maps.sansa.org.za/SPOT2012/", {
+        "2012 Mosaic", "http://maps.sansa.org.za/SPOT2012/", {
             layername: '.',
             type: 'png',
             getURL: overlay_getTileURL,
