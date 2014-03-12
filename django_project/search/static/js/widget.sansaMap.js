@@ -52,13 +52,10 @@ function overlay_getTileURL(bounds) {
             layername: '.',
             type: 'png',
             getURL: overlay_getTileURL,
-            alpha: true,
+            alpha: false,
             isBaseLayer: false
         });
 
-        if (OpenLayers.Util.alphaHack() == false){
-            TMSOverlay.setOpacity(0.7);
-        }
       var layerMapnik = new OpenLayers.Layer.OSM("Open Street Map");
 
       var myLayersList = [
