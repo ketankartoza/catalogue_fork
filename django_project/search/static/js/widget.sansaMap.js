@@ -1,27 +1,6 @@
-
-var mapBounds = new OpenLayers.Bounds( 16.0, -34.9999882412, 32.9999919763, -22.0);
-var mapMinZoom = 1;
-var mapMaxZoom = 15;
-
 // avoid pink tiles
-OpenLayers.IMAGE_RELOAD_ATTEMPTS = 3;
-OpenLayers.Util.onImageLoadErrorColor = "transparent";
-
-function overlay_getTileURL(bounds) {
-    var res = this.map.getResolution();
-    var x = Math.round((bounds.left - this.maxExtent.left) / (res * this.tileSize.w));
-    var y = Math.round((bounds.bottom - this.tileOrigin.lat) / (res * this.tileSize.h));
-    var z = this.map.getZoom();
-    if (this.map.baseLayer.name == 'Virtual Earth Roads' || this.map.baseLayer.name == 'Virtual Earth Aerial' || this.map.baseLayer.name == 'Virtual Earth Hybrid') {
-       z = z + 1;
-    }
-    if (z >= mapMinZoom && z <= mapMaxZoom ) {
-       //console.log( this.url + z + "/" + x + "/" + y + "." + this.type);
-       return this.url + z + "/" + x + "/" + y + "." + this.type;
-    } else {
-       return "http://www.maptiler.org/img/none.png";
-    }
-}
+// OpenLayers.IMAGE_RELOAD_ATTEMPTS = 3;
+// OpenLayers.Util.onImageLoadErrorColor = "transparent";
 
 +function () {
 
@@ -50,10 +29,15 @@ function overlay_getTileURL(bounds) {
       var TMSOverlay = new OpenLayers.Layer.TMS(
         "2012 Mosaic", "http://maps.sansa.org.za/SPOT2012/", {
             layername: '.',
-            type: 'png',
-            getURL: overlay_getTileURL,
+            type: 'jpg',
+            getURL: this.overlay_getTileURL,
             alpha: false,
-            isBaseLayer: false
+            isBaseLayer: false,
+            // layer specific variables
+            // make sure we correctly transform bounds to the map projection
+            TMSLayerBounds: this.transformBounds(new OpenLayers.Bounds( 16.0, -34.9999882412, 32.9999919763, -22.0)),
+            TMSLayerMinZoom: 1,
+            TMSLayerMaxZoom: 15
         });
 
       var layerMapnik = new OpenLayers.Layer.OSM("Open Street Map");
@@ -249,7 +233,23 @@ function overlay_getTileURL(bounds) {
         div.append(layerHTML);
       }
     });
-  }
+  },
+  overlay_getTileURL: function(bounds) {
+    var res = this.map.getResolution();
+    var x = Math.round((bounds.left - this.maxExtent.left) / (res * this.tileSize.w));
+    var y = Math.round((bounds.bottom - this.tileOrigin.lat) / (res * this.tileSize.h));
+    var z = this.map.getZoom();
+
+    if (this.map.baseLayer.name == 'Virtual Earth Roads' || this.map.baseLayer.name == 'Virtual Earth Aerial' || this.map.baseLayer.name == 'Virtual Earth Hybrid') {
+       z = z + 1;
+    }
+    if (this.TMSLayerBounds.intersectsBounds( bounds ) && z >= this.TMSLayerMinZoom && z <= this.TMSLayerMaxZoom ) {
+       //console.log( this.url + z + "/" + x + "/" + y + "." + this.type);
+       return this.url + z + "/" + x + "/" + y + "." + this.type;
+    } else {
+       return "http://www.maptiler.org/img/none.png";
+    }
+}
 }; // prototype
 
 }(); // anon function
