@@ -567,6 +567,8 @@ APP.ResultGridView = Backbone.View.extend({
         var cur_pag_el = this.$el.find('#resultsPosition');
         var page_info = this.collection.pageInfo();
         var paginator = this._createSelectPaginator(page_info.current_page, page_info.pages);
+        var showing = page_info.limit;
+        if (page_info.total < page_info.limit) showing = page_info.total;
         var text = 'Page <span id="paginator"></span> of ' + page_info.pages + ' ('+page_info.total+' records)';
         if (page_info.current_page > 1) {
             $('#searchPrev').show();
@@ -582,7 +584,7 @@ APP.ResultGridView = Backbone.View.extend({
         cur_pag_el.html(text);
         $('#paginator').html(paginator);
         if (page_info.current_page == 1) {
-            $('#main-content').prepend('<div class="alert alert-info alert-dismissable alert-search"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong>'+page_info.total+' Records Returned. Displaying '+page_info.limit+'.</strong></div>');
+            $('#main-content').prepend('<div class="alert alert-info alert-dismissable alert-search"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong>'+page_info.total+' Records Returned. Displaying '+showing+'.</strong></div>');
             window.setTimeout(function () {
                 $(".alert").alert('close');
             }, 6000);
@@ -599,7 +601,8 @@ APP.ResultGridViewItem = Backbone.View.extend({
         'click': 'highlightResultItem',
         'click img': 'imagePopover',
         'mouseenter': 'focusItem',
-        'mouseleave': 'blurItem'
+        'mouseleave': 'blurItem',
+        'mouseleave span': function() {console.log('test');},
     },
     initialize: function() {
         $APP.on('highlightResultItem', $.proxy(this.highlightResultItem, this));
@@ -644,11 +647,11 @@ APP.ResultGridViewItem = Backbone.View.extend({
 
     blurItem: function() {
         if (typeof this.line != 'undefined') this.line.remove();
-        var selectedID = this.model.get('id');
+        var selectedID = this.model.get('original_product_id');
         if (APP.selectedFeatureID == selectedID) {
             $APP.trigger('highlightSearchRecord', {'original_product_id': selectedID, 'zoom': false});
         } else {
-            $APP.trigger('removeFocusFeature', {'id': selectedID});
+            $APP.trigger('removeFocusFeature', {'original_product_id': selectedID});
         }
     },
 
@@ -741,9 +744,9 @@ var template = [
               '<% } else { %>UNK',
               '<% } %>',
             '</p></div>',
-            '<span class="button metadata-button btn btn-default" data-toggle="tooltip" data-title="View Metadata"><i class="icon-list-alt"></i></span>',
-            '<span class="button cart-button btn btn-default" data-toggle="tooltip" data-title="Add to Cart"><i class="icon-shopping-cart"></i></span>',
-            '<span class="button cart-remove-button btn btn-danger hide" data-toggle="tooltip" data-title="Remove From Cart"><i class="icon-remove"></i></span>',
+            '<span class="button metadata-button btn btn-default" data-title="View Metadata"><i class="icon-list-alt"></i></span>',
+            '<span class="button cart-button btn btn-default" data-title="Add to Cart"><i class="icon-shopping-cart"></i></span>',
+            '<span class="button cart-remove-button btn btn-danger hide" data-title="Remove From Cart"><i class="icon-remove"></i></span>',
           '</div>'
           ].join('');
 
@@ -790,13 +793,10 @@ APP.CartGridView = Backbone.View.extend({
     },
 
     deleteItem: function(event, data) {
-        var del = confirm('Are you sure?');
-        if (del) {
-            var exist = APP.Cart.find(function(item) {
-                return item.get("product").original_product_id == data.id;
-            });
-            exist.destroy({wait: true});
-        }
+        var exist = APP.Cart.find(function(item) {
+            return item.get("product").original_product_id == data.id;
+        });
+        exist.destroy({wait: true});
     },
 
     render: function() {
@@ -835,11 +835,8 @@ APP.CartGridViewItem = Backbone.View.extend({
         });
     },
     delete: function() {
-        var del = confirm('Are you sure?');
-        if (del) {
-            $APP.trigger('removedItemFromCartUpdateResults', {'original_product_id': this.model.get('product').original_product_id});
-            this.model.destroy({wait: true});
-        }
+        $APP.trigger('removedItemFromCartUpdateResults', {'original_product_id': this.model.get('product').original_product_id});
+        this.model.destroy({wait: true});
     },
     render: function() {
        $(this.el).html(_.template(templateCart, {model:this.model}));
