@@ -29,7 +29,7 @@ from catalogue.tests.model_factories import VisitF
 
 class ReportsViews_visitorReport_Tests(TestCase):
     """
-    Tests reports.py visitorReport method/view
+    Tests reports.py visitor_report method/view
     """
 
     def setUp(self):
@@ -71,7 +71,7 @@ class ReportsViews_visitorReport_Tests(TestCase):
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
-            reverse('visitorReport', kwargs={}))
+            reverse('visitor_report', kwargs={}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
             myResp.context['app_path'], u'/visitorreport/')

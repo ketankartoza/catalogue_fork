@@ -29,7 +29,7 @@ from search.tests.model_factories import SearchF
 
 class ReportsViews_recentSearches_Tests(TestCase):
     """
-    Tests reports.py visitorReport method/view
+    Tests reports.py visitor_report method/view
     """
 
     def setUp(self):

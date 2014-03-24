@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load render_table from django_tables2 %}
 {% block extrajs %}
 {{ block.super }}
       <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -31,7 +32,6 @@
 </script>
 {% endblock %}
 {% block content %}
-{% if myScores %}
 <div class="row-fluid">
   <h2 class="center chartTitle">Visits by Country</h2>
   <h5 class="center muted">Excluding SA</h5>
@@ -56,22 +56,7 @@
 </div>
 <div class="row-fluid">
   <div class="span8 offset2">
-    <table id="gradient-style" summary="SAC Catalogue Visitors"
-         class="table table-striped">
-      <thead>
-        <th>Country</th>
-        <th>Visitors</th>
-      </thead>
-      <tfoot></tfoot>
-      <tbody>
-        {% for myCountry in myScores %}
-        <tr><td>{% filter force_escape %}{{myCountry.country|title}}{% endfilter %}</td><td>{{ myCountry.count }}</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    {% render_table table 'django_tables2/custom-table.html' %}
   </div>
 </div>
-{% else %}
-<p>No reports to generate.</p>
-{% endif %}
 {% endblock %}

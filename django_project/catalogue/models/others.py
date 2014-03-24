@@ -11,6 +11,7 @@ Contact : lkleyn@sansa.org.za
    of Linfiniti Consulting CC.
 
 """
+import datetime
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.1'
@@ -34,25 +35,35 @@ class VisitHelpersManager(models.GeoManager):
     """
     Visit model helper methods
     """
-    def countryStats(self):
+    def countryStats(self, **kwargs):
         """
         Count visits per country
 
         NOTE: We need to use executeRAWSQL as manager.raw method requires
         PrimaryKey to be returned which is then used to map objects back to the
         model
+
+        sort_col and sort_order used to allow for sorting of data in rendered
+        table in view.
         """
-        myResults = executeRAWSQL("""
+        sort_col = kwargs.get('sort_col', 'count')
+        sort_order = kwargs.get('sort_order', 'DESC')
+        results = executeRAWSQL("""
 SELECT LOWER(country) as country, COUNT(*) AS count
 FROM catalogue_visit
 GROUP BY LOWER(country)
-ORDER BY count DESC;""")
+ORDER BY %s %s;""" % (sort_col, sort_order))
 
-        return myResults
+        return results
 
     def monthlyReport(self, theDate):
         """
         Count visits per country for each month
+
+        sort_col and sort_order used to allow for sorting of data in rendered
+        table in view.
+        :param kwargs: Contains sort_col and sort_order for table rendering
+        :param the_date: The requested date for the report
         """
         myResults = executeRAWSQL("""
 SELECT LOWER(country) as country ,count(*) as count, DATE_TRUNC('month',

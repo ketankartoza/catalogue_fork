@@ -14,7 +14,8 @@ INSTALLED_APPS += (
     'tastypie',
     'backbone_tastypie',
     'pipeline',
-    'exchange'
+    'exchange',
+    'django_tables2'
 )
 
 # Added by George for webodt

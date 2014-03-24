@@ -6,8 +6,8 @@ from .views import (
     searchMonthlyReport,
     searchMonthlyReportAOI,
     visitorList,
-    visitorReport,
-    visitorMonthlyReport,
+    visitor_report,
+    visitor_monthly_report,
     dataSummaryTable,
     dictionaryReport,
     sensorSummaryTable,
@@ -25,9 +25,9 @@ urlpatterns = patterns(
         searchMonthlyReportAOI, name='searchMonthlyReportAOI'
         ),
     url(r'^visitorlist/$', visitorList, name='visitorList'),
-    url(r'^visitorreport/$', visitorReport, name='visitorReport'),
+    url(r'^visitorreport/$', visitor_report, name='visitorReport'),
     url(r'^visitormonthlyreport/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$',
-        visitorMonthlyReport, name='visitorMonthlyReport'
+        visitor_monthly_report, name='visitorMonthlyReport'
         ),
     url(r'^dataSummaryTable/$', dataSummaryTable, name='dataSummaryTable'),
     url(r'^dictionaryReport/$', dictionaryReport, name='dictionaryReport'),

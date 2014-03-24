@@ -55,6 +55,7 @@ from search.models import (
 )
 
 from dictionaries.models import SatelliteInstrumentGroup
+import django_tables2 as tables
 
 
 # in case you need to slice ResultSet (paginate) for display
@@ -74,42 +75,118 @@ def sliceForDisplay(theList, thePageSize=10):
         yield theList[myX * thePageSize:myX * thePageSize + thePageSize]
 
 
+def table_sort_settings(request):
+    """
+    Helper function to fetch sort and order from GET and set the consequent
+    value for sort_link which is appended to the table sort links in the
+    template
+
+    :param request: HttpRequest
+    :return: sort_col, sort_order, sort_link :rtype: str
+    """
+    sort_col = request.GET.get('sort', None)
+    sort_order = request.GET.get('order', None)
+    if sort_order == 'ASC':
+        sort_link = 'DESC'
+    elif sort_order == 'DESC':
+        sort_link = 'ASC'
+    else:
+        sort_link = 'DESC'
+    return sort_col, sort_order, sort_link
+
+
+class TitleColumn(tables.Column):
+    """
+    Returns a column with a titled cell value
+    (i.e. "South Africa", not "south africa")
+    """
+    def render(self, value):
+        """
+        Renders the cell's value
+        :param value: cell value
+        :return: value.title() :rtype: str
+        """
+        return value.title()
+
+
+class CountryTable(tables.Table):
+    """
+    Renders a County/Count table
+    """
+    country = TitleColumn()
+    count = tables.Column()
+
+    class Meta(object):
+        """
+        Adding CSS class attrs to the table (required for Bootstrap)
+        """
+        attrs = {
+            'class': 'table table-striped'
+        }
+
+
 @staff_member_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('visitorReport.html')
-def visitorReport(theRequest):
-    myCountryStats = Visit.helpers.countryStats()
+def visitor_report(request):
+    """
+    The view to render a visitor report
+
+    Note: Staff member required
+
+    :param request: HttpRequest
+    :return: visitorReport.html :rtype: HttpResponse
+    """
+    sort_col, sort_order, sort_link = table_sort_settings(request)
+    country_stats = Visit.helpers.countryStats(
+        sort_col=sort_col or 'count',
+        sort_order=sort_order or 'DESC'
+    )
+    table = CountryTable(country_stats)
 
     #render_to_response is done by the renderWithContext decorator
     return ({
         'myGraphLabel': ({'Country': 'country'}),
-        'myScores': myCountryStats,
-        'myCurrentMonth': datetime.date.today()
+        'myCurrentMonth': datetime.date.today(),
+        'table': table,
+        'sort_link': sort_link
     })
 
 
 @staff_member_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('visitorMonthlyReport.html')
-def visitorMonthlyReport(theRequest, theYear, theMonth):
+def visitor_monthly_report(request, theYear, theMonth):
+    """
+    The view to return a monthly report on visitor activity
+
+    :param request: HttpRequest
+    :param theYear: Requested year
+    :param theMonth: Requested month
+    :return: visitorMonthlyReport.html :rtype: HttpResponse
+    """
+    sort_col, sort_order, sort_link = table_sort_settings(request)
     #construct date object
     if not(theYear and theMonth):
-        myDate = datetime.date.today()
+        my_date = datetime.date.today()
     else:
         try:
-            myDate = datetime.date(int(theYear), int(theMonth), 1)
-        except:
+            my_date = datetime.date(int(theYear), int(theMonth), 1)
+        except (TypeError, Exception):
+            my_date = None
             logger.error('Date arguments cannot be parsed')
             logger.info(traceback.format_exc())
 
-    myCountryStats = Visit.helpers.monthlyReport(myDate)
+    country_stats = Visit.helpers.monthlyReport(my_date)
+    table = CountryTable(country_stats)
 
     return ({
         'myGraphLabel': ({'Country': 'country'}),
-        'myScores': myCountryStats,
-        'myCurrentDate': myDate,
-        'myPrevDate': myDate - datetime.timedelta(days=1),
-        'myNextDate': myDate + datetime.timedelta(days=31),
+        'table': table,
+        'sort_link': sort_link,
+        'myCurrentDate': my_date,
+        'myPrevDate': my_date - datetime.timedelta(days=1),
+        'myNextDate': my_date + datetime.timedelta(days=31),
     })
 
 
