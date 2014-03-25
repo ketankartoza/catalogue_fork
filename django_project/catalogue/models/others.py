@@ -48,15 +48,27 @@ class VisitHelpersManager(models.GeoManager):
         """
         sort_col = kwargs.get('sort_col', 'count')
         sort_order = kwargs.get('sort_order', 'DESC')
-        results = executeRAWSQL("""
-SELECT LOWER(country) as country, COUNT(*) AS count
-FROM catalogue_visit
-GROUP BY LOWER(country)
-ORDER BY %s %s;""" % (sort_col, sort_order))
-
+        valid_sort_order = None
+        valid_sort_col = None
+        if sort_col == 'country' or sort_col == 'count':
+            valid_sort_col = sort_col
+        if sort_order == 'DESC' or sort_order == 'ASC':
+            valid_sort_order = sort_order
+        if valid_sort_col or valid_sort_order:
+            results = executeRAWSQL("""
+                SELECT LOWER(country) as country, COUNT(*) AS count
+                FROM catalogue_visit
+                GROUP BY LOWER(country)
+                ORDER BY %s %s;""" % (sort_col, sort_order))
+        else:
+            results = executeRAWSQL("""
+                SELECT LOWER(country) as country, COUNT(*) AS count
+                FROM catalogue_visit
+                GROUP BY LOWER(country)
+                ORDER BY count DESC;""")
         return results
 
-    def monthlyReport(self, theDate):
+    def monthlyReport(self, theDate, **kwargs):
         """
         Count visits per country for each month
 
@@ -65,6 +77,8 @@ ORDER BY %s %s;""" % (sort_col, sort_order))
         :param kwargs: Contains sort_col and sort_order for table rendering
         :param the_date: The requested date for the report
         """
+        sort_col = kwargs.get('sort_col', 'count')
+        sort_order = kwargs.get('sort_order', 'DESC')
         myResults = executeRAWSQL("""
 SELECT LOWER(country) as country ,count(*) as count, DATE_TRUNC('month',
 visit_date) as month
@@ -72,7 +86,11 @@ FROM catalogue_visit
 WHERE visit_date BETWEEN to_date(%(date)s,'MM-YYYY')
     AND to_date(%(date)s,'MM-YYYY')+ interval '1 month'
 GROUP BY LOWER(country),DATE_TRUNC('month',visit_date)
-ORDER BY count DESC;""", {'date': theDate.strftime('%m-%Y')})
+ORDER BY %(sort_col)s %(sort_order)s;""", {
+            'date': theDate.strftime('%m-%Y'),
+            'sort_col': sort_col,
+            'sort_order': sort_order
+        })
         return myResults
 
 

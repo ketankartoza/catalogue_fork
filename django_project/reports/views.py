@@ -177,7 +177,7 @@ def visitor_monthly_report(request, theYear, theMonth):
             logger.error('Date arguments cannot be parsed')
             logger.info(traceback.format_exc())
 
-    country_stats = Visit.helpers.monthlyReport(my_date)
+    country_stats = Visit.helpers.monthlyReport(my_date, sort_col, sort_order)
     table = CountryTable(country_stats)
 
     return ({
