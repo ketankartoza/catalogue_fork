@@ -41,7 +41,7 @@
     <button onclick='location="{% url 'visitorMonthlyReport' myNextDate|date:'Y' myNextDate|date:'m' %}"'
         class="btn" id="download-btn">Next Month <i class="icon-chevron-right"></i> </button>
   </div>
-
+  {% if table %}
     <!--Load the AJAX API-->
     <h2 class="text-center chartTitle">
       Visits by Country For {{ myCurrentDate|date:'F Y' }}
@@ -57,4 +57,9 @@
         </div>
       </div>
     </div>
+  {% else %}
+    <div class="row-fluid">
+      <h3 class="text-center">No Report to Generate</h3>
+    </div>
+  {% endif %}
 {% endblock %}

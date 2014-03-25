@@ -35,7 +35,31 @@ class VisitHelpersManager(models.GeoManager):
     """
     Visit model helper methods
     """
-    def countryStats(self, **kwargs):
+
+    @staticmethod
+    def validate_params(sort_col, sort_order):
+        """
+        This method validates sort_col and sort_order in order to avoid
+        SQL injection attacks
+
+        Django's raw sql execution params option is only an option to replace
+        SQL variables, not column names, so we have to use a standard str
+        replace, which is insecure. We therefore validate that sort_col and
+        sort_order are one of our predefined options only.
+
+        :param sort_col: 'country' or 'count'
+        :param sort_order: 'ASC' or 'DESC'
+        :return: valid_sort_col and valid_sort_order :rtype: str
+        """
+        valid_sort_order = None
+        valid_sort_col = None
+        if sort_col == 'country' or sort_col == 'count':
+            valid_sort_col = sort_col
+        if sort_order == 'DESC' or sort_order == 'ASC':
+            valid_sort_order = sort_order
+        return valid_sort_col, valid_sort_order
+
+    def country_stats(self, **kwargs):
         """
         Count visits per country
 
@@ -48,27 +72,28 @@ class VisitHelpersManager(models.GeoManager):
         """
         sort_col = kwargs.get('sort_col', 'count')
         sort_order = kwargs.get('sort_order', 'DESC')
-        valid_sort_order = None
-        valid_sort_col = None
-        if sort_col == 'country' or sort_col == 'count':
-            valid_sort_col = sort_col
-        if sort_order == 'DESC' or sort_order == 'ASC':
-            valid_sort_order = sort_order
-        if valid_sort_col or valid_sort_order:
+        valid_sort_col, valid_sort_order = self.validate_params(
+            sort_col,
+            sort_order
+        )
+        if valid_sort_col and valid_sort_order:
             results = executeRAWSQL("""
-                SELECT LOWER(country) as country, COUNT(*) AS count
-                FROM catalogue_visit
+                SELECT LOWER(country) as country,
+                COUNT(*) AS count
+                FROM catalogue_visit WHERE country != 'South Africa'
                 GROUP BY LOWER(country)
-                ORDER BY %s %s;""" % (sort_col, sort_order))
+                ORDER BY %s %s;""" % (
+                valid_sort_col, valid_sort_order))
         else:
             results = executeRAWSQL("""
-                SELECT LOWER(country) as country, COUNT(*) AS count
-                FROM catalogue_visit
+                SELECT LOWER(country) as country,
+                COUNT(*) AS count
+                FROM catalogue_visit WHERE country != 'South Africa'
                 GROUP BY LOWER(country)
                 ORDER BY count DESC;""")
         return results
 
-    def monthlyReport(self, theDate, **kwargs):
+    def monthly_report(self, the_date, **kwargs):
         """
         Count visits per country for each month
 
@@ -79,19 +104,38 @@ class VisitHelpersManager(models.GeoManager):
         """
         sort_col = kwargs.get('sort_col', 'count')
         sort_order = kwargs.get('sort_order', 'DESC')
-        myResults = executeRAWSQL("""
-SELECT LOWER(country) as country ,count(*) as count, DATE_TRUNC('month',
-visit_date) as month
-FROM catalogue_visit
-WHERE visit_date BETWEEN to_date(%(date)s,'MM-YYYY')
-    AND to_date(%(date)s,'MM-YYYY')+ interval '1 month'
-GROUP BY LOWER(country),DATE_TRUNC('month',visit_date)
-ORDER BY %(sort_col)s %(sort_order)s;""", {
-            'date': theDate.strftime('%m-%Y'),
-            'sort_col': sort_col,
-            'sort_order': sort_order
-        })
-        return myResults
+        valid_sort_col, valid_sort_order = self.validate_params(
+            sort_col,
+            sort_order
+        )
+        if valid_sort_col and valid_sort_order:
+            # Yes, this is not great... Better solutions/suggestions welcome,
+            # but assuming we have to use raw SQL and assuming that the columns
+            # have to be sortable, I can't see a better solution.....
+            raw_str = """SELECT LOWER(country) as country, count(*) as count,
+                DATE_TRUNC('month', visit_date) as month
+                FROM catalogue_visit WHERE (country != 'South Africa'
+                AND visit_date BETWEEN to_date({{date}},'MM-YYYY')
+                    AND to_date({{date}},'MM-YYYY')+ interval '1 month')
+                GROUP BY LOWER(country),DATE_TRUNC('month',visit_date)
+                ORDER BY %s %s;""" % (
+                valid_sort_col, valid_sort_order)
+            raw_sql = raw_str.replace('{{date}}', '%(date)s')
+            results = executeRAWSQL(raw_sql, {
+                'date': the_date.strftime('%m-%Y'),
+            })
+        else:
+            results = executeRAWSQL("""
+                SELECT LOWER(country) as country, count(*) as count,
+                DATE_TRUNC('month', visit_date) as month
+                FROM catalogue_visit WHERE (country != 'South Africa'
+                AND visit_date BETWEEN to_date(%(date)s,'MM-YYYY')
+                    AND to_date(%(date)s,'MM-YYYY')+ interval '1 month')
+                GROUP BY LOWER(country),DATE_TRUNC('month',visit_date)
+                ORDER BY count DESC;""", {
+                'date': the_date.strftime('%m-%Y'),
+            })
+        return results
 
 
 class Visit(models.Model):

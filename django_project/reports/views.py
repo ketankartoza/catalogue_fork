@@ -11,7 +11,6 @@ Contact : lkleyn@sansa.org.za
    of Linfiniti Consulting CC.
 
 """
-
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.1'
 __date__ = '17/08/2012'
@@ -55,7 +54,10 @@ from search.models import (
 )
 
 from dictionaries.models import SatelliteInstrumentGroup
-import django_tables2 as tables
+from reports.tables import (
+    table_sort_settings,
+    CountryTable
+)
 
 
 # in case you need to slice ResultSet (paginate) for display
@@ -75,56 +77,6 @@ def sliceForDisplay(theList, thePageSize=10):
         yield theList[myX * thePageSize:myX * thePageSize + thePageSize]
 
 
-def table_sort_settings(request):
-    """
-    Helper function to fetch sort and order from GET and set the consequent
-    value for sort_link which is appended to the table sort links in the
-    template
-
-    :param request: HttpRequest
-    :return: sort_col, sort_order, sort_link :rtype: str
-    """
-    sort_col = request.GET.get('sort', None)
-    sort_order = request.GET.get('order', None)
-    if sort_order == 'ASC':
-        sort_link = 'DESC'
-    elif sort_order == 'DESC':
-        sort_link = 'ASC'
-    else:
-        sort_link = 'DESC'
-    return sort_col, sort_order, sort_link
-
-
-class TitleColumn(tables.Column):
-    """
-    Returns a column with a titled cell value
-    (i.e. "South Africa", not "south africa")
-    """
-    def render(self, value):
-        """
-        Renders the cell's value
-        :param value: cell value
-        :return: value.title() :rtype: str
-        """
-        return value.title()
-
-
-class CountryTable(tables.Table):
-    """
-    Renders a County/Count table
-    """
-    country = TitleColumn()
-    count = tables.Column()
-
-    class Meta(object):
-        """
-        Adding CSS class attrs to the table (required for Bootstrap)
-        """
-        attrs = {
-            'class': 'table table-striped'
-        }
-
-
 @staff_member_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('visitorReport.html')
@@ -138,12 +90,14 @@ def visitor_report(request):
     :return: visitorReport.html :rtype: HttpResponse
     """
     sort_col, sort_order, sort_link = table_sort_settings(request)
-    country_stats = Visit.helpers.countryStats(
+    country_stats = Visit.helpers.country_stats(
         sort_col=sort_col or 'count',
         sort_order=sort_order or 'DESC'
     )
-    table = CountryTable(country_stats)
-
+    if len(country_stats) > 0:
+        table = CountryTable(country_stats)
+    else:
+        table = None
     #render_to_response is done by the renderWithContext decorator
     return ({
         'myGraphLabel': ({'Country': 'country'}),
@@ -177,8 +131,15 @@ def visitor_monthly_report(request, theYear, theMonth):
             logger.error('Date arguments cannot be parsed')
             logger.info(traceback.format_exc())
 
-    country_stats = Visit.helpers.monthlyReport(my_date, sort_col, sort_order)
-    table = CountryTable(country_stats)
+    country_stats = Visit.helpers.monthly_report(
+        my_date,
+        sort_col=sort_col,
+        sort_order=sort_order
+    )
+    if len(country_stats) > 0:
+        table = CountryTable(country_stats)
+    else:
+        table = None
 
     return ({
         'myGraphLabel': ({'Country': 'country'}),
