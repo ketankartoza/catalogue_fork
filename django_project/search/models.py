@@ -264,7 +264,7 @@ class BaseSearch(models.Model):
     guid = models.CharField(max_length=40, unique=True)
     deleted = models.NullBooleanField(
         'Deleted?', blank=True, null=True, default=True,
-        help_text='Mark this search as deleted so the user doesn not see it')
+        help_text='Mark this search as deleted so the user does not see it')
 
     record_count = models.IntegerField(blank=True, null=True, editable=False)
 
@@ -458,7 +458,7 @@ class Search(BaseSearch):
         return "%s Guid: %s User: %s" % (
             self.search_date, self.guid, self.user)
 
-    def datesAsString(self):
+    def dates_as_string(self):
         """
         Date ranges formatted
         """
@@ -466,6 +466,24 @@ class Search(BaseSearch):
         for d in self.searchdaterange_set.all():
             result.append(d.local_format())
         return ', '.join(result)
+
+    def satellites_as_list(self):
+        """
+        Returns a simply formatted string with satellite abbreviations
+        """
+        satellites = []
+        for satellite in self.satellite.all():
+            satellites.append(satellite.abbreviation)
+        return satellites
+
+    def sensors_as_list(self):
+        """
+        Returns a simply formatted string with instrument type abbreviations
+        """
+        sensors = []
+        for sensor in self.instrument_type.all():
+            sensors.append(sensor.abbreviation)
+        return sensors
 
 ###############################################################################
 #

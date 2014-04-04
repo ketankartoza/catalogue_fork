@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 SANSA-EO Catalogue - Uncategorized models
 
@@ -11,7 +12,7 @@ Contact : lkleyn@sansa.org.za
    of Linfiniti Consulting CC.
 
 """
-import datetime
+from catalogue.utils import validate_params
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.1'
@@ -19,7 +20,6 @@ __date__ = '09/08/2012'
 __copyright__ = 'South African National Space Agency'
 
 from django.contrib.gis.db import models
-
 #for user id foreign keys
 from django.contrib.auth.models import User
 
@@ -36,29 +36,6 @@ class VisitHelpersManager(models.GeoManager):
     Visit model helper methods
     """
 
-    @staticmethod
-    def validate_params(sort_col, sort_order):
-        """
-        This method validates sort_col and sort_order in order to avoid
-        SQL injection attacks
-
-        Django's raw sql execution params option is only an option to replace
-        SQL variables, not column names, so we have to use a standard str
-        replace, which is insecure. We therefore validate that sort_col and
-        sort_order are one of our predefined options only.
-
-        :param sort_col: 'country' or 'count'
-        :param sort_order: 'ASC' or 'DESC'
-        :return: valid_sort_col and valid_sort_order :rtype: str
-        """
-        valid_sort_order = None
-        valid_sort_col = None
-        if sort_col == 'country' or sort_col == 'count':
-            valid_sort_col = sort_col
-        if sort_order == 'DESC' or sort_order == 'ASC':
-            valid_sort_order = sort_order
-        return valid_sort_col, valid_sort_order
-
     def country_stats(self, **kwargs):
         """
         Count visits per country
@@ -69,28 +46,24 @@ class VisitHelpersManager(models.GeoManager):
 
         sort_col and sort_order used to allow for sorting of data in rendered
         table in view.
+
+        :param kwargs: Includes sort_col and sort_order
         """
-        sort_col = kwargs.get('sort_col', 'count')
-        sort_order = kwargs.get('sort_order', 'DESC')
-        valid_sort_col, valid_sort_order = self.validate_params(
-            sort_col,
-            sort_order
+        sort_col = kwargs.get('sort_col', None)
+        sort_order = kwargs.get('sort_order', None)
+        valid_sort_col, valid_sort_order = validate_params(
+            sort_col, sort_order,
+            'count', 'DESC'
         )
-        if valid_sort_col and valid_sort_order:
-            results = executeRAWSQL("""
-                SELECT LOWER(country) as country,
-                COUNT(*) AS count
-                FROM catalogue_visit WHERE country != 'South Africa'
-                GROUP BY LOWER(country)
-                ORDER BY %s %s;""" % (
-                valid_sort_col, valid_sort_order))
-        else:
-            results = executeRAWSQL("""
-                SELECT LOWER(country) as country,
-                COUNT(*) AS count
-                FROM catalogue_visit WHERE country != 'South Africa'
-                GROUP BY LOWER(country)
-                ORDER BY count DESC;""")
+        results = executeRAWSQL(
+            """
+            SELECT LOWER(country) as country,
+            COUNT(*) AS count
+            FROM catalogue_visit WHERE country != 'South Africa'
+            GROUP BY LOWER(country)
+            ORDER BY %s %s;
+            """ % (valid_sort_col, valid_sort_order)
+        )
         return results
 
     def monthly_report(self, the_date, **kwargs):
@@ -102,39 +75,23 @@ class VisitHelpersManager(models.GeoManager):
         :param kwargs: Contains sort_col and sort_order for table rendering
         :param the_date: The requested date for the report
         """
-        sort_col = kwargs.get('sort_col', 'count')
-        sort_order = kwargs.get('sort_order', 'DESC')
-        valid_sort_col, valid_sort_order = self.validate_params(
-            sort_col,
-            sort_order
+        sort_col = kwargs.get('sort_col', None)
+        sort_order = kwargs.get('sort_order', None)
+        valid_sort_col, valid_sort_order = validate_params(
+            sort_col, sort_order,
+            'count', 'DESC'
         )
-        if valid_sort_col and valid_sort_order:
-            # Yes, this is not great... Better solutions/suggestions welcome,
-            # but assuming we have to use raw SQL and assuming that the columns
-            # have to be sortable, I can't see a better solution.....
-            raw_str = """SELECT LOWER(country) as country, count(*) as count,
-                DATE_TRUNC('month', visit_date) as month
-                FROM catalogue_visit WHERE (country != 'South Africa'
-                AND visit_date BETWEEN to_date({{date}},'MM-YYYY')
-                    AND to_date({{date}},'MM-YYYY')+ interval '1 month')
-                GROUP BY LOWER(country),DATE_TRUNC('month',visit_date)
-                ORDER BY %s %s;""" % (
-                valid_sort_col, valid_sort_order)
-            raw_sql = raw_str.replace('{{date}}', '%(date)s')
-            results = executeRAWSQL(raw_sql, {
-                'date': the_date.strftime('%m-%Y'),
-            })
-        else:
-            results = executeRAWSQL("""
-                SELECT LOWER(country) as country, count(*) as count,
-                DATE_TRUNC('month', visit_date) as month
-                FROM catalogue_visit WHERE (country != 'South Africa'
-                AND visit_date BETWEEN to_date(%(date)s,'MM-YYYY')
-                    AND to_date(%(date)s,'MM-YYYY')+ interval '1 month')
-                GROUP BY LOWER(country),DATE_TRUNC('month',visit_date)
-                ORDER BY count DESC;""", {
-                'date': the_date.strftime('%m-%Y'),
-            })
+        raw_str = """SELECT LOWER(country) as country, count(*) as count,
+            DATE_TRUNC('month', visit_date) as month
+            FROM catalogue_visit WHERE (country != 'South Africa'
+            AND visit_date BETWEEN to_date({{date}},'MM-YYYY')
+                AND to_date({{date}},'MM-YYYY')+ interval '1 month')
+            GROUP BY LOWER(country),DATE_TRUNC('month',visit_date)
+            ORDER BY %s %s;""" % (valid_sort_col, valid_sort_order)
+        raw_sql = raw_str.replace('{{date}}', '%(date)s')
+        results = executeRAWSQL(raw_sql, {
+            'date': the_date.strftime('%m-%Y'),
+        })
         return results
 
 
@@ -219,9 +176,9 @@ class AllUsersMessage(models.Model):
     def save(self, *args, **kwargs):
         """Broadcase the message using offline messages."""
         for myUser in User.objects.all():
-            myNotifiedAlreadyFlag = OfflineMessage.objects.filter(
+            notified_already_flag = OfflineMessage.objects.filter(
                 user=myUser, message=self.message).exists()
-            if not myNotifiedAlreadyFlag:
+            if not notified_already_flag:
                 create_offline_message(
                     myUser, self.message, level=constants.INFO)
         super(AllUsersMessage, self).save(*args, **kwargs)

@@ -133,7 +133,7 @@ class ReportsViews_sensorSummaryTable_Tests(TestCase):
 
         self.assertEqual(unicode(myResp.context['mySensor']), u'ST 1 - ITOP 1')
         self.assertEqual(
-            myResp.context['mySensorYearyStats'].__name__, 'sliceForDisplay')
+            myResp.context['mySensorYearyStats'].__name__, 'slice_for_display')
         self.assertEqual(
             myResp.context['myResults']['Searches for this sensor'], 1)
         self.assertEqual(
