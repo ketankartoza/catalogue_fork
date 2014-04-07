@@ -146,9 +146,9 @@ class SearchesTable(tables.Table):
     """
     searched_by = tables.Column(empty_values=())
     search_date = SANSADateColumn()
-    satellites = tables.Column(empty_values=())
-    sensors = tables.Column(empty_values=())
-    date_ranges = tables.Column(empty_values=())
+    satellites = tables.Column(empty_values=(), orderable=False)
+    sensors = tables.Column(empty_values=(), orderable=False)
+    date_ranges = tables.Column(empty_values=(), orderable=False)
     actions = tables.Column(empty_values=(), orderable=False)
 
     def render_searched_by(self, record):
@@ -223,6 +223,7 @@ class VisitorTable(tables.Table):
     A table to render a list of Visitors
     """
     user = tables.Column(empty_values=())
+    visit_date = SANSADateColumn(verbose_name='Visit Date')
 
     # noinspection PyMethodMayBeStatic
     def render_user(self, record):
