@@ -71,7 +71,7 @@ class ReportsViews_visitorReport_Tests(TestCase):
         myClient = Client()
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
-            reverse('visitor_report', kwargs={}))
+            reverse('visitorReport', kwargs={}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
             myResp.context['app_path'], u'/visitorreport/')
