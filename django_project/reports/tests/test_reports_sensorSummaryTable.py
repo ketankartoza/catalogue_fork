@@ -61,7 +61,7 @@ class ReportsViews_sensorSummaryTable_Tests(TestCase):
         myClient = Client()
         myResp = myClient.get(
             reverse('sensorSummaryTable',
-                    kwargs={'theSensorId': '34'}))
+                    kwargs={'sensor_id': '34'}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
             myResp.context['app_path'], u'/sensorSummaryTable/34/')
@@ -80,7 +80,7 @@ class ReportsViews_sensorSummaryTable_Tests(TestCase):
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
             reverse('sensorSummaryTable',
-                    kwargs={'theSensorId': '34'}))
+                    kwargs={'sensor_id': '34'}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
             myResp.context['app_path'], u'/sensorSummaryTable/34/')
@@ -128,7 +128,7 @@ class ReportsViews_sensorSummaryTable_Tests(TestCase):
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
             reverse('sensorSummaryTable',
-                    kwargs={'theSensorId': '1'}))
+                    kwargs={'sensor_id': '1'}))
         self.assertEqual(myResp.status_code, 200)
 
         self.assertEqual(unicode(myResp.context['mySensor']), u'ST 1 - ITOP 1')

@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 SANSA-EO Catalogue - Report application views
 
@@ -223,16 +224,16 @@ def recent_searches(request):
     """
     View to return a list of recent searches. Limited to 50.
 
-    table is deliberately not oderable as this is the RECENT search history
+    table is deliberately not orderable as this is the RECENT search history
 
     :param request: HttpRequest dict
     :return: recentSearches.html :rtype: HttpResponse
     """
-    search_history = (
+    search_history_objs = (
         Search.objects.filter(deleted=False).order_by('-search_date'))
-    if len(search_history) > 50:
-        search_history = search_history[:50]
-    table = SearchesTable(search_history)
+    if len(search_history_objs) > 50:
+        search_history_objs = search_history_objs[:50]
+    table = SearchesTable(search_history_objs)
     table.orderable = False
     return ({
         'mySearches': search_history,
@@ -252,6 +253,7 @@ def search_monthly_report(request, year, month):
     :param month: Month to render
     :return: searchMonthlyReport.html :rtype: HttpResponse
     """
+    sort_col, sort_order, sort_link = table_sort_settings(request)
     if not(year and month):
         date = datetime.date.today()
     else:
@@ -261,12 +263,19 @@ def search_monthly_report(request, year, month):
             date = None
             logger.error('Date arguments cannot be parsed')
             logger.info(traceback.format_exc())
-
-    country_stats = Search.helpers.monthlyReport(theDate=date)
-
+    country_stats = Search.helpers.monthly_report(
+        date,
+        sort_col=sort_col,
+        sort_order=sort_order
+    )
+    if len(country_stats) > 0:
+        table = CountryTable(country_stats)
+    else:
+        table = None
     return ({
         'myGraphLabel': ({'Country': 'country'}),
-        'myScores': country_stats,
+        'table': table,
+        'sort_link': sort_link,
         'myCurrentDate': date,
         'myPrevDate': date - datetime.timedelta(days=1),
         'myNextDate': date + datetime.timedelta(days=31),
@@ -276,25 +285,42 @@ def search_monthly_report(request, year, month):
 #monthly search report by user ip_position
 @staff_member_required
 @renderWithContext('searchMonthlyReportAOI.html')
-def searchMonthlyReportAOI(theRequest, theYear, theMonth):
-    #construct date object
-    if not(theYear and theMonth):
-        myDate = datetime.date.today()
+def search_monthly_report_aoi(request, year, month):
+    """
+    The view to return a table of countries searched for by month
+
+    :param request: HttpRequest dict
+    :param year: The year requested (int)
+    :param month: The month requested (int)
+    :return: searchMonthlyReportAOI.html :rtype: HttpResponse
+    """
+    sort_col, sort_order, sort_link = table_sort_settings(request)
+    if not(year and month):
+        date = datetime.date.today()
     else:
         try:
-            myDate = datetime.date(int(theYear), int(theMonth), 1)
-        except:
+            date = datetime.date(int(year), int(month), 1)
+        except (TypeError, Exception):
+            date = None
             logger.error('Date arguments cannot be parsed')
             logger.info(traceback.format_exc())
 
-    myCountryStats = Search.helpers.monthlyReportAOI(theDate=myDate)
-
+    country_stats = Search.helpers.monthly_report_aoi(
+        date,
+        sort_col=sort_col,
+        sort_order=sort_order
+    )
+    if len(country_stats) > 0:
+        table = CountryTable(country_stats)
+    else:
+        table = None
     return ({
         'myGraphLabel': ({'Country': 'country'}),
-        'myScores': myCountryStats,
-        'myCurrentDate': myDate,
-        'myPrevDate': myDate - datetime.timedelta(days=1),
-        'myNextDate': myDate + datetime.timedelta(days=31),
+        'table': table,
+        'sort_link': sort_link,
+        'myCurrentDate': date,
+        'myPrevDate': date - datetime.timedelta(days=1),
+        'myNextDate': date + datetime.timedelta(days=31),
     })
 
 
@@ -321,74 +347,84 @@ def data_summary_table(request):
 @staff_member_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('sensorSummaryTable.html')
-def sensorSummaryTable(theRequest, theSensorId):
+def sensor_summary_table(request, sensor_id):
     """
     Summary of tasking requests,orders etc for a given sensor
+    :param sensor_id: The ID of the sensor requested
+    :param request: HttpRequest dict
     """
     #
     # Note: don't use len() to count recs - its very inefficient
     #       use count() rather
     #
-    mySensor = get_object_or_404(SatelliteInstrumentGroup, id=theSensorId)
-    mySearchCount = Search.objects.all().count()
-    mySearchForSensorCount = Search.objects.filter(
-        satellite__satelliteinstrumentgroup=mySensor).count()
-    myProductForSensorCount = None
+    sensor = get_object_or_404(SatelliteInstrumentGroup, id=sensor_id)
+    search_count = Search.objects.all().count()
+    search_for_sensor_count = Search.objects.filter(
+        satellite__satelliteinstrumentgroup=sensor).count()
 
-    myProductForSensorCount = OpticalProduct.objects.filter(
-        product_profile__satellite_instrument__satellite_instrument_group=mySensor).count()
-    myProductTotalCount = GenericSensorProduct.objects.count()
+    product_for_sensor_count = OpticalProduct.objects.filter(
+        product_profile__satellite_instrument__satellite_instrument_group=
+        sensor).count()
+    product_total_count = GenericSensorProduct.objects.count()
 
-    myRecords = SearchRecord.objects.filter(
+    records = SearchRecord.objects.filter(
         user__isnull=False).filter(order__isnull=False)
-    myProductOrdersTotalCount = myRecords.count()
-    myProductOrdersForSensorCount = (
+    product_orders_total_count = records.count()
+    product_orders_for_sensor_count = (
         SearchRecord.objects.filter(user__isnull=False)
         .filter(order__isnull=False)
-        .filter(product__genericimageryproduct__genericsensorproduct__opticalproduct__product_profile__satellite_instrument__satellite_instrument_group__exact=mySensor)
+        # No idea how we can PEP8 this one!!
+        .filter(product__genericimageryproduct__genericsensorproduct__opticalproduct__product_profile__satellite_instrument__satellite_instrument_group__exact=sensor)
         .count())
 
-    myResults = SortedDict()
-    myResults['Searches for this sensor'] = mySearchForSensorCount
-    myResults['Searches for all sensors'] = mySearchCount
-    myResults['Total ordered products for this sensor'] = myProductOrdersForSensorCount
-    myResults['Total ordered products for all sensors'] = myProductOrdersTotalCount
-    myResults['Total products for this sensor'] = myProductForSensorCount
-    myResults['Total products for all sensors'] = myProductTotalCount
+    results = SortedDict()
+    results['Searches for this sensor'] = search_for_sensor_count
+    results['Searches for all sensors'] = search_count
+    results['Total ordered products for this sensor'] = \
+        product_orders_for_sensor_count
+    results['Total ordered products for all sensors'] = \
+        product_orders_total_count
+    results['Total products for this sensor'] = product_for_sensor_count
+    results['Total products for all sensors'] = product_total_count
 
-    mySensorYearlyStats = mySensor.products_per_year()
+    sensor_yearly_stats = sensor.products_per_year()
 
-    #define beginning year for yearly product summary
-    myStartYear = 1981
-    myCurrentYear = datetime.date.today().year
+    # define beginning year for yearly product summary
+    start_year = 1981
+    current_year = datetime.date.today().year
     # create a list of 'empty' records
-    mySensorYearlyStatsAll = [
+    sensor_yearly_stats_all = [
         {'year': myYear, 'count': 0}
-        for myYear in range(myStartYear, myCurrentYear + 1)]
+        for myYear in range(start_year, current_year + 1)]
 
     # update records, replace with actual data
-    for myIdx, myTmpYear in enumerate(mySensorYearlyStatsAll):
-        for myDataYear in mySensorYearlyStats:
+    for myIdx, myTmpYear in enumerate(sensor_yearly_stats_all):
+        for myDataYear in sensor_yearly_stats:
             if myDataYear.get('year') == myTmpYear.get('year'):
-                mySensorYearlyStatsAll[myIdx] = myDataYear
+                sensor_yearly_stats_all[myIdx] = myDataYear
 
     return ({
-        'myResults': myResults, 'mySensor': mySensor,
-        'mySensorYearyStats': slice_for_display(mySensorYearlyStatsAll)})
+        'myResults': results,
+        'mySensor': sensor,
+        'mySensorYearlyStats': slice_for_display(sensor_yearly_stats_all)
+    })
 
 
 @staff_member_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('dictionaryReport.html')
-def dictionaryReport(theRequest):
+def dictionary_report(request):
     """
     Summary of mission, sensor, type and mode. Later we could add
-    proc level too
+        proc level too
+    :param request: HttpRequest
     """
 
-    myReport = (
+    report = (
         SatelliteInstrumentGroup.objects.all().select_related()
         .order_by('satellite__name')
     )
 
-    return({"myResults": myReport})
+    return ({
+        "myResults": report
+    })

@@ -61,7 +61,7 @@ class ReportsViews_searchMonthlyReportAOI_Tests(TestCase):
         myClient = Client()
         myResp = myClient.get(
             reverse('searchMonthlyReportAOI',
-                    kwargs={'theYear': '2010', 'theMonth': '7'}))
+                    kwargs={'year': '2010', 'month': '7'}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
             myResp.context['app_path'], u'/searchmonthlyreportaoi/2010/7/')
@@ -74,7 +74,7 @@ class ReportsViews_searchMonthlyReportAOI_Tests(TestCase):
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
             reverse('searchMonthlyReportAOI',
-                    kwargs={'theYear': '2010', 'theMonth': '7'}))
+                    kwargs={'year': '2010', 'month': '7'}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
             myResp.context['app_path'], u'/searchmonthlyreportaoi/2010/7/')
@@ -102,7 +102,7 @@ class ReportsViews_searchMonthlyReportAOI_Tests(TestCase):
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
             reverse('searchMonthlyReportAOI',
-                    kwargs={'theYear': myDate.year, 'theMonth': myDate.month}))
+                    kwargs={'year': myDate.year, 'month': myDate.month}))
         self.assertEqual(myResp.status_code, 200)
 
         self.assertEqual(

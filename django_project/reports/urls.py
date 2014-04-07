@@ -4,13 +4,13 @@ from .views import (
     search_history,
     recent_searches,
     search_monthly_report,
-    searchMonthlyReportAOI,
+    search_monthly_report_aoi,
     visitor_list,
     visitor_report,
     visitor_monthly_report,
     data_summary_table,
-    dictionaryReport,
-    sensorSummaryTable,
+    dictionary_report,
+    sensor_summary_table,
 )
 
 
@@ -21,8 +21,8 @@ urlpatterns = patterns(
     url(r'^searchmonthlyreport/(?P<year>\d{4})/(?P<month>\d{1,2})/$',
         search_monthly_report, name='searchMonthlyReport'
         ),
-    url(r'^searchmonthlyreportaoi/(?P<theYear>\d{4})/(?P<theMonth>\d{1,2})/$',
-        searchMonthlyReportAOI, name='searchMonthlyReportAOI'
+    url(r'^searchmonthlyreportaoi/(?P<year>\d{4})/(?P<month>\d{1,2})/$',
+        search_monthly_report_aoi, name='searchMonthlyReportAOI'
         ),
     url(r'^visitorlist/$', visitor_list, name='visitorList'),
     url(r'^visitorreport/$', visitor_report, name='visitorReport'),
@@ -30,8 +30,8 @@ urlpatterns = patterns(
         visitor_monthly_report, name='visitorMonthlyReport'
         ),
     url(r'^dataSummaryTable/$', data_summary_table, name='dataSummaryTable'),
-    url(r'^dictionaryReport/$', dictionaryReport, name='dictionaryReport'),
-    url(r'^sensorSummaryTable/(?P<theSensorId>[0-9]+)/$',
-        sensorSummaryTable, name='sensorSummaryTable'
+    url(r'^dictionaryReport/$', dictionary_report, name='dictionaryReport'),
+    url(r'^sensorSummaryTable/(?P<sensor_id>[0-9]+)/$',
+        sensor_summary_table, name='sensorSummaryTable'
         ),
 )

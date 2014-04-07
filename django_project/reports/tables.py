@@ -95,14 +95,6 @@ class CountryTable(tables.Table):
     country = TitleColumn()
     count = tables.Column()
 
-    class Meta(object):
-        """
-        Adding CSS class attrs to the table (required for Bootstrap)
-        """
-        attrs = {
-            'class': 'table table-striped'
-        }
-
 
 class SatelliteInstrumentTable(tables.Table):
     """
@@ -118,14 +110,6 @@ class SatelliteInstrumentTable(tables.Table):
         accessor='id__count',
         verbose_name='Search Count'
     )
-
-    class Meta(object):
-        """
-        Adding CSS class attrs to the table (required for Bootstrap)
-        """
-        attrs = {
-            'class': 'table table-striped'
-        }
 
 
 class OrderListTable(tables.Table):
@@ -154,15 +138,8 @@ class OrderListTable(tables.Table):
             % record.id
         )
 
-    class Meta(object):
-        """
-        Adding CSS class attrs to the table (required for Bootstrap)
-        """
-        attrs = {
-            'class': 'table table-striped'
-        }
 
-
+# noinspection PyMethodMayBeStatic
 class SearchesTable(tables.Table):
     """
     Renders a table of Search objects
@@ -240,14 +217,6 @@ class SearchesTable(tables.Table):
             }
         )
 
-    class Meta(object):
-        """
-        Adding CSS classes to the table (required for Bootstrap)
-        """
-        attrs = {
-            'class': 'table table-striped'
-        }
-
 
 class VisitorTable(tables.Table):
     """
@@ -255,7 +224,14 @@ class VisitorTable(tables.Table):
     """
     user = tables.Column(empty_values=())
 
+    # noinspection PyMethodMayBeStatic
     def render_user(self, record):
+        """
+        Render the user's name representation
+
+        :param record: The record being rendered in this row
+        :return: User's name representation :rtype: str
+        """
         return render_user_names(record)
 
     class Meta(object):
@@ -268,6 +244,3 @@ class VisitorTable(tables.Table):
         sequence = (
             'user', 'ip_address', 'country', 'city', 'visit_date'
         )
-        attrs = {
-            'class': 'table table-striped'
-        }
