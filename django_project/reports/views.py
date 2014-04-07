@@ -12,9 +12,6 @@ Contact : lkleyn@sansa.org.za
    of Linfiniti Consulting CC.
 
 """
-from django.conf import settings
-from django_tables2 import RequestConfig
-
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.1'
 __date__ = '17/08/2012'
@@ -61,7 +58,10 @@ from dictionaries.models import SatelliteInstrumentGroup
 from reports.tables import (
     table_sort_settings,
     CountryTable,
-    SatelliteInstrumentTable, SearchesTable, VisitorTable)
+    SatelliteInstrumentTable, VisitorTable)
+from django.conf import settings
+from django_tables2 import RequestConfig
+from search.tables import SearchesTable
 
 
 # in case you need to slice ResultSet (paginate) for display

@@ -11,9 +11,6 @@ Contact : lkleyn@sansa.org.za
    of Linfiniti Consulting CC.
 
 """
-from django_tables2 import RequestConfig
-from reports.tables import OrderListTable
-
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.1'
 __date__ = '01/01/2011'
@@ -83,6 +80,8 @@ from catalogue.renderDecorator import renderWithContext
 
 from search.models import SearchRecord
 from dictionaries.models import Projection, ProcessingLevel
+from django_tables2 import RequestConfig
+from orders.tables import OrderListTable
 # from dictionaries.models import InstrumentType, Satellite
 ###########################################################
 #
