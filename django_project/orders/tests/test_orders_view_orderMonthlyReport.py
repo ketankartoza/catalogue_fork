@@ -43,10 +43,10 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
         Test badURL requests
         """
         myKwargsTests = [
-            {'theyear': '', 'themonth': ''},
-            {'theyear': '12345', 'themonth': '5'},
-            {'theyear': '12345', 'themonth': '5'},
-            {'theyear': 'abcd', 'themonth': 'ab'},
+            {'year': '', 'month': ''},
+            {'year': '12345', 'month': '5'},
+            {'year': '12345', 'month': '5'},
+            {'year': 'abcd', 'month': 'ab'},
             {'testarg1': '1234', 'thearg2': '5'}
         ]
 
@@ -63,7 +63,7 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
         myResp = myClient.get(
             reverse(
                 'orderMonthlyReport',
-                kwargs={'theyear': 2012, 'themonth': 6}))
+                kwargs={'year': 2012, 'month': 6}))
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
@@ -92,8 +92,8 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
             reverse(
                 'orderMonthlyReport',
                 kwargs={
-                    'theyear': myTestDate.year,
-                    'themonth': myTestDate.month}
+                    'year': myTestDate.year,
+                    'month': myTestDate.month}
             )
         )
         self.assertEqual(myResp.status_code, 200)
@@ -143,8 +143,8 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
             reverse(
                 'orderMonthlyReport',
                 kwargs={
-                    'theyear': myTestDate.year,
-                    'themonth': myTestDate.month}
+                    'year': myTestDate.year,
+                    'month': myTestDate.month}
             )
         )
         self.assertEqual(myResp.status_code, 200)
@@ -195,8 +195,8 @@ class OrdersViews_orderMonthlyReport_Tests(TestCase):
             reverse(
                 'orderMonthlyReport',
                 kwargs={
-                    'theyear': myTestDate.year,
-                    'themonth': myTestDate.month}
+                    'year': myTestDate.year,
+                    'month': myTestDate.month}
             ),
             {'pdf': ''}
         )

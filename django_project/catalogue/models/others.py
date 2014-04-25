@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 SANSA-EO Catalogue - Uncategorized models
 
@@ -11,6 +12,7 @@ Contact : lkleyn@sansa.org.za
    of Linfiniti Consulting CC.
 
 """
+from catalogue.utils import validate_params
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.1'
@@ -18,7 +20,6 @@ __date__ = '09/08/2012'
 __copyright__ = 'South African National Space Agency'
 
 from django.contrib.gis.db import models
-
 #for user id foreign keys
 from django.contrib.auth.models import User
 
@@ -34,35 +35,64 @@ class VisitHelpersManager(models.GeoManager):
     """
     Visit model helper methods
     """
-    def countryStats(self):
+
+    def country_stats(self, **kwargs):
         """
         Count visits per country
 
         NOTE: We need to use executeRAWSQL as manager.raw method requires
         PrimaryKey to be returned which is then used to map objects back to the
         model
+
+        sort_col and sort_order used to allow for sorting of data in rendered
+        table in view.
+
+        :param kwargs: Includes sort_col and sort_order
         """
-        myResults = executeRAWSQL("""
-SELECT LOWER(country) as country, COUNT(*) AS count
-FROM catalogue_visit
-GROUP BY LOWER(country)
-ORDER BY count DESC;""")
+        sort_col = kwargs.get('sort_col', None)
+        sort_order = kwargs.get('sort_order', None)
+        valid_sort_col, valid_sort_order = validate_params(
+            sort_col, sort_order,
+            'count', 'DESC'
+        )
+        results = executeRAWSQL(
+            """
+            SELECT LOWER(country) as country,
+            COUNT(*) AS count
+            FROM catalogue_visit WHERE country != 'South Africa'
+            GROUP BY LOWER(country)
+            ORDER BY %s %s;
+            """ % (valid_sort_col, valid_sort_order)
+        )
+        return results
 
-        return myResults
-
-    def monthlyReport(self, theDate):
+    def monthly_report(self, the_date, **kwargs):
         """
         Count visits per country for each month
+
+        sort_col and sort_order used to allow for sorting of data in rendered
+        table in view.
+        :param kwargs: Contains sort_col and sort_order for table rendering
+        :param the_date: The requested date for the report
         """
-        myResults = executeRAWSQL("""
-SELECT LOWER(country) as country ,count(*) as count, DATE_TRUNC('month',
-visit_date) as month
-FROM catalogue_visit
-WHERE visit_date BETWEEN to_date(%(date)s,'MM-YYYY')
-    AND to_date(%(date)s,'MM-YYYY')+ interval '1 month'
-GROUP BY LOWER(country),DATE_TRUNC('month',visit_date)
-ORDER BY count DESC;""", {'date': theDate.strftime('%m-%Y')})
-        return myResults
+        sort_col = kwargs.get('sort_col', None)
+        sort_order = kwargs.get('sort_order', None)
+        valid_sort_col, valid_sort_order = validate_params(
+            sort_col, sort_order,
+            'count', 'DESC'
+        )
+        raw_str = """SELECT LOWER(country) as country, count(*) as count,
+            DATE_TRUNC('month', visit_date) as month
+            FROM catalogue_visit WHERE (country != 'South Africa'
+            AND visit_date BETWEEN to_date({{date}},'MM-YYYY')
+                AND to_date({{date}},'MM-YYYY')+ interval '1 month')
+            GROUP BY LOWER(country),DATE_TRUNC('month',visit_date)
+            ORDER BY %s %s;""" % (valid_sort_col, valid_sort_order)
+        raw_sql = raw_str.replace('{{date}}', '%(date)s')
+        results = executeRAWSQL(raw_sql, {
+            'date': the_date.strftime('%m-%Y'),
+        })
+        return results
 
 
 class Visit(models.Model):
@@ -146,9 +176,9 @@ class AllUsersMessage(models.Model):
     def save(self, *args, **kwargs):
         """Broadcase the message using offline messages."""
         for myUser in User.objects.all():
-            myNotifiedAlreadyFlag = OfflineMessage.objects.filter(
+            notified_already_flag = OfflineMessage.objects.filter(
                 user=myUser, message=self.message).exists()
-            if not myNotifiedAlreadyFlag:
+            if not notified_already_flag:
                 create_offline_message(
                     myUser, self.message, level=constants.INFO)
         super(AllUsersMessage, self).save(*args, **kwargs)

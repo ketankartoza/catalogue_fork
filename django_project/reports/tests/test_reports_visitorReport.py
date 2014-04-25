@@ -29,7 +29,7 @@ from catalogue.tests.model_factories import VisitF
 
 class ReportsViews_visitorReport_Tests(TestCase):
     """
-    Tests reports.py visitorReport method/view
+    Tests reports.py visitor_report method/view
     """
 
     def setUp(self):

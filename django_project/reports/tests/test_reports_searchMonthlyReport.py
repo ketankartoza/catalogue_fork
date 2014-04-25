@@ -30,7 +30,7 @@ from catalogue.tests.model_factories import WorldBordersF
 
 class ReportsViews_searchMonthlyReport_Tests(TestCase):
     """
-    Tests reports.py visitorReport method/view
+    Tests reports.py visitor_report method/view
     """
 
     def setUp(self):
@@ -56,7 +56,7 @@ class ReportsViews_searchMonthlyReport_Tests(TestCase):
         myClient = Client()
         myResp = myClient.get(
             reverse('searchMonthlyReport',
-                    kwargs={'theYear': '2010', 'theMonth': '7'}))
+                    kwargs={'year': '2010', 'month': '7'}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
             myResp.context['app_path'], u'/searchmonthlyreport/2010/7/')
@@ -74,7 +74,7 @@ class ReportsViews_searchMonthlyReport_Tests(TestCase):
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
             reverse('searchMonthlyReport',
-                    kwargs={'theYear': '2010', 'theMonth': '7'}))
+                    kwargs={'year': '2010', 'month': '7'}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
             myResp.context['app_path'], u'/searchmonthlyreport/2010/7/')
@@ -102,7 +102,7 @@ class ReportsViews_searchMonthlyReport_Tests(TestCase):
         myClient.login(username='timlinux', password='password')
         myResp = myClient.get(
             reverse('searchMonthlyReport',
-                    kwargs={'theYear': myDate.year, 'theMonth': myDate.month}))
+                    kwargs={'year': myDate.year, 'month': myDate.month}))
         self.assertEqual(myResp.status_code, 200)
 
         self.assertEqual(

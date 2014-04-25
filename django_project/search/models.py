@@ -11,6 +11,7 @@ Contact : lkleyn@sansa.org.za
    of Linfiniti Consulting CC.
 
 """
+from catalogue.utils import validate_params
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.1'
@@ -264,7 +265,7 @@ class BaseSearch(models.Model):
     guid = models.CharField(max_length=40, unique=True)
     deleted = models.NullBooleanField(
         'Deleted?', blank=True, null=True, default=True,
-        help_text='Mark this search as deleted so the user doesn not see it')
+        help_text='Mark this search as deleted so the user does not see it')
 
     record_count = models.IntegerField(blank=True, null=True, editable=False)
 
@@ -282,39 +283,57 @@ class SearchHelpersManager(models.GeoManager):
     """
     Search model helper methods
     """
-    def monthlyReport(self, theDate):
+    def monthly_report(self, date, **kwargs):
         """
         Count searches per country for user each month
         """
-        myResults = executeRAWSQL("""
+        sort_col = kwargs.get('sort_col', None)
+        sort_order = kwargs.get('sort_order', None)
+        valid_sort_col, valid_sort_order = validate_params(
+            sort_col, sort_order,
+            'count', 'DESC'
+        )
+        raw_str = """
 WITH search_geom AS (SELECT a.name, b.search_date FROM catalogue_worldborders a
     INNER JOIN search_search b ON
     st_intersects(a.geometry,b.ip_position))
 SELECT name as country, date_trunc('month',search_date) as month,
     count(*) as count
 FROM search_geom
-WHERE search_date BETWEEN to_date(%(date)s,'MM-YYYY') AND
-    to_date(%(date)s,'MM-YYYY') + interval '1 month'
+WHERE search_date BETWEEN to_date({{date}},'MM-YYYY') AND
+    to_date({{date}},'MM-YYYY') + interval '1 month'
 GROUP BY name,date_trunc('month',search_date)
-ORDER BY count DESC;""", {'date': theDate.strftime('%m-%Y')})
+ORDER BY %s %s;""" % (valid_sort_col, valid_sort_order)
+        raw_sql = raw_str.replace('{{date}}', '%(date)s')
+        results = executeRAWSQL(raw_sql, {
+            'date': date.strftime('%m-%Y'),
+        })
+        return results
 
-        return myResults
-
-    def monthlyReportAOI(self, theDate):
+    def monthly_report_aoi(self, date, **kwargs):
         """
         Count AOI searches per country per each month
         """
-        myResults = executeRAWSQL("""
+        sort_col = kwargs.get('sort_col', None)
+        sort_order = kwargs.get('sort_order', None)
+        valid_sort_col, valid_sort_order = validate_params(
+            sort_col, sort_order,
+            'count', 'DESC'
+        )
+        raw_str = """
 SELECT a.name as country, date_trunc('month',b.search_date) as month,
     count(*) as count
 FROM catalogue_worldborders a INNER JOIN search_search b ON
     st_intersects(a.geometry,b.geometry)
-WHERE search_date between to_date(%(date)s,'MM-YYYY') AND
-        to_date(%(date)s,'MM-YYYY') + interval '1 month'
+WHERE search_date between to_date({{date}},'MM-YYYY') AND
+        to_date({{date}},'MM-YYYY') + interval '1 month'
 GROUP BY  a.name,date_trunc('month',b.search_date)
-ORDER BY count desc;""", {'date': theDate.strftime('%m-%Y')})
-
-        return myResults
+ORDER BY %s %s;""" % (valid_sort_col, valid_sort_order)
+        raw_sql = raw_str.replace('{{date}}', '%(date)s')
+        results = executeRAWSQL(raw_sql, {
+            'date': date.strftime('%m-%Y'),
+        })
+        return results
 
 
 class Search(BaseSearch):
@@ -458,7 +477,7 @@ class Search(BaseSearch):
         return "%s Guid: %s User: %s" % (
             self.search_date, self.guid, self.user)
 
-    def datesAsString(self):
+    def dates_as_string(self):
         """
         Date ranges formatted
         """
@@ -466,6 +485,24 @@ class Search(BaseSearch):
         for d in self.searchdaterange_set.all():
             result.append(d.local_format())
         return ', '.join(result)
+
+    def satellites_as_list(self):
+        """
+        Returns a simply formatted string with satellite abbreviations
+        """
+        satellites = []
+        for satellite in self.satellite.all():
+            satellites.append(satellite.abbreviation)
+        return satellites
+
+    def sensors_as_list(self):
+        """
+        Returns a simply formatted string with instrument type abbreviations
+        """
+        sensors = []
+        for sensor in self.instrument_type.all():
+            sensors.append(sensor.abbreviation)
+        return sensors
 
 ###############################################################################
 #

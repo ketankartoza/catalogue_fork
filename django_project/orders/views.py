@@ -11,7 +11,6 @@ Contact : lkleyn@sansa.org.za
    of Linfiniti Consulting CC.
 
 """
-
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.1'
 __date__ = '01/01/2011'
@@ -81,6 +80,8 @@ from catalogue.renderDecorator import renderWithContext
 
 from search.models import SearchRecord
 from dictionaries.models import Projection, ProcessingLevel
+from django_tables2 import RequestConfig
+from orders.tables import OrderListTable
 # from dictionaries.models import InstrumentType, Satellite
 ###########################################################
 #
@@ -123,81 +124,115 @@ def myOrders(theRequest):
 
 @login_required
 @renderWithContext('orderListPage.html', 'orderList.html')
-def listOrders(theRequest):
-    myRecords = None
-    if not theRequest.user.is_staff:
+def list_orders(request):
+    """
+    The view to return a list of Orders. Records returned depends on whether
+    the requesting User is_staff.
+
+    :param request: HttpRequest dict
+    :return: orderListPage and orderList :rtype: HttpResponse
+    """
+    if not request.user.is_staff:
         '''Non staff users can only see their own orders listed'''
-        myRecords = Order.base_objects.filter(
-            user=theRequest.user).order_by('-order_date')
+        records = Order.base_objects.filter(
+            user=request.user).order_by('-order_date')
     else:
         '''This view is strictly for staff only'''
         # This view uses the NoSubclassManager
         # base_objects is defined in the model and
         # will exclude all tasking requests or other
         # derived classes
-        myRecords = Order.base_objects.all().order_by('-order_date')
-    if 'pdf' in theRequest.GET:
-        myPageSize = myRecords.count()
+        records = Order.base_objects.all().order_by('-order_date')
+    if 'pdf' in request.GET:
+        # Django's pagination is only required for the PDF view as
+        # django-tables2 handles pagination for the table
+        table = None
+        page_size = records.count()
+        try:
+            page = int(request.GET.get('page', '1'))
+        except ValueError:
+            page = 1
+        paginator = Paginator(records, page_size)
+        try:
+            records = paginator.page(page)
+        except (EmptyPage, InvalidPage):
+            records = paginator.page(paginator.num_pages)
     else:
-        myPageSize = 100
-    if myPageSize == 0:
-        # Prevent divide by zero crash
-        myPageSize = 1
-    # Paginate the results
-    try:
-        myPage = int(theRequest.GET.get('page', '1'))
-    except ValueError:
-        myPage = 1
-    myPaginator = Paginator(myRecords, myPageSize)
-    # If page request (9999) is out of range, deliver last page of results.
-    try:
-        myRecords = myPaginator.page(myPage)
-    except (EmptyPage, InvalidPage):
-        myRecords = myPaginator.page(myPaginator.num_pages)
-    #render_to_response is done by the renderWithContext decorator
+        table = OrderListTable(records)
+        RequestConfig(request, paginate={
+            'per_page': settings.PAGE_SIZE
+        }).configure(table)
     return ({
-        'myRecords': myRecords,
         'myUrl': reverse('listOrders'),
-        'myCurrentMonth': datetime.date.today()
+        'myCurrentMonth': datetime.date.today(),
+        'table': table,
+        'myRecords': records
     })
 
 
 @login_required
 @renderWithContext('orderMonthlyReport.html')
-def orderMonthlyReport(theRequest, theyear, themonth):
-    #construct date object
-    if not(theyear and themonth):
-        myDate = datetime.date.today()
+def order_monthly_report(request, year, month):
+    """
+    The view to render a monthly Order report. reports depends on whether the
+    requesting User is_staff
+
+    :param request: HttpRequest dict
+    :param year: Optional year int
+    :param month: Optional month int
+    :return: orderMonthlyReport.html :rtype: HttpResponse
+    """
+    if not(year and month):
+        date = datetime.date.today()
     else:
         try:
-            myDate = datetime.date(int(theyear), int(themonth), 1)
+            date = datetime.date(int(year), int(month), 1)
         except:
+            date = None
             logger.error('Date arguments cannot be parsed')
             logger.info(traceback.format_exc())
-
-    if not theRequest.user.is_staff:
+    if not request.user.is_staff:
         '''Non staff users can only see their own orders listed'''
-        myRecords = (Order.base_objects.filter(
-            user=theRequest.user)
+        records = (Order.base_objects.filter(
+            user=request.user)
             .filter(
-                order_date__month=myDate.month)
+                order_date__month=date.month)
             .filter(
-                order_date__year=myDate.year)
+                order_date__year=date.year)
             .order_by('order_date'))
     else:
         '''This view is strictly for staff only'''
-        myRecords = (
+        records = (
             Order.base_objects.filter(
-                order_date__month=myDate.month)
+                order_date__month=date.month)
             .filter(
-                order_date__year=myDate.year)
+                order_date__year=date.year)
             .order_by('order_date'))
-
+    if 'pdf' in request.GET:
+        # Django's pagination is only required for the PDF view as
+        # django-tables2 handles pagination for the table
+        table = None
+        page_size = records.count()
+        try:
+            page = int(request.GET.get('page', '1'))
+        except ValueError:
+            page = 1
+        paginator = Paginator(records, page_size)
+        try:
+            records = paginator.page(page)
+        except (EmptyPage, InvalidPage):
+            records = paginator.page(paginator.num_pages)
+    else:
+        table = OrderListTable(records)
+        RequestConfig(request, paginate={
+            'per_page': settings.PAGE_SIZE
+        }).configure(table)
     return ({
-        'myRecords': myRecords,
-        'myCurrentDate': myDate,
-        'myPrevDate': myDate - datetime.timedelta(days=1),
-        'myNextDate': myDate + datetime.timedelta(days=31)
+        'myRecords': records,
+        'myCurrentDate': date,
+        'myPrevDate': date - datetime.timedelta(days=1),
+        'myNextDate': date + datetime.timedelta(days=31),
+        'table': table
     })
 
 

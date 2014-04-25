@@ -124,19 +124,19 @@ class TestSearchCRUD(TestCase):
 
     def test_Search_datesAsString_single(self):
         """
-        Tests Search model datesAsString method
+        Tests Search model dates_as_string method
         """
         mySearch = SearchF.create()
         SearchDateRangeF.create(search=mySearch)
 
         myExpResults = '15-07-2010 : 15-07-2012'
 
-        myRes = mySearch.datesAsString()
+        myRes = mySearch.dates_as_string()
         self.assertEqual(myRes, myExpResults)
 
     def test_Search_datesAsString_multiple(self):
         """
-        Tests Search model datesAsString method
+        Tests Search model dates_as_string method
         """
         mySearch = SearchF.create()
         # add date ranges
@@ -149,7 +149,7 @@ class TestSearchCRUD(TestCase):
             '15-07-2010 : 16-07-2012'
         )
 
-        myRes = mySearch.datesAsString()
+        myRes = mySearch.dates_as_string()
         self.assertEqual(myRes, myExpResults)
 
     def test_Search_model_repr(self):

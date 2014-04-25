@@ -56,7 +56,7 @@ class ReportsViews_visitorMonthlyReport_Tests(TestCase):
         myResp = myClient.get(
             reverse(
                 'visitorMonthlyReport',
-                kwargs={'theYear': '2010', 'theMonth': '11'}))
+                kwargs={'year': '2010', 'month': '11'}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
             myResp.context['app_path'], u'/visitormonthlyreport/2010/11/')
@@ -75,7 +75,7 @@ class ReportsViews_visitorMonthlyReport_Tests(TestCase):
         myResp = myClient.get(
             reverse(
                 'visitorMonthlyReport',
-                kwargs={'theYear': '2010', 'theMonth': '11'}))
+                kwargs={'year': '2010', 'month': '11'}))
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(
             myResp.context['app_path'], u'/visitormonthlyreport/2010/11/')
@@ -100,7 +100,7 @@ class ReportsViews_visitorMonthlyReport_Tests(TestCase):
         myResp = myClient.get(
             reverse(
                 'visitorMonthlyReport',
-                kwargs={'theYear': myDate.year, 'theMonth': myDate.month}))
+                kwargs={'year': myDate.year, 'month': myDate.month}))
 
         self.assertEqual(myResp.status_code, 200)
         self.assertEqual(

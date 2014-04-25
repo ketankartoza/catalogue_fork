@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load render_table from django_tables2 %}
 {% block extrajs %}
       {{ block.super }}
       <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -34,51 +35,26 @@
       </script>
 {% endblock %}
 {% block content %}
-
-<h2 class="centered">
-  Summary of All Sensor-Based Catalogue Holdings
-</h2>
-<!--Div that will hold the pie chart-->
-<div class="row">
-  <div id="chart_div" style="width: 860px; margin: auto;"></div>
-</div>
-<div class="row" style="margin-top:20px;">
-  <p class="text-center">
-    Click on a sensor name for a detailed summary for that sensor.
-  </p>
-</div>
-<div style="width: 860px; margin: auto;">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Sensor</th>
-        <th>Abbreviation</th>
-        <th>Count</th>
-{#        <th>Info</th>#}
-      </tr>
-    </thead>
-    <tbody>
-      {% for myRecord in myResultSet %}
-      {% if myRecord.id__count != 0 %}
-      <tr>
-        <td>
-          <a href="#" onclick="loadSummaryTable({{myRecord.id}});">
-            {{ myRecord.satellite.name }} {{ myRecord.instrument_type.name }} </a>
-        </td>
-        <td>{{ myRecord.satellite.abbreviation }} {{ myRecord.instrument_type.abbreviation }}</td>
-        <td><script> document.write(numberWithCommas({{myRecord.id__count}}));</script></td>
-{#        <td></td>#}
-      </tr>
-      {% endif %}
-      {% endfor %}
-      <tr>
-        <th>Total</th>
-        <th></th>
-        <th><script> document.write(numberWithCommas({{myTotal}}));</script></th>
-{#        <th></th>#}
-      </tr>
-    </tbody>
-  </table>
-</div>
-
+  <h2 class="centered">
+    Summary of All Sensor-Based Catalogue Holdings
+  </h2>
+  <!--Div that will hold the pie chart-->
+  <div class="row">
+    <div id="chart_div" style="width: 860px; margin: auto;"></div>
+  </div>
+  <div class="row" style="margin-top:20px;">
+    <p class="text-center">
+      Click on a sensor name for a detailed summary for that sensor.
+    </p>
+  </div>
+  <div class="row">
+    <div class="span8 offset2">
+      {% render_table table 'django_tables2/custom-table.html' %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="span8 offset2 text-right">
+      <p><strong>Total Searches: {{ total }}</strong></p>
+    </div>
+  </div>
 {% endblock %}

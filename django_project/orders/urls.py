@@ -2,8 +2,8 @@ from django.conf.urls import patterns, url
 
 from .views import (
     myOrders,
-    listOrders,
-    orderMonthlyReport,
+    list_orders,
+    order_monthly_report,
     downloadOrder,
     downloadClipGeometry,
     downloadOrderMetadata,
@@ -25,9 +25,9 @@ urlpatterns = patterns(
     url(r'^downloadorder/(?P<theId>\d*)/$',
         downloadOrder, name='downloadOrder'),
     url(r'^myorders/$', myOrders, name='myOrders'),
-    url(r'^listorders/$', listOrders, name='listOrders'),
-    url(r'^ordermonthlyreport/(?P<theyear>\d{4})/(?P<themonth>\d{1,2})/$',
-        orderMonthlyReport, name='orderMonthlyReport'),
+    url(r'^listorders/$', list_orders, name='listOrders'),
+    url(r'^ordermonthlyreport/(?P<year>\d{4})/(?P<month>\d{1,2})/$',
+        order_monthly_report, name='orderMonthlyReport'),
     url(r'^vieworder/(?P<theId>[0-9]+)/$', viewOrder, name='viewOrder'),
     url(r'^updateorderhistory/$',
         updateOrderHistory, name='updateOrderHistory'),

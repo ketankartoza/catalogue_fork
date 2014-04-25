@@ -1,3 +1,4 @@
+{% load render_table from django_tables2 %}
 <script type="text/javascript">
 function showOrder(theId) {
   theUrl = '/vieworder/' + theId + '/';
@@ -40,84 +41,18 @@ function showOrder(theId) {
     {% endif %}
   </div>
 </div>
-<div class="row-fluid center">
-  <span class="step-links btn-group">
-    {% if myRecords.has_previous %}
-      <a class="btn btn-small" href="{{myUrl}}?page={{ myRecords.previous_page_number }}"><i class="icon-chevron-left"></i></a>
-    {% else %}
-      <a class="btn btn-small disabled" href="#"><i class="icon-chevron-left"></i></a>
-    {% endif %}
-    <span class="current btn btn-small disabled btn-success">
-      {{ myRecords.number }} of {{ myRecords.paginator.num_pages }}
-    </span>
-    {% if myRecords.has_next %}
-      <a class="btn btn-small" href="{{myUrl}}?page={{ myRecords.next_page_number }}"><i class="icon-chevron-right"></i></a>
-    {% else %}
-      <a class="btn btn-small disabled" href="#"><i class="icon-chevron-right"></i></a>
-    {% endif %}
-  </span>
-</div>
-<div class="row-fluid">
-<table class="table table-striped">
-  <thead>
-    <th>Id</th>
-    <th>Date</th>
-    <th>Status</th>
-    {% if myUrl == '/listorders/' %}
-    <th>Placed by</th>
-    {% endif %}
-    <th>View</th>
-  </thead>
-  <tbody>
-    {% for myOrder in myRecords.object_list %}
-    <tr>
-      <td>{{myOrder.id }}</td>
-      <td>{{myOrder.order_date|date:"D, d M Y, H:m" }}</td>
-      <td>{{myOrder.order_status}}{% if myOrder.get_recent_history_date %}: {{ myOrder.get_recent_history_date|date:"D, d M Y, H:m" }}{% endif %}</td>
-      {% if myUrl == '/listorders/' %}
-      <td>{{myOrder.user.get_profile.firstname}} {{myOrder.user.get_profile.surname}}</td>
-      {% endif %}
-      <td>
-        <a href="{% url 'viewOrder' myOrder.id %}">
-          <i class="icon-search"></i>
-        </a>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-</div>
-<div class="row-fluid center">
-  <span class="step-links btn-group">
-    {% if myRecords.has_previous %}
-      <a class="btn btn-small" href="{{myUrl}}?page={{ myRecords.previous_page_number }}"><i class="icon-chevron-left"></i></a>
-    {% else %}
-      <a class="btn btn-small disabled" href="#"><i class="icon-chevron-left"></i></a>
-    {% endif %}
-    <span class="current btn btn-small disabled btn-success">
-      {{ myRecords.number }} of {{ myRecords.paginator.num_pages }}
-    </span>
-    {% if myRecords.has_next %}
-      <a class="btn btn-small" href="{{myUrl}}?page={{ myRecords.next_page_number }}"><i class="icon-chevron-right"></i></a>
-    {% else %}
-      <a class="btn btn-small disabled" href="#"><i class="icon-chevron-right"></i></a>
-    {% endif %}
-
-  </span>
-</div>
+{% if table %}
+  <div class="row-fluid">
+    {% render_table table 'django_tables2/custom-table.html' %}
+  </div>
+{% else %}
+  <div class="row-fluid text-center">
+    <p class="lead">
+      No Report to Generate
+    </p>
+  </div>
+{% endif %}
 <script>
-{% if myRecords.has_previous %}
-$('.previous-btn').tooltip({
-  placement:'top',
-  title:'Previous Page'
-});
-{% endif %}
-{% if myRecords.has_next %}
-$('.next-btn').tooltip({
-  placement:'top',
-  title:'Next Page'
-});
-{% endif %}
 $('.monthly-btn').tooltip({
   placement:'top',
   title:'Monthly Orders'

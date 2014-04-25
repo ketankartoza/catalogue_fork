@@ -14,7 +14,8 @@ INSTALLED_APPS += (
     'tastypie',
     'backbone_tastypie',
     'pipeline',
-    'exchange'
+    'exchange',
+    'django_tables2'
 )
 
 # Added by George for webodt
@@ -70,3 +71,14 @@ PIPELINE_DISABLE_WRAPPER = True
 
 # django-exchange openexchangerates API Key
 OPENEXCHANGERATES_API_KEY = 'db63cb9bdc5f4199a9302fea8b173f41'
+
+
+# used to sanitize sorting/column inputs to the executeRAWSQL commands in a
+# number of table views
+ACCEPTABLE_COLUMNS = [
+    'country', 'count'
+]
+
+ACCEPTABLE_SORTS = [
+    'ASC', 'DESC'
+]
