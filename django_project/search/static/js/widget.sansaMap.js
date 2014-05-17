@@ -29,7 +29,7 @@
       var TMSOverlay = new OpenLayers.Layer.TMS(
         "2012 Mosaic", "http://maps.sansa.org.za/SPOT2012/", {
             layername: '.',
-            type: 'jpg',
+            type: 'png',
             getURL: this.overlay_getTileURL,
             alpha: false,
             isBaseLayer: false,
