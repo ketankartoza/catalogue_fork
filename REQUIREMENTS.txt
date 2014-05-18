@@ -1,7 +1,8 @@
 #DateUtils==0.6.6
 Django==1.6.0
 GDAL
-PIL==1.1.7
+#PIL==1.1.7
+pillow
 Pygments==1.4
 SQLAlchemy==0.8.0b2
 Sphinx==1.2b1
@@ -16,7 +17,7 @@ django-tastypie==0.10.0
 django-userena==1.2.1
 django-webodt
 docutils==0.7
-elementsoap==0.6-20071224
+#elementsoap==0.6-20071224
 factory-boy==2.1.1
 gdata==2.0.17
 # Use my forked version because pip 1.4.1 requires non beta deps and pytz
@@ -24,7 +25,7 @@ gdata==2.0.17
 git+https://github.com/timlinux/python-dateutils.git@c67ee1932d678b82d65aa69ee35b07791d1c0364
 git+https://github.com/PaulUithol/backbone-tastypie.git
 git+https://github.com/cmheisel/nose-xcover.git#egg=nosexcover
-git+https://github.com/dodobas/pycsw.git
+git+https://github.com/timlinux/pycsw.git
 git+https://github.com/gak/pygooglechart.git
 django-jenkins==0.14.1
 html5lib==0.90
