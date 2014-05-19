@@ -133,3 +133,42 @@ python manage.py dims_iif_harvest -i True -d \
     "/home/timlinux/dev/python/catalogue/django_project/deliveries" \
     -e -v2  --settings=core.settings.dev_timlinux
 ```
+
+# Ingesting SPOT data
+
+```
+python manage.py spot_harvest --help --settings=core.settings.dev_timlinuxUsage: manage.py spot_harvest [options]
+
+Imports SPOT packages into the SANSA catalogue
+
+Options:
+  -v VERBOSITY, --verbosity=VERBOSITY
+                        Verbosity level; 0=minimal output, 1=normal output,
+                        2=verbose output, 3=very verbose output
+  --settings=SETTINGS   The Python path to a settings module, e.g.
+                        "myproject.settings.main". If this isn't provided, the
+                        DJANGO_SETTINGS_MODULE environment variable will be
+                        used.
+  --pythonpath=PYTHONPATH
+                        A directory to add to the Python path, e.g.
+                        "/home/djangoprojects/myproject".
+  --traceback           Raise on exception
+  -f SHAPEFILE, --file=SHAPEFILE
+                        Shapefile containing spot coverage data.
+  -d DOWNLOAD_THUMBS, --download-thumbs=DOWNLOAD_THUMBS
+                        Whether thumbnails should be fetched to. If not
+                        fetched now they will be fetched on demand as needed.
+  -t, --test_only       Just test, nothing will be written into the DB.
+  -a AREA, --area=AREA  Area of interest, images which are external to this
+                        area will not be imported (WKT Polygon, SRID=4326)
+  -e HALT_ON_ERROR, --halt_on_error=HALT_ON_ERROR
+                        Halt on first error that occurs and print a stacktrace
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
+```
+
+Example usage:
+
+```
+
+```
