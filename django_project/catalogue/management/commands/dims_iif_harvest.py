@@ -39,7 +39,16 @@ class Command(BaseCommand):
                     help=(
                         'Halt on first error that occurs and print a '
                         'stacktrace'),
-                    default=False)
+                    default=False),
+        make_option(
+            '--ignore-missing-thumbs',
+            '-i',
+            dest='ignore_missing_thumbs',
+            action='store',
+            help=(
+                'Continue with importing records even if they miss their'
+                'thumbnails.'),
+            default=False)
     )
 
     def handle(self, *args, **options):
@@ -48,9 +57,11 @@ class Command(BaseCommand):
         source_dir = options.get('source_dir')
         verbose = int(options.get('verbosity'))
         halt_on_error = options.get('halt_on_error')
+        ignore_missing_thumbs = options.get('ignore_missing_thumbs')
         dims_iif.ingest(
             source_path=source_dir,
             test_only_flag=test_only,
             verbosity_level=verbose,
-            halt_on_error_flag=halt_on_error
+            halt_on_error_flag=halt_on_error,
+            ignore_missing_thumbs=ignore_missing_thumbs
         )
