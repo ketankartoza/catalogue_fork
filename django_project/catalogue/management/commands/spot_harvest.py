@@ -65,7 +65,13 @@ class Command(BaseCommand):
             action='store',
             help=(
                 'Halt on first error that occurs and print a stacktrace'),
-            default=False)
+            default=False),
+        make_option(
+            '--start-from',
+            '-s',
+            dest='start_from',
+            action='store',
+            help='Start from a specific original ID')
     )
 
     # noinspection PyDeprecation
@@ -92,6 +98,7 @@ class Command(BaseCommand):
         area = options.get('area')
         halt_on_error = self._parameter_to_bool(
             options.get('halt_on_error_flag'))
+        start_from = options.get('start_from')
 
         spot.ingest(
             shapefile=shapefile,
@@ -99,4 +106,5 @@ class Command(BaseCommand):
             area_of_interest=area,
             test_only_flag=test_only_flag,
             verbosity_level=verbose,
-            halt_on_error_flag=halt_on_error)
+            halt_on_error_flag=halt_on_error,
+            start_from=start_from)
