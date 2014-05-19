@@ -170,5 +170,18 @@ Options:
 Example usage:
 
 ```
-
+python manage.py spot_harvest -e True \
+    -f /home/timlinux/dev/python/catalogue/django_project/SPOT_Coverage/Africa_2002_ACScorrected.shp \
+    --settings=core.settings.dev_timlinux
 ```
+
+# Debugging ingestors in pycharm
+
+To run a management command you have to do:
+
+* New configuration
+* Django server (I know it is a little counter-intuitive)
+* Additional options: Options for management commnad  ``-e True -f /home/timlinux/dev/python/catalogue/django_project/SPOT_Coverage/Africa_2002_ACScorrected.shp --settings=core.settings.dev_timlinux``
+* [x] Run custom command: set the name of the command (without args) e.g. ``spot_harvest``
+
+You can now run that command in debug mode with breakpoints etc.
