@@ -118,7 +118,18 @@ Options:
                         thumbnail to import.
   -e HALT_ON_ERROR, --halt_on_error=HALT_ON_ERROR
                         Halt on first error that occurs and print a stacktrace
+  -i IGNORE_MISSING_THUMBS, --ignore-missing-thumbs=IGNORE_MISSING_THUMBS
+                        Continue with importing records even if they miss
+                        theirthumbnails.
   --version             show program's version number and exit
   -h, --help            show this help message and exit
+
 ```
 
+Real example of use:
+
+```
+python manage.py dims_iif_harvest -i True -d \
+    "/home/timlinux/dev/python/catalogue/django_project/deliveries" \
+    -e -v2  --settings=core.settings.dev_timlinux
+```

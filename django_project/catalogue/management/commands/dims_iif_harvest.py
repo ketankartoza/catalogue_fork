@@ -24,22 +24,31 @@ class Command(BaseCommand):
     # noinspection PyShadowingBuiltins
     help = 'Imports DIMS Landsat records into the SANSA catalogue'
     option_list = BaseCommand.option_list + (
-        make_option('--test_only', '-t', dest='test_only', action='store_true',
-                    help='Just test, nothing will be written into the DB.',
-                    default=False),
-        make_option('--source_dir', '-d', dest='source_dir', action='store',
-                    help=(
-                        'Source directory containing DIMS IIF xml file and '
-                        'thumbnail to import.'),
-                    default=(
-                        '/home/web/catalogue/django_project/catalogue'
-                        '/tests/sample_files/landsat/')),
-        make_option('--halt_on_error', '-e', dest='halt_on_error',
-                    action='store',
-                    help=(
-                        'Halt on first error that occurs and print a '
-                        'stacktrace'),
-                    default=False),
+        make_option(
+            '--test_only',
+            '-t',
+            dest='test_only',
+            action='store_true',
+            help='Just test, nothing will be written into the DB.',
+            default=False),
+        make_option(
+            '--source_dir',
+            '-d',
+            dest='source_dir',
+            action='store',
+            help=(
+                'Source directory containing DIMS IIF xml file and '
+                'thumbnail to import.'),
+            default=(
+                '/home/web/catalogue/django_project/catalogue'
+                '/tests/sample_files/IIF/')),
+        make_option(
+            '--halt_on_error', '-e', dest='halt_on_error',
+            action='store',
+            help=(
+                'Halt on first error that occurs and print a '
+                'stacktrace'),
+            default=False),
         make_option(
             '--ignore-missing-thumbs',
             '-i',
