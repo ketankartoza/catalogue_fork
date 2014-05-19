@@ -64,7 +64,7 @@ class SpotIngestorTest(TestCase):
             operator_abbreviation='HRV')
         # Spot 4
         hrvir_instrument_type = InstrumentTypeF.create(
-            abbreviation='HRVIR',
+            abbreviation='HIR',
             operator_abbreviation='HRVIR')
         # Spot 5
         hrg_instrument_type = InstrumentTypeF.create(
@@ -151,11 +151,13 @@ class SpotIngestorTest(TestCase):
 
         # Two HRVIR cameras on Spot4 satellite
         s4_hrvir1_instrument = SatelliteInstrumentF.create(
-            operator_abbreviation='S4-HRVIR1',
+            operator_abbreviation='S4-HIR1',
             satellite_instrument_group=s4_satellite_instrument_group
         )
         s4_hrvir2_instrument = SatelliteInstrumentF.create(
-            operator_abbreviation='S4-HRVIR2',
+            # note that operator abbr. should be S4-HRVIR2 -
+            # dictionary needs updating though
+            operator_abbreviation='S4-HIR2',
             satellite_instrument_group=s4_satellite_instrument_group
         )
 
@@ -462,7 +464,8 @@ class SpotIngestorTest(TestCase):
         product_count = GenericProduct.objects.count()
         spot.ingest(shapefile=SHAPEFILE_NAME,
                     verbosity_level=3,
-                    area_of_interest=area)
+                    area_of_interest=area,
+                    halt_on_error_flag=True)
         new_product_count = GenericProduct.objects.count()
         self.assertEqual(product_count + 4, new_product_count)
 

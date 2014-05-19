@@ -163,16 +163,17 @@ def get_product_profile(log_message, feature):
     log_message('Satellite: %s' % satellite, 2)
 
     # Work out the instrument type
+    # We standardised on using operator_abbreviation
     instrument_type_abbreviation = None
     if satellite_number in [1, 2, 3]:
         instrument_type_abbreviation = 'HRV'
     elif satellite_number == 4:
-        instrument_type_abbreviation = 'HRVIR'
+        instrument_type_abbreviation = 'HIR'
     elif satellite_number == 5:
         instrument_type_abbreviation = 'HRG'
 
     instrument_type = InstrumentType.objects.get(
-        operator_abbreviation=instrument_type_abbreviation)
+        abbreviation=instrument_type_abbreviation)
     log_message('Instrument type: %s' % instrument_type, 2)
 
     # Work out the instrument group
@@ -723,6 +724,7 @@ def ingest(
             failed_record_count += 1
             if halt_on_error_flag is True:
                 print 'Halt on error flag was set to %s ' % halt_on_error_flag
+                print str(e)
                 print e.message
                 break
             else:

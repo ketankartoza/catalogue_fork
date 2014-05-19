@@ -346,7 +346,6 @@ def get_product_profile(log_message, dom):
             operator_abbreviation=sensor_value)  # e.g. OLI_TIRS
     except Exception, e:
         #print e.message
-        instrument_type = None
         raise e
     log_message('Instrument Type %s' % instrument_type, 2)
 
