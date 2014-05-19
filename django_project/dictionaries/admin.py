@@ -101,6 +101,7 @@ class InstrumentTypeAdmin(admin.ModelAdmin):
     list_display = [
         'name',
         'abbreviation',
+        'operator_abbreviation',
         'description',
         'is_searchable',
         'is_radar',
