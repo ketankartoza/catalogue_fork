@@ -9,7 +9,7 @@ DATABASES = {
         'USER': 'docker',
         'PASSWORD': 'docker',
         'HOST': 'localhost',
-        'PORT': '25432',
+        'PORT': '2000',
         'TEST_NAME': 'sac_unittest_master',
     }
 }
