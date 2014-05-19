@@ -92,3 +92,33 @@ Target: catalogue.tests.test_spot_ingestor
 Working directory: /home/timlinux/dev/python/catalogue/django_project
 
 
+# Ingesting IIF Data
+
+```
+python manage.py dims_iif_harvest --help  --settings=core.settings.dev_timlinux
+Usage: manage.py dims_iif_harvest [options]
+
+Imports DIMS Landsat records into the SANSA catalogue
+
+Options:
+  -v VERBOSITY, --verbosity=VERBOSITY
+                        Verbosity level; 0=minimal output, 1=normal output,
+                        2=verbose output, 3=very verbose output
+  --settings=SETTINGS   The Python path to a settings module, e.g.
+                        "myproject.settings.main". If this isn't provided, the
+                        DJANGO_SETTINGS_MODULE environment variable will be
+                        used.
+  --pythonpath=PYTHONPATH
+                        A directory to add to the Python path, e.g.
+                        "/home/djangoprojects/myproject".
+  --traceback           Raise on exception
+  -t, --test_only       Just test, nothing will be written into the DB.
+  -d SOURCE_DIR, --source_dir=SOURCE_DIR
+                        Source directory containing DIMS IIF xml file and
+                        thumbnail to import.
+  -e HALT_ON_ERROR, --halt_on_error=HALT_ON_ERROR
+                        Halt on first error that occurs and print a stacktrace
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
+```
+
