@@ -78,6 +78,7 @@ class Command(BaseCommand):
             options.get('halt_on_error_flag'))
         ignore_missing_thumbs = self._parameter_to_bool(
             options.get('ignore_missing_thumbs_flag'))
+
         dims_iif.ingest(
             source_path=source_dir,
             test_only_flag=test_only,

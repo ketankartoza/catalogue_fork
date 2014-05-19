@@ -364,7 +364,8 @@ def ingest(
         area_of_interest=None,
         test_only_flag=True,
         verbosity_level=2,
-        halt_on_error_flag=True):
+        halt_on_error_flag=True,
+        start_from=None):
     """
     Ingest a collection of Spot scenes from a shapefile.
 
@@ -407,6 +408,10 @@ def ingest(
 
     :param halt_on_error_flag: Whether we should stop processing when the first
         error is encountered. Default is True.
+
+    :param start_from: Optional record to start from - use the original_id for
+        this.
+    :type start_from: str
     """
     def log_message(message, level=1):
         """Log a message for a given level.
@@ -471,6 +476,11 @@ def ingest(
             transaction.commit()
 
         original_product_id = feature.get('A21')
+
+        if start_from is not None and start_from != original_product_id:
+            continue
+        else:
+            start_from = None
 
         # SPOT has a wierd thing they do on their catalogue where they
         # assign the same number to two kinds of products. For example:
@@ -622,6 +632,8 @@ def ingest(
                 ).getConcreteInstance()
                 new_record_flag = False
                 update_message = product.ingestion_log
+                if update_message is None:
+                    update_message = ''
                 update_message += '\n'
                 update_message += '%s : %s - updating record' % (
                     time_stamp, ingestor_version)
@@ -725,6 +737,8 @@ def ingest(
             if halt_on_error_flag is True:
                 print 'Halt on error flag was set to %s ' % halt_on_error_flag
                 print str(e)
+                tb = traceback.format_exc()
+                print tb
                 print e.message
                 break
             else:
