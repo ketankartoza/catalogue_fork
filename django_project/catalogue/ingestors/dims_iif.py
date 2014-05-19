@@ -483,20 +483,29 @@ def ingest(
             '/home/web/catalogue/django_project/catalogue/tests/sample_files/'
             'landsat/'),
         verbosity_level=2,
-        halt_on_error_flag=True):
+        halt_on_error_flag=True,
+        ignore_missing_thumbs=False):
     """
     Ingest a collection of Landsat metadata folders.
 
     :param test_only_flag: Whether to do a dummy run ( database will not be
         updated. Default False.
+    :type test_only_flag: bool
 
     :param source_path: A DIMS created IIF metadata xml file and thumbnail.
+    :type source_path: str
 
     :param verbosity_level: How verbose the logging output should be. 0-2
         where 2 is very very very very verbose! Default is 1.
+    :type verbosity_level: int
 
     :param halt_on_error_flag: Whather we should stop processing when the first
         error is encountered. Default is True.
+    :type halt_on_error_flag: bool
+
+    :param ignore_missing_thumbs: Whether we should raise an error
+        if we find we are missing a thumbnails. Default is False.
+    :type ignore_missing_thumbs: bool
     """
     def log_message(message, level=1):
         """Log a message for a given leven.
@@ -757,19 +766,24 @@ def ingest(
 
                     jpeg_path = os.path.join(str(myFolder), '*.jpeg')
                     log_message(jpeg_path, 2)
-                    jpeg_path = glob.glob(jpeg_path)[0]
-                    new_name = '%s.jpg' % product.original_product_id
-                    shutil.copyfile(
-                        jpeg_path,
-                        os.path.join(thumbs_folder, new_name))
-                    # Transform and store .wld file
-                    log_message('Referencing thumb', 2)
-                    try:
-                        path = product.georeferencedThumbnail()
-                        log_message('Georeferenced Thumb: %s' % path, 2)
-                    except:
-                        traceback.print_exc(file=sys.stdout)
-
+                    jpeg_path = glob.glob(jpeg_path)
+                    if len(jpeg_path) > 1:
+                        jpeg_path = jpeg_path[0]
+                        new_name = '%s.jpg' % product.original_product_id
+                        shutil.copyfile(
+                            jpeg_path,
+                            os.path.join(thumbs_folder, new_name))
+                        # Transform and store .wld file
+                        log_message('Referencing thumb', 2)
+                        try:
+                            path = product.georeferencedThumbnail()
+                            log_message('Georeferenced Thumb: %s' % path, 2)
+                        except:
+                            traceback.print_exc(file=sys.stdout)
+                    elif ignore_missing_thumbs:
+                            log_message('IGNORING missing thumb:')
+                    else:
+                        raise Exception('Missing thumbnail in %s' % myFolder)
                 if new_record_flag:
                     log_message('Product %s imported.' % record_count, 2)
                     pass
