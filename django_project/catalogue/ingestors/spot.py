@@ -528,11 +528,11 @@ def ingest(
             radiometric_resolution = 8  # 8 bits will need to change in spot 6
 
             # path for GenericSensorProduct
-            path = feature.get('a21')[1:4].rjust(4, '0')[0]
+            path = feature.get('a21')[1:4].rjust(4, '0')
             log_message('Path: %s' % path, 2)
 
             # row for GenericSensorProduct
-            row = feature.get('a21')[4:7].rjust(4, '0')[0]
+            row = feature.get('a21')[4:7].rjust(4, '0')
             log_message('Row: %s' % row, 2)
 
             # earth_sun_distance for OpticalProduct
@@ -717,8 +717,9 @@ def ingest(
             # if original_product_id == '51194111302060828412B':
             #     print e
             #     raise e
-            log_message('Record import failed. AAAAAAARGH! : %s' %
-                        original_product_id, 0)
+            log_message(
+                'Record import failed. AAAAAAARGH! : %s' %
+                original_product_id, 0)
             failed_record_count += 1
             if halt_on_error_flag is True:
                 print 'Halt on error flag was set to %s ' % halt_on_error_flag

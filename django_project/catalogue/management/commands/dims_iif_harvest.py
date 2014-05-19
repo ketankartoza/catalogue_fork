@@ -27,7 +27,7 @@ class Command(BaseCommand):
         make_option(
             '--test_only',
             '-t',
-            dest='test_only',
+            dest='test_only_flag',
             action='store_true',
             help='Just test, nothing will be written into the DB.',
             default=False),
@@ -43,7 +43,7 @@ class Command(BaseCommand):
                 '/home/web/catalogue/django_project/catalogue'
                 '/tests/sample_files/IIF/')),
         make_option(
-            '--halt_on_error', '-e', dest='halt_on_error',
+            '--halt_on_error', '-e', dest='halt_on_error_flag',
             action='store',
             help=(
                 'Halt on first error that occurs and print a '
@@ -52,7 +52,7 @@ class Command(BaseCommand):
         make_option(
             '--ignore-missing-thumbs',
             '-i',
-            dest='ignore_missing_thumbs',
+            dest='ignore_missing_thumbs_flag',
             action='store',
             help=(
                 'Continue with importing records even if they miss their'
@@ -60,13 +60,24 @@ class Command(BaseCommand):
             default=False)
     )
 
+    # noinspection PyDeprecation
+    @staticmethod
+    def _parameter_to_bool(parameter):
+        if parameter == 'True':
+            parameter = True
+        else:
+            parameter = False
+        return parameter
+
     def handle(self, *args, **options):
         """ command execution """
-        test_only = options.get('test_only')
+        test_only = self._parameter_to_bool(options.get('test_only_flag'))
         source_dir = options.get('source_dir')
         verbose = int(options.get('verbosity'))
-        halt_on_error = options.get('halt_on_error')
-        ignore_missing_thumbs = options.get('ignore_missing_thumbs')
+        halt_on_error = self._parameter_to_bool(
+            options.get('halt_on_error_flag'))
+        ignore_missing_thumbs = self._parameter_to_bool(
+            options.get('ignore_missing_thumbs_flag'))
         dims_iif.ingest(
             source_path=source_dir,
             test_only_flag=test_only,

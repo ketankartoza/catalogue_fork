@@ -38,7 +38,7 @@ class Command(BaseCommand):
         make_option(
             '--download-thumbs',
             '-d',
-            dest='download_thumbs',
+            dest='download_thumbs_flag',
             action='store',
             help='Whether thumbnails should be fetched to. If not '
                  'fetched now they will be fetched on demand as needed.',
@@ -46,7 +46,7 @@ class Command(BaseCommand):
         make_option(
             '--test_only',
             '-t',
-            dest='test_only',
+            dest='test_only_flag',
             action='store_true',
             help='Just test, nothing will be written into the DB.',
             default=False),
@@ -61,7 +61,7 @@ class Command(BaseCommand):
         make_option(
             '--halt_on_error',
             '-e',
-            dest='halt_on_error',
+            dest='halt_on_error_flag',
             action='store',
             help=(
                 'Halt on first error that occurs and print a stacktrace'),
@@ -69,6 +69,14 @@ class Command(BaseCommand):
     )
 
     # noinspection PyDeprecation
+    @staticmethod
+    def _parameter_to_bool(parameter):
+        if parameter == 'True':
+            parameter = True
+        else:
+            parameter = False
+        return parameter
+
     @transaction.commit_manually
     def handle(self, *args, **options):
         """ command execution
@@ -76,11 +84,15 @@ class Command(BaseCommand):
         :param options:
         """
         shapefile = options.get('shapefile')
-        download_thumbs_flag = options.get('download_thumbs_flag')
-        test_only_flag = options.get('test_only_flag')
+        download_thumbs_flag = self._parameter_to_bool(
+            options.get('download_thumbs_flag'))
+        test_only_flag = self._parameter_to_bool(
+            options.get('test_only_flag'))
         verbose = int(options.get('verbosity'))
         area = options.get('area')
-        halt_on_error = options.get('halt_on_error')
+        halt_on_error = self._parameter_to_bool(
+            options.get('halt_on_error_flag'))
+
         spot.ingest(
             shapefile=shapefile,
             download_thumbs_flag=download_thumbs_flag,
