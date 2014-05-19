@@ -1,0 +1,124 @@
+Setup notes on a fresh server:
+
+# Virtualenv and pip
+
+We set up using a pip cache to make repeatable setup easy and fast:
+
+Add to ~/.pip/pip.conf :
+
+```
+[global]
+download_cache =
+```
+
+And make the pip dir:
+
+```
+mkdir ~/.cache/pip
+```
+
+
+Create the virtualenv:
+
+```
+virtualenv env
+```
+
+Manually install gdal:
+
+```
+source virtualenv/bin/activate
+pip install --no-install GDAL
+cd venv/build/GDAL/
+python setup.py build_ext --include-dirs=/usr/include/gdal/
+pip install --no-download GDAL
+```
+
+
+# Development database configuration
+
+## Build docker db container
+
+```
+docker build -t kartoza/postgis:2.6 git://github.com/timlinux/docker-postgis
+docker run --name="catalogue-postgis" -p 2000:5432 -p 20001:22 -t -d kartoza/postgis:2.6
+psql -U docker -h localhost -p 2000 -l
+```
+
+(use 'docker' for the password)
+
+## Restore dump to container
+
+```
+createdb -U docker -h localhost -p 2000 -T template_postgis catalogue
+pg_restore drunk_elephant.dmp | psql -U docker -h localhost -p 2000 catalogue
+```
+
+``drunk_elephant`` being the name of the database dump to restore.
+
+
+# PyCharm configurations:
+
+## Django Server:
+
+* Configuration type: Django server
+* Host: localhost
+* Additional options: ``--settings=core.settings.dev_timlinux``
+*
+
+
+## All Tests:
+
+* Configuration type: Django tests
+* Target: catalogue
+* [x] Custom settings: ``/home/timlinux/dev/python/catalogue/django_project/core/settings/test_timlinux.py``
+* Working directory: /home/timlinux/dev/python/catalogue/django_project
+
+## Test: Catalogue IIF Ingestors:
+
+* Configuration type: Django tests
+* Target: catalogue.tests.test_dims_iif_ingestor
+* [x] Custom settings: ``/home/timlinux/dev/python/catalogue/django_project/core/settings/test_timlinux.py``
+* Working directory: /home/timlinux/dev/python/catalogue/django_project
+
+
+
+## catalogue.tests.test_spot_ingestor:
+
+Configuration type: Django tests
+
+Target: catalogue.tests.test_spot_ingestor
+[x] Custom settings: ``/home/timlinux/dev/python/catalogue/django_project/core/settings/test_timlinux.py``
+Working directory: /home/timlinux/dev/python/catalogue/django_project
+
+
+# Ingesting IIF Data
+
+```
+python manage.py dims_iif_harvest --help  --settings=core.settings.dev_timlinux
+Usage: manage.py dims_iif_harvest [options]
+
+Imports DIMS Landsat records into the SANSA catalogue
+
+Options:
+  -v VERBOSITY, --verbosity=VERBOSITY
+                        Verbosity level; 0=minimal output, 1=normal output,
+                        2=verbose output, 3=very verbose output
+  --settings=SETTINGS   The Python path to a settings module, e.g.
+                        "myproject.settings.main". If this isn't provided, the
+                        DJANGO_SETTINGS_MODULE environment variable will be
+                        used.
+  --pythonpath=PYTHONPATH
+                        A directory to add to the Python path, e.g.
+                        "/home/djangoprojects/myproject".
+  --traceback           Raise on exception
+  -t, --test_only       Just test, nothing will be written into the DB.
+  -d SOURCE_DIR, --source_dir=SOURCE_DIR
+                        Source directory containing DIMS IIF xml file and
+                        thumbnail to import.
+  -e HALT_ON_ERROR, --halt_on_error=HALT_ON_ERROR
+                        Halt on first error that occurs and print a stacktrace
+  --version             show program's version number and exit
+  -h, --help            show this help message and exit
+```
+
