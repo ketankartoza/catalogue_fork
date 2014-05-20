@@ -1,7 +1,6 @@
 from django.conf.urls import patterns, url
 
 from .views import (
-    myOrders,
     list_orders,
     order_monthly_report,
     downloadOrder,
@@ -12,7 +11,8 @@ from .views import (
     addOrder,
     ordersSummary,
     addAdhocOrder,
-    convertPrice
+    convertPrice,
+    my_orders
 )
 # Here are our patterns
 urlpatterns = patterns(
@@ -24,7 +24,7 @@ urlpatterns = patterns(
         downloadOrderMetadata, name='downloadOrderMetadata'),
     url(r'^downloadorder/(?P<theId>\d*)/$',
         downloadOrder, name='downloadOrder'),
-    url(r'^myorders/$', myOrders, name='myOrders'),
+    url(r'^myorders/$', my_orders, name='myOrders'),
     url(r'^listorders/$', list_orders, name='listOrders'),
     url(r'^ordermonthlyreport/(?P<year>\d{4})/(?P<month>\d{1,2})/$',
         order_monthly_report, name='orderMonthlyReport'),
