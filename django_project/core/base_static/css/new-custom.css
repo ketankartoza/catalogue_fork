@@ -5,7 +5,9 @@ hr {display: block;position: relative;padding: 0;margin: 8px auto;height: 0;widt
 .main-content {
     margin-top: 100px;
 }
-
+.popover {
+    min-width: 260px;
+}
 .big-map {
     left: 0;
     position: fixed;
