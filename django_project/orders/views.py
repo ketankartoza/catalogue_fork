@@ -92,33 +92,42 @@ from orders.tables import OrderListTable
 
 @login_required
 @renderWithContext('orderListPage.html', 'orderList.html')
-def myOrders(theRequest):
-    '''Non staff users can only see their own orders listed'''
-    myRecords = Order.base_objects.filter(
-        user=theRequest.user).order_by('-order_date')
-    # Paginate the results
-    if 'pdf' in theRequest.GET:
-        myPageSize = myRecords.count()
+def my_orders(request):
+    """
+    The view to return a requesting user's orders
+
+    NOTE: This view should probably be replaced by list_orders below as the
+        only difference between the two is the value of myUrl which can equally
+        well be calculated from request.path
+
+    :param request: HttpRequest obj
+    """
+    records = Order.base_objects.filter(
+        user=request.user).order_by('-order_date')
+    if 'pdf' in request.GET:
+        # Django's pagination is only required for the PDF view as
+        # django-tables2 handles pagination for the table
+        table = None
+        page_size = records.count()
+        try:
+            page = int(request.GET.get('page', '1'))
+        except ValueError:
+            page = 1
+        paginator = Paginator(records, page_size)
+        try:
+            records = paginator.page(page)
+        except (EmptyPage, InvalidPage):
+            records = paginator.page(paginator.num_pages)
     else:
-        myPageSize = 100
-    myPaginator = Paginator(myRecords, myPageSize)
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        myPage = int(theRequest.GET.get('page', '1'))
-    except ValueError:
-        myPage = 1
-        logger.info(
-            'Order list page request defaulting to page 1 because on an error '
-            'in pagination')
-    # If page request (9999) is out of range, deliver last page of results.
-    try:
-        myRecords = myPaginator.page(myPage)
-    except (EmptyPage, InvalidPage):
-        myRecords = myPaginator.page(myPaginator.num_pages)
-    #render_to_response is done by the renderWithContext decorator
+        table = OrderListTable(records)
+        RequestConfig(request, paginate={
+            'per_page': settings.PAGE_SIZE
+        }).configure(table)
     return ({
-        'myRecords': myRecords,
-        'myUrl': reverse('myOrders')
+        'myUrl': reverse('myOrders'),
+        'myCurrentMonth': datetime.date.today(),
+        'table': table,
+        'myRecords': records
     })
 
 
