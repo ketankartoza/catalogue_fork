@@ -102,17 +102,18 @@ class OthersViews_visitorMap_Tests(TestCase):
         #     len(myResp.context['myMessages']), 8)
         self.assertEqual(
             len(myResp.context['myExtents']), 16)
+        definitions = myResp.context['myLayerDefinitions']
         self.assertEqual(
-            len(myResp.context['myLayerDefinitions']), 6)
+            len(definitions),
+            2,
+            str(definitions))
         myExpLaylersList = (
-            '[zaSpot10mMosaic2010,zaSpot10mMosaic2009,zaSpot10mMosaic2008,'
-            'zaSpot10mMosaic2007,zaRoadsBoundaries,visitors]'
+            '[TMSOverlay,visitors]'
         )
         self.assertEqual(
             myResp.context['myLayersList'], myExpLaylersList)
-        myExpActiveBaseMap = (
-            'zaSpot10mMosaic2010'
-        )
+
+        myExpActiveBaseMap = 'TMSOverlay'
         self.assertEqual(
             myResp.context['myActiveBaseMap'], myExpActiveBaseMap)
         # check used templates

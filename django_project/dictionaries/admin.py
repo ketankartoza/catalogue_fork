@@ -101,6 +101,7 @@ class InstrumentTypeAdmin(admin.ModelAdmin):
     list_display = [
         'name',
         'abbreviation',
+        'operator_abbreviation',
         'description',
         'is_searchable',
         'is_radar',
@@ -138,9 +139,17 @@ admin.site.register(ImagingMode, ImagingModeAdmin)
 
 
 class SatelliteInstrumentAdmin(admin.ModelAdmin):
-    search_fields = ['name', 'abbreviation', 'description']
+    search_fields = [
+        'name',
+        'abbreviation',
+        'operator_abbreviation',
+        'description']
     list_filter = ['satellite_instrument_group']
-    list_display = ['name', 'abbreviation', 'description']
+    list_display = [
+        'name',
+        'abbreviation',
+        'operator_abbreviation',
+        'description']
 admin.site.register(SatelliteInstrument, SatelliteInstrumentAdmin)
 
 
