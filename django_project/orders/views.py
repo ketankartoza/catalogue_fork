@@ -513,7 +513,7 @@ def updateOrderHistory(theRequest):
         return HttpResponse(resp, mimetype="application/json")
     myOrder.order_status = myNewStatus
     myOrder.save()
-    notifySalesStaff(myOrder.user, myOrderId, myRequestContext)
+    notifySalesStaff(myOrder.user, myOrderId)
     resp = simplejson.dumps({"saved": 'ok'})
     return HttpResponse(resp, mimetype="application/json")
 
