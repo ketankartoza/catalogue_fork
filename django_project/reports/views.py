@@ -109,7 +109,8 @@ def visitor_report(request):
         'myGraphLabel': ({'Country': 'country'}),
         'myCurrentMonth': datetime.date.today(),
         'table': table,
-        'sort_link': sort_link
+        'sort_link': sort_link,
+        'myScores': country_stats
     })
 
 
@@ -154,6 +155,7 @@ def visitor_monthly_report(request, year, month):
         'myCurrentDate': my_date,
         'myPrevDate': my_date - datetime.timedelta(days=1),
         'myNextDate': my_date + datetime.timedelta(days=31),
+        'myScores': country_stats
     })
 
 
@@ -279,6 +281,7 @@ def search_monthly_report(request, year, month):
         'myCurrentDate': date,
         'myPrevDate': date - datetime.timedelta(days=1),
         'myNextDate': date + datetime.timedelta(days=31),
+        'myScores': country_stats
     })
 
 
@@ -321,6 +324,7 @@ def search_monthly_report_aoi(request, year, month):
         'myCurrentDate': date,
         'myPrevDate': date - datetime.timedelta(days=1),
         'myNextDate': date + datetime.timedelta(days=31),
+        'myScores': country_stats
     })
 
 
@@ -341,7 +345,11 @@ def data_summary_table(request):
         total += result.id__count
     table = SatelliteInstrumentTable(result_set)
     RequestConfig(request, paginate=False).configure(table)
-    return {'table': table, 'total': total}
+    return {
+        'table': table,
+        'total': total,
+        'myResultSet': result_set
+    }
 
 
 @staff_member_required
