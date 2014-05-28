@@ -55,6 +55,7 @@ docker.io run \
 
 
 ```
+**Note:** You need to adjust the path to your ``~/Documents/MapBox``
 
 Now open your browser at:  http://localhost:20009/
 
@@ -91,4 +92,14 @@ containers with a few commands!
 to security. Please read up on how to secure your postgres and tilemill
 instances if you want to deploy into a production environment.
 
+
+*5) Unpack the icons*
+
+```
+cd ~/Documents/MapBox
+mkdir icons
+wget http://www.sjjb.co.uk/mapicons/download/SJJB-PNG-Icons-20111021.tar.gz
+cd icons
+tar xfz ../SJJB-PNG-Icons-20111021.tar.gz
+```
 
