@@ -41,7 +41,7 @@ CSW = {
         'identification_fees': 'None',
         'identification_accessconstraints': 'None',
         'provider_name': 'South African National Space Agency (SANSA)',
-        'provider_url': 'http://localhost:8888/csw',
+        'provider_url': 'http://41.74.158.4/csw',
         'contact_name': 'Unknown',
         'contact_position': 'Unknown',
         'contact_address': 'Unknown',
