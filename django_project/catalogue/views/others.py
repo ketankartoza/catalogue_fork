@@ -386,7 +386,7 @@ def showProduct(theRequest, theProductId):
     myMessages = []
     myObject = None
     myProducts = GenericProduct.objects.filter(
-        unique_product_id=theProductId)
+        original_product_id=theProductId)
     if len(myProducts) > 0:
         myProduct = myProducts[0]
         myObject, myType = myProduct.getConcreteProduct()
