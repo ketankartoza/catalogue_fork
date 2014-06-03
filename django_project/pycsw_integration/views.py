@@ -8,6 +8,7 @@ from django.conf import settings
 
 from pycsw import server
 
+
 CONFIGURATION = {
     'server': {
         'home': '.',
@@ -17,6 +18,9 @@ CONFIGURATION = {
         'maxrecords': '10',
         'pretty_print': 'true',
         'profiles': 'apiso'
+    },
+    'manager': {
+        'transactions': 'false'
     },
     'repository': {
         'database': 'postgresql+psycopg2://%s:@/%s' % (
@@ -37,7 +41,7 @@ CSW = {
         'identification_fees': 'None',
         'identification_accessconstraints': 'None',
         'provider_name': 'South African National Space Agency (SANSA)',
-        'provider_url': 'http://www.sansa.org.za/',
+        'provider_url': 'http://localhost:8888/csw',
         'contact_name': 'Unknown',
         'contact_position': 'Unknown',
         'contact_address': 'Unknown',
