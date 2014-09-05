@@ -8,7 +8,7 @@ Add to ~/.pip/pip.conf :
 
 ```
 [global]
-download_cache =
+download_cache =  ~/.cache/pip
 ```
 
 And make the pip dir:
