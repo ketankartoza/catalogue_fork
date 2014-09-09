@@ -685,8 +685,16 @@ class SpectralModeProcessingCosts(models.Model):
     def __unicode__(self):
         return u'{0} {1} ({2} - {3})'.format(
             self.cost_per_scene,
-            self.currency.code,
+            self.get_currency().code,
             self.spectral_mode.name, self.instrument_type_processing_level)
+
+    def get_currency(self):
+        """Handle the case where no currency is specified"""
+        if self.currency:
+            return self.currency
+        else:
+            from exchange.models import Currency
+            return Currency.objects.get(code='ZAR')
 
     class Meta:
         """Meta class implementation."""
