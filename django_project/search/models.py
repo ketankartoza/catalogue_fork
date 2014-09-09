@@ -157,9 +157,19 @@ class SearchRecord(models.Model):
                 basespectralModeProcCosts.get_currency().code, 'ZAR'
                 )
         except ObjectDoesNotExist:
-                rand_cost_per_scene = 0;
+                rand_cost_per_scene = 0
         levels.append([14, 'Level 0 Raw instrument data', rand_cost_per_scene])
-        return json.dumps([list(level) for level in levels])
+
+        def decimal_default(obj):
+            """Cater for decimals as per
+            http://stackoverflow.com/questions/16957275/
+            python-to-json-serialization-fails-on-decimal"""
+            import decimal
+            if isinstance(obj, decimal.Decimal):
+                return float(obj)
+            raise TypeError
+        return json.dumps([list(level) for level in levels],
+                          default=decimal_default)
 
     def create(self, theUser, theProduct):
         """Python has no support for overloading constrctors"""
