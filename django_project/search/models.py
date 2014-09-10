@@ -126,18 +126,18 @@ class SearchRecord(models.Model):
             ).get()
             try:
                 spectralModeProcCosts = SpectralModeProcessingCosts.objects.filter(
-                spectral_mode=(
-                    self.product.getConcreteInstance().product_profile
-                    .spectral_mode
-                ),
-                instrument_type_processing_level=insTypeProcLevel
+                    spectral_mode=(
+                        self.product.getConcreteInstance().product_profile
+                        .spectral_mode
+                    ),
+                    instrument_type_processing_level=insTypeProcLevel
                 ).get()
                 rand_cost_per_scene = convert_value(
-                spectralModeProcCosts.cost_per_scene,
-                spectralModeProcCosts.currency.code, 'ZAR'
+                    spectralModeProcCosts.cost_per_scene,
+                    spectralModeProcCosts.get_currency().code, 'ZAR'
                 )
             except ObjectDoesNotExist:
-                rand_cost_per_scene = 0;
+                rand_cost_per_scene = 0
             levels.append([lvl.id, lvl.name, int(rand_cost_per_scene)])
         # add base level and cost
         try:
@@ -154,12 +154,22 @@ class SearchRecord(models.Model):
                 ).get()
             rand_cost_per_scene = convert_value(
                 basespectralModeProcCosts.cost_per_scene,
-                basespectralModeProcCosts.currency.code, 'ZAR'
+                basespectralModeProcCosts.get_currency().code, 'ZAR'
                 )
         except ObjectDoesNotExist:
-                rand_cost_per_scene = 0;
+                rand_cost_per_scene = 0
         levels.append([14, 'Level 0 Raw instrument data', rand_cost_per_scene])
-        return json.dumps([list(level) for level in levels])
+
+        def decimal_default(obj):
+            """Cater for decimals as per
+            http://stackoverflow.com/questions/16957275/
+            python-to-json-serialization-fails-on-decimal"""
+            import decimal
+            if isinstance(obj, decimal.Decimal):
+                return float(obj)
+            raise TypeError
+        return json.dumps([list(level) for level in levels],
+                          default=decimal_default)
 
     def create(self, theUser, theProduct):
         """Python has no support for overloading constrctors"""
@@ -230,10 +240,10 @@ class SearchRecord(models.Model):
         ).get()
         # snapshot current values
         self.cost_per_scene = spectralModeProcCosts.cost_per_scene
-        self.currency = spectralModeProcCosts.currency
+        self.currency = spectralModeProcCosts.get_currency()
         self.rand_cost_per_scene = convert_value(
             spectralModeProcCosts.cost_per_scene,
-            spectralModeProcCosts.currency.code, 'ZAR'
+            self.currency.code, 'ZAR'
         )
 
         # invoke model save method - default behaviour

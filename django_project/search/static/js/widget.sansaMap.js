@@ -27,7 +27,7 @@
 
     initLayers: function() {
       var TMSOverlay = new OpenLayers.Layer.TMS(
-        "2012 Mosaic", "http://maps.sansa.org.za/SPOT2012/", {
+        "2012 Mosaic", "http://maps.sansa.org.za/SPOT2012-BM/", {
             layername: '.',
             type: 'png',
             getURL: this.overlay_getTileURL,

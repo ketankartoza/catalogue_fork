@@ -8,7 +8,7 @@ Add to ~/.pip/pip.conf :
 
 ```
 [global]
-download_cache =
+download_cache =  ~/.cache/pip
 ```
 
 And make the pip dir:
@@ -21,13 +21,13 @@ mkdir ~/.cache/pip
 Create the virtualenv:
 
 ```
-virtualenv env
+virtualenv venv
 ```
 
 Manually install gdal:
 
 ```
-source virtualenv/bin/activate
+source venv/bin/activate
 pip install --no-install GDAL
 cd venv/build/GDAL/
 python setup.py build_ext --include-dirs=/usr/include/gdal/
