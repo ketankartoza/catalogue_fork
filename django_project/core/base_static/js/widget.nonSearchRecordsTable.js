@@ -67,7 +67,7 @@
   			this._calculateTotal();
   		}
 
-  		$('.deleteRow').click(function() {
+  		$(document).on("click", '.deleteRow', function() {
   			datachanged = true;
   			$(this).parent().parent().remove();
   			self._calculateTotal();
