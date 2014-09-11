@@ -19,10 +19,11 @@
 		var options = this.options;
 		var elem = this.element;
 		this.currencyElem = document.createElement("select");
+        this.currencyElem.setAttribute("id", "currency");
 		_.each(options.currency, function(element) {
 			var option = new Option(element[1], element[0]);
 			$(self.currencyElem).append(option);
-		})
+		});
 
 		elem.append(this._writeHeader());
 		elem.append(this._writeBody());
@@ -71,7 +72,7 @@
   			$(this).parent().parent().remove();
   			self._calculateTotal();
   		});
-
+        $('#currency').val('ZAR');
 	},
 
 	//called everytime when accessing element without calling function
