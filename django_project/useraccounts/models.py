@@ -16,7 +16,8 @@ class SansaUserProfile(UserenaBaseProfile):
     )
     strategic_partner = models.BooleanField(
         'Strategic Partner?', help_text=('Mark this as true if the person '
-        'belongs to an institution that is a CSIR/SAC strategic partner')
+        'belongs to an institution that is a CSIR/SAC strategic partner'),
+        default=False
     )
     url = models.URLField(blank=True)
     about = models.TextField(blank=True)

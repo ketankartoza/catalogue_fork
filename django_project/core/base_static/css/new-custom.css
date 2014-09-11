@@ -30,6 +30,7 @@ h3 {color:#228441;font-family: arial;}
 .table-striped tbody > tr:nth-child(odd) > td, .table-striped tbody > tr:nth-child(odd) > th {
 background-color: #EDF1FC!important;
 }
+#fundisa{font-family: "StarJedi Special Edition"; font-size: 20px}
 @media (min-width: 980px) and (max-width: 1370px) {
   .custom-hide{display:none;}
 }
