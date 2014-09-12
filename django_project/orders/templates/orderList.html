@@ -41,14 +41,14 @@ function showOrder(theId) {
     {% endif %}
   </div>
 </div>
-{% if table %}
+{% if myRecords %}
   <div class="row-fluid" id="list-order-table">
     {% render_table table 'django_tables2/custom-table.html' %}
   </div>
 {% else %}
   <div class="row-fluid text-center" id="list-order-table">
     <p class="lead">
-      No Report to Generate
+      No Order Founds.
     </p>
   </div>
 {% endif %}
