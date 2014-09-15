@@ -12,9 +12,8 @@ RUN  dpkg-divert --local --rename --add /sbin/initctl
 # Or comment this line out if you do not with to use caching
 ADD 71-apt-cacher-ng /etc/apt/apt.conf.d/71-apt-cacher-ng
 
-RUN echo "deb http://archive.ubuntu.com/ubuntu trusty main universe" > /etc/apt/sources.list
 RUN apt-get -y update
-RUN apt-get -y install openssh-server python-virtualenv
+RUN apt-get -y install openssh-server python-virtualenv python-uno openjdk-6-jre-headless
 RUN mkdir /var/run/sshd
 
 #-------------Application Specific Stuff ----------------------------------------------------
@@ -22,7 +21,7 @@ RUN mkdir /var/run/sshd
 EXPOSE 22 8000
 ADD start-dev-docker.sh /start.sh
 RUN chmod 0755 /start.sh
-ADD catalogue.venv.tar.bz2 /home/web/catalogue/venv
+ADD catalogue.venv.tar.bz2 /home/web/catalogue
 
 CMD /start.sh
 
