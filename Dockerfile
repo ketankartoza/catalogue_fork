@@ -13,7 +13,7 @@ RUN  dpkg-divert --local --rename --add /sbin/initctl
 ADD 71-apt-cacher-ng /etc/apt/apt.conf.d/71-apt-cacher-ng
 
 RUN apt-get -y update
-RUN apt-get -y install openssh-server python-virtualenv python-uno openjdk-6-jre-headless libpq5 libgeos libgdal1 python-geoip
+RUN apt-get -y install openssh-server python-virtualenv python-uno openjdk-6-jre-headless libpq5 libgdal1-1.7.0 python-geoip
 RUN mkdir /var/run/sshd
 
 #-------------Application Specific Stuff ----------------------------------------------------
