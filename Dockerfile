@@ -13,7 +13,7 @@ RUN  dpkg-divert --local --rename --add /sbin/initctl
 ADD 71-apt-cacher-ng /etc/apt/apt.conf.d/71-apt-cacher-ng
 
 RUN apt-get -y update
-RUN apt-get -y install openssh-server python-virtualenv python-uno openjdk-6-jre-headless
+RUN apt-get -y install openssh-server python-virtualenv python-uno openjdk-6-jre-headless libpq5 libgeos libgdal1
 RUN mkdir /var/run/sshd
 
 #-------------Application Specific Stuff ----------------------------------------------------
@@ -22,6 +22,7 @@ EXPOSE 22 8000
 ADD start-dev-docker.sh /start.sh
 RUN chmod 0755 /start.sh
 ADD catalogue.venv.tar.bz2 /home/web/catalogue
+RUN chmod a+rw -R /home/web/catalogue/venv
 
 CMD /start.sh
 
