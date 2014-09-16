@@ -5,10 +5,10 @@ POSTGIS_VERSION = (2, 1, 2)
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'catalogue',
+        'NAME': 'gis',
         'USER': 'docker',
         'PASSWORD': 'docker',
-        'HOST': '172.17.0.2',
+        'HOST': 'catalogue-postgis',
         'PORT': '5432',
         'TEST_NAME': 'sac_unittest_master',
     }
