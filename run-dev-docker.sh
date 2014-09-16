@@ -6,10 +6,9 @@ docker kill catalogue-postgis
 docker rm catalogue-postgis
 docker run --name="catalogue-postgis" \
      --hostname="catalogue-postgis" \
-     -p 2000:5432 \
      --restart="always" \
      -d -t \
-     kartoza/catalogue-postgis /start.sh
+     kartoza/catalogue-postgis /start-postgis.sh
 
 # Run the catalogue development environment
 # See https://github.com/kartoza/catalogue/wiki/Development-environment-in-docker
