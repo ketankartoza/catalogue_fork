@@ -1,15 +1,15 @@
 from .dev import *
 import platform
 
-POSTGIS_VERSION=(2,1,2)
+POSTGIS_VERSION = (2, 1, 2)
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'catalogue',
+        'NAME': 'gis',
         'USER': 'docker',
         'PASSWORD': 'docker',
-        'HOST': 'localhost',
-        'PORT': '2000',
+        'HOST': 'catalogue-postgis',
+        'PORT': '5432',
         'TEST_NAME': 'sac_unittest_master',
     }
 }
