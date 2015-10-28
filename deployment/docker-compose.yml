@@ -1,0 +1,178 @@
+#
+# Production server with UWSGI configured to run on port 8080
+#
+# Usage:
+# fig -f fig-.yml <command>
+#
+# Typical useage:
+#
+# fig build
+# fig up -d web
+#
+# See accompanying Make commands for easy collectstatic etc.
+
+smtp:
+  image: catatnight/postfix
+  container_name: catalogue_smtp
+  hostname: postfix
+  environment:
+    # You could change this to something more suitable
+    - maildomain=kartoza.com
+    - smtp_user=noreply:docker
+
+db:
+  image: kartoza/postgis:9.4-2.1
+  container_name: catalogue_db
+  volumes:
+    - ./pg/postgres_data:/var/lib/postgresql
+    - ./sql:/sql
+  environment:
+    - USERNAME=docker
+    - PASS=docker
+
+qgisserver:
+  image: kartoza/qgis-server:2.6
+  container_name: catalogue_qgisserver
+  hostname: qgis-server
+  volumes:
+    - ../maps:/web
+    - ./logs/qgisserver:/var/log/apache2
+  links:
+    - db:db
+#
+#mapproxy:
+#  image: kartoza/mapproxy
+#  hostname: mapproxy
+#  volumes:
+#    - ../mapproxy:/mapproxy
+#  volumes_from:
+#    - qgisserver
+#  links:
+#    - qgisserver:qgisserver
+
+rabbitmq:
+  image: library/rabbitmq
+  hostname: rabbitmq
+  environment:
+     - RABBIT_PASSWORD=rabbit_test_password
+     - USER=rabbit_user
+     - RABBITMQ_NODENAME=rabbit
+
+worker:
+  build: docker
+  hostname: worker
+  command: celery worker -A event_mapper.celery -l info
+  environment:
+    - DATABASE_NAME=gis
+    - DATABASE_USERNAME=docker
+    - DATABASE_PASSWORD=docker
+    - DATABASE_HOST=db
+    - RABBITMQ_HOST=rabbitmq
+    - DJANGO_SETTINGS_MODULE=core.settings.prod_docker
+    - VIRTUAL_HOST=catalogue.kartoza.org
+    - VIRTUAL_PORT=8080
+  volumes:
+    - ../django_project:/home/web/django_project
+    - ./static:/home/web/static
+    - ./media:/home/web/media
+    - ./reports:/home/web/reports
+    - ./logs:/var/log/
+  links:
+    - smtp:smtp
+    - db:db
+    - rabbitmq:rabbitmq
+
+uwsgi:
+  build: docker
+  container_name: catalogue_uwsgi
+  hostname: uwsgi
+  environment:
+    - DATABASE_NAME=gis
+    - DATABASE_USERNAME=docker
+    - DATABASE_PASSWORD=docker
+    - DATABASE_HOST=db
+    - RABBITMQ_HOST=rabbitmq
+    - DJANGO_SETTINGS_MODULE=core.settings.prod_docker
+    - VIRTUAL_HOST=catalogue.kartoza.org
+    - VIRTUAL_PORT=8080
+  volumes:
+    - ../django_project:/home/web/django_project
+    - ./static:/home/web/static
+    - ./media:/home/web/media
+    - ./reports:/home/web/reports
+    - ./logs:/var/log/
+    - ../mapserver:/home/web/mapserver 
+  links:
+    - smtp:smtp
+    - db:db
+#    - qgisserver:qgisserver
+#    - rabbitmq:rabbitmq
+#    - worker:worker
+
+dbbackups:
+  image: kartoza/pg-backup
+  hostname: pg-backups
+  container_name: catalogue_db_backups
+  volumes:
+    - ./backups:/backups
+  links:
+    - db:db
+  environment:
+    - DUMPPREFIX=PG_CATALOGUE$
+    # These are all defaults anyway, but setting explicitly in
+    # case we ever want to ever use different credentials
+    - PGUSER=docker
+    - PGPASSWORD=docker
+    - PGPORT=5432
+    - PGHOST=db
+    - PGDATABASE=gis
+
+# This is normally the main entry point for a production server
+web:
+  image: nginx
+  container_name: catalogue_nginx
+  hostname: nginx
+  volumes:
+    - ./sites-enabled:/etc/nginx/conf.d:ro
+    # I dont use volumes_from as I want to use the ro modifier
+    - ./static:/home/web/static:ro
+    - ./media:/home/web/media:ro
+    - ./logs:/var/log/nginx
+    - ./reports:/home/web/archive
+  links:
+    - uwsgi:uwsgi
+  ports:
+    - "49300:8080"
+
+# This is the entry point for a development server.
+# Run with --no-deps to run attached to the services
+# from produ environment if wanted
+devweb:
+  # Note you cannot scale if you use conteiner_name
+  container_name: catalogue_dev_web
+  build: docker
+  dockerfile: Dockerfile-dev
+  hostname: uwsgi
+  environment:
+    - DATABASE_NAME=gis
+    - DATABASE_USERNAME=docker
+    - DATABASE_PASSWORD=docker
+    - DATABASE_HOST=db
+    - DJANGO_SETTINGS_MODULE=core.settings.prod_docker
+    - PYTHONPATH=/home/web/django_project
+    - VIRTUAL_HOST=staging.at.kartoza.com
+    - VIRTUAL_PORT=8000
+  volumes:
+    - ../django_project:/home/web/django_project
+    - ./static:/home/web/static
+    - ./media:/home/web/media
+    - ./reports:/home/web/reports
+    - ./logs:/var/log/
+  links:
+    - smtp:smtp
+    - db:db
+  ports:
+    # for django test server
+    - "49302:8080"
+    # for ssh
+    - "49303:22"
