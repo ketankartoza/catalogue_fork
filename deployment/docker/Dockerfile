@@ -11,17 +11,21 @@ MAINTAINER Tim Sutton<tim@kartoza.com>
 ADD 71-apt-cacher-ng /etc/apt/apt.conf.d/71-apt-cacher-ng
 
 
+# Pandoc needed to generate rst dumps
+RUN apt-get update -y; apt-get -y --force-yes install yui-compressor pandoc
+RUN apt-get -y install build-essential python-all-dev
+WORKDIR "/tmp"
+RUN wget http://download.osgeo.org/gdal/gdal-1.9.0.tar.gz
+RUN tar xvfz gdal-1.9.0.tar.gz
+WORKDIR "/tmp/gdal-1.9.0"
+RUN ./configure --with-python && make && make install
+RUN apt-get -y install python-uno libpq5 python-geoip
+
+
 ADD REQUIREMENTS.txt /REQUIREMENTS.txt
 RUN pip install -r /REQUIREMENTS.txt
 RUN pip install uwsgi
 
-#RUN echo 'http://ppa.launchpad.net/libreoffice/ppa/ubuntu jessie main' | tee -a /etc/apt/sources.list
-#RUN echo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1378B444 
-
-RUN apt-get update -y; apt-get -y --force-yes install yui-compressor
-
-# Install translation
-RUN apt-get -y --force-yes install gettext
 
 # Open port 8080 as we will be running our uwsgi socket on that
 EXPOSE 8080
