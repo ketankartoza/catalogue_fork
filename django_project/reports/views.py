@@ -440,7 +440,7 @@ def dictionary_report(request):
 
 
 @renderWithContext('sensor-fact-sheet.html')
-def sensor_fact_sheet(request, sat_abbr):
+def sensor_fact_sheet(request, sat_abbr, instrument_type):
     """
     The view to render a Sensor's fact sheet
 
@@ -450,7 +450,8 @@ def sensor_fact_sheet(request, sat_abbr):
     """
     try:
         sat_group = SatelliteInstrumentGroup.objects.get(
-            satellite__operator_abbreviation=sat_abbr
+            satellite__operator_abbreviation=sat_abbr,
+                instrument_type__operator_abbreviation=instrument_type
         )
     except SatelliteInstrumentGroup.DoesNotExist:
         return HttpResponseNotFound(
