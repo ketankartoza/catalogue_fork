@@ -127,7 +127,8 @@ class SatelliteInstrumentTable(tables.Table):
         return mark_safe(
             '<a href="%s"><i class="icon-question-sign"></i></a>' % reverse(
                 'fact-sheet',
-                kwargs={'sat_abbr': record.satellite.operator_abbreviation}
+                kwargs={'sat_abbr': record.satellite.operator_abbreviation,
+                        'instrument_type': record.instrument_type.operator_abbreviation}
             )
         )
 

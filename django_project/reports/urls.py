@@ -35,6 +35,6 @@ urlpatterns = patterns(
     url(r'^sensorSummaryTable/(?P<sensor_id>[0-9]+)/$',
         sensor_summary_table, name='sensorSummaryTable'
         ),
-    url(r'^sensor-fact-sheet/(?P<sat_abbr>[\w-]+)/$',
+    url(r'^sensor-fact-sheet/(?P<sat_abbr>[\w-]+)/(?P<instrument_type>[\w-]+)/$',
         sensor_fact_sheet, name='fact-sheet')
 )
