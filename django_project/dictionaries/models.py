@@ -493,7 +493,6 @@ class SatelliteInstrumentGroup(models.Model):
         return u'{0} - {1}'.format(
             self.satellite.operator_abbreviation,
             self.instrument_type.operator_abbreviation,
-            self.min_year
         )
 
     def min_year(self):
