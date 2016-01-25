@@ -5,10 +5,6 @@ print(os.environ)
 
 ALLOWED_HOSTS = ['*']
 
-ADMINS = (
-    ('Tim Sutton', 'tim@kartoza.com'),
-    ('Christian Christelis', 'christian@kartoza.com'),)
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
