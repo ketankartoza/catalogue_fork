@@ -492,8 +492,15 @@ class SatelliteInstrumentGroup(models.Model):
     def __unicode__(self):
         return u'{0} - {1}'.format(
             self.satellite.operator_abbreviation,
-            self.instrument_type.operator_abbreviation
+            self.instrument_type.operator_abbreviation,
+            self.min_year
         )
+
+    def min_year(self):
+        return self.products_per_year()[1]['year']
+
+    def max_year(self):
+        return self.products_per_year()[-1]['year']
 
     def products_per_year(self):
         myStats = executeRAWSQL("""
