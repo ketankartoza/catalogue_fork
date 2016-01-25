@@ -492,7 +492,7 @@ class SatelliteInstrumentGroup(models.Model):
     def __unicode__(self):
         return u'{0} - {1}'.format(
             self.satellite.operator_abbreviation,
-            self.instrument_type.operator_abbreviation,
+            self.instrument_type.operator_abbreviation
         )
 
     def min_year(self):
