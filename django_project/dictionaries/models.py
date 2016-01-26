@@ -495,20 +495,6 @@ class SatelliteInstrumentGroup(models.Model):
             self.instrument_type.operator_abbreviation
         )
 
-    def get_year(self):
-        years = []
-        all_years = self.products_per_year()
-        for year in all_years:
-            years.append(year['year'])
-        return years
-
-    def get_count(self):
-        counts = []
-        all_counts = self.products_per_year()
-        for count in all_counts:
-            counts.append(count['count'])
-        return counts
-
     def products_per_year(self):
         myStats = executeRAWSQL("""
 SELECT count(*) as count, extract(YEAR from gp.product_date)::int as year
