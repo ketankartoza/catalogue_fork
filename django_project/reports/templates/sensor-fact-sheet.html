@@ -128,4 +128,39 @@
       <p>{{ sat_group.instrument_type.keywords }}</p>
     </div>
   </div>
+    <div class="row">
+    <div class="span12">
+      <h3>Yearly catalogue product overview for {{ sat_group.satellite.name }}</h3>
+      <hr/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span8">
+        <table class="table table-striped">
+    <thead>
+    </thead>
+    <tbody>
+              <tr>
+          {% for year in sat_group.get_year %}
+            {% if not year == 0 %}
+              <th>
+                  {{ year }}
+              </th>
+            {% endif %}
+          {% endfor %}
+        </tr>
+        <tr>
+          {% for count in sat_group.get_count %}
+            {% if not count == 0 %}
+              <td>
+                  {{ count }}
+              </td>
+            {% endif %}
+          {% endfor %}
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+  </div>
 {% endblock %}
