@@ -117,10 +117,10 @@ class SatelliteInstrumentTable(tables.Table):
         verbose_name='Scene Count'
     )
 
-    start_date = tables.Column(accessor='min_year')
-    end_date = tables.Column(accessor='max_year')
+    start_date = tables.Column(accessor='min_year', orderable=False)
+    end_date = tables.Column(accessor='max_year', orderable=False)
 
-    info = tables.Column(empty_values=())
+    info = tables.Column(empty_values=(), orderable=False)
 
     # noinspection PyMethodMayBeStatic
     def render_info(self, record):
