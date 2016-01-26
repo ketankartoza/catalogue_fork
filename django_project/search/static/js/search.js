@@ -4,6 +4,7 @@ var ResultPanelState = false;
 var ResultDownloadOptionsState = false;
 var CartDownloadOptionsState = false;
 var LayerSwitcherState = false;
+var CartSubPaneState = false;
 
 function toggleSearchPanel() {
     if (SearchPanelState) {
@@ -89,6 +90,10 @@ function showResultDownloadOptions() {
 
 function hideCartDownloadOptions() {
     $('#cart-panel-btns').fadeOut('fast');
+}
+
+function showCartSubPanel() {
+    $('#cart-sub-panel').fadeIn('fast');
 }
 
 function showCartDownloadOptions() {
@@ -705,6 +710,8 @@ APP.ResultGridViewItem = Backbone.View.extend({
                 $("#result_item_"+ this.model.get('original_product_id')).children('.cart-remove-button').removeClass('hide');
                 $("#result_item_"+ this.model.get('original_product_id')).children('.cart-button').addClass('hide');
             }
+            showCartSubPanel();
+            CartSubPaneState = true;
         } else {
             alert('You need to log in first!');
         }
