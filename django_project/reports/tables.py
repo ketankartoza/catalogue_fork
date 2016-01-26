@@ -111,11 +111,16 @@ class SatelliteInstrumentTable(tables.Table):
         verbose_name='Sensor'
     )
     abbreviation = tables.Column(accessor='satellite.abbreviation')
+
     count = tables.Column(
         accessor='id__count',
         verbose_name='Scene Count'
     )
-    info = tables.Column(empty_values=())
+
+    start_date = tables.Column(accessor='min_year', orderable=False)
+    end_date = tables.Column(accessor='max_year', orderable=False)
+
+    info = tables.Column(empty_values=(), orderable=False)
 
     # noinspection PyMethodMayBeStatic
     def render_info(self, record):
