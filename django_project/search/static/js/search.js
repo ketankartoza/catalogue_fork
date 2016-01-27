@@ -4,7 +4,7 @@ var ResultPanelState = false;
 var ResultDownloadOptionsState = false;
 var CartDownloadOptionsState = false;
 var LayerSwitcherState = false;
-var CartSubPaneState = false;
+var ButtonSubPanelState = false;
 
 function toggleSearchPanel() {
     if (SearchPanelState) {
@@ -63,6 +63,7 @@ function openResultPanel() {
 }
 
 function defaultPanelState() {
+    hideButtonSubPanel();
     hideResultDownloadOptions();
     hideCartDownloadOptions();
     if (SearchPanelState) {
@@ -92,8 +93,18 @@ function hideCartDownloadOptions() {
     $('#cart-panel-btns').fadeOut('fast');
 }
 
-function showCartSubPanel() {
-    $('#cart-sub-panel').fadeIn('fast');
+function showButtonSubPanel() {
+    $('#cart-show-map').fadeIn('fast');
+    $('#place_order').fadeIn('fast');
+    $('#cart-panel-download-button').fadeIn('fast');
+    ButtonSubPanelState = true;
+}
+
+function hideButtonSubPanel() {
+    $('#cart-show-map').fadeOut('fast');
+    $('#place_order').fadeOut('fast');
+    $('#cart-panel-download-button').fadeOut('fast');
+    ButtonSubPanelState = false;
 }
 
 function showCartDownloadOptions() {
@@ -710,8 +721,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
                 $("#result_item_"+ this.model.get('original_product_id')).children('.cart-remove-button').removeClass('hide');
                 $("#result_item_"+ this.model.get('original_product_id')).children('.cart-button').addClass('hide');
             }
-            showCartSubPanel();
-            CartSubPaneState = true;
+            showButtonSubPanel();
         } else {
             alert('You need to log in first!');
         }
@@ -819,6 +829,7 @@ APP.CartGridView = Backbone.View.extend({
             });
         return this;
     },
+
     renderItem: function(item) {
         var myItem = new APP.CartGridViewItem({
             model:item,
