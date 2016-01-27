@@ -139,7 +139,6 @@
             <table class="table table-striped">
                 <tbody>
                 <tr>
-
                     {% for items in sat_group.products_per_year %}
                         <th>{{ items.year }}</th>
                     {% endfor %}
@@ -149,12 +148,17 @@
 
                         <td>{{ items.count }}</td>
                     {% endfor %}
-
                 </tr>
-
-
                 </tbody>
             </table>
         </div>
     </div>
+
+    <div class="row-fluid center gap-bottom">
+  <div id="order-list-buttonset" class="btn-group">
+    <button id="download-btn" class="btn"
+            onclick='location="{{ myUrl }}?page=&pdf"'>
+      <i class="icon-download"></i> Download as PDF
+    </button>
+  </div>
 {% endblock %}
