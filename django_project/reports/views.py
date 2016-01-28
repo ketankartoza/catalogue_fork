@@ -480,5 +480,6 @@ def sensor_fact_sheet(request, sat_abbr, instrument_type):
     return ({
         'bands' : bands,
         'processing_levels': processing_levels,
+        'dataSummaryTable' : reverse('dataSummaryTable'),
         'sat_group': sat_group
     })

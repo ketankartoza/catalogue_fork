@@ -154,11 +154,16 @@
         </div>
     </div>
 
-    <div class="row-fluid center gap-bottom">
-  <div id="order-list-buttonset" class="btn-group">
-    <button id="download-btn" class="btn"
-            onclick='location="{{ myUrl }}?page=&pdf"'>
-      <i class="icon-download"></i> Download as PDF
-    </button>
-  </div>
+    <div class="row-fluid center gap-right">
+        <button class="btn btn-success"
+                onclick='location="{{ dataSummaryTable }}"'>
+            Back
+        </button>
+        <div id="order-list-buttonset" class="btn-group">
+            <button id="download-btn" class="btn"
+                    onclick='location="{{ myUrl }}?page=&pdf"'>
+                <i class="icon-download"></i> Download as PDF
+            </button>
+        </div>
+    </div>
 {% endblock %}
