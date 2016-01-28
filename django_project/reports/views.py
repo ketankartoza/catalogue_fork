@@ -57,7 +57,7 @@ from search.models import (
     SearchRecord,
 )
 
-from dictionaries.models import SatelliteInstrumentGroup
+from dictionaries.models import SatelliteInstrumentGroup, Band, SpectralMode, InstrumentTypeProcessingLevel, ProcessingLevel
 from reports.tables import (
     table_sort_settings,
     CountryTable,
@@ -467,15 +467,18 @@ def sensor_fact_sheet(request, sat_abbr, instrument_type):
     :param request: HttpRequest
     :return: HttpResponse
     """
-    try:
-        sat_group = SatelliteInstrumentGroup.objects.get(
-            satellite__operator_abbreviation=sat_abbr,
-                instrument_type__operator_abbreviation=instrument_type
-        )
-    except SatelliteInstrumentGroup.DoesNotExist:
-        return HttpResponseNotFound(
-            'Sorry! No fact sheet matches the requested sensor.'
-        )
+    sat_group = SatelliteInstrumentGroup.objects.get(
+        satellite__operator_abbreviation=sat_abbr,
+            instrument_type__operator_abbreviation=instrument_type
+    )
+    bands = Band.objects.filter(
+        instrument_type__operator_abbreviation=instrument_type
+    ).order_by('band_number')
+
+    processing_levels = ProcessingLevel.objects.all()
+
     return ({
+        'bands' : bands,
+        'processing_levels': processing_levels,
         'sat_group': sat_group
     })
