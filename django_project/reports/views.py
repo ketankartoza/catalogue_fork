@@ -477,5 +477,6 @@ def sensor_fact_sheet(request, sat_abbr, instrument_type):
             'Sorry! No fact sheet matches the requested sensor.'
         )
     return ({
+        'dataSummaryTable' : reverse('dataSummaryTable'),
         'sat_group': sat_group
     })

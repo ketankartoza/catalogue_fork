@@ -139,7 +139,6 @@
             <table class="table table-striped">
                 <tbody>
                 <tr>
-
                     {% for items in sat_group.products_per_year %}
                         <th>{{ items.year }}</th>
                     {% endfor %}
@@ -149,12 +148,15 @@
 
                         <td>{{ items.count }}</td>
                     {% endfor %}
-
                 </tr>
-
-
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="row-fluid center gap-bottom">
+    <button class="btn btn-success"
+                onclick='location="{{ dataSummaryTable }}"'>
+          Back!
+        </button>
     </div>
 {% endblock %}
