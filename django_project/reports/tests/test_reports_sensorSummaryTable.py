@@ -35,122 +35,124 @@ from dictionaries.tests.model_factories import (
 
 class ReportsViews_sensorSummaryTable_Tests(TestCase):
     """
+    sensorSummaryTable has been deleted from URL
+    but the codes in the view and template still exist.
     Tests reports.py sensorSummaryTable method/view
     """
 
-    def setUp(self):
-        """
-        Set up before each test
-        """
-
-    def test_myReports_badURL(self):
-        """
-        Test badURL requests
-        """
-        myKwargsTests = [{'testargs': 1}]
-
-        for myKwargTest in myKwargsTests:
-            self.assertRaises(
-                NoReverseMatch, reverse, 'sensorSummaryTable',
-                kwargs=myKwargTest)
-
-    def test_myReports_nologin(self):
-        """
-        Test view if user is not logged in
-        """
-        myClient = Client()
-        myResp = myClient.get(
-            reverse('sensorSummaryTable',
-                    kwargs={'sensor_id': '34'}))
-        self.assertEqual(myResp.status_code, 200)
-        self.assertEqual(
-            myResp.context['app_path'], u'/sensorSummaryTable/34/')
-
-    def test_myReports_userlogin(self):
-        """
-        Test view if user is logged as user
-        """
-
-        UserF.create(**{
-            'username': 'pompies',
-            'password': 'password'
-        })
-
-        myClient = Client()
-        myClient.login(username='pompies', password='password')
-        myResp = myClient.get(
-            reverse('sensorSummaryTable',
-                    kwargs={'sensor_id': '34'}))
-        self.assertEqual(myResp.status_code, 200)
-        self.assertEqual(
-            myResp.context['app_path'], u'/sensorSummaryTable/34/')
-
-    def test_myReports_stafflogin_generic(self):
-        """
-        Test view if user is logged as staff and basic functionality
-        """
-
-        UserF.create(**{
-            'username': 'timlinux',
-            'password': 'password',
-            'is_staff': True
-        })
-
-        myInstType = InstrumentTypeF.create(**{
-            'operator_abbreviation': 'ITOP 1'
-        })
-        mySatellite = SatelliteF.create(**{
-            'operator_abbreviation': 'ST 1'
-        })
-
-        mySensor = SatelliteInstrumentGroupF.create(**{
-            'id': 1,
-            'instrument_type': myInstType,
-            'satellite': mySatellite
-        })
-        SearchF.create(**{'satellites': [mySatellite]})
-
-        mySatInst = SatelliteInstrumentF.create(**{
-            'satellite_instrument_group': mySensor
-        })
-
-        myOPP = OpticalProductProfileF.create(**{
-            'satellite_instrument': mySatInst
-        })
-        myProduct = OpticalProductF.create(**{
-            'product_profile': myOPP
-        })
-
-        SearchRecordF.create(**{
-            'product': myProduct
-        })
-        myClient = Client()
-        myClient.login(username='timlinux', password='password')
-        myResp = myClient.get(
-            reverse('sensorSummaryTable',
-                    kwargs={'sensor_id': '1'}))
-        self.assertEqual(myResp.status_code, 200)
-
-        self.assertEqual(unicode(myResp.context['mySensor']), u'ST 1 - ITOP 1')
-        self.assertEqual(
-            myResp.context['mySensorYearlyStats'].__name__, 'slice_for_display')
-        self.assertEqual(
-            myResp.context['myResults']['Searches for this sensor'], 1)
-        self.assertEqual(
-            myResp.context['myResults']['Searches for all sensors'], 1)
-        self.assertEqual(
-            myResp.context['myResults']['Total products for this sensor'], 1)
-        self.assertEqual(
-            myResp.context['myResults']['Total products for all sensors'], 1)
-        self.assertEqual(
-            myResp.context['myResults']
-            ['Total ordered products for this sensor'], 1)
-        self.assertEqual(
-            myResp.context['myResults']
-            ['Total ordered products for all sensors'], 1)
-
-        # check used templates
-        myExpTemplates = ['sensorSummaryTable.html']
-
-        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
-        self.assertEqual(myUsedTemplates, myExpTemplates)
+    # def setUp(self):
+    #     """
+    #     Set up before each test
+    #     """
+    #
+    # def test_myReports_badURL(self):
+    #     """
+    #     Test badURL requests
+    #     """
+    #     myKwargsTests = [{'testargs': 1}]
+    #
+    #     for myKwargTest in myKwargsTests:
+    #         self.assertRaises(
+    #             NoReverseMatch, reverse, 'sensorSummaryTable',
+    #             kwargs=myKwargTest)
+    #
+    # def test_myReports_nologin(self):
+    #     """
+    #     Test view if user is not logged in
+    #     """
+    #     myClient = Client()
+    #     myResp = myClient.get(
+    #         reverse('sensorSummaryTable',
+    #                 kwargs={'sensor_id': '34'}))
+    #     self.assertEqual(myResp.status_code, 200)
+    #     self.assertEqual(
+    #         myResp.context['app_path'], u'/sensorSummaryTable/34/')
+    #
+    # def test_myReports_userlogin(self):
+    #     """
+    #     Test view if user is logged as user
+    #     """
+    #
+    #     UserF.create(**{
+    #         'username': 'pompies',
+    #         'password': 'password'
+    #     })
+    #
+    #     myClient = Client()
+    #     myClient.login(username='pompies', password='password')
+    #     myResp = myClient.get(
+    #         reverse('sensorSummaryTable',
+    #                 kwargs={'sensor_id': '34'}))
+    #     self.assertEqual(myResp.status_code, 200)
+    #     self.assertEqual(
+    #         myResp.context['app_path'], u'/sensorSummaryTable/34/')
+    #
+    # def test_myReports_stafflogin_generic(self):
+    #     """
+    #     Test view if user is logged as staff and basic functionality
+    #     """
+    #
+    #     UserF.create(**{
+    #         'username': 'timlinux',
+    #         'password': 'password',
+    #         'is_staff': True
+    #     })
+    #
+    #     myInstType = InstrumentTypeF.create(**{
+    #         'operator_abbreviation': 'ITOP 1'
+    #     })
+    #     mySatellite = SatelliteF.create(**{
+    #         'operator_abbreviation': 'ST 1'
+    #     })
+    #
+    #     mySensor = SatelliteInstrumentGroupF.create(**{
+    #         'id': 1,
+    #         'instrument_type': myInstType,
+    #         'satellite': mySatellite
+    #     })
+    #     SearchF.create(**{'satellites': [mySatellite]})
+    #
+    #     mySatInst = SatelliteInstrumentF.create(**{
+    #         'satellite_instrument_group': mySensor
+    #     })
+    #
+    #     myOPP = OpticalProductProfileF.create(**{
+    #         'satellite_instrument': mySatInst
+    #     })
+    #     myProduct = OpticalProductF.create(**{
+    #         'product_profile': myOPP
+    #     })
+    #
+    #     SearchRecordF.create(**{
+    #         'product': myProduct
+    #     })
+    #     myClient = Client()
+    #     myClient.login(username='timlinux', password='password')
+    #     myResp = myClient.get(
+    #         reverse('sensorSummaryTable',
+    #                 kwargs={'sensor_id': '1'}))
+    #     self.assertEqual(myResp.status_code, 200)
+    #
+    #     self.assertEqual(unicode(myResp.context['mySensor']), u'ST 1 - ITOP 1')
+    #     self.assertEqual(
+    #         myResp.context['mySensorYearlyStats'].__name__, 'slice_for_display')
+    #     self.assertEqual(
+    #         myResp.context['myResults']['Searches for this sensor'], 1)
+    #     self.assertEqual(
+    #         myResp.context['myResults']['Searches for all sensors'], 1)
+    #     self.assertEqual(
+    #         myResp.context['myResults']['Total products for this sensor'], 1)
+    #     self.assertEqual(
+    #         myResp.context['myResults']['Total products for all sensors'], 1)
+    #     self.assertEqual(
+    #         myResp.context['myResults']
+    #         ['Total ordered products for this sensor'], 1)
+    #     self.assertEqual(
+    #         myResp.context['myResults']
+    #         ['Total ordered products for all sensors'], 1)
+    #
+    #     # check used templates
+    #     myExpTemplates = ['sensorSummaryTable.html']
+    #
+    #     myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
+    #     self.assertEqual(myUsedTemplates, myExpTemplates)
