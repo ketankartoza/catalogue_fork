@@ -374,6 +374,7 @@ def visitorMap(theRequest):
     })
 
 
+@login_required
 #renderWithContext is explained in renderWith.py
 @renderWithContext('productView.html')
 def showProduct(theRequest, theProductId):
