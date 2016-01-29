@@ -241,7 +241,7 @@ def recent_searches(request):
     table = SearchesTable(search_history_objs)
     table.orderable = False
     return ({
-        'mySearches': search_history,
+        'mySearches': search_history_objs,
         'myCurrentMonth': datetime.date.today(),
         'table': table
     })
@@ -467,10 +467,15 @@ def sensor_fact_sheet(request, sat_abbr, instrument_type):
     :param request: HttpRequest
     :return: HttpResponse
     """
-    sat_group = SatelliteInstrumentGroup.objects.get(
-        satellite__operator_abbreviation=sat_abbr,
-            instrument_type__operator_abbreviation=instrument_type
-    )
+    try:
+        sat_group = SatelliteInstrumentGroup.objects.get(
+            satellite__operator_abbreviation=sat_abbr,
+                instrument_type__operator_abbreviation=instrument_type
+        )
+    except SatelliteInstrumentGroup.DoesNotExist:
+        return HttpResponseNotFound(
+            'Sorry! No fact sheet matches the requested sensor.'
+        )
     bands = Band.objects.filter(
         instrument_type__operator_abbreviation=instrument_type
     ).order_by('band_number')
