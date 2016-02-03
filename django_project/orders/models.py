@@ -21,6 +21,7 @@ from django.contrib.gis.db import models
 from django.db.models.query import QuerySet
 
 #for user id foreign keys
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 
@@ -206,6 +207,12 @@ class Order(models.Model):
             .latest('order_change_date')
         )
         return recent_history.order_change_date
+
+    def day_in_process(self):
+        if (self.get_recent_history_date().date() == self.order_date.date()):
+            return "less than one day"
+        else:
+            return abs(self.get_recent_history_date().date() - self.order_date.date())
 
     def value(self):
         """
