@@ -21,7 +21,6 @@ from django.contrib.gis.db import models
 from django.db.models.query import QuerySet
 
 #for user id foreign keys
-from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 
