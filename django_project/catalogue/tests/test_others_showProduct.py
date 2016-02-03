@@ -19,6 +19,7 @@ __date__ = '08/08/2012'
 __copyright__ = 'South African National Space Agency'
 
 
+import unittest
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.test import TestCase
 from django.test.client import Client
@@ -49,6 +50,7 @@ class OthersViews_showProduct_Tests(TestCase):
                 NoReverseMatch, reverse, 'showProduct',
                 kwargs=myKwargTest)
 
+    @unittest.skip("Currently not used anymore")
     def test_showProduct(self):
         """
         Test view show product and product id is found
