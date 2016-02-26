@@ -139,7 +139,7 @@ def get_orbit_number(dom):
     return orbit_number
 
 def get_original_product_id(dom):
-    dataset_name = dom.getElementsByTagName('DATASET_NAME')[0]
+    dataset_name = dom.getElementsByTagName('PASS_ID')[0]
     product_name = dataset_name.firstChild.nodeValue
     return product_name
 
@@ -392,7 +392,7 @@ def ingest(
             log_message(product_folder, 2)
 
             # Find the first and only xml file in the folder
-            search_path = os.path.join(str(myFolder), '*.XML')
+            search_path = os.path.join(str(myFolder), '*.xml')
             log_message(search_path, 2)
             xml_file = glob.glob(search_path)[0]
             log_message(xml_file, 2)
@@ -406,12 +406,10 @@ def ingest(
                 log_message, dom)
             # projection for GenericProduct
             projection = get_projection(dom)
-            # # Original product id for GenericProduct
             original_product_id = get_original_product_id(dom)
             # Band count for GenericImageryProduct
             band_count = get_band_count(dom)
             orbit_number = get_orbit_number(dom)
-
             # # Spatial resolution x for GenericImageryProduct
             spatial_resolution_x = float(get_spatial_resolution_x(dom))
             # # Spatial resolution y for GenericImageryProduct
@@ -422,18 +420,11 @@ def ingest(
             # # Spatial resolution for GenericImageryProduct calculated as (x+y)/2
             spatial_resolution = (spatial_resolution_x + spatial_resolution_y) / 2
             log_message('Spatial resolution: %s' % spatial_resolution, 2)
-            #
-            # # Radiometric resolution for GenericImageryProduct
             radiometric_resolution = get_radiometric_resolution(dom)
             log_message('Radiometric resolution: %s' % radiometric_resolution, 2)
-            #
-            # # Get the quality for GenericProduct
             quality = get_quality()
-            #
-            # # ProductProfile for OpticalProduct
-            product_profile = get_product_profile(
-                log_message, dom)
-
+            # ProductProfile for OpticalProduct
+            product_profile = get_product_profile(log_message, dom)
             # Get the original text file metadata
             metadata_file = file(xml_file, 'rt')
             metadata = metadata_file.readlines()

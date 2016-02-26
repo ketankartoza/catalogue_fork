@@ -13,7 +13,7 @@ class Command(BaseCommand):
     """
 
     # noinspection PyShadowingBuiltins
-    help = 'Imports DIMS Landsat records into the SANSA catalogue'
+    help = 'Imports SPOT 7 records into the SANSA catalogue'
     option_list = BaseCommand.option_list + (
         make_option(
             '--test_only',
