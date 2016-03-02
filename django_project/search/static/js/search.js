@@ -728,9 +728,9 @@ APP.ResultGridViewItem = Backbone.View.extend({
     },
 
     removeFromCart: function(event) {
+        $APP.trigger('removedItemFromCart', {'original_product_id': this.model.get('original_product_id')});
         $APP.trigger('deleteCartItem', {'id': this.model.get('original_product_id')});
         this._removeFromCart(this.model.get('original_product_id'));
-        $APP.trigger('removedItemFromCart', {'id': this.model.get('original_product_id')});
         event.stopPropagation();
     },
 
@@ -810,7 +810,7 @@ APP.CartGridView = Backbone.View.extend({
 
     deleteItem: function(event, data) {
         var exist = APP.Cart.find(function(item) {
-            return item.original_product_id == data.id;
+            return item.get('product').original_product_id == data.id;
         });
         if (exist) {
             exist.destroy({wait: true});
@@ -861,8 +861,8 @@ APP.CartGridViewItem = Backbone.View.extend({
         });
     },
     delete: function() {
-        $APP.trigger('deleteCartItem', {'original_product_id': this.model.get('product').original_product_id});
         $APP.trigger('removedItemFromCartUpdateResults', {'original_product_id': this.model.get('product').original_product_id});
+        $APP.trigger('deleteCartItem', {'id': this.model.get('product').original_product_id});
     },
     render: function() {
        $(this.el).html(_.template(templateCart, {model:this.model}));
