@@ -63,7 +63,6 @@ function openResultPanel() {
 }
 
 function defaultPanelState() {
-    hideButtonSubPanel();
     hideResultDownloadOptions();
     hideCartDownloadOptions();
     if (SearchPanelState) {
@@ -101,9 +100,9 @@ function showButtonSubPanel() {
 }
 
 function hideButtonSubPanel() {
-    $('#cart-show-map').fadeOut('fast');
-    $('#place_order').fadeOut('fast');
-    $('#cart-panel-download-button').fadeOut('fast');
+    $('#cart-show-map').hide();
+    $('#place_order').hide();
+    $('#cart-panel-download-button').hide();
     ButtonSubPanelState = false;
 }
 
@@ -811,9 +810,15 @@ APP.CartGridView = Backbone.View.extend({
 
     deleteItem: function(event, data) {
         var exist = APP.Cart.find(function(item) {
-            return item.get("product").original_product_id == data.id;
+            return item.original_product_id == data.id;
         });
-        exist.destroy({wait: true});
+        if (exist) {
+            exist.destroy({wait: true});
+        }
+        if (APP.Cart.length-1==0) {
+            // If cart is empty after item has been removed then hide bottom panel button
+            hideButtonSubPanel();
+        }
     },
 
     render: function() {
@@ -827,6 +832,9 @@ APP.CartGridView = Backbone.View.extend({
         $APP.trigger('SearchCartLayer_addFeatures', {
                 'data': this.collection.models
             });
+        if(APP.Cart.length==0) {
+            hideButtonSubPanel();
+        }
         return this;
     },
 
@@ -853,13 +861,13 @@ APP.CartGridViewItem = Backbone.View.extend({
         });
     },
     delete: function() {
+        $APP.trigger('deleteCartItem', {'original_product_id': this.model.get('product').original_product_id});
         $APP.trigger('removedItemFromCartUpdateResults', {'original_product_id': this.model.get('product').original_product_id});
-        this.model.destroy({wait: true});
     },
     render: function() {
        $(this.el).html(_.template(templateCart, {model:this.model}));
         return this;
-    },
+    }
 });
 
 
