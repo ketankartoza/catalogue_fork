@@ -35,16 +35,16 @@ def parse_date_time(theDate):
     :param theDate: Date in this format:
     :type theDate: str
 
-    Example format from Landsat:`1989-05-03T07:30:05.000`
+    Example format from Landsat:`1989-05-03T07:30:05.000` 20150303T10:35:18
 
     :returns: A python datetime object.
     :rtype: datetime
     """
     #print 'Parsing Date: %s\n' % theDate
     start_year = theDate[0:4]
-    start_month = theDate[5:7]
-    start_day = theDate[8:10]
-    start_time = theDate[11:19]
+    start_month = theDate[4:6]
+    start_day = theDate[6:8]
+    start_time = theDate[9:17]
     tokens = start_time.split(':')
     start_hour = tokens[0]
     start_minute = tokens[1]
@@ -101,13 +101,18 @@ def get_geometry(log_message, dom):
     polygon = 'POLYGON((' ' %s %s, ' \
               '%s %s, %s %s, %s %s' '))' % (
         ul_lat, ul_long, ur_lat, ur_long, lr_lat, lr_long, ll_lat, ll_long )
-    log_message(polygon, 2)
-
+    # poly = 'POLYGON(( %s %s, ' \
+    #        '%s %s,' \
+    #        ' %s %s,' \
+    #        ' %s %s))' % (ul_lat, ul_long,
+    #                     ur_lat, ur_long,
+    #                     lr_lat, lr_long,
+    #                     ll_lat, ll_long)
     # Now make a geometry object
-    myReader = WKTReader()
-    myGeometry = myReader.read(polygon)
+    #myReader = WKTReader()
+    #myGeometry = myReader.read(poly)
     #log_message('Geometry: %s' % myGeometry, 2)
-    return myGeometry
+    return polygon
 
 
 def get_dates(log_message, dom):
