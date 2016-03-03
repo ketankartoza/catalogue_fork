@@ -439,6 +439,10 @@ class Search(BaseSearch):
         null=True, blank=True, max_length=3,
         verbose_name="Max Clouds"
     )
+    cloud_min = models.IntegerField(
+        null=True, blank=True, max_length=3,
+        verbose_name="Min Clouds"
+    )
     license_type = models.ManyToManyField(
         'dictionaries.License', blank=True, null=True,
         help_text='Choose a license type.'

@@ -165,6 +165,15 @@ class AdvancedSearchForm(forms.ModelForm):
         help_text=(
             'Range 0 - 100')
     )
+
+    cloud_min = forms.IntegerField(
+        label=u'Cloud Min Percentage',
+        min_value=0, max_value=100, initial=0,
+        help_text=(
+            'Range 0 - 100'
+        )
+    )
+
     selected_sensors = forms.CharField(
         widget=forms.HiddenInput(), required=False
     )
