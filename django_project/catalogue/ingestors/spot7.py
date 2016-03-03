@@ -269,8 +269,13 @@ def get_radiometric_resolution(dom):
     :returns: The bit depth for the image.
     :rtype: int
     """
-    base_number = int(float(11))
-    bit_depth = int(float(12))
+    base_value = dom.getElementsByTagName('GLOBAL_H_MINIMUM')[0]
+    base = base_value.firstChild.nodeValue
+    depth_value = dom.getElementsByTagName('GLOBAL_H_MAXIMUM')[0]
+    depth = depth_value.firstChild.nodeValue
+
+    base_number = int(float(base))
+    bit_depth = int(float(depth))
     if base_number == 0:
         bit_depth += 1
     base = 2  # to get to bit depth in base 2
