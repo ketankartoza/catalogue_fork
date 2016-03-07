@@ -435,15 +435,9 @@ def ingest(
             quality = get_quality()
             # ProductProfile for OpticalProduct
             product_profile = get_product_profile(log_message, original_product_id)
-            # Get the original text file metadata
-            metadata_file = file(xml_file, 'rt')
-            metadata = metadata_file.readlines()
-            metadata_file.close()
-            log_message('Metadata retrieved', 2)
-
+        
             # Do the ingestion here...
             data = {
-                'metadata': metadata,
                 'spatial_coverage': geometry,
                 'radiometric_resolution': radiometric_resolution,
                 'band_count': band_count,
