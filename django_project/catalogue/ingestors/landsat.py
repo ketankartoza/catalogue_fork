@@ -151,28 +151,40 @@ def get_dates(log_message, dom):
 def get_band_count(dom):
     #band_count = dom.getElementsByTagName('NBANDS')[0]
     #count = band_count.firstChild.nodeValue
-    return 10
+    return 12
 
 def get_orbit_number(dom):
     # value_orbit_number = dom.getElementsByTagName('ORBIT_NUMBER')[0]
     # orbit_number = value_orbit_number.firstChild.nodeValue
     return 10
 
-def get_original_product_id(dom):
+def get_original_product_id(dom, filename):
+    constant = 'JSA00'
+    # Get part of product name from dom
     dataset_name = dom.getElementsByTagName('ALTERNATETITLE')[0]
-    product_name = dataset_name.firstChild.nodeValue
+    product_name_full = dataset_name.firstChild.nodeValue
+    tokens = product_name_full.split(' ')
+    product_name_dom = tokens[2]
+
+    # Get part of product name from filename.
+    product_name_file = filename[0:3]
+    product_name = product_name_file + product_name_dom + constant
+
     return product_name
 
-def get_unique_product_id(dom):
-    product_id = dom.getElementsByTagName('ALTERNATETITLE')[0]
-    id = product_id.firstChild.nodeValue
-    return id
+def get_spatial_resolution_x(filename):
+    product_name_file = filename[2]
+    if product_name_file == '7':
+        return 15
+    else:
+        return 30
 
-def get_spatial_resolution_x(dom):
-    return 2
-
-def get_spatial_resolution_y(dom):
-    return 3
+def get_spatial_resolution_y(filename):
+    product_name_file = filename[2]
+    if product_name_file == '7':
+        return 15
+    else:
+        return 30
 
 def get_product_profile(log_message, dom):
     """Find the product_profile for this record.
@@ -417,6 +429,8 @@ def ingest(
             log_message(search_path, 2)
             xml_file = glob.glob(search_path)[0]
             log_message(xml_file, 2)
+            file_path = os.path.basename(xml_file)
+            filename = os.path.splitext(file_path)[0]
 
             # Create a DOM document from the file
             dom = parse(xml_file)
@@ -427,15 +441,15 @@ def ingest(
                 log_message, dom)
             # projection for GenericProduct
             projection = get_projection(dom)
-            original_product_id = get_original_product_id(dom)
+            original_product_id = get_original_product_id(dom, filename)
             # Band count for GenericImageryProduct
             band_count = get_band_count(dom)
             orbit_number = get_orbit_number(dom)
             # # Spatial resolution x for GenericImageryProduct
-            spatial_resolution_x = float(get_spatial_resolution_x(dom))
+            spatial_resolution_x = float(get_spatial_resolution_x(filename))
             # # Spatial resolution y for GenericImageryProduct
             spatial_resolution_y = float(
-                get_spatial_resolution_y(dom))
+                get_spatial_resolution_y(filename))
             log_message('Spatial resolution y: %s' % spatial_resolution_y, 2)
             #
             # # Spatial resolution for GenericImageryProduct calculated as (x+y)/2
@@ -452,7 +466,7 @@ def ingest(
             metadata_file.close()
             log_message('Metadata retrieved', 2)
 
-            unique_product_id = get_unique_product_id(dom)
+            unique_product_id = original_product_id
             # Check if there is already a matching product based
             # on original_product_id
 
