@@ -326,19 +326,13 @@ def get_projection(dom):
     :returns: A projection model for the specified EPSG.
     :rtype: Projection
     """
+    epsg_default_code = '32'
+    zone_value = dom.getElementsByTagName('ZONE')[0]
+    zone = zone_value.firstChild.nodeValue
+    location_code = '7' # 6 for north and 7 for south
+    epsg_code = epsg_default_code + location_code + zone
 
-    try:
-        projection_element = "UTM"
-        projection = 3
-        projection = Projection.objects.get(epsg_code=int(projection))
-    except:
-        # If projection not found default to WGS84 - some Landsat files
-        # may not have a projection if they are 'scene identifying Landsat's'
-        # and the data is raw / unprocessed.
-        # Discussion with Linda 29 Jan 2014 - eventually we should probably
-        # just remove projection from GenericProduct and only worry about
-        # CRS on deliver of the product.
-        projection = Projection.objects.get(epsg_code=4326)
+    projection = Projection.objects.get(epsg_code=epsg_code)
     return projection
 
 
