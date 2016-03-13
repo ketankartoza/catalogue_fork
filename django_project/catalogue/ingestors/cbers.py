@@ -97,27 +97,15 @@ def get_geometry(log_message, dom):
     low_right_long = low_right_long_value.firstChild.nodeValue
 
     polygon = 'POLYGON((' '%s %s, ' \
-              '%s %s, %s %s, %s %s' '))' % (
+              '%s %s, %s %s, %s %s, %s %s' '))' % (
         up_left_lat, up_left_long,
         up_right_lat, up_right_long,
         low_left_lat, low_left_long,
-        low_right_lat, low_right_long )
-
-    # An Example values which supported by WKT Reader
-    poly = 'POLYGON((-25.5046342204173477 27.8219556282282916, ' \
-           '-25.3952283349931811 27.0846262721131801, ' \
-           '-26.5469834681209278 27.8152127244838532, ' \
-           '-26.4587570199439135 27.0956524346403924, ' \
-           '-25.5046342204173477 27.8219556282282916))'
-
-    # these are values from CBERS, did not supported by WKTReader
-    # poly = 'POLYGON((-17.834695000000000 46.034298600000000,
-    # -17.808832599999999 48.342597400000002,
-    # -19.725163400000000 48.380619099999997,
-    # -19.754022500000001 46.046088300000001))'
+        low_right_lat, low_right_long,
+        up_left_lat, up_left_long)
 
     myReader = WKTReader()
-    myGeometry = myReader.read(poly)
+    myGeometry = myReader.read(polygon)
     log_message('Geometry: %s' % myGeometry, 2)
     return myGeometry
 
@@ -408,7 +396,7 @@ def ingest(
             original_product_id = unique_product_id
 
             # Create a DOM document from the file
-            dom = parse(xml_file, )
+            dom = parse(xml_file)
 
             # First grab all the generic properties that any CBERS will have...
             geometry = get_geometry(log_message, dom)
@@ -435,7 +423,7 @@ def ingest(
             quality = get_quality()
             # ProductProfile for OpticalProduct
             product_profile = get_product_profile(log_message, original_product_id)
-        
+
             # Do the ingestion here...
             data = {
                 'spatial_coverage': geometry,
