@@ -99,15 +99,15 @@ def get_geometry(log_message, dom):
     ll_long = ll_long_value.firstChild.nodeValue
 
     polygon = 'POLYGON ((' ' %s %s, ' \
-              '%s %s, %s %s, %s %s' '))' % (
-        ul_lat, ul_long, ur_lat, ur_long, lr_lat, lr_long, ll_lat, ll_long )
+              '%s %s, %s %s, %s %s, %s %s' '))' % (
+        ul_lat, ul_long, ur_lat, ur_long, lr_lat, lr_long, ll_lat, ll_long, ul_lat, ul_long )
 
-    # An Example values which supported by WKT Reader
-    poly = 'POLYGON((-25.5046342204173477 27.8219556282282916, ' \
-           '-25.3952283349931811 27.0846262721131801, ' \
-           '-26.5469834681209278 27.8152127244838532, ' \
-           '-26.4587570199439135 27.0956524346403924, ' \
-           '-25.5046342204173477 27.8219556282282916))'
+    # # An Example values which supported by WKT Reader
+    # poly = 'POLYGON((-25.5046342204173477 27.8219556282282916, ' \
+    #        '-25.3952283349931811 27.0846262721131801, ' \
+    #        '-26.5469834681209278 27.8152127244838532, ' \
+    #        '-26.4587570199439135 27.0956524346403924, ' \
+    #        '-25.5046342204173477 27.8219556282282916))'
 
     # these are values from landsat, did not supported by WKTReader
     # poly = 'POLYGON((-17.834695000000000 46.034298600000000,
@@ -116,7 +116,7 @@ def get_geometry(log_message, dom):
     # -19.754022500000001 46.046088300000001))'
 
     myReader = WKTReader()
-    myGeometry = myReader.read(poly)
+    myGeometry = myReader.read(polygon)
     #log_message('Geometry: %s' % myGeometry, 2)
     return myGeometry
 
