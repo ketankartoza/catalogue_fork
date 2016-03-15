@@ -72,7 +72,7 @@ def get_geometry(log_message, dom):
 
     :return: geoemtry
     """
-    geo_area = dom.getElementsByTagName('EXEXTENT')[0]
+    geo_area = dom.getElementsByTagName('SCENEDATAEXTENT')[0]
 
     ul_lat_value = geo_area.getElementsByTagName('UL_LAT')[0]
     ul_lat = ul_lat_value.firstChild.nodeValue
