@@ -18,4 +18,12 @@
 <tr><td class="loud">Solar Zenith Angle</td><td class="quiet">{{ myObject.solar_zenith_angle }}</td></tr>
 <tr><td class="loud">Solar Azimuth Angle</td><td class="quiet">{{ myObject.solar_azimuth_angle }}</td></tr>
 <tr><td class="loud">Earth Sun Distance</td><td class="quiet">{{ myObject.earth_sun_distance }}</td></tr>
+
 {% endblock %}
+
+{% block footer %}
+    <div class="row-fluid center gap-bottom">
+        <button type="button" class="btn btn-success" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+{% endblock %}
+
