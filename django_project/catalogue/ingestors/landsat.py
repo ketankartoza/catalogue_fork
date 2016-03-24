@@ -290,17 +290,20 @@ def get_radiometric_resolution(dom):
 
 def get_cloud_cover(dom):
     """Get the scene's cloud cover"""
-    return dom.getElementsByTagName('CLOUDCOVERPERCENTAGE')
+    return dom.getElementsByTagName(
+        'CLOUDCOVERPERCENTAGE')[0].firstChild.nodeValue
 
 
 def get_solar_zenith_angle(dom):
     """Get the solar zenith angle"""
-    return dom.getElementsByTagName('ILLUMINATIONELEVATIONANGLE')
+    return dom.getElementsByTagName(
+        'ILLUMINATIONELEVATIONANGLE')[0].firstChild.nodeValue
 
 
 def get_solar_azimuth_angle(dom):
     """Get the solar azimuth angle"""
-    return dom.getElementsByTagName('ILLUMINATIONELEVATIONAZIMUTH')
+    return dom.getElementsByTagName(
+        'ILLUMINATIONELEVATIONAZIMUTH')[0].firstChild.nodeValue
 
 
 def get_projection(dom):
