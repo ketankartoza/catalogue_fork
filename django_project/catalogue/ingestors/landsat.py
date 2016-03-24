@@ -1,3 +1,6 @@
+# coding=utf-8
+"""Landsat 8 ingestor script"""
+
 __author__ = 'rischan - <--rischan@kartoza.com-->'
 __date__ = '3/3/16'
 
@@ -29,27 +32,27 @@ from dictionaries.models import (
 from catalogue.models import OpticalProduct
 
 
-def parse_date_time(theDate):
+def parse_date_time(date_stamp):
     """A helper method to create a date object from a landsat time stamp.
 
-    :param theDate: Date in this format:
-    :type theDate: str
+    :param date_stamp: Date in this format:
+    :type date_stamp: str
 
     Example format from Landsat:`1989-05-03T07:30:05.000` 20150303T10:35:18
 
     :returns: A python datetime object.
     :rtype: datetime
     """
-    #print 'Parsing Date: %s\n' % theDate
-    start_year = theDate[0:4]
-    start_month = theDate[4:6]
-    start_day = theDate[6:8]
-    start_time = theDate[9:17]
+    # print 'Parsing Date: %s\n' % theDate
+    start_year = date_stamp[0:4]
+    start_month = date_stamp[4:6]
+    start_day = date_stamp[6:8]
+    start_time = date_stamp[9:17]
     tokens = start_time.split(':')
     start_hour = tokens[0]
     start_minute = tokens[1]
     start_seconds = tokens[2]
-    #print "%s-%s-%sT%s:%s:%s" % (
+    # print "%s-%s-%sT%s:%s:%s" % (
     #    start_year, start_month, start_day,
     #    start_hour, start_minute, start_seconds)
     parsed_date_time = datetime(
@@ -61,12 +64,9 @@ def parse_date_time(theDate):
         int(start_seconds))
     return parsed_date_time
 
-def get_geometry(log_message, dom):
+
+def get_geometry(dom):
     """Extract the bounding box as a geometry from the xml file.
-
-    :param log_message: A log_message function used for user feedback.
-    :type log_message: log_message
-
     :param dom: DOM Document containing the bounds of the scene.
     :type dom: DOM document.
 
@@ -98,14 +98,16 @@ def get_geometry(log_message, dom):
     ll_long_value = geo_area.getElementsByTagName('LL_LONG')[0]
     ll_long = ll_long_value.firstChild.nodeValue
 
-    polygon = 'POLYGON ((' ' %s %s, ' \
-              '%s %s, %s %s, %s %s, %s %s' '))' % (
-        ul_lat, ul_long, ur_lat, ur_long, lr_lat, lr_long, ll_lat, ll_long, ul_lat, ul_long )
+    polygon = 'POLYGON ((' ' %s %s, %s %s, %s %s, %s %s, %s %s' '))' % (
+        ul_long, ul_lat,
+        ur_long, ur_lat,
+        lr_long, lr_lat,
+        ll_long, ll_lat,
+        ul_long, ul_lat,
+    )
 
-    myReader = WKTReader()
-    myGeometry = myReader.read(polygon)
-    #log_message('Geometry: %s' % myGeometry, 2)
-    return myGeometry
+    polygon_geometry = WKTReader().read(polygon)
+    return polygon_geometry
 
 
 def get_dates(log_message, dom):
@@ -135,15 +137,12 @@ def get_dates(log_message, dom):
 
     return start_date, center_date
 
-def get_band_count(dom):
-    #band_count = dom.getElementsByTagName('NBANDS')[0]
-    #count = band_count.firstChild.nodeValue
-    return 12
 
-def get_orbit_number(dom):
-    # value_orbit_number = dom.getElementsByTagName('ORBIT_NUMBER')[0]
-    # orbit_number = value_orbit_number.firstChild.nodeValue
+def get_band_count():
+    # band_count = dom.getElementsByTagName('NBANDS')[0]
+    # count = band_count.firstChild.nodeValue
     return 10
+
 
 def get_original_product_id(dom, filename):
     constant = 'JSA00'
@@ -159,19 +158,28 @@ def get_original_product_id(dom, filename):
 
     return product_name
 
+
 def get_spatial_resolution_x(filename):
+    """Spacial resolution
+    :param filename: For getting version from filename
+    """
     product_name_file = filename[2]
     if product_name_file == '7':
         return 15
     else:
         return 30
 
+
 def get_spatial_resolution_y(filename):
+    """Spacial resolution
+    :param filename: For getting version from filename
+    """
     product_name_file = filename[2]
     if product_name_file == '7':
         return 15
     else:
         return 30
+
 
 def get_product_profile(log_message, dom):
     """Find the product_profile for this record.
@@ -212,7 +220,7 @@ def get_product_profile(log_message, dom):
         instrument_type = InstrumentType.objects.get(
             operator_abbreviation=sensor_value)  # e.g. OLI_TIRS
     except Exception, e:
-        #print e.message
+        # print e.message
         raise e
     log_message('Instrument Type %s' % instrument_type, 2)
 
@@ -270,32 +278,29 @@ def get_product_profile(log_message, dom):
 
 
 def get_radiometric_resolution(dom):
-    """Get the radiometric resolution for the supplied product record.
+    """Get the radiometric resolution for the supplied product record."""
 
-    Note that the resolution (quantisation) is stored in the document as an
-    integer describing the maximum number of values allowed per pixel (e.g.
-    4096), but we want it expressed as the number of bits (e.g. 12bit,
-    16bit etc.) allowed per pixel so we do some conversion of the extracted
-    number.
+    mission_index = dom.getElementsByTagName('PLATFORMNAME')[0]
+    mission_index_value = mission_index.firstChild.nodeValue
+    if mission_index_value == 'Landsat-7':
+        return 8
+    elif mission_index_value == 'Landsat-8':
+        return 16
 
-    .. note:: quantisation is mis-spelled as quantitisation in Landsat docs
 
-    If min in the product description is 0, the max number is base 0,
-    otherwise it is base 1.
+def get_cloud_cover(dom):
+    """Get the scene's cloud cover"""
+    return dom.getElementsByTagName('CLOUDCOVERPERCENTAGE')
 
-    :param resolution_element: Dom Document containing the bounds of the scene.
-    :type resolution_element: DOM document.
 
-    :returns: The bit depth for the image.
-    :rtype: int
-    """
-    base_number = int(float(11))
-    bit_depth = int(float(12))
-    if base_number == 0:
-        bit_depth += 1
-    base = 2  # to get to bit depth in base 2
-    radiometric_resolution = int(log(bit_depth, base).real)
-    return radiometric_resolution
+def get_solar_zenith_angle(dom):
+    """Get the solar zenith angle"""
+    return dom.getElementsByTagName('ILLUMINATIONELEVATIONANGLE')
+
+
+def get_solar_azimuth_angle(dom):
+    """Get the solar azimuth angle"""
+    return dom.getElementsByTagName('ILLUMINATIONELEVATIONAZIMUTH')
 
 
 def get_projection(dom):
@@ -316,7 +321,7 @@ def get_projection(dom):
     epsg_default_code = '32'
     zone_value = dom.getElementsByTagName('ZONE')[0]
     zone = zone_value.firstChild.nodeValue
-    location_code = '7' # 6 for north and 7 for south
+    location_code = '7'  # 6 for north and 7 for south
     epsg_code = epsg_default_code + location_code + zone
 
     projection = Projection.objects.get(epsg_code=epsg_code)
@@ -364,17 +369,17 @@ def ingest(
         if we find we are missing a thumbnails. Default is False.
     :type ignore_missing_thumbs: bool
     """
-    def log_message(message, level=1):
-        """Log a message for a given leven.
+    def log_message(log_message_content, level=1):
+        """Log a message for a given level.
 
-        :param message: A message.
+        :param log_message_content: A message.
         :param level: A log level.
         """
         if verbosity_level >= level:
-            print message
+            print log_message_content
 
     log_message((
-        'Running Landsat 7 Importer with these options:\n'
+        'Running Landsat 7/8 Importer with these options:\n'
         'Test Only Flag: %s\n'
         'Source Dir: %s\n'
         'Verbosity Level: %s\n'
@@ -389,7 +394,7 @@ def ingest(
     log_message('Scanning folders in %s' % source_path, 1)
     # Loop through each folder found
 
-    ingestor_version = 'Landsat7 ingestor version 1'
+    ingestor_version = 'Landsat7/8 ingestor version 1.1'
     record_count = 0
     updated_record_count = 0
     created_record_count = 0
@@ -416,28 +421,30 @@ def ingest(
             # Create a DOM document from the file
             dom = parse(xml_file)
             #
-            # First grab all the generic properties that any Landsat will have...
-            geometry = get_geometry(log_message, dom)
+            # First grab all the generic properties that any
+            # Landsat will have...
+            geometry = get_geometry(dom)
             start_date_time, center_date_time = get_dates(
                 log_message, dom)
             # projection for GenericProduct
             projection = get_projection(dom)
             original_product_id = get_original_product_id(dom, filename)
             # Band count for GenericImageryProduct
-            band_count = get_band_count(dom)
-            orbit_number = get_orbit_number(dom)
+            band_count = get_band_count()
+            # orbit_number = get_orbit_number(dom) -- NOT SPECIFIED IN METADATA
             # # Spatial resolution x for GenericImageryProduct
             spatial_resolution_x = float(get_spatial_resolution_x(filename))
             # # Spatial resolution y for GenericImageryProduct
             spatial_resolution_y = float(
                 get_spatial_resolution_y(filename))
             log_message('Spatial resolution y: %s' % spatial_resolution_y, 2)
-            #
-            # # Spatial resolution for GenericImageryProduct calculated as (x+y)/2
-            spatial_resolution = (spatial_resolution_x + spatial_resolution_y) / 2
+            # Spatial resolution for GenericImageryProduct calculated as (x+y)/2
+            spatial_resolution = (
+                spatial_resolution_x + spatial_resolution_y) / 2
             log_message('Spatial resolution: %s' % spatial_resolution, 2)
             radiometric_resolution = get_radiometric_resolution(dom)
-            log_message('Radiometric resolution: %s' % radiometric_resolution, 2)
+            log_message(
+                'Radiometric resolution: %s' % radiometric_resolution, 2)
             quality = get_quality()
             # ProductProfile for OpticalProduct
             product_profile = get_product_profile(log_message, dom)
@@ -450,6 +457,11 @@ def ingest(
             unique_product_id = original_product_id
             # Check if there is already a matching product based
             # on original_product_id
+
+            # Other data
+            cloud_cover = get_cloud_cover(dom)
+            solar_zenith_angle = get_solar_zenith_angle(dom)
+            solar_azimuth_angle = get_solar_azimuth_angle(dom)
 
             # Do the ingestion here...
             data = {
@@ -465,9 +477,12 @@ def ingest(
                 'product_profile': product_profile,
                 'product_acquisition_start': start_date_time,
                 'product_date': center_date_time,
-                'orbit_number': orbit_number,
+                # 'orbit_number': orbit_number,  # Not in current metadata
+                'cloud_cover': cloud_cover,
                 'projection': projection,
-                'quality': quality
+                'quality': quality,
+                'solar_zenith_angle': solar_zenith_angle,
+                'solar_azimuth_angle': solar_azimuth_angle
             }
             log_message(data, 3)
             # Check if it's already in catalogue:
@@ -481,8 +496,8 @@ def ingest(
             update_mode = True
             try:
                 log_message('Trying to update')
-                #original_product_id is not necessarily unique
-                #so we use product_id
+                # original_product_id is not necessarily unique
+                # so we use product_id
                 product = OpticalProduct.objects.get(
                     original_product_id=original_product_id
                 ).getConcreteInstance()
