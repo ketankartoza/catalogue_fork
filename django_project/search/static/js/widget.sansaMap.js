@@ -98,13 +98,13 @@
 
     var myHistoryControl = new OpenLayers.Control.NavigationHistory({
       nextOptions: {
-        title : "Next view: quickly jump to the next map view, works only with prevoius view.",
+        title : "Next view: quickly jump to the next map view, works only with previous view.",
         displayClass:'olnext btn btn-large btn-info disabled right icon-chevron-right olControlNavigationHistoryNext',
         div: OpenLayers.Util.getElement('map-navigation'),
         eventListeners: modifyEventListeners
       },
       previousOptions: {
-        title : "Previous view: quickly jump to the prevoius map view.",
+        title : "Previous view: quickly jump to the previous map view.",
         displayClass:'olprev btn btn-large disabled btn-info right icon-chevron-left olControlNavigationHistoryPrevious',
         div: OpenLayers.Util.getElement('map-navigation')
       },
