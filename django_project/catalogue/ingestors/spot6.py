@@ -29,11 +29,11 @@ from dictionaries.models import (
 from catalogue.models import OpticalProduct
 
 
-def parse_date_time(theDate):
-    """A helper method to create a date object from a landsat time stamp.
+def parse_date_time(date_stamp):
+    """A helper method to create a date object from a SPOT6 time stamp.
 
-    :param theDate: Date in this format:
-    :type theDate: str
+    :param date_stamp: Date in this format:
+    :type date_stamp: str
 
     Example format from SPOT:`1989-05-03T07:30:05.000`
 
@@ -41,10 +41,10 @@ def parse_date_time(theDate):
     :rtype: datetime
     """
     #print 'Parsing Date: %s\n' % theDate
-    start_year = theDate[0:4]
-    start_month = theDate[5:7]
-    start_day = theDate[8:10]
-    start_time = theDate[11:19]
+    start_year = date_stamp[0:4]
+    start_month = date_stamp[5:7]
+    start_day = date_stamp[8:10]
+    start_time = date_stamp[11:19]
     tokens = start_time.split(':')
     start_hour = tokens[0]
     start_minute = tokens[1]
@@ -70,7 +70,7 @@ def get_geometry(log_message, dom):
     :param dom: DOM Document containing the bounds of the scene.
     :type dom: DOM document.
 
-    :return: geoemtry
+    :return: geometry
     """
     dataset_extent = dom.getElementsByTagName('Dataset_Extent')[0]
     points = dataset_extent.getElementsByTagName('Vertex')
@@ -109,9 +109,9 @@ def get_dates(log_message, dom):
     :param dom: Dom Document containing the bounds of the scene.
     :type dom: DOM document.
 
-    :return: A three-tuple of dates for the start, mid scene and end dates
+    :return: A two-tuple of dates for the start and product dates
         respectively.
-    :rtype: (datetime, datetime, datetime)
+    :rtype: (datetime, datetime)
     """
     located_geometric_value = dom.getElementsByTagName('Located_Geometric_Values')[0]
 
@@ -133,14 +133,12 @@ def get_band_count(dom):
     return count
 
 def get_original_product_id(dom):
+    constant = 'S6'
     dataset_name = dom.getElementsByTagName('DATASET_NAME')[0]
-    product_name = dataset_name.firstChild.nodeValue
+    product_name_full = dataset_name.firstChild.nodeValue
+    tokens = product_name_full.split('_')
+    product_name = constant + tokens[2] + tokens[3] + tokens[4]
     return product_name
-
-def get_unique_product_id(dom):
-    product_id = dom.getElementsByTagName('JOB_ID')[0]
-    id = product_id.firstChild.nodeValue
-    return id
 
 def get_spatial_resolution_x(dom):
     return 2
