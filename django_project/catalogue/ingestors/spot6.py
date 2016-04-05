@@ -144,6 +144,11 @@ def get_spatial_resolution_x():
 def get_spatial_resolution_y():
     return 1.5  # static value based on client information
 
+def get_solar_azimuth(dom):
+    sun_azimuth = dom.getElementsByTagName('SUN_AZIMUTH')[0]
+    solar_azimuth = sun_azimuth.firstChild.nodeValue
+    return solar_azimuth
+
 def get_product_profile(log_message, dom):
     """Find the product_profile for this record.
 
@@ -329,7 +334,7 @@ def ingest(
             original_product_id = get_original_product_id(dom)
             # Band count for GenericImageryProduct
             band_count = get_band_count()
-
+            solar_azimuth_angle = get_solar_azimuth(dom)
             # Spatial resolution x for GenericImageryProduct
             spatial_resolution_x = float(get_spatial_resolution_x())
             # Spatial resolution y for GenericImageryProduct
@@ -376,6 +381,7 @@ def ingest(
                 'product_profile': product_profile,
                 'product_acquisition_start': start_date_time,
                 'product_date': center_date_time,
+                'solar_azimuth_angle' : solar_azimuth_angle,
                 'projection': projection,
                 'quality': quality
             }
