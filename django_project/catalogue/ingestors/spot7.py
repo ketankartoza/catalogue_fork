@@ -30,22 +30,22 @@ from dictionaries.models import (
 from catalogue.models import OpticalProduct
 
 
-def parse_date_time(theDate):
-    """A helper method to create a date object from a landsat time stamp.
+def parse_date_time(date_stamp):
+    """A helper method to create a date object from a SPOT7 time stamp.
 
-    :param theDate: Date in this format:
-    :type theDate: str
+    :param date_stamp: Date in this format:
+    :type date_stamp: str
 
     Example format from SPOT:`1989-05-03T07:30:05.000`
 
     :returns: A python datetime object.
     :rtype: datetime
     """
-    #print 'Parsing Date: %s\n' % theDate
-    start_year = theDate[0:4]
-    start_month = theDate[5:7]
-    start_day = theDate[8:10]
-    start_time = theDate[11:19]
+    #print 'Parsing Date: %s\n' % date_stamp
+    start_year = date_stamp[0:4]
+    start_month = date_stamp[5:7]
+    start_day = date_stamp[8:10]
+    start_time = date_stamp[11:19]
     tokens = start_time.split(':')
     start_hour = tokens[0]
     start_minute = tokens[1]
@@ -128,10 +128,8 @@ def get_dates(log_message, dom):
 
     return start_date, center_date
 
-def get_band_count(dom):
-    #band_count = dom.getElementsByTagName('NBANDS')[0]
-    #count = band_count.firstChild.nodeValue
-    return 10
+def get_band_count():
+    return 5  # static value based on client information
 
 def get_orbit_number(dom):
     value_orbit_number = dom.getElementsByTagName('ORBIT_NUMBER')[0]
@@ -139,39 +137,21 @@ def get_orbit_number(dom):
     return orbit_number
 
 def get_original_product_id(dom):
-    dataset_name = dom.getElementsByTagName('PASS_ID')[0]
-    product_name = dataset_name.firstChild.nodeValue
+    constant = 'S6'
+    dataset_name = dom.getElementsByTagName('DATASET_NAME')[0]
+    product_name_full = dataset_name.firstChild.nodeValue
+    tokens = product_name_full.split('_')
+    product_name = constant + tokens[2] + tokens[3] + tokens[4]
     return product_name
 
-def get_unique_product_id(dom):
-    product_id = dom.getElementsByTagName('JOB_ID')[0]
-    id = product_id.firstChild.nodeValue
-    return id
+def get_spatial_resolution_x():
+    return 1.5
 
-def get_spatial_resolution_x(dom):
-    return 2
-
-def get_spatial_resolution_y(dom):
-    return 3
+def get_spatial_resolution_y():
+    return 1.5
 
 def get_product_profile(log_message, dom):
     """Find the product_profile for this record.
-
-    It can be that one or more spectral modes are associated with a product.
-    For example Landsat8 might have Pan (1 band), Multispectral (8 bands) and
-    Thermal (2 bands) modes associated with a single product (total 11 bands).
-
-    Because of this there is a many to many relationship on
-    OpticalProductProfile and to get a specific OpticalProductProfile record
-    we would need to know the satellite instrument and all the associated
-    spectral modes to that profile record.
-
-    We use the following elements to reverse engineer what the
-    OpticalProductProfile is::
-
-        <feature key="type">HRF</feature>
-        <feature key="sensor">OLI_TIRS</feature>
-        <feature key="mission">LANDSAT8</feature>
 
     :param log_message: A log_message function used for user feedback.
     :type log_message: log_message
@@ -212,12 +192,6 @@ def get_product_profile(log_message, dom):
         raise e
     log_message('Satellite Instrument Group %s' %
                 satellite_instrument_group, 2)
-
-    # Note that in some cases e.g. SPOT you may get more that one instrument
-    # groups matched. When the time comes you will need to add more filtering
-    # rules to ensure that you end up with only one instrument group.
-    # For the mean time, we can assume that Landsat will return only one.
-
     try:
         satellite_instrument = SatelliteInstrument.objects.get(
             satellite_instrument_group=satellite_instrument_group)
@@ -249,68 +223,13 @@ def get_product_profile(log_message, dom):
     return product_profile
 
 
-def get_radiometric_resolution(dom):
-    """Get the radiometric resolution for the supplied product record.
+def get_radiometric_resolution():
+    """Get the radiometric resolution for the supplied product record."""
+    return 12  # static value based on client information
 
-    Note that the resolution (quantisation) is stored in the document as an
-    integer describing the maximum number of values allowed per pixel (e.g.
-    4096), but we want it expressed as the number of bits (e.g. 12bit,
-    16bit etc.) allowed per pixel so we do some conversion of the extracted
-    number.
-
-    .. note:: quantisation is mis-spelled as quantitisation in SPOT docs
-
-    If min in the product description is 0, the max number is base 0,
-    otherwise it is base 1.
-
-    :param resolution_element: Dom Document containing the bounds of the scene.
-    :type resolution_element: DOM document.
-
-    :returns: The bit depth for the image.
-    :rtype: int
-    """
-    base_value = dom.getElementsByTagName('GLOBAL_H_MINIMUM')[0]
-    base = base_value.firstChild.nodeValue
-    depth_value = dom.getElementsByTagName('GLOBAL_H_MAXIMUM')[0]
-    depth = depth_value.firstChild.nodeValue
-
-    base_number = int(float(base))
-    bit_depth = int(float(depth))
-    if base_number == 0:
-        bit_depth += 1
-    base = 2  # to get to bit depth in base 2
-    radiometric_resolution = int(log(bit_depth, base).real)
-    return radiometric_resolution
-
-
-def get_projection(dom):
-    """Get the projection for this product record.
-
-    The project is always expressed as an EPSG code and we fetch the related
-    Projection model for that code.
-
-    In SPOT we only get 'UTM' for the CRS which is basically unusable for
-    us (since we need the zone too) so we will always fail and return EPSG:4326
-
-    :param specific_parameters: Dom Document containing the bounds of the scene.
-    :type specific_parameters: DOM document.
-
-    :returns: A projection model for the specified EPSG.
-    :rtype: Projection
-    """
-
-    try:
-        projection_element = "UTM"
-        projection = 3
-        projection = Projection.objects.get(epsg_code=int(projection))
-    except:
-        # If projection not found default to WGS84 - some SPOT files
-        # may not have a projection if they are 'scene identifying SPOT's'
-        # and the data is raw / unprocessed.
-        # Discussion with Linda 29 Jan 2014 - eventually we should probably
-        # just remove projection from GenericProduct and only worry about
-        # CRS on deliver of the product.
-        projection = Projection.objects.get(epsg_code=4326)
+def get_projection():
+    # If projection not found default to WGS84
+    projection = Projection.objects.get(epsg_code=4326)
     return projection
 
 
@@ -329,18 +248,18 @@ def ingest(
         test_only_flag=True,
         source_path=(
             '/home/web/catalogue/django_project/catalogue/tests/sample_files/'
-            'landsat/'),
+            'SPOT7/'),
         verbosity_level=2,
         halt_on_error_flag=True,
         ignore_missing_thumbs=False):
     """
-    Ingest a collection of Landsat metadata folders.
+    Ingest a collection of SPOT7 metadata folders.
 
     :param test_only_flag: Whether to do a dummy run ( database will not be
         updated. Default False.
     :type test_only_flag: bool
 
-    :param source_path: A SPOT created spot6 metadata xml file and thumbnail.
+    :param source_path: A SPOT created spot6/7 metadata xml file and thumbnail.
     :type source_path: str
 
     :param verbosity_level: How verbose the logging output should be. 0-2
@@ -380,7 +299,7 @@ def ingest(
     log_message('Scanning folders in %s' % source_path, 1)
     # Loop through each folder found
 
-    ingestor_version = 'SPOT7 ingestor version 1'
+    ingestor_version = 'SPOT7 ingestor version 1.1'
     record_count = 0
     updated_record_count = 0
     created_record_count = 0
@@ -410,22 +329,22 @@ def ingest(
             start_date_time, center_date_time = get_dates(
                 log_message, dom)
             # projection for GenericProduct
-            projection = get_projection(dom)
+            projection = get_projection()
             original_product_id = get_original_product_id(dom)
             # Band count for GenericImageryProduct
-            band_count = get_band_count(dom)
+            band_count = get_band_count()
             orbit_number = get_orbit_number(dom)
             # # Spatial resolution x for GenericImageryProduct
-            spatial_resolution_x = float(get_spatial_resolution_x(dom))
+            spatial_resolution_x = float(get_spatial_resolution_x())
             # # Spatial resolution y for GenericImageryProduct
             spatial_resolution_y = float(
-                get_spatial_resolution_y(dom))
+                get_spatial_resolution_y())
             log_message('Spatial resolution y: %s' % spatial_resolution_y, 2)
             #
             # # Spatial resolution for GenericImageryProduct calculated as (x+y)/2
             spatial_resolution = (spatial_resolution_x + spatial_resolution_y) / 2
             log_message('Spatial resolution: %s' % spatial_resolution, 2)
-            radiometric_resolution = get_radiometric_resolution(dom)
+            radiometric_resolution = get_radiometric_resolution()
             log_message('Radiometric resolution: %s' % radiometric_resolution, 2)
             quality = get_quality()
             # ProductProfile for OpticalProduct
@@ -436,7 +355,7 @@ def ingest(
             metadata_file.close()
             log_message('Metadata retrieved', 2)
 
-            unique_product_id = get_unique_product_id(dom)
+            unique_product_id = original_product_id
             # Check if there is already a matching product based
             # on original_product_id
 
