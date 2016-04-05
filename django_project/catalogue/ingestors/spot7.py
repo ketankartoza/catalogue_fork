@@ -137,11 +137,11 @@ def get_orbit_number(dom):
     return orbit_number
 
 def get_original_product_id(dom):
-    constant = 'S6'
+    constant = 'S7'
     dataset_name = dom.getElementsByTagName('DATASET_NAME')[0]
     product_name_full = dataset_name.firstChild.nodeValue
     tokens = product_name_full.split('_')
-    product_name = constant + tokens[2] + tokens[3] + tokens[4]
+    product_name = constant + tokens[0] + tokens[2] + tokens[3]
     return product_name
 
 def get_spatial_resolution_x():
