@@ -40,7 +40,7 @@ def parse_date_time(date_stamp):
     :returns: A python datetime object.
     :rtype: datetime
     """
-    #print 'Parsing Date: %s\n' % theDate
+    #print 'Parsing Date: %s\n' % date_stamp
     start_year = date_stamp[0:4]
     start_month = date_stamp[5:7]
     start_day = date_stamp[8:10]
