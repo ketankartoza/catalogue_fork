@@ -127,10 +127,8 @@ def get_dates(log_message, dom):
 
     return start_date, center_date
 
-def get_band_count(dom):
-    band_count = dom.getElementsByTagName('NBANDS')[0]
-    count = band_count.firstChild.nodeValue
-    return count
+def get_band_count():
+    return 5  # static value based on client information
 
 def get_original_product_id(dom):
     constant = 'S6'
@@ -140,30 +138,14 @@ def get_original_product_id(dom):
     product_name = constant + tokens[2] + tokens[3] + tokens[4]
     return product_name
 
-def get_spatial_resolution_x(dom):
-    return 2
+def get_spatial_resolution_x():
+    return 1.5  # static value based on client information
 
-def get_spatial_resolution_y(dom):
-    return 3
+def get_spatial_resolution_y():
+    return 1.5  # static value based on client information
 
 def get_product_profile(log_message, dom):
     """Find the product_profile for this record.
-
-    It can be that one or more spectral modes are associated with a product.
-    For example Landsat8 might have Pan (1 band), Multispectral (8 bands) and
-    Thermal (2 bands) modes associated with a single product (total 11 bands).
-
-    Because of this there is a many to many relationship on
-    OpticalProductProfile and to get a specific OpticalProductProfile record
-    we would need to know the satellite instrument and all the associated
-    spectral modes to that profile record.
-
-    We use the following elements to reverse engineer what the
-    OpticalProductProfile is::
-
-        <feature key="type">HRF</feature>
-        <feature key="sensor">OLI_TIRS</feature>
-        <feature key="mission">LANDSAT8</feature>
 
     :param log_message: A log_message function used for user feedback.
     :type log_message: log_message
@@ -182,7 +164,7 @@ def get_product_profile(log_message, dom):
 
     try:
         instrument_type = InstrumentType.objects.get(
-            operator_abbreviation=sensor_value)  # e.g. OLI_TIRS
+            operator_abbreviation=sensor_value)  # e.g. HRV
     except Exception, e:
         #print e.message
         raise e
@@ -204,12 +186,6 @@ def get_product_profile(log_message, dom):
         raise e
     log_message('Satellite Instrument Group %s' %
                 satellite_instrument_group, 2)
-
-    # Note that in some cases e.g. SPOT you may get more that one instrument
-    # groups matched. When the time comes you will need to add more filtering
-    # rules to ensure that you end up with only one instrument group.
-    # For the mean time, we can assume that Landsat will return only one.
-
     try:
         satellite_instrument = SatelliteInstrument.objects.get(
             satellite_instrument_group=satellite_instrument_group)
@@ -241,63 +217,14 @@ def get_product_profile(log_message, dom):
     return product_profile
 
 
-def get_radiometric_resolution(dom):
-    """Get the radiometric resolution for the supplied product record.
-
-    Note that the resolution (quantisation) is stored in the document as an
-    integer describing the maximum number of values allowed per pixel (e.g.
-    4096), but we want it expressed as the number of bits (e.g. 12bit,
-    16bit etc.) allowed per pixel so we do some conversion of the extracted
-    number.
-
-    .. note:: quantisation is mis-spelled as quantitisation in SPOT docs
-
-    If min in the product description is 0, the max number is base 0,
-    otherwise it is base 1.
-
-    :param resolution_element: Dom Document containing the bounds of the scene.
-    :type resolution_element: DOM document.
-
-    :returns: The bit depth for the image.
-    :rtype: int
-    """
-    base_number = int(float(11))
-    bit_depth = int(float(12))
-    if base_number == 0:
-        bit_depth += 1
-    base = 2  # to get to bit depth in base 2
-    radiometric_resolution = int(log(bit_depth, base).real)
-    return radiometric_resolution
+def get_radiometric_resolution():
+    """Get the radiometric resolution for the supplied product record."""
+    return 12  # static value based on client information
 
 
-def get_projection(dom):
-    """Get the projection for this product record.
-
-    The project is always expressed as an EPSG code and we fetch the related
-    Projection model for that code.
-
-    In SPOT we only get 'UTM' for the CRS which is basically unusable for
-    us (since we need the zone too) so we will always fail and return EPSG:4326
-
-    :param specific_parameters: Dom Document containing the bounds of the scene.
-    :type specific_parameters: DOM document.
-
-    :returns: A projection model for the specified EPSG.
-    :rtype: Projection
-    """
-
-    try:
-        projection_element = "UTM"
-        projection = 3
-        projection = Projection.objects.get(epsg_code=int(projection))
-    except:
-        # If projection not found default to WGS84 - some SPOT files
-        # may not have a projection if they are 'scene identifying SPOT's'
-        # and the data is raw / unprocessed.
-        # Discussion with Linda 29 Jan 2014 - eventually we should probably
-        # just remove projection from GenericProduct and only worry about
-        # CRS on deliver of the product.
-        projection = Projection.objects.get(epsg_code=4326)
+def get_projection():
+    # If projection not found default to WGS84
+    projection = Projection.objects.get(epsg_code=4326)
     return projection
 
 
@@ -397,31 +324,31 @@ def ingest(
             start_date_time, center_date_time = get_dates(
                 log_message, dom)
             # projection for GenericProduct
-            projection = get_projection(dom)
-            # # Original product id for GenericProduct
+            projection = get_projection()
+            # Original product id for GenericProduct
             original_product_id = get_original_product_id(dom)
             # Band count for GenericImageryProduct
-            band_count = get_band_count(dom)
+            band_count = get_band_count()
 
-            # # Spatial resolution x for GenericImageryProduct
-            spatial_resolution_x = float(get_spatial_resolution_x(dom))
-            # # Spatial resolution y for GenericImageryProduct
+            # Spatial resolution x for GenericImageryProduct
+            spatial_resolution_x = float(get_spatial_resolution_x())
+            # Spatial resolution y for GenericImageryProduct
             spatial_resolution_y = float(
-                get_spatial_resolution_y(dom))
+                get_spatial_resolution_y())
             log_message('Spatial resolution y: %s' % spatial_resolution_y, 2)
-            #
-            # # Spatial resolution for GenericImageryProduct calculated as (x+y)/2
+
+            # Spatial resolution for GenericImageryProduct calculated as (x+y)/2
             spatial_resolution = (spatial_resolution_x + spatial_resolution_y) / 2
             log_message('Spatial resolution: %s' % spatial_resolution, 2)
-            #
-            # # Radiometric resolution for GenericImageryProduct
-            radiometric_resolution = get_radiometric_resolution(dom)
+
+            # Radiometric resolution for GenericImageryProduct
+            radiometric_resolution = get_radiometric_resolution()
             log_message('Radiometric resolution: %s' % radiometric_resolution, 2)
-            #
-            # # Get the quality for GenericProduct
+
+            # Get the quality for GenericProduct
             quality = get_quality()
-            #
-            # # ProductProfile for OpticalProduct
+
+            # ProductProfile for OpticalProduct
             product_profile = get_product_profile(
                 log_message, dom)
 
@@ -431,7 +358,7 @@ def ingest(
             metadata_file.close()
             log_message('Metadata retrieved', 2)
 
-            unique_product_id = get_unique_product_id(dom)
+            unique_product_id = original_product_id
             # Check if there is already a matching product based
             # on original_product_id
 
