@@ -148,6 +148,11 @@ def get_band_count():
     # http://www.cbers.inpe.br/ingles/satellites/cameras_cbers3_4.php
     return 4
 
+def get_solar_azimuth_angle(dom):
+    sun_azimuth = dom.getElementsByTagName('sunAzimuthElevation')[0]
+    solar_azimuth = sun_azimuth.firstChild.nodeValue
+    return solar_azimuth
+
 def get_scene_row(dom):
     scene_row = dom.getElementsByTagName('sceneRow')[0]
     row = scene_row.firstChild.nodeValue
@@ -236,12 +241,6 @@ def get_product_profile(log_message, product_id):
         raise e
     log_message('Satellite Instrument Group %s' %
                 satellite_instrument_group, 2)
-
-    # Note that in some cases e.g. CBERS you may get more that one instrument
-    # groups matched. When the time comes you will need to add more filtering
-    # rules to ensure that you end up with only one instrument group.
-    # For the mean time, we can assume that CBERS will return only one.
-
     try:
         satellite_instrument = SatelliteInstrument.objects.get(
             satellite_instrument_group=satellite_instrument_group)
@@ -411,6 +410,7 @@ def ingest(
             band_count = get_band_count()
             row = get_scene_row(dom)
             path = get_scene_path(dom)
+            solar_azimuth_angle = get_solar_azimuth_angle(dom)
             sensor_inclination = get_sensor_inclination()
             # # Spatial resolution x for GenericImageryProduct
             spatial_resolution_x = float(get_spatial_resolution_x(dom))
@@ -434,7 +434,7 @@ def ingest(
                 'radiometric_resolution': radiometric_resolution,
                 'band_count': band_count,
                 'original_product_id': original_product_id,
-                'unique_product_id': unique_product_id,
+                'unique_product_id': original_product_id,
                 'spatial_resolution_x': spatial_resolution_x,
                 'spatial_resolution_y': spatial_resolution_y,
                 'spatial_resolution': spatial_resolution,
@@ -442,6 +442,7 @@ def ingest(
                 'product_acquisition_start': start_date_time,
                 'product_date': center_date_time,
                 'sensor_inclination_angle': sensor_inclination,
+                'solar_azimuth_angle': solar_azimuth_angle,
                 'row': row,
                 'path': path,
                 'projection': projection,
