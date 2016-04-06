@@ -140,6 +140,16 @@ def get_band_count(dom):
     #count = band_count.firstChild.nodeValue
     return 10
 
+def get_scene_row(dom):
+    scene_row = dom.getElementsByTagName('sceneRow')[0]
+    row = scene_row.firstChild.nodeValue
+    return row
+
+def get_scene_path(dom):
+    scene_path = dom.getElementsByTagName('scenePath')[0]
+    path = scene_path.firstChild.nodeValue
+    return path
+
 def get_orbit_number(dom):
     # value_orbit_number = dom.getElementsByTagName('ORBIT_NUMBER')[0]
     # orbit_number = value_orbit_number.firstChild.nodeValue
@@ -407,6 +417,8 @@ def ingest(
 
             # Band count for GenericImageryProduct
             band_count = get_band_count(dom)
+            row = get_scene_row(dom)
+            path = get_scene_path(dom)
             orbit_number = get_orbit_number(dom)
             # # Spatial resolution x for GenericImageryProduct
             spatial_resolution_x = float(get_spatial_resolution_x(dom))
@@ -438,6 +450,8 @@ def ingest(
                 'product_acquisition_start': start_date_time,
                 'product_date': center_date_time,
                 'orbit_number': orbit_number,
+                'row': row,
+                'path': path,
                 'projection': projection,
                 'quality': quality
             }
