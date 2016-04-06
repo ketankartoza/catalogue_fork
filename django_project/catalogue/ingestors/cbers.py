@@ -135,6 +135,13 @@ def get_dates(log_message, dom):
 
     return start_date, center_date
 
+def get_original_product_id(filename):
+    # Get part of product name from filename
+    # file name = CB04-WFI-81-135-20160118-L20000024812
+    tokens = filename.split('-')
+    product_name = ''.join(tokens)
+    return product_name
+
 def get_band_count():
     # for each camera has 4 bands
     # based on this information
@@ -387,8 +394,8 @@ def ingest(
             log_message(search_path, 2)
             xml_file = glob.glob(search_path)[0]
             file = os.path.basename(xml_file)
-            unique_product_id = os.path.splitext(file)[0]
-            original_product_id = unique_product_id
+            file_name = os.path.splitext(file)[0]
+            original_product_id = get_original_product_id(file_name)
 
             # Create a DOM document from the file
             dom = parse(xml_file)
