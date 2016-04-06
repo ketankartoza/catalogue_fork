@@ -157,29 +157,39 @@ def get_sensor_inclination():
     return 98.5
 
 def get_spatial_resolution_x(dom):
-    return 2
+    get_sensor_id = dom.getElementsByTagName('sensorId')[0]
+    sensor_id = get_sensor_id.firstChild.nodeValue
+    # sensor_id : MUX, P10, P5M, WFI
+    # source http://www.cbers.inpe.br/ingles/satellites/cameras_cbers3_4.php
+    if sensor_id == 'MUX':
+        return 20
+    elif sensor_id == 'P10':
+        return 5
+    elif sensor_id =='P5M':
+        return 40
+    elif sensor_id == 'WFI':
+        return 64
+    else:
+        return 0
 
 def get_spatial_resolution_y(dom):
-    return 3
+    get_sensor_id = dom.getElementsByTagName('sensorId')[0]
+    sensor_id = get_sensor_id.firstChild.nodeValue
+    # sensor_id : MUX, P10, P5M, WFI
+    # source http://www.cbers.inpe.br/ingles/satellites/cameras_cbers3_4.php
+    if sensor_id == 'MUX':
+        return 20
+    elif sensor_id == 'P10':
+        return 5
+    elif sensor_id =='P5M':
+        return 40
+    elif sensor_id == 'WFI':
+        return 64
+    else:
+        return 0
 
 def get_product_profile(log_message, product_id):
     """Find the product_profile for this record.
-
-    It can be that one or more spectral modes are associated with a product.
-    For example CBERS8 might have Pan (1 band), Multispectral (8 bands) and
-    Thermal (2 bands) modes associated with a single product (total 11 bands).
-
-    Because of this there is a many to many relationship on
-    OpticalProductProfile and to get a specific OpticalProductProfile record
-    we would need to know the satellite instrument and all the associated
-    spectral modes to that profile record.
-
-    We use the following elements to reverse engineer what the
-    OpticalProductProfile is::
-
-        <feature key="type">HRF</feature>
-        <feature key="sensor">OLI_TIRS</feature>
-        <feature key="mission">CBERS8</feature>
 
     :param log_message: A log_message function used for user feedback.
     :type log_message: log_message
@@ -285,34 +295,8 @@ def get_radiometric_resolution(dom):
     return radiometric_resolution
 
 
-def get_projection(dom):
-    """Get the projection for this product record.
-
-    The project is always expressed as an EPSG code and we fetch the related
-    Projection model for that code.
-
-    In CBERS we only get 'UTM' for the CRS which is basically unusable for
-    us (since we need the zone too) so we will always fail and return EPSG:4326
-
-    :param specific_parameters: Dom Document containing the bounds of the scene.
-    :type specific_parameters: DOM document.
-
-    :returns: A projection model for the specified EPSG.
-    :rtype: Projection
-    """
-
-    try:
-        projection_element = "UTM"
-        projection = 3
-        projection = Projection.objects.get(epsg_code=int(projection))
-    except:
-        # If projection not found default to WGS84 - some CBERS files
-        # may not have a projection if they are 'scene identifying CBERS's'
-        # and the data is raw / unprocessed.
-        # Discussion with Linda 29 Jan 2014 - eventually we should probably
-        # just remove projection from GenericProduct and only worry about
-        # CRS on deliver of the product.
-        projection = Projection.objects.get(epsg_code=4326)
+def get_projection():
+    projection = Projection.objects.get(epsg_code=4326)
     return projection
 
 
@@ -342,7 +326,7 @@ def ingest(
         updated. Default False.
     :type test_only_flag: bool
 
-    :param source_path: A CBERS created CBERS6 metadata xml file and thumbnail.
+    :param source_path: A CBERS created CBERS 04 metadata xml file and thumbnail.
     :type source_path: str
 
     :param verbosity_level: How verbose the logging output should be. 0-2
@@ -367,7 +351,7 @@ def ingest(
             print message
 
     log_message((
-        'Running CBERS 7 Importer with these options:\n'
+        'Running CBERS 04 Importer with these options:\n'
         'Test Only Flag: %s\n'
         'Source Dir: %s\n'
         'Verbosity Level: %s\n'
@@ -382,7 +366,7 @@ def ingest(
     log_message('Scanning folders in %s' % source_path, 1)
     # Loop through each folder found
 
-    ingestor_version = 'CBERS7 ingestor version 1'
+    ingestor_version = 'CBERS 04 ingestor version 1.1'
     record_count = 0
     updated_record_count = 0
     created_record_count = 0
@@ -414,7 +398,7 @@ def ingest(
             start_date_time, center_date_time = get_dates(
                 log_message, dom)
             # projection for GenericProduct
-            projection = get_projection(dom)
+            projection = get_projection()
 
             # Band count for GenericImageryProduct
             band_count = get_band_count()
