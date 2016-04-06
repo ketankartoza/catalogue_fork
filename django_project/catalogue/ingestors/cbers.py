@@ -226,9 +226,9 @@ def get_product_profile(log_message, product_id):
     log_message('Instrument Type %s' % instrument_type, 2)
 
     if mission_index == 'CB04':
-        mission_value = 'C2B'
+        mission_value = 'CB04'
     elif mission_index == 'CB05':
-        mission_value = 'C2B'
+        mission_value = 'CB05'
     else:
         raise Exception('Unknown mission in CBERS')
     satellite = Satellite.objects.get(abbreviation=mission_value)
@@ -301,8 +301,26 @@ def get_radiometric_resolution(dom):
     else:
         return 0
 
-def get_projection():
-    projection = Projection.objects.get(epsg_code=4326)
+def get_projection(dom):
+    """Get the projection for this product record.
+
+    The project is always expressed as an EPSG code and we fetch the related
+    Projection model for that code.
+
+    :param specific_parameters: Dom Document containing the bounds of the scene.
+    :type specific_parameters: DOM document.
+
+    :returns: A projection model for the specified EPSG.
+    :rtype: Projection
+    """
+    epsg_default_code = '32'
+    get_zone = dom.getElementsByTagName('zone')[0]
+    zone_value = get_zone.firstChild.nodeValue
+    zone = zone_value[0:2]
+    location_code = '7'  # 6 for north and 7 for south
+    epsg_code = epsg_default_code + location_code + zone
+
+    projection = Projection.objects.get(epsg_code=epsg_code)
     return projection
 
 
@@ -404,7 +422,7 @@ def ingest(
             start_date_time, center_date_time = get_dates(
                 log_message, dom)
             # projection for GenericProduct
-            projection = get_projection()
+            projection = get_projection(dom)
 
             # Band count for GenericImageryProduct
             band_count = get_band_count()
