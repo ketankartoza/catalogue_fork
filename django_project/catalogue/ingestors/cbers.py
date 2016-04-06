@@ -209,7 +209,7 @@ def get_product_profile(log_message, product_id):
     """
     # We need type, sensor and mission so that we can look up the
     # OpticalProductProfile that applies to this product
-    sensor_value = product_id[5:8]
+    sensor_value = product_id[4:7]
     mission_index = product_id[0:4]
 
     try:
