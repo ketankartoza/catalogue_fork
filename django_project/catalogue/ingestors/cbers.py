@@ -135,10 +135,11 @@ def get_dates(log_message, dom):
 
     return start_date, center_date
 
-def get_band_count(dom):
-    #band_count = dom.getElementsByTagName('NBANDS')[0]
-    #count = band_count.firstChild.nodeValue
-    return 10
+def get_band_count():
+    # for each camera has 4 bands
+    # based on this information
+    # http://www.cbers.inpe.br/ingles/satellites/cameras_cbers3_4.php
+    return 4
 
 def get_scene_row(dom):
     scene_row = dom.getElementsByTagName('sceneRow')[0]
@@ -150,10 +151,10 @@ def get_scene_path(dom):
     path = scene_path.firstChild.nodeValue
     return path
 
-def get_orbit_number(dom):
-    # value_orbit_number = dom.getElementsByTagName('ORBIT_NUMBER')[0]
-    # orbit_number = value_orbit_number.firstChild.nodeValue
-    return 10
+def get_sensor_inclination():
+    # The static value of sensor inclination angle
+    # source http://www.cbers.inpe.br/ingles/satellites/orbit_cbers3_4.php
+    return 98.5
 
 def get_spatial_resolution_x(dom):
     return 2
@@ -416,10 +417,10 @@ def ingest(
             projection = get_projection(dom)
 
             # Band count for GenericImageryProduct
-            band_count = get_band_count(dom)
+            band_count = get_band_count()
             row = get_scene_row(dom)
             path = get_scene_path(dom)
-            orbit_number = get_orbit_number(dom)
+            sensor_inclination = get_sensor_inclination()
             # # Spatial resolution x for GenericImageryProduct
             spatial_resolution_x = float(get_spatial_resolution_x(dom))
             # # Spatial resolution y for GenericImageryProduct
@@ -449,7 +450,7 @@ def ingest(
                 'product_profile': product_profile,
                 'product_acquisition_start': start_date_time,
                 'product_date': center_date_time,
-                'orbit_number': orbit_number,
+                'sensor_inclination_angle': sensor_inclination,
                 'row': row,
                 'path': path,
                 'projection': projection,
