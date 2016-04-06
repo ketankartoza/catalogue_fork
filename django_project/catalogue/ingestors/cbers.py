@@ -274,17 +274,12 @@ def get_product_profile(log_message, product_id):
 
 def get_radiometric_resolution(dom):
     """Get the radiometric resolution for the supplied product record.
+    source = http://www.cbers.inpe.br/ingles/satellites/cameras_cbers3_4.php
 
-    Note that the resolution (quantisation) is stored in the document as an
-    integer describing the maximum number of values allowed per pixel (e.g.
-    4096), but we want it expressed as the number of bits (e.g. 12bit,
-    16bit etc.) allowed per pixel so we do some conversion of the extracted
-    number.
-
-    .. note:: quantisation is mis-spelled as quantitisation in CBERS docs
-
-    If min in the product description is 0, the max number is base 0,
-    otherwise it is base 1.
+    MUXCAM = 8 bits
+    PANMUX = 8 bits
+    IRSCAM = 8 bits
+    WFICAM = 10 bits
 
     :param resolution_element: Dom Document containing the bounds of the scene.
     :type resolution_element: DOM document.
@@ -292,14 +287,19 @@ def get_radiometric_resolution(dom):
     :returns: The bit depth for the image.
     :rtype: int
     """
-    base_number = int(float(11))
-    bit_depth = int(float(12))
-    if base_number == 0:
-        bit_depth += 1
-    base = 2  # to get to bit depth in base 2
-    radiometric_resolution = int(log(bit_depth, base).real)
-    return radiometric_resolution
-
+    get_sensor_id = dom.getElementsByTagName('sensorId')[0]
+    sensor_id = get_sensor_id.firstChild.nodeValue
+    # sensor_id : MUX, P10, P5M, WFI
+    if sensor_id == 'MUX':
+        return 8
+    elif sensor_id == 'P10':
+        return 8
+    elif sensor_id =='P5M':
+        return 8
+    elif sensor_id == 'WFI':
+        return 10
+    else:
+        return 0
 
 def get_projection():
     projection = Projection.objects.get(epsg_code=4326)
