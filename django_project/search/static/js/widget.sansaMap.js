@@ -43,7 +43,6 @@
       var layerMapnik = new OpenLayers.Layer.OSM("Open Street Map");
 
       var myLayersList = [
-            TMSOverlay,
             layerMapnik
         ];
         this.map.addLayers(myLayersList);
@@ -128,6 +127,9 @@
     this.mNavigationPanel.addControls(
       [myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.previous, myHistoryControl.next]
     );
+
+    // Make the pan navigation button default selected
+    this.mNavigationPanel.activateControl(myNavigationControl);
 
     this.refreshLayerSwitcher();
 
