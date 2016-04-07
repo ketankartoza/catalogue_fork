@@ -100,8 +100,8 @@ def get_geometry(log_message, dom):
               '%s %s, %s %s, %s %s, %s %s' '))' % (
         up_left_long, up_left_lat,
         up_right_long, up_right_lat,
-        low_left_long, low_left_lat,
         low_right_long, low_right_lat,
+        low_left_long, low_left_lat,
         up_left_long, up_left_lat )
 
     myReader = WKTReader()
