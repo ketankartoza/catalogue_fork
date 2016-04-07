@@ -73,16 +73,16 @@ def get_geometry(log_message, dom):
 
     :return: geoemtry
     """
-    geo_area = dom.getElementsByTagName('Album_Footprint')[0]
-    points = geo_area.getElementsByTagName('Corners_Location')
+    geo_area = dom.getElementsByTagName('Programming_Geo_Area')[0]
+    points = geo_area.getElementsByTagName('CORNER')
     polygon = 'POLYGON(('
     is_first = True
     first_longitude = None
     first_latitude = None
     for point in points:
-        latitude = point.getElementsByTagName('LON')[0]
+        latitude = point.getElementsByTagName('LATITUDE')[0]
         latitude = latitude.firstChild.nodeValue
-        longitude = point.getElementsByTagName('LAT')[0]
+        longitude = point.getElementsByTagName('LONGITUDE')[0]
         longitude = longitude.firstChild.nodeValue
         if not is_first:
             polygon += ','
