@@ -3,7 +3,7 @@ from .base import *
 # Extra installed apps
 INSTALLED_APPS += (
     'offline_messages',
-    'raven.contrib.django',
+    'raven.contrib.django.raven_compat',
     'shapes',
     'django_extensions',
     'userena',
