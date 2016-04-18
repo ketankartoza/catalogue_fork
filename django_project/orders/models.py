@@ -207,6 +207,12 @@ class Order(models.Model):
         )
         return recent_history.order_change_date
 
+    def day_in_process(self):
+        if (self.get_recent_history_date().date() == self.order_date.date()):
+            return "less than one day"
+        else:
+            return abs(self.get_recent_history_date().date() - self.order_date.date())
+
     def value(self):
         """
         Total order vaule, a sum of total rand_cost_per_scene for all
