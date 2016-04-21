@@ -57,7 +57,7 @@ class OrdersViews_ordersSummary_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/signin/?next=/orderssummary/')
+            '/accounts/signin/?next=/orderssummary/')
 
     def test_ordersSummary_login_staff(self):
         """

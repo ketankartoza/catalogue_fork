@@ -57,9 +57,7 @@ class ReportsViews_visitorMonthlyReport_Tests(TestCase):
             reverse(
                 'visitorMonthlyReport',
                 kwargs={'year': '2010', 'month': '11'}))
-        self.assertEqual(myResp.status_code, 200)
-        self.assertEqual(
-            myResp.context['app_path'], u'/visitormonthlyreport/2010/11/')
+        self.assertEqual(myResp.status_code, 302)
 
     def test_myReports_userlogin(self):
         """
@@ -76,9 +74,7 @@ class ReportsViews_visitorMonthlyReport_Tests(TestCase):
             reverse(
                 'visitorMonthlyReport',
                 kwargs={'year': '2010', 'month': '11'}))
-        self.assertEqual(myResp.status_code, 200)
-        self.assertEqual(
-            myResp.context['app_path'], u'/visitormonthlyreport/2010/11/')
+        self.assertEqual(myResp.status_code, 302)
 
     def test_myReports_stafflogin(self):
         """
@@ -114,13 +110,3 @@ class ReportsViews_visitorMonthlyReport_Tests(TestCase):
         self.assertEqual(
             myResp.context['myNextDate'], myDate + datetime.timedelta(days=31))
 
-        # check used templates
-        myExpTemplates = [
-            'visitorMonthlyReport.html', u'base.html',
-            u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
-            u'useraccounts/menu_content.html',
-            u'django_tables2/custom-table.html'
-        ]
-
-        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
-        self.assertEqual(myUsedTemplates, myExpTemplates)
