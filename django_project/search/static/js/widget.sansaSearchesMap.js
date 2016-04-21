@@ -26,11 +26,11 @@
 
       var myLayersList = [
             WEB_LAYERS.searches,
-            WEB_LAYERS.BlueMarble,
-            WEB_LAYERS.Heatmap_total,
-            WEB_LAYERS.Heatmap_last3month,
-            WEB_LAYERS.Heatmap_lastmonth,
-            WEB_LAYERS.Heatmap_lastweek,
+            // WEB_LAYERS.BlueMarble,
+            // WEB_LAYERS.Heatmap_total,
+            // WEB_LAYERS.Heatmap_last3month,
+            // WEB_LAYERS.Heatmap_lastmonth,
+            // WEB_LAYERS.Heatmap_lastweek,
             layerMapnik
         ];
         this.map.addLayers(myLayersList);
@@ -101,6 +101,9 @@
     this.mNavigationPanel.addControls(
       [myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.previous, myHistoryControl.next]
     );
+
+    // Make the pan navigation button default selected
+    this.mNavigationPanel.activateControl(myNavigationControl);
 
     this.refreshLayerSwitcher();
 

@@ -3,7 +3,7 @@
 {% block body_load %}{% endblock %}
 
 {% block content%}
-      <div id="map"></div>
+      <div id="map" class="search-map"></div>
       <div id="map-controls">
         <div id="map-layerswitcher-control">
           <button class="btn btn-info btn-large right icon-globe" data-toggle="tooltip"
@@ -28,6 +28,7 @@
       var UserLoged = false;
     {% endif %}
   </script>
+  <script type="text/javascript" src="{% static 'js/backbone-pagination.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/search.js' %}"></script>
   <script>
   $( document ).ready(function() {
