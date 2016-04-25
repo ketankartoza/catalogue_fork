@@ -19,6 +19,7 @@ __copyright__ = 'South African National Space Agency'
 
 import logging
 logger = logging.getLogger(__name__)
+from django.contrib.auth.models import User
 
 from django import forms
 
@@ -46,6 +47,7 @@ class OrderForm(forms.ModelForm):
       self.fields['market_sector'].empty_label = "--- Please select ---"
       # following line needed to refresh widget copy of choice list
       self.fields['market_sector'].widget.choices = self.fields['market_sector'].choices
+      self.fields['user'].queryset = User.objects.order_by('username')
 
 
 class OrderFormNonSearchRecords(forms.ModelForm):
