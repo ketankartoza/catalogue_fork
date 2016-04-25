@@ -4,6 +4,7 @@ var ResultPanelState = false;
 var ResultDownloadOptionsState = false;
 var CartDownloadOptionsState = false;
 var LayerSwitcherState = false;
+var ButtonSubPanelState = false;
 
 function toggleSearchPanel() {
     if (SearchPanelState) {
@@ -89,6 +90,20 @@ function showResultDownloadOptions() {
 
 function hideCartDownloadOptions() {
     $('#cart-panel-btns').fadeOut('fast');
+}
+
+function showButtonSubPanel() {
+    $('#cart-show-map').fadeIn('fast');
+    $('#place_order').fadeIn('fast');
+    $('#cart-panel-download-button').fadeIn('fast');
+    ButtonSubPanelState = true;
+}
+
+function hideButtonSubPanel() {
+    $('#cart-show-map').hide();
+    $('#place_order').hide();
+    $('#cart-panel-download-button').hide();
+    ButtonSubPanelState = false;
 }
 
 function showCartDownloadOptions() {
@@ -732,6 +747,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
                 $("#result_item_"+ this.model.get('original_product_id')).children('.cart-remove-button').removeClass('hide');
                 $("#result_item_"+ this.model.get('original_product_id')).children('.cart-button').addClass('hide');
             }
+            showButtonSubPanel();
         } else {
             alert('You need to log in first!');
         }
@@ -739,9 +755,9 @@ APP.ResultGridViewItem = Backbone.View.extend({
     },
 
     removeFromCart: function(event) {
+        $APP.trigger('removedItemFromCart', {'original_product_id': this.model.get('original_product_id')});
         $APP.trigger('deleteCartItem', {'id': this.model.get('original_product_id')});
         this._removeFromCart(this.model.get('original_product_id'));
-        $APP.trigger('removedItemFromCart', {'id': this.model.get('original_product_id')});
         event.stopPropagation();
     },
 
@@ -821,9 +837,15 @@ APP.CartGridView = Backbone.View.extend({
 
     deleteItem: function(event, data) {
         var exist = APP.Cart.find(function(item) {
-            return item.get("product").original_product_id == data.id;
+            return item.get('product').original_product_id == data.id;
         });
-        exist.destroy({wait: true});
+        if (exist) {
+            exist.destroy({wait: true});
+        }
+        if (APP.Cart.length-1==0) {
+            // If cart is empty after item has been removed then hide bottom panel button
+            hideButtonSubPanel();
+        }
     },
 
     render: function() {
@@ -837,8 +859,12 @@ APP.CartGridView = Backbone.View.extend({
         $APP.trigger('SearchCartLayer_addFeatures', {
                 'data': this.collection.models
             });
+        if(APP.Cart.length==0) {
+            hideButtonSubPanel();
+        }
         return this;
     },
+
     renderItem: function(item) {
         var myItem = new APP.CartGridViewItem({
             model:item,
@@ -863,12 +889,12 @@ APP.CartGridViewItem = Backbone.View.extend({
     },
     delete: function() {
         $APP.trigger('removedItemFromCartUpdateResults', {'original_product_id': this.model.get('product').original_product_id});
-        this.model.destroy({wait: true});
+        $APP.trigger('deleteCartItem', {'id': this.model.get('product').original_product_id});
     },
     render: function() {
        $(this.el).html(_.template(templateCart, {model:this.model}));
         return this;
-    },
+    }
 });
 
 
