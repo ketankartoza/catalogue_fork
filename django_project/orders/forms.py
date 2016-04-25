@@ -46,6 +46,8 @@ class OrderForm(forms.ModelForm):
       self.fields['market_sector'].empty_label = "--- Please select ---"
       # following line needed to refresh widget copy of choice list
       self.fields['market_sector'].widget.choices = self.fields['market_sector'].choices
+      self.fields['subsidy_type_assigned'].empty_label = None
+      self.fields['subsidy_type_requested'].empty_label = None
 
 
 class OrderFormNonSearchRecords(forms.ModelForm):
