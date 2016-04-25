@@ -869,7 +869,7 @@ class SubsidyType(models.Model):
     abbreviation = models.CharField(max_length=10)
 
     def __unicode__(self):
-        return self.abbreviation
+        return self.name
 
 
 class ProductProcessState(models.Model):
