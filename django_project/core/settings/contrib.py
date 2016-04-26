@@ -1,3 +1,8 @@
+# coding=utf-8
+"""
+core.settings.contrib
+"""
+import os
 from .base import *
 
 # Extra installed apps
@@ -15,7 +20,8 @@ INSTALLED_APPS += (
     'backbone_tastypie',
     'pipeline',
     'exchange',
-    'django_tables2'
+    'django_tables2',
+    'celery'
 )
 
 # Added by George for webodt
@@ -88,3 +94,10 @@ ACCEPTABLE_SORTS = [
 ]
 
 MESSAGE_STORAGE = 'offline_messages.storage.OfflineStorageEngine'
+
+
+BROKER_URL = 'amqp://guest:guest@%s:5672//' % os.environ['RABBITMQ_HOST']
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
