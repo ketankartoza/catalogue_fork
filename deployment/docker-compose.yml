@@ -85,6 +85,7 @@ uwsgi:
     - DATABASE_USERNAME=docker
     - DATABASE_PASSWORD=docker
     - DATABASE_HOST=db
+    - RABBITMQ_HOST=rabbitmq
     - DJANGO_SETTINGS_MODULE=core.settings.prod_docker
     - VIRTUAL_HOST=catalogue.kartoza.com
     - VIRTUAL_PORT=8080
@@ -94,9 +95,12 @@ uwsgi:
     - ./media:/home/web/media
     - ./reports:/home/web/reports
     - ./logs:/var/log/
+    - ./data:/home/web/django_project/data
   links:
     - smtp:smtp
     - db:db
+    - rabbitmq:rabbitmq
+    - worker:worker
   restart: on-failure:5
 
 dbbackups:
