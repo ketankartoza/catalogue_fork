@@ -13,4 +13,4 @@ logger = logging.getLogger(__name__)
 
 @shared_task(name='tasks.exchange_update')
 def exchange_update():
-    management.call_command('exchange_update')
+    management.call_command('update_rates')
