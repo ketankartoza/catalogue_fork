@@ -16,5 +16,6 @@ export DATABASE_PASSWORD=docker
 export DATABASE_HOST=db
 export DJANGO_SETTINGS_MODULE=core.settings.prod_docker
 export PYTHONPATH=/home/web/django_project
-export VIRTUAL_HOST=catalgue
+export VIRTUAL_HOST=catalogue.at.kartoza.com
 export VIRTUAL_PORT=8080
+export RABBITMQ_HOST=rabbitmq

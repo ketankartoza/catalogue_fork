@@ -229,6 +229,20 @@ dbsync:
 	-@ssh inasafe-docker "cd /home/data/changelog.inasafe.org/deployment; make dbbackup"
 	@rsync -av --progress inasafe-docker:/home/data/changelog.inasafe.org/deployment/backups/ backups
 
+worker:
+	@echo
+	@echo "------------------------------------------------------------------"
+	@echo "Running worker production mode"
+	@echo "------------------------------------------------------------------"
+	@docker-compose -p $(PROJECT_ID) up -d worker
+
+workerlogs:
+	@echo
+	@echo "------------------------------------------------------------------"
+	@echo "Showing celery worker logs in production mode"
+	@echo "------------------------------------------------------------------"
+	@docker-compose -p $(PROJECT_ID) logs worker
+
 # ----------------------------------------------------------------------------
 #    DEVELOPMENT C O M M A N D S
 # --no-deps will attach to prod deps if running

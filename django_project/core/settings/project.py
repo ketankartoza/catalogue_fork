@@ -226,3 +226,5 @@ PIPELINE = {
         }
     }
 }
+
+from .celery_setting import *  # noqa
