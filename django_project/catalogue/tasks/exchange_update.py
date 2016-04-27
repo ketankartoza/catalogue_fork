@@ -11,6 +11,9 @@ from django.core.exceptions import ObjectDoesNotExist
 import logging
 logger = logging.getLogger(__name__)
 
+# This is exchange rates update task, we can use it for updating exchange rate.
+# https://github.com/metglobal/django-exchange
+
 @shared_task(name='tasks.exchange_update')
 def exchange_update():
     management.call_command('update_rates')
