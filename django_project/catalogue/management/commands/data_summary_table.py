@@ -76,17 +76,23 @@ class Command(BaseCommand):
         inst_list = list(set(self.get_instrument_group_id()))
 
         for inst_id in inst_list:
-            print "satellite: {}, instrument_type: {}".format(
+            file_name = "output.txt"
+            text_file = open(path + file_name, "a")
+            text_file.write("satellite: {}, instrument_type: {}\n".format(
                 self.get_satellite_instrument_type(inst_id)[0]['satellite'],
-                self.get_satellite_instrument_type(inst_id)[0]['instrument_type'])
+                self.get_satellite_instrument_type(inst_id)[0]['instrument_type']))
+            print "write satellite and instrument type.."
             try:
+                print "write min year..."
                 min_year = self.get_product_per_year(inst_id)[1]['year']
-                print "start_year : {}".format(min_year)
+                text_file.write("start_year : {}\n".format(min_year))
             except:
-                print "-"
+                text_file.write("start_year : - \n")
             try:
+                print "write max year"
                 max_year = self.get_product_per_year(inst_id)[-1]['year']
-                print "end_year : {}".format(max_year)
+                text_file.write("end_year : {}\n".format(max_year))
             except:
-                print "-"
+                text_file.write("end_year : - \n")
             continue
+            text_file.close()
