@@ -63,7 +63,7 @@ class Command(BaseCommand):
                     json_data['max_year'] = '-'
                 all_json_data.append(json_data)
 
-            json_file.write(json.dumps(all_json_data, indent=4))
+            json_file.write(json.dumps(all_json_data, indent=4).decode('unicode-escape').encode('utf8'))
             json_file.truncate()
             json_file.close()
 

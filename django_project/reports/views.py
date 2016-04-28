@@ -376,7 +376,7 @@ def data_summary_table(request):
         # Django's pagination is only required for the PDF view as
         # django-tables2 handles pagination for the table
         table = None
-        page_size = json_data.count()
+        page_size = len(json_data)
         try:
             page = int(request.GET.get('page', '1'))
         except ValueError:
