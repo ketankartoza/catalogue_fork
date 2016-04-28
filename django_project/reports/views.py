@@ -18,6 +18,8 @@ __version__ = '0.1'
 __date__ = '17/08/2012'
 __copyright__ = 'South African National Space Agency'
 
+import os
+import json
 # for error logging
 import traceback
 # for date handling
@@ -62,10 +64,13 @@ from dictionaries.models import SatelliteInstrumentGroup, Band, SpectralMode, In
 from reports.tables import (
     table_sort_settings,
     CountryTable,
-    SatelliteInstrumentTable, VisitorTable)
+    SatelliteInstrumentTable,
+    SatelliteInstrumentTableJSON,
+    VisitorTable)
 from django.conf import settings
 from django_tables2 import RequestConfig
 from search.tables import SearchesTable
+from core.settings.base import STATIC_ROOT
 
 
 # in case you need to slice ResultSet (paginate) for display
@@ -354,29 +359,35 @@ def data_summary_table(request):
     Summary of available records
     :param request: HttpRequest dict
     """
-    result_set = SatelliteInstrumentGroup.objects.annotate(
-        id__count=Count(
-            'satelliteinstrument__opticalproductprofile__opticalproduct'))\
-        .order_by('satellite__name').filter(id__count__gt=0)
     total = 0
-    for result in result_set:
-        total += result.id__count
+
+    try:
+        # Open data summary json file, change this path
+        json_file = open('/home/web/static/output.json')
+        json_data = json.load(json_file)
+        json_file.close()
+    except IOError:
+        print 'File not found'
+        json_data = []
+
+    for result in json_data:
+        total += result['id__count']
     if 'pdf' in request.GET:
         # Django's pagination is only required for the PDF view as
         # django-tables2 handles pagination for the table
         table = None
-        page_size = result_set.count()
+        page_size = len(json_data)
         try:
             page = int(request.GET.get('page', '1'))
         except ValueError:
             page = 1
-        paginator = Paginator(result_set, page_size)
+        paginator = Paginator(json_data, page_size)
         try:
             records = paginator.page(page)
         except (EmptyPage, InvalidPage):
             records = paginator.page(paginator.num_pages)
     else:
-        table = SatelliteInstrumentTable(result_set)
+        table = SatelliteInstrumentTableJSON(json_data)
         RequestConfig(request, paginate={
             'per_page': settings.PAGE_SIZE
         }).configure(table)
@@ -384,7 +395,7 @@ def data_summary_table(request):
         'myUrl': reverse('dataSummaryTable'),
         'table': table,
         'total': total,
-        'myResultSet': result_set
+        'myResultSet': json_data
     })
 
 
