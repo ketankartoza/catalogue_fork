@@ -18,12 +18,14 @@
 
             // Create our data table.
             var data = new google.visualization.DataTable();
+            console.log(data);
             data.addColumn('string', 'Sensor');
             data.addColumn('number', 'Records');
             data.addRows([
                 {% for myRecord in myResultSet %}
                     {% if myRecord.id__count > 0 %}
-                        ['{{myRecord}}', {{ myRecord.id__count }}],
+                        ['{{myRecord.satellite_operator_abbr }} - {{ myRecord.instrument_operator_abbr }}',
+                            {{ myRecord.id__count }}],
                     {% endif %}
                 {% endfor %}
                 [null, null]]);
@@ -53,34 +55,11 @@
             Click on <i class="icon-question-sign"></i> for a detailed summary for that sensor.
         </p>
     </div>
-    <div class="container">
-    <table class="table">
-        <thead>
-        </thead>
-        <tbody>
-        <tr>
-            <th>Satellite</th>
-            <th>Sensor</th>
-            <th>Abbreviation</th>
-            <th>Scene Count</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Info</th>
-        </tr>
-        {% for myRecord in myResultSet %}
-            <tr>
-                <td>{{ myRecord.satellite.name }}</td>
-            <td>{{ myRecord.instrument_type.name }}</td>
-            <td>{{ myRecord.satellite.abbreviation }}</td>
-            <td>{{ myRecord.id__count }}</td>
-            <td>{{ myRecord.start_date }}</td>
-            <td>{{ myRecord.end_date }}</td>
-            <td><a href='{% url "fact-sheet" myRecord.satellite.operator_abbreviation myRecord.instrument_type.operator_abbreviation %}'><i class="icon-question-sign"></i></a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+    <div class="row">
+        <div class="span8 offset2">
+            {% render_table table 'django_tables2/custom-table.html' %}
+        </div>
+    </div>
     <div class="row">
         <div class="span8 offset2 text-right">
             <p><strong>Total Scenes: {{ total }}</strong></p>
