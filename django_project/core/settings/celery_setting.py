@@ -9,6 +9,11 @@ CELERYBEAT_SCHEDULE = {
         'task': 'tasks.exchange_update',
         'schedule': crontab(minute=0, hour=0),
     },
+    'data-summary-table': {
+        'task': 'tasks.data_summary_table',
+        'schedule': crontab(minute=0, hour=0),
+        'args': ('/home/web/static/',),
+    },
 }
 
 CELERY_TIMEZONE = 'UTC'
