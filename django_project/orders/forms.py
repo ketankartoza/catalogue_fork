@@ -57,11 +57,6 @@ class OrderFormNonSearchRecords(forms.ModelForm):
         model = Order
         exclude = ('order_status', 'file_format', 'datum', 'resampling_method', 'delivery_method')
 
-    # def user_new_unicode(self):
-    #     return self.username if self.get_full_name() == "" else self.get_full_name()
-    #
-    # User.__unicode__ = user_new_unicode
-
     def __init__(self, *args, **kwargs):
       super(OrderFormNonSearchRecords, self).__init__(*args, **kwargs)
       self.fields['subsidy_type_assigned'].empty_label = None
