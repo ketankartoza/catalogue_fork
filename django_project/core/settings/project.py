@@ -64,7 +64,7 @@ GEOIP_CITY = 'GeoLiteCity.dat'
 HOST = '192.168.1.1'
 
 # used in various places including kml generator
-DOMAIN = 'catalogue.localhost'
+DOMAIN = 'catalogue.sansa.org.za'
 
 # Standard page size for pagination
 PAGE_SIZE = 20
