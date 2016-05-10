@@ -29,7 +29,7 @@ DEBUG = TEMPLATE_DEBUG = False
 
 # External site URL, used in KML data generation and elsewhere
 # No terminating slash
-EXTERNAL_SITE_URL = 'http://catalogue.localhost'
+EXTERNAL_SITE_URL = 'http://catalogue.sansa.org.za'
 
 
 # Url that holds directories of thumbnails...
@@ -64,7 +64,7 @@ GEOIP_CITY = 'GeoLiteCity.dat'
 HOST = '192.168.1.1'
 
 # used in various places including kml generator
-DOMAIN = 'catalogue.localhost'
+DOMAIN = 'catalogue.sansa.org.za'
 
 # Standard page size for pagination
 PAGE_SIZE = 20
