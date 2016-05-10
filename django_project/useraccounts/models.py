@@ -19,7 +19,7 @@ class SansaUserProfile(UserenaBaseProfile):
         'belongs to an institution that is a CSIR/SAC strategic partner'),
         default=False
     )
-    url = models.URLField(blank=True)
+    url = models.URLField('Your website url', blank=True)
     about = models.TextField(blank=True)
     address1 = models.CharField(
         'Address 1 (required)', max_length=255, null=False, blank=False
