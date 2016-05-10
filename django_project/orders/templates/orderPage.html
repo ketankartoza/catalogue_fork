@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load pipeline %}
-
+{% load staticfiles %}
 {% block extracss %}
 	{{ block.super }}
 	{% stylesheet 'orderpage' %}
@@ -66,7 +66,7 @@
   		<h4>Order options</h4>
   	</div>
   </div>
-  {% include "orderFormSearch.html" %}
+  {% include "orderFormSearch_no_button.html" %}
 
 	<div class="row">
 		<div class="span12">
@@ -122,7 +122,11 @@
 	  			{{ myStatusForm.notes }}
 	  		</div>
 	  		<div class="span4">
-	  			<button type="submit" id="statusUpdate" class="btn">Set</button>
+	  			<button type="submit" id="statusUpdate" class="btn">
+                    <span class="download-spinner" style="display: none;">
+                        <img src="{% static 'images/ellipsis.gif' %}" height="5" width="15"></span>
+                    Set
+                </button>
 	  		</div>
 	  	</form>
   		</div>
@@ -176,6 +180,17 @@
 	}
 
   	$( document ).ready(function() {
+
+        $('form#updateStatusForm').submit(function(){
+            $('.download-spinner').show();
+            $(this).find('button[type=submit]').prop('disabled', true);
+        });
+
+        $('form#order-form').submit(function(){
+            $('.download-spinner').show();
+            $(this).find('button[type=submit]').prop('disabled', true);
+        });
+
   		APP.$modal = $('#ajax-modal');
   		$('.metadata').click(function() {
 			var id = $(this).data('id');
