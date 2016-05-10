@@ -57,6 +57,14 @@ class OrderFormNonSearchRecords(forms.ModelForm):
         model = Order
         exclude = ('order_status', 'file_format', 'datum', 'resampling_method', 'delivery_method')
 
+    def __init__(self, *args, **kwargs):
+      super(OrderFormNonSearchRecords, self).__init__(*args, **kwargs)
+      self.fields['subsidy_type_assigned'].empty_label = None
+      self.fields['subsidy_type_requested'].empty_label = None
+      users = User.objects.all()
+      User._meta.ordering = ['first_name','last_name','username']
+      self.fields['user'].choices = [(user.pk, (user.username if user.get_full_name() == "" else user.get_full_name())) for user in users]
+
 
 class OrderStatusHistoryForm(forms.ModelForm):
     class Meta:
