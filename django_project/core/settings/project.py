@@ -29,7 +29,7 @@ DEBUG = TEMPLATE_DEBUG = False
 
 # External site URL, used in KML data generation and elsewhere
 # No terminating slash
-EXTERNAL_SITE_URL = 'http://catalogue.localhost'
+EXTERNAL_SITE_URL = 'http://catalogue.sansa.org.za'
 
 
 # Url that holds directories of thumbnails...
