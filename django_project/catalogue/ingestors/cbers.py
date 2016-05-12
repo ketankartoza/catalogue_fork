@@ -142,11 +142,13 @@ def get_original_product_id(filename):
     product_name = ''.join(tokens)
     return product_name
 
-def get_band_count():
-    # for each camera has 4 bands
-    # based on this information
-    # http://www.cbers.inpe.br/ingles/satellites/cameras_cbers3_4.php
-    return 4
+def get_band_count(dom):
+    band_count_data = dom.getElementsByTagName('bands')[0]
+    band_count = band_count_data.firstChild.nodeValue
+    if len(band_count)==1:
+        return 1
+    else:
+        return len(eval(band_count))
 
 def get_solar_azimuth_angle(dom):
     sun_azimuth = dom.getElementsByTagName('sunAzimuthElevation')[0]
@@ -169,36 +171,14 @@ def get_sensor_inclination():
     return 98.5
 
 def get_spatial_resolution_x(dom):
-    get_sensor_id = dom.getElementsByTagName('sensorId')[0]
-    sensor_id = get_sensor_id.firstChild.nodeValue
-    # sensor_id : MUX, P10, P5M, WFI
-    # source http://www.cbers.inpe.br/ingles/satellites/cameras_cbers3_4.php
-    if sensor_id == 'MUX':
-        return 20
-    elif sensor_id == 'P10':
-        return 5
-    elif sensor_id =='P5M':
-        return 40
-    elif sensor_id == 'WFI':
-        return 64
-    else:
-        return 0
+    spatial_resolution_data = dom.getElementsByTagName('pixelSpacing')[0]
+    spatial_resolution = spatial_resolution_data.firstChild.nodeValue
+    return spatial_resolution
 
 def get_spatial_resolution_y(dom):
-    get_sensor_id = dom.getElementsByTagName('sensorId')[0]
-    sensor_id = get_sensor_id.firstChild.nodeValue
-    # sensor_id : MUX, P10, P5M, WFI
-    # source http://www.cbers.inpe.br/ingles/satellites/cameras_cbers3_4.php
-    if sensor_id == 'MUX':
-        return 20
-    elif sensor_id == 'P10':
-        return 5
-    elif sensor_id =='P5M':
-        return 40
-    elif sensor_id == 'WFI':
-        return 64
-    else:
-        return 0
+    spatial_resolution_data = dom.getElementsByTagName('pixelSpacing')[0]
+    spatial_resolution = spatial_resolution_data.firstChild.nodeValue
+    return spatial_resolution
 
 def get_product_profile(log_message, product_id):
     """Find the product_profile for this record.
@@ -324,17 +304,18 @@ def get_projection(dom):
     return projection
 
 
-def get_quality():
+def get_quality(dom):
     """Get the quality for this record - currently hard coded to unknown.
 
     :returns: A quality object fixed to 'unknown'.
     :rtype: Quality
     """
-    quality = Quality.objects.get(name='Unknown')
+    overall_quality = dom.getElementsByTagName('overallQuality')[0]
+    quality_xml = str(overall_quality.firstChild.nodeValue)
+    quality = Quality.objects.get(name=quality_xml)
     return quality
 
 
-@transaction.commit_manually
 def ingest(
         test_only_flag=True,
         source_path=(
@@ -397,7 +378,7 @@ def ingest(
     failed_record_count = 0
     log_message('Starting directory scan...', 2)
 
-    for myFolder in glob.glob(os.path.join(source_path, '*')):
+    for myFolder in glob.glob(os.path.join(source_path, '*.XML')):
         record_count += 1
         try:
             log_message('', 2)
@@ -407,9 +388,9 @@ def ingest(
             log_message(product_folder, 2)
 
             # Find the first and only xml file in the folder
-            search_path = os.path.join(str(myFolder), '*.XML')
-            log_message(search_path, 2)
-            xml_file = glob.glob(search_path)[0]
+            #search_path = os.path.join(str(myFolder), '*.XML')
+            log_message(myFolder, 2)
+            xml_file = glob.glob(myFolder)[0]
             file = os.path.basename(xml_file)
             file_name = os.path.splitext(file)[0]
             original_product_id = get_original_product_id(file_name)
@@ -425,7 +406,7 @@ def ingest(
             projection = get_projection(dom)
 
             # Band count for GenericImageryProduct
-            band_count = get_band_count()
+            band_count = get_band_count(dom)
             row = get_scene_row(dom)
             path = get_scene_path(dom)
             solar_azimuth_angle = get_solar_azimuth_angle(dom)
@@ -442,7 +423,7 @@ def ingest(
             log_message('Spatial resolution: %s' % spatial_resolution, 2)
             radiometric_resolution = get_radiometric_resolution(dom)
             log_message('Radiometric resolution: %s' % radiometric_resolution, 2)
-            quality = get_quality()
+            quality = get_quality(dom)
             # ProductProfile for OpticalProduct
             product_profile = get_product_profile(log_message, original_product_id)
 
