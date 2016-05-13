@@ -38,7 +38,7 @@ class Command(BaseCommand):
         failed_record_count = 0
         print 'Starting directory scan...'
 
-        for myFolder in glob.glob(os.path.join(path, '*')):
+        for myFolder in glob.glob(os.path.join(path, '*.XML')):
             record_count += 1
             try:
                 # Get the folder name
@@ -46,9 +46,9 @@ class Command(BaseCommand):
                 # print product_folder
 
                 # Find the first and only xml file in the folder
-                search_path = os.path.join(str(myFolder), '*.XML')
+                #search_path = os.path.join(str(myFolder), '*.XML')
                 # print search_path
-                xml_file = glob.glob(search_path)[0]
+                xml_file = glob.glob(myFolder)[0]
                 filename = os.path.basename(xml_file)
                 print "Converting {} ....".format(filename)
                 pattern = 'GB2312'
