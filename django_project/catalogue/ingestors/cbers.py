@@ -497,6 +497,43 @@ def ingest(
                     updated_record_count += 1
                 else:
                     created_record_count += 1
+                if test_only_flag:
+                    log_message('Testing: image not saved.', 2)
+                    pass
+                else:
+                    # Store thumbnail
+                    thumbs_folder = os.path.join(
+                        settings.THUMBS_ROOT,
+                        product.thumbnailDirectory())
+                    try:
+                        os.makedirs(thumbs_folder)
+                    except OSError:
+                        # TODO: check for creation failure rather than
+                        # attempt to  recreate an existing dir
+                        pass
+
+                    jpeg_path = os.path.join(str(myFolder))
+                    #log_message(jpeg_path, 2)
+                    jpeg_path = jpeg_path.replace(".XML","-THUMB.JPG")
+
+                    if jpeg_path:
+                        print jpeg_path
+                        new_name = '%s.JPG' % product.original_product_id
+                        shutil.copyfile(
+                            jpeg_path,
+                            os.path.join(thumbs_folder, new_name))
+                        print new_name
+                        # Transform and store .wld file
+                    #     log_message('Referencing thumb', 2)
+                    #     try:
+                    #         path = product.georeferencedThumbnail()
+                    #         log_message('Georeferenced Thumb: %s' % path, 2)
+                    #     except:
+                    #         traceback.print_exc(file=sys.stdout)
+                    # elif ignore_missing_thumbs:
+                    #         log_message('IGNORING missing thumb:')
+                    else:
+                        raise Exception('Missing thumbnail in %s' %jpeg_path)
                 if new_record_flag:
                     log_message('Product %s imported.' % record_count, 2)
                     pass
