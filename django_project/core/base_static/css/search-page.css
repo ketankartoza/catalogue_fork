@@ -777,3 +777,12 @@
 #close-metadata:hover{
     opacity: 0.7;
 }
+
+#id_panchromatic_imagery, #id_free_imagery{
+    width: 20px !important;
+    margin-top: 15px;
+}
+
+#id_sensor_inclination_angle_start, #id_sensor_inclination_angle_end {
+    height: 20px;
+}
