@@ -3,13 +3,35 @@ This directory needs the GeoIP lite dataset in it:
 wget http://www.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
 gunzip GeoLiteCity.dat.gz
 
-wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP
-.dat.gz
+wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
 gunzip GeoIP.dat.gz
 
-You also need the geoip c library:
 
-On linux : sudo apt-get install geoip
+On Ubuntu:
+- Now download the GeoIP C library.
+
+wget geolite.maxmind.com/download/geoip/api/c/GeoIP.tar.gz
+
+- Extract the archived GeoIP C library that you just downloaded.
+
+gunzip < GeoIP.tar.gz | tar xvf -
+
+- Now move to the new directory that was created when you extracted the archived GeoIP C library.
+
+cd GeoIP-*
+
+- Now, configure and install the GeoIP C library by issuing the following commands.
+
+./configure
+
+- If you do not get an error, jut make and make install
+
+make
+
+make check
+
+sudo make install
+
 
 On OSX:
 
