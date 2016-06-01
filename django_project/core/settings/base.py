@@ -9,10 +9,10 @@ ABS_PATH = lambda *x: join(abspath(PROJECT_ROOT), *x)
 SERVER_EMAIL = 'error@catalogue.sansa.org.za'
 
 ADMINS = (
-    ('Tim Sutton', 'tim@linfiniti.com'),
-    ('George Irwin', 'george@linfiniti.com'),
-    ('Drazen Odobasic', 'dodobasic@gmail.com'),
-    ('Linda Kleyn', 'lkleyn@sansa.org.za'),
+    ('Tim Sutton', 'tim@kartoza.com'),
+    ('Gavin Fleming', 'gavin@kartoza.com'),
+    ('Rischan Mafrur', 'rischan@kartoza.com'),
+    ('Maite Machipi', 'mmachipi@sansa.org.za'),
 )
 
 MANAGERS = ADMINS
