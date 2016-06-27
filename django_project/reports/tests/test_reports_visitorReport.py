@@ -55,9 +55,7 @@ class ReportsViews_visitorReport_Tests(TestCase):
         myClient = Client()
         myResp = myClient.get(
             reverse('visitorReport', kwargs={}))
-        self.assertEqual(myResp.status_code, 200)
-        self.assertEqual(
-            myResp.context['app_path'], u'/visitorreport/')
+        self.assertEqual(myResp.status_code, 302)
 
     def test_myReports_userlogin(self):
         """
@@ -72,9 +70,7 @@ class ReportsViews_visitorReport_Tests(TestCase):
         myClient.login(username='pompies', password='password')
         myResp = myClient.get(
             reverse('visitorReport', kwargs={}))
-        self.assertEqual(myResp.status_code, 200)
-        self.assertEqual(
-            myResp.context['app_path'], u'/visitorreport/')
+        self.assertEqual(myResp.status_code, 302)
 
     def test_myReports_stafflogin(self):
         """
@@ -103,7 +99,8 @@ class ReportsViews_visitorReport_Tests(TestCase):
         myExpTemplates = [
             'visitorReport.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
-            u'useraccounts/menu_content.html'
+            u'useraccounts/menu_content.html',
+            u'django_tables2/custom-table.html'
         ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]

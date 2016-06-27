@@ -1,9 +1,14 @@
+# coding=utf-8
+"""
+core.settings.contrib
+"""
+import os
 from .base import *
 
 # Extra installed apps
 INSTALLED_APPS += (
     'offline_messages',
-    'raven.contrib.django',
+    'raven.contrib.django.raven_compat',
     'shapes',
     'django_extensions',
     'userena',
@@ -15,18 +20,18 @@ INSTALLED_APPS += (
     'backbone_tastypie',
     'pipeline',
     'exchange',
-    'django_tables2'
+    'django_tables2',
+    'celery'
 )
 
 # Added by George for webodt
-#WEBODT_CONVERTER = 'webodt.converters.abiword.AbiwordODFConverter'
-WEBODT_CONVERTER = 'webodt.converters.openoffice.OpenOfficeODFConverter'
+WEBODT_CONVERTER = 'webodt.converters.abiword.AbiwordODFConverter'
+WEBODT_ABIWORD_COMMAND = ['/usr/bin/abiword', '--plugin', 'AbiCommand']
 WEBODT_TEMPLATE_PATH = ABS_PATH('reports', 'report-templates')
 WEBODT_ODF_TEMPLATE_PREPROCESSORS = [
     'webodt.preprocessors.xmlfor_preprocessor',
     'webodt.preprocessors.unescape_templatetags_preprocessor',
 ]
-WEBODT_OPENOFFICE_SERVER = ('127.0.0.1', 2002)
 WEBODT_DEFAULT_FORMAT = 'pdf'
 
 # Added by Tim for registration app
@@ -63,11 +68,16 @@ USERENA_USE_MESSAGES = False
 # use underscore template function
 PIPELINE_TEMPLATE_FUNC = '_.template'
 
+# add pipelinefinders to statistic_finders
+STATICFILES_FINDERS += (
+    'pipeline.finders.PipelineFinder',
+)
+
 # enable cached storage - requires uglify.js (node.js)
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 # we use some of the libraries which use global namespace (OL, Proj4JS, ...)
-PIPELINE_DISABLE_WRAPPER = True
+DISABLE_WRAPPER = True
 
 # django-exchange openexchangerates API Key
 OPENEXCHANGERATES_API_KEY = 'db63cb9bdc5f4199a9302fea8b173f41'
@@ -82,3 +92,12 @@ ACCEPTABLE_COLUMNS = [
 ACCEPTABLE_SORTS = [
     'ASC', 'DESC'
 ]
+
+MESSAGE_STORAGE = 'offline_messages.storage.OfflineStorageEngine'
+
+
+BROKER_URL = 'amqp://guest:guest@%s:5672//' % os.environ['RABBITMQ_HOST']
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'

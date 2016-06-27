@@ -48,7 +48,7 @@ from django.contrib.gis.gdal import (
     SpatialReference,
     CoordTransform)
 
-from django.utils import simplejson
+import json as simplejson
 from exchange.models import Currency
 from exchange.conversion import convert_value
 # Models and forms for our app
@@ -519,12 +519,12 @@ def updateOrderHistory(theRequest):
         myOrderStatusHistory.save()
     except:
         resp = simplejson.dumps({"saved": 'failed'})
-        return HttpResponse(resp, mimetype="application/json")
+        return HttpResponse(resp, content_type="application/json")
     myOrder.order_status = myNewStatus
     myOrder.save()
     notifySalesStaff(myOrder.user, myOrderId)
     resp = simplejson.dumps({"saved": 'ok'})
-    return HttpResponse(resp, mimetype="application/json")
+    return HttpResponse(resp, content_type="application/json")
 
 
 
@@ -626,6 +626,19 @@ def ordersSummary(theRequest):
         myOrderInstrumentType=myOrderInstrumentType,
         myOrderSatellite=myOrderSatellite)
 
+@login_required
+#renderWithContext is explained in renderWith.py
+@renderWithContext('order-summary.html')
+def orderSummaryMail(theRequest):
+    myOrder = get_object_or_404(Order, id=643)
+    myRecords = SearchRecord.objects.filter(order=myOrder).select_related()
+    myHistory = OrderStatusHistory.objects.filter(order=myOrder)
+    return ({
+        'myOrder': myOrder,
+        'myRecords': myRecords,
+        'myHistory': myHistory,
+        'domain': settings.DOMAIN
+    })
 
 @staff_member_required
 def addAdhocOrder(theRequest):
@@ -679,7 +692,7 @@ def convertPrice(theRequest):
     price = Decimal(theRequest.POST.get('price'))
     rand_price = "%0.2f" % (convert_value(price, currency, 'ZAR'),)
     resp = simplejson.dumps({"rand_price": rand_price})
-    return HttpResponse(resp, mimetype="application/json")
+    return HttpResponse(resp, content_type="application/json")
 
 
 @login_required

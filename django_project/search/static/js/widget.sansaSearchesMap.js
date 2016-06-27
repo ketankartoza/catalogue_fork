@@ -26,11 +26,11 @@
 
       var myLayersList = [
             WEB_LAYERS.searches,
-            WEB_LAYERS.BlueMarble,
-            WEB_LAYERS.Heatmap_total,
-            WEB_LAYERS.Heatmap_last3month,
-            WEB_LAYERS.Heatmap_lastmonth,
-            WEB_LAYERS.Heatmap_lastweek,
+            // WEB_LAYERS.BlueMarble,
+            // WEB_LAYERS.Heatmap_total,
+            // WEB_LAYERS.Heatmap_last3month,
+            // WEB_LAYERS.Heatmap_lastmonth,
+            // WEB_LAYERS.Heatmap_lastweek,
             layerMapnik
         ];
         this.map.addLayers(myLayersList);
@@ -85,13 +85,13 @@
 
     var myHistoryControl = new OpenLayers.Control.NavigationHistory({
       nextOptions: {
-        title : "Next view: quickly jump to the next map view, works only with prevoius view.",
+        title : "Next view: quickly jump to the next map view, works only with previous view.",
         displayClass:'btn btn-large btn-info right icon-chevron-right olControlNavigationHistoryNext',
         div: OpenLayers.Util.getElement('map-navigation'),
         eventListeners: modifyEventListeners
       },
       previousOptions: {
-        title : "Previous view: quickly jump to the prevoius map view.",
+        title : "Previous view: quickly jump to the previous map view.",
         displayClass:'btn btn-large btn-info right icon-chevron-left olControlNavigationHistoryPrevious',
         div: OpenLayers.Util.getElement('map-navigation'),
         eventListeners: modifyEventListeners
@@ -101,6 +101,9 @@
     this.mNavigationPanel.addControls(
       [myZoomInControl,myZoomOutControl, myNavigationControl, myHistoryControl.previous, myHistoryControl.next]
     );
+
+    // Make the pan navigation button default selected
+    this.mNavigationPanel.activateControl(myNavigationControl);
 
     this.refreshLayerSwitcher();
 

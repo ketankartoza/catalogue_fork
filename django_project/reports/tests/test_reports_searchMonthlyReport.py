@@ -57,9 +57,7 @@ class ReportsViews_searchMonthlyReport_Tests(TestCase):
         myResp = myClient.get(
             reverse('searchMonthlyReport',
                     kwargs={'year': '2010', 'month': '7'}))
-        self.assertEqual(myResp.status_code, 200)
-        self.assertEqual(
-            myResp.context['app_path'], u'/searchmonthlyreport/2010/7/')
+        self.assertEqual(myResp.status_code, 302)
 
     def test_myReports_userlogin(self):
         """
@@ -75,9 +73,7 @@ class ReportsViews_searchMonthlyReport_Tests(TestCase):
         myResp = myClient.get(
             reverse('searchMonthlyReport',
                     kwargs={'year': '2010', 'month': '7'}))
-        self.assertEqual(myResp.status_code, 200)
-        self.assertEqual(
-            myResp.context['app_path'], u'/searchmonthlyreport/2010/7/')
+        self.assertEqual(myResp.status_code, 302)
 
     def test_myReports_stafflogin(self):
         """
@@ -121,7 +117,8 @@ class ReportsViews_searchMonthlyReport_Tests(TestCase):
         myExpTemplates = [
             'searchMonthlyReport.html', u'base.html',
             u'pipeline/css.html', u'pipeline/js.html', u'menu.html',
-            u'useraccounts/menu_content.html'
+            u'useraccounts/menu_content.html',
+            u'django_tables2/custom-table.html'
         ]
 
         myUsedTemplates = [tmpl.name for tmpl in myResp.templates]

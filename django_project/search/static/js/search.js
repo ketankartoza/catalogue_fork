@@ -4,6 +4,7 @@ var ResultPanelState = false;
 var ResultDownloadOptionsState = false;
 var CartDownloadOptionsState = false;
 var LayerSwitcherState = false;
+var ButtonSubPanelState = false;
 
 function toggleSearchPanel() {
     if (SearchPanelState) {
@@ -89,6 +90,20 @@ function showResultDownloadOptions() {
 
 function hideCartDownloadOptions() {
     $('#cart-panel-btns').fadeOut('fast');
+}
+
+function showButtonSubPanel() {
+    $('#cart-show-map').fadeIn('fast');
+    $('#place_order').fadeIn('fast');
+    $('#cart-panel-download-button').fadeIn('fast');
+    ButtonSubPanelState = true;
+}
+
+function hideButtonSubPanel() {
+    $('#cart-show-map').hide();
+    $('#place_order').hide();
+    $('#cart-panel-download-button').hide();
+    ButtonSubPanelState = false;
 }
 
 function showCartDownloadOptions() {
@@ -266,7 +281,8 @@ function resetSearchForm() {
         $(this).val('');
     });
     // set cloud back to 100
-    $('#id_cloud_mean').val(100);
+    $('#id_cloud_min').val(0);
+    $('#id_cloud_max').val(100);
     // clear checkboxes
     $('input:checkbox').each(function() {
         $(this).attr('checked', false);
@@ -363,20 +379,45 @@ APP.handlePathorRow = function(e) {
     }
 }
 
-APP.handleCloudMean = function(e) {
+APP.handleCloudMax = function(e) {
     var error_msg = 'Enter a valid value, number between 0 and 100.';
     APP.removeErrorNotification(e);
-    if (e.target.value != '') {
-        if (!APP.isNumber(e.target.value)) {
-            APP.addErrorNotifiction(e,error_msg);
-            return;
-        }
-        if (e.target.value < 0 || e.target.value > 100) {
-            APP.addErrorNotifiction(e,error_msg);
-            return;
-        }
-
+    if(!isValidCloud(e.target.value) || !isValidCloud($('#id_cloud_min').val())) {
+        APP.addErrorNotifiction(e,error_msg);
+        return;
     }
+    if($('#id_cloud_min').val() - e.target.value > 0) {
+        error_msg = 'Range is incorrect';
+        APP.addErrorNotifiction(e,error_msg);
+    }
+}
+
+APP.handleCloudMin = function(e) {
+    var error_msg = 'Enter a valid value, number between 0 and 100.';
+    APP.removeErrorNotification(e);
+
+    if(!isValidCloud(e.target.value) || !isValidCloud($('#id_cloud_max').val())) {
+        APP.addErrorNotifiction(e,error_msg);
+        return;
+    }
+
+    if($('#id_cloud_max').val() - e.target.value < 0) {
+        error_msg = 'Range is incorrect';
+        APP.addErrorNotifiction(e,error_msg);
+    }
+}
+
+function isValidCloud(cloud) {
+    if (cloud != '') {
+        if (!APP.isNumber(cloud)) {
+            return false;
+        }
+        if (cloud < 0 || cloud > 100) {
+            return false;
+        }
+        return true;
+    }
+    return false;
 }
 
 APP.handleAngle = function(e) {
@@ -417,7 +458,8 @@ $(document).on("sansaDateRangeChanged", APP.checkDateRange);
 $('#id_aoi_geometry').on("keyup", APP.handleAoiGeometry);
 $('#id_k_orbit_path').on("keyup", APP.handlePathorRow);
 $('#id_j_frame_row').on("keyup", APP.handlePathorRow);
-$('#id_cloud_mean').on("keyup", APP.handleCloudMean);
+$('#id_cloud_max').on("keyup", APP.handleCloudMax);
+$('#id_cloud_min').on("keyup", APP.handleCloudMin);
 $('#id_sensor_inclination_angle_start').on("keyup", APP.handleAngle);
 $('#id_sensor_inclination_angle_end').on("keyup", APP.handleAngle);
 $('#id_geometry_file').on("change", function() {
@@ -705,6 +747,7 @@ APP.ResultGridViewItem = Backbone.View.extend({
                 $("#result_item_"+ this.model.get('original_product_id')).children('.cart-remove-button').removeClass('hide');
                 $("#result_item_"+ this.model.get('original_product_id')).children('.cart-button').addClass('hide');
             }
+            showButtonSubPanel();
         } else {
             alert('You need to log in first!');
         }
@@ -712,9 +755,9 @@ APP.ResultGridViewItem = Backbone.View.extend({
     },
 
     removeFromCart: function(event) {
+        $APP.trigger('removedItemFromCart', {'original_product_id': this.model.get('original_product_id')});
         $APP.trigger('deleteCartItem', {'id': this.model.get('original_product_id')});
         this._removeFromCart(this.model.get('original_product_id'));
-        $APP.trigger('removedItemFromCart', {'id': this.model.get('original_product_id')});
         event.stopPropagation();
     },
 
@@ -794,9 +837,15 @@ APP.CartGridView = Backbone.View.extend({
 
     deleteItem: function(event, data) {
         var exist = APP.Cart.find(function(item) {
-            return item.get("product").original_product_id == data.id;
+            return item.get('product').original_product_id == data.id;
         });
-        exist.destroy({wait: true});
+        if (exist) {
+            exist.destroy({wait: true});
+        }
+        if (APP.Cart.length-1==0) {
+            // If cart is empty after item has been removed then hide bottom panel button
+            hideButtonSubPanel();
+        }
     },
 
     render: function() {
@@ -810,8 +859,12 @@ APP.CartGridView = Backbone.View.extend({
         $APP.trigger('SearchCartLayer_addFeatures', {
                 'data': this.collection.models
             });
+        if(APP.Cart.length==0) {
+            hideButtonSubPanel();
+        }
         return this;
     },
+
     renderItem: function(item) {
         var myItem = new APP.CartGridViewItem({
             model:item,
@@ -836,24 +889,24 @@ APP.CartGridViewItem = Backbone.View.extend({
     },
     delete: function() {
         $APP.trigger('removedItemFromCartUpdateResults', {'original_product_id': this.model.get('product').original_product_id});
-        this.model.destroy({wait: true});
+        $APP.trigger('deleteCartItem', {'id': this.model.get('product').original_product_id});
     },
     render: function() {
        $(this.el).html(_.template(templateCart, {model:this.model}));
         return this;
-    },
+    }
 });
 
 
 var templateCart = [
         '<div class="cart-item">',
-          '<img src="/thumbnail/<%= model.get("product").original_product_id %>/mini/" />',
+          '<img src="/thumbnail/<%= model.get("product").id %>/mini/" />',
           '<div class="cart-item-info">',
             '<p><%= model.get("product").productName %></p>',
           '</div>',
-          //'<div class="cart-item-info-date">',
-          //  '<p><%= model.get("product").product_date %></p>',
-          //'</div>',
+          '<div class="cart-item-info-date">',
+            '<p><%= model.get("product").product_date %></p>',
+          '</div>',
           '<div class="cart-item-buttons">',
               '<span class="button metadata-button btn btn-default" data-toggle="tooltip" data-title="View Metadata"><i class="icon-list-alt"></i></span>',
               '<span class="button delete-button btn btn-danger" data-toggle="tooltip" data-title="Remove From Cart"><i class="icon-remove"></i></span>',

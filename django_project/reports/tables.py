@@ -111,11 +111,16 @@ class SatelliteInstrumentTable(tables.Table):
         verbose_name='Sensor'
     )
     abbreviation = tables.Column(accessor='satellite.abbreviation')
+
     count = tables.Column(
         accessor='id__count',
         verbose_name='Scene Count'
     )
-    info = tables.Column(empty_values=())
+
+    start_date = tables.Column(accessor='min_year', orderable=False)
+    end_date = tables.Column(accessor='max_year', orderable=False)
+
+    info = tables.Column(empty_values=(), orderable=False)
 
     # noinspection PyMethodMayBeStatic
     def render_info(self, record):
@@ -127,10 +132,49 @@ class SatelliteInstrumentTable(tables.Table):
         return mark_safe(
             '<a href="%s"><i class="icon-question-sign"></i></a>' % reverse(
                 'fact-sheet',
-                kwargs={'sat_abbr': record.satellite.operator_abbreviation}
+                kwargs={'sat_abbr': record.satellite.operator_abbreviation,
+                        'instrument_type': record.instrument_type.operator_abbreviation}
             )
         )
 
+
+class SatelliteInstrumentTableJSON(tables.Table):
+    """
+    Renders a SatelliteInstrumentTable from JSON
+    """
+    sensor = tables.Column(
+        accessor='satellite_name',
+        verbose_name='Satellite'
+    )
+    instrument_type = tables.Column(
+        accessor='instrument_type',
+        verbose_name='Sensor'
+    )
+    abbreviation = tables.Column(accessor='satellite_abbr')
+    count = tables.Column(
+        accessor='id__count',
+        verbose_name='Scene Count'
+    )
+
+    start_date = tables.Column(accessor='min_year', orderable=False)
+    end_date = tables.Column(accessor='max_year', orderable=False)
+
+    info = tables.Column(empty_values=(), orderable=False)
+
+    # noinspection PyMethodMayBeStatic
+    def render_info(self, record):
+        """
+        Render the row's Info column with a link to the Sensor's Summary Fact
+            Sheet
+        :param record: The record being rendered in this row
+        """
+        return mark_safe(
+            '<a href="%s"><i class="icon-question-sign"></i></a>' % reverse(
+                'fact-sheet',
+                kwargs={'sat_abbr': record['satellite_operator_abbr'],
+                        'instrument_type': record['instrument_operator_abbr']}
+            )
+        )
 
 
 class VisitorTable(tables.Table):

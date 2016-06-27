@@ -18,6 +18,8 @@ __version__ = '0.1'
 __date__ = '17/08/2012'
 __copyright__ = 'South African National Space Agency'
 
+import os
+import json
 # for error logging
 import traceback
 # for date handling
@@ -26,6 +28,7 @@ import datetime
 import logging
 logger = logging.getLogger(__name__)
 
+from django.core.urlresolvers import reverse
 # Django helpers for forming html pages
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseNotFound
@@ -38,7 +41,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 # from django.template import RequestContext
 # from django.forms.util import ErrorList
 #for sorted, useful when rendering templates
-from django.utils.datastructures import SortedDict
+from collections import OrderedDict
+# from django.utils.datastructures import SortedDict
 
 # for aggregate queries
 from django.db.models import Count  # for aggregate queries
@@ -56,14 +60,17 @@ from search.models import (
     SearchRecord,
 )
 
-from dictionaries.models import SatelliteInstrumentGroup
+from dictionaries.models import SatelliteInstrumentGroup, Band, SpectralMode, InstrumentTypeProcessingLevel, ProcessingLevel
 from reports.tables import (
     table_sort_settings,
     CountryTable,
-    SatelliteInstrumentTable, VisitorTable)
+    SatelliteInstrumentTable,
+    SatelliteInstrumentTableJSON,
+    VisitorTable)
 from django.conf import settings
 from django_tables2 import RequestConfig
 from search.tables import SearchesTable
+from core.settings.base import STATIC_ROOT
 
 
 # in case you need to slice ResultSet (paginate) for display
@@ -175,13 +182,28 @@ def visitor_list(request):
     records = Visit.objects.all().order_by('-visit_date')
     if 'pdf' in request.GET:
         table = None
-        page_size = records.count()
-        paginator = Paginator(records, page_size)
+        page = request.GET.get('page')
+        get_all_records = False
+
         # Make sure page request is an int. If not, deliver first page.
         try:
-            page = int(request.GET.get('page', '1'))
+            page = int(page)
         except ValueError:
+            if page == 'all':
+                get_all_records = True
             page = 1
+
+        # Check if records sorted
+        sort_method = request.GET.get('sort')
+
+        if sort_method is not None:
+            records = records.extra(order_by=[sort_method])
+
+        if get_all_records:
+            paginator = Paginator(records, records.count())
+        else:
+            paginator = Paginator(records, settings.PAGE_SIZE)
+
         # If page request (9999) is out of range, deliver last page of results.
         try:
             records = paginator.page(page)
@@ -240,7 +262,7 @@ def recent_searches(request):
     table = SearchesTable(search_history_objs)
     table.orderable = False
     return ({
-        'mySearches': search_history,
+        'mySearches': search_history_objs,
         'myCurrentMonth': datetime.date.today(),
         'table': table
     })
@@ -337,20 +359,44 @@ def data_summary_table(request):
     Summary of available records
     :param request: HttpRequest dict
     """
-    result_set = SatelliteInstrumentGroup.objects.annotate(
-        id__count=Count(
-            'satelliteinstrument__opticalproductprofile__opticalproduct'))\
-        .order_by('satellite__name').filter(id__count__gt=0)
     total = 0
-    for result in result_set:
-        total += result.id__count
-    table = SatelliteInstrumentTable(result_set)
-    RequestConfig(request, paginate=False).configure(table)
-    return {
+
+    try:
+        # Open data summary json file, change this path
+        json_file = open('/home/web/static/output.json')
+        json_data = json.load(json_file)
+        json_file.close()
+    except IOError:
+        print 'File not found'
+        json_data = []
+
+    for result in json_data:
+        total += result['id__count']
+    if 'pdf' in request.GET:
+        # Django's pagination is only required for the PDF view as
+        # django-tables2 handles pagination for the table
+        table = None
+        page_size = len(json_data)
+        try:
+            page = int(request.GET.get('page', '1'))
+        except ValueError:
+            page = 1
+        paginator = Paginator(json_data, page_size)
+        try:
+            records = paginator.page(page)
+        except (EmptyPage, InvalidPage):
+            records = paginator.page(paginator.num_pages)
+    else:
+        table = SatelliteInstrumentTableJSON(json_data)
+        RequestConfig(request, paginate={
+            'per_page': settings.PAGE_SIZE
+        }).configure(table)
+    return ({
+        'myUrl': reverse('dataSummaryTable'),
         'table': table,
         'total': total,
-        'myResultSet': result_set
-    }
+        'myResultSet': json_data
+    })
 
 
 @staff_member_required
@@ -386,7 +432,7 @@ def sensor_summary_table(request, sensor_id):
         .filter(product__genericimageryproduct__genericsensorproduct__opticalproduct__product_profile__satellite_instrument__satellite_instrument_group__exact=sensor)
         .count())
 
-    results = SortedDict()
+    results = OrderedDict()
     results['Searches for this sensor'] = search_for_sensor_count
     results['Searches for all sensors'] = search_count
     results['Total ordered products for this sensor'] = \
@@ -440,7 +486,7 @@ def dictionary_report(request):
 
 
 @renderWithContext('sensor-fact-sheet.html')
-def sensor_fact_sheet(request, sat_abbr):
+def sensor_fact_sheet(request, sat_abbr, instrument_type):
     """
     The view to render a Sensor's fact sheet
 
@@ -450,12 +496,22 @@ def sensor_fact_sheet(request, sat_abbr):
     """
     try:
         sat_group = SatelliteInstrumentGroup.objects.get(
-            satellite__operator_abbreviation=sat_abbr
+            satellite__operator_abbreviation=sat_abbr,
+                instrument_type__operator_abbreviation=instrument_type
         )
     except SatelliteInstrumentGroup.DoesNotExist:
         return HttpResponseNotFound(
             'Sorry! No fact sheet matches the requested sensor.'
         )
+    bands = Band.objects.filter(
+        instrument_type__operator_abbreviation=instrument_type
+    ).order_by('band_number')
+
+    processing_levels = ProcessingLevel.objects.all()
+
     return ({
+        'bands' : bands,
+        'processing_levels': processing_levels,
+        'dataSummaryTable' : reverse('dataSummaryTable'),
         'sat_group': sat_group
     })

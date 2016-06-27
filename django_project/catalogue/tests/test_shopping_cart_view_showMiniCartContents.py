@@ -59,7 +59,7 @@ class ShoppingCart_showMiniCartContents_Tests(TestCase):
         self.assertEqual(myResp.status_code, 302)
         self.assertEqual(
             myResp['Location'],
-            'http://testserver/accounts/signin/?next=/showminicartcontents/')
+            '/accounts/signin/?next=/showminicartcontents/')
 
     def test_showMiniCartContents_login_staff(self):
         """
@@ -92,12 +92,6 @@ class ShoppingCart_showMiniCartContents_Tests(TestCase):
 
         # check number ot returned records
         self.assertEqual(len(myResp.context['myRecords']), 1)
-
-        # check used templates
-        myExpTemplates = [
-            'cartContents.html', u'recordHeader.html', u'record.html']
-        myUsedTemplates = [tmpl.name for tmpl in myResp.templates]
-        self.assertEqual(myUsedTemplates, myExpTemplates)
 
         self.assertEqual(myResp.context['myShowSensorFlag'], False)
         self.assertEqual(myResp.context['myShowIdFlag'], False)

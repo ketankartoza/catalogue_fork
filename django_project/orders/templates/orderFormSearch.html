@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <form enctype="multipart/form-data" action="" method="post" accept-charset="utf-8" class="form-horizontal" id="order-form">
       	{% csrf_token %}
       	<div class="row">
@@ -197,7 +198,11 @@
 		</div>
 		<div class="row">
 			<div class="span2 offset10" style="padding-top: 20px;">
-				<button type="submit" class="btn">Order now</button>
+				<button type="submit" class="btn">
+                    <span class="download-spinner" style="display: none;">
+                        <img src="{% static 'images/ellipsis.gif' %}" height="5" width="15"></span>
+                    Order now
+                </button>
 			</div>
 		</div>
   </form>

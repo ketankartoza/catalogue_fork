@@ -19,6 +19,7 @@ __copyright__ = 'South African National Space Agency'
 
 import logging
 logger = logging.getLogger(__name__)
+from django.contrib.auth.models import User
 
 from django import forms
 
@@ -32,6 +33,7 @@ from .models import (
 
 class OrderStatusForm(forms.ModelForm):
     class Meta:
+        fields = '__all__'
         model = OrderStatus
 
 
@@ -45,12 +47,23 @@ class OrderForm(forms.ModelForm):
       self.fields['market_sector'].empty_label = "--- Please select ---"
       # following line needed to refresh widget copy of choice list
       self.fields['market_sector'].widget.choices = self.fields['market_sector'].choices
+      self.fields['subsidy_type_assigned'].empty_label = None
+      self.fields['subsidy_type_requested'].empty_label = None
+      self.fields['user'].queryset = User.objects.order_by('username')
 
 
 class OrderFormNonSearchRecords(forms.ModelForm):
     class Meta:
         model = Order
         exclude = ('order_status', 'file_format', 'datum', 'resampling_method', 'delivery_method')
+
+    def __init__(self, *args, **kwargs):
+      super(OrderFormNonSearchRecords, self).__init__(*args, **kwargs)
+      self.fields['subsidy_type_assigned'].empty_label = None
+      self.fields['subsidy_type_requested'].empty_label = None
+      users = User.objects.all()
+      User._meta.ordering = ['first_name','last_name','username']
+      self.fields['user'].choices = [(user.pk, (user.username if user.get_full_name() == "" else user.get_full_name())) for user in users]
 
 
 class OrderStatusHistoryForm(forms.ModelForm):

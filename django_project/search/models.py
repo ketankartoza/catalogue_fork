@@ -34,6 +34,7 @@ from dictionaries.models import (
     SpectralModeProcessingCosts,
     InstrumentTypeProcessingLevel
 )
+from exchange.models import Currency
 
 ###############################################################################
 
@@ -194,7 +195,7 @@ class SearchRecord(models.Model):
                 self.product_ready = False
         # if order is null and searchrecord is updated, make snapshot at the
         # time of placing order
-        if (self.pk and self._cached_data.get('order_id') is None and
+        if (self.pk is None and
                 self.order_id is not None):
             # snapshot data and suppress save (we are in a save method)
             self._snapshot_cost_and_currency(save=False)
@@ -221,30 +222,37 @@ class SearchRecord(models.Model):
 
         This method is invoked by a post_save signal on Order model
         """
-        # identify InstrumentTypeProcessingLevel
-        insTypeProcLevel = InstrumentTypeProcessingLevel.objects.filter(
-            processing_level=self.processing_level,
-            instrument_type=(
-                self.product.getConcreteInstance().product_profile
-                .satellite_instrument.satellite_instrument_group
-                .instrument_type
+        try:
+            # identify InstrumentTypeProcessingLevel
+            insTypeProcLevel = InstrumentTypeProcessingLevel.objects.filter(
+                processing_level=self.processing_level,
+                instrument_type=(
+                    self.product.getConcreteInstance().product_profile
+                    .satellite_instrument.satellite_instrument_group
+                    .instrument_type
+                )
+            ).get()
+            # retrieve the processing mode costs
+            mode = self.product.getConcreteInstance().product_profile.spectral_mode
+            spectralModeProcCosts = SpectralModeProcessingCosts.objects.filter(
+                spectral_mode=(
+                    self.product.getConcreteInstance().product_profile
+                    .spectral_mode
+                ),
+                instrument_type_processing_level=insTypeProcLevel
+            ).get()
+            self.currency = spectralModeProcCosts.get_currency()
+            self.cost_per_scene = spectralModeProcCosts.cost_per_scene
+            self.rand_cost_per_scene = convert_value(
+                spectralModeProcCosts.cost_per_scene,
+                self.currency.code, 'ZAR'
             )
-        ).get()
-        # retrieve the processing mode costs
-        spectralModeProcCosts = SpectralModeProcessingCosts.objects.filter(
-            spectral_mode=(
-                self.product.getConcreteInstance().product_profile
-                .spectral_mode
-            ),
-            instrument_type_processing_level=insTypeProcLevel
-        ).get()
+        except ObjectDoesNotExist:
+            self.currency = Currency.objects.get(code='ZAR')
+            self.cost_per_scene = 0
+            self.rand_cost_per_scene = 0
+
         # snapshot current values
-        self.cost_per_scene = spectralModeProcCosts.cost_per_scene
-        self.currency = spectralModeProcCosts.get_currency()
-        self.rand_cost_per_scene = convert_value(
-            spectralModeProcCosts.cost_per_scene,
-            self.currency.code, 'ZAR'
-        )
 
         # invoke model save method - default behaviour
         if save is True:
@@ -269,7 +277,7 @@ class BaseSearch(models.Model):
 
     ip_position = models.PointField(srid=4326, null=True, blank=True)
     search_date = models.DateTimeField(
-        'Search Date', auto_now=True, auto_now_add=True,
+        'Search Date', auto_now_add=True,
         help_text='When the search was made - not shown to users')
     # e.g. 16fd2706-8baf-433b-82eb-8c7fada847da
     guid = models.CharField(max_length=40, unique=True)
@@ -435,9 +443,13 @@ class Search(BaseSearch):
             'If you want to limit searches to optical products with a certain '
             'cloud cover, enable this.')
     )
-    cloud_mean = models.IntegerField(
+    cloud_max = models.IntegerField(
         null=True, blank=True, max_length=3,
         verbose_name="Max Clouds"
+    )
+    cloud_min = models.IntegerField(
+        null=True, blank=True, max_length=3,
+        verbose_name="Min Clouds"
     )
     license_type = models.ManyToManyField(
         'dictionaries.License', blank=True, null=True,
@@ -570,7 +582,7 @@ class Clip(models.Model):
     guid = models.CharField(max_length=40)
     owner = models.ForeignKey('auth.User')
     date = models.DateTimeField(
-        verbose_name='Date', auto_now=True, auto_now_add=True,
+        verbose_name='Date', auto_now_add=True,
         help_text='Not shown to users')
     ## provisory hardcoded choices for clipped image source.
     image = models.CharField(

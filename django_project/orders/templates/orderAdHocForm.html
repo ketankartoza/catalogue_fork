@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% load compressed %}
+{% load pipeline %}
 
 {% block extracss %}
 	{{ block.super }}
-	{% compressed_css 'orderpage' %}
+	{% stylesheet 'orderpage' %}
 {% endblock %}
 
 {% block content%}
@@ -30,12 +30,14 @@
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="{{ myOrderForm.subsidy_type_assigned.auto_id }}">{{ myOrderForm.subsidy_type_assigned.label }}</label>
-				<div class="controls">
+                <div class="controls">
 					{{ myOrderForm.subsidy_type_assigned }}
 				</div>
 			</div>
 			<div class="control-group" id="user_div">
-				<label class="control-label" for="{{ myOrderForm.user.auto_id }}">{{ myOrderForm.user.label }}</label>
+				<label class="control-label" for="{{ myOrderForm.user.auto_id }}">Choose the user who made this request
+                <br /><span class="staffonly">Staff only
+					</span></label>
 				<div class="controls">
 					{{ myOrderForm.user }}
 				</div>
@@ -66,7 +68,7 @@
 
 {% block extrajs %}
   {{ block.super }}
-  {% compressed_js 'orderpage' %}
+  {% javascript 'orderpage' %}
   <script>
   	{% autoescape  off %}
   		var currencies = $.parseJSON('{{ myCurrency }}');

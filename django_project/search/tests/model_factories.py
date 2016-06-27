@@ -8,7 +8,8 @@ class SearchF(factory.django.DjangoModelFactory):
     """
     Search model factory
     """
-    FACTORY_FOR = Search
+    class Meta:
+        model = Search
 
     user = factory.SubFactory('core.model_factories.UserF')
     geometry = (
@@ -23,7 +24,7 @@ class SearchF(factory.django.DjangoModelFactory):
     k_orbit_path = None
     j_frame_row = None
     use_cloud_cover = False
-    cloud_mean = 5
+    cloud_max = 5
     band_count = None
     spatial_resolution = None
     sensor_inclination_angle_start = None
@@ -100,7 +101,8 @@ class SearchDateRangeF(factory.django.DjangoModelFactory):
     """
     SearchDateRange model factory
     """
-    FACTORY_FOR = SearchDateRange
+    class Meta:
+        model = SearchDateRange
 
     search = factory.SubFactory(SearchF)
     start_date = date(2010, 07, 15)
@@ -111,7 +113,8 @@ class ClipF(factory.django.DjangoModelFactory):
     """
     Clip model factory
     """
-    FACTORY_FOR = Clip
+    class Meta:
+        model = Clip
 
     guid = None
     owner = factory.SubFactory('core.model_factories.UserF')
@@ -130,7 +133,8 @@ class SearchRecordF(factory.django.DjangoModelFactory):
     """
     SearchRecord model factory
     """
-    FACTORY_FOR = SearchRecord
+    class Meta:
+        model = SearchRecord
 
     user = factory.SubFactory('core.model_factories.UserF')
     order = factory.SubFactory('orders.tests.model_factories.OrderF')
