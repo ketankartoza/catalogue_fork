@@ -338,32 +338,32 @@ class GenericProduct(models.Model):
 
         # Hack to automatically fetch spot or other non local thumbs from their
         # catalogue and store them locally
-        if self.remote_thumbnail_url and not os.path.exists(myFileName):
-            if not os.path.isdir(myThumbDir):
-                logger.debug('Creating dir: %s' % myThumbDir)
-                try:
-                    os.makedirs(myThumbDir)
-                except OSError:
-                    logger.debug('Failed to make output directory...quitting')
-                    return 'Failed to make output dir.'
-            logger.debug('Fetching image: %s' % self.remote_thumbnail_url)
-            myOpener = urllib2.build_opener()
-            myImagePage = myOpener.open(self.remote_thumbnail_url)
-            myImage = myImagePage.read()
-            logger.debug('Image fetched, saving as %s' % myImageFile)
-            myWriter = open(os.path.join(
-                settings.THUMBS_ROOT, myImageFile), 'wb')
-            myWriter.write(myImage)
-            myWriter.close()
-            self.remote_thumbnail_url = ""
-            self.save()
+        # if self.remote_thumbnail_url and not os.path.exists(myFileName):
+        #     if not os.path.isdir(myThumbDir):
+        #         logger.debug('Creating dir: %s' % myThumbDir)
+        #         try:
+        #             os.makedirs(myThumbDir)
+        #         except OSError:
+        #             logger.debug('Failed to make output directory...quitting')
+        #             return 'Failed to make output dir.'
+        #     logger.debug('Fetching image: %s' % self.remote_thumbnail_url)
+        #     myOpener = urllib2.build_opener()
+        #     myImagePage = myOpener.open(self.remote_thumbnail_url)
+        #     myImage = myImagePage.read()
+        #     logger.debug('Image fetched, saving as %s' % myImageFile)
+        #     myWriter = open(os.path.join(
+        #         settings.THUMBS_ROOT, myImageFile), 'wb')
+        #     myWriter.write(myImage)
+        #     myWriter.close()
+        #     self.remote_thumbnail_url = ""
+        #     self.save()
 
         # Specify background colour, should be the same as div background
         myBackgroundColour = (255, 255, 255)
         myAngle = 0
         myShadowFlag = False
-        logger.info('Creating thumbnail of : ' + myFileName)
-        logger.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
+        # logger.info('Creating thumbnail of : ' + myFileName)
+        # logger.info('Thumbnail path:   ' + str(settings.THUMBS_ROOT))
 
         if not os.path.isfile(myFileName):
             #file does not exist so show an error icon
