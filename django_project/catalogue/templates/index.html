@@ -15,11 +15,12 @@
             <div class="carousel-inner">
                 {% if slider %}
                     {% for myItem in slider %}
-                        <div class="active item">
+                        <div class="item">
                             <img src="media/{{ myItem.slide }}" style="height:300px;width:1210px"/>
                         </div>
                     {% endfor %}
                 {% endif %}
+
             </div>
             <!-- Carousel nav -->
             <a class="carousel-control left" href="#home-slider" data-slide="prev">&lsaquo;</a>
