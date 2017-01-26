@@ -30,7 +30,9 @@ from catalogue.models import (
     OpticalProduct,
     GeospatialProduct,
     Visit,
-    AllUsersMessage
+    AllUsersMessage,
+    Contact,
+    Slider
 )
 
 
@@ -44,6 +46,30 @@ class VisitAdmin(admin.GeoModelAdmin):
     search_fields = ['city', 'country', 'user__username']
     list_filter = ['city', 'country', 'user']
     list_display = ('visit_date', 'city', 'country', 'user')
+
+class Contactdmin(admin.ModelAdmin):
+    """Admin model for Contact."""
+    list_display = ('people_earth_obeservation', 'email_earth_observation',
+                    'phone_earth_observation', 'catalogue_email_enqueries','catalogue_phone')
+    def has_add_permission(self, request):
+        num_objects = self.model.objects.count()
+        if num_objects >= 1:
+          return False
+        else:
+          return True
+
+    def has_delete_permission(self, request, obj=None):
+        num_objects = self.model.objects.count()
+        if num_objects >= 1:
+          return False
+        else:
+          return True
+
+class SliderAdmin(admin.ModelAdmin):
+    """Admin model for Sliders."""
+    list_display = ('name', 'slide')
+
+
 
 
 #################################################
@@ -106,3 +132,5 @@ admin.site.register(GeospatialProduct, GeospatialProductAdmin)
 admin.site.register(Visit, VisitAdmin)
 admin.site.register(OfflineMessage, OfflineMessageAdmin)
 admin.site.register(AllUsersMessage, AllUsersMessageAdmin)
+admin.site.register(Contact, Contactdmin)
+admin.site.register(Slider, SliderAdmin)
