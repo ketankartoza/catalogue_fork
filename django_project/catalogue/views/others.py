@@ -46,7 +46,9 @@ from django.contrib.gis.geos import Point
 from catalogue.models import (
     GenericProduct,
     Visit,
-    VisitorReport
+    VisitorReport,
+    Contact,
+    Slider
 )
 from catalogue.forms import (
     ClipForm)
@@ -590,7 +592,8 @@ def getFeatureInfo(theRequest,
 def index(theRequest):
     #render_to_response is done by the renderWithContext decorator
     return ({
-        'myPartnerFlag': isStrategicPartner(theRequest)
+        'myPartnerFlag': isStrategicPartner(theRequest),
+        'slider' : Slider.objects.all()
     })
 
 
@@ -612,7 +615,11 @@ def about(theRequest):
 @renderWithContext('contact.html')
 def contact(theRequest):
     #render_to_response is done by the renderWithContext decorator
-    return ()
+    return (
+        {
+            'data': Contact.objects.all()
+        }
+    )
 
 
 #renderWithContext is explained in renderWith.py
