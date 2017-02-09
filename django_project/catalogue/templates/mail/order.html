@@ -17,11 +17,11 @@ for {{ myOrder.user.first_name }} {{ myOrder.user.last_name }} made on <b>
 Your order status: {{ myOrder.order_status }}
 </p>
 
-You can review this order at any time by visiting the
-<a id="link" href="http://{{ domain }}{% url 'viewOrder' myOrder.id %}">Order
-Page</a> If you have any problems or special requests relating to this
+You can review this order at any time by visiting the http://{{ domain }}{% url 'viewOrder' myOrder.id %}
+
+    If you have any problems or special requests relating to this
 order, please contact our sales staff
-at <a id="link" href="mailto:customers-eo@sansa.org.za">customers-eo@sansa.org.za</a>. They will be
+at customers-eo@sansa.org.za. They will be
 more than happy to assist you. Below you will find a summary of the
 order options and products for this order (you may need to scroll down
 to see it). If any of the products is available for immediate
