@@ -140,10 +140,14 @@ def get_original_product_id(dom):
     dataset_name = dom.getElementsByTagName('DATASET_NAME')[0]
     product_name_full = dataset_name.firstChild.nodeValue
     tokens = product_name_full.split('_')
-    if tokens[1] == "SPOT6":
-        constant = "S6"
-    else: constant = "S7"
-    product_name = constant + tokens[0] + tokens[2] + tokens[3]
+    # change according to Maite's explanation in kartoza/catalogue#496, constant always THUMBNAIL
+    # if tokens[1] == "SPOT6":
+    #    constant = "S6"
+    # else: constant = "S7"
+    constant = "THUMBNAIL_"
+    # change according to Maite's explanation in kartoza/catalogue#496
+    # product_name = constant + tokens[0] + tokens[2] + tokens[3]
+    product_name = constant + tokens[2]
     return product_name
 
 def get_spatial_resolution_x():
