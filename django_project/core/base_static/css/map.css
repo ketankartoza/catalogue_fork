@@ -810,21 +810,21 @@ body {
 .result-item {
     width: 99%;
     border: 1px solid rgb(210, 208, 206);
-    margin-bottom: 6px;
+    margin-bottom: 3px;
     display: flex;
 }
 
 .result-image-thumb {
-    min-width: 60px;
-    height: 60px;
-    line-height: 60px;
+    min-width: 40px;
+    height: 40px;
+    line-height: 40px;
     text-align: center;
     border-right: 1px solid rgb(243, 242, 241);
     border-radius: 5px 0px 0px 3px;
 }
 
 .result-item-info {
-    width: 60%;
+    width: 50%;
     flex-flow: column nowrap;
     justify-content: space-evenly;
     margin-left: 10px;
@@ -835,17 +835,18 @@ body {
 }
 
 .result-item-info-date {
-    margin-right: 50px;
+    margin-right: 40px;
     float: left;
+    font-size: 13px;
 }
 
-
-.result-item-info-date p{
-    margin-bottom: 0.5rem;
+.result-item-info-cloud-cover{
+    font-size: 13px;
 }
 
 .button-action {
     height: 50px;
+    margin-left: 25px;
 }
 
 .result-panel {
