@@ -838,10 +838,12 @@ body {
     margin-right: 40px;
     float: left;
     font-size: 13px;
+    margin-top: -3px;
 }
 
 .result-item-info-cloud-cover{
     font-size: 13px;
+    margin-top: -3px;
 }
 
 .button-action {

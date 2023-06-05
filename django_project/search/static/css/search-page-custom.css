@@ -112,8 +112,7 @@ html, body {
 }
 
 #layoutRightSide .navigation {
-    position: absolute;
-    top: 0;
+    border: 1px solid rgb(210, 208, 206);
     width: 100%;
 }
 
@@ -137,6 +136,7 @@ html, body {
 
 #layoutRightSide .result-item {
     width: 100%;
+    height: 40px;
 }
 
 .date_range_row{

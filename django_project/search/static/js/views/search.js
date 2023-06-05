@@ -249,9 +249,9 @@ define([
                 return;
             }
             let file = field.get(0).files[0];
-            console.log(file);
             const formdata = new FormData();
             formdata.append('file_upload', file);
+            console.log(formdata);
             $.ajax({
                 url: upload_url,
                 headers: {"X-CSRFToken": csrfToken},
