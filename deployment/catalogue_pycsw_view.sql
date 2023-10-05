@@ -62,6 +62,7 @@ CREATE MATERIALIZED VIEW IF NOT EXISTS catalogue_pycsw_view AS
 	c.insert_date as insert_date,
 	concat_ws(' ', c.title, c.identifier) AS title_alternate,
 	NULL AS date_modified,
+	NULL AS edition,
     NULL as date_revision,
     NULL AS date_publication,
     'SANSA' AS organization,
