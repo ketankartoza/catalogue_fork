@@ -2,7 +2,7 @@
 title: PROJECT_TITLE
 summary: PROJECT_SUMMARY
     - Ketan Bamniya
-date: DATE
+date: 28-03-2024
 some_url: https://github.com/kartoza/catalogue
 copyright: Copyright 2023, PROJECT_OWNER
 contact: PROJECT_CONTACT
@@ -116,4 +116,8 @@ You can read our license to find out what rights this license bestows to users a
 [License](about/license.md)
 
 <!-- Keep the Kartoza Logo at the bottom of the page if the project allows -->
-![Kartoza Logo](img/KartozaLogo-320x132.png)
+## Kartoza
+
+The SAEOSS-Portal platform has been developed by [Kartoza](https://www.kartoza.com/), leaders in GIS and Geospatial technology and innovation.
+
+[![Kartoza Logo](https://raw.githubusercontent.com/kartoza/SAEOSS-Portal/62086df2ad0009ce393ee9a616dd36afe6781b7e/docs/src/img/logo.svg)](https://kartoza.com/)

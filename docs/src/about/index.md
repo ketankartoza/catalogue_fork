@@ -2,7 +2,7 @@
 title: PROJECT_TITLE
 summary: PROJECT_SUMMARY
     - Ketan Bamniya
-date: DATE
+date: 28-03-2024
 some_url: https://github.com/kartoza/catalogue
 copyright: Copyright 2023, PROJECT_OWNER
 contact: PROJECT_CONTACT
@@ -21,7 +21,7 @@ Published under AGPL-3. See the [full license](license.md) text.
 
 | Contributor | GitHub Handle | |
 | ----------- | ------------- |-|
-| Hugh Mann| [NotARobot]() | <img src="https://github.com/[username].png" alt= “” width="64" height="64"> |
+| Ketan Bamniya | [ketankartoza](https://github.com/ketankartoza) | <img src="https://github.com/ketankartoza.png" alt="" width="64" height="64"> |
 | Tim Sutton | [timlinux](https://github.com/timlinux) | <img src="https://github.com/timlinux.png" alt= “” width="64" height="64"> |
 
 ## Project funders/backers
