@@ -2,7 +2,7 @@
 title: PROJECT_TITLE
 summary: PROJECT_SUMMARY
     - Ketan Bamniya
-date: DATE
+date: 28-03-2024
 some_url: https://github.com/kartoza/catalogue
 copyright: Copyright 2023, PROJECT_OWNER
 contact: PROJECT_CONTACT
