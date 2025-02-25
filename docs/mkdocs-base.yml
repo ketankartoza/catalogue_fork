@@ -55,6 +55,7 @@ nav:
                           - user/manual/index.md
                           - Sign Up: user/manual/sign-up.md
                           - Login: user/manual/login.md
+                          - Landing Page: user/manual/landing-page.md
         - Administrators:
                 - administrator/index.md
                 - Guide:
