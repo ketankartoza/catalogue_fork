@@ -53,6 +53,7 @@ nav:
                           - Data Summary Page: user/guide/data-summary-page.md
                           - Login: user/guide/login.md
                           - Search Page: user/guide/search-page.md
+                          - Profile Page: user/guide/profile-page.md
                   - Manual :
                           - user/manual/index.md
                           - Sign Up: user/manual/sign-up.md
@@ -60,6 +61,7 @@ nav:
                           - Search Page: user/manual/search-page.md
                           - Landing Page: user/manual/landing-page.md
                           - Data Summary Page: user/manual/data-summary-page.md
+                          - Profile Page: user/manual/profile-page.md
         - Administrators:
                 - administrator/index.md
                 - Guide:

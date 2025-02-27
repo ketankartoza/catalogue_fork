@@ -20,3 +20,5 @@ license: This program is free software; you can redistribute it and/or modify it
 * **[Data Summary Page](./data-summary-page.md):** You can use this page to walk through the data summary page.
 
 * **[Search](./search-page.md):** You can use this page as a walkthrough to learn how to access the search page.
+
+* **[Profile Page](./profile-page.md):** You can use this page as a walkthrough to learn how to access the user profile.
