@@ -27,4 +27,6 @@ license: This program is free software; you can redistribute it and/or modify it
 
 * **[Links](./links.md):** You can use this page to navigate through the various available links.
 
+* **[Administration](./administration.md):** You can use this page to navigate through the various links available in the administration.
+
 * **[Profile Page](./profile-page.md):** You can use this page as a walkthrough to learn how to access the user profile.
