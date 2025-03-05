@@ -17,7 +17,6 @@ what the various components of that page do. The manual is intended to function
 as a reference for the application. For narrative / workflow based tutorials,
 you may prefer to work through our [user guide](../guide/index.md).
 
-
 * **[Sign Up](./sign-up.md):** Users can use this page to walk through the signup process.
 
 * **[Login](./login.md):** Users can use this page to walk through the login process.
@@ -31,5 +30,7 @@ you may prefer to work through our [user guide](../guide/index.md).
 * **[Order Page](./order-page.md):** Users can use this page as a walkthrough to learn how to access the order page.
 
 * **[links](./links.md):** Users can use this page as a walkthrough to learn how to access the various links.
+
+* **[Administration](./administration.md):** Users can use this page as a walkthrough to learn how to access the various links available in the administration.
 
 * **[Profile Page](./profile-page.md):** Users can use this page as a walkthrough to learn how to access the user profile.

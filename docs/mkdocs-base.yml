@@ -55,6 +55,7 @@ nav:
                           - Data Summary Page: user/guide/data-summary-page.md
                           - Contact Page: user/guide/contact-page.md
                           - Links: user/guide/links.md
+                          - Administration: user/guide/administration.md
                           - Profile Page: user/guide/profile-page.md
                   - Manual :
                           - user/manual/index.md
@@ -65,6 +66,7 @@ nav:
                           - Data Summary Page: user/manual/data-summary-page.md
                           - Contact Page: user/manual/contact-page.md
                           - Links: user/manual/links.md
+                          - Administration: user/manual/administration.md
                           - Profile Page: user/manual/profile-page.md
         - Administrators:
                 - administrator/index.md
