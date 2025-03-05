@@ -66,6 +66,20 @@ nav:
                           - Contact Page: user/manual/contact-page.md
                           - Links: user/manual/links.md
                           - Profile Page: user/manual/profile-page.md
+
+                  - Backup Files: Backup-Files.md
+                  - Catalogue Test Modules: Catalogue-test-modules.md
+                  - Deploying Updates: Deploying-Updates.md
+                  - Development Environment In Docker: Development-environment-in-docker.md
+                  - Ingesting Metadata: Ingesting-metadata.md
+                  - Nginx Setup: Nginx-Setup.md
+                  - Server Management: Server-Management.md
+                  - Soffice Backend: Soffice-Backend.md
+                  - Tilemill Setup For Africa Overlay: Tilemill-setup-for-Africa-overlay.md
+                  - Tiling Blue Marble: Tiling-Blue-Marble.md
+                  - Tiling Spot Mosaics: Tiling-Spot-Mosaics.md
+                  - Using Docker: Using-Docker.md
+
         - Administrators:
                 - administrator/index.md
                 - Guide:
