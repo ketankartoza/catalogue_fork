@@ -10,7 +10,7 @@ license: This program is free software; you can redistribute it and/or modify it
 #context_id: 1234
 ---
 
-# Contributing to [PROJECT_NAME]
+# Contributing to SANSA Catalogue
 
 First off, thanks for taking the time to contribute! 🎉 😘 ✨
 
