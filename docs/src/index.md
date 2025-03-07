@@ -10,22 +10,16 @@ license: This program is free software; you can redistribute it and/or modify it
 #context_id: 1234
 ---
 
-# Template project title
+# Template SANSA Catalogue
 <!-- This is the Home Page, replace all of the titles with relevant titles -->
 
 Strapline <!-- replace with one line product description e.g. "Welcome to PROJECT_NAME, where the aim is to ..." -->
 
-![main_screenshot]() <!-- change path to main screenshot, InaSAFE is a good reference -->
-
-## Introduction
-
-<!-- Insert introduction paragraphs here -->
-<!-- Can also input short video demo of project here (YouTube link, etc) -->
-<!-- Can contain Purpose/Why of project and the Scope of Project without use of sub-headings-->
+[![main_screenshot](./img/home-img-1.png)](./img/home-img-1.png) <!-- change path to main screenshot, InaSAFE is a good reference -->
 
 ## Key concepts
 
-A **project** (dashboard) is the most important feature of PROJECT_NAME. Projects
+A **project** (dashboard) is the most important feature of SANSA Catalogue. Projects
 combine different elements (Reference datasets, indicators, and context layers)
 and enable data visualization/analysis for all end users.
 
@@ -48,20 +42,9 @@ for any loss of revenue, life, physical harm or any other adverse outcome that m
 occur as a result of the use of this platform.
 </div>
 
-### Purpose
-
-### Scope of project
-
-### Project roadmap
-
-![Project Roadmap]()
-[Project Roadmap]()
-<!-- Either insert link to roadmap or actual roadmap (Speak to team leads) -->
-
 #### Contributing
 
-We would love to collaborate with you! But first, please read our [contributor
-guidelines](about/contributing.md) which describe how to report
+We would love to collaborate with you! But first, please read our [contributor guidelines](about/contributing.md) which describe how to report
 issues, plan and contribute feature additions etc.
 
 #### Code of conduct
@@ -82,27 +65,16 @@ While much of the work for our project is technical in nature, we value and
 encourage contributions from those with expertise in other areas, and welcome
 them into our community.
 
-## Project partners
+## Project Partners
 
-<!-- Insert Project Partner Logos and/or Links -->
-![Project Partner 1]()
-[Project Partner 1]()
+By partnering up with SANSA (South African National Space Agency), SAEON (South African Environmental Observation Network) and The Department of Science & Innovation, joint interests sparked the conceptualisation of the SAEOSS-portal platform.
 
-#### Releases
-
-<!-- Insert links to release pages, change as needed -->
-[GitHub releases page]()
-[Releases page]()
+[<img src="https://raw.githubusercontent.com/kartoza/SAEOSS-Portal/main/docs/src/img/SANSA_Logo.png" alt= “” width="30%" height="auto">](https://www.sansa.org.za/)[<img src="https://raw.githubusercontent.com/kartoza/SAEOSS-Portal/main/docs/src/img/SAEONN_Logo.png" alt= “” width="30%" height="auto">](https://www.saeon.ac.za/)[<img src="https://raw.githubusercontent.com/kartoza/SAEOSS-Portal/main/docs/src/img/DSI_logo.png" alt= “” width="40%" height="auto">](https://www.dst.gov.za)
 
 | | **Project Badges** | |
 | ----------------------- | ----------------------- | ----------------------- |
 | ![License](https://img.shields.io/github/license/{username}/{repo-name}.svg) | ![Version](https://img.shields.io/github/release/{username}/{repo-name}.svg) | ![Commits](https://img.shields.io/github/commits-since/{username}/{repo-name}/{version}.svg) |
 | ![Issue Tracker](https://img.shields.io/github/issues/{username}/{repo-name}.svg) | ![Closed Issues](https://img.shields.io/github/issues-closed/{username}/{repo-name}.svg) | ![Pull requests](https://img.shields.io/github/issues-pr/{username}/{repo-name}.svg) |
-
-#### Project chatroom
-
-<!-- Insert links to chatroom pages if available, otherwise remove -->
-[Chatroom]()
 
 #### Contributor License Agreement (CLA)
 <!-- Insert links to CLA -->
@@ -116,6 +88,7 @@ You can read our license to find out what rights this license bestows to users a
 [License](about/license.md)
 
 <!-- Keep the Kartoza Logo at the bottom of the page if the project allows -->
+
 ## Kartoza
 
 The SAEOSS-Portal platform has been developed by [Kartoza](https://www.kartoza.com/), leaders in GIS and Geospatial technology and innovation.

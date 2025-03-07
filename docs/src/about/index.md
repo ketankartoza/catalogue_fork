@@ -23,6 +23,10 @@ Published under AGPL-3. See the [full license](license.md) text.
 | ----------- | ------------- |-|
 | Ketan Bamniya | [ketankartoza](https://github.com/ketankartoza) | <img src="https://github.com/ketankartoza.png" alt="" width="64" height="64"> |
 | Tim Sutton | [timlinux](https://github.com/timlinux) | <img src="https://github.com/timlinux.png" alt= “” width="64" height="64"> |
+| Jeremy Prior | [Jeremy-Prior](https://github.com/Jeremy-Prior) | <img src="https://github.com/Jeremy-Prior.png" alt= “” width="64" height="64"> |
+| Juanique Voogt | [voogt](https://github.com/voogt) | <img src="https://github.com/voogt.png" alt= “” width="64" height="64"> |
+| Eli Volschenk | [EliVolsch](https://github.com/EliVolsch) | <img src="https://github.com/EliVolsch.png" alt= “” width="64" height="64"> |
+| Dimas Ciputra | [dimasciput](https://github.com/dimasciput) | <img src="https://github.com/dimasciput.png" alt="" width="64" height="64"> |
 
 ## Project funders/backers
 
@@ -31,4 +35,5 @@ This project was conceptualized and initially funded by [FUNDER_1]().
 ## Logos
 
 Another fine project contributed to by: [Kartoza.com](https://kartoza.com)
+
 ![Kartoza Logo](../img/KartozaLogo-320x132.png)
