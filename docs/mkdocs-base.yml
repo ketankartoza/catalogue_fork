@@ -86,6 +86,9 @@ nav:
                 - administrator/index.md
                 - Guide:
                         - administrator/guide/index.md
+                        - Add Record: administrator/guide/django-add-record.md
+                        - Remove Record: administrator/guide/django-remove-record.md
+                        - Update Record: administrator/guide/django-update-record.md
                 - Manual:
                         - administrator/manual/index.md
                         - Add Record: administrator/manual/django-add-record.md

@@ -11,5 +11,9 @@ context_id: 1234
 ---
 
 # Administrator guide
-<!-- Narrative Instructions on how admin users will use the product/platform -->
-<!-- Replace all of the titles with relevant titles -->
+
+**[Add Record](./django-add-record.md):** This page guides you on how to add a record to the table using the admin page.
+
+**[Delete Record](./django-delete-record.md):** This page guides you on how to delete a record from the table using the admin page.
+
+**[Update Record](./django-update-record.md):** This page guides you on how to update a record in the table using the admin page.
