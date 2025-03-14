@@ -37,6 +37,9 @@ RUN sed -i "/        new_class = super_new(cls, name, bases, {'__module__': modu
 
 RUN sed -i "s/ver = geos_version().decode()/ver = geos_version().decode().split(' ')[0]/" /usr/local/lib/python3.8/site-packages/django/contrib/gis/geos/libgeos.py
 
+RUN mkdir -p /var/log/uwsgi && touch /var/log/uwsgi/flood_mapper.log && chmod -R 755 /var/log/uwsgi
+
+
 ADD deployment/docker/uwsgi.conf /uwsgi.conf
 
 
