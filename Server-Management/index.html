@@ -26,7 +26,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#server">40. 
+<a class="md-skip" href="#server">42. 
           Skip to content
         </a>
 </div>
@@ -493,7 +493,7 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#restart-server">40.1 
+<a class="md-nav__link" href="#restart-server">42.1 
 <span class="md-ellipsis">
       Restart Server
     </span>
@@ -945,7 +945,7 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#restart-server">40.1 
+<a class="md-nav__link" href="#restart-server">42.1 
 <span class="md-ellipsis">
       Restart Server
     </span>
@@ -959,8 +959,8 @@
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
 <div><p>This page explains some useful commands for administering the production server.</p>
-<h1 id="server"><span class="enumerate-headings-plugin enumerate-heading-plugin">40.</span> Server<a class="headerlink" href="#server" title="Permanent link">¶</a></h1>
-<h2 id="restart-server"><span class="enumerate-headings-plugin enumerate-heading-plugin">40.1</span> Restart Server<a class="headerlink" href="#restart-server" title="Permanent link">¶</a></h2>
+<h1 id="server"><span class="enumerate-headings-plugin enumerate-heading-plugin">42.</span> Server<a class="headerlink" href="#server" title="Permanent link">¶</a></h1>
+<h2 id="restart-server"><span class="enumerate-headings-plugin enumerate-heading-plugin">42.1</span> Restart Server<a class="headerlink" href="#restart-server" title="Permanent link">¶</a></h2>
 <p><em>Note: Please don't restart server frequently, as we don't have any backup server yet.</em></p>
 <p>If a change is made and it requires to restart the server, there are 2 ways (depends on the scope of the changes):
 - Go to <code>/home/web/catalogue/deployment</code> and type: <code>make reload</code>. </p>
@@ -971,14 +971,14 @@
 <li><code>docker-compose -p catalogue up -d web</code></li>
 </ul>
 <p>This will restart the web server (nginx and uwsgi containers).</p>
-<h1 id="database"><span class="enumerate-headings-plugin enumerate-heading-plugin">41.</span> Database<a class="headerlink" href="#database" title="Permanent link">¶</a></h1>
-<h2 id="database-container"><span class="enumerate-headings-plugin enumerate-heading-plugin">41.1</span> Database Container<a class="headerlink" href="#database-container" title="Permanent link">¶</a></h2>
+<h1 id="database"><span class="enumerate-headings-plugin enumerate-heading-plugin">43.</span> Database<a class="headerlink" href="#database" title="Permanent link">¶</a></h1>
+<h2 id="database-container"><span class="enumerate-headings-plugin enumerate-heading-plugin">43.1</span> Database Container<a class="headerlink" href="#database-container" title="Permanent link">¶</a></h2>
 <p>If for some reasons you need to go to the database via a terminal, you can do:
 - Go to <code>/home/web/catalogue/deployment</code>
 - Type: <code>make dbshell</code>
 - Type <em>docker</em> when asking a password
 - You are already inside the database container.</p>
-<h2 id="database-backup-files"><span class="enumerate-headings-plugin enumerate-heading-plugin">41.2</span> Database Backup Files<a class="headerlink" href="#database-backup-files" title="Permanent link">¶</a></h2>
+<h2 id="database-backup-files"><span class="enumerate-headings-plugin enumerate-heading-plugin">43.2</span> Database Backup Files<a class="headerlink" href="#database-backup-files" title="Permanent link">¶</a></h2>
 <p>The database is backed up daily at 00.00 AM.</p>
 <p>The location of the backup files is <code>/home/web/catalogue/deployment/backups</code>.</p>
 <p>The backup file naming convention is <code>PG_catalogue_gis.&lt;date_of_backup&gt;.dmp</code>.</p>

@@ -26,7 +26,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#tile-server-setup-notes">43.1 
+<a class="md-skip" href="#tile-server-setup-notes">45.1 
           Skip to content
         </a>
 </div>
@@ -507,28 +507,28 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#tile-server-setup-notes">43.1 
+<a class="md-nav__link" href="#tile-server-setup-notes">45.1 
 <span class="md-ellipsis">
       Tile server setup notes:
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#create-the-postgis-container-and-load-it">43.2 
+<a class="md-nav__link" href="#create-the-postgis-container-and-load-it">45.2 
 <span class="md-ellipsis">
       Create the postgis container and load it:
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#create-the-tilemill-container">43.3 
+<a class="md-nav__link" href="#create-the-tilemill-container">45.3 
 <span class="md-ellipsis">
       Create the tilemill container:
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#when-the-server-reboots">43.4 
+<a class="md-nav__link" href="#when-the-server-reboots">45.4 
 <span class="md-ellipsis">
       When the server reboots
     </span>
@@ -966,28 +966,28 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#tile-server-setup-notes">43.1 
+<a class="md-nav__link" href="#tile-server-setup-notes">45.1 
 <span class="md-ellipsis">
       Tile server setup notes:
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#create-the-postgis-container-and-load-it">43.2 
+<a class="md-nav__link" href="#create-the-postgis-container-and-load-it">45.2 
 <span class="md-ellipsis">
       Create the postgis container and load it:
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#create-the-tilemill-container">43.3 
+<a class="md-nav__link" href="#create-the-tilemill-container">45.3 
 <span class="md-ellipsis">
       Create the tilemill container:
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#when-the-server-reboots">43.4 
+<a class="md-nav__link" href="#when-the-server-reboots">45.4 
 <span class="md-ellipsis">
       When the server reboots
     </span>
@@ -1000,8 +1000,8 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1><span class="enumerate-headings-plugin enumerate-heading-plugin">43.</span> Tilemill Setup For Africa Overlay</h1>
-<div><h2 id="tile-server-setup-notes"><span class="enumerate-headings-plugin enumerate-heading-plugin">43.1</span> Tile server setup notes:<a class="headerlink" href="#tile-server-setup-notes" title="Permanent link">¶</a></h2>
+<h1><span class="enumerate-headings-plugin enumerate-heading-plugin">45.</span> Tilemill Setup For Africa Overlay</h1>
+<div><h2 id="tile-server-setup-notes"><span class="enumerate-headings-plugin enumerate-heading-plugin">45.1</span> Tile server setup notes:<a class="headerlink" href="#tile-server-setup-notes" title="Permanent link">¶</a></h2>
 <p>We are publishing OpenStreetmap transparent tiles - a modified version of the <a href="https://github.com/mapbox/osm-bright">OSM Bright</a> project.</p>
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
 <a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>sudo sh -c "echo deb https://get.docker.io/ubuntu docker main &gt; /etc/apt/sources.list.d/docker.list"
@@ -1024,7 +1024,7 @@
 <a href="#__codelineno-0-19" id="__codelineno-0-19" name="__codelineno-0-19"></a>
 <a href="#__codelineno-0-20" id="__codelineno-0-20" name="__codelineno-0-20"></a>cd ..
 </code></pre></div>
-<h2 id="create-the-postgis-container-and-load-it"><span class="enumerate-headings-plugin enumerate-heading-plugin">43.2</span> Create the postgis container and load it:<a class="headerlink" href="#create-the-postgis-container-and-load-it" title="Permanent link">¶</a></h2>
+<h2 id="create-the-postgis-container-and-load-it"><span class="enumerate-headings-plugin enumerate-heading-plugin">45.2</span> Create the postgis container and load it:<a class="headerlink" href="#create-the-postgis-container-and-load-it" title="Permanent link">¶</a></h2>
 <p>Password is <code>docker</code>, username is <code>docker</code>. The <code>osm.dmp</code> was copied over from the local machine.</p>
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>docker run --name="osm-africa-postgis" \
 <a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>        -d -t -p 5432:5432 kartoza/postgis
@@ -1039,7 +1039,7 @@
 <p><strong>Note:</strong> You should be able to ignore any errors like the one below since the occur because the docker database already has postgis installed into it:</p>
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>ERROR:<span class="w">  </span><span class="k">function</span><span class="w"> </span><span class="s2">"srid"</span><span class="w"> </span>already<span class="w"> </span>exists<span class="w"> </span>with<span class="w"> </span>same<span class="w"> </span>argument<span class="w"> </span>types
 </code></pre></div>
-<h2 id="create-the-tilemill-container"><span class="enumerate-headings-plugin enumerate-heading-plugin">43.3</span> Create the tilemill container:<a class="headerlink" href="#create-the-tilemill-container" title="Permanent link">¶</a></h2>
+<h2 id="create-the-tilemill-container"><span class="enumerate-headings-plugin enumerate-heading-plugin">45.3</span> Create the tilemill container:<a class="headerlink" href="#create-the-tilemill-container" title="Permanent link">¶</a></h2>
 <p>Note that the <code>Documents/MapBoxdir</code> was copied over from my local machine</p>
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>cd ~/Documents/MapBox/project/OSMAfrica
 <a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>rpl "172.17.0.2" "41.74.158.9" *
@@ -1053,7 +1053,7 @@
 <a href="#__codelineno-3-10" id="__codelineno-3-10" name="__codelineno-3-10"></a>        -d \
 <a href="#__codelineno-3-11" id="__codelineno-3-11" name="__codelineno-3-11"></a>        -t kartoza/tilemill
 </code></pre></div>
-<h2 id="when-the-server-reboots"><span class="enumerate-headings-plugin enumerate-heading-plugin">43.4</span> When the server reboots<a class="headerlink" href="#when-the-server-reboots" title="Permanent link">¶</a></h2>
+<h2 id="when-the-server-reboots"><span class="enumerate-headings-plugin enumerate-heading-plugin">45.4</span> When the server reboots<a class="headerlink" href="#when-the-server-reboots" title="Permanent link">¶</a></h2>
 <p>The docker containers will be brought down on reboot. To bring them up again simply do:</p>
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>docker start osm-africa-postgis
 <a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>docker start tilemill
