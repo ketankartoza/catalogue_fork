@@ -26,7 +26,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#development-setup">33. 
+<a class="md-skip" href="#development-setup">35. 
           Skip to content
         </a>
 </div>
@@ -472,14 +472,14 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#prerequisites">33.1 
+<a class="md-nav__link" href="#prerequisites">35.1 
 <span class="md-ellipsis">
       Prerequisites
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#docker-setup">33.2 
+<a class="md-nav__link" href="#docker-setup">35.2 
 <span class="md-ellipsis">
       Docker Setup:
     </span>
@@ -487,14 +487,14 @@
 <nav aria-label="Docker Setup:" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#load-the-dump">33.2.1 
+<a class="md-nav__link" href="#load-the-dump">35.2.1 
 <span class="md-ellipsis">
       Load the dump:
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#run-the-development-container">33.2.2 
+<a class="md-nav__link" href="#run-the-development-container">35.2.2 
 <span class="md-ellipsis">
       Run the development container.
     </span>
@@ -504,7 +504,7 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#pycharm-configuration">33.3 
+<a class="md-nav__link" href="#pycharm-configuration">35.3 
 <span class="md-ellipsis">
       Pycharm configuration
     </span>
@@ -977,14 +977,14 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#prerequisites">33.1 
+<a class="md-nav__link" href="#prerequisites">35.1 
 <span class="md-ellipsis">
       Prerequisites
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#docker-setup">33.2 
+<a class="md-nav__link" href="#docker-setup">35.2 
 <span class="md-ellipsis">
       Docker Setup:
     </span>
@@ -992,14 +992,14 @@
 <nav aria-label="Docker Setup:" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#load-the-dump">33.2.1 
+<a class="md-nav__link" href="#load-the-dump">35.2.1 
 <span class="md-ellipsis">
       Load the dump:
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#run-the-development-container">33.2.2 
+<a class="md-nav__link" href="#run-the-development-container">35.2.2 
 <span class="md-ellipsis">
       Run the development container.
     </span>
@@ -1009,7 +1009,7 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#pycharm-configuration">33.3 
+<a class="md-nav__link" href="#pycharm-configuration">35.3 
 <span class="md-ellipsis">
       Pycharm configuration
     </span>
@@ -1022,24 +1022,24 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<div><h1 id="development-setup"><span class="enumerate-headings-plugin enumerate-heading-plugin">33.</span> Development Setup<a class="headerlink" href="#development-setup" title="Permanent link">¶</a></h1>
-<h2 id="prerequisites"><span class="enumerate-headings-plugin enumerate-heading-plugin">33.1</span> Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h2>
+<div><h1 id="development-setup"><span class="enumerate-headings-plugin enumerate-heading-plugin">35.</span> Development Setup<a class="headerlink" href="#development-setup" title="Permanent link">¶</a></h1>
+<h2 id="prerequisites"><span class="enumerate-headings-plugin enumerate-heading-plugin">35.1</span> Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h2>
 <ul>
 <li>you should have <code>postgresql-client-9.3</code> (or more recent) installed on the host.</li>
 <li>you should be using at least docker v 1.2.</li>
 </ul>
-<h2 id="docker-setup"><span class="enumerate-headings-plugin enumerate-heading-plugin">33.2</span> Docker Setup:<a class="headerlink" href="#docker-setup" title="Permanent link">¶</a></h2>
+<h2 id="docker-setup"><span class="enumerate-headings-plugin enumerate-heading-plugin">35.2</span> Docker Setup:<a class="headerlink" href="#docker-setup" title="Permanent link">¶</a></h2>
 <p>Run the postgis test server in docker:</p>
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>docker build -t kartoza/postgis git://github.com/kartoza/docker-postgis
 <a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>docker run --name="catalogue-postgis" \
 <a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>           --hostname="catalogue-postgis" \
 <a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>           --restart="always" -d -t kartoza/postgis
 </code></pre></div>
-<h3 id="load-the-dump"><span class="enumerate-headings-plugin enumerate-heading-plugin">33.2.1</span> Load the dump:<a class="headerlink" href="#load-the-dump" title="Permanent link">¶</a></h3>
+<h3 id="load-the-dump"><span class="enumerate-headings-plugin enumerate-heading-plugin">35.2.1</span> Load the dump:<a class="headerlink" href="#load-the-dump" title="Permanent link">¶</a></h3>
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>./pg_restore -f catalogue.dmp | psql -h 172.17.0.89 -U docker gis
 </code></pre></div>
 <p><strong>Note</strong>: You should replace <code>172.17.0.89</code> with the IP address of your postgis container.</p>
-<h3 id="run-the-development-container"><span class="enumerate-headings-plugin enumerate-heading-plugin">33.2.2</span> Run the development container.<a class="headerlink" href="#run-the-development-container" title="Permanent link">¶</a></h3>
+<h3 id="run-the-development-container"><span class="enumerate-headings-plugin enumerate-heading-plugin">35.2.2</span> Run the development container.<a class="headerlink" href="#run-the-development-container" title="Permanent link">¶</a></h3>
 <p>This is a simple container with all deps installed in a venv under /home/web/catalogue and ssh.:</p>
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>cd &lt;this repository root&gt;
 <a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>./build.sh
@@ -1047,7 +1047,7 @@
 </code></pre></div>
 <p>This will mount your django project directory into <code>/home/web/catalogue/django_project</code> inside the container. The container will have a user whose gid and uid matches yours so that there are no permissions issues.</p>
 <p><strong>Note</strong>: The above setup is not intended to be secure - it is intended to provide a repeatable development environment.</p>
-<h2 id="pycharm-configuration"><span class="enumerate-headings-plugin enumerate-heading-plugin">33.3</span> Pycharm configuration<a class="headerlink" href="#pycharm-configuration" title="Permanent link">¶</a></h2>
+<h2 id="pycharm-configuration"><span class="enumerate-headings-plugin enumerate-heading-plugin">35.3</span> Pycharm configuration<a class="headerlink" href="#pycharm-configuration" title="Permanent link">¶</a></h2>
 <p>Now set up your pycharm so that you can work with your dev container as a 'remote' container.</p>
 <p>First in <code>File --&gt; Settings --&gt; Python Interpreter</code> add a remote interpreter with the following details:</p>
 <ul>

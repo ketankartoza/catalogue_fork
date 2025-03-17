@@ -26,7 +26,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#background">35. 
+<a class="md-skip" href="#background">37. 
           Skip to content
         </a>
 </div>
@@ -924,7 +924,7 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<div><h1 id="background"><span class="enumerate-headings-plugin enumerate-heading-plugin">35.</span> Background<a class="headerlink" href="#background" title="Permanent link">¶</a></h1>
+<div><h1 id="background"><span class="enumerate-headings-plugin enumerate-heading-plugin">37.</span> Background<a class="headerlink" href="#background" title="Permanent link">¶</a></h1>
 <p>When your tile stores are set up, you need to host them as public 'xyz' tile services. This is simply a case of deploying apache or nginx (we describe the process using nginx here) and then hosting the tile directories. We use the following scheme for these tile store urls:</p>
 <ul>
 <li>http://maps.sansa.org.za/bluemarble - tiles for the global blue marble dataset</li>
@@ -932,11 +932,11 @@
 <li>http://maps.sansa.org.za/osm_africa - transparent overlay tiles for South Africa</li>
 </ul>
 <p>As successive years of tiles are added, they will be published according to http://maps.sansa.org.za/za_spot_XXXX where the XXXX represents the year number.</p>
-<h1 id="nginx-installation"><span class="enumerate-headings-plugin enumerate-heading-plugin">36.</span> Nginx Installation<a class="headerlink" href="#nginx-installation" title="Permanent link">¶</a></h1>
+<h1 id="nginx-installation"><span class="enumerate-headings-plugin enumerate-heading-plugin">38.</span> Nginx Installation<a class="headerlink" href="#nginx-installation" title="Permanent link">¶</a></h1>
 <p>Install nginx using the following command:</p>
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>sudo apt-get install nginx
 </code></pre></div>
-<h1 id="create-directory-shares-for-nginx"><span class="enumerate-headings-plugin enumerate-heading-plugin">37.</span> Create directory shares for nginx<a class="headerlink" href="#create-directory-shares-for-nginx" title="Permanent link">¶</a></h1>
+<h1 id="create-directory-shares-for-nginx"><span class="enumerate-headings-plugin enumerate-heading-plugin">39.</span> Create directory shares for nginx<a class="headerlink" href="#create-directory-shares-for-nginx" title="Permanent link">¶</a></h1>
 <p>Edit <code>/etc/nginx/sites-enabled/default</code> as sudo and set the file contents as per the listing below:</p>
 <div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>server {
 <a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>        listen 80 default_server;
