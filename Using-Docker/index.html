@@ -26,7 +26,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#catalogue-on-docker">48. 
+<a class="md-skip" href="#catalogue-on-docker">44. 
           Skip to content
         </a>
 </div>
@@ -528,21 +528,21 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#images">48.1 
+<a class="md-nav__link" href="#images">44.1 
 <span class="md-ellipsis">
       Images
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#containers">48.2 
+<a class="md-nav__link" href="#containers">44.2 
 <span class="md-ellipsis">
       Containers
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#database-backup">48.3 
+<a class="md-nav__link" href="#database-backup">44.3 
 <span class="md-ellipsis">
       Database backup
     </span>
@@ -550,14 +550,14 @@
 <nav aria-label="Database backup" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#about-database-backup">48.3.1 
+<a class="md-nav__link" href="#about-database-backup">44.3.1 
 <span class="md-ellipsis">
       About Database backup
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#the-configuration-of-database-backup">48.3.2 
+<a class="md-nav__link" href="#the-configuration-of-database-backup">44.3.2 
 <span class="md-ellipsis">
       The configuration of database backup
     </span>
@@ -977,21 +977,21 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#images">48.1 
+<a class="md-nav__link" href="#images">44.1 
 <span class="md-ellipsis">
       Images
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#containers">48.2 
+<a class="md-nav__link" href="#containers">44.2 
 <span class="md-ellipsis">
       Containers
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#database-backup">48.3 
+<a class="md-nav__link" href="#database-backup">44.3 
 <span class="md-ellipsis">
       Database backup
     </span>
@@ -999,14 +999,14 @@
 <nav aria-label="Database backup" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#about-database-backup">48.3.1 
+<a class="md-nav__link" href="#about-database-backup">44.3.1 
 <span class="md-ellipsis">
       About Database backup
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#the-configuration-of-database-backup">48.3.2 
+<a class="md-nav__link" href="#the-configuration-of-database-backup">44.3.2 
 <span class="md-ellipsis">
       The configuration of database backup
     </span>
@@ -1022,13 +1022,13 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<div><h1 id="catalogue-on-docker"><span class="enumerate-headings-plugin enumerate-heading-plugin">48.</span> Catalogue on Docker<a class="headerlink" href="#catalogue-on-docker" title="Permanent link">¶</a></h1>
+<div><h1 id="catalogue-on-docker"><span class="enumerate-headings-plugin enumerate-heading-plugin">44.</span> Catalogue on Docker<a class="headerlink" href="#catalogue-on-docker" title="Permanent link">¶</a></h1>
 <p>This page explains how catalogue is maintained using docker.
 Shell or command line interface (CLI) is used to execute all the commands below.</p>
-<h2 id="images"><span class="enumerate-headings-plugin enumerate-heading-plugin">48.1</span> Images<a class="headerlink" href="#images" title="Permanent link">¶</a></h2>
+<h2 id="images"><span class="enumerate-headings-plugin enumerate-heading-plugin">44.1</span> Images<a class="headerlink" href="#images" title="Permanent link">¶</a></h2>
 <p>All required apps have been build and packed into docker images on the server.
 These images would then be executed as containers.</p>
-<h2 id="containers"><span class="enumerate-headings-plugin enumerate-heading-plugin">48.2</span> Containers<a class="headerlink" href="#containers" title="Permanent link">¶</a></h2>
+<h2 id="containers"><span class="enumerate-headings-plugin enumerate-heading-plugin">44.2</span> Containers<a class="headerlink" href="#containers" title="Permanent link">¶</a></h2>
 <p>Catalogue runs on top of docker containers.
 To see the list of docker containers, type: <code>docker ps</code>.</p>
 <p>Then, a list of containers along with its images and ports are shown.</p>
@@ -1038,13 +1038,13 @@ Type <code>docker</code> when asking for a password.</p>
 <p>You would be on the catalogue db container. Please note that this is not the real database, it's just a container serves as database. Type: <code>psql -h localhost -U docker "dbname=gis" -p 5432</code> to go to Postgres interactive terminal.
 From here, you can type any sql commands.</p>
 <p>If you keen to learn more about docker, you can go to <a href="https://docs.docker.com">documentation page</a>.</p>
-<h2 id="database-backup"><span class="enumerate-headings-plugin enumerate-heading-plugin">48.3</span> Database backup<a class="headerlink" href="#database-backup" title="Permanent link">¶</a></h2>
-<h3 id="about-database-backup"><span class="enumerate-headings-plugin enumerate-heading-plugin">48.3.1</span> About Database backup<a class="headerlink" href="#about-database-backup" title="Permanent link">¶</a></h3>
+<h2 id="database-backup"><span class="enumerate-headings-plugin enumerate-heading-plugin">44.3</span> Database backup<a class="headerlink" href="#database-backup" title="Permanent link">¶</a></h2>
+<h3 id="about-database-backup"><span class="enumerate-headings-plugin enumerate-heading-plugin">44.3.1</span> About Database backup<a class="headerlink" href="#about-database-backup" title="Permanent link">¶</a></h3>
 <p><code>catalogue-db-backups</code> is the name for a docker container running a cron job backing up database.
 The backup process run on a daily basis at 11 PM.
 All the backup files are stored in the <code>/home/web/catalogue/deployment/backups.</code>
 The files are organised based on <em>YEAR/MONTH</em> folder.</p>
-<h3 id="the-configuration-of-database-backup"><span class="enumerate-headings-plugin enumerate-heading-plugin">48.3.2</span> The configuration of database backup<a class="headerlink" href="#the-configuration-of-database-backup" title="Permanent link">¶</a></h3>
+<h3 id="the-configuration-of-database-backup"><span class="enumerate-headings-plugin enumerate-heading-plugin">44.3.2</span> The configuration of database backup<a class="headerlink" href="#the-configuration-of-database-backup" title="Permanent link">¶</a></h3>
 <p><code>/home/web/catalogue/deployment/docker-compose.yml</code> specifies configuration setting for database backup.</p>
 <p>Look for <code>dbbackups</code> section on the file. </p>
 <p>The following variables are used within the file:</p>
